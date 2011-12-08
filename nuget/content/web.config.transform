@@ -1,0 +1,32 @@
+<configuration>
+  <system.web>
+    <pages>
+      <namespaces>
+        <add namespace="MvcSiteMapProvider.Web.Html" />
+      </namespaces>
+    </pages>
+    <siteMap defaultProvider="MvcSiteMapProvider" enabled="true">
+      <providers>
+        <clear />
+        <add name="MvcSiteMapProvider"
+             type="MvcSiteMapProvider.DefaultSiteMapProvider, MvcSiteMapProvider"
+             siteMapFile="~/Mvc.Sitemap"
+             securityTrimmingEnabled="true"
+             cacheDuration="5"
+             enableLocalization="true"
+             scanAssembliesForSiteMapNodes="true"
+             includeAssembliesForScan=""
+             excludeAssembliesForScan=""
+             attributesToIgnore="visibility"
+             nodeKeyGenerator="MvcSiteMapProvider.DefaultNodeKeyGenerator, MvcSiteMapProvider"
+             controllerTypeResolver="MvcSiteMapProvider.DefaultControllerTypeResolver, MvcSiteMapProvider"
+             actionMethodParameterResolver="MvcSiteMapProvider.DefaultActionMethodParameterResolver, MvcSiteMapProvider"
+             aclModule="MvcSiteMapProvider.DefaultAclModule, MvcSiteMapProvider"
+             siteMapNodeUrlResolver="MvcSiteMapProvider.DefaultSiteMapNodeUrlResolver, MvcSiteMapProvider"
+             siteMapNodeVisibilityProvider="MvcSiteMapProvider.DefaultSiteMapNodeVisibilityProvider, MvcSiteMapProvider"
+             siteMapProviderEventHandler="MvcSiteMapProvider.DefaultSiteMapProviderEventHandler, MvcSiteMapProvider"
+             />
+      </providers>
+    </siteMap>
+  </system.web>
+</configuration>

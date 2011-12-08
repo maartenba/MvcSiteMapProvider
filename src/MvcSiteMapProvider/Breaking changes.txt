@@ -1,0 +1,26 @@
+2.2.0 -> 2.3.0
+==============
+
+- Web.config setting skipAssemblyScanOn has been deprecated in favor of
+  excludeAssembliesForScan and includeAssembliesForScan
+
+- ISiteMapNodeUrlResolver is now completely responsible for generating the
+  sitemap node URL. This means that any custom ISiteMapNodeUrlResolver now
+  should also check the mvcSiteMapNode["url"] value, e.g.:
+
+        public virtual string ResolveUrl(MvcSiteMapNode mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
+        {
+            if (mvcSiteMapNode["url"] != null)
+            {
+                if (mvcSiteMapNode["url"].StartsWith("~"))
+                {
+                    return System.Web.VirtualPathUtility.ToAbsolute(mvcSiteMapNode["url"]);
+                }
+                else
+                {
+                    return mvcSiteMapNode["url"];
+                }
+            }
+
+            return UrlHelper.Action(action, controller, new RouteValueDictionary(routeValues));
+        }

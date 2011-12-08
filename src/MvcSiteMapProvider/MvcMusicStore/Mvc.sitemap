@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0"
+            xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0 MvcSiteMapSchema.xsd"
+            enableLocalization="true">
+
+  <mvcSiteMapNode title="$resources:SiteMapLocalizations,HomeTitle" controller="Home" action="Index" changeFrequency="Always" updatePriority="Normal" lastModifiedDate="2002-05-30T09:00:00">
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,BrowseGenresTitle" controller="Store" action="Index">
+      <mvcSiteMapNode title="Browse" action="Browse" dynamicNodeProvider="MvcMusicStore.Code.StoreBrowseDynamicNodeProvider, Mvc Music Store">
+        <mvcSiteMapNode title="Details" action="Details" dynamicNodeProvider="MvcMusicStore.Code.StoreDetailsDynamicNodeProvider, Mvc Music Store" />
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,ReviewCartTitle" controller="ShoppingCart" action="Index" />
+
+    <mvcSiteMapNode key="Checkout" title="$resources:SiteMapLocalizations,CheckoutTitle" controller="Checkout" clickable="false" />
+
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,AccountTitle" controller="Account" clickable="false">
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,LogOnTitle" action="LogOn" visibilityProvider="MvcMusicStore.Code.NonAuthenticatedVisibilityProvider, Mvc Music Store" />
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,LogOffTitle" action="LogOff" visibilityProvider="MvcMusicStore.Code.AuthenticatedVisibilityProvider, Mvc Music Store" />
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,RegisterTitle" action="Register" visibilityProvider="MvcMusicStore.Code.NonAuthenticatedVisibilityProvider, Mvc Music Store" />
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,ChangePasswordTitle" action="ChangePassword" visibilityProvider="MvcMusicStore.Code.AuthenticatedVisibilityProvider, Mvc Music Store" />
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,AdministrationTitle" area="Admin" controller="Home" visibility="SiteMapPathHelper,!*" visibilityProvider="MvcSiteMapProvider.FilteredSiteMapNodeVisibilityProvider, MvcSiteMapProvider">
+      <mvcSiteMapNode title="$resources:SiteMapLocalizations,StoreManagerTitle" area="Admin" controller="StoreManager" action="Index">
+        <mvcSiteMapNode title="$resources:SiteMapLocalizations,CreateAlbumTitle" action="Create"/>
+        <mvcSiteMapNode title="$resources:SiteMapLocalizations,EditAlbumTitle" action="Edit"/>
+        <mvcSiteMapNode title="$resources:SiteMapLocalizations,DeleteAlbumTitle" action="Delete"/>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,SitemapTitle" action="SiteMap" urlResolver="MvcMusicStore.Code.UpperCaseSiteMapNodeUrlResolver, Mvc Music Store" />
+  </mvcSiteMapNode>
+</mvcSiteMap>
