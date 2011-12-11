@@ -69,7 +69,6 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false);
         }
 
-#if NET35
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -80,18 +79,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent)
-#else
-        /// <summary>
-        /// Build a menu, based on the MvcSiteMap
-        /// </summary>
-        /// <param name="helper">The helper.</param>
-        /// <param name="startingNodeLevel">The starting node level.</param>
-        /// <param name="maxDepth">The max depth.</param>
-        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
-        /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch = false, bool drillDownToContent = false)
-#endif
         {
             SiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.Provider), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
@@ -101,7 +88,31 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, startingNode, true, false, maxDepth + 1, drillDownToContent);
         }
 
-#if NET35
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth)
+        {
+            return Menu(helper, startingNodeLevel, maxDepth, false, false);
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch)
+        {
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, false);
+        }
+
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -114,7 +125,15 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent)
-#else
+        {
+            SiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.Provider), startingNodeLevel, allowForwardSearch);
+            if (startingNode == null)
+            {
+                return MvcHtmlString.Empty;
+            }
+            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth + 1, drillDownToContent);
+        }
+
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -126,18 +145,11 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
         /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch = false, bool drillDownToContent = false)
-#endif
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
-            SiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.Provider), startingNodeLevel, allowForwardSearch);
-            if (startingNode == null)
-            {
-                return MvcHtmlString.Empty;
-            }
-            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth + 1, drillDownToContent);
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, false, false);
         }
 
-#if NET35
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -149,7 +161,10 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToContent)
-#else
+        {
+            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent);
+        }
+
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -160,10 +175,9 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToContent = false)
-#endif
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
-            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent);
+            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false);
         }
 
         /// <summary>
@@ -218,7 +232,6 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false);
         }
 
-#if NET35
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -230,19 +243,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent)
-#else
-        /// <summary>
-        /// Build a menu, based on the MvcSiteMap
-        /// </summary>
-        /// <param name="helper">The helper.</param>
-        /// <param name="templateName">Name of the template.</param>
-        /// <param name="startingNodeLevel">The starting node level.</param>
-        /// <param name="maxDepth">The max depth.</param>
-        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, int maxDepth, bool allowForwardSearch = false, bool drillDownToCurrent = false)
-#endif
         {
             SiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.Provider), startingNodeLevel, false);
             if (startingNode == null)
@@ -252,7 +252,19 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, templateName, startingNode, true, true, maxDepth + 1, drillDownToCurrent);
         }
 
-#if NET35
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, int maxDepth)
+        {
+            return Menu(helper, templateName, startingNodeLevel, maxDepth, false, false);
+        }
+
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -266,21 +278,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent)
-#else
-        /// <summary>
-        /// Build a menu, based on the MvcSiteMap
-        /// </summary>
-        /// <param name="helper">The helper.</param>
-        /// <param name="templateName">Name of the template.</param>
-        /// <param name="startingNodeLevel">The starting node level.</param>
-        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
-        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
-        /// <param name="maxDepth">The max depth.</param>
-        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch = false, bool drillDownToCurrent = false)
-#endif
         {
             SiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.Provider), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
@@ -290,7 +287,21 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth + 1, drillDownToCurrent);
         }
 
-#if NET35
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
+        {
+            return Menu(helper, templateName, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, false, false);
+        }
+
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -303,7 +314,13 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent)
-#else
+        {
+            var model = BuildModel(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent);
+            return helper
+                .CreateHtmlHelperForModel(model)
+                .DisplayFor(m => model, templateName);
+        }
+
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -313,18 +330,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent = false)
-#endif
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
-            var model = BuildModel(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent);
-            return helper
-                .CreateHtmlHelperForModel(model)
-                .DisplayFor(m => model, templateName);
+            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false);
         }
 
-#if NET35
         /// <summary>
         /// Builds the model.
         /// </summary>
@@ -336,19 +347,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <returns>The model.</returns>
         private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent)
-#else
-        /// <summary>
-        /// Builds the model.
-        /// </summary>
-        /// <param name="helper">The helper.</param>
-        /// <param name="startingNode">The starting node.</param>
-        /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
-        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
-        /// <param name="maxDepth">The max depth.</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <returns>The model.</returns>
-        private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent = false)
-#endif
         {
             // Build model
             var model = new MenuHelperModel();
@@ -415,6 +413,20 @@ namespace MvcSiteMapProvider.Web.Html
         }
 
         /// <summary>
+        /// Builds the model.
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <returns>The model.</returns>
+        private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
+        {
+            return BuildModel(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false);
+        }
+
+        /// <summary>
         /// This determines the deepest node matching the current HTTP context, so if the current URL describes a location
         /// deeper than the site map designates, it will determine the closest parent to the current URL and return that 
         /// as the current node. This allows menu relevence when navigating deeper than the sitemap structure designates, such
@@ -451,7 +463,6 @@ namespace MvcSiteMapProvider.Web.Html
             return currentNode;
         }
 
-#if NET35
         /// <summary>
         /// Gets the starting node.
         /// </summary>
@@ -460,16 +471,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
         /// <returns>The starting node.</returns>
         public static SiteMapNode GetStartingNode(SiteMapNode currentNode, int startingNodeLevel, bool allowForwardSearch)
-#else
-        /// <summary>
-        /// Gets the starting node.
-        /// </summary>
-        /// <param name="currentNode">The current node.</param>
-        /// <param name="startingNodeLevel">The starting node level.</param>
-        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <returns>The starting node.</returns>
-        public static SiteMapNode GetStartingNode(SiteMapNode currentNode, int startingNodeLevel, bool allowForwardSearch = false)
-#endif
         {
             SiteMapNode startingNode = GetNodeAtLevel(currentNode, startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
@@ -481,6 +482,18 @@ namespace MvcSiteMapProvider.Web.Html
                 startingNode = startingNode.ParentNode;
             }
             return startingNode;
+        }
+
+        /// <summary>
+        /// Gets the starting node.
+        /// </summary>
+        /// <param name="currentNode">The current node.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <returns>The starting node.</returns>
+        public static SiteMapNode GetStartingNode(SiteMapNode currentNode, int startingNodeLevel)
+        {
+            return GetStartingNode(currentNode, startingNodeLevel, false);
         }
 
         /// <summary>

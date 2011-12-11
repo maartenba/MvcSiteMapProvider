@@ -55,7 +55,7 @@ param(
     <summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://mvcsitemap.codeplex.com.</summary>
     <language>en-US</language>
     <tags>mvc sitemap menu breadcrumb navigation</tags>
-    <projectUrl>http://mvcsitemap.codeplex.com</projectUrl>
+    <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
     <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
   </metadata>
 </package>

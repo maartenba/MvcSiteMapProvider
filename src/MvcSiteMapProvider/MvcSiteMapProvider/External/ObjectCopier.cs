@@ -10,6 +10,9 @@ namespace Telerik.Web.Mvc.Infrastructure.Implementation
     using System.Linq;
     using System.Reflection;
 
+    /// <summary>
+    /// ObjectCopier
+    /// </summary>
     public static class ObjectCopier
     {
         public static void Copy(object source, object destination, params string[] excludedMembers)

@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<IEnumerable<MvcMusicStore.Models.Genre>>" %>
 
-<%=Html.MvcSiteMap().Menu(2, 1, allowForwardSearch: true)%>
+<%=Html.MvcSiteMap().Menu(2, 1, true)%>
 <!--
 <ul>
     <% foreach (var genre in Model) { %>
