@@ -97,10 +97,14 @@ namespace MvcSiteMapProvider
             // Create controller context
             var controllerContext = new ControllerContext();
             controllerContext.RequestContext = requestContext;
+
+            // Whether controller is built by the ControllerFactory (or otherwise by Activator)
+            bool factoryBuiltController = false;
             try
             {
                 string controllerName = requestContext.RouteData.GetRequiredString("controller");
                 controllerContext.Controller = ControllerBuilder.Current.GetControllerFactory().CreateController(requestContext, controllerName) as ControllerBase;
+                factoryBuiltController = true;
             }
             catch
             {
@@ -149,8 +153,22 @@ namespace MvcSiteMapProvider
                                controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
                                    <AuthorizeAttribute>().ToList());
 #else
+                    IFilterProvider filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
+                    IEnumerable<Filter> filters;
+
+                    // If depencency resolver has an IFilterProvider registered, use it
+                    if (filterProvider != null)
+                    {
+                        filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
+                    }
+                    // Otherwise use FilterProviders.Providers
+                    else
+                    {
+                        filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
+                    }
+                    
                     IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
-                        FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor)
+                        filters
                             .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
                             .Select(f => f.Instance as AuthorizeAttribute);
 #endif
@@ -191,6 +209,10 @@ namespace MvcSiteMapProvider
             {
                 // Restore HttpContext
                 httpContext.RewritePath(originalPath, true);
+
+                // Release controller
+                if (factoryBuiltController)
+                    ControllerBuilder.Current.GetControllerFactory().ReleaseController(controllerContext.Controller);
             }
         }
 
