@@ -1,5 +1,6 @@
 ﻿#region Using directives
 
+using System;
 using System.Collections.Generic;
 
 #endregion
@@ -95,6 +96,18 @@ namespace MvcSiteMapProvider.Extensibility
         /// </summary>
         /// <value>The roles.</value>
         public IList<string> Roles { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last modified date.
+        /// </summary>
+        /// <value>The last modified date.</value>
+        public DateTime? LastModifiedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the change frequency.
+        /// </summary>
+        /// <value>The change frequency.</value>
+        public ChangeFrequency ChangeFrequency { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicNode"/> class.
