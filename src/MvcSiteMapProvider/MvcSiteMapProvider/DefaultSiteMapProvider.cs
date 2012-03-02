@@ -489,7 +489,7 @@ namespace MvcSiteMapProvider
             // Return immediately if this method has been called before
             if (root != null) //  && (HttpContext.Current.Cache[cacheKey] != null || isBuildingSiteMap)
             {
-                //return root;
+               return root;
             }
 
             // Build sitemap
@@ -695,7 +695,7 @@ namespace MvcSiteMapProvider
 
                     //if (childNode.ParentNode != null && childNode.ParentNode != rootNode)
                     //{
-                    //    parentNode = childNode.ParentNode;
+                    //   parentNode = childNode.ParentNode;
                     //}
 
                     if (!HasDynamicNodes(childNode))
@@ -941,7 +941,7 @@ namespace MvcSiteMapProvider
                 string key = dynamicNode.Key;
                 if (string.IsNullOrEmpty(key))
                 {
-                    key = NodeKeyGenerator.GenerateKey(Guid.NewGuid().ToString(), mvcNode.Url, mvcNode.Title, mvcNode.Area, mvcNode.Controller, mvcNode.Action, mvcNode.Clickable);
+                   key = NodeKeyGenerator.GenerateKey(parentNode == null ? "" : parentNode.Key, Guid.NewGuid().ToString(), mvcNode.Url, mvcNode.Title, mvcNode.Area, mvcNode.Controller, mvcNode.Action, mvcNode.Clickable);
                 }
 
                 var clone = mvcNode.Clone(key) as MvcSiteMapNode;
@@ -1115,8 +1115,7 @@ namespace MvcSiteMapProvider
                     requestContext, routeData.Values);
                 string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
                     ?? string.Empty).TrimEnd('/') + "/";
-                node = base.FindSiteMapNode(
-                    requestContext.HttpContext.Response.ApplyAppPathModifier(appPathPrefix + vpd.VirtualPath)) as MvcSiteMapNode;
+                node = base.FindSiteMapNode(httpContext.Request.RawUrl) as MvcSiteMapNode;
 
                 if (!routeData.Values.ContainsKey("area"))
                 {
@@ -1315,6 +1314,7 @@ namespace MvcSiteMapProvider
 
             // Generate key for node
             string key = NodeKeyGenerator.GenerateKey(
+                parentNode == null ? "" : parentNode.Key,
                 node.GetAttributeValue("key"),
                 node.GetAttributeValue("url"),
                 node.GetAttributeValue("title"),
@@ -1427,6 +1427,7 @@ namespace MvcSiteMapProvider
                 }
             }
 
+            siteMapNode.ParentNode = parentMvcNode;
             return siteMapNode;
         }
 
@@ -1552,6 +1553,7 @@ namespace MvcSiteMapProvider
 
             // Generate key for node
             string key = NodeKeyGenerator.GenerateKey(
+                null,
                 attribute.Key,
                 attribute.Url,
                 attribute.Title,
