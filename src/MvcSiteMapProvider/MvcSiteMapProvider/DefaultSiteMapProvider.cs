@@ -978,6 +978,16 @@ namespace MvcSiteMapProvider
                     clone.Route = dynamicNode.Route;
                 }
 
+                if (dynamicNode.LastModifiedDate.HasValue)
+                {
+                    clone.LastModifiedDate = dynamicNode.LastModifiedDate.Value;
+                }
+
+                if (dynamicNode.ChangeFrequency != ChangeFrequency.Undefined)
+                {
+                    clone.ChangeFrequency = dynamicNode.ChangeFrequency;
+                }
+
                 if (dynamicNode.PreservedRouteParameters.Any())
                 {
                     clone.PreservedRouteParameters = String.Join(";", dynamicNode.PreservedRouteParameters.ToArray());
