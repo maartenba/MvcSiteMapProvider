@@ -287,8 +287,11 @@ namespace MvcSiteMapProvider
             }
             if (NodeKeyGenerator == null)
             {
-                NodeKeyGenerator = DependencyResolver.Current.GetService<INodeKeyGenerator>()
-                                   ?? new DefaultNodeKeyGenerator();
+                NodeKeyGenerator =
+#if !NET35
+ DependencyResolver.Current.GetService<INodeKeyGenerator>() ??
+#endif
+ new DefaultNodeKeyGenerator();
             }
 
             // Is a controller type resolver given?
@@ -299,8 +302,11 @@ namespace MvcSiteMapProvider
             }
             if (ControllerTypeResolver == null)
             {
-                ControllerTypeResolver = DependencyResolver.Current.GetService<IControllerTypeResolver>()
-                                   ?? new DefaultControllerTypeResolver();
+                ControllerTypeResolver =
+#if !NET35
+ DependencyResolver.Current.GetService<IControllerTypeResolver>() ??
+#endif
+ new DefaultControllerTypeResolver();
             }
 
             // Is an action method parameter resolver given?
@@ -311,8 +317,11 @@ namespace MvcSiteMapProvider
             }
             if (ActionMethodParameterResolver == null)
             {
-                ActionMethodParameterResolver = DependencyResolver.Current.GetService<IActionMethodParameterResolver>()
-                                   ?? new DefaultActionMethodParameterResolver();
+                ActionMethodParameterResolver =
+#if !NET35
+ DependencyResolver.Current.GetService<IActionMethodParameterResolver>() ??
+#endif
+ new DefaultActionMethodParameterResolver();
             }
 
             // Is an acl module given?
@@ -323,8 +332,11 @@ namespace MvcSiteMapProvider
             }
             if (AclModule == null)
             {
-                AclModule = DependencyResolver.Current.GetService<IAclModule>()
-                                   ?? new DefaultAclModule();
+                AclModule =
+#if !NET35
+ DependencyResolver.Current.GetService<IAclModule>() ??
+#endif
+ new DefaultAclModule();
             }
 
             // Is a SiteMapNode URL resolver given?
@@ -335,8 +347,11 @@ namespace MvcSiteMapProvider
             }
             if (SiteMapNodeUrlResolver == null)
             {
-                SiteMapNodeUrlResolver = DependencyResolver.Current.GetService<ISiteMapNodeUrlResolver>()
-                                   ?? new DefaultSiteMapNodeUrlResolver();
+                SiteMapNodeUrlResolver =
+#if !NET35
+ DependencyResolver.Current.GetService<ISiteMapNodeUrlResolver>() ??
+#endif
+ new DefaultSiteMapNodeUrlResolver();
             }
 
             // Is a SiteMapNode visibility provider given?
@@ -347,8 +362,11 @@ namespace MvcSiteMapProvider
             }
             if (SiteMapNodeVisibilityProvider == null)
             {
-                SiteMapNodeVisibilityProvider = DependencyResolver.Current.GetService<ISiteMapNodeVisibilityProvider>()
-                                   ?? new DefaultSiteMapNodeVisibilityProvider();
+                SiteMapNodeVisibilityProvider =
+#if !NET35
+ DependencyResolver.Current.GetService<ISiteMapNodeVisibilityProvider>() ??
+#endif
+ new DefaultSiteMapNodeVisibilityProvider();
             }
 
             // Is a SiteMapProvider event handler given?
@@ -359,8 +377,11 @@ namespace MvcSiteMapProvider
             }
             if (SiteMapProviderEventHandler == null)
             {
-                SiteMapProviderEventHandler = DependencyResolver.Current.GetService<ISiteMapProviderEventHandler>()
-                                   ?? new DefaultSiteMapProviderEventHandler();
+                SiteMapProviderEventHandler =
+#if !NET35
+ DependencyResolver.Current.GetService<ISiteMapProviderEventHandler>() ??
+#endif
+ new DefaultSiteMapProviderEventHandler();
             }
         }
 
@@ -496,7 +517,7 @@ namespace MvcSiteMapProvider
             // Return immediately if this method has been called before
             if (root != null) //  && (HttpContext.Current.Cache[cacheKey] != null || isBuildingSiteMap)
             {
-               return root;
+                return root;
             }
 
             // Build sitemap
@@ -948,7 +969,7 @@ namespace MvcSiteMapProvider
                 string key = dynamicNode.Key;
                 if (string.IsNullOrEmpty(key))
                 {
-                   key = NodeKeyGenerator.GenerateKey(parentNode == null ? "" : parentNode.Key, Guid.NewGuid().ToString(), mvcNode.Url, mvcNode.Title, mvcNode.Area, mvcNode.Controller, mvcNode.Action, mvcNode.Clickable);
+                    key = NodeKeyGenerator.GenerateKey(parentNode == null ? "" : parentNode.Key, Guid.NewGuid().ToString(), mvcNode.Url, mvcNode.Title, mvcNode.Area, mvcNode.Controller, mvcNode.Action, mvcNode.Clickable);
                 }
 
                 var clone = mvcNode.Clone(key) as MvcSiteMapNode;
