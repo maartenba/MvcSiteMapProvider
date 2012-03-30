@@ -23,6 +23,7 @@ namespace MvcSiteMapProvider
     {
         #region IAclModule Members
 
+#if !NET35
         protected string filterProviderCacheKey = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
         protected IFilterProvider ResolveFilterProvider()
         {
@@ -37,6 +38,7 @@ namespace MvcSiteMapProvider
             }
             return DependencyResolver.Current.GetService<IFilterProvider>();
         }
+#endif
 
         /// <summary>
         /// Determines whether node is accessible to user.
