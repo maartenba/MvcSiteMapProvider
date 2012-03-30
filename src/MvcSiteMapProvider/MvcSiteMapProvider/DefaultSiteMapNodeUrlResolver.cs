@@ -71,13 +71,23 @@ namespace MvcSiteMapProvider
 
             if (!string.IsNullOrEmpty(mvcSiteMapNode.PreservedRouteParameters))
             {
+                var routeDataValues = UrlHelper.RequestContext.RouteData.Values;
+                var queryStringValues = UrlHelper.RequestContext.HttpContext.Request.QueryString;
                 foreach (var item in mvcSiteMapNode.PreservedRouteParameters.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     var preservedParameterName = item.Trim();
                     if (!string.IsNullOrEmpty(preservedParameterName))
                     {
-                        routeValues[preservedParameterName] =
-                            UrlHelper.RequestContext.RouteData.Values[preservedParameterName];
+                        if (routeDataValues.ContainsKey(preservedParameterName))
+                        {
+                            routeValues[preservedParameterName] =
+                                routeDataValues[preservedParameterName];
+                        }
+                        else if (queryStringValues[preservedParameterName] != null)
+                        {
+                            routeValues[preservedParameterName] =
+                                queryStringValues[preservedParameterName];
+                        }
                     }
                 }
             }
