@@ -287,7 +287,8 @@ namespace MvcSiteMapProvider
             }
             if (NodeKeyGenerator == null)
             {
-                NodeKeyGenerator = new DefaultNodeKeyGenerator();
+                NodeKeyGenerator = DependencyResolver.Current.GetService<INodeKeyGenerator>()
+                                   ?? new DefaultNodeKeyGenerator();
             }
 
             // Is a controller type resolver given?
@@ -298,7 +299,8 @@ namespace MvcSiteMapProvider
             }
             if (ControllerTypeResolver == null)
             {
-                ControllerTypeResolver = new DefaultControllerTypeResolver();
+                ControllerTypeResolver = DependencyResolver.Current.GetService<IControllerTypeResolver>()
+                                   ?? new DefaultControllerTypeResolver();
             }
 
             // Is an action method parameter resolver given?
@@ -309,7 +311,8 @@ namespace MvcSiteMapProvider
             }
             if (ActionMethodParameterResolver == null)
             {
-                ActionMethodParameterResolver = new DefaultActionMethodParameterResolver();
+                ActionMethodParameterResolver = DependencyResolver.Current.GetService<IActionMethodParameterResolver>()
+                                   ?? new DefaultActionMethodParameterResolver();
             }
 
             // Is an acl module given?
@@ -320,7 +323,8 @@ namespace MvcSiteMapProvider
             }
             if (AclModule == null)
             {
-                AclModule = new DefaultAclModule();
+                AclModule = DependencyResolver.Current.GetService<IAclModule>()
+                                   ?? new DefaultAclModule();
             }
 
             // Is a SiteMapNode URL resolver given?
@@ -331,7 +335,8 @@ namespace MvcSiteMapProvider
             }
             if (SiteMapNodeUrlResolver == null)
             {
-                SiteMapNodeUrlResolver = new DefaultSiteMapNodeUrlResolver();
+                SiteMapNodeUrlResolver = DependencyResolver.Current.GetService<ISiteMapNodeUrlResolver>()
+                                   ?? new DefaultSiteMapNodeUrlResolver();
             }
 
             // Is a SiteMapNode visibility provider given?
@@ -342,7 +347,8 @@ namespace MvcSiteMapProvider
             }
             if (SiteMapNodeVisibilityProvider == null)
             {
-                SiteMapNodeVisibilityProvider = new DefaultSiteMapNodeVisibilityProvider();
+                SiteMapNodeVisibilityProvider = DependencyResolver.Current.GetService<ISiteMapNodeVisibilityProvider>()
+                                   ?? new DefaultSiteMapNodeVisibilityProvider();
             }
 
             // Is a SiteMapProvider event handler given?
@@ -353,7 +359,8 @@ namespace MvcSiteMapProvider
             }
             if (SiteMapProviderEventHandler == null)
             {
-                SiteMapProviderEventHandler = new DefaultSiteMapProviderEventHandler();
+                SiteMapProviderEventHandler = DependencyResolver.Current.GetService<ISiteMapProviderEventHandler>()
+                                   ?? new DefaultSiteMapProviderEventHandler();
             }
         }
 
