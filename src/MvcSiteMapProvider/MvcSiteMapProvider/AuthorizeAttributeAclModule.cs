@@ -23,6 +23,21 @@ namespace MvcSiteMapProvider
     {
         #region IAclModule Members
 
+        protected string filterProviderCacheKey = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
+        protected IFilterProvider ResolveFilterProvider()
+        {
+            if (HttpContext.Current != null)
+            {
+                if (!HttpContext.Current.Items.Contains(filterProviderCacheKey))
+                {
+                    HttpContext.Current.Items[filterProviderCacheKey] =
+                        DependencyResolver.Current.GetService<IFilterProvider>();
+                }
+                return (IFilterProvider)HttpContext.Current.Items[filterProviderCacheKey];
+            }
+            return DependencyResolver.Current.GetService<IFilterProvider>();
+        }
+
         /// <summary>
         /// Determines whether node is accessible to user.
         /// </summary>
@@ -153,7 +168,7 @@ namespace MvcSiteMapProvider
                                controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
                                    <AuthorizeAttribute>().ToList());
 #else
-                    IFilterProvider filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
+                    IFilterProvider filterProvider = ResolveFilterProvider();
                     IEnumerable<Filter> filters;
 
                     // If depencency resolver has an IFilterProvider registered, use it
@@ -166,7 +181,7 @@ namespace MvcSiteMapProvider
                     {
                         filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
                     }
-                    
+
                     IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
                         filters
                             .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
