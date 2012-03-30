@@ -81,11 +81,9 @@ namespace MvcSiteMapProvider.Filters
             {
                 var result = (ViewResult)filterContext.Result;
 
-                var target = ResolveTarget(result.ViewData.Model, PropertyName);
-                if (target == null)
-                {
-                    target = ResolveTarget(result.ViewData, PropertyName);
-                }
+                var target = (ResolveTarget(result.ViewData.Model, PropertyName) ??
+                              ResolveTarget(result.ViewData, PropertyName)) ??
+                              result.ViewData[PropertyName];
 
                 if (target != null)
                 {
