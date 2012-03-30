@@ -970,7 +970,7 @@ namespace MvcSiteMapProvider
                 }
                 if (!string.IsNullOrEmpty(dynamicNode.ImageUrl))
                 {
-                    clone.Title = dynamicNode.ImageUrl;
+                    clone.ImageUrl = dynamicNode.ImageUrl;
                 }
 
                 if (!string.IsNullOrEmpty(dynamicNode.Route))
