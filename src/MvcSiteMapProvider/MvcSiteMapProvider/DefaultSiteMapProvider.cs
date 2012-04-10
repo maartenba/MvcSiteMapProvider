@@ -162,7 +162,7 @@ namespace MvcSiteMapProvider
         /// </exception>
         public override bool IsAccessibleToUser(HttpContext context, SiteMapNode node)
         {
-            if (isBuildingSiteMap && CacheDuration > 0)
+            if ((isBuildingSiteMap && CacheDuration > 0) || !SecurityTrimmingEnabled)
             {
                 return true;
             }
