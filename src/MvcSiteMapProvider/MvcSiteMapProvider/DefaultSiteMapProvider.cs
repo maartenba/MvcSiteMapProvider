@@ -114,7 +114,14 @@ namespace MvcSiteMapProvider
         {
             get
             {
-                return (SiteMapNode)HttpContext.Current.Items[currentNodeCacheKey] ?? base.CurrentNode;
+                if (HttpContext.Current.Items[currentNodeCacheKey] == null)
+                {
+                    var currentNode = base.CurrentNode;
+                    HttpContext.Current.Items[currentNodeCacheKey] = currentNode;
+                    return currentNode;
+                }
+                return (SiteMapNode)HttpContext.Current.Items[currentNodeCacheKey];
+
             }
         }
 
@@ -162,7 +169,7 @@ namespace MvcSiteMapProvider
         /// </exception>
         public override bool IsAccessibleToUser(HttpContext context, SiteMapNode node)
         {
-            if (isBuildingSiteMap && CacheDuration > 0)
+            if ((isBuildingSiteMap && CacheDuration > 0) || !SecurityTrimmingEnabled)
             {
                 return true;
             }
