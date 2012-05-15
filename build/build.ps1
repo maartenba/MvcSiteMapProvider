@@ -4,7 +4,7 @@ properties {
     $source_directory = "$base_directory\src\MvcSiteMapProvider"
     $nuget_directory  = "$base_directory\nuget"
     $tools_directory  = "$base_directory\tools"
-    $version          = "3.2.2.0"
+    $version          = "3.2.3.0"
 }
 
 include .\psake_ext.ps1
@@ -38,6 +38,7 @@ task Compile35 -depends Clean, Init -description "This task compiles the solutio
             /p:outdir=$build_directory\\$solution\\net35\\ `
             /verbosity:quiet `
             /p:Configuration=Release `
+			/t:Rebuild `
 			/property:WarningLevel=3 `
             /property:TargetFrameworkVersion=v3.5 `
             /property:DefineConstants=NET35
@@ -50,6 +51,7 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
             /p:outdir=$build_directory\\$solution\\net40\\ `
             /verbosity:quiet `
             /p:Configuration=Release `
+			/t:Rebuild `
 			/property:WarningLevel=3 `
             /property:TargetFrameworkVersion=v4.0 `
             /property:DefineConstants=NET40
