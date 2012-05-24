@@ -142,8 +142,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
-        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
