@@ -77,13 +77,12 @@ namespace MvcSiteMapProvider.Filters
         /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (filterContext.Result is ViewResult)
+            ViewResult result = filterContext.Result as ViewResult;
+            if (result != null)
             {
-                var result = (ViewResult)filterContext.Result;
-
                 var target = (ResolveTarget(result.ViewData.Model, PropertyName) ??
                               ResolveTarget(result.ViewData, PropertyName)) ??
-                              result.ViewData[PropertyName];
+                             result.ViewData[PropertyName];
 
                 if (target != null)
                 {
