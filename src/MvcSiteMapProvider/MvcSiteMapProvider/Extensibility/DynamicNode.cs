@@ -110,6 +110,12 @@ namespace MvcSiteMapProvider.Extensibility
         public ChangeFrequency ChangeFrequency { get; set; }
 
         /// <summary>
+        /// Gets or sets the update priority.
+        /// </summary>
+        /// <value>The update priority.</value>
+        public UpdatePriority UpdatePriority { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="DynamicNode"/> class.
         /// </summary>
         public DynamicNode()
