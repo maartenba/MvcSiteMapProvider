@@ -1023,6 +1023,11 @@ namespace MvcSiteMapProvider
                     clone.ChangeFrequency = dynamicNode.ChangeFrequency;
                 }
 
+                if (dynamicNode.UpdatePriority != UpdatePriority.Undefined)
+                {
+                    clone.ChangeFrequency = dynamicNode.ChangeFrequency;
+                }
+
                 if (dynamicNode.PreservedRouteParameters.Any())
                 {
                     clone.PreservedRouteParameters = String.Join(";", dynamicNode.PreservedRouteParameters.ToArray());
