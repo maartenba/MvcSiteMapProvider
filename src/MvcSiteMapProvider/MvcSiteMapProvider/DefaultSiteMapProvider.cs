@@ -1456,7 +1456,6 @@ namespace MvcSiteMapProvider
 
             // Add route values to sitemap node
             siteMapNode.RouteValues = routeValues;
-            routeValues = new Dictionary<string, object>();
 
             // Add node's route defaults
             var httpContext = new HttpContextWrapper(HttpContext.Current);
