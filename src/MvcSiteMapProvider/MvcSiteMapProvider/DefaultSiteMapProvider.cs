@@ -518,6 +518,7 @@ namespace MvcSiteMapProvider
         /// Builds the sitemap, firstly reads in the XML file, and grabs the outer root element and 
         /// maps this to become our main out root SiteMap node.
         /// </summary>
+        /// <exception cref="MvcSiteMapException"></exception>
         /// <returns>The root SiteMapNode.</returns>
         public override SiteMapNode BuildSiteMap()
         {
@@ -528,7 +529,7 @@ namespace MvcSiteMapProvider
             }
 
             // Build sitemap
-            SiteMapNode rootNode = root;
+            SiteMapNode rootNode;
             lock (synclock)
             {
                 // Return immediately if this method has been called before
@@ -537,7 +538,7 @@ namespace MvcSiteMapProvider
                     return root;
                 }
 
-                XDocument siteMapXml = null;
+                XDocument siteMapXml;
                 try
                 {
                     // Does the SiteMap XML exist?
@@ -549,7 +550,7 @@ namespace MvcSiteMapProvider
                         // If no namespace is present (or the wrong one is present), replace it
                         foreach (var e in siteMapXml.Descendants())
                         {
-                            if (e.Name.Namespace == null || string.IsNullOrEmpty(e.Name.Namespace.NamespaceName) || e.Name.Namespace != this.SiteMapNamespace)
+                            if (string.IsNullOrEmpty(e.Name.Namespace.NamespaceName) || e.Name.Namespace != this.SiteMapNamespace)
                             {
                                 e.Name = XName.Get(e.Name.LocalName, this.SiteMapNamespace.ToString());
                             }
@@ -581,7 +582,7 @@ namespace MvcSiteMapProvider
                         isBuildingSiteMap = true;
 
                         // List of assemblies
-                        IEnumerable<Assembly> assemblies = null;
+                        IEnumerable<Assembly> assemblies;
                         if (includeAssembliesForScan.Any())
                         {
                             // An include list is given
@@ -606,7 +607,7 @@ namespace MvcSiteMapProvider
                         {
                             // http://stackoverflow.com/questions/1423733/how-to-tell-if-a-net-assembly-is-dynamic
                             if (!(assembly.ManifestModule is System.Reflection.Emit.ModuleBuilder)
-                                && !(assembly.ManifestModule.GetType().Namespace == "System.Reflection.Emit"))
+                                && assembly.ManifestModule.GetType().Namespace != "System.Reflection.Emit")
                             {
                                 ProcessNodesInAssembly(assembly);
                             }
@@ -716,11 +717,10 @@ namespace MvcSiteMapProvider
         /// <param name="rootElement">The main root XML element.</param>
         protected void ProcessXmlNodes(SiteMapNode rootNode, XElement rootElement)
         {
-            SiteMapNode childNode = rootNode;
-
             // Loop through each element below the current root element.
             foreach (XElement node in rootElement.Elements())
             {
+                SiteMapNode childNode;
                 if (node.Name == this.SiteMapNamespace + NodeName)
                 {
                     // If this is a normal mvcSiteMapNode then map the xml element
@@ -805,7 +805,7 @@ namespace MvcSiteMapProvider
                 try
                 {
                     var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(x => x.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).Count() > 0);
+                        .Where(x => x.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).Any());
 
                     foreach (var method in methods)
                     {
