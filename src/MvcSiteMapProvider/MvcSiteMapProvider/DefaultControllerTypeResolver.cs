@@ -107,13 +107,16 @@ namespace MvcSiteMapProvider
             var namespacesForArea = new List<string>();
             var namespacesCommon = new List<string>();
 
-            foreach (var route in routes.OfType<Route>().Where(r => r.DataTokens != null && r.DataTokens["Namespaces"] != null))
+            foreach (var route in routes.OfType<Route>().Where(r => r.DataTokens != null))
             {
+                var areaToken = route.DataTokens["area"];
+                IEnumerable<string> namespacesToken = route.DataTokens["Namespaces"] == null ? new string[] { "" } : (IEnumerable<string>)route.DataTokens["Namespaces"];
+
                 // search for area-based namespaces
-                if (route.DataTokens["area"] != null && route.DataTokens["area"].ToString().Equals(area, StringComparison.OrdinalIgnoreCase))
-                    namespacesForArea.AddRange((IEnumerable<string>)route.DataTokens["Namespaces"]);
-                else if (route.DataTokens["area"] == null)
-                    namespacesCommon.AddRange((IEnumerable<string>)route.DataTokens["Namespaces"]);
+                if (areaToken != null && areaToken.ToString().Equals(area, StringComparison.OrdinalIgnoreCase))
+                    namespacesForArea.AddRange(namespacesToken);
+                else if (areaToken == null)
+                    namespacesCommon.AddRange(namespacesToken);
             }
 
             if (namespacesForArea.Count > 0)
