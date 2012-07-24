@@ -481,7 +481,7 @@ namespace MvcSiteMapProvider
         /// <returns>The route data associated with the current node.</returns>
         public RouteData GetRouteData(HttpContextBase httpContext)
         {
-            RouteData routeData = null;
+            RouteData routeData;
             if (!string.IsNullOrEmpty(this.Route))
             {
                 routeData = RouteTable.Routes[this.Route].GetRouteData(httpContext);

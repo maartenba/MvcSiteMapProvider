@@ -1560,7 +1560,7 @@ namespace MvcSiteMapProvider
                 foreach (MethodInfo m in ms.OfType<MethodInfo>())
                 {
                     var pars = m.GetParameters();
-                    if (pars == null || pars.Length == 0)
+                    if (pars.Length == 0)
                     {
                         methodInfo = m;
                         break;
@@ -1589,7 +1589,7 @@ namespace MvcSiteMapProvider
             }
 
             // Determine controller and (index) action
-            string controller = type.Name.Replace("Controller", "") ?? "Home";
+            string controller = type.Name.Replace("Controller", "");
             string action = (methodInfo != null ? methodInfo.Name : null) ?? "Index";
             if (methodInfo != null) // handle custom action name
             {
@@ -1687,13 +1687,13 @@ namespace MvcSiteMapProvider
         {
             if (!string.IsNullOrEmpty(text))
             {
-                string tempStr1 = null;
+                string tempStr1;
                 var tempStr2 = text.TrimStart(new[] { ' ' });
-                if (((tempStr2 != null) && (tempStr2.Length > 10)) && tempStr2.ToLower(CultureInfo.InvariantCulture).StartsWith("$resources:", StringComparison.Ordinal))
+                if (((tempStr2.Length > 10)) && tempStr2.ToLower(CultureInfo.InvariantCulture).StartsWith("$resources:", StringComparison.Ordinal))
                 {
                     tempStr1 = tempStr2.Substring(11);
-                    string tempStr3 = null;
-                    string tempStr4 = null;
+                    string tempStr3;
+                    string tempStr4;
                     var index = tempStr1.IndexOf(',');
                     tempStr3 = tempStr1.Substring(0, index);
                     tempStr4 = tempStr1.Substring(index + 1);
