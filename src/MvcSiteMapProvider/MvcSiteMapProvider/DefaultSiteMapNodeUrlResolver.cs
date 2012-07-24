@@ -101,7 +101,7 @@ namespace MvcSiteMapProvider
                 key += routeValue.Key + (routeValue.Value ?? string.Empty);
             if (_urlkey == key) return _url;
 
-            string returnValue = null;
+            string returnValue;
             if (!string.IsNullOrEmpty(mvcSiteMapNode.Route))
             {
                 returnValue = UrlHelper.RouteUrl(mvcSiteMapNode.Route, new RouteValueDictionary(routeValues));

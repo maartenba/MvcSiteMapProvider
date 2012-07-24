@@ -21,7 +21,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <summary>
         /// Source metadata
         /// </summary>
-        private static Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(SiteMapHelper).FullName } };
+        private static readonly Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(SiteMapHelper).FullName } };
 
         /// <summary>
         /// Build a sitemap tree, based on the MvcSiteMap
