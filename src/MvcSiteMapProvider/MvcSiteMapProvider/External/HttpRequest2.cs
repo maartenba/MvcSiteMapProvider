@@ -13,8 +13,6 @@ namespace MvcSiteMapProvider.External
     /// </summary>
     public class HttpRequest2 : HttpRequestWrapper
     {
-        private HttpRequest httpRequest;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpRequest2"/> class.
         /// </summary>
@@ -25,7 +23,6 @@ namespace MvcSiteMapProvider.External
         public HttpRequest2(HttpRequest httpRequest)
             : base(httpRequest)
         {
-            this.httpRequest = httpRequest;
         }
 
         /// <summary>

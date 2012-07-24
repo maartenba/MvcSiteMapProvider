@@ -64,7 +64,7 @@ namespace MvcSiteMapProvider
             string controller = controllerName;
 
             // Find controller type
-            Type controllerType = null;
+            Type controllerType;
             HashSet<string> namespaces = null;
             if (areaNamespaces != null)
             {

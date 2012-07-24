@@ -26,7 +26,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <remarks>
         /// This number should be 50000 in theory, see http://www.sitemaps.org/protocol.php#sitemapIndex_sitemap.
-        /// Since citemap files can be maximal 10MB per file and calculating the total sitemap size would degrade performance,
+        /// Since sitemap files can be maximal 10MB per file and calculating the total sitemap size would degrade performance,
         /// an average cap of 35000 has been chosen.
         /// </remarks>
         private const int MaxNumberOfLinksPerFile = 35000;
@@ -140,8 +140,6 @@ namespace MvcSiteMapProvider.Web
         /// <param name="page">The page.</param>
         protected virtual void ExecuteSitemapResult(ControllerContext context, IEnumerable<SiteMapNode> flattenedHierarchy, long flattenedHierarchyCount, int page)
         {
-            // Count the number of pages
-            double numPages = Math.Ceiling((double)flattenedHierarchyCount / MaxNumberOfLinksPerFile);
 
             // Output content type
             context.HttpContext.Response.ContentType = "text/xml";

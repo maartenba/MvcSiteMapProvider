@@ -21,7 +21,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <summary>
         /// Source metadata
         /// </summary>
-        private static Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(SiteMapTitleHelper).FullName } };
+        private static readonly Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(SiteMapTitleHelper).FullName } };
 
         /// <summary>
         /// Gets the title of SiteMap.CurrentNode
@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// </returns>
         public static MvcHtmlString SiteMapTitle(this MvcSiteMapHtmlHelper helper, string templateName)
         {
-            var model = BuildModel(helper, helper.Provider.CurrentNode ?? helper.Provider.RootNode);
+            var model = BuildModel(helper.Provider.CurrentNode ?? helper.Provider.RootNode);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -54,10 +54,9 @@ namespace MvcSiteMapProvider.Web.Html
         /// <summary>
         /// Builds the model.
         /// </summary>
-        /// <param name="helper">The helper.</param>
         /// <param name="startingNode">The starting node.</param>
         /// <returns>The model.</returns>
-        private static SiteMapTitleHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SiteMapNode startingNode)
+        private static SiteMapTitleHelperModel BuildModel(SiteMapNode startingNode)
         {
             // Map to model
             var mvcNode = startingNode as MvcSiteMapNode;

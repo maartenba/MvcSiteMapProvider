@@ -1004,27 +1004,27 @@ namespace MvcSiteMapProvider.External
         Expression ParseIntegerLiteral()
         {
             ValidateToken(TokenId.IntegerLiteral);
-            string text = token.text;
-            if (text[0] != '-')
+            string tokenText = token.text;
+            if (tokenText[0] != '-')
             {
                 ulong value;
-                if (!UInt64.TryParse(text, out value))
-                    throw ParseError(Res.InvalidIntegerLiteral, text);
+                if (!UInt64.TryParse(tokenText, out value))
+                    throw ParseError(Res.InvalidIntegerLiteral, tokenText);
                 NextToken();
-                if (value <= (ulong)Int32.MaxValue) return CreateLiteral((int)value, text);
-                if (value <= (ulong)UInt32.MaxValue) return CreateLiteral((uint)value, text);
-                if (value <= (ulong)Int64.MaxValue) return CreateLiteral((long)value, text);
-                return CreateLiteral(value, text);
+                if (value <= Int32.MaxValue) return CreateLiteral((int)value, tokenText);
+                if (value <= UInt32.MaxValue) return CreateLiteral((uint)value, tokenText);
+                if (value <= Int64.MaxValue) return CreateLiteral((long)value, tokenText);
+                return CreateLiteral(value, tokenText);
             }
             else
             {
                 long value;
-                if (!Int64.TryParse(text, out value))
-                    throw ParseError(Res.InvalidIntegerLiteral, text);
+                if (!Int64.TryParse(tokenText, out value))
+                    throw ParseError(Res.InvalidIntegerLiteral, tokenText);
                 NextToken();
                 if (value >= Int32.MinValue && value <= Int32.MaxValue)
-                    return CreateLiteral((int)value, text);
-                return CreateLiteral(value, text);
+                    return CreateLiteral((int)value, tokenText);
+                return CreateLiteral(value, tokenText);
             }
         }
 
