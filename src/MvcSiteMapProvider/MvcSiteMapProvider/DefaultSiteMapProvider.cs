@@ -1165,7 +1165,7 @@ namespace MvcSiteMapProvider
                     requestContext, routeData.Values);
                 string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
                     ?? string.Empty).TrimEnd('/') + "/";
-                node = base.FindSiteMapNode(httpContext.Request.RawUrl) as MvcSiteMapNode;
+                node = base.FindSiteMapNode(httpContext.Request.Path) as MvcSiteMapNode;
 
                 if (!routeData.Values.ContainsKey("area"))
                 {
