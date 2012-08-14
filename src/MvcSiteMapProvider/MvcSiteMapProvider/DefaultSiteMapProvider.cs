@@ -1179,7 +1179,7 @@ namespace MvcSiteMapProvider
                     requestContext, routeData.Values);
                 string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
                     ?? string.Empty).TrimEnd('/') + "/";
-                node = base.FindSiteMapNode(httpContext.Request.RawUrl) as MvcSiteMapNode;
+                node = base.FindSiteMapNode(httpContext.Request.Path) as MvcSiteMapNode;
 
                 if (!routeData.Values.ContainsKey("area"))
                 {
@@ -1307,7 +1307,13 @@ namespace MvcSiteMapProvider
                 // Verify route values
                 if (values.Count > 0)
                 {
-                    foreach (var pair in values)
+                    // Checking for same keys and values.
+                    if( !CompareMustMatchRouteValues( mvcNode.RouteValues, values ) )
+                    {
+                        return false;
+                    } 
+                    
+                    foreach( var pair in values )
                     {
                         if (!string.IsNullOrEmpty(mvcNode[pair.Key]))
                         {
@@ -1344,6 +1350,26 @@ namespace MvcSiteMapProvider
             }
 
             return nodeValid;
+        }
+
+        /// <summary>
+        /// Returns whether the two route value collections have same keys and same values.
+        /// </summary>
+        /// <param name="mvcNodeRouteValues">The route values of the original node.</param>
+        /// <param name="routeValues">The route values to check in the given node.</param>
+        /// <returns><c>True</c> if the <paramref name="mvcNodeRouteValues"/> contains all keys and the same values as the given <paramref name="routeValues"/>, otherwise <c>false</c>.</returns>
+        private static bool CompareMustMatchRouteValues(IDictionary<string, object> mvcNodeRouteValues, IDictionary<string, object> routeValues)
+        {
+            var routeKeys = mvcNodeRouteValues.Keys;
+
+            foreach (var pair in routeValues)
+            {
+                if (routeKeys.Contains(pair.Key) && !mvcNodeRouteValues[pair.Key].ToString().Equals(pair.Value.ToString(), StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         #endregion
