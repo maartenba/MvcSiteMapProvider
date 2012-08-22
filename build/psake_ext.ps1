@@ -57,14 +57,6 @@ param(
     <tags>mvc sitemap menu breadcrumb navigation</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
     <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
-	<dependencies>
-	   <group targetFramework=""net30"">
-		  <dependency id=""MvcSiteMapProvider"" version=""[3.2.3.0]"" />
-	   </group>
-	   <group targetFramework=""net35"">
-		  <dependency id=""MvcSiteMapProvider"" version=""[3.2.3.0]"" />
-	   </group>
-	</dependencies>
   </metadata>
 </package>
 "
