@@ -72,6 +72,8 @@
     <Compile Include="AuthorizeAttributeAclModule.cs" />
     <Compile Include="AclModuleNotSupportedException.cs" />
     <Compile Include="ControllerExtensions.cs" />
+    <Compile Include="External\HttpContextMethodOverrider.cs" />
+    <Compile Include="External\HttpRequestMethodOverrider.cs" />
     <Compile Include="External\Dynamic.cs" />
     <Compile Include="External\ObjectCopier.cs" />
     <Compile Include="Filters\AttributeTarget.cs" />
