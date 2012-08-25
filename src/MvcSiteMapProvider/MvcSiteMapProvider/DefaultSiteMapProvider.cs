@@ -96,6 +96,15 @@ namespace MvcSiteMapProvider
         public int CacheDuration { get; private set; }
 
         /// <summary>
+        /// Get or sets the name of HTTP method to use when checking node accessibility.
+        /// </summary>
+        /// <value>
+        /// The name of HTTP method to use when checking node accessibility or null to use
+        /// the method of the current request. Defaults to null.
+        /// </value>
+        public string RouteMethod { get; private set; }
+
+        /// <summary>
         /// Gets the RootNode for the current SiteMapProvider.
         /// </summary>
         public override SiteMapNode RootNode
@@ -344,6 +353,11 @@ namespace MvcSiteMapProvider
  DependencyResolver.Current.GetService<IAclModule>() ??
 #endif
  new DefaultAclModule();
+            }
+
+            if (!string.IsNullOrEmpty(attributes["routeMethod"]))
+            {
+                RouteMethod = attributes["routeMethod"];
             }
 
             // Is a SiteMapNode URL resolver given?

@@ -88,7 +88,7 @@ namespace MvcSiteMapProvider
             }
 
             // Find routes for the sitemap node's url
-            HttpContextBase httpContext = new HttpContextWrapper(context);
+            HttpContextBase httpContext = new HttpContextMethodOverrider(context, provider.RouteMethod);
             string originalPath = httpContext.Request.Path;
             var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
             httpContext.RewritePath(nodeUrl, true);
