@@ -633,7 +633,17 @@ namespace MvcSiteMapProvider
                     {
                         throw new MvcSiteMapException(Resources.Messages.CouldNotDetermineRootNode);
                     }
-
+                }
+                catch (MvcSiteMapException)
+                {
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    throw new MvcSiteMapException(Resources.Messages.UnknownException, ex);
+                }
+                finally
+                {
                     // Create a cache item, this is used for the sole purpose of being able to invalidate our sitemap
                     // after a given time period, it also adds a dependancy on the sitemap file,
                     // so that once changed it will refresh your sitemap, unfortunately at this stage
@@ -654,19 +664,7 @@ namespace MvcSiteMapProvider
                                                   new CacheItemRemovedCallback(OnSiteMapChanged));
 
                     isBuildingSiteMap = false;
-                }
-                catch (MvcSiteMapException)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    throw new MvcSiteMapException(Resources.Messages.UnknownException, ex);
-                }
-                finally
-                {
                     siteMapXml = null;
-                    isBuildingSiteMap = false;
                 }
             }
 
