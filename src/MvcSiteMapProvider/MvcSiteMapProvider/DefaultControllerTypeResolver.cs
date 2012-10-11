@@ -69,6 +69,10 @@ namespace MvcSiteMapProvider
             if (areaNamespaces != null)
             {
                 namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
+                if (string.IsNullOrEmpty(areaName))
+    			{
+					namespaces = new HashSet<string>(namespaces.Union(ControllerBuilder.Current.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
+				}
             }
             else if (ControllerBuilder.Current.DefaultNamespaces.Count > 0)
             {
@@ -107,17 +111,14 @@ namespace MvcSiteMapProvider
             var namespacesForArea = new List<string>();
             var namespacesCommon = new List<string>();
 
-            foreach (var route in routes.OfType<Route>().Where(r => r.DataTokens != null))
-            {
-                var areaToken = route.DataTokens["area"];
-                IEnumerable<string> namespacesToken = route.DataTokens["Namespaces"] == null ? new string[] { "" } : (IEnumerable<string>)route.DataTokens["Namespaces"];
-
-                // search for area-based namespaces
-                if (areaToken != null && areaToken.ToString().Equals(area, StringComparison.OrdinalIgnoreCase))
-                    namespacesForArea.AddRange(namespacesToken);
-                else if (areaToken == null)
-                    namespacesCommon.AddRange(namespacesToken);
-            }
+            foreach (var route in routes.OfType<Route>().Where(r => r.DataTokens != null && r.DataTokens["Namespaces"] != null))
+    		{
+				// search for area-based namespaces
+				if (route.DataTokens["area"] != null && route.DataTokens["area"].ToString().Equals(area, StringComparison.OrdinalIgnoreCase))
+					namespacesForArea.AddRange((IEnumerable<string>)route.DataTokens["Namespaces"]);
+				else if (route.DataTokens["area"] == null)
+					namespacesCommon.AddRange((IEnumerable<string>)route.DataTokens["Namespaces"]);
+			}
 
             if (namespacesForArea.Count > 0)
             {
