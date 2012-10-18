@@ -145,7 +145,7 @@ namespace MvcSiteMapProvider
                     {
                         List<Type> controllerTypes = GetListOfControllerTypes();
                         var groupedByName = controllerTypes.GroupBy(
-                            t => t.Name.Substring(0, t.Name.Length - "Controller".Length),
+                            t => t.Name.Substring(0, t.Name.IndexOf("Controller")),
                             StringComparer.OrdinalIgnoreCase);
                         AssemblyCache = groupedByName.ToDictionary(
                             g => g.Key,
@@ -178,7 +178,7 @@ namespace MvcSiteMapProvider
                 }
                 typesSoFar = typesSoFar.Concat(typesInAsm);
             }
-            return typesSoFar.Where(t => t != null && t.IsClass && t.IsPublic && !t.IsAbstract && t.Name.EndsWith("Controller", StringComparison.OrdinalIgnoreCase) && typeof(IController).IsAssignableFrom(t)).ToList();
+            return typesSoFar.Where(t => t != null && t.IsClass && t.IsPublic && !t.IsAbstract && t.Name.IndexOf("Controller", StringComparison.OrdinalIgnoreCase) != -1 && typeof(IController).IsAssignableFrom(t)).ToList();
         }
 
         /// <summary>
