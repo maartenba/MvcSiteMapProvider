@@ -1627,7 +1627,7 @@ namespace MvcSiteMapProvider
             }
 
             // Determine controller and (index) action
-            string controller = type.Name.Replace("Controller", "");
+            string controller = type.Name.Substring(0, type.Name.IndexOf("Controller"));
             string action = (methodInfo != null ? methodInfo.Name : null) ?? "Index";
             if (methodInfo != null) // handle custom action name
             {
