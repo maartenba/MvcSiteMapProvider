@@ -2,3 +2,5 @@ nuget/lib/*
 release/MvcSiteMapProvider/net35/*
 release/MvcSiteMapProvider/net40/*
 *.nupkg
+_ReSharper*/
+*.resharper

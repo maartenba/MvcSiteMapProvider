@@ -46,6 +46,11 @@ namespace MvcSiteMapProvider
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the item factory.
+        /// </summary>
+        /// <value>The item factory.</value>
+        public IItemFactory ItemFactory { get; set; }
 
         /// <summary>
         /// Gets or sets the node key generator.
@@ -295,10 +300,25 @@ namespace MvcSiteMapProvider
                 }
             }
 
+
+            // Is an item factory given?
+            if (!string.IsNullOrEmpty(attributes["itemFactory"]))
+            {
+                ItemFactory = Activator.CreateInstance(
+                    Type.GetType(attributes["itemFactory"])) as IItemFactory;
+            }
+            if (ItemFactory == null)
+            {
+                ItemFactory =
+#if !NET35
+ DependencyResolver.Current.GetService<IItemFactory>() ??
+#endif
+ new DefaultItemFactory();
+            }
             // Is a node key generator given?
             if (!string.IsNullOrEmpty(attributes["nodeKeyGenerator"]))
             {
-                NodeKeyGenerator = Activator.CreateInstance(
+                NodeKeyGenerator = ItemFactory.CreateInstance(
                     Type.GetType(attributes["nodeKeyGenerator"])) as INodeKeyGenerator;
             }
             if (NodeKeyGenerator == null)
@@ -313,7 +333,7 @@ namespace MvcSiteMapProvider
             // Is a controller type resolver given?
             if (!string.IsNullOrEmpty(attributes["controllerTypeResolver"]))
             {
-                ControllerTypeResolver = Activator.CreateInstance(
+                ControllerTypeResolver = ItemFactory.CreateInstance(
                     Type.GetType(attributes["controllerTypeResolver"])) as IControllerTypeResolver;
             }
             if (ControllerTypeResolver == null)
@@ -328,7 +348,7 @@ namespace MvcSiteMapProvider
             // Is an action method parameter resolver given?
             if (!string.IsNullOrEmpty(attributes["actionMethodParameterResolver"]))
             {
-                ActionMethodParameterResolver = Activator.CreateInstance(
+                ActionMethodParameterResolver = ItemFactory.CreateInstance(
                     Type.GetType(attributes["actionMethodParameterResolver"])) as IActionMethodParameterResolver;
             }
             if (ActionMethodParameterResolver == null)
@@ -343,7 +363,7 @@ namespace MvcSiteMapProvider
             // Is an acl module given?
             if (!string.IsNullOrEmpty(attributes["aclModule"]))
             {
-                AclModule = Activator.CreateInstance(
+                AclModule = ItemFactory.CreateInstance(
                     Type.GetType(attributes["aclModule"])) as IAclModule;
             }
             if (AclModule == null)
@@ -363,7 +383,7 @@ namespace MvcSiteMapProvider
             // Is a SiteMapNode URL resolver given?
             if (!string.IsNullOrEmpty(attributes["siteMapNodeUrlResolver"]))
             {
-                SiteMapNodeUrlResolver = Activator.CreateInstance(
+                SiteMapNodeUrlResolver = ItemFactory.CreateInstance(
                     Type.GetType(attributes["siteMapNodeUrlResolver"])) as ISiteMapNodeUrlResolver;
             }
             if (SiteMapNodeUrlResolver == null)
@@ -378,7 +398,7 @@ namespace MvcSiteMapProvider
             // Is a SiteMapNode visibility provider given?
             if (!string.IsNullOrEmpty(attributes["siteMapNodeVisibilityProvider"]))
             {
-                SiteMapNodeVisibilityProvider = Activator.CreateInstance(
+                SiteMapNodeVisibilityProvider = ItemFactory.CreateInstance(
                     Type.GetType(attributes["siteMapNodeVisibilityProvider"])) as ISiteMapNodeVisibilityProvider;
             }
             if (SiteMapNodeVisibilityProvider == null)
@@ -393,7 +413,7 @@ namespace MvcSiteMapProvider
             // Is a SiteMapProvider event handler given?
             if (!string.IsNullOrEmpty(attributes["siteMapProviderEventHandler"]))
             {
-                SiteMapProviderEventHandler = Activator.CreateInstance(
+                SiteMapProviderEventHandler = ItemFactory.CreateInstance(
                     Type.GetType(attributes["siteMapProviderEventHandler"])) as ISiteMapProviderEventHandler;
             }
             if (SiteMapProviderEventHandler == null)
@@ -1306,12 +1326,12 @@ namespace MvcSiteMapProvider
                 if (values.Count > 0)
                 {
                     // Checking for same keys and values.
-                    if( !CompareMustMatchRouteValues( mvcNode.RouteValues, values ) )
+                    if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
                     {
                         return false;
-                    } 
-                    
-                    foreach( var pair in values )
+                    }
+
+                    foreach (var pair in values)
                     {
                         if (!string.IsNullOrEmpty(mvcNode[pair.Key]))
                         {
