@@ -153,7 +153,7 @@ namespace MvcSiteMapProvider
                 {
                     if (dynamicNodeProvider == null)
                     {
-                        dynamicNodeProvider = Activator.CreateInstance(
+                        dynamicNodeProvider = ItemFactory.CreateInstance(
                             Type.GetType(this["dynamicNodeProvider"])) as IDynamicNodeProvider;
                     }
                     return dynamicNodeProvider;
@@ -188,7 +188,7 @@ namespace MvcSiteMapProvider
                 {
                     if (urlResolver == null)
                     {
-                        urlResolver = Activator.CreateInstance(
+                        urlResolver = ItemFactory.CreateInstance(
                             Type.GetType(this["urlResolver"])) as ISiteMapNodeUrlResolver;
                     }
                     return urlResolver;
@@ -223,7 +223,7 @@ namespace MvcSiteMapProvider
                 {
                     if (visibilityProvider == null)
                     {
-                        visibilityProvider = Activator.CreateInstance(
+                        visibilityProvider = ItemFactory.CreateInstance(
                             Type.GetType(this["visibilityProvider"])) as ISiteMapNodeVisibilityProvider;
                     }
                     return visibilityProvider;

@@ -80,6 +80,7 @@
     <Compile Include="External\ObjectCopier.cs" />
     <Compile Include="Filters\AttributeTarget.cs" />
     <Compile Include="Filters\SiteMapTitleTarget.cs" />
+    <Compile Include="ItemFactory.cs" />
     <Compile Include="UrlResolverException.cs" />
     <Compile Include="DefaultSiteMapNodeUrlResolver.cs" />
     <Compile Include="DefaultSiteMapProviderEventHandler.cs" />

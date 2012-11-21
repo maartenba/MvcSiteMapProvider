@@ -47,12 +47,6 @@ namespace MvcSiteMapProvider
 
         #region Properties
         /// <summary>
-        /// Gets or sets the item factory.
-        /// </summary>
-        /// <value>The item factory.</value>
-        public IItemFactory ItemFactory { get; set; }
-
-        /// <summary>
         /// Gets or sets the node key generator.
         /// </summary>
         /// <value>The node key generator.</value>
@@ -301,20 +295,7 @@ namespace MvcSiteMapProvider
             }
 
 
-            // Is an item factory given?
-            if (!string.IsNullOrEmpty(attributes["itemFactory"]))
-            {
-                ItemFactory = Activator.CreateInstance(
-                    Type.GetType(attributes["itemFactory"])) as IItemFactory;
-            }
-            if (ItemFactory == null)
-            {
-                ItemFactory =
-#if !NET35
- DependencyResolver.Current.GetService<IItemFactory>() ??
-#endif
- new DefaultItemFactory();
-            }
+          
             // Is a node key generator given?
             if (!string.IsNullOrEmpty(attributes["nodeKeyGenerator"]))
             {
