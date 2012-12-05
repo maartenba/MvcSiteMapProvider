@@ -31,9 +31,9 @@ namespace MvcSiteMapProvider
         protected const string NodeName = "mvcSiteMapNode";
         protected readonly XNamespace ns = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0";
         protected readonly object synclock = new object();
-        protected string cacheKey = "__MVCSITEMAP_A33EF2B1-F0A4-4507-B011-94669840F79C";
-        protected string aclCacheItemKey = "__MVCSITEMAP_7C881C5D-9338-4CEF-AF5F-4BA5B31EB1C0";
-        protected string currentNodeCacheKey = "__MVCSITEMAP_C7704085-E4F5-42C2-BE74-3DD32D360623";
+        protected string cacheKey;
+        protected string aclCacheItemKey;
+        protected string currentNodeCacheKey;
         protected SiteMapNode root;
         protected bool isBuildingSiteMap = false;
         protected bool scanAssembliesForSiteMapNodes;
@@ -42,7 +42,6 @@ namespace MvcSiteMapProvider
         protected List<string> excludeAssembliesForScan = new List<string>();
         protected List<string> includeAssembliesForScan = new List<string>();
         protected List<string> attributesToIgnore = new List<string>();
-
         #endregion
 
         #region Properties
@@ -130,7 +129,6 @@ namespace MvcSiteMapProvider
                     return currentNode;
                 }
                 return (SiteMapNode)HttpContext.Current.Items[currentNodeCacheKey];
-
             }
         }
 
@@ -144,6 +142,9 @@ namespace MvcSiteMapProvider
         public DefaultSiteMapProvider()
         {
             CacheDuration = 5;
+            cacheKey = "__MVCSITEMAP_" + Guid.NewGuid().ToString();
+            aclCacheItemKey = "__MVCSITEMAP_ACL_" + Guid.NewGuid().ToString();
+            currentNodeCacheKey = "__MVCSITEMAP_CN_" + Guid.NewGuid().ToString();
         }
 
         #endregion
@@ -1306,12 +1307,12 @@ namespace MvcSiteMapProvider
                 if (values.Count > 0)
                 {
                     // Checking for same keys and values.
-                    if( !CompareMustMatchRouteValues( mvcNode.RouteValues, values ) )
+                    if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
                     {
                         return false;
-                    } 
-                    
-                    foreach( var pair in values )
+                    }
+
+                    foreach (var pair in values)
                     {
                         if (!string.IsNullOrEmpty(mvcNode[pair.Key]))
                         {

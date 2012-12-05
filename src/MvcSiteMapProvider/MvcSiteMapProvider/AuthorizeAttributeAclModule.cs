@@ -10,7 +10,6 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Extensibility;
 using MvcSiteMapProvider.External;
 using Telerik.Web.Mvc.Infrastructure.Implementation;
-
 #endregion
 
 namespace MvcSiteMapProvider
@@ -103,7 +102,7 @@ namespace MvcSiteMapProvider
             {
                 routes.Values[routeValue.Key] = routeValue.Value;
             }
-            if (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || mvcNode.Area == String.Empty)
+            if (originalRoutes != null && (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || mvcNode.Area == String.Empty))
             {
                 routes.DataTokens.Remove("area");
                 //routes.DataTokens.Remove("Namespaces");
