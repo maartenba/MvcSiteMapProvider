@@ -26,7 +26,7 @@ namespace MvcSiteMapProvider
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, DefaultSiteMapProvider provider, HttpContext context, SiteMapNode node)
+        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, SiteMapProvider provider, HttpContext context, SiteMapNode node)
         {
             // Is security trimming enabled?
             if (!provider.SecurityTrimmingEnabled)

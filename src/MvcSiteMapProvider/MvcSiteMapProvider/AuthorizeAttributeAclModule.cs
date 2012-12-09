@@ -49,7 +49,7 @@ namespace MvcSiteMapProvider
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, DefaultSiteMapProvider provider, HttpContext context, SiteMapNode node)
+        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, SiteMapProvider provider, HttpContext context, SiteMapNode node)
         {
             // Is security trimming enabled?
             if (!provider.SecurityTrimmingEnabled)
@@ -87,7 +87,7 @@ namespace MvcSiteMapProvider
             }
 
             // Find routes for the sitemap node's url
-            HttpContextBase httpContext = new HttpContextMethodOverrider(context, provider.RouteMethod);
+            HttpContextBase httpContext = new HttpContextMethodOverrider(context, null);
             string originalPath = httpContext.Request.Path;
             var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
             httpContext.RewritePath(nodeUrl, true);
