@@ -121,5 +121,10 @@ namespace MvcSiteMapProvider
         /// The preserved route parameter names.
         /// </value>
         string PreservedRouteParameters { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the provider this node is associated with
+        /// </summary>
+        string SiteMapProviderName { get; set; }
     }
 }

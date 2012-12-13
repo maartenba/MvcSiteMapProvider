@@ -21,6 +21,6 @@ namespace MvcSiteMapProvider.Extensibility
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, DefaultSiteMapProvider provider, HttpContext context, SiteMapNode node);
+        bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, SiteMapProvider provider, HttpContext context, SiteMapNode node);
     }
 }

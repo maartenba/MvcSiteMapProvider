@@ -101,7 +101,7 @@ namespace MvcSiteMapProvider
         /// The name of HTTP method to use when checking node accessibility or null to use
         /// the method of the current request. Defaults to null.
         /// </value>
-        public string RouteMethod { get; private set; }
+        //public string RouteMethod { get; private set; }
 
         /// <summary>
         /// Gets the RootNode for the current SiteMapProvider.
@@ -356,10 +356,11 @@ namespace MvcSiteMapProvider
  new DefaultAclModule();
             }
 
-            if (!string.IsNullOrEmpty(attributes["routeMethod"]))
-            {
-                RouteMethod = attributes["routeMethod"];
-            }
+            //this is not documented that you can even set it...default seemt to be taken...and this is used on AclModule, so drop for now
+            //if (!string.IsNullOrEmpty(attributes["routeMethod"]))
+            //{
+            //    RouteMethod = attributes["routeMethod"];
+            //}
 
             // Is a SiteMapNode URL resolver given?
             if (!string.IsNullOrEmpty(attributes["siteMapNodeUrlResolver"]))
@@ -855,12 +856,17 @@ namespace MvcSiteMapProvider
             Dictionary<SiteMapNode, string> nodesToProcessLater
                 = new Dictionary<SiteMapNode, string>();
 
+            //SiteMap.Provider.Name
+            bool isDefaultProvider = this.Name == SiteMap.Provider.Name;
+
             // Search root node prior to searching other nodes
-            if (definitions.Where(t => String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)).Count() == 1)
+            if (definitions.Any(t => String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)
+                                       && (isDefaultProvider && string.IsNullOrEmpty(t.SiteMapNodeAttribute.SiteMapProviderName)
+                                           || t.SiteMapNodeAttribute.SiteMapProviderName == this.Name)))
             {
                 SiteMapNode attributedRootNode = null;
 
-                var item = definitions.Where(t => String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)).Single();
+                var item = definitions.Single(t => String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey));
 
                 var actionNode = item as MvcSiteMapNodeAttributeDefinitionForAction;
                 if (actionNode != null)
@@ -884,7 +890,9 @@ namespace MvcSiteMapProvider
             }
 
             // Create nodes
-            foreach (var assemblyNode in definitions.Where(t => !String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)))
+            foreach (var assemblyNode in definitions.Where(t => !String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)
+                    && (isDefaultProvider && string.IsNullOrEmpty(t.SiteMapNodeAttribute.SiteMapProviderName)
+                                           || t.SiteMapNodeAttribute.SiteMapProviderName == this.Name)))
             {
                 SiteMapNode nodeToAdd = null;
 
@@ -944,7 +952,7 @@ namespace MvcSiteMapProvider
                 var parentNode = FindSiteMapNodeFromKey(nodeToAdd.Value);
                 if (parentNode == null)
                 {
-                    var temp = nodesToProcessLater.Keys.Where(t => t.Key == nodeToAdd.Value).FirstOrDefault();
+                    var temp = nodesToProcessLater.Keys.FirstOrDefault(t => t.Key == nodeToAdd.Value);
                     if (temp != null)
                     {
                         parentNode = temp;
@@ -1607,7 +1615,9 @@ namespace MvcSiteMapProvider
                 }
             }
 
-            // Determine area (will only work if controller is defined as Assembly.<Area>.Controllers.HomeController)
+
+
+            // Determine area (will only work if controller is defined as <anything>.Areas.<Area>.Controllers.HomeController - which is normal convention)
             string area = "";
             if (!string.IsNullOrEmpty(attribute.AreaName))
             {
@@ -1615,15 +1625,15 @@ namespace MvcSiteMapProvider
             }
             if (string.IsNullOrEmpty(area))
             {
-                var parts = type.Namespace.Split('.');
-                area = parts[parts.Length - 2];
-
-                var assemblyParts = type.Assembly.FullName.Split(',');
-
-                if (type.Namespace == assemblyParts[0] + ".Controllers" || type.Namespace.StartsWith(area))
+                if (type.Namespace!=null)
                 {
-                    // Is in default areaName...
-                    area = "";
+                    var areaIndex = type.Namespace.LastIndexOf("Areas.", StringComparison.OrdinalIgnoreCase);
+                    if (areaIndex > 0)
+                    {
+                        var parts = type.Namespace.Substring(areaIndex).Split('.');
+                        if (parts.Length > 0)
+                            area = parts[1];
+                    }
                 }
             }
 
