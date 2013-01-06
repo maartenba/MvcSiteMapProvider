@@ -102,13 +102,15 @@ namespace MvcSiteMapProvider
             if (_urlkey == key) return _url;
 
             string returnValue;
+            var routeValueDictionary = new RouteValueDictionary(routeValues);
             if (!string.IsNullOrEmpty(mvcSiteMapNode.Route))
             {
-                returnValue = UrlHelper.RouteUrl(mvcSiteMapNode.Route, new RouteValueDictionary(routeValues));
+                routeValueDictionary.Remove("route");
+                returnValue = UrlHelper.RouteUrl(mvcSiteMapNode.Route, routeValueDictionary);
             }
             else
             {
-                returnValue = UrlHelper.Action(action, controller, new RouteValueDictionary(routeValues));
+                returnValue = UrlHelper.Action(action, controller, routeValueDictionary);
             }
 
             if (string.IsNullOrEmpty(returnValue))
