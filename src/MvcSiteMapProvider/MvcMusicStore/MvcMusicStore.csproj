@@ -47,6 +47,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
@@ -227,6 +230,14 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MvcSiteMapProvider.Core\MvcSiteMapProvider.Core.csproj">
+      <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
+      <Name>MvcSiteMapProvider.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MvcSiteMapProvider.Web\MvcSiteMapProvider.Web.csproj">
+      <Project>{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}</Project>
+      <Name>MvcSiteMapProvider.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
       <Project>{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}</Project>
       <Name>MvcSiteMapProvider</Name>
