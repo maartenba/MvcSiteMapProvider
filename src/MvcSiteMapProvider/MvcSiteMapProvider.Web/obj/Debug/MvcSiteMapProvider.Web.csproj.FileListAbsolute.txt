@@ -1,0 +1,5 @@
+F:\Projects\MvcSiteMapProvider\src\MvcSiteMapProvider\MvcSiteMapProvider.Web\bin\Debug\MvcSiteMapProvider.Web.dll
+F:\Projects\MvcSiteMapProvider\src\MvcSiteMapProvider\MvcSiteMapProvider.Web\bin\Debug\MvcSiteMapProvider.Web.pdb
+F:\Projects\MvcSiteMapProvider\src\MvcSiteMapProvider\MvcSiteMapProvider.Web\obj\Debug\MvcSiteMapProvider.Web.csprojResolveAssemblyReference.cache
+F:\Projects\MvcSiteMapProvider\src\MvcSiteMapProvider\MvcSiteMapProvider.Web\obj\Debug\MvcSiteMapProvider.Web.dll
+F:\Projects\MvcSiteMapProvider\src\MvcSiteMapProvider\MvcSiteMapProvider.Web\obj\Debug\MvcSiteMapProvider.Web.pdb
