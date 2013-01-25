@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -46,10 +47,63 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="IoC\DI.cs" />
+    <Compile Include="IoC\IResolver.cs" />
+    <Compile Include="ISiteMapRequestContext.cs" />
+    <Compile Include="ISiteMapSource.cs" />
+    <Compile Include="Mvc\AmbiguousControllerException.cs" />
+    <Compile Include="Mvc\DefaultActionMethodParameterResolver.cs" />
+    <Compile Include="Mvc\DefaultControllerTypeResolver.cs" />
+    <Compile Include="Mvc\IActionMethodParameterResolver.cs" />
+    <Compile Include="Mvc\IControllerTypeResolver.cs" />
+    <Compile Include="Mvc\ThreadSafeDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Security\AclModuleNotSupportedException.cs" />
+    <Compile Include="Security\AuthorizeAttributeAclModule.cs" />
+    <Compile Include="Security\AuthorizeAttributeBuilder.cs" />
+    <Compile Include="Security\DefaultAclModule.cs" />
+    <Compile Include="Security\IAclModule.cs" />
+    <Compile Include="Security\IAuthorizeAttribute.cs" />
+    <Compile Include="Security\InternalAuthorize.cs" />
+    <Compile Include="Security\ObjectCopier.cs" />
+    <Compile Include="Security\XmlRolesAclModule.cs" />
+    <Compile Include="SiteMapRequestContext.cs" />
+    <Compile Include="SiteMap\CacheDescription.cs" />
+    <Compile Include="SiteMap\DynamicNode.cs" />
+    <Compile Include="SiteMap\HttpContext2.cs" />
+    <Compile Include="SiteMap\HttpContextMethodOverrider.cs" />
+    <Compile Include="SiteMap\HttpRequest2.cs" />
+    <Compile Include="SiteMap\HttpRequestMethodOverrider.cs" />
+    <Compile Include="SiteMap\IDefaultSiteMapProvider.cs" />
+    <Compile Include="SiteMap\IDynamicNodeProvider.cs" />
+    <Compile Include="SiteMap\ISiteMap.cs" />
+    <Compile Include="SiteMap\ISiteMapNodeUrlResolver.cs" />
+    <Compile Include="SiteMap\ISiteMapNodeVisibilityProvider.cs" />
+    <Compile Include="SiteMap\ISiteMapProvider.cs" />
+    <Compile Include="SiteMap\IStaticSiteMapProvider.cs" />
+    <Compile Include="SiteMap\MvcSiteMapException.cs" />
+    <Compile Include="SiteMap\MvcSiteMapNode.cs" />
+    <Compile Include="SiteMap\SiteMap.cs" />
+    <Compile Include="SiteMap\SiteMapResolveEventArgs.cs" />
+    <Compile Include="SiteMap\UrlPath.cs" />
+    <Compile Include="UpdatePriority.cs" />
+    <Compile Include="XSiteMapNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

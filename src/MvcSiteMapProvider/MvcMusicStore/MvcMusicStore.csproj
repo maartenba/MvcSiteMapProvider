@@ -118,6 +118,7 @@
     <Compile Include="Areas\Admin\Controllers\StoreManagerController.cs" />
     <Compile Include="Code\AuthenticatedVisibilityProvider.cs" />
     <Compile Include="Code\BlingHelper.cs" />
+    <Compile Include="Code\IoC\StructureMapResolver.cs" />
     <Compile Include="Code\NonAuthenticatedVisibilityProvider.cs" />
     <Compile Include="Code\StoreBrowseDynamicNodeProvider.cs" />
     <Compile Include="Code\StoreDetailsDynamicNodeProvider.cs" />

@@ -2,3 +2,13 @@ nuget/lib/*
 release/MvcSiteMapProvider/net35/*
 release/MvcSiteMapProvider/net40/*
 *.nupkg
+[Rr]elease*/
+[Dd]ebug*/
+[Bb]in
+obj/
+*.suo
+*.vspscc
+*.user
+*.obj
+*.tlb
+*.tlh
