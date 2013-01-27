@@ -49,7 +49,7 @@ namespace MvcSiteMapProvider.Core.Security
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, MvcSiteMapProvider.Core.SiteMap.SiteMap provider, HttpContext context, SiteMapNode node)
+        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, ISiteMap provider, HttpContext context, ISiteMapNode node)
         {
             // Is security trimming enabled?
             if (!provider.SecurityTrimmingEnabled)
@@ -65,12 +65,12 @@ namespace MvcSiteMapProvider.Core.Security
             }
 
             // Is it a regular node?
-            var mvcNode = node as MvcSiteMapNode;
-            if (mvcNode == null)
-            {
-                throw new AclModuleNotSupportedException(
-                    Resources.Messages.AclModuleDoesNotSupportRegularSiteMapNodes);
-            }
+            var mvcNode = node;
+            //if (mvcNode == null)
+            //{
+            //    throw new AclModuleNotSupportedException(
+            //        Resources.Messages.AclModuleDoesNotSupportRegularSiteMapNodes);
+            //}
 
             // Clickable? Always accessible.
             if (mvcNode.Clickable == false)

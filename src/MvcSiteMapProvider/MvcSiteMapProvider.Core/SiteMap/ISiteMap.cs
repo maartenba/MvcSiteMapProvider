@@ -7,9 +7,9 @@
 namespace MvcSiteMapProvider.Core.SiteMap
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    //using System.Collections.Generic;
+    //using System.Linq;
+    //using System.Text;
 
     /// <summary>
     /// TODO: Update summary.
@@ -17,30 +17,31 @@ namespace MvcSiteMapProvider.Core.SiteMap
     public interface ISiteMap
     {
         // ISiteMapProvider members
-        System.Web.SiteMapNode CurrentNode { get; }
+        ISiteMapNode CurrentNode { get; }
         bool EnableLocalization { get; set; }
-        System.Web.SiteMapNode FindSiteMapNode(string rawUrl);
-        System.Web.SiteMapNode FindSiteMapNode(System.Web.HttpContext context);
-        System.Web.SiteMapNode FindSiteMapNodeFromKey(string key);
-        System.Web.SiteMapNodeCollection GetChildNodes(System.Web.SiteMapNode node);
-        System.Web.SiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel);
-        System.Web.SiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel);
-        System.Web.SiteMapNode GetParentNode(System.Web.SiteMapNode node);
-        System.Web.SiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int walkupLevels, int relativeDepthFromWalkup);
-        System.Web.SiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(System.Web.SiteMapNode node, int walkupLevels, int relativeDepthFromWalkup);
-        void HintAncestorNodes(System.Web.SiteMapNode node, int upLevel);
-        void HintNeighborhoodNodes(System.Web.SiteMapNode node, int upLevel, int downLevel);
-        void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes);
-        bool IsAccessibleToUser(System.Web.HttpContext context, System.Web.SiteMapNode node);
-        SiteMap ParentProvider { get; set; }
+        ISiteMapNode FindSiteMapNode(string rawUrl);
+        ISiteMapNode FindSiteMapNode(System.Web.HttpContext context);
+        ISiteMapNode FindSiteMapNodeFromKey(string key);
+        SiteMapNodeCollection GetChildNodes(ISiteMapNode node);
+        ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel);
+        ISiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel);
+        ISiteMapNode GetParentNode(ISiteMapNode node);
+        ISiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int walkupLevels, int relativeDepthFromWalkup);
+        ISiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(ISiteMapNode node, int walkupLevels, int relativeDepthFromWalkup);
+        void HintAncestorNodes(ISiteMapNode node, int upLevel);
+        void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel);
+        //void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes);
+        bool IsAccessibleToUser(System.Web.HttpContext context, ISiteMapNode node);
+        //SiteMap ParentProvider { get; set; }
         string ResourceKey { get; set; }
-        System.Web.SiteMapNode RootNode { get; }
+        ISiteMapNode RootNode { get; }
         //System.Web.SiteMapProvider RootProvider { get; }
         bool SecurityTrimmingEnabled { get; }
         //event System.Web.SiteMapResolveEventHandler SiteMapResolve;
 
         // IStaticSiteMapProvider members
-        System.Web.SiteMapNode BuildSiteMap();
+
+        ISiteMapNode BuildSiteMap();
         //System.Web.SiteMapNode FindSiteMapNode(string rawUrl);
         //System.Web.SiteMapNode FindSiteMapNodeFromKey(string key);
         //System.Web.SiteMapNodeCollection GetChildNodes(System.Web.SiteMapNode node);
@@ -54,7 +55,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //MvcSiteMapProvider.Extensibility.IControllerTypeResolver ControllerTypeResolver { get; set; }
         //System.Web.SiteMapNode CurrentNode { get; } // From ISiteMapProvider
         //System.Web.SiteMapNode FindSiteMapNode(System.Web.HttpContext context); // From ISiteMapProvider
-        System.Web.SiteMapNode FindSiteMapNode(System.Web.Mvc.ControllerContext context);
+        ISiteMapNode FindSiteMapNode(System.Web.Mvc.ControllerContext context);
         //void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes); // From ISiteMapProvider
         //bool IsAccessibleToUser(System.Web.HttpContext context, System.Web.SiteMapNode node); // From ISiteMapProvider
         //MvcSiteMapProvider.Extensibility.INodeKeyGenerator NodeKeyGenerator { get; set; }
@@ -63,5 +64,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //MvcSiteMapProvider.Extensibility.ISiteMapNodeUrlResolver SiteMapNodeUrlResolver { get; set; }
         //MvcSiteMapProvider.Extensibility.ISiteMapNodeVisibilityProvider SiteMapNodeVisibilityProvider { get; set; }
         //MvcSiteMapProvider.Extensibility.ISiteMapProviderEventHandler SiteMapProviderEventHandler { get; set; }
+
+
+        // Data structure management
+        void AddNode(ISiteMapNode node);
+        void AddNode(ISiteMapNode node, ISiteMapNode parentNode);
+        void RemoveNode(ISiteMapNode node);
+        void Clear();
     }
 }

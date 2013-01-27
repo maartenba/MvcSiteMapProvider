@@ -7,6 +7,7 @@
 namespace MvcSiteMapProvider.Core.SiteMap
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -76,8 +77,255 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return true;
         }
 
- 
+        public static bool IsAbsolutePhysicalPath(string path)
+        {
+            if ((path == null) || (path.Length < 3))
+            {
+                return false;
+            }
+            return (((path[1] == ':') && IsDirectorySeparatorChar(path[2])) || IsUncSharePath(path));
+        }
 
+        private static bool IsDirectorySeparatorChar(char ch)
+        {
+            if (ch != '\\')
+            {
+                return (ch == '/');
+            }
+            return true;
+        }
 
+        private static bool IsUncSharePath(string path)
+        {
+            return (((path.Length > 2) && IsDirectorySeparatorChar(path[0])) && IsDirectorySeparatorChar(path[1]));
+        }
+
+        public static string Combine(string basepath, string relative)
+        {
+            //return Combine(HttpRuntime.AppDomainAppVirtualPathString, basepath, relative);
+            return Combine(HttpRuntime.AppDomainAppVirtualPath, basepath, relative);
+        }
+
+        private static string Combine(string appPath, string basepath, string relative)
+        {
+            string str;
+            if (string.IsNullOrEmpty(relative))
+            {
+                throw new ArgumentNullException("relative");
+            }
+            if (string.IsNullOrEmpty(basepath))
+            {
+                throw new ArgumentNullException("basepath");
+            }
+            if ((basepath[0] == '~') && (basepath.Length == 1))
+            {
+                basepath = "~/";
+            }
+            else
+            {
+                int num = basepath.LastIndexOf('/');
+                if (num < (basepath.Length - 1))
+                {
+                    basepath = basepath.Substring(0, num + 1);
+                }
+            }
+            CheckValidVirtualPath(relative);
+            if (IsRooted(relative))
+            {
+                str = relative;
+            }
+            else
+            {
+                if ((relative.Length == 1) && (relative[0] == '~'))
+                {
+                    return appPath;
+                }
+                if (IsAppRelativePath(relative))
+                {
+                    if (appPath.Length > 1)
+                    {
+                        str = appPath + "/" + relative.Substring(2);
+                    }
+                    else
+                    {
+                        str = "/" + relative.Substring(2);
+                    }
+                }
+                else
+                {
+                    str = SimpleCombine(basepath, relative);
+                }
+            }
+            return Reduce(str);
+        }
+
+        private static string SimpleCombine(string basepath, string relative)
+        {
+            if (HasTrailingSlash(basepath))
+            {
+                return (basepath + relative);
+            }
+            return (basepath + "/" + relative);
+        }
+
+        private static bool HasTrailingSlash(string virtualPath)
+        {
+            return (virtualPath[virtualPath.Length - 1] == '/');
+        }
+
+        private static void CheckValidVirtualPath(string path)
+        {
+            if (IsAbsolutePhysicalPath(path))
+            {
+                throw new HttpException(string.Format(Resources.Messages.PhysicalPathNotAllowed, path));
+            }
+            int index = path.IndexOf('?');
+            if (index >= 0)
+            {
+                path = path.Substring(0, index);
+            }
+            if (HasScheme(path))
+            {
+                throw new HttpException(string.Format(Resources.Messages.InvalidVirtualPath, path));
+            }
+        }
+
+        private static bool HasScheme(string virtualPath)
+        {
+            int index = virtualPath.IndexOf(':');
+            if (index == -1)
+            {
+                return false;
+            }
+            int num2 = virtualPath.IndexOf('/');
+            if (num2 != -1)
+            {
+                return (index < num2);
+            }
+            return true;
+        }
+
+        private static string Reduce(string path)
+        {
+            string str = null;
+            if (path != null)
+            {
+                int index = path.IndexOf('?');
+                if (index >= 0)
+                {
+                    str = path.Substring(index);
+                    path = path.Substring(0, index);
+                }
+            }
+            path = FixVirtualPathSlashes(path);
+            path = ReduceVirtualPath(path);
+            if (str == null)
+            {
+                return path;
+            }
+            return (path + str);
+        }
+
+        private static string ReduceVirtualPath(string path)
+        {
+            int length = path.Length;
+            int startIndex = 0;
+            while (true)
+            {
+                startIndex = path.IndexOf('.', startIndex);
+                if (startIndex < 0)
+                {
+                    return path;
+                }
+                if (((startIndex == 0) || (path[startIndex - 1] == '/')) && ((((startIndex + 1) == length) || (path[startIndex + 1] == '/')) || ((path[startIndex + 1] == '.') && (((startIndex + 2) == length) || (path[startIndex + 2] == '/')))))
+                {
+                    break;
+                }
+                startIndex++;
+            }
+            ArrayList list = new ArrayList();
+            StringBuilder builder = new StringBuilder();
+            startIndex = 0;
+            do
+            {
+                int num3 = startIndex;
+                startIndex = path.IndexOf('/', num3 + 1);
+                if (startIndex < 0)
+                {
+                    startIndex = length;
+                }
+                if ((((startIndex - num3) <= 3) && ((startIndex < 1) || (path[startIndex - 1] == '.'))) && (((num3 + 1) >= length) || (path[num3 + 1] == '.')))
+                {
+                    if ((startIndex - num3) == 3)
+                    {
+                        if (list.Count == 0)
+                        {
+                            throw new HttpException(Resources.Messages.CannotExitUpTopDirectory);
+                        }
+                        if ((list.Count == 1) && IsAppRelativePath(path))
+                        {
+                            return ReduceVirtualPath(MakeVirtualPathAppAbsolute(path));
+                        }
+                        builder.Length = (int)list[list.Count - 1];
+                        list.RemoveRange(list.Count - 1, 1);
+                    }
+                }
+                else
+                {
+                    list.Add(builder.Length);
+                    builder.Append(path, num3, startIndex - num3);
+                }
+            }
+            while (startIndex != length);
+            string str = builder.ToString();
+            if (str.Length != 0)
+            {
+                return str;
+            }
+            if ((length > 0) && (path[0] == '/'))
+            {
+                return "/";
+            }
+            return ".";
+        }
+
+        private static string FixVirtualPathSlashes(string virtualPath)
+        {
+            virtualPath = virtualPath.Replace('\\', '/');
+            while (true)
+            {
+                string str = virtualPath.Replace("//", "/");
+                if (str == virtualPath)
+                {
+                    return virtualPath;
+                }
+                virtualPath = str;
+            }
+        }
+
+        /// <summary>
+        /// Encodes the external URL.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns></returns>
+        public static bool EncodeExternalUrl(ISiteMapNode node)
+        {
+            var url = node.Url;
+            if (url.Contains("http") || url.Contains("ftp"))
+            {
+                node.Url = HttpUtility.UrlEncode(url);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Decodes the external URL.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        public static void DecodeExternalUrl(ISiteMapNode node)
+        {
+            node.Url = HttpUtility.UrlDecode(node.Url);
+        }
     }
 }

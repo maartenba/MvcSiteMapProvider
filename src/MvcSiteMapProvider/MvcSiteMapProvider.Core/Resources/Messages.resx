@@ -126,7 +126,37 @@
   <data name="CannotEnumerateThreadSafeDictionary" xml:space="preserve">
     <value>Cannot enumerate a threadsafe dictionary. Instead, enumerate the keys or values collection.</value>
   </data>
+  <data name="CannotExitUpTopDirectory" xml:space="preserve">
+    <value>Cannot use a leading .. to exit above the top directory.</value>
+  </data>
+  <data name="CollectionReadOnly" xml:space="preserve">
+    <value>Collection is read-only.</value>
+  </data>
+  <data name="InvalidSiteMapElement" xml:space="preserve">
+    <value>An invalid element was found in the sitemap.</value>
+  </data>
+  <data name="InvalidVirtualPath" xml:space="preserve">
+    <value>'{0}' is not a valid virtual path.</value>
+  </data>
+  <data name="MultipleNodesWithIdenticalKey" xml:space="preserve">
+    <value>Multiple nodes with the same key '{0}' were found. XmlSiteMapProvider requires that sitemap nodes have unique keys.</value>
+  </data>
+  <data name="MultipleNodesWithIdenticalUrl" xml:space="preserve">
+    <value>Multiple nodes with the same URL '{0}' were found. XmlSiteMapProvider requires that sitemap nodes have unique URLs.</value>
+  </data>
+  <data name="NoParentKeyDefined" xml:space="preserve">
+    <value>Multiple root nodes defined. Are you missing a ParentKey definition on the {0} controller, {1}?</value>
+  </data>
   <data name="NoUrlResolverProvided" xml:space="preserve">
     <value>No ISiteMapNodeUrlResolver is provided for the current node.</value>
+  </data>
+  <data name="PhysicalPathNotAllowed" xml:space="preserve">
+    <value>'{0}' is a physical path, but a virtual path was expected.</value>
+  </data>
+  <data name="SiteMapInvalidRootNode" xml:space="preserve">
+    <value>Root node defined in SiteMap is null, root node cannot be null.</value>
+  </data>
+  <data name="SiteMapNodeCollectionInvalidType" xml:space="preserve">
+    <value>Invalid value of type {0} passed in, value must be of type SiteMapNode.</value>
   </data>
 </root>

@@ -178,68 +178,68 @@
 //            return clone;
 //        }
 
-//        // TODO: move to extension method
-//        /// <summary>
-//        /// Finds the closest parent.
-//        /// </summary>
-//        /// <param name="parentKey">The parent key.</param>
-//        /// <returns></returns>
-//        public virtual XSiteMapNode FindClosestParent(string parentKey)
-//        {
-//            XSiteMapNode current = this;
-//            while (current.ParentNode != null)
-//            {
-//                if (current.Key == parentKey)
-//                {
-//                    return current;
-//                }
-//                current = current.ParentNode;
-//            }
-//            return null;
-//        }
+//        //// TODO: move to extension method
+//        ///// <summary>
+//        ///// Finds the closest parent.
+//        ///// </summary>
+//        ///// <param name="parentKey">The parent key.</param>
+//        ///// <returns></returns>
+//        //public virtual XSiteMapNode FindClosestParent(string parentKey)
+//        //{
+//        //    XSiteMapNode current = this;
+//        //    while (current.ParentNode != null)
+//        //    {
+//        //        if (current.Key == parentKey)
+//        //        {
+//        //            return current;
+//        //        }
+//        //        current = current.ParentNode;
+//        //    }
+//        //    return null;
+//        //}
 
-//        // TODO: move to extension method
-//        /// <summary>
-//        /// Finds the node for a given key by searching parents and children.
-//        /// </summary>
-//        /// <param name="key">The key.</param>
-//        /// <returns></returns>
-//        public virtual XSiteMapNode FindForKey(string key)
-//        {
-//            XSiteMapNode current = this;
+//        //// TODO: move to extension method
+//        ///// <summary>
+//        ///// Finds the node for a given key by searching parents and children.
+//        ///// </summary>
+//        ///// <param name="key">The key.</param>
+//        ///// <returns></returns>
+//        //public virtual XSiteMapNode FindForKey(string key)
+//        //{
+//        //    XSiteMapNode current = this;
 
-//            // Search up
-//            while (current.ParentNode != null)
-//            {
-//                if (current.Key == key)
-//                {
-//                    return current;
-//                }
-//                current = current.ParentNode;
-//            }
+//        //    // Search up
+//        //    while (current.ParentNode != null)
+//        //    {
+//        //        if (current.Key == key)
+//        //        {
+//        //            return current;
+//        //        }
+//        //        current = current.ParentNode;
+//        //    }
 
-//            // Search down
-//            return FindChildWithKey(key, current);
-//        }
+//        //    // Search down
+//        //    return FindChildWithKey(key, current);
+//        //}
 
-//        // TODO: move to extension method
-//        /// <summary>
-//        /// Finds the node for a given key by searching children.
-//        /// </summary>
-//        /// <param name="key">The key.</param>
-//        /// <param name="root">The root.</param>
-//        /// <returns></returns>
-//        public virtual XSiteMapNode FindChildWithKey(string key, XSiteMapNode root)
-//        {
-//            foreach (var childNode in root.ChildNodes)
-//            {
-//                if (childNode.Key == key)
-//                {
-//                    return childNode;
-//                }
-//                return FindChildWithKey(key, childNode);
-//            }
-//            return null;
-//        }
+//        //// TODO: move to extension method
+//        ///// <summary>
+//        ///// Finds the node for a given key by searching children.
+//        ///// </summary>
+//        ///// <param name="key">The key.</param>
+//        ///// <param name="root">The root.</param>
+//        ///// <returns></returns>
+//        //public virtual XSiteMapNode FindChildWithKey(string key, XSiteMapNode root)
+//        //{
+//        //    foreach (var childNode in root.ChildNodes)
+//        //    {
+//        //        if (childNode.Key == key)
+//        //        {
+//        //            return childNode;
+//        //        }
+//        //        return FindChildWithKey(key, childNode);
+//        //    }
+//        //    return null;
+//        //}
 //    }
 //}

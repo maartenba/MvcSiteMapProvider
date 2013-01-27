@@ -88,11 +88,101 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot use a leading .. to exit above the top directory..
+        /// </summary>
+        internal static string CannotExitUpTopDirectory {
+            get {
+                return ResourceManager.GetString("CannotExitUpTopDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection is read-only..
+        /// </summary>
+        internal static string CollectionReadOnly {
+            get {
+                return ResourceManager.GetString("CollectionReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An invalid element was found in the sitemap..
+        /// </summary>
+        internal static string InvalidSiteMapElement {
+            get {
+                return ResourceManager.GetString("InvalidSiteMapElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is not a valid virtual path..
+        /// </summary>
+        internal static string InvalidVirtualPath {
+            get {
+                return ResourceManager.GetString("InvalidVirtualPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple nodes with the same key &apos;{0}&apos; were found. XmlSiteMapProvider requires that sitemap nodes have unique keys..
+        /// </summary>
+        internal static string MultipleNodesWithIdenticalKey {
+            get {
+                return ResourceManager.GetString("MultipleNodesWithIdenticalKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple nodes with the same URL &apos;{0}&apos; were found. XmlSiteMapProvider requires that sitemap nodes have unique URLs..
+        /// </summary>
+        internal static string MultipleNodesWithIdenticalUrl {
+            get {
+                return ResourceManager.GetString("MultipleNodesWithIdenticalUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple root nodes defined. Are you missing a ParentKey definition on the {0} controller, {1}?.
+        /// </summary>
+        internal static string NoParentKeyDefined {
+            get {
+                return ResourceManager.GetString("NoParentKeyDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No ISiteMapNodeUrlResolver is provided for the current node..
         /// </summary>
         internal static string NoUrlResolverProvided {
             get {
                 return ResourceManager.GetString("NoUrlResolverProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; is a physical path, but a virtual path was expected..
+        /// </summary>
+        internal static string PhysicalPathNotAllowed {
+            get {
+                return ResourceManager.GetString("PhysicalPathNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root node defined in SiteMap is null, root node cannot be null..
+        /// </summary>
+        internal static string SiteMapInvalidRootNode {
+            get {
+                return ResourceManager.GetString("SiteMapInvalidRootNode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid value of type {0} passed in, value must be of type SiteMapNode..
+        /// </summary>
+        internal static string SiteMapNodeCollectionInvalidType {
+            get {
+                return ResourceManager.GetString("SiteMapNodeCollectionInvalidType", resourceCulture);
             }
         }
     }

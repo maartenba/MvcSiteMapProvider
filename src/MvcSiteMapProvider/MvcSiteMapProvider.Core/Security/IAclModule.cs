@@ -1,6 +1,7 @@
 ﻿#region Using directives
 
 using System.Web;
+using MvcSiteMapProvider.Core.SiteMap;
 using MvcSiteMapProvider.Core.Mvc;
 
 #endregion
@@ -22,6 +23,6 @@ namespace MvcSiteMapProvider.Core.Security
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, MvcSiteMapProvider.Core.SiteMap.SiteMap provider, HttpContext context, SiteMapNode node);
+        bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, ISiteMap provider, HttpContext context, ISiteMapNode node);
     }
 }

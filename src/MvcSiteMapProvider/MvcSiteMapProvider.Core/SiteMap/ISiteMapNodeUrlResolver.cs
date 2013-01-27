@@ -19,6 +19,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <param name="action">The action.</param>
         /// <param name="routeValues">The route values.</param>
         /// <returns>The resolved URL.</returns>
-        string ResolveUrl(MvcSiteMapNode mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues);
+        string ResolveUrl(SiteMapNode2 mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues);
     }
 }

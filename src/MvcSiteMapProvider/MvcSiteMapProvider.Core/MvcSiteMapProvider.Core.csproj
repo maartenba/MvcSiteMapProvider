@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Globalization\INodeLocalizer.cs" />
+    <Compile Include="Globalization\NodeLocalizer.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
     <Compile Include="ISiteMapRequestContext.cs" />
@@ -57,6 +59,10 @@
     <Compile Include="Mvc\DefaultControllerTypeResolver.cs" />
     <Compile Include="Mvc\IActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
+    <Compile Include="SiteMap\Builder\DynamicNodeBuilder.cs" />
+    <Compile Include="SiteMap\Builder\IDynamicNodeBuilder.cs" />
+    <Compile Include="SiteMap\Builder\MvcSiteMapNodeAttributeDefinitionForAction.cs" />
+    <Compile Include="SiteMap\Builder\MvcSiteMapNodeAttributeDefinitionForController.cs" />
     <Compile Include="Mvc\ThreadSafeDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Messages.Designer.cs">
@@ -74,6 +80,20 @@
     <Compile Include="Security\ObjectCopier.cs" />
     <Compile Include="Security\XmlRolesAclModule.cs" />
     <Compile Include="SiteMapRequestContext.cs" />
+    <Compile Include="SiteMap\Builder\IMvcSiteMapNodeAttribute.cs" />
+    <Compile Include="SiteMap\Builder\IMvcSiteMapNodeAttributeDefinition.cs" />
+    <Compile Include="SiteMap\Builder\INodeKeyGenerator.cs" />
+    <Compile Include="SiteMap\Builder\ReflectionSiteMapBuilder.cs" />
+    <Compile Include="SiteMap\DynamicNodeProviderStrategy.cs" />
+    <Compile Include="SiteMap\IDynamicNodeProviderStrategy.cs" />
+    <Compile Include="SiteMap\ISiteMapNode.cs" />
+    <Compile Include="SiteMap\ISiteMapNodeFactory.cs" />
+    <Compile Include="SiteMap\SiteMapNode2-OLD.cs" />
+    <Compile Include="SiteMap\SiteMapNode2.cs" />
+    <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
+    <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
+    <Compile Include="Xml\XElementExtensions.cs" />
+    <Compile Include="SiteMap\Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="SiteMap\CacheDescription.cs" />
     <Compile Include="SiteMap\DynamicNode.cs" />
     <Compile Include="SiteMap\HttpContext2.cs" />
@@ -87,6 +107,7 @@
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProvider.cs" />
     <Compile Include="SiteMap\ISiteMapProvider.cs" />
     <Compile Include="SiteMap\IStaticSiteMapProvider.cs" />
+    <Compile Include="SiteMap\Builder\ISiteMapBuilder.cs" />
     <Compile Include="SiteMap\MvcSiteMapException.cs" />
     <Compile Include="SiteMap\MvcSiteMapNode.cs" />
     <Compile Include="SiteMap\SiteMap.cs" />
@@ -103,6 +124,7 @@
     <EmbeddedResource Include="Resources\Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
