@@ -50,7 +50,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
-        protected readonly ISiteMapNodeUrlResolver siteMapNodeUrlResolver;
         protected readonly ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly INodeLocalizer nodeLocalizer;

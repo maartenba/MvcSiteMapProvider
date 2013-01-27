@@ -29,8 +29,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             string xmlSiteMapFilePath,
             List<string> attributesToIgnore,
             INodeKeyGenerator nodeKeyGenerator,
-            ISiteMapNodeUrlResolver siteMapNodeUrlResolver,
-            ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider,
             INodeLocalizer nodeLocalizer,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory
@@ -42,10 +40,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 throw new ArgumentNullException("attributesToIgnore");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
-            if (siteMapNodeUrlResolver == null)
-                throw new ArgumentNullException("siteMapNodeUrlResolver");
-            if (siteMapNodeVisibilityProvider == null)
-                throw new ArgumentNullException("siteMapNodeVisibilityProvider");
             if (nodeLocalizer == null)
                 throw new ArgumentNullException("nodeLocalizer");
             if (dynamicNodeBuilder == null)
@@ -56,8 +50,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             this.xmlSiteMapFilePath = xmlSiteMapFilePath;
             this.attributesToIgnore = attributesToIgnore;
             this.nodeKeyGenerator = nodeKeyGenerator;
-            this.siteMapNodeUrlResolver = siteMapNodeUrlResolver;
-            this.siteMapNodeVisibilityProvider = siteMapNodeVisibilityProvider;
             this.nodeLocalizer = nodeLocalizer;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
@@ -66,8 +58,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         protected readonly string xmlSiteMapFilePath;
         protected readonly List<string> attributesToIgnore;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
-        protected readonly ISiteMapNodeUrlResolver siteMapNodeUrlResolver;
-        protected readonly ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider;
         protected readonly INodeLocalizer nodeLocalizer;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;

@@ -88,7 +88,6 @@
     <Compile Include="SiteMap\IDynamicNodeProviderStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNode.cs" />
     <Compile Include="SiteMap\ISiteMapNodeFactory.cs" />
-    <Compile Include="SiteMap\SiteMapNode2-OLD.cs" />
     <Compile Include="SiteMap\SiteMapNode2.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
@@ -109,12 +108,10 @@
     <Compile Include="SiteMap\IStaticSiteMapProvider.cs" />
     <Compile Include="SiteMap\Builder\ISiteMapBuilder.cs" />
     <Compile Include="SiteMap\MvcSiteMapException.cs" />
-    <Compile Include="SiteMap\MvcSiteMapNode.cs" />
     <Compile Include="SiteMap\SiteMap.cs" />
     <Compile Include="SiteMap\SiteMapResolveEventArgs.cs" />
     <Compile Include="SiteMap\UrlPath.cs" />
     <Compile Include="UpdatePriority.cs" />
-    <Compile Include="XSiteMapNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

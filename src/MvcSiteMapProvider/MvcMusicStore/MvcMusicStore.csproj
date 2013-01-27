@@ -201,7 +201,9 @@
     <Content Include="Views\Store\Details.aspx" />
     <Content Include="Views\Store\GenreMenu.ascx" />
     <Content Include="Views\Store\Index.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
