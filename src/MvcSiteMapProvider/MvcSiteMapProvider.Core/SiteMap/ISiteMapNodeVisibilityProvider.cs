@@ -21,6 +21,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
         /// </returns>
-        bool IsVisible(SiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata);
+        bool IsVisible(ISiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata);
+
+        /// <summary>
+        /// Determines whether the provider instance matches the name
+        /// </summary>
+        /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name can be used.</param>
+        /// <returns>
+        /// True if the provider name matches.
+        /// </returns>
+        bool AppliesTo(string providerName);
     }
 }

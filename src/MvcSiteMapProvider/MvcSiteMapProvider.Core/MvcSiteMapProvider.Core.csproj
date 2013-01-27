@@ -88,9 +88,13 @@
     <Compile Include="SiteMap\IDynamicNodeProviderStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNode.cs" />
     <Compile Include="SiteMap\ISiteMapNodeFactory.cs" />
+    <Compile Include="SiteMap\ISiteMapNodeUrlResolverStrategy.cs" />
+    <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="SiteMap\SiteMapNode2.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
+    <Compile Include="SiteMap\SiteMapNodeUrlResolverStrategy.cs" />
+    <Compile Include="SiteMap\SiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="SiteMap\Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="SiteMap\CacheDescription.cs" />
