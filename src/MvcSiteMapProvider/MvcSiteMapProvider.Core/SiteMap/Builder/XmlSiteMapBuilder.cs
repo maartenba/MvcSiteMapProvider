@@ -27,7 +27,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
     {
         public XmlSiteMapBuilder(
             string xmlSiteMapFilePath,
-            List<string> attributesToIgnore,
+            IEnumerable<string> attributesToIgnore,
             INodeKeyGenerator nodeKeyGenerator,
             INodeLocalizer nodeLocalizer,
             IDynamicNodeBuilder dynamicNodeBuilder,
@@ -56,7 +56,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         }
 
         protected readonly string xmlSiteMapFilePath;
-        protected readonly List<string> attributesToIgnore;
+        protected readonly IEnumerable<string> attributesToIgnore;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly INodeLocalizer nodeLocalizer;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
@@ -71,13 +71,12 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
         #region ISiteMapBuilder Members
 
-        public ISiteMapNode BuildSiteMap(ISiteMap siteMap)
+        public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
             // Build sitemap
-            ISiteMapNode rootNode = null;
             lock (synclock)
             {
-                // Return immediately if this method has been called before
+                
                 if (siteMap.RootNode != null)
                 {
                     return siteMap.RootNode;

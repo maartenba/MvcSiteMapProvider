@@ -169,6 +169,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relative URL is not allowed..
+        /// </summary>
+        internal static string RelativeUrlNotAllowed {
+            get {
+                return ResourceManager.GetString("RelativeUrlNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Root node defined in SiteMap is null, root node cannot be null..
         /// </summary>
         internal static string SiteMapInvalidRootNode {
@@ -178,11 +187,29 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The sitemap loader may only be set in the App_Initialize event of Global.asax and must not be set again..
+        /// </summary>
+        internal static string SiteMapLoaderAlreadySet {
+            get {
+                return ResourceManager.GetString("SiteMapLoaderAlreadySet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid value of type {0} passed in, value must be of type SiteMapNode..
         /// </summary>
         internal static string SiteMapNodeCollectionInvalidType {
             get {
                 return ResourceManager.GetString("SiteMapNodeCollectionInvalidType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no default builder set configured..
+        /// </summary>
+        internal static string SiteMapNoDefaultBuilderSetConfigured {
+            get {
+                return ResourceManager.GetString("SiteMapNoDefaultBuilderSetConfigured", resourceCulture);
             }
         }
     }

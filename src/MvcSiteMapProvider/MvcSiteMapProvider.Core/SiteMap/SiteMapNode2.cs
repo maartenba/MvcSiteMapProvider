@@ -19,7 +19,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             ISiteMap siteMap, 
             string key, 
             string implicitResourceKey, 
-            ISiteMapNodeFactory siteMapNodeFactory, 
+            //ISiteMapNodeFactory siteMapNodeFactory, 
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy
             )
         {
@@ -27,15 +27,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMap");
             //if (string.IsNullOrEmpty(key))
             //    throw new ArgumentNullException("key");
-            if (siteMapNodeFactory == null)
-                throw new ArgumentNullException("siteMapNodeFactory");
+            //if (siteMapNodeFactory == null)
+            //    throw new ArgumentNullException("siteMapNodeFactory");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
 
             this.siteMap = siteMap;
             this.key = key;
             this.ResourceKey = implicitResourceKey;
-            this.siteMapNodeFactory = siteMapNodeFactory;
+            //this.siteMapNodeFactory = siteMapNodeFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
 
             // Initialize variables
@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         // Services
-        protected readonly ISiteMapNodeFactory siteMapNodeFactory;
+        //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
 
         // Object State
@@ -470,60 +470,117 @@ namespace MvcSiteMapProvider.Core.SiteMap
         #endregion
 
 
-        #region ICloneable Members
+        //#region ICloneable Members
+
+        ///// <summary>
+        ///// Creates a new object that is a copy of the current instance.
+        ///// </summary>
+        ///// <returns>
+        ///// A new object that is a copy of this instance.
+        ///// </returns>
+        //public virtual object Clone()
+        //{
+        //    //var clone = new SiteMapNode2(this.siteMap, this.key, this.ResourceKey);
+
+        //    var clone = siteMapNodeFactory.Create(this.siteMap, this.key, this.ResourceKey);
+        //    clone.ParentNode = this.ParentNode;
+
+        //    // TODO: implement and cascade call to SiteMapNodeCollection instead of looping here
+        //    //clone.ChildNodes = new SiteMapNodeCollection();
+        //    //foreach (var childNode in ChildNodes)
+        //    //{
+        //    //    var childClone = ((SiteMapNode2)childNode).Clone() as SiteMapNode2;
+        //    //    childClone.ParentNode = clone;
+        //    //    clone.ChildNodes.Add(childClone);
+        //    //}
+
+        //    clone.ChildNodes = (SiteMapNodeCollection)ChildNodes.Clone();
+        //    clone.Url = this.Url;
+        //    clone.HttpMethod = this.HttpMethod;
+        //    clone.Clickable = this.Clickable;
+        //    //clone.ResourceKey = this.ResourceKey;
+        //    clone.Title = this.Title;
+        //    clone.Description = this.Description;
+        //    clone.TargetFrame = this.TargetFrame;
+        //    clone.ImageUrl = this.ImageUrl;
+        //    clone.Attributes = new Dictionary<string, string>(this.Attributes);
+        //    clone.Roles = new List<string>(this.Roles);
+        //    clone.LastModifiedDate = this.LastModifiedDate;
+        //    clone.ChangeFrequency = this.ChangeFrequency;
+        //    clone.UpdatePriority = this.UpdatePriority;
+        //    clone.VisibilityProvider = this.VisibilityProvider;
+
+        //    // Route
+        //    clone.Route = this.Route;
+        //    clone.RouteValues = new Dictionary<string, object>(this.RouteValues);
+        //    clone.PreservedRouteParameters = this.PreservedRouteParameters;
+        //    clone.UrlResolver = this.UrlResolver;
+
+        //    // MVC
+        //    clone.Action = this.Action;
+        //    clone.Area = this.Area;
+        //    clone.Controller = this.Controller;
+
+        //    return clone;
+        //}
+
+        //#endregion
+
 
         /// <summary>
-        /// Creates a new object that is a copy of the current instance.
+        /// Gets the level of the current SiteMapNode
         /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public virtual object Clone()
+        /// <param name="current">The current SiteMapNode</param>
+        /// <returns>The level of the current SiteMapNode</returns>
+        public int GetNodeLevel()
         {
-            //var clone = new SiteMapNode2(this.siteMap, this.key, this.ResourceKey);
+            var level = 0;
+            ISiteMapNode node = this;
 
-            var clone = siteMapNodeFactory.Create(this.siteMap, this.key, this.ResourceKey);
-            clone.ParentNode = this.ParentNode;
+            if (node != null)
+            {
+                while (node.ParentNode != null)
+                {
+                    level++;
+                    node = node.ParentNode;
+                }
+            }
 
-            // TODO: implement and cascade call to SiteMapNodeCollection instead of looping here
-            //clone.ChildNodes = new SiteMapNodeCollection();
-            //foreach (var childNode in ChildNodes)
-            //{
-            //    var childClone = ((SiteMapNode2)childNode).Clone() as SiteMapNode2;
-            //    childClone.ParentNode = clone;
-            //    clone.ChildNodes.Add(childClone);
-            //}
-
-            clone.ChildNodes = (SiteMapNodeCollection)ChildNodes.Clone();
-            clone.Url = this.Url;
-            clone.HttpMethod = this.HttpMethod;
-            clone.Clickable = this.Clickable;
-            //clone.ResourceKey = this.ResourceKey;
-            clone.Title = this.Title;
-            clone.Description = this.Description;
-            clone.TargetFrame = this.TargetFrame;
-            clone.ImageUrl = this.ImageUrl;
-            clone.Attributes = new Dictionary<string, string>(this.Attributes);
-            clone.Roles = new List<string>(this.Roles);
-            clone.LastModifiedDate = this.LastModifiedDate;
-            clone.ChangeFrequency = this.ChangeFrequency;
-            clone.UpdatePriority = this.UpdatePriority;
-            clone.VisibilityProvider = this.VisibilityProvider;
-
-            // Route
-            clone.Route = this.Route;
-            clone.RouteValues = new Dictionary<string, object>(this.RouteValues);
-            clone.PreservedRouteParameters = this.PreservedRouteParameters;
-            clone.UrlResolver = this.UrlResolver;
-
-            // MVC
-            clone.Action = this.Action;
-            clone.Area = this.Area;
-            clone.Controller = this.Controller;
-
-            return clone;
+            return level;
         }
 
-        #endregion
+        // TODO: rework... (maartenba)
+
+        /// <summary>
+        /// Determines whether the specified node is in current path.
+        /// </summary>
+        /// <param name="current">The current.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified node is in current path; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInCurrentPath()
+        {
+            ISiteMapNode node = this;
+            return (this.siteMap.CurrentNode != null && (node == this.siteMap.CurrentNode || this.siteMap.CurrentNode.IsDescendantOf(node)));
+        }
+
+
+        public virtual bool HasChildNodes
+        {
+            get
+            {
+                IList childNodes = this.ChildNodes;
+                return ((childNodes != null) && (childNodes.Count > 0));
+            }
+        }
+
+        public virtual ISiteMap SiteMap
+        {
+            get
+            {
+                return this.siteMap;
+            }
+        }
+
     }
 }

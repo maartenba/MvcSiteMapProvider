@@ -47,6 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\ISiteMapCache.cs" />
+    <Compile Include="Cache\ISiteMapCacheKeyGenerator.cs" />
+    <Compile Include="Cache\SiteMapCache.cs" />
+    <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="ChangeFrequency.cs" />
     <Compile Include="Globalization\INodeLocalizer.cs" />
     <Compile Include="Globalization\NodeLocalizer.cs" />
@@ -54,13 +58,24 @@
     <Compile Include="IoC\IResolver.cs" />
     <Compile Include="ISiteMapRequestContext.cs" />
     <Compile Include="ISiteMapSource.cs" />
+    <Compile Include="Loader\ISiteMapLoader.cs" />
+    <Compile Include="Loader\ISiteMapLoaderFactory.cs" />
+    <Compile Include="Loader\SiteMapLoader.cs" />
+    <Compile Include="Loader\SiteMapLoaderFactory.cs" />
     <Compile Include="Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Mvc\DefaultActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\DefaultControllerTypeResolver.cs" />
     <Compile Include="Mvc\IActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
+    <Compile Include="SiteMap\Builder\IReflectionSiteMapBuilderFactory.cs" />
+    <Compile Include="SiteMap\Builder\IXmlSiteMapBuilderFactory.cs" />
+    <Compile Include="SiteMap\Builder\ReflectionSiteMapBuilderFactory.cs" />
+    <Compile Include="SiteMap\Builder\SiteMapBuilderSetStrategy.cs" />
+    <Compile Include="SiteMap\Builder\CompositeSiteMapBuilder.cs" />
     <Compile Include="SiteMap\Builder\DynamicNodeBuilder.cs" />
+    <Compile Include="SiteMap\Builder\ISiteMapBuilderSetStrategy.cs" />
     <Compile Include="SiteMap\Builder\IDynamicNodeBuilder.cs" />
+    <Compile Include="SiteMap\Builder\ISiteMapBuilderSet.cs" />
     <Compile Include="SiteMap\Builder\MvcSiteMapNodeAttributeDefinitionForAction.cs" />
     <Compile Include="SiteMap\Builder\MvcSiteMapNodeAttributeDefinitionForController.cs" />
     <Compile Include="Mvc\ThreadSafeDictionary.cs" />
@@ -83,18 +98,44 @@
     <Compile Include="SiteMap\Builder\IMvcSiteMapNodeAttribute.cs" />
     <Compile Include="SiteMap\Builder\IMvcSiteMapNodeAttributeDefinition.cs" />
     <Compile Include="SiteMap\Builder\INodeKeyGenerator.cs" />
+    <Compile Include="SiteMap\Builder\NodeKeyGenerator.cs" />
     <Compile Include="SiteMap\Builder\ReflectionSiteMapBuilder.cs" />
+    <Compile Include="SiteMap\Builder\SiteMapBuilderSet.cs" />
+    <Compile Include="SiteMap\Builder\XmlSiteMapBuilderFactory.cs" />
     <Compile Include="SiteMap\DynamicNodeProviderStrategy.cs" />
     <Compile Include="SiteMap\IDynamicNodeProviderStrategy.cs" />
+    <Compile Include="SiteMap\ISiteMapFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNode.cs" />
     <Compile Include="SiteMap\ISiteMapNodeFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
+    <Compile Include="SiteMap\SiteMapFactory.cs" />
     <Compile Include="SiteMap\SiteMapNode2.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
     <Compile Include="SiteMap\SiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\SiteMapNodeVisibilityProviderStrategy.cs" />
+    <Compile Include="SiteMap\SiteMaps.cs" />
+    <Compile Include="Mvc\MvcSiteMapProviderViewEngine.cs" />
+    <Compile Include="Mvc\MvcSiteMapProviderViewEngineVirtualFile.cs" />
+    <Compile Include="Mvc\MvcSiteMapProviderViewEngineVirtualPathProvider.cs" />
+    <Compile Include="SiteMap\UnknownSiteMapProviderException.cs" />
+    <Compile Include="Web\Html\HtmlHelperExtensions.cs" />
+    <Compile Include="Web\Html\MenuHelper.cs" />
+    <Compile Include="Web\Html\Models\MenuHelperModel.cs" />
+    <Compile Include="Web\Html\Models\SiteMapHelperModel.cs" />
+    <Compile Include="Web\Html\Models\SiteMapNodeModel.cs" />
+    <Compile Include="Web\Html\Models\SiteMapNodeModelList.cs" />
+    <Compile Include="Web\Html\Models\SiteMapPathHelperModel.cs" />
+    <Compile Include="Web\Html\Models\SiteMapTitleHelperModel.cs" />
+    <Compile Include="Web\Html\MvcSiteMapHtmlHelper.cs" />
+    <Compile Include="Web\Html\SiteMapHelper.cs" />
+    <Compile Include="Web\Html\SiteMapNodeModelMapper.cs" />
+    <Compile Include="Web\Html\SiteMapPathHelper.cs" />
+    <Compile Include="Web\Html\SiteMapTitleHelper.cs" />
+    <Compile Include="Web\ViewDataContainer.cs" />
+    <Compile Include="Web\XmlSiteMapController.cs" />
+    <Compile Include="Web\XmlSiteMapResult.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="SiteMap\Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="SiteMap\CacheDescription.cs" />
@@ -120,12 +161,41 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\MenuHelperModel.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapHelperModel.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapNodeModel.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapNodeModelList.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapPathHelperModel.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapTitleHelperModel.ascx">
+      <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

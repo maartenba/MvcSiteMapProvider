@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// TODO: Update summary.
     /// </summary>
     public interface ISiteMapNode
-        : ICloneable
+        //: ICloneable
     {
         string Action { get; set; }
         string Area { get; set; }
@@ -27,13 +27,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
         string Controller { get; set; }
         string Description { get; set; }
         string DynamicNodeProvider { get; set; }
+        int GetNodeLevel();
         RouteData GetRouteData(HttpContextBase httpContext);
+        bool HasChildNodes { get; }
         bool HasDynamicNodeProvider { get; }
         string HttpMethod { get; set; }
         string ImageUrl { get; set; }
         bool IsAccessibleToUser(HttpContext context);
         bool IsDescendantOf(ISiteMapNode node);
         bool IsDynamic { get; }
+        bool IsInCurrentPath();
         bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata);
         string Key { get; }
         DateTime LastModifiedDate { get; set; }
@@ -46,6 +49,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMapNode RootNode { get; }
         string Route { get; set; }
         IDictionary<string, object> RouteValues { get; set; }
+        ISiteMap SiteMap { get; }
         string TargetFrame { get; set; }
         string Title { get; set; }
         UpdatePriority UpdatePriority { get; set; }

@@ -33,13 +33,18 @@ namespace MvcSiteMapProvider.Web
 
         public override void Initialize(string name, NameValueCollection attributes)
         {
-            Inject();
+            //Inject();
             base.Initialize(name, attributes);
         }
 
         public override SiteMapNode BuildSiteMap()
         {
-            throw new NotImplementedException();
+            var rootNode = siteMap.BuildSiteMap();
+
+            //TODO: convert sitemap node to the appropriate type
+            //return rootNode;
+
+            return new SiteMapNode(this, rootNode.Key);
         }
 
         protected override SiteMapNode GetRootNodeCore()

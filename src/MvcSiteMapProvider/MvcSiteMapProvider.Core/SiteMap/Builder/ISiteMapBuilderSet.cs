@@ -1,20 +1,22 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ISiteMapLoader.cs" company="">
+// <copyright file="ISiteMapBuilderSet.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-using MvcSiteMapProvider.Core;
-
 namespace MvcSiteMapProvider.Core.SiteMap.Builder
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public interface ISiteMapBuilder
+    public interface ISiteMapBuilderSet
     {
-        ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode);
+        string Name { get; }
+        ISiteMapBuilder Builder { get; }
     }
 }

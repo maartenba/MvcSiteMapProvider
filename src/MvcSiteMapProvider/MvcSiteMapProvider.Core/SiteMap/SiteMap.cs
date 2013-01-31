@@ -19,6 +19,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     using System.Xml.Linq;
     using MvcSiteMapProvider.Core.Security;
     using MvcSiteMapProvider.Core.Mvc;
+    using MvcSiteMapProvider.Core.SiteMap.Builder;
 
     /// <summary>
     /// This class was created by extracting the public intefaces of SiteMapProvider, 
@@ -26,16 +27,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// </summary>
     public class SiteMap : ISiteMap
     {
-        private readonly IAclModule aclModule;
-        private readonly IActionMethodParameterResolver actionMethodParameterResolver;
-        private readonly IControllerTypeResolver controllerTypeResolver;
-
         public SiteMap(
+            ISiteMapBuilder siteMapBuilder,
             IAclModule aclModule, 
             IActionMethodParameterResolver actionMethodParameterResolver,
             IControllerTypeResolver controllerTypeResolver
             )
         {
+            if (siteMapBuilder == null)
+                throw new ArgumentNullException("siteMapBuilder");
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
             if (actionMethodParameterResolver == null)
@@ -43,10 +43,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
 
+            this.siteMapBuilder = siteMapBuilder;
             this.aclModule = aclModule;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
         }
+
+        private readonly ISiteMapBuilder siteMapBuilder;
+        private readonly IAclModule aclModule;
+        private readonly IActionMethodParameterResolver actionMethodParameterResolver;
+        private readonly IControllerTypeResolver controllerTypeResolver;
 
         #region SiteMapProvider state
 
@@ -82,7 +88,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected string cacheKey;
         protected string aclCacheItemKey;
         protected string currentNodeCacheKey;
-        protected SiteMapNode2 root;
+        protected ISiteMapNode root;
         protected bool isBuildingSiteMap = false; // TODO: remove
         //protected bool scanAssembliesForSiteMapNodes;
         //protected string siteMapFile = string.Empty;
@@ -653,11 +659,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns></returns>
         protected ISiteMapNode GetRootNodeCore()
         {
-            lock (synclock)
-            {
-                BuildSiteMap();
-                return root;
-            }
+            //lock (synclock)
+            //{
+            //    BuildSiteMap();
+            //    return root;
+            //}
+            return BuildSiteMap();
         }
 
         public bool SecurityTrimmingEnabled
@@ -667,8 +674,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public ISiteMapNode BuildSiteMap()
         {
-            // TODO: Provide implementation
-            throw new NotImplementedException();
+            // Return immediately if this method has been called before
+            if (root != null) 
+            {
+                return root;
+            }
+
+            root = siteMapBuilder.BuildSiteMap(this, root);
+            return root;
         }
 
         /// <summary>

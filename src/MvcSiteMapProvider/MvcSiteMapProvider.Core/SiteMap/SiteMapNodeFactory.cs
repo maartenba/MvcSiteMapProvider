@@ -14,25 +14,25 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SiteMapNodeFactory : ISiteMapNodeFactory
+    public class SiteMapNodeFactory 
+        : ISiteMapNodeFactory
     {
-        // TODO: Add constructor to inject services into SiteMapNode
         public SiteMapNodeFactory(
-            ISiteMapNodeFactory siteMapNodeFactory, 
+            //ISiteMapNodeFactory siteMapNodeFactory, 
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy
             ) 
         {
-            if (siteMapNodeFactory == null)
-                throw new ArgumentNullException("siteMapNodeFactory");
+            //if (siteMapNodeFactory == null)
+            //    throw new ArgumentNullException("siteMapNodeFactory");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
 
-            this.siteMapNodeFactory = siteMapNodeFactory;
+            //this.siteMapNodeFactory = siteMapNodeFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
         }
 
         // Services
-        protected readonly ISiteMapNodeFactory siteMapNodeFactory;
+        //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
 
 
@@ -47,7 +47,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 siteMap, 
                 key, 
                 implicitResourceKey, 
-                siteMapNodeFactory, 
+                //siteMapNodeFactory, 
                 dynamicNodeProviderStrategy);
         }
 
@@ -57,7 +57,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 siteMap, 
                 string.Empty, 
                 implicitResourceKey, 
-                siteMapNodeFactory, 
+                //siteMapNodeFactory, 
                 dynamicNodeProviderStrategy);
         }
 

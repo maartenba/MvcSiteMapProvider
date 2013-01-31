@@ -153,10 +153,19 @@
   <data name="PhysicalPathNotAllowed" xml:space="preserve">
     <value>'{0}' is a physical path, but a virtual path was expected.</value>
   </data>
+  <data name="RelativeUrlNotAllowed" xml:space="preserve">
+    <value>Relative URL is not allowed.</value>
+  </data>
   <data name="SiteMapInvalidRootNode" xml:space="preserve">
     <value>Root node defined in SiteMap is null, root node cannot be null.</value>
   </data>
+  <data name="SiteMapLoaderAlreadySet" xml:space="preserve">
+    <value>The sitemap loader may only be set in the App_Initialize event of Global.asax and must not be set again.</value>
+  </data>
   <data name="SiteMapNodeCollectionInvalidType" xml:space="preserve">
     <value>Invalid value of type {0} passed in, value must be of type SiteMapNode.</value>
+  </data>
+  <data name="SiteMapNoDefaultBuilderSetConfigured" xml:space="preserve">
+    <value>There is no default builder set configured.</value>
   </data>
 </root>

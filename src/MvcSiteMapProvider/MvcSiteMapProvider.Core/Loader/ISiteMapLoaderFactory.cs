@@ -1,10 +1,10 @@
 ﻿//// -----------------------------------------------------------------------
-//// <copyright file="SiteMapRequestContext.cs" company="">
+//// <copyright file="ISiteMapLoaderFactory.cs" company="">
 //// TODO: Update copyright text.
 //// </copyright>
 //// -----------------------------------------------------------------------
 
-//namespace MvcSiteMapProvider.Core
+//namespace MvcSiteMapProvider.Core.Loader
 //{
 //    using System;
 //    using System.Collections.Generic;
@@ -12,12 +12,10 @@
 //    using System.Text;
 
 //    /// <summary>
-//    /// Provides data to uniquely identify a sitemap within a mulit-culture and multi-tenant site.
+//    /// TODO: Update summary.
 //    /// </summary>
-//    public class SiteMapRequestContext
+//    public interface ISiteMapLoaderFactory
 //    {
-//        public string Host { get; set; }
-//        public int Port { get; set; }
-//        public int LocaleId { get; set; }
+//        ISiteMapLoader Create();
 //    }
 //}

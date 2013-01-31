@@ -15,7 +15,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SiteMapNodeCollection : IHierarchicalEnumerable, IList, ICollection, IEnumerable, ICloneable
+    public class SiteMapNodeCollection : IHierarchicalEnumerable, IList, ICollection, IEnumerable//, ICloneable
     {
         private int _initialSize;
         private ArrayList _innerList;
@@ -480,19 +480,19 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        #region ICloneable Members
+        //#region ICloneable Members
 
-        public virtual object Clone()
-        {
-            var result = new SiteMapNodeCollection();
-            foreach (var node in this.List)
-            {
-                var child = ((ISiteMapNode)node).Clone() as ISiteMapNode;
-                result.Add(child);
-            }
-            return result;
-        }
+        //public virtual object Clone()
+        //{
+        //    var result = new SiteMapNodeCollection();
+        //    foreach (var node in this.List)
+        //    {
+        //        var child = ((ISiteMapNode)node).Clone() as ISiteMapNode;
+        //        result.Add(child);
+        //    }
+        //    return result;
+        //}
 
-        #endregion
+        //#endregion
     }
 }

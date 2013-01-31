@@ -20,9 +20,9 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
     /// </summary>
     public class ReflectionSiteMapBuilder : ISiteMapBuilder
     {
-        ReflectionSiteMapBuilder(
-            List<String> includeAssemblies,
-            List<String> excludeAssemblies,
+        public ReflectionSiteMapBuilder(
+            IEnumerable<String> includeAssemblies,
+            IEnumerable<String> excludeAssemblies,
             INodeKeyGenerator nodeKeyGenerator,
             INodeLocalizer nodeLocalizer,
             IDynamicNodeBuilder dynamicNodeBuilder,
@@ -50,7 +50,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
-        protected readonly ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider;
+        //protected readonly ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly INodeLocalizer nodeLocalizer;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
@@ -63,7 +63,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <value>
         /// The include assemblies.
         /// </value>
-        protected List<string> IncludeAssemblies { get; set; }
+        protected IEnumerable<string> IncludeAssemblies { get; set; }
 
         /// <summary>
         /// Gets or sets the exclude assemblies.
@@ -71,7 +71,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <value>
         /// The exclude assemblies.
         /// </value>
-        protected List<string> ExcludeAssemblies { get; set; }
+        protected IEnumerable<string> ExcludeAssemblies { get; set; }
 
         ///// <summary>
         ///// Initializes a new instance of the <see cref="ReflectionSiteMapSource" /> class.
@@ -114,10 +114,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// </summary>
         /// <param name="siteMap">The siteMap object to populate with the data.</param>
         /// <returns></returns>
-        public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap)
+        public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
-            var rootNode = siteMap.RootNode;
-
             // List of assemblies
             IEnumerable<Assembly> assemblies;
             if (IncludeAssemblies.Any())
