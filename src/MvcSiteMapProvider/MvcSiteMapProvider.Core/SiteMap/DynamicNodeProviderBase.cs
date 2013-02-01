@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
+using MvcSiteMapProvider.Core.Reflection;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -40,7 +42,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </returns>
         public bool AppliesTo(string providerName)
         {
-            return this.GetType().FullName.Equals(providerName);
+            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName);
         }
 
         #endregion

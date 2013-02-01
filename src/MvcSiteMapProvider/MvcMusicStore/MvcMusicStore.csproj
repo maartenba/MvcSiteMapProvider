@@ -241,10 +241,6 @@
       <Project>{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}</Project>
       <Name>MvcSiteMapProvider.Web</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
-      <Project>{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}</Project>
-      <Name>MvcSiteMapProvider</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mvc.sitemap">

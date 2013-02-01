@@ -92,6 +92,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected string aclCacheItemKey;
         protected string currentNodeCacheKey;
         protected ISiteMapNode root;
+        protected bool isBuildingSiteMap = false;
 
         #endregion
 
@@ -154,14 +155,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
 
-            //// TODO: Investigate why this could be the case - perhaps the clear or remove
-            //// method needs attention instead. This will go into an endless loop when building
-            //// a sitemap, so we can't do this here.
-            //// Avoid issue with url table not clearing correctly.
-            //if (this.FindSiteMapNode(node.Url) != null)
-            //{
-            //    this.RemoveNode(node);
-            //}
+            // TODO: Investigate why this could be the case - perhaps the clear or remove
+            // method needs attention instead. This will go into an endless loop when building
+            // a sitemap, so we can't do this here.
+            // Avoid issue with url table not clearing correctly.
+            if (this.FindSiteMapNode(node.Url) != null)
+            {
+                this.RemoveNode(node);
+            }
 
             //// Allow for external URLs
             //var encoded = UrlPath.EncodeExternalUrl(node);
@@ -683,9 +684,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 return root;
             }
-
-            root = siteMapBuilder.BuildSiteMap(this, root);
-            return root;
+            lock (this.synclock)
+            {
+                if (this.isBuildingSiteMap)
+                {
+                    return null;
+                }
+                isBuildingSiteMap = true;
+                root = siteMapBuilder.BuildSiteMap(this, root);
+                isBuildingSiteMap = false;
+                return root;
+            }
         }
 
         ///// <summary>

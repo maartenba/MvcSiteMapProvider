@@ -52,6 +52,7 @@
     <Compile Include="Cache\SiteMapCache.cs" />
     <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="Globalization\INodeLocalizer.cs" />
     <Compile Include="Globalization\NodeLocalizer.cs" />
     <Compile Include="IoC\DI.cs" />
@@ -65,9 +66,14 @@
     <Compile Include="Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Mvc\DefaultActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\DefaultControllerTypeResolver.cs" />
+    <Compile Include="Mvc\Filters\AttributeTarget.cs" />
+    <Compile Include="Mvc\Filters\SiteMapPreserveRouteDataAttribute.cs" />
+    <Compile Include="Mvc\Filters\SiteMapTitleAttribute.cs" />
+    <Compile Include="Mvc\Filters\SiteMapTitleTarget.cs" />
     <Compile Include="Mvc\IActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
     <Compile Include="Mvc\UrlResolver\UrlResolverException.cs" />
+    <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="SiteMap\Builder\IReflectionSiteMapBuilderFactory.cs" />
     <Compile Include="SiteMap\Builder\IXmlSiteMapBuilderFactory.cs" />
     <Compile Include="SiteMap\Builder\ReflectionSiteMapBuilderFactory.cs" />
@@ -107,11 +113,13 @@
     <Compile Include="SiteMap\DynamicNodeProviderBase.cs" />
     <Compile Include="SiteMap\DynamicNodeProviderStrategy.cs" />
     <Compile Include="SiteMap\IDynamicNodeProviderStrategy.cs" />
+    <Compile Include="SiteMap\IMvcSiteMapNodeAttribute.cs" />
     <Compile Include="SiteMap\ISiteMapFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNode.cs" />
     <Compile Include="SiteMap\ISiteMapNodeFactory.cs" />
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
+    <Compile Include="SiteMap\MvcSiteMapNodeAttribute.cs" />
     <Compile Include="SiteMap\SiteMapFactory.cs" />
     <Compile Include="SiteMap\SiteMapNode.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
@@ -137,8 +145,8 @@
     <Compile Include="Web\Html\SiteMapPathHelper.cs" />
     <Compile Include="Web\Html\SiteMapTitleHelper.cs" />
     <Compile Include="Web\ViewDataContainer.cs" />
-    <Compile Include="Web\XmlSiteMapController.cs" />
-    <Compile Include="Web\XmlSiteMapResult.cs" />
+    <Compile Include="Mvc\XmlSiteMapController.cs" />
+    <Compile Include="Mvc\XmlSiteMapResult.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="SiteMap\Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="SiteMap\CacheDescription.cs" />

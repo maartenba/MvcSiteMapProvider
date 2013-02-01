@@ -18,8 +18,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMapNode(
             ISiteMap siteMap, 
-            string key, 
-            string implicitResourceKey, 
+            string key,
+            string implicitResourceKey,
+            bool isDynamic,
             //ISiteMapNodeFactory siteMapNodeFactory, 
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
@@ -39,6 +40,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMap = siteMap;
             this.key = key;
             this.ResourceKey = implicitResourceKey;
+            this.IsDynamic = isDynamic;
             //this.siteMapNodeFactory = siteMapNodeFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
@@ -46,6 +48,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // Initialize variables
             Attributes = new Dictionary<string, string>();
             Roles = new List<string>();
+            RouteValues = new Dictionary<string, object>();
+            PreservedRouteParameters = new List<string>();
         }
 
         // Services
@@ -73,10 +77,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             protected set { this.key = value; }
         }
 
-        public virtual bool IsDynamic
-        {
-            get { return String.IsNullOrEmpty(this.key); }
-        }
+        public virtual bool IsDynamic { get; protected set; }
 
         #region Node Map Positioning
 
@@ -399,6 +400,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
+        public virtual string UnresolvedUrl { get { return this.url; } }
+
         #endregion
 
         #region Dynamic Nodes
@@ -445,6 +448,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The route.</value>
         public string Route { get; set; }
 
+
+        // TODO: Change this to readonly property with class that inherits from RouteValueDictionary
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>

@@ -108,7 +108,44 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 //clone.DynamicNodeProvider = null;
                 //clone.IsDynamic = true;
 
-                var clone = siteMapNodeFactory.CreateDynamic(siteMap, mvcNode.ResourceKey);
+                var clone = siteMapNodeFactory.CreateDynamic(siteMap, key, mvcNode.ResourceKey);
+
+
+                // TODO: figure out a better way to create a dynamic node.
+                // It should probably be a different datatype since it has different behavior.
+
+                // Begin Clone
+
+
+                foreach (var attribute in mvcNode.Attributes)
+                {
+                    clone.Attributes[attribute.Key] = attribute.Value;
+                }
+                foreach (var route in mvcNode.RouteValues)
+                {
+                    clone.RouteValues[route.Key] = route.Value;
+                }
+                foreach (var param in mvcNode.PreservedRouteParameters)
+                {
+                    clone.PreservedRouteParameters.Add(param);
+                }
+                foreach (var role in mvcNode.Roles)
+                {
+                    clone.Roles.Add(role);
+                }
+                clone.Area = mvcNode.Area;
+                clone.Action = mvcNode.Action;
+                clone.Controller = mvcNode.Controller;
+                clone.Route = mvcNode.Route;
+                clone.VisibilityProvider = mvcNode.VisibilityProvider;
+                clone.UrlResolver = mvcNode.UrlResolver;
+                clone.Url = mvcNode.UnresolvedUrl;
+                clone.DynamicNodeProvider = mvcNode.DynamicNodeProvider;
+                clone.Clickable = mvcNode.Clickable;
+
+                // End Clone
+
+
 
                 foreach (var kvp in dynamicNode.RouteValues)
                 {

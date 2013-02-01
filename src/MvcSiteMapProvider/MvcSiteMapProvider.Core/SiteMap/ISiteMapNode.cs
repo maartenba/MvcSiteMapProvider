@@ -52,6 +52,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMap SiteMap { get; }
         string TargetFrame { get; set; }
         string Title { get; set; }
+        string UnresolvedUrl { get; }
         UpdatePriority UpdatePriority { get; set; }
         string Url { get; set; }
         string UrlResolver { get; set; }

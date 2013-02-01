@@ -17,6 +17,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
     public interface ISiteMapNodeFactory
     {
         ISiteMapNode Create(ISiteMap siteMap, string key, string implicitResourceKey);
-        ISiteMapNode CreateDynamic(ISiteMap siteMap, string implicitResourceKey);
+        ISiteMapNode CreateDynamic(ISiteMap siteMap, string key, string implicitResourceKey);
     }
 }

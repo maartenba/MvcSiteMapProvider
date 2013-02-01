@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web;
-using MvcSiteMapProvider.Core;
+using MvcSiteMapProvider.Core.Mvc;
 using StructureMap;
 
 namespace MvcMusicStore
@@ -99,6 +99,7 @@ namespace MvcMusicStore
             container.Configure(x => x.Scan(scan =>
                 {
                     scan.TheCallingAssembly();
+                    scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMap.SiteMaps>();
                     scan.WithDefaultConventions();
                     scan.AddAllTypesOf<MvcSiteMapProvider.Core.SiteMap.IDynamicNodeProvider>();
                 }
@@ -113,6 +114,7 @@ namespace MvcMusicStore
             container.Configure(x => x.Scan(scan =>
             {
                 scan.TheCallingAssembly();
+                scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMap.SiteMaps>();
                 scan.WithDefaultConventions();
                 scan.AddAllTypesOf<MvcSiteMapProvider.Core.Mvc.UrlResolver.ISiteMapNodeUrlResolver>();
             }

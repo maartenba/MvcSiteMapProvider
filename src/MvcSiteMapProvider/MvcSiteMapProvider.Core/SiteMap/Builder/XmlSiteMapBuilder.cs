@@ -238,7 +238,12 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
             siteMapNode.Roles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
+
+            // TODO: move these to sitemapnode constructor so they can't be changed at runtime.
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
+            siteMapNode.DynamicNodeProvider = node.GetAttributeValue("dynamicNodeProvider");
+
+
             siteMapNode.ImageUrl = node.GetAttributeValue("imageUrl");
             siteMapNode.TargetFrame = node.GetAttributeValue("targetFrame");
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
@@ -286,6 +291,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 routeNode.RouteValues = AcquireRouteValuesFrom(node);
                 routeNode.PreservedRouteParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                 //routeNode.Url = "";
+
+                // TODO: move this to sitemapnode constructor so they can't be changed at runtime.
                 routeNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
                 // Add inherited route values to sitemap node

@@ -14,7 +14,7 @@ using System.IO.Compression;
 
 #endregion
 
-namespace MvcSiteMapProvider.Core.Web
+namespace MvcSiteMapProvider.Core.Mvc
 {
     /// <summary>
     /// XmlSiteMapResult class.

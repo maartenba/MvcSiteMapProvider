@@ -52,18 +52,20 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return new SiteMapNode(
                 siteMap, 
                 key, 
-                implicitResourceKey, 
+                implicitResourceKey,
+                false,
                 //siteMapNodeFactory, 
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy);
         }
 
-        public ISiteMapNode CreateDynamic(ISiteMap siteMap, string implicitResourceKey)
+        public ISiteMapNode CreateDynamic(ISiteMap siteMap, string key, string implicitResourceKey)
         {
             return new SiteMapNode(
-                siteMap, 
-                string.Empty, 
-                implicitResourceKey, 
+                siteMap,
+                key, 
+                implicitResourceKey,
+                true,
                 //siteMapNodeFactory, 
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy);

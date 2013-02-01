@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core.Reflection;
 
 
 namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
@@ -57,6 +58,18 @@ namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
         /// <returns>The resolved URL.</returns>
         public virtual string ResolveUrl(ISiteMapNode siteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
         {
+            if (!String.IsNullOrEmpty(siteMapNode.UnresolvedUrl))
+            {
+                if (siteMapNode.UnresolvedUrl.StartsWith("~"))
+                {
+                    return System.Web.VirtualPathUtility.ToAbsolute(siteMapNode.UnresolvedUrl);
+                }
+                else
+                {
+                    return siteMapNode.UnresolvedUrl;
+                }
+            }
+
             //if (siteMapNode["url"] != null)
             //{
             //    if (siteMapNode["url"].StartsWith("~"))
@@ -132,7 +145,7 @@ namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
         /// </returns>
         public virtual bool AppliesTo(string providerName)
         {
-            return providerName == "default" || string.IsNullOrEmpty(providerName);
+            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName);
         }
 
         #endregion

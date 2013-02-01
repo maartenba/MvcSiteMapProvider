@@ -48,7 +48,7 @@ namespace MvcSiteMapProvider.Core.Mvc
         {
             string resourceFileName = Path.GetFileName(embeddedFileName);
             Assembly assembly = typeof(MvcSiteMapProviderViewEngineVirtualFile).Assembly;
-            return assembly.GetManifestResourceStream("MvcSiteMapProvider.Web.Html.DisplayTemplates." + resourceFileName);
+            return assembly.GetManifestResourceStream("MvcSiteMapProvider.Core.Web.Html.DisplayTemplates." + resourceFileName);
         }
     }
 }
