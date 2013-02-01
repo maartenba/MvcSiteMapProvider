@@ -303,30 +303,30 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        /// <summary>
-        /// Encodes the external URL.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns></returns>
-        public static bool EncodeExternalUrl(ISiteMapNode node)
-        {
-            var url = node.Url;
-            if (url.Contains("http") || url.Contains("ftp"))
-            {
-                node.Url = HttpUtility.UrlEncode(url);
-                return true;
-            }
-            return false;
-        }
+        ///// <summary>
+        ///// Encodes the external URL.
+        ///// </summary>
+        ///// <param name="node">The node.</param>
+        ///// <returns></returns>
+        //public static bool EncodeExternalUrl(ISiteMapNode node)
+        //{
+        //    var url = node.Url;
+        //    if (url.Contains("http") || url.Contains("ftp"))
+        //    {
+        //        node.Url = HttpUtility.UrlEncode(url);
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
-        /// <summary>
-        /// Decodes the external URL.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        public static void DecodeExternalUrl(ISiteMapNode node)
-        {
-            node.Url = HttpUtility.UrlDecode(node.Url);
-        }
+        ///// <summary>
+        ///// Decodes the external URL.
+        ///// </summary>
+        ///// <param name="node">The node.</param>
+        //public static void DecodeExternalUrl(ISiteMapNode node)
+        //{
+        //    node.Url = HttpUtility.UrlDecode(node.Url);
+        //}
 
 
 

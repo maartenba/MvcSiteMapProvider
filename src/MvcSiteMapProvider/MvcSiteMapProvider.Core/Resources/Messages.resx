@@ -168,4 +168,10 @@
   <data name="SiteMapNoDefaultBuilderSetConfigured" xml:space="preserve">
     <value>There is no default builder set configured.</value>
   </data>
+  <data name="CouldNotResolve" xml:space="preserve">
+    <value>Could not resolve URL for sitemap node {0} which represents action {1} in controller {2}. Ensure that the route {3} for this sitemap node can be resolved and that its default values allow resolving the URL for the current sitemap node.</value>
+  </data>
+  <data name="SiteMapFileNotFound" xml:space="preserve">
+    <value>Site map file {0} could not be found. Verify that the path provided is correct.</value>
+  </data>
 </root>

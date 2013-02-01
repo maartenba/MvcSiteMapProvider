@@ -524,10 +524,10 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             siteMapNode.TargetFrame = attribute.TargetFrame;
             siteMapNode.HttpMethod = httpMethod;
 
-            if (!siteMapNode.Clickable)
-            {
-                siteMapNode.Url = "";
-            }
+            //if (!siteMapNode.Clickable)
+            //{
+            //    siteMapNode.Url = "";
+            //}
 
             siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
             siteMapNode.ChangeFrequency = attribute.ChangeFrequency;

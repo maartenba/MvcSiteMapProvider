@@ -106,6 +106,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not resolve URL for sitemap node {0} which represents action {1} in controller {2}. Ensure that the route {3} for this sitemap node can be resolved and that its default values allow resolving the URL for the current sitemap node..
+        /// </summary>
+        internal static string CouldNotResolve {
+            get {
+                return ResourceManager.GetString("CouldNotResolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An invalid element was found in the sitemap..
         /// </summary>
         internal static string InvalidSiteMapElement {
@@ -174,6 +183,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         internal static string RelativeUrlNotAllowed {
             get {
                 return ResourceManager.GetString("RelativeUrlNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Site map file {0} could not be found. Verify that the path provided is correct..
+        /// </summary>
+        internal static string SiteMapFileNotFound {
+            get {
+                return ResourceManager.GetString("SiteMapFileNotFound", resourceCulture);
             }
         }
         

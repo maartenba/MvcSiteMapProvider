@@ -4,12 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MvcSiteMapProvider.Core.SiteMap
+namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using MvcSiteMapProvider.Core.SiteMap;
 
     /// <summary>
     /// TODO: Update summary.

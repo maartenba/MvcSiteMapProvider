@@ -96,7 +96,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                         mvcNode.Clickable);
                 }
 
-                //var clone = mvcNode.Clone(key) as SiteMapNode2;
+                //var clone = mvcNode.Clone(key) as SiteMapNode;
                 ////foreach (var kvp in dynamicNode.RouteValues)
                 ////{
                 ////    clone.RouteValues[kvp.Key] = kvp.Value;

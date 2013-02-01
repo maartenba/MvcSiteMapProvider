@@ -47,12 +47,19 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.aclModule = aclModule;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
+
+            // TODO: move request caching to a different class that wraps this one
+            this.instanceId = Guid.NewGuid();
+            this.aclCacheItemKey = "__MVCSITEMAP_ACL_" + this.instanceId.ToString();
+            this.currentNodeCacheKey = "__MVCSITEMAP_CN_" + this.instanceId.ToString();
         }
 
         private readonly ISiteMapBuilder siteMapBuilder;
         private readonly IAclModule aclModule;
         private readonly IActionMethodParameterResolver actionMethodParameterResolver;
         private readonly IControllerTypeResolver controllerTypeResolver;
+
+        private readonly Guid instanceId;
 
         #region SiteMapProvider state
 
@@ -81,21 +88,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region DefaultSiteMapProvider state
 
-        //protected const string RootName = "mvcSiteMap";
-        //protected const string NodeName = "mvcSiteMapNode";
-        //protected readonly XNamespace ns = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0";
         protected readonly object synclock = new object();
-        protected string cacheKey;
         protected string aclCacheItemKey;
         protected string currentNodeCacheKey;
         protected ISiteMapNode root;
-        protected bool isBuildingSiteMap = false; // TODO: remove
-        //protected bool scanAssembliesForSiteMapNodes;
-        //protected string siteMapFile = string.Empty;
-        //protected string siteMapFileAbsolute = string.Empty;
-        //protected List<string> excludeAssembliesForScan = new List<string>();
-        //protected List<string> includeAssembliesForScan = new List<string>();
-        //protected List<string> attributesToIgnore = new List<string>();
 
         #endregion
 
@@ -158,14 +154,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
 
-            // Avoid issue with url table not clearing correctly.
-            if (this.FindSiteMapNode(node.Url) != null)
-            {
-                this.RemoveNode(node);
-            }
+            //// TODO: Investigate why this could be the case - perhaps the clear or remove
+            //// method needs attention instead. This will go into an endless loop when building
+            //// a sitemap, so we can't do this here.
+            //// Avoid issue with url table not clearing correctly.
+            //if (this.FindSiteMapNode(node.Url) != null)
+            //{
+            //    this.RemoveNode(node);
+            //}
 
-            // Allow for external URLs
-            var encoded = UrlPath.EncodeExternalUrl(node);
+            //// Allow for external URLs
+            //var encoded = UrlPath.EncodeExternalUrl(node);
 
             // Add the node
             try
@@ -178,11 +177,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 AddNodeInternal(node, parentNode);
             }
 
-            // Restore the external URL
-            if (encoded)
-            {
-                UrlPath.DecodeExternalUrl(node);
-            }
+            //// Restore the external URL
+            //if (encoded)
+            //{
+            //    UrlPath.DecodeExternalUrl(node);
+            //}
 
         }
 
@@ -198,6 +197,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 string url = node.Url;
                 if (!string.IsNullOrEmpty(url))
                 {
+                    if (url.StartsWith("http") || url.StartsWith("ftp"))
+                    {
+                        // This is an external url, so we will encode it
+                        url = HttpUtility.UrlEncode(url);
+                    }
                     if (HttpRuntime.AppDomainAppVirtualPath != null)
                     {
                         if (!UrlPath.IsAbsolutePhysicalPath(url))
@@ -244,7 +248,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             lock (this._lock)
             {
-                SiteMapNode node2 = (SiteMapNode)this.ParentNodeTable[node];
+                ISiteMapNode node2 = (ISiteMapNode)this.ParentNodeTable[node];
                 if (this.ParentNodeTable.Contains(node))
                 {
                     this.ParentNodeTable.Remove(node);
@@ -597,7 +601,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </exception>
         public bool IsAccessibleToUser(System.Web.HttpContext context, ISiteMapNode node)
         {
-            if ((isBuildingSiteMap && CacheDuration > 0) || !SecurityTrimmingEnabled)
+            if (!SecurityTrimmingEnabled)
             {
                 return true;
             }
@@ -684,11 +688,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return root;
         }
 
-        /// <summary>
-        /// Gets or sets the duration of the cache.
-        /// </summary>
-        /// <value>The duration of the cache.</value>
-        public int CacheDuration { get; private set; }
+        ///// <summary>
+        ///// Gets or sets the duration of the cache.
+        ///// </summary>
+        ///// <value>The duration of the cache.</value>
+        //public int CacheDuration { get; private set; }
 
                 /// <summary>
         /// Finds the site map node.
@@ -867,7 +871,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
                     foreach (var pair in values)
                     {
-                        if (!string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
+                        if (mvcNode.Attributes.ContainsKey(pair.Key) && !string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
                         {
                             if (mvcNode.Attributes[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
                             {
@@ -903,6 +907,83 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
             return nodeValid;
         }
+
+        ///// <summary>
+        ///// Nodes the matches route.
+        ///// </summary>
+        ///// <param name="mvcNode">The MVC node.</param>
+        ///// <param name="values">The values.</param>
+        ///// <returns>
+        ///// A matches route represented as a <see cref="bool"/> instance 
+        ///// </returns>
+        //private bool NodeMatchesRoute(ISiteMapNode mvcNode, IDictionary<string, object> values)
+        //{
+        //    // Temporary Thread Lock to help with debugging
+        //    lock (this.synclock)
+        //    {
+
+        //        var nodeValid = true;
+
+        //        if (mvcNode != null)
+        //        {
+        //            // Find action method parameters?
+        //            IEnumerable<string> actionParameters = new List<string>();
+        //            //if (mvcNode.DynamicNodeProvider == null && mvcNode.IsDynamic == false)
+        //            if (mvcNode.IsDynamic == false)
+        //            {
+        //                actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
+        //                    controllerTypeResolver, mvcNode.Area, mvcNode.Controller, mvcNode.Action);
+        //            }
+
+        //            // Verify route values
+        //            if (values.Count > 0)
+        //            {
+        //                // Checking for same keys and values.
+        //                if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
+        //                {
+        //                    return false;
+        //                }
+
+        //                foreach (var pair in values)
+        //                {
+        //                    if (!string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
+        //                    {
+        //                        if (mvcNode.Attributes[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
+        //                        {
+        //                            continue;
+        //                        }
+        //                        else
+        //                        {
+        //                            // Is the current pair.Key a parameter on the action method?
+        //                            if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
+        //                            {
+        //                                return false;
+        //                            }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
+        //                        {
+        //                            continue;
+        //                        }
+        //                        else if (pair.Key == "area")
+        //                        {
+        //                            return false;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            nodeValid = false;
+        //        }
+
+        //        return nodeValid;
+
+        //    }
+        //}
 
         /// <summary>
         /// Returns whether the two route value collections have same keys and same values.

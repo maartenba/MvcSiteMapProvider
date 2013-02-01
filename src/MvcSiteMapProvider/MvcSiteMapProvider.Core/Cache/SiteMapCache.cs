@@ -17,7 +17,8 @@ namespace MvcSiteMapProvider.Core.Cache
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SiteMapCache : MvcSiteMapProvider.Core.Cache.ISiteMapCache
+    public class SiteMapCache 
+        : ISiteMapCache
     {
         public SiteMapCache(Cache cache)
         {
@@ -61,5 +62,10 @@ namespace MvcSiteMapProvider.Core.Cache
         //{
 
         //}
+
+        public virtual void Remove(string key)
+        {
+            cache.Remove(key);
+        }
     }
 }

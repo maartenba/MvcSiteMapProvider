@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MvcSiteMapProvider.Core.SiteMap;
 
-namespace MvcSiteMapProvider.Core.SiteMap
+namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
 {
     /// <summary>
     /// SiteMapNode URL resolver contract.

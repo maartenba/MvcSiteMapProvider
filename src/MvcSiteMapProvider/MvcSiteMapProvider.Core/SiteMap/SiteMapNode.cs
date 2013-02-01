@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Routing;
 using System.Linq;
+using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -12,15 +13,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SiteMapNode2
+    public class SiteMapNode
         : ISiteMapNode
     {
-        public SiteMapNode2(
+        public SiteMapNode(
             ISiteMap siteMap, 
             string key, 
             string implicitResourceKey, 
             //ISiteMapNodeFactory siteMapNodeFactory, 
-            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy
+            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
+            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
             )
         {
             if (siteMap == null)
@@ -31,12 +33,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
             //    throw new ArgumentNullException("siteMapNodeFactory");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
+            if (siteMapNodeUrlResolverStrategy == null)
+                throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
 
             this.siteMap = siteMap;
             this.key = key;
             this.ResourceKey = implicitResourceKey;
             //this.siteMapNodeFactory = siteMapNodeFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
+            this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
 
             // Initialize variables
             Attributes = new Dictionary<string, string>();
@@ -46,6 +51,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         // Services
         //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
+        protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
 
         // Object State
         protected string key = String.Empty;
@@ -54,6 +60,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected bool isParentNodeSet = false;
         protected SiteMapNodeCollection childNodes;
         protected bool isChildNodesSet = false;
+        protected string url = String.Empty;
 
 
         /// <summary>
@@ -229,13 +236,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return this.siteMap.IsAccessibleToUser(context, this);
         }
 
-        /// <summary>
-        /// Gets or sets the URL.
-        /// </summary>
-        /// <value>
-        /// The URL.
-        /// </value>
-        public string Url { get; set; }
+        ///// <summary>
+        ///// Gets or sets the URL.
+        ///// </summary>
+        ///// <value>
+        ///// The URL.
+        ///// </value>
+        //public string Url { get; set; }
 
         // TODO: Determine what the value of this property is
         /// <summary>
@@ -246,13 +253,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string HttpMethod { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="SiteMapNode2" /> is clickable.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if clickable; otherwise, <c>false</c>.
-        /// </value>
-        public bool Clickable { get; set; }
+
 
         /// <summary>
         /// Gets or sets the implicit resource key (optional).
@@ -350,6 +351,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         #region URL Resolver
 
         /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SiteMapNode" /> is clickable.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if clickable; otherwise, <c>false</c>.
+        /// </value>
+        public bool Clickable { get; set; }
+
+        /// <summary>
         /// Gets or sets the name or type of the URL resolver.
         /// </summary>
         /// <value>
@@ -357,15 +366,38 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string UrlResolver { get; set; }
 
-
-        // TODO: provide implementation for resolving Urls
-        //private string ResolveUrl(MvcSiteMapNode mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
-        //{
-
-        //}
-
-        // TODO: use strategy factory to provide implementation logic from concrete provider
-        // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
+        /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        /// <value>
+        /// The URL.
+        /// </value>
+        public string Url 
+        {
+            get
+            {
+                if (!this.Clickable)
+                {
+                    return string.Empty;
+                }
+                // Only resolve the url if an absolute url is not already set
+                if (String.IsNullOrEmpty(this.url) || (!this.url.StartsWith("http") && !this.url.StartsWith("ftp")))
+                {
+                    // use strategy factory to provide implementation logic from concrete provider
+                    // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
+                    return siteMapNodeUrlResolverStrategy.ResolveUrl(
+                        this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
+                }
+                return this.url;
+            }
+            set
+            {
+                if (this.url != value)
+                {
+                    this.url = value;
+                }
+            }
+        }
 
         #endregion
 
@@ -480,7 +512,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ///// </returns>
         //public virtual object Clone()
         //{
-        //    //var clone = new SiteMapNode2(this.siteMap, this.key, this.ResourceKey);
+        //    //var clone = new SiteMapNode(this.siteMap, this.key, this.ResourceKey);
 
         //    var clone = siteMapNodeFactory.Create(this.siteMap, this.key, this.ResourceKey);
         //    clone.ParentNode = this.ParentNode;
@@ -489,7 +521,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //    //clone.ChildNodes = new SiteMapNodeCollection();
         //    //foreach (var childNode in ChildNodes)
         //    //{
-        //    //    var childClone = ((SiteMapNode2)childNode).Clone() as SiteMapNode2;
+        //    //    var childClone = ((SiteMapNode)childNode).Clone() as SiteMapNode;
         //    //    childClone.ParentNode = clone;
         //    //    clone.ChildNodes.Add(childClone);
         //    //}

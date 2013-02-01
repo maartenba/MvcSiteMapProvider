@@ -51,7 +51,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //MvcSiteMapProvider.Extensibility.IAclModule AclModule { get; set; }
         //MvcSiteMapProvider.Extensibility.IActionMethodParameterResolver ActionMethodParameterResolver { get; set; }
         //System.Web.SiteMapNode BuildSiteMap(); // From IStaticSiteMapProvider
-        int CacheDuration { get; }
+        //int CacheDuration { get; }
         //MvcSiteMapProvider.Extensibility.IControllerTypeResolver ControllerTypeResolver { get; set; }
         //System.Web.SiteMapNode CurrentNode { get; } // From ISiteMapProvider
         //System.Web.SiteMapNode FindSiteMapNode(System.Web.HttpContext context); // From ISiteMapProvider

@@ -14,6 +14,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
+    using System.Web.Hosting;
     using System.Xml.Linq;
     using System.IO;
     using System.Globalization;
@@ -66,28 +67,38 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         protected const string xmlRootName = "mvcSiteMap";
         protected const string xmlNodeName = "mvcSiteMapNode";
         protected readonly XNamespace xmlSiteMapNamespace = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0";
-        protected readonly object synclock = new object();
+        //protected readonly object synclock = new object();
         
 
         #region ISiteMapBuilder Members
 
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
-            // Build sitemap
-            lock (synclock)
-            {
-                
-                if (siteMap.RootNode != null)
-                {
-                    return siteMap.RootNode;
-                }
+            
 
-                var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
-                if (xml != null)
-                {
-                    rootNode = LoadSiteMapFromXml(siteMap, xml);
-                }
+            var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
+            if (xml != null)
+            {
+                rootNode = LoadSiteMapFromXml(siteMap, xml);
             }
+
+            //// Build sitemap
+            //lock (synclock)
+            //{
+                
+            //    if (siteMap.RootNode != null)
+            //    {
+            //        return siteMap.RootNode;
+            //    }
+
+            //    var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
+            //    if (xml != null)
+            //    {
+            //        rootNode = LoadSiteMapFromXml(siteMap, xml);
+            //    }
+            //}
+
+            // Done!
             return rootNode;
         }
 
@@ -96,9 +107,14 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         private XDocument GetSiteMapXmlFromFile(string xmlSiteMapFilePath)
         {
             XDocument result = null;
-            if (File.Exists(xmlSiteMapFilePath))
+            var siteMapFileAbsolute = HostingEnvironment.MapPath(this.xmlSiteMapFilePath);
+            if (File.Exists(siteMapFileAbsolute))
             {
-                result = XDocument.Load(xmlSiteMapFilePath);
+                result = XDocument.Load(siteMapFileAbsolute);
+            }
+            else
+            {
+                throw new FileNotFoundException(string.Format(Resources.Messages.SiteMapFileNotFound, this.xmlSiteMapFilePath), siteMapFileAbsolute);
             }
             return result;
         }
@@ -115,6 +131,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             // Process our XML file, passing in the main root sitemap node and xml element.
             ProcessXmlNodes(siteMap, root, rootElement);
 
+            // Done!
             return root;
         }
 
@@ -197,7 +214,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             // Handle title and description globalization
             var explicitResourceKeys = new NameValueCollection();
             var title = node.GetAttributeValue("title");
-            var description = node.GetAttributeValue("description") ?? title;
+            //var description = node.GetAttributeValue("description") ?? title;
+            var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
             nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
             nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
 
@@ -217,21 +235,23 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             siteMapNode.Description = description;
             //siteMapNode.ResourceKey = implicitResourceKey;
             siteMapNode.Attributes = AcquireAttributesFrom(node);
+
             siteMapNode.Roles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
             siteMapNode.ImageUrl = node.GetAttributeValue("imageUrl");
             siteMapNode.TargetFrame = node.GetAttributeValue("targetFrame");
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
+            siteMapNode.Url = node.GetAttributeValue("url");
 
-            if (!siteMapNode.Clickable)
-            {
-                siteMapNode.Url = "";
-            }
-            else
-            {
-                siteMapNode.Url = node.GetAttributeValue("url");
-            }
+            //if (!siteMapNode.Clickable)
+            //{
+            //    siteMapNode.Url = "";
+            //}
+            //else
+            //{
+            //    siteMapNode.Url = node.GetAttributeValue("url");
+            //}
             if (!string.IsNullOrEmpty(node.GetAttributeValue("changeFrequency")))
             {
                 siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValue("changeFrequency"));
@@ -265,7 +285,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 routeNode.Route = node.GetAttributeValue("route");
                 routeNode.RouteValues = AcquireRouteValuesFrom(node);
                 routeNode.PreservedRouteParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                routeNode.Url = "";
+                //routeNode.Url = "";
                 routeNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
                 // Add inherited route values to sitemap node
@@ -453,11 +473,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                     // to an MvcSiteMapNode, and add the node to the current root.
                     childNode = GetSiteMapNodeFromXmlElement(siteMap, node, rootNode);
                     ISiteMapNode parentNode = rootNode;
-
-                    //if (childNode.ParentNode != null && childNode.ParentNode != rootNode)
-                    //{
-                    //   parentNode = childNode.ParentNode;
-                    //}
+                    childNode.ParentNode = parentNode;
 
                     //if (!dynamicNodeBuilder.HasDynamicNodes(childNode))
                     if (!childNode.HasDynamicNodeProvider)
