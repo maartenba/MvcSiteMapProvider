@@ -113,7 +113,7 @@
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="SiteMap\SiteMapFactory.cs" />
-    <Compile Include="SiteMap\SiteMapNode2.cs" />
+    <Compile Include="SiteMap\SiteMapNode.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
     <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />
