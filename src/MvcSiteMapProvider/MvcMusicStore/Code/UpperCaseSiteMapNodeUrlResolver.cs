@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MvcSiteMapProvider;
+//using MvcSiteMapProvider;
+using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+using MvcSiteMapProvider.Core.SiteMap;
 
 namespace MvcMusicStore.Code
 {
@@ -10,7 +12,7 @@ namespace MvcMusicStore.Code
     /// Sample ISiteMapNodeUrlResolver implementation.
     /// </summary>
     public class UpperCaseSiteMapNodeUrlResolver
-        : DefaultSiteMapNodeUrlResolver
+        : SiteMapNodeUrlResolver
     {
         /// <summary>
         /// Resolves the URL.
@@ -21,7 +23,7 @@ namespace MvcMusicStore.Code
         /// <param name="action">The action.</param>
         /// <param name="routeValues">The route values.</param>
         /// <returns>The resolved URL.</returns>
-        public override string ResolveUrl(MvcSiteMapNode mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
+        public override string ResolveUrl(ISiteMapNode mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
         {
             return base.ResolveUrl(mvcSiteMapNode, area, controller, action, routeValues).ToUpperInvariant();
         }

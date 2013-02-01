@@ -38,8 +38,7 @@
                 </div>
 
                 <div id="main">
-                    <!--<asp:SiteMapPath ID="siteMapPath" runat="server" ViewStateMode="Disabled">
-                    </asp:SiteMapPath>-->
+                    
                     <%=Html.MvcSiteMap().SiteMapPath()%>
                     
                     <div style="height: 10px;"></div>

@@ -1,8 +1,8 @@
-﻿@model MvcSiteMapProvider.Web.Html.Models.SiteMapNodeModel
+﻿@model MvcSiteMapProvider.Core.Web.Html.Models.SiteMapNodeModel
 @using System.Web.Mvc.Html
-@using MvcSiteMapProvider.Web.Html.Models
+@using MvcSiteMapProvider.Core.Web.Html.Models
 
-@if (Model.IsCurrentNode && Model.SourceMetadata["HtmlHelper"].ToString() != "MvcSiteMapProvider.Web.Html.MenuHelper")  { 
+@if (Model.IsCurrentNode && Model.SourceMetadata["HtmlHelper"].ToString() != "MvcSiteMapProvider.Core.Web.Html.MenuHelper")  { 
     <text>@Model.Title</text>
 } else if (Model.IsClickable) { 
     <a href="@Model.Url ">@Model.Title</a>

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MvcSiteMapProvider.Extensibility;
+//using MvcSiteMapProvider.Extensibility;
+using MvcSiteMapProvider.Core.SiteMap;
 
 namespace MvcMusicStore.Code
 {
@@ -23,9 +24,14 @@ namespace MvcMusicStore.Code
         /// <returns>
         /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsVisible(SiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata)
+        public bool IsVisible(ISiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata)
         {
             return !HttpContext.Current.Request.IsAuthenticated;
+        }
+
+        public bool AppliesTo(string providerName)
+        {
+            return this.GetType().FullName.Equals(providerName);
         }
 
         #endregion
