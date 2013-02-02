@@ -63,7 +63,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region SiteMapProvider state
 
-        private bool _enableLocalization;
+        private bool enableLocalization;
         //private SiteMap _parentProvider;
         private object _resolutionTicket = new object();
         private string _resourceKey;
@@ -345,11 +345,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                return this._enableLocalization;
+                return this.enableLocalization;
             }
             set
             {
-                this._enableLocalization = value;
+                this.enableLocalization = value;
             }
         }
 
