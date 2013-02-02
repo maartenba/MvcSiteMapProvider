@@ -575,11 +575,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         }
 
-        //public void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
         /// <summary>
         /// Retrieves a Boolean value indicating whether the specified <see cref="T:System.Web.SiteMapNode"/> object can be viewed by the user in the specified context.
         /// </summary>
@@ -756,11 +751,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 }
             }
             return null;
-        }
-
-        public void Refresh()
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

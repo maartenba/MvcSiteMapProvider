@@ -59,7 +59,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes); // From ISiteMapProvider
         //bool IsAccessibleToUser(System.Web.HttpContext context, System.Web.SiteMapNode node); // From ISiteMapProvider
         //MvcSiteMapProvider.Extensibility.INodeKeyGenerator NodeKeyGenerator { get; set; }
-        void Refresh();
+        //void Refresh();
         //System.Web.SiteMapNode RootNode { get; } // From ISiteMapProvider
         //MvcSiteMapProvider.Extensibility.ISiteMapNodeUrlResolver SiteMapNodeUrlResolver { get; set; }
         //MvcSiteMapProvider.Extensibility.ISiteMapNodeVisibilityProvider SiteMapNodeVisibilityProvider { get; set; }
