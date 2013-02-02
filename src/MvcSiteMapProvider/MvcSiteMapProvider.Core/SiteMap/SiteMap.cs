@@ -65,7 +65,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         private const string _allRoles = "*";
         private bool _enableLocalization;
-        internal readonly object _lock = new object();
         //private SiteMap _parentProvider;
         private object _resolutionTicket = new object();
         private string _resourceKey;
@@ -191,7 +190,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
-            lock (this._lock)
+            lock (this.synclock)
             {
                 bool flag = false;
                 string url = node.Url;
@@ -246,7 +245,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
-            lock (this._lock)
+            lock (this.synclock)
             {
                 ISiteMapNode node2 = (ISiteMapNode)this.ParentNodeTable[node];
                 if (this.ParentNodeTable.Contains(node))
@@ -276,7 +275,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public virtual void Clear()
         {
-            lock (this._lock)
+            lock (this.synclock)
             {
                 root = null;
                 if (this._childNodeCollectionTable != null)
@@ -1055,7 +1054,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 if (this._childNodeCollectionTable == null)
                 {
-                    lock (this._lock)
+                    lock (this.synclock)
                     {
                         if (this._childNodeCollectionTable == null)
                         {
@@ -1073,7 +1072,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 if (this._keyTable == null)
                 {
-                    lock (this._lock)
+                    lock (this.synclock)
                     {
                         if (this._keyTable == null)
                         {
@@ -1091,7 +1090,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 if (this._parentNodeTable == null)
                 {
-                    lock (this._lock)
+                    lock (this.synclock)
                     {
                         if (this._parentNodeTable == null)
                         {
@@ -1109,7 +1108,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 if (this._urlTable == null)
                 {
-                    lock (this._lock)
+                    lock (this.synclock)
                     {
                         if (this._urlTable == null)
                         {
