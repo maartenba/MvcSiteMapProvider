@@ -97,9 +97,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         #region ISiteMap Members
 
         /// <summary>
-        /// Adds a <see cref="T:System.Web.SiteMapNode"/> object to the node collection that is maintained by the site map provider.
+        /// Adds a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object to the node collection that is maintained by the site map provider.
         /// </summary>
-        /// <param name="node">The <see cref="T:System.Web.SiteMapNode"/> to add to the node collection maintained by the provider.</param>
+        /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> to add to the node collection maintained by the provider.</param>
         public virtual void AddNode(ISiteMapNode node)
         {
             this.AddNode(node, null);
@@ -138,15 +138,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         /// <summary>
-        /// Adds a <see cref="T:System.Web.SiteMapNode"/> to the collections that are maintained by the site map provider and establishes a parent/child relationship between the <see cref="T:System.Web.SiteMapNode"/> objects.
+        /// Adds a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> to the collections that are maintained by the site map provider and establishes a 
+        /// parent/child relationship between the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> objects.
         /// </summary>
-        /// <param name="node">The <see cref="T:System.Web.SiteMapNode"/> to add to the site map provider.</param>
-        /// <param name="parentNode">The <see cref="T:System.Web.SiteMapNode"/> under which to add <paramref name="node"/>.</param>
+        /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> to add to the site map provider.</param>
+        /// <param name="parentNode">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> under which to add <paramref name="node"/>.</param>
         /// <exception cref="T:System.ArgumentNullException">
         /// 	<paramref name="node"/> is null.
         /// </exception>
         /// <exception cref="T:System.InvalidOperationException">
-        /// The <see cref="P:System.Web.SiteMapNode.Url"/> or <see cref="P:System.Web.SiteMapNode.Key"/> is already registered with the <see cref="T:System.Web.StaticSiteMapProvider"/>. A site map node must be made up of pages with unique URLs or keys.
+        /// The <see cref="P:System.Web.SiteMapNode.Url"/> or <see cref="P:System.Web.SiteMapNode.Key"/> is already registered with 
+        /// the <see cref="T:System.Web.StaticSiteMapProvider"/>. A site map node must be made up of pages with unique URLs or keys.
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
@@ -203,12 +205,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     {
                         if (!UrlPath.IsAbsolutePhysicalPath(url))
                         {
-                            //url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPathString, url));
                             url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPath, url));
                         }
                         if (this.UrlTable[url] != null)
                         {
-                            //throw new InvalidOperationException(System.Web.SR.GetString("XmlSiteMapProvider_Multiple_Nodes_With_Identical_Url", new object[] { url }));
                             throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
                         }
                     }
@@ -217,7 +217,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 string key = node.Key;
                 if (this.KeyTable.Contains(key))
                 {
-                    //throw new InvalidOperationException(System.Web.SR.GetString("XmlSiteMapProvider_Multiple_Nodes_With_Identical_Key", new object[] { key }));
                     throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalKey, key));
                 }
                 this.KeyTable[key] = node;
@@ -297,10 +296,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
 
         /// <summary>
-        /// Gets the <see cref="T:System.Web.SiteMapNode"/> object that represents the currently requested page.
+        /// Gets the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page.
         /// </summary>
-        /// <returns>A <see cref="T:System.Web.SiteMapNode"/> that represents the currently requested page; otherwise, 
-        /// null, if the <see cref="T:System.Web.SiteMapNode"/> is not found or cannot be returned for the current user.</returns>
+        /// <returns>A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, 
+        /// null, if the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> is not found or cannot be returned for the current user.</returns>
         public ISiteMapNode CurrentNode
         {
             get 
@@ -318,28 +317,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     current.Items[currentNodeCacheKey] = currentNode;
                 }
                 return currentNode;
-
-
-                //if (HttpContext.Current.Items[currentNodeCacheKey] == null)
-                //{
-                //    var currentNode = base.CurrentNode;
-                //    HttpContext.Current.Items[currentNodeCacheKey] = currentNode;
-                //    return currentNode;
-                //}
-                //return (SiteMapNode)HttpContext.Current.Items[currentNodeCacheKey];
-
-
-
-                //HttpContext current = HttpContext.Current;
-                //currentNode = this.ResolveSiteMapNode(current);
-                //if (currentNode == null)
-                //{
-                //    currentNode = this.FindSiteMapNode(current);
-                //}
-                //return this.ReturnNodeIfAccessible(currentNode);
             }
         }
 
+        /// <summary>
+        /// Gets or sets a Boolean value indicating whether localized values of <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode">SiteMapNode</see> 
+        /// attributes are returned.
+        /// </summary>
+        /// <remarks>
+        /// The EnableLocalization property is used for the get accessor of the Title and Description properties, as well as additional 
+        /// Attributes properties of a SiteMapNode object.
+        /// </remarks>
         public bool EnableLocalization
         {
             get
@@ -371,11 +359,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         /// <summary>
-        /// Retrieves a <see cref="T:System.Web.SiteMapNode"/> object that represents the currently requested page using the specified <see cref="T:System.Web.HttpContext"/> object.
+        /// Retrieves a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page using the specified <see cref="T:System.Web.HttpContext"/> object.
         /// </summary>
         /// <param name="context">The <see cref="T:System.Web.HttpContext"/> used to match node information with the URL of the requested page.</param>
         /// <returns>
-        /// A <see cref="T:System.Web.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:System.Web.SiteMapNode"/> can be found in the <see cref="T:System.Web.SiteMapNode"/> or if the page context is null.
+        /// A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> or if the page context is null.
         /// </returns>
         public ISiteMapNode FindSiteMapNode(System.Web.HttpContext context)
         {
@@ -576,10 +564,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         /// <summary>
-        /// Retrieves a Boolean value indicating whether the specified <see cref="T:System.Web.SiteMapNode"/> object can be viewed by the user in the specified context.
+        /// Retrieves a Boolean value indicating whether the specified <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object can be viewed by the user in the specified context.
         /// </summary>
         /// <param name="context">The <see cref="T:System.Web.HttpContext"/> that contains user information.</param>
-        /// <param name="node">The <see cref="T:System.Web.SiteMapNode"/> that is requested by the user.</param>
+        /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that is requested by the user.</param>
         /// <returns>
         /// true if security trimming is enabled and <paramref name="node"/> can be viewed by the user or security trimming is not enabled; otherwise, false.
         /// </returns>
@@ -625,6 +613,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //    }
         //}
 
+        /// <summary>
+        /// Get or sets the resource key that is used for localizing <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> attributes. 
+        /// </summary>
+        /// <remarks>
+        /// The ResourceKey property is used with the GetImplicitResourceString method of the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> class. 
+        /// For the Title and Description properties, as well as any additional attributes that are defined in the Attributes collection of the 
+        /// <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object, the GetImplicitResourceString method takes precedence over the 
+        /// GetExplicitResourceString when the localization is enabled with the EnableLocalization property set to true. 
+        /// </remarks>
         public string ResourceKey
         {
             get
@@ -637,6 +634,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
+        /// <summary>
+        /// Gets the root <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object of the site map data that the current provider represents.
+        /// </summary>
         public ISiteMapNode RootNode
         {
             get 
@@ -645,6 +645,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
+        /// <summary>
+        /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
+        /// </summary>
         public bool SecurityTrimmingEnabled
         {
             get { return this.securityTrimmingEnabled; }
@@ -670,13 +673,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        ///// <summary>
-        ///// Gets or sets the duration of the cache.
-        ///// </summary>
-        ///// <value>The duration of the cache.</value>
-        //public int CacheDuration { get; private set; }
-
-                /// <summary>
+        /// <summary>
         /// Finds the site map node.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -990,8 +987,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 do
                 {
-                    //node = node.ParentNode;
-                    node = this.GetParentNode(node);
+                    node = node.ParentNode;
                     walkupLevels--;
                 }
                 while ((node != null) && (walkupLevels != 0));
@@ -1001,9 +997,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         private ISiteMapNode ReturnNodeIfAccessible(ISiteMapNode node)
         {
-            
-            //if ((node != null) && node.IsAccessibleToUser(HttpContext.Current))
-            if ((node != null) && this.IsAccessibleToUser(HttpContext.Current, node))
+            if ((node != null) && node.IsAccessibleToUser(HttpContext.Current))
             {
                 return node;
             }
