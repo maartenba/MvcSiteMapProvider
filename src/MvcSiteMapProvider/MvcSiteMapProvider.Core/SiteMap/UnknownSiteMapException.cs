@@ -7,7 +7,7 @@ using System;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// UnknownSiteMapProviderException
+    /// UnknownSiteMapException
     /// </summary>
     public class UnknownSiteMapException : Exception
     {
