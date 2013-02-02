@@ -62,9 +62,7 @@
     <Compile Include="ISiteMapRequestContext.cs" />
     <Compile Include="ISiteMapSource.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
-    <Compile Include="Loader\ISiteMapLoaderFactory.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
-    <Compile Include="Loader\SiteMapLoaderFactory.cs" />
     <Compile Include="Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Mvc\DefaultActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\DefaultControllerTypeResolver.cs" />
