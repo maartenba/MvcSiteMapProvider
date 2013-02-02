@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider.Core.Mvc
     /// <summary>
     /// AmbiguousControllerException
     /// </summary>
+    [Serializable]
     public class AmbiguousControllerException : Exception
     {
         /// <summary>
