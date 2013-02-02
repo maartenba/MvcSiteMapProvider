@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// <summary>
     /// MvcSiteMapException
     /// </summary>
+    [Serializable]
     public class MvcSiteMapException : Exception
     {
         /// <summary>

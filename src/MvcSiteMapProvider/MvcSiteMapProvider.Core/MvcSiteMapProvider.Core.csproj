@@ -130,7 +130,7 @@
     <Compile Include="Mvc\MvcSiteMapProviderViewEngine.cs" />
     <Compile Include="Mvc\MvcSiteMapProviderViewEngineVirtualFile.cs" />
     <Compile Include="Mvc\MvcSiteMapProviderViewEngineVirtualPathProvider.cs" />
-    <Compile Include="SiteMap\UnknownSiteMapProviderException.cs" />
+    <Compile Include="SiteMap\UnknownSiteMapException.cs" />
     <Compile Include="Web\Html\HtmlHelperExtensions.cs" />
     <Compile Include="Web\Html\MenuHelper.cs" />
     <Compile Include="Web\Html\Models\MenuHelperModel.cs" />

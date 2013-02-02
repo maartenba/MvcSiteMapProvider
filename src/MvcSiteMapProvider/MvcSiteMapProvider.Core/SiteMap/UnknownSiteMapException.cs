@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider
     /// <summary>
     /// UnknownSiteMapException
     /// </summary>
+    [Serializable]
     public class UnknownSiteMapException : Exception
     {
         /// <summary>

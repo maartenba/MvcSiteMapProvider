@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider.Core.Security
     /// <summary>
     /// AclModuleNotSupportedException
     /// </summary>
+    [Serializable]
     public class AclModuleNotSupportedException : Exception
     {
         /// <summary>

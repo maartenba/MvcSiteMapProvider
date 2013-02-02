@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
     /// <summary>
     /// UrlResolverException
     /// </summary>
+    [Serializable]
     public class UrlResolverException : Exception
     {
         /// <summary>
