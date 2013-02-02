@@ -104,7 +104,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
         #endregion
 
-        private XDocument GetSiteMapXmlFromFile(string xmlSiteMapFilePath)
+        protected virtual XDocument GetSiteMapXmlFromFile(string xmlSiteMapFilePath)
         {
             XDocument result = null;
             var siteMapFileAbsolute = HostingEnvironment.MapPath(this.xmlSiteMapFilePath);
@@ -119,7 +119,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             return result;
         }
 
-        private ISiteMapNode LoadSiteMapFromXml(ISiteMap siteMap, XDocument xml)
+        protected virtual ISiteMapNode LoadSiteMapFromXml(ISiteMap siteMap, XDocument xml)
         {
             FixXmlNamespaces(xml);
             SetEnableLocalization(siteMap, xml);
@@ -135,7 +135,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             return root;
         }
 
-        private void FixXmlNamespaces(XDocument xml)
+        protected virtual void FixXmlNamespaces(XDocument xml)
         {
             // If no namespace is present (or the wrong one is present), replace it
             foreach (var node in xml.Descendants())
@@ -147,7 +147,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             }
         }
 
-        private void SetEnableLocalization(ISiteMap siteMap, XDocument xml)
+        protected virtual void SetEnableLocalization(ISiteMap siteMap, XDocument xml)
         {
             // Enable Localization?
             string enableLocalization =
@@ -158,13 +158,13 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             }
         }
 
-        private XElement GetRootElement(XDocument xml)
+        protected virtual XElement GetRootElement(XDocument xml)
         {
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
             return xml.Element(this.xmlSiteMapNamespace + xmlRootName).Element(this.xmlSiteMapNamespace + xmlNodeName);
         }
 
-        private ISiteMapNode GetRootNode(ISiteMap siteMap, XDocument xml, XElement rootElement)
+        protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, XDocument xml, XElement rootElement)
         {
             return GetSiteMapNodeFromXmlElement(siteMap, rootElement, null);
         }
@@ -176,7 +176,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <param name="node">The element to map.</param>
         /// <param name="parentNode">The parent SiteMapNode</param>
         /// <returns>An MvcSiteMapNode which represents the XMLElement.</returns>
-        protected ISiteMapNode GetSiteMapNodeFromXmlElement(ISiteMap siteMap, XElement node, ISiteMapNode parentNode)
+        protected virtual ISiteMapNode GetSiteMapNodeFromXmlElement(ISiteMap siteMap, XElement node, ISiteMapNode parentNode)
         {
             // Get area, controller and action from node declaration
             string area = node.GetAttributeValue("area");
@@ -407,8 +407,10 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                && attributeName != "url"
                && attributeName != "clickable"
                && attributeName != "httpMethod"
+               && attributeName != "dynamicNodeProvider"
                && attributeName != "urlResolver"
                && attributeName != "visibilityProvider"
+               && attributeName != "visibility"
                && attributeName != "lastModifiedDate"
                && attributeName != "changeFrequency"
                && attributeName != "updatePriority"
@@ -468,7 +470,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// </summary>
         /// <param name="rootNode">The main root sitemap node.</param>
         /// <param name="rootElement">The main root XML element.</param>
-        protected void ProcessXmlNodes(ISiteMap siteMap, ISiteMapNode rootNode, XElement rootElement)
+        protected virtual void ProcessXmlNodes(ISiteMap siteMap, ISiteMapNode rootNode, XElement rootElement)
         {
             // Loop through each element below the current root element.
             foreach (XElement node in rootElement.Elements())
