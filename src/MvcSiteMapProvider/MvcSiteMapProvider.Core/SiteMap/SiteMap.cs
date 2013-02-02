@@ -63,7 +63,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region SiteMapProvider state
 
-        private const string _allRoles = "*";
         private bool _enableLocalization;
         //private SiteMap _parentProvider;
         private object _resolutionTicket = new object();
