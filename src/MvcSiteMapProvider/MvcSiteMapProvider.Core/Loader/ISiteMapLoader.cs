@@ -5,7 +5,7 @@ namespace MvcSiteMapProvider.Core.Loader
 {
     public interface ISiteMapLoader
     {
-        ISiteMap GetSiteMap(string builderSetName);
-        ISiteMap GetSiteMap(string siteMapKey, string builderSetName);
+        ISiteMap GetSiteMap();
+        ISiteMap GetSiteMap(string siteMapKey);
     }
 }

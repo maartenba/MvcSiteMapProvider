@@ -223,6 +223,11 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.SiteMap.SiteMapFactory>()
             );
 
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyToBuilderSetMapper>()
+                .Use<MvcSiteMapProvider.Core.Cache.SiteMapCacheKeyToBuilderSetMapper>()
+            );
+
 
             container.Configure(x => x
                 .For<System.Web.Caching.Cache>()
@@ -235,7 +240,8 @@ namespace MvcMusicStore
                 container.GetInstance<MvcSiteMapProvider.Core.Cache.ISiteMapCache>(),
                 container.GetInstance<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyGenerator>(),
                 container.GetInstance<MvcSiteMapProvider.Core.SiteMap.Builder.ISiteMapBuilderSetStrategy>(),
-                container.GetInstance<MvcSiteMapProvider.Core.SiteMap.ISiteMapFactory>()
+                container.GetInstance<MvcSiteMapProvider.Core.SiteMap.ISiteMapFactory>(),
+                container.GetInstance<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyToBuilderSetMapper>()
                 );
 
             MvcSiteMapProvider.Core.SiteMap.SiteMaps.Loader = loader;

@@ -27,7 +27,8 @@ namespace MvcSiteMapProvider.Core.Loader
             ISiteMapCache siteMapCache,
             ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
             ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy,
-            ISiteMapFactory siteMapFactory
+            ISiteMapFactory siteMapFactory,
+            ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper
             )
         {
             if (slidingCacheExpiration == null)
@@ -40,44 +41,65 @@ namespace MvcSiteMapProvider.Core.Loader
                 throw new ArgumentNullException("siteMapBuilderSetStrategy");
             if (siteMapFactory == null)
                 throw new ArgumentNullException("siteMapFactory");
+            if (siteMapCacheKeyToBuilderSetMapper == null)
+                throw new ArgumentNullException("siteMapCacheKeyToBuilderSetMapper");
 
             this.slidingCacheExpiration = slidingCacheExpiration;
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapBuilderSetStrategy = siteMapBuilderSetStrategy;
             this.siteMapFactory = siteMapFactory;
+            this.siteMapCacheKeyToBuilderSetMapper = siteMapCacheKeyToBuilderSetMapper;
         }
 
-        private readonly TimeSpan slidingCacheExpiration;
-        private readonly ISiteMapCache siteMapCache;
-        private readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
-        private readonly ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy;
-        private readonly ISiteMapFactory siteMapFactory;
+        protected readonly TimeSpan slidingCacheExpiration;
+        protected readonly ISiteMapCache siteMapCache;
+        protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
+        protected readonly ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy;
+        protected readonly ISiteMapFactory siteMapFactory;
+        protected readonly ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper;
 
-        protected readonly object synclock = new object();
+        protected readonly ReaderWriterLockSlim synclock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        public ISiteMap GetSiteMap(string builderSetName)
+        public virtual ISiteMap GetSiteMap()
         {
             var key = siteMapCacheKeyGenerator.GenerateKey(HttpContext.Current);
-            return GetSiteMap(key, builderSetName);
+            return GetSiteMap(key);
         }
 
-        public ISiteMap GetSiteMap(string siteMapKey, string builderSetName)
+        public virtual ISiteMap GetSiteMap(string siteMapCacheKey)
         {
-            lock (this.synclock)
+            ISiteMap siteMap = null;
+
+            synclock.EnterReadLock();
+            try
             {
-                var siteMap = siteMapCache[siteMapKey];
-                if (siteMap == null)
+                siteMap = siteMapCache[siteMapCacheKey];
+            }
+            finally
+            {
+                synclock.ExitReadLock();
+            }
+
+            if (siteMap == null)
+            {
+                synclock.EnterWriteLock();
+                try
                 {
                     // Build sitemap
+                    var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
                     var builder = siteMapBuilderSetStrategy.GetBuilder(builderSetName);
                     siteMap = siteMapFactory.Create(builder);
                     siteMap.BuildSiteMap();
 
-                    siteMapCache.Insert(siteMapKey, siteMap, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingCacheExpiration);
+                    siteMapCache.Insert(siteMapCacheKey, siteMap, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingCacheExpiration);
                 }
-                return siteMap;
+                finally
+                {
+                    synclock.ExitWriteLock();
+                }
             }
+            return siteMap;
         }
     }
 }

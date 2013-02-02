@@ -49,8 +49,10 @@
   <ItemGroup>
     <Compile Include="Cache\ISiteMapCache.cs" />
     <Compile Include="Cache\ISiteMapCacheKeyGenerator.cs" />
+    <Compile Include="Cache\ISiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="Cache\SiteMapCache.cs" />
     <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
+    <Compile Include="Cache\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="Globalization\INodeLocalizer.cs" />

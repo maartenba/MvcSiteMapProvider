@@ -33,17 +33,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public static ISiteMap Current
         {
-            get { return GetSiteMap("default"); }
+            get { return GetSiteMap(); }
         }
 
-        public static ISiteMap GetSiteMap(string siteMapKey, string builderSetName)
+        public static ISiteMap GetSiteMap(string siteMapCacheKey)
         {
-            return loader.GetSiteMap(siteMapKey, builderSetName);
+            return loader.GetSiteMap(siteMapCacheKey);
         }
 
-        public static ISiteMap GetSiteMap(string builderSetName)
+        public static ISiteMap GetSiteMap()
         {
-            return loader.GetSiteMap(builderSetName);
+            return loader.GetSiteMap();
         }
     }
 }
