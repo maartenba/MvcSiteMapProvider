@@ -92,7 +92,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected string aclCacheItemKey;
         protected string currentNodeCacheKey;
         protected ISiteMapNode root;
-        protected bool isBuildingSiteMap = false;
 
         #endregion
 
@@ -371,7 +370,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 rawUrl = UrlPath.MakeVirtualPathAppAbsolute(rawUrl);
             }
-            this.BuildSiteMap();
             return this.ReturnNodeIfAccessible((ISiteMapNode)this.UrlTable[rawUrl]);
         }
 
@@ -427,7 +425,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
-            this.BuildSiteMap();
             SiteMapNodeCollection collection = (SiteMapNodeCollection)this.ChildNodeCollectionTable[node];
             if (collection == null)
             {
@@ -487,7 +484,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
-            this.BuildSiteMap();
             var parentNode = (ISiteMapNode)this.ParentNodeTable[node];
             if (parentNode == null)
             {
@@ -653,23 +649,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get 
             {
-                var rootNodeCore = this.GetRootNodeCore();
-                return this.ReturnNodeIfAccessible(rootNodeCore);
+                return this.ReturnNodeIfAccessible(root);
             }
-        }
-
-        /// <summary>
-        /// Returns the current root, otherwise calls the BuildSiteMap method.
-        /// </summary>
-        /// <returns></returns>
-        protected ISiteMapNode GetRootNodeCore()
-        {
-            //lock (synclock)
-            //{
-            //    BuildSiteMap();
-            //    return root;
-            //}
-            return BuildSiteMap();
         }
 
         public bool SecurityTrimmingEnabled
@@ -686,13 +667,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             lock (this.synclock)
             {
-                if (this.isBuildingSiteMap)
+                // Return immediately if the prevous lock called this before
+                if (root != null)
                 {
-                    return null;
+                    return root;
                 }
-                isBuildingSiteMap = true;
                 root = siteMapBuilder.BuildSiteMap(this, root);
-                isBuildingSiteMap = false;
                 return root;
             }
         }
