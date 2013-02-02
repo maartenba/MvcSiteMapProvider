@@ -123,6 +123,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         {
             FixXmlNamespaces(xml);
             SetEnableLocalization(siteMap, xml);
+            SetSecurityTrimmingEnabled(siteMap, xml);
 
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
             var rootElement = GetRootElement(xml);
@@ -155,6 +156,17 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             if (!string.IsNullOrEmpty(enableLocalization))
             {
                 siteMap.EnableLocalization = Boolean.Parse(enableLocalization);
+            }
+        }
+
+        protected virtual void SetSecurityTrimmingEnabled(ISiteMap siteMap, XDocument xml)
+        {
+            // Enable Security Trimming?
+            string securityTrimmingEnabled =
+                xml.Element(this.xmlSiteMapNamespace + xmlRootName).GetAttributeValue("securityTrimmingEnabled");
+            if (!string.IsNullOrEmpty(securityTrimmingEnabled))
+            {
+                siteMap.SecurityTrimmingEnabled = Boolean.Parse(securityTrimmingEnabled);
             }
         }
 

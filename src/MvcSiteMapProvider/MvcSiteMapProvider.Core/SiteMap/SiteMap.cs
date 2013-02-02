@@ -68,8 +68,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //private object _resolutionTicket = new object();
         private string resourceKey;
         //private SiteMap _rootProvider;
-        private bool _securityTrimmingEnabled;
-        internal const string _securityTrimmingEnabledAttrName = "securityTrimmingEnabled";
+        private bool securityTrimmingEnabled;
 
         //public event SiteMapResolveEventHandler SiteMapResolve;
 
@@ -653,7 +652,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public bool SecurityTrimmingEnabled
         {
-            get { return this._securityTrimmingEnabled; }
+            get { return this.securityTrimmingEnabled; }
+            set { this.securityTrimmingEnabled = value; }
         }
 
         public ISiteMapNode BuildSiteMap()

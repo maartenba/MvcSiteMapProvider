@@ -170,6 +170,10 @@
     <Compile Include="UpdatePriority.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MvcSiteMapProvider.snk" />
+    <None Include="MvcSiteMapSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

@@ -36,7 +36,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         string ResourceKey { get; set; }
         ISiteMapNode RootNode { get; }
         //System.Web.SiteMapProvider RootProvider { get; }
-        bool SecurityTrimmingEnabled { get; }
+        bool SecurityTrimmingEnabled { get; set; }
         //event System.Web.SiteMapResolveEventHandler SiteMapResolve;
 
         // IStaticSiteMapProvider members
