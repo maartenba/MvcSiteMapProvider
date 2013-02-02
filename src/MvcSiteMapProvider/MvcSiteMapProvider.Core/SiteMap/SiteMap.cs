@@ -76,10 +76,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region StaticSiteMapProvider state
 
-        private Hashtable _childNodeCollectionTable;
-        private Hashtable _keyTable;
-        private Hashtable _parentNodeTable;
-        private Hashtable _urlTable;
+        private Hashtable childNodeCollectionTable;
+        private Hashtable keyTable;
+        private Hashtable parentNodeTable;
+        private Hashtable urlTable;
 
         #endregion
 
@@ -276,21 +276,21 @@ namespace MvcSiteMapProvider.Core.SiteMap
             lock (this.synclock)
             {
                 root = null;
-                if (this._childNodeCollectionTable != null)
+                if (this.childNodeCollectionTable != null)
                 {
-                    this._childNodeCollectionTable.Clear();
+                    this.childNodeCollectionTable.Clear();
                 }
-                if (this._urlTable != null)
+                if (this.urlTable != null)
                 {
-                    this._urlTable.Clear();
+                    this.urlTable.Clear();
                 }
-                if (this._parentNodeTable != null)
+                if (this.parentNodeTable != null)
                 {
-                    this._parentNodeTable.Clear();
+                    this.parentNodeTable.Clear();
                 }
-                if (this._keyTable != null)
+                if (this.keyTable != null)
                 {
-                    this._keyTable.Clear();
+                    this.keyTable.Clear();
                 }
             }
         }
@@ -1051,17 +1051,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                if (this._childNodeCollectionTable == null)
+                if (this.childNodeCollectionTable == null)
                 {
                     lock (this.synclock)
                     {
-                        if (this._childNodeCollectionTable == null)
+                        if (this.childNodeCollectionTable == null)
                         {
-                            this._childNodeCollectionTable = new Hashtable();
+                            this.childNodeCollectionTable = new Hashtable();
                         }
                     }
                 }
-                return this._childNodeCollectionTable;
+                return this.childNodeCollectionTable;
             }
         }
 
@@ -1069,17 +1069,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                if (this._keyTable == null)
+                if (this.keyTable == null)
                 {
                     lock (this.synclock)
                     {
-                        if (this._keyTable == null)
+                        if (this.keyTable == null)
                         {
-                            this._keyTable = new Hashtable();
+                            this.keyTable = new Hashtable();
                         }
                     }
                 }
-                return this._keyTable;
+                return this.keyTable;
             }
         }
 
@@ -1087,17 +1087,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                if (this._parentNodeTable == null)
+                if (this.parentNodeTable == null)
                 {
                     lock (this.synclock)
                     {
-                        if (this._parentNodeTable == null)
+                        if (this.parentNodeTable == null)
                         {
-                            this._parentNodeTable = new Hashtable();
+                            this.parentNodeTable = new Hashtable();
                         }
                     }
                 }
-                return this._parentNodeTable;
+                return this.parentNodeTable;
             }
         }
 
@@ -1105,17 +1105,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                if (this._urlTable == null)
+                if (this.urlTable == null)
                 {
                     lock (this.synclock)
                     {
-                        if (this._urlTable == null)
+                        if (this.urlTable == null)
                         {
-                            this._urlTable = new Hashtable(StringComparer.OrdinalIgnoreCase);
+                            this.urlTable = new Hashtable(StringComparer.OrdinalIgnoreCase);
                         }
                     }
                 }
-                return this._urlTable;
+                return this.urlTable;
             }
         }
 
