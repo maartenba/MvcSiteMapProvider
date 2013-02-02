@@ -65,8 +65,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         private bool enableLocalization;
         //private SiteMap _parentProvider;
-        private object _resolutionTicket = new object();
-        private string _resourceKey;
+        //private object _resolutionTicket = new object();
+        private string resourceKey;
         //private SiteMap _rootProvider;
         private bool _securityTrimmingEnabled;
         internal const string _securityTrimmingEnabledAttrName = "securityTrimmingEnabled";
@@ -635,11 +635,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                return this._resourceKey;
+                return this.resourceKey;
             }
             set
             {
-                this._resourceKey = value;
+                this.resourceKey = value;
             }
         }
 
