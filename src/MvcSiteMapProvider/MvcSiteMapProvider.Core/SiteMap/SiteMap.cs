@@ -1,30 +1,24 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMap.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using MvcSiteMapProvider.Core.Security;
+using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.SiteMap.Builder;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-    using System.Web.Util;
-    using System.Web.UI;
-    using System.Web.Mvc;
-    using System.Web.Routing;
-    using System.Xml.Linq;
-    using MvcSiteMapProvider.Core.Security;
-    using MvcSiteMapProvider.Core.Mvc;
-    using MvcSiteMapProvider.Core.SiteMap.Builder;
-
     /// <summary>
+    /// This class acts as the root of a SiteMap object graph and maintains a map
+    /// between the child <see cref="T:MvcSiteMapProvider.Core.SiteMapNode"/> nodes.
+    /// </summary>
+    /// <remarks>
     /// This class was created by extracting the public intefaces of SiteMapProvider, 
     /// StaticSiteMapProvider, and MvcSiteMapProvider.DefaultSiteMapProvider.
-    /// </summary>
+    /// </remarks>
     public class SiteMap : ISiteMap
     {
         public SiteMap(
