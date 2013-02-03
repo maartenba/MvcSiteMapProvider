@@ -100,38 +100,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual void AddNode(ISiteMapNode node)
         {
             this.AddNode(node, null);
-
-            //if (SiteMapProviderEventHandler.OnAddingSiteMapNode(new SiteMapProviderEventContext(this, node, root)))
-            //{
-            //    try
-            //    {
-            //        // Avoid issue with url table not clearing correctly.
-            //        if (base.FindSiteMapNode(node.Url) != null)
-            //        {
-            //            base.RemoveNode(node);
-            //        }
-
-            //        // Allow for external URLs
-            //        var encoded = EncodeExternalUrl(node);
-
-            //        // Add the node
-            //        base.AddNode(node);
-
-            //        // Restore the external URL
-            //        if (encoded)
-            //        {
-            //            DecodeExternalUrl(node);
-            //        }
-            //    }
-            //    catch (InvalidOperationException)
-            //    {
-            //        if (!isBuildingSiteMap)
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    SiteMapProviderEventHandler.OnAddedSiteMapNode(new SiteMapProviderEventContext(this, node, root));
-            //}
         }
 
         /// <summary>
@@ -149,6 +117,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
+            //if (SiteMapProviderEventHandler.OnAddingSiteMapNode(new SiteMapProviderEventContext(this, node, root)))
+            //{
 
             // TODO: Investigate why this could be the case - perhaps the clear or remove
             // method needs attention instead. This will go into an endless loop when building
@@ -179,6 +149,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             //    UrlPath.DecodeExternalUrl(node);
             //}
 
+            //    SiteMapProviderEventHandler.OnAddedSiteMapNode(new SiteMapProviderEventContext(this, node, root));
+            //}
         }
 
         protected virtual void AddNodeInternal(ISiteMapNode node, ISiteMapNode parentNode)
