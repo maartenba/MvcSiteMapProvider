@@ -174,4 +174,7 @@
   <data name="SiteMapFileNotFound" xml:space="preserve">
     <value>Site map file {0} could not be found. Verify that the path provided is correct.</value>
   </data>
+  <data name="SecurityTrimmingCannotBeDisabled" xml:space="preserve">
+    <value>Security trimming cannot be disabled again after it is enabled.</value>
+  </data>
 </root>

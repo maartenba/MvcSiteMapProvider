@@ -651,7 +651,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public bool SecurityTrimmingEnabled
         {
             get { return this.securityTrimmingEnabled; }
-            set { this.securityTrimmingEnabled = value; }
+            set 
+            {
+                if (value == false && this.securityTrimmingEnabled == true)
+                    throw new System.Security.SecurityException(Resources.Messages.SecurityTrimmingCannotBeDisabled);
+                this.securityTrimmingEnabled = value; 
+            }
         }
 
         public ISiteMapNode BuildSiteMap()

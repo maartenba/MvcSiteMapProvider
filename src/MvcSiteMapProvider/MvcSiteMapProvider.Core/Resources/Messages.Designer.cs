@@ -187,6 +187,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Security trimming cannot be disabled again after it is enabled..
+        /// </summary>
+        internal static string SecurityTrimmingCannotBeDisabled {
+            get {
+                return ResourceManager.GetString("SecurityTrimmingCannotBeDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Site map file {0} could not be found. Verify that the path provided is correct..
         /// </summary>
         internal static string SiteMapFileNotFound {

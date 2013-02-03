@@ -59,8 +59,6 @@
     <Compile Include="Globalization\NodeLocalizer.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
-    <Compile Include="ISiteMapRequestContext.cs" />
-    <Compile Include="ISiteMapSource.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
     <Compile Include="Mvc\AmbiguousControllerException.cs" />
@@ -101,7 +99,6 @@
     <Compile Include="Security\InternalAuthorize.cs" />
     <Compile Include="Security\ObjectCopier.cs" />
     <Compile Include="Security\XmlRolesAclModule.cs" />
-    <Compile Include="SiteMapRequestContext.cs" />
     <Compile Include="SiteMap\Builder\IMvcSiteMapNodeAttribute.cs" />
     <Compile Include="SiteMap\Builder\IMvcSiteMapNodeAttributeDefinition.cs" />
     <Compile Include="SiteMap\Builder\INodeKeyGenerator.cs" />
@@ -160,8 +157,6 @@
     <Compile Include="SiteMap\ISiteMap.cs" />
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolver.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProvider.cs" />
-    <Compile Include="SiteMap\ISiteMapProvider.cs" />
-    <Compile Include="SiteMap\IStaticSiteMapProvider.cs" />
     <Compile Include="SiteMap\Builder\ISiteMapBuilder.cs" />
     <Compile Include="SiteMap\MvcSiteMapException.cs" />
     <Compile Include="SiteMap\SiteMap.cs" />
