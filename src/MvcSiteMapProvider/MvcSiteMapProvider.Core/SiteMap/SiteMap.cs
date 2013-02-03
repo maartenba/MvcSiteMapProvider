@@ -65,12 +65,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         private bool enableLocalization;
         //private SiteMap _parentProvider;
-        //private object _resolutionTicket = new object();
         private string resourceKey;
         //private SiteMap _rootProvider;
         private bool securityTrimmingEnabled;
-
-        //public event SiteMapResolveEventHandler SiteMapResolve;
 
         #endregion
 
@@ -308,11 +305,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 var currentNode = (ISiteMapNode)current.Items[currentNodeCacheKey];
                 if (currentNode == null)
                 {
-                    currentNode = this.ResolveSiteMapNode(current);
-                    if (currentNode == null)
-                    {
-                        currentNode = this.FindSiteMapNode(current);
-                    }
+                    currentNode = this.FindSiteMapNode(current);
                     currentNode = this.ReturnNodeIfAccessible(currentNode);
                     current.Items[currentNodeCacheKey] = currentNode;
                 }
@@ -330,14 +323,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </remarks>
         public bool EnableLocalization
         {
-            get
-            {
-                return this.enableLocalization;
-            }
-            set
-            {
-                this.enableLocalization = value;
-            }
+            get { return this.enableLocalization; }
+            set { this.enableLocalization = value; }
         }
 
         public ISiteMapNode FindSiteMapNode(string rawUrl)
@@ -624,14 +611,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </remarks>
         public string ResourceKey
         {
-            get
-            {
-                return this.resourceKey;
-            }
-            set
-            {
-                this.resourceKey = value;
-            }
+            get { return this.resourceKey; }
+            set { this.resourceKey = value; }
         }
 
         /// <summary>
@@ -639,10 +620,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         public ISiteMapNode RootNode
         {
-            get 
-            {
-                return this.ReturnNodeIfAccessible(root);
-            }
+            get { return this.ReturnNodeIfAccessible(root); }
         }
 
         /// <summary>
@@ -1006,33 +984,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 return node;
             }
-            return null;
-        }
-
-        private ISiteMapNode ResolveSiteMapNode(HttpContext context)
-        {
-            //SiteMapResolveEventHandler siteMapResolve = this.SiteMapResolve;
-            //if ((siteMapResolve != null) && !context.Items.Contains(this._resolutionTicket))
-            //{
-            //    context.Items.Add(this._resolutionTicket, true);
-            //    try
-            //    {
-            //        Delegate[] invocationList = siteMapResolve.GetInvocationList();
-            //        int length = invocationList.Length;
-            //        for (int i = 0; i < length; i++)
-            //        {
-            //            SiteMapNode node = ((SiteMapResolveEventHandler)invocationList[i])(this, new SiteMapResolveEventArgs(context, this));
-            //            if (node != null)
-            //            {
-            //                return node;
-            //            }
-            //        }
-            //    }
-            //    finally
-            //    {
-            //        context.Items.Remove(this._resolutionTicket);
-            //    }
-            //}
             return null;
         }
 
