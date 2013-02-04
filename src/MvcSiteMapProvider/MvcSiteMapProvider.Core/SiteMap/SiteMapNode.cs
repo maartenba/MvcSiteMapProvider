@@ -4,15 +4,13 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
-//using System.Linq;
+using System.Linq;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -51,25 +49,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
 
             // Initialize child objects
-            //Attributes = new Dictionary<string, string>();
-            //this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
-
-
-            //localizationService.ResourceKey = implicitResourceKey;
-            // TODO: Create factory to handle this creation.
-            //this.attributes = new AttributeCollection(siteMap, localizationService);
-
-            //this.attributes = 
-
             Roles = new List<string>();
             RouteValues = new Dictionary<string, object>();
             PreservedRouteParameters = new List<string>();
 
+            //this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
         }
 
         // Services
-        //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
-        //protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
         protected readonly ILocalizationService localizationService;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
@@ -263,14 +250,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return this.siteMap.IsAccessibleToUser(context, this);
         }
 
-        ///// <summary>
-        ///// Gets or sets the URL.
-        ///// </summary>
-        ///// <value>
-        ///// The URL.
-        ///// </value>
-        //public string Url { get; set; }
-
         // TODO: Determine what the value of this property is
         /// <summary>
         /// Gets or sets the HTTP method.
@@ -299,13 +278,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get 
             {
-                //return this.GetResourceValue("title", title);
                 return localizationService.GetResourceString("title", this.title, this.siteMap);
             }
             set 
             {
-                //this.title = value;
-                //explicitResourceKeyParser.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
                 this.title = localizationService.ExtractExplicitResourceKey("title", value);
             }
         }
@@ -318,13 +294,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                //return this.GetResourceValue("description", title);
                 return localizationService.GetResourceString("description", this.description, this.siteMap);
             }
             set
             {
-                //this.title = value;
-                //explicitResourceKeyParser.HandleResourceAttribute("description", ref title, ref explicitResourceKeys);
                 this.description = localizationService.ExtractExplicitResourceKey("description", value);
             }
         }
@@ -340,12 +313,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         /// <value>The image URL.</value>
         public string ImageUrl { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the attributes (optional).
-        ///// </summary>
-        ///// <value>The attributes.</value>
-        //public IDictionary<string, string> Attributes { get; set; }
 
         /// <summary>
         /// Gets the attributes (optional).
@@ -370,46 +337,46 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //    //c.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(c_CollectionChanged);
         //}
 
-        private void Attributes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+        //private void Attributes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        //{
+        //    switch (e.Action)
+        //    {
+        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
 
-                    foreach (var item in e.NewItems)
-                    {
-                        var pair = (KeyValuePair<string, string>)item;
-                        string value = pair.Value;
+        //            foreach (var item in e.NewItems)
+        //            {
+        //                var pair = (KeyValuePair<string, string>)item;
+        //                string value = pair.Value;
 
-                        //explicitResourceKeyParser.HandleResourceAttribute(pair.Key, ref value, ref explicitResourceKeys);
+        //                //explicitResourceKeyParser.HandleResourceAttribute(pair.Key, ref value, ref explicitResourceKeys);
 
-                        // Update the node in the collection if it changed
-                        if (this.Attributes[pair.Key] != value)
-                        {
-                            this.Attributes[pair.Key] = value;
-                        }
-                    }
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+        //                // Update the node in the collection if it changed
+        //                if (this.Attributes[pair.Key] != value)
+        //                {
+        //                    this.Attributes[pair.Key] = value;
+        //                }
+        //            }
+        //            break;
+        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
 
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+        //            break;
+        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
 
-                    foreach (var item in e.NewItems)
-                    {
-                        var pair = (KeyValuePair<string, string>)item;
-                        explicitResourceKeys.Remove(pair.Key);
-                    }
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+        //            foreach (var item in e.NewItems)
+        //            {
+        //                var pair = (KeyValuePair<string, string>)item;
+        //                explicitResourceKeys.Remove(pair.Key);
+        //            }
+        //            break;
+        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
 
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+        //            break;
+        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
 
-                    break;
-            }
+        //            break;
+        //    }
 
-        }
+        //}
 
         /// <summary>
         /// Gets or sets the roles.
@@ -532,15 +499,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string DynamicNodeProvider { get; set; }
 
-        // TODO: use strategy factory to provide implementation logic from concrete provider
-        // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-
         /// <summary>
         /// Gets the dynamic node collection.
         /// </summary>
         /// <returns>A dynamic node collection.</returns>
         public IEnumerable<DynamicNode> GetDynamicNodeCollection()
         {
+            // use strategy factory to provide implementation logic from concrete provider
+            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
             return dynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider);
         }
 
@@ -552,6 +518,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public bool HasDynamicNodeProvider
         {
+            // use strategy factory to provide implementation logic from concrete provider
+            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
             get { return (dynamicNodeProviderStrategy.GetProvider(this.DynamicNodeProvider) != null); }
         }
 
@@ -735,188 +703,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 return this.siteMap;
             }
         }
-
-
-
-
-//        #region Bubbling event Hooks
-
-//        /// <summary>
-//        /// For internal use.
-//        /// </summary>
-//        /// <param name="child">Child object.</param>
-//        [EditorBrowsable(EditorBrowsableState.Never)]
-//        protected void AddEventHooks(IBusinessObject child)
-//        {
-//            OnAddEventHooks(child);
-//        }
-
-//        /// <summary>
-//        /// Hook child object events.
-//        /// </summary>
-//        /// <param name="child">Child object.</param>
-//        [EditorBrowsable(EditorBrowsableState.Never)]
-//        protected virtual void OnAddEventHooks(IBusinessObject child)
-//        {
-//            INotifyBusy busy = child as INotifyBusy;
-//            if (busy != null)
-//                busy.BusyChanged += Child_BusyChanged;
-
-//            INotifyUnhandledAsyncException unhandled = child as INotifyUnhandledAsyncException;
-//            if (unhandled != null)
-//                unhandled.UnhandledAsyncException += Child_UnhandledAsyncException;
-
-//            INotifyPropertyChanged pc = child as INotifyPropertyChanged;
-//            if (pc != null)
-//                pc.PropertyChanged += Child_PropertyChanged;
-
-//#if !SILVERLIGHT
-//            IBindingList bl = child as IBindingList;
-//            if (bl != null)
-//                bl.ListChanged += Child_ListChanged;
-//#endif
-
-//            INotifyCollectionChanged ncc = child as INotifyCollectionChanged;
-//            if (ncc != null)
-//                ncc.CollectionChanged += Child_CollectionChanged;
-
-//            INotifyChildChanged cc = child as INotifyChildChanged;
-//            if (cc != null)
-//                cc.ChildChanged += Child_Changed;
-//        }
-
-//        /// <summary>
-//        /// For internal use only.
-//        /// </summary>
-//        /// <param name="child">Child object.</param>
-//        [EditorBrowsable(EditorBrowsableState.Never)]
-//        protected void RemoveEventHooks(IBusinessObject child)
-//        {
-//            OnRemoveEventHooks(child);
-//        }
-
-//        /// <summary>
-//        /// Unhook child object events.
-//        /// </summary>
-//        /// <param name="child">Child object.</param>
-//        [EditorBrowsable(EditorBrowsableState.Never)]
-//        protected virtual void OnRemoveEventHooks(IBusinessObject child)
-//        {
-//            INotifyBusy busy = child as INotifyBusy;
-//            if (busy != null)
-//                busy.BusyChanged -= Child_BusyChanged;
-
-//            INotifyUnhandledAsyncException unhandled = child as INotifyUnhandledAsyncException;
-//            if (unhandled != null)
-//                unhandled.UnhandledAsyncException -= Child_UnhandledAsyncException;
-
-//            INotifyPropertyChanged pc = child as INotifyPropertyChanged;
-//            if (pc != null)
-//                pc.PropertyChanged -= Child_PropertyChanged;
-
-//#if !SILVERLIGHT
-//            IBindingList bl = child as IBindingList;
-//            if (bl != null)
-//                bl.ListChanged -= Child_ListChanged;
-//#endif
-
-//            INotifyCollectionChanged ncc = child as INotifyCollectionChanged;
-//            if (ncc != null)
-//                ncc.CollectionChanged -= Child_CollectionChanged;
-
-//            INotifyChildChanged cc = child as INotifyChildChanged;
-//            if (cc != null)
-//                cc.ChildChanged -= Child_Changed;
-//        }
-
-//        #endregion
-
-
-        ///// <summary>
-        ///// Gets the localized text for the attribute.
-        ///// </summary>
-        ///// <param name="attributeName">The name of the attribute (as it is in the original XML file).</param>
-        ///// <param name="attributeValue">The current value of the attribute in the object.</param>
-        ///// <returns></returns>
-        //protected string GetResourceValue(string attributeName, string attributeValue)
-        //{
-        //    if (this.siteMap.EnableLocalization)
-        //    {
-        //        string resourceString = this.GetImplicitResourceString(attributeName);
-        //        if (resourceString != null)
-        //        {
-        //            return resourceString;
-        //        }
-        //        resourceString = this.GetExplicitResourceString(attributeName, attributeValue, true);
-        //        if (resourceString != null)
-        //        {
-        //            return resourceString;
-        //        }
-        //    }
-        //    if (attributeValue != null)
-        //    {
-        //        return attributeValue;
-        //    }
-        //    return string.Empty;
-        //}
-
-
-
-        //// TODO: Move to either an injected service or a base class
-        //protected string GetImplicitResourceString(string attributeName)
-        //{
-        //    if (attributeName == null)
-        //    {
-        //        throw new ArgumentNullException("attributeName");
-        //    }
-        //    string globalResourceObject = null;
-        //    if (!string.IsNullOrEmpty(this.ResourceKey))
-        //    {
-        //        try
-        //        {
-        //            globalResourceObject = HttpContext.GetGlobalResourceObject(this.siteMap.ResourceKey, this.ResourceKey + "." + attributeName) as string;
-        //        }
-        //        catch
-        //        {
-        //        }
-        //    }
-        //    return globalResourceObject;
-        //}
-
-        //// TODO: Move to either an injected service or a base class
-        //protected string GetExplicitResourceString(string attributeName, string defaultValue, bool throwIfNotFound)
-        //{
-        //    if (attributeName == null)
-        //    {
-        //        throw new ArgumentNullException("attributeName");
-        //    }
-        //    string globalResourceObject = null;
-        //    if (this.explicitResourceKeys != null)
-        //    {
-        //        string[] values = this.explicitResourceKeys.GetValues(attributeName);
-        //        if ((values == null) || (values.Length <= 1))
-        //        {
-        //            return globalResourceObject;
-        //        }
-        //        try
-        //        {
-        //            globalResourceObject = HttpContext.GetGlobalResourceObject(values[0], values[1]) as string;
-        //        }
-        //        catch (System.Resources.MissingManifestResourceException)
-        //        {
-        //            if (defaultValue != null)
-        //            {
-        //                return defaultValue;
-        //            }
-        //        }
-        //        if ((globalResourceObject == null) && throwIfNotFound)
-        //        {
-        //            throw new InvalidOperationException(String.Format(Resources.Messages.ResourceNotFoundWithClassAndKey, values[0], values[1]));
-        //        }
-        //    }
-        //    return globalResourceObject;
-        //}
-
 
     }
 }
