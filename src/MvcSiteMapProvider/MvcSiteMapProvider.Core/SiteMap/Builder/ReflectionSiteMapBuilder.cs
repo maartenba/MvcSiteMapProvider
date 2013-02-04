@@ -500,7 +500,9 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             siteMapNode.Title = title;
             siteMapNode.Description = description;
             //siteMapNode.ResourceKey = implicitResourceKey;
-            siteMapNode.Roles = attribute.Roles;
+            //siteMapNode.Roles = attribute.Roles;
+            AcquireRolesFrom(attribute, siteMapNode.Roles);
+
             siteMapNode.Clickable = attribute.Clickable;
 
             // TODO: Change semantics here so the providers cannot be overridden after node creation.
@@ -550,5 +552,18 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             return siteMapNode;
         }
 
+
+        /// <summary>
+        /// Acquires the roles list from a given XElement
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="roles">The roles IList to populate.</param>
+        protected virtual void AcquireRolesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> roles)
+        {
+            foreach (var role in attribute.Roles)
+            {
+                roles.Add(role);
+            }
+        }
     }
 }

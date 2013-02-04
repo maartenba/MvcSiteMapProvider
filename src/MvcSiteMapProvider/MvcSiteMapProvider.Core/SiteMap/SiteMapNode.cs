@@ -73,12 +73,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         // Child collections and dictionaries
         protected NameValueCollection explicitResourceKeys = new NameValueCollection(); 
-        //protected readonly ObservableDictionary<string, string> attributes = new ObservableDictionary<string, string>();
         protected readonly IDictionary<string, string> attributes;
         protected readonly RouteValueCollection routeValues = new RouteValueCollection();
-        
-
-
 
         /// <summary>
         /// Gets the key.
@@ -320,23 +316,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The attributes.</value>
         public IDictionary<string, string> Attributes { get { return this.attributes; } }
 
-        //private void foo()
-        //{
-        //    System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
-        //    var x = nvc[0];
-
-        //    IDictionary<string, string> nvc2 = new Dictionary<string, string>();
-        //    var y = nvc2["test"];
-
-        //    var a = new System.Web.Routing.RouteCollection();
-
-        //    //var b = new System.Collections.ObjectModel.
-
-        //    var c = new MvcSiteMapProvider.Core.Collections.ObservableDictionary<string, string>();
-
-        //    //c.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(c_CollectionChanged);
-        //}
-
         //private void Attributes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         //{
         //    switch (e.Action)
@@ -382,7 +361,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the roles.
         /// </summary>
         /// <value>The roles.</value>
-        public IList<string> Roles { get; set; }
+        public IList<string> Roles { get; protected set; }
 
         /// <summary>
         /// Gets or sets the last modified date.

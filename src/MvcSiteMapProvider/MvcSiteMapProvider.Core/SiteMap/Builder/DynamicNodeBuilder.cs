@@ -206,7 +206,11 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
                 if (dynamicNode.Roles != null && dynamicNode.Roles.Any())
                 {
-                    clone.Roles = dynamicNode.Roles.ToArray();
+                    //clone.Roles = dynamicNode.Roles.ToArray();
+                    foreach (var role in dynamicNode.Roles)
+                    {
+                        clone.Roles.Add(role);
+                    }
                 }
 
                 // Optionally, an area, controller and action can be specified. If so, override the clone.

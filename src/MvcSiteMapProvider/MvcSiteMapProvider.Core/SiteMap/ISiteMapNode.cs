@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         IList<string> PreservedRouteParameters { get; set; }
         ISiteMapNode PreviousSibling { get; }
         string ResourceKey { get; }
-        IList<string> Roles { get; set; }
+        IList<string> Roles { get; }
         ISiteMapNode RootNode { get; }
         string Route { get; set; }
         RouteValueCollection RouteValues { get; }

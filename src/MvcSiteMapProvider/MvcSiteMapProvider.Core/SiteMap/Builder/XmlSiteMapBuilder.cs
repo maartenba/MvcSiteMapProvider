@@ -217,9 +217,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             //siteMapNode.Attributes = AcquireAttributesFrom(node);
 
             AcquireAttributesFrom(node, siteMapNode.Attributes);
-
-
-            siteMapNode.Roles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            AcquireRolesFrom(node, siteMapNode.Roles);
+            //siteMapNode.Roles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
 
             // TODO: move these to sitemapnode constructor so they can't be changed at runtime.
@@ -356,7 +355,9 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
                 if (attributeName == "roles")
                 {
-                    siteMapNode.Roles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    //siteMapNode.Roles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    AcquireRolesFrom(attribute, siteMapNode.Roles);
                 }
             }
         }
@@ -446,6 +447,37 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             }
             //return returnValue;
         }
+
+        /// <summary>
+        /// Acquires the roles list from a given XElement
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="roles">The roles IList to populate.</param>
+        protected virtual void AcquireRolesFrom(XElement node, IList<string> roles)
+        {
+            var localRoles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var role in localRoles)
+            {
+                roles.Add(role);
+            }
+        }
+
+        /// <summary>
+        /// Acquires the roles list from a given XAttribute
+        /// </summary>
+        /// <param name="node">The attribute.</param>
+        /// <param name="roles">The roles IList to populate.</param>
+        protected virtual void AcquireRolesFrom(XAttribute attribute, IList<string> roles)
+        {
+            //siteMapNode.Roles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var localRoles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var role in localRoles)
+            {
+                roles.Add(role);
+            }
+        }
+
 
 
         /// <summary>
