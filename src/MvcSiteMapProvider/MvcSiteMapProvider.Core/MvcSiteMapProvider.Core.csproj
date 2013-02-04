@@ -54,6 +54,8 @@
     <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Cache\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
+    <Compile Include="Globalization\IExplicitResourceKeyParser.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="Globalization\INodeLocalizer.cs" />
     <Compile Include="Globalization\NodeLocalizer.cs" />
@@ -117,8 +119,11 @@
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="SiteMap\MvcSiteMapNodeAttribute.cs" />
+    <Compile Include="Collections\NameValueCollection.cs" />
+    <Compile Include="Collections\ObservableDictionary.cs" />
     <Compile Include="SiteMap\SiteMapFactory.cs" />
     <Compile Include="SiteMap\SiteMapNode.cs" />
+    <Compile Include="SiteMap\SiteMapNodeAttributeDictionary.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
     <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />

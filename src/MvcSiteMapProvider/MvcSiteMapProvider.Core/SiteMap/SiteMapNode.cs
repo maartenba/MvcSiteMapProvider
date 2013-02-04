@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
-using System.Linq;
+//using System.Linq;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -22,6 +25,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             string implicitResourceKey,
             bool isDynamic,
             //ISiteMapNodeFactory siteMapNodeFactory, 
+            IExplicitResourceKeyParser explicitResourceKeyParser,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
             )
@@ -32,6 +36,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             //    throw new ArgumentNullException("key");
             //if (siteMapNodeFactory == null)
             //    throw new ArgumentNullException("siteMapNodeFactory");
+            if (explicitResourceKeyParser == null)
+                throw new ArgumentNullException("explicitResourceKeyParser");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
@@ -42,18 +48,23 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.ResourceKey = implicitResourceKey;
             this.IsDynamic = isDynamic;
             //this.siteMapNodeFactory = siteMapNodeFactory;
+            this.explicitResourceKeyParser = explicitResourceKeyParser;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
 
-            // Initialize variables
-            Attributes = new Dictionary<string, string>();
+            // Initialize child objects
+            //Attributes = new Dictionary<string, string>();
+            this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
+
             Roles = new List<string>();
             RouteValues = new Dictionary<string, object>();
             PreservedRouteParameters = new List<string>();
+
         }
 
         // Services
         //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
+        protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
 
@@ -65,6 +76,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected SiteMapNodeCollection childNodes;
         protected bool isChildNodesSet = false;
         protected string url = String.Empty;
+        protected string title = String.Empty;
+        protected string description = String.Empty;
+
+        // Child collections and dictionaries
+        protected NameValueCollection explicitResourceKeys = new NameValueCollection(); 
+        protected readonly ObservableDictionary<string, string> attributes = new ObservableDictionary<string, string>();
+        
+
 
 
         /// <summary>
@@ -267,14 +286,36 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the title (optional).
         /// </summary>
         /// <value>The title.</value>
-        public string Title { get; set; }
+        public string Title 
+        {
+            get 
+            {
+                return this.GetResourceValue("title", title);
+            }
+            set 
+            {
+                this.title = value;
+                explicitResourceKeyParser.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
+            }
+        }
 
         // TODO: Localize
         /// <summary>
         /// Gets or sets the description (optional).
         /// </summary>
         /// <value>The description.</value>
-        public string Description { get; set; }
+        public string Description 
+        {
+            get
+            {
+                return this.GetResourceValue("description", title);
+            }
+            set
+            {
+                this.title = value;
+                explicitResourceKeyParser.HandleResourceAttribute("description", ref title, ref explicitResourceKeys);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the target frame (optional).
@@ -288,11 +329,75 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The image URL.</value>
         public string ImageUrl { get; set; }
 
+        ///// <summary>
+        ///// Gets or sets the attributes (optional).
+        ///// </summary>
+        ///// <value>The attributes.</value>
+        //public IDictionary<string, string> Attributes { get; set; }
+
         /// <summary>
-        /// Gets or sets the attributes (optional).
+        /// Gets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get { return this.attributes; } }
+
+        //private void foo()
+        //{
+        //    System.Collections.Specialized.NameValueCollection nvc = new System.Collections.Specialized.NameValueCollection();
+        //    var x = nvc[0];
+
+        //    IDictionary<string, string> nvc2 = new Dictionary<string, string>();
+        //    var y = nvc2["test"];
+
+        //    var a = new System.Web.Routing.RouteCollection();
+
+        //    //var b = new System.Collections.ObjectModel.
+
+        //    var c = new MvcSiteMapProvider.Core.Collections.ObservableDictionary<string, string>();
+
+        //    //c.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(c_CollectionChanged);
+        //}
+
+        private void Attributes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+
+                    foreach (var item in e.NewItems)
+                    {
+                        var pair = (KeyValuePair<string, string>)item;
+                        string value = pair.Value;
+
+                        explicitResourceKeyParser.HandleResourceAttribute(pair.Key, ref value, ref explicitResourceKeys);
+
+                        // Update the node in the collection if it changed
+                        if (this.Attributes[pair.Key] != value)
+                        {
+                            this.Attributes[pair.Key] = value;
+                        }
+                    }
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+
+                    foreach (var item in e.NewItems)
+                    {
+                        var pair = (KeyValuePair<string, string>)item;
+                        explicitResourceKeys.Remove(pair.Key);
+                    }
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+
+                    break;
+            }
+
+        }
 
         /// <summary>
         /// Gets or sets the roles.
@@ -618,6 +723,188 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 return this.siteMap;
             }
         }
+
+
+
+
+//        #region Bubbling event Hooks
+
+//        /// <summary>
+//        /// For internal use.
+//        /// </summary>
+//        /// <param name="child">Child object.</param>
+//        [EditorBrowsable(EditorBrowsableState.Never)]
+//        protected void AddEventHooks(IBusinessObject child)
+//        {
+//            OnAddEventHooks(child);
+//        }
+
+//        /// <summary>
+//        /// Hook child object events.
+//        /// </summary>
+//        /// <param name="child">Child object.</param>
+//        [EditorBrowsable(EditorBrowsableState.Never)]
+//        protected virtual void OnAddEventHooks(IBusinessObject child)
+//        {
+//            INotifyBusy busy = child as INotifyBusy;
+//            if (busy != null)
+//                busy.BusyChanged += Child_BusyChanged;
+
+//            INotifyUnhandledAsyncException unhandled = child as INotifyUnhandledAsyncException;
+//            if (unhandled != null)
+//                unhandled.UnhandledAsyncException += Child_UnhandledAsyncException;
+
+//            INotifyPropertyChanged pc = child as INotifyPropertyChanged;
+//            if (pc != null)
+//                pc.PropertyChanged += Child_PropertyChanged;
+
+//#if !SILVERLIGHT
+//            IBindingList bl = child as IBindingList;
+//            if (bl != null)
+//                bl.ListChanged += Child_ListChanged;
+//#endif
+
+//            INotifyCollectionChanged ncc = child as INotifyCollectionChanged;
+//            if (ncc != null)
+//                ncc.CollectionChanged += Child_CollectionChanged;
+
+//            INotifyChildChanged cc = child as INotifyChildChanged;
+//            if (cc != null)
+//                cc.ChildChanged += Child_Changed;
+//        }
+
+//        /// <summary>
+//        /// For internal use only.
+//        /// </summary>
+//        /// <param name="child">Child object.</param>
+//        [EditorBrowsable(EditorBrowsableState.Never)]
+//        protected void RemoveEventHooks(IBusinessObject child)
+//        {
+//            OnRemoveEventHooks(child);
+//        }
+
+//        /// <summary>
+//        /// Unhook child object events.
+//        /// </summary>
+//        /// <param name="child">Child object.</param>
+//        [EditorBrowsable(EditorBrowsableState.Never)]
+//        protected virtual void OnRemoveEventHooks(IBusinessObject child)
+//        {
+//            INotifyBusy busy = child as INotifyBusy;
+//            if (busy != null)
+//                busy.BusyChanged -= Child_BusyChanged;
+
+//            INotifyUnhandledAsyncException unhandled = child as INotifyUnhandledAsyncException;
+//            if (unhandled != null)
+//                unhandled.UnhandledAsyncException -= Child_UnhandledAsyncException;
+
+//            INotifyPropertyChanged pc = child as INotifyPropertyChanged;
+//            if (pc != null)
+//                pc.PropertyChanged -= Child_PropertyChanged;
+
+//#if !SILVERLIGHT
+//            IBindingList bl = child as IBindingList;
+//            if (bl != null)
+//                bl.ListChanged -= Child_ListChanged;
+//#endif
+
+//            INotifyCollectionChanged ncc = child as INotifyCollectionChanged;
+//            if (ncc != null)
+//                ncc.CollectionChanged -= Child_CollectionChanged;
+
+//            INotifyChildChanged cc = child as INotifyChildChanged;
+//            if (cc != null)
+//                cc.ChildChanged -= Child_Changed;
+//        }
+
+//        #endregion
+
+
+        /// <summary>
+        /// Gets the localized text for the attribute.
+        /// </summary>
+        /// <param name="attributeName">The name of the attribute (as it is in the original XML file).</param>
+        /// <param name="attributeValue">The current value of the attribute in the object.</param>
+        /// <returns></returns>
+        protected string GetResourceValue(string attributeName, string attributeValue)
+        {
+            if (this.siteMap.EnableLocalization)
+            {
+                string resourceString = this.GetImplicitResourceString(attributeName);
+                if (resourceString != null)
+                {
+                    return resourceString;
+                }
+                resourceString = this.GetExplicitResourceString(attributeName, attributeValue, true);
+                if (resourceString != null)
+                {
+                    return resourceString;
+                }
+            }
+            if (attributeValue != null)
+            {
+                return attributeValue;
+            }
+            return string.Empty;
+        }
+
+
+
+        // TODO: Move to either an injected service or a base class
+        protected string GetImplicitResourceString(string attributeName)
+        {
+            if (attributeName == null)
+            {
+                throw new ArgumentNullException("attributeName");
+            }
+            string globalResourceObject = null;
+            if (!string.IsNullOrEmpty(this.ResourceKey))
+            {
+                try
+                {
+                    globalResourceObject = HttpContext.GetGlobalResourceObject(this.siteMap.ResourceKey, this.ResourceKey + "." + attributeName) as string;
+                }
+                catch
+                {
+                }
+            }
+            return globalResourceObject;
+        }
+
+        // TODO: Move to either an injected service or a base class
+        protected string GetExplicitResourceString(string attributeName, string defaultValue, bool throwIfNotFound)
+        {
+            if (attributeName == null)
+            {
+                throw new ArgumentNullException("attributeName");
+            }
+            string globalResourceObject = null;
+            if (this.explicitResourceKeys != null)
+            {
+                string[] values = this.explicitResourceKeys.GetValues(attributeName);
+                if ((values == null) || (values.Length <= 1))
+                {
+                    return globalResourceObject;
+                }
+                try
+                {
+                    globalResourceObject = HttpContext.GetGlobalResourceObject(values[0], values[1]) as string;
+                }
+                catch (System.Resources.MissingManifestResourceException)
+                {
+                    if (defaultValue != null)
+                    {
+                        return defaultValue;
+                    }
+                }
+                if ((globalResourceObject == null) && throwIfNotFound)
+                {
+                    throw new InvalidOperationException(String.Format(Resources.Messages.ResourceNotFoundWithClassAndKey, values[0], values[1]));
+                }
+            }
+            return globalResourceObject;
+        }
+
 
     }
 }

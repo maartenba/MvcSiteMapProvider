@@ -492,11 +492,11 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 attribute.Clickable);
 
             // Handle title and description globalization
-            var explicitResourceKeys = new NameValueCollection();
+            //var explicitResourceKeys = new NameValueCollection();
             var title = attribute.Title;
             var description = attribute.Description;
-            nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
-            nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
+            //nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
+            //nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
 
             // Handle implicit resources
             var implicitResourceKey = attribute.ResourceKey;

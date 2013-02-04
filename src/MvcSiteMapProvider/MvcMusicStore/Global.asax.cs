@@ -140,6 +140,12 @@ namespace MvcMusicStore
             );
 
             container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.Globalization.IExplicitResourceKeyParser>()
+                .Singleton()
+                .Use<MvcSiteMapProvider.Core.Globalization.ExplicitResourceKeyParser>()
+            );
+
+            container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.SiteMap.Builder.IDynamicNodeBuilder>()
                 .Singleton()
                 .Use<MvcSiteMapProvider.Core.SiteMap.Builder.DynamicNodeBuilder>()

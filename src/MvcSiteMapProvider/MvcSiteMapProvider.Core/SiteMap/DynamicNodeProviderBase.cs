@@ -40,7 +40,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// True if the provider name matches.
         /// </returns>
-        public bool AppliesTo(string providerName)
+        public virtual bool AppliesTo(string providerName)
         {
             return this.GetType().ShortAssemblyQualifiedName().Equals(providerName);
         }

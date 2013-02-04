@@ -11,6 +11,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     using System.Linq;
     using System.Text;
     using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+    using MvcSiteMapProvider.Core.Globalization;
 
     /// <summary>
     /// TODO: Update summary.
@@ -20,24 +21,29 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMapNodeFactory(
             //ISiteMapNodeFactory siteMapNodeFactory, 
+            IExplicitResourceKeyParser explicitResourceKeyParser,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
             ) 
         {
             //if (siteMapNodeFactory == null)
             //    throw new ArgumentNullException("siteMapNodeFactory");
+            if (explicitResourceKeyParser == null)
+                throw new ArgumentNullException("explicitResourceKeyParser");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
 
             //this.siteMapNodeFactory = siteMapNodeFactory;
+            this.explicitResourceKeyParser = explicitResourceKeyParser;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
         }
 
         // Services
         //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
+        protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
 
@@ -54,7 +60,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 key, 
                 implicitResourceKey,
                 false,
-                //siteMapNodeFactory, 
+                //siteMapNodeFactory,
+                explicitResourceKeyParser,
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy);
         }
@@ -67,6 +74,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 implicitResourceKey,
                 true,
                 //siteMapNodeFactory, 
+                explicitResourceKeyParser,
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy);
         }

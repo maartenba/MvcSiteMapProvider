@@ -224,12 +224,12 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 !(node.GetAttributeValue("clickable") == "false"));
 
             // Handle title and description globalization
-            var explicitResourceKeys = new NameValueCollection();
+            //var explicitResourceKeys = new NameValueCollection();
             var title = node.GetAttributeValue("title");
             //var description = node.GetAttributeValue("description") ?? title;
             var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
-            nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
-            nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
+            //nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
+            //nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
 
             // Handle implicit resources
             var implicitResourceKey = node.GetAttributeValue("resourceKey");
@@ -246,7 +246,10 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             siteMapNode.Title = title;
             siteMapNode.Description = description;
             //siteMapNode.ResourceKey = implicitResourceKey;
-            siteMapNode.Attributes = AcquireAttributesFrom(node);
+            //siteMapNode.Attributes = AcquireAttributesFrom(node);
+
+            AcquireAttributesFrom(node, siteMapNode.Attributes);
+
 
             siteMapNode.Roles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
@@ -439,9 +442,9 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual IDictionary<string, string> AcquireAttributesFrom(XElement node)
+        protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, string> attributes)
         {
-            var returnValue = new Dictionary<string, string>();
+            //var returnValue = new Dictionary<string, string>();
             foreach (XAttribute attribute in node.Attributes())
             {
                 var attributeName = attribute.Name.ToString();
@@ -449,10 +452,11 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
                 if (IsRegularAttribute(attributeName))
                 {
-                    returnValue.Add(attributeName, attributeValue);
+                    attributes.Add(attributeName, attributeValue);
+                    //returnValue.Add(attributeName, attributeValue);
                 }
             }
-            return returnValue;
+            //return returnValue;
         }
 
         /// <summary>
