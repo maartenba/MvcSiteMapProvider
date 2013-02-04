@@ -38,7 +38,7 @@ namespace MvcSiteMapProvider.Core.Web.Html
                 IsInCurrentPath = node.IsInCurrentPath(),
                 IsRootNode = node == node.SiteMap.RootNode,
                 IsClickable = (node == null || node.Clickable),
-                RouteValues = (node != null ? node.RouteValues : new Dictionary<string, object>()),
+                RouteValues = (node != null ? (IDictionary<string, object>)node.RouteValues : new Dictionary<string, object>()),
                 // TODO: rename to Attributes
                 MetaAttributes = (node != null ? node.Attributes : new Dictionary<string, string>()),
                 SourceMetadata = sourceMetadata

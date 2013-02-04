@@ -166,11 +166,11 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <returns>An MvcSiteMapNode which represents the XMLElement.</returns>
         protected virtual ISiteMapNode GetSiteMapNodeFromXmlElement(ISiteMap siteMap, XElement node, ISiteMapNode parentNode)
         {
-            // Get area, controller and action from node declaration
+            //// Get area, controller and action from node declaration
             string area = node.GetAttributeValue("area");
             string controller = node.GetAttributeValue("controller");
-            string action = node.GetAttributeValue("action");
-            string route = node.GetAttributeValue("route");
+            //string action = node.GetAttributeValue("action");
+            //string route = node.GetAttributeValue("route");
 
             //// Determine the node type ??
             //XSiteMapNode siteMapNode = null;
@@ -271,7 +271,9 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             {
                 // Assign to node
                 routeNode.Route = node.GetAttributeValue("route");
-                routeNode.RouteValues = AcquireRouteValuesFrom(node);
+                //routeNode.RouteValues = AcquireRouteValuesFrom(node);
+                AcquireRouteValuesFrom(node, routeNode.RouteValues);
+
                 routeNode.PreservedRouteParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                 //routeNode.Url = "";
 
@@ -297,10 +299,10 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             var mvcNode = siteMapNode;
             if (mvcNode != null)
             {
-                // MVC properties
-                mvcNode.Area = area;
-                mvcNode.Controller = controller;
-                mvcNode.Action = action;
+                //// MVC properties
+                //mvcNode.Area = area;
+                //mvcNode.Controller = controller;
+                //mvcNode.Action = action;
 
                 // Inherit area and controller from parent
                 var parentMvcNode = parentNode;
@@ -429,9 +431,9 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual IDictionary<string, object> AcquireRouteValuesFrom(XElement node)
+        protected virtual void AcquireRouteValuesFrom(XElement node, RouteValueCollection routeValues)
         {
-            var returnValue = new Dictionary<string, object>();
+            //var returnValue = new Dictionary<string, object>();
             foreach (XAttribute attribute in node.Attributes())
             {
                 var attributeName = attribute.Name.ToString();
@@ -439,10 +441,10 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
                 if (IsRouteAttribute(attributeName))
                 {
-                    returnValue.Add(attributeName, attributeValue);
+                    routeValues.Add(attributeName, attributeValue);
                 }
             }
-            return returnValue;
+            //return returnValue;
         }
 
 

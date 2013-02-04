@@ -126,6 +126,7 @@
     <Compile Include="SiteMap\MvcSiteMapNodeAttribute.cs" />
     <Compile Include="Collections\NameValueCollection.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
+    <Compile Include="SiteMap\RouteValueCollection.cs" />
     <Compile Include="SiteMap\SiteMapFactory.cs" />
     <Compile Include="SiteMap\SiteMapNode.cs" />
     <Compile Include="SiteMap\AttributeCollection.cs" />

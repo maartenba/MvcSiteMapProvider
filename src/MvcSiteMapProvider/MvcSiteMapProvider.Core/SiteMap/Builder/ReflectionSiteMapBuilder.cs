@@ -524,24 +524,26 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             siteMapNode.Route = attribute.Route;
 
             // Create a route data dictionary
-            IDictionary<string, object> routeValues = new Dictionary<string, object>();
-            routeValues.Add("area", area);
-            routeValues.Add("controller", controller);
-            routeValues.Add("action", action);
+            //IDictionary<string, object> routeValues = new Dictionary<string, object>();
+            siteMapNode.RouteValues.Add("area", area);
+            siteMapNode.RouteValues.Add("controller", controller);
+            siteMapNode.RouteValues.Add("action", action);
 
             // Add route values to sitemap node
-            siteMapNode.RouteValues = routeValues;
+            //siteMapNode.RouteValues = routeValues;
+
+
             siteMapNode.PreservedRouteParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-            // Handle MVC details
-            siteMapNode.Area = area;
-            siteMapNode.Controller = controller;
-            siteMapNode.Action = action;
+            //// Handle MVC details
+            //siteMapNode.Area = area;
+            //siteMapNode.Controller = controller;
+            //siteMapNode.Action = action;
 
             // Add defaults for area
             if (!siteMapNode.RouteValues.ContainsKey("area"))
             {
-                siteMapNode.Attributes["area"] = "";
+                //siteMapNode.Attributes["area"] = "";
                 siteMapNode.RouteValues.Add("area", "");
             }
 

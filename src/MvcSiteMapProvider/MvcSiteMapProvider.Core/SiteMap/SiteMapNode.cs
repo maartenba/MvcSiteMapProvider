@@ -50,7 +50,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
             // Initialize child objects
             Roles = new List<string>();
-            RouteValues = new Dictionary<string, object>();
             PreservedRouteParameters = new List<string>();
 
             //this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
@@ -76,6 +75,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected NameValueCollection explicitResourceKeys = new NameValueCollection(); 
         //protected readonly ObservableDictionary<string, string> attributes = new ObservableDictionary<string, string>();
         protected readonly IDictionary<string, string> attributes;
+        protected readonly RouteValueCollection routeValues = new RouteValueCollection();
         
 
 
@@ -539,7 +539,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the route values.
         /// </summary>
         /// <value>The route values.</value>
-        public IDictionary<string, object> RouteValues { get; set; }
+        public RouteValueCollection RouteValues { get { return this.routeValues; } }
 
         /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
@@ -571,23 +571,53 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region MVC
 
+        ///// <summary>
+        ///// Gets or sets the area (optional).
+        ///// </summary>
+        ///// <value>The area.</value>
+        //public string Area { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets the controller (optional).
+        ///// </summary>
+        ///// <value>The controller.</value>
+        //public string Controller { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets the action (optional).
+        ///// </summary>
+        ///// <value>The action.</value>
+        //public string Action { get; set; }
+
         /// <summary>
-        /// Gets or sets the area (optional).
+        /// Gets or sets the area.
         /// </summary>
         /// <value>The area.</value>
-        public string Area { get; set; }
+        public string Area
+        {
+            get { return RouteValues.ContainsKey("area") && RouteValues["area"] != null ? RouteValues["area"].ToString() : ""; }
+            set { RouteValues["area"] = value; }
+        }
 
         /// <summary>
-        /// Gets or sets the controller (optional).
+        /// Gets or sets the controller.
         /// </summary>
         /// <value>The controller.</value>
-        public string Controller { get; set; }
+        public string Controller
+        {
+            get { return RouteValues.ContainsKey("controller") ? RouteValues["controller"].ToString() : ""; }
+            set { RouteValues["controller"] = value; }
+        }
 
         /// <summary>
-        /// Gets or sets the action (optional).
+        /// Gets or sets the action.
         /// </summary>
         /// <value>The action.</value>
-        public string Action { get; set; }
+        public string Action
+        {
+            get { return RouteValues.ContainsKey("action") ? RouteValues["action"].ToString() : ""; }
+            set { RouteValues["action"] = value; }
+        }
 
         #endregion
 
