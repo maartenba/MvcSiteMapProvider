@@ -187,6 +187,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The resource object with classname &apos;{0}&apos; and key &apos;{1}&apos; was not found..
+        /// </summary>
+        internal static string ResourceNotFoundWithClassAndKey {
+            get {
+                return ResourceManager.GetString("ResourceNotFoundWithClassAndKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Security trimming cannot be disabled again after it is enabled..
         /// </summary>
         internal static string SecurityTrimmingCannotBeDisabled {
