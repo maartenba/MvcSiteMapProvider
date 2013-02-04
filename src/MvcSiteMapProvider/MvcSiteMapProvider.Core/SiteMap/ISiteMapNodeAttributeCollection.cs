@@ -1,19 +1,21 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="INodeLocalizer.cs" company="">
+// <copyright file="ISiteMapNodeAttributeCollection.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace MvcSiteMapProvider.Core.Globalization
+namespace MvcSiteMapProvider.Core.SiteMap
 {
     using System;
-    using System.Collections.Specialized;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public interface INodeLocalizer
+    public interface ISiteMapNodeAttributeCollection
+        : IDictionary<string, string>
     {
-        void HandleResourceAttribute(string attributeName, ref string text, ref NameValueCollection collection);
     }
 }

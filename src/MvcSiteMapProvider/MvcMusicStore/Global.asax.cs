@@ -127,22 +127,21 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.SiteMap.Builder.NodeKeyGenerator>()
             );
 
-            //container.Configure(x => x
-            //    .For<MvcSiteMapProvider.Core.SiteMap.ISiteMapNodeFactory>()
-            //    .Singleton()
-            //    .Use<MvcSiteMapProvider.Core.SiteMap.SiteMapNodeFactory>()
-            //);
-
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Globalization.INodeLocalizer>()
-                .Singleton()
-                .Use<MvcSiteMapProvider.Core.Globalization.NodeLocalizer>()
-            );
-
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.Globalization.IExplicitResourceKeyParser>()
                 .Singleton()
                 .Use<MvcSiteMapProvider.Core.Globalization.ExplicitResourceKeyParser>()
+            );
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.Globalization.IStringLocalizer>()
+                .Singleton()
+                .Use<MvcSiteMapProvider.Core.Globalization.StringLocalizer>()
+            );
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.Globalization.ILocalizationService>()
+                .Use<MvcSiteMapProvider.Core.Globalization.LocalizationService>()
             );
 
             container.Configure(x => x

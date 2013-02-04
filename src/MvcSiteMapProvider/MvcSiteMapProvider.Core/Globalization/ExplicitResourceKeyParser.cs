@@ -9,7 +9,7 @@ namespace MvcSiteMapProvider.Core.Globalization
 {
     /// <summary>
     /// AttributeResourceKeyParser class. This class is used to parse resource information from 
-    /// attributes in XML files. This information can later be used to lookup localized versions of the text
+    /// attributes in XML files (or other sources). This information can later be used to lookup localized versions of the text
     /// to insert in place of the resource string.
     /// </summary>
     public class ExplicitResourceKeyParser

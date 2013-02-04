@@ -24,7 +24,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             IEnumerable<String> includeAssemblies,
             IEnumerable<String> excludeAssemblies,
             INodeKeyGenerator nodeKeyGenerator,
-            INodeLocalizer nodeLocalizer,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory
             )
@@ -35,8 +34,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 throw new ArgumentNullException("excludeAssemblies");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
-            if (nodeLocalizer == null)
-                throw new ArgumentNullException("nodeLocalizer");
             if (dynamicNodeBuilder == null)
                 throw new ArgumentNullException("dynamicNodeBuilder");
             if (siteMapNodeFactory == null)
@@ -45,14 +42,12 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             this.IncludeAssemblies = includeAssemblies;
             this.ExcludeAssemblies = excludeAssemblies;
             this.nodeKeyGenerator = nodeKeyGenerator;
-            this.nodeLocalizer = nodeLocalizer;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
         //protected readonly ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
-        protected readonly INodeLocalizer nodeLocalizer;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
 
@@ -491,20 +486,12 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 controller, action, httpMethod,
                 attribute.Clickable);
 
-            // Handle title and description globalization
-            //var explicitResourceKeys = new NameValueCollection();
+            // Handle title and description
             var title = attribute.Title;
             var description = attribute.Description;
-            //nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
-            //nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
 
             // Handle implicit resources
             var implicitResourceKey = attribute.ResourceKey;
-            if (!string.IsNullOrEmpty(implicitResourceKey))
-            {
-                title = null;
-                description = null;
-            }
 
             // Assign defaults
             //var siteMapNode = new MvcSiteMapNode();

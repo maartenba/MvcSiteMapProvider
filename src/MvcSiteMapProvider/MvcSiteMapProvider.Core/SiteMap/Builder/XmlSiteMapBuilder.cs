@@ -30,7 +30,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             string xmlSiteMapFilePath,
             IEnumerable<string> attributesToIgnore,
             INodeKeyGenerator nodeKeyGenerator,
-            INodeLocalizer nodeLocalizer,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory
             )
@@ -41,8 +40,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 throw new ArgumentNullException("attributesToIgnore");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
-            if (nodeLocalizer == null)
-                throw new ArgumentNullException("nodeLocalizer");
             if (dynamicNodeBuilder == null)
                 throw new ArgumentNullException("dynamicNodeBuilder");
             if (siteMapNodeFactory == null)
@@ -51,7 +48,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             this.xmlSiteMapFilePath = xmlSiteMapFilePath;
             this.attributesToIgnore = attributesToIgnore;
             this.nodeKeyGenerator = nodeKeyGenerator;
-            this.nodeLocalizer = nodeLocalizer;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
@@ -59,7 +55,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         protected readonly string xmlSiteMapFilePath;
         protected readonly IEnumerable<string> attributesToIgnore;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
-        protected readonly INodeLocalizer nodeLocalizer;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         
@@ -67,36 +62,17 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         protected const string xmlRootName = "mvcSiteMap";
         protected const string xmlNodeName = "mvcSiteMapNode";
         protected readonly XNamespace xmlSiteMapNamespace = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0";
-        //protected readonly object synclock = new object();
-        
+
 
         #region ISiteMapBuilder Members
 
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
-            
-
             var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
             if (xml != null)
             {
                 rootNode = LoadSiteMapFromXml(siteMap, xml);
             }
-
-            //// Build sitemap
-            //lock (synclock)
-            //{
-                
-            //    if (siteMap.RootNode != null)
-            //    {
-            //        return siteMap.RootNode;
-            //    }
-
-            //    var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
-            //    if (xml != null)
-            //    {
-            //        rootNode = LoadSiteMapFromXml(siteMap, xml);
-            //    }
-            //}
 
             // Done!
             return rootNode;
@@ -223,21 +199,13 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant(),
                 !(node.GetAttributeValue("clickable") == "false"));
 
-            // Handle title and description globalization
-            //var explicitResourceKeys = new NameValueCollection();
+            // Handle title and description
             var title = node.GetAttributeValue("title");
             //var description = node.GetAttributeValue("description") ?? title;
             var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
-            //nodeLocalizer.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
-            //nodeLocalizer.HandleResourceAttribute("description", ref description, ref explicitResourceKeys);
 
             // Handle implicit resources
             var implicitResourceKey = node.GetAttributeValue("resourceKey");
-            if (!string.IsNullOrEmpty(implicitResourceKey))
-            {
-                title = null;
-                description = null;
-            }
 
             // Create node
             ISiteMapNode siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
@@ -444,7 +412,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <returns></returns>
         protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, string> attributes)
         {
-            //var returnValue = new Dictionary<string, string>();
             foreach (XAttribute attribute in node.Attributes())
             {
                 var attributeName = attribute.Name.ToString();
@@ -453,10 +420,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 if (IsRegularAttribute(attributeName))
                 {
                     attributes.Add(attributeName, attributeValue);
-                    //returnValue.Add(attributeName, attributeValue);
                 }
             }
-            //return returnValue;
         }
 
         /// <summary>

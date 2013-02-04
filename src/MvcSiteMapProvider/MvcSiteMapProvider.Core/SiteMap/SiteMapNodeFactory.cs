@@ -1,18 +1,12 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapNodeFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using MvcSiteMapProvider.Core.Mvc.UrlResolver;
-    using MvcSiteMapProvider.Core.Globalization;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -20,30 +14,35 @@ namespace MvcSiteMapProvider.Core.SiteMap
         : ISiteMapNodeFactory
     {
         public SiteMapNodeFactory(
-            //ISiteMapNodeFactory siteMapNodeFactory, 
             IExplicitResourceKeyParser explicitResourceKeyParser,
+            IStringLocalizer stringLocalizer,
+            IAttributeCollectionFactory attributeCollectionFactory,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
             ) 
         {
-            //if (siteMapNodeFactory == null)
-            //    throw new ArgumentNullException("siteMapNodeFactory");
             if (explicitResourceKeyParser == null)
                 throw new ArgumentNullException("explicitResourceKeyParser");
+            if (stringLocalizer == null)
+                throw new ArgumentNullException("stringLocalizer");
+            if (attributeCollectionFactory == null)
+                throw new ArgumentNullException("attributeCollectionFactory");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
 
-            //this.siteMapNodeFactory = siteMapNodeFactory;
             this.explicitResourceKeyParser = explicitResourceKeyParser;
+            this.stringLocalizer = stringLocalizer;
+            this.attributeCollectionFactory = attributeCollectionFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
         }
 
         // Services
-        //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
+        protected readonly IStringLocalizer stringLocalizer;
+        protected readonly IAttributeCollectionFactory attributeCollectionFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
 
@@ -52,31 +51,39 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public ISiteMapNode Create(ISiteMap siteMap, string key, string implicitResourceKey)
         {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("key");
-
-            return new SiteMapNode(
-                siteMap, 
-                key, 
-                implicitResourceKey,
-                false,
-                //siteMapNodeFactory,
-                explicitResourceKeyParser,
-                dynamicNodeProviderStrategy,
-                siteMapNodeUrlResolverStrategy);
+            return CreateInternal(siteMap, key, implicitResourceKey, false);
         }
 
         public ISiteMapNode CreateDynamic(ISiteMap siteMap, string key, string implicitResourceKey)
         {
+            return CreateInternal(siteMap, key, implicitResourceKey, true);
+        }
+
+        protected ISiteMapNode CreateInternal(ISiteMap siteMap, string key, string implicitResourceKey, bool isDynamic)
+        {
+            // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
+            var localizationService = CreateLocalizationService(implicitResourceKey);
+            var attributes = CreateAttributeCollection(siteMap, localizationService);
+
             return new SiteMapNode(
                 siteMap,
-                key, 
-                implicitResourceKey,
-                true,
-                //siteMapNodeFactory, 
-                explicitResourceKeyParser,
+                key,
+                isDynamic,
+                attributes,
+                localizationService,
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy);
+        }
+
+
+        protected virtual ILocalizationService CreateLocalizationService(string implicitResourceKey)
+        {
+            return new LocalizationService(implicitResourceKey, explicitResourceKeyParser, stringLocalizer);
+        }
+
+        protected virtual IDictionary<string, string> CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
+        {
+            return attributeCollectionFactory.Create(siteMap, localizationService);
         }
 
         #endregion

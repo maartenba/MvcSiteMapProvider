@@ -55,10 +55,12 @@
     <Compile Include="Cache\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
     <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
+    <Compile Include="Globalization\ILocalizationService.cs" />
     <Compile Include="Globalization\IExplicitResourceKeyParser.cs" />
+    <Compile Include="Globalization\IStringLocalizer.cs" />
+    <Compile Include="Globalization\LocalizationService.cs" />
+    <Compile Include="Globalization\StringLocalizer.cs" />
     <Compile Include="Linq\Dynamic.cs" />
-    <Compile Include="Globalization\INodeLocalizer.cs" />
-    <Compile Include="Globalization\NodeLocalizer.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
     <Compile Include="Mvc\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
+    <Compile Include="SiteMap\AttributeCollectionFactory.cs" />
     <Compile Include="SiteMap\Builder\IReflectionSiteMapBuilderFactory.cs" />
     <Compile Include="SiteMap\Builder\IXmlSiteMapBuilderFactory.cs" />
     <Compile Include="SiteMap\Builder\ReflectionSiteMapBuilderFactory.cs" />
@@ -115,6 +118,8 @@
     <Compile Include="SiteMap\IMvcSiteMapNodeAttribute.cs" />
     <Compile Include="SiteMap\ISiteMapFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNode.cs" />
+    <Compile Include="SiteMap\ISiteMapNodeAttributeCollection.cs" />
+    <Compile Include="SiteMap\IAttributeCollectionFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNodeFactory.cs" />
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
@@ -123,7 +128,7 @@
     <Compile Include="Collections\ObservableDictionary.cs" />
     <Compile Include="SiteMap\SiteMapFactory.cs" />
     <Compile Include="SiteMap\SiteMapNode.cs" />
-    <Compile Include="SiteMap\SiteMapNodeAttributeDictionary.cs" />
+    <Compile Include="SiteMap\AttributeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
     <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />

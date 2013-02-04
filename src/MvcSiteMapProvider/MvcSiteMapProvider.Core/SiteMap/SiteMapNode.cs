@@ -22,22 +22,21 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public SiteMapNode(
             ISiteMap siteMap, 
             string key,
-            string implicitResourceKey,
             bool isDynamic,
-            //ISiteMapNodeFactory siteMapNodeFactory, 
-            IExplicitResourceKeyParser explicitResourceKeyParser,
+            IDictionary<string, string> attributes,
+            ILocalizationService localizationService,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
             )
         {
             if (siteMap == null)
                 throw new ArgumentNullException("siteMap");
-            //if (string.IsNullOrEmpty(key))
-            //    throw new ArgumentNullException("key");
-            //if (siteMapNodeFactory == null)
-            //    throw new ArgumentNullException("siteMapNodeFactory");
-            if (explicitResourceKeyParser == null)
-                throw new ArgumentNullException("explicitResourceKeyParser");
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException("key");
+            if (attributes == null)
+                throw new ArgumentNullException("attributes");
+            if (localizationService == null)
+                throw new ArgumentNullException("localizationService");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
@@ -45,16 +44,22 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
             this.siteMap = siteMap;
             this.key = key;
-            this.ResourceKey = implicitResourceKey;
             this.IsDynamic = isDynamic;
-            //this.siteMapNodeFactory = siteMapNodeFactory;
-            this.explicitResourceKeyParser = explicitResourceKeyParser;
+            this.attributes = attributes;
+            this.localizationService = localizationService;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
 
             // Initialize child objects
             //Attributes = new Dictionary<string, string>();
-            this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
+            //this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
+
+
+            //localizationService.ResourceKey = implicitResourceKey;
+            // TODO: Create factory to handle this creation.
+            //this.attributes = new AttributeCollection(siteMap, localizationService);
+
+            //this.attributes = 
 
             Roles = new List<string>();
             RouteValues = new Dictionary<string, object>();
@@ -64,7 +69,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         // Services
         //protected readonly ISiteMapNodeFactory siteMapNodeFactory;
-        protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
+        //protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
+        protected readonly ILocalizationService localizationService;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
 
@@ -81,7 +87,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         // Child collections and dictionaries
         protected NameValueCollection explicitResourceKeys = new NameValueCollection(); 
-        protected readonly ObservableDictionary<string, string> attributes = new ObservableDictionary<string, string>();
+        //protected readonly ObservableDictionary<string, string> attributes = new ObservableDictionary<string, string>();
+        protected readonly IDictionary<string, string> attributes;
         
 
 
@@ -276,12 +283,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
 
         /// <summary>
-        /// Gets or sets the implicit resource key (optional).
+        /// Gets the implicit resource key (optional).
         /// </summary>
         /// <value>The implicit resource key.</value>
-        public string ResourceKey { get; protected set; }
+        public string ResourceKey
+        {
+            get { return this.localizationService.ResourceKey; }
+        }
 
-        // TODO: Localize
         /// <summary>
         /// Gets or sets the title (optional).
         /// </summary>
@@ -290,16 +299,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get 
             {
-                return this.GetResourceValue("title", title);
+                //return this.GetResourceValue("title", title);
+                return localizationService.GetResourceString("title", this.title, this.siteMap);
             }
             set 
             {
-                this.title = value;
-                explicitResourceKeyParser.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
+                //this.title = value;
+                //explicitResourceKeyParser.HandleResourceAttribute("title", ref title, ref explicitResourceKeys);
+                this.title = localizationService.ExtractExplicitResourceKey("title", value);
             }
         }
 
-        // TODO: Localize
         /// <summary>
         /// Gets or sets the description (optional).
         /// </summary>
@@ -308,12 +318,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                return this.GetResourceValue("description", title);
+                //return this.GetResourceValue("description", title);
+                return localizationService.GetResourceString("description", this.description, this.siteMap);
             }
             set
             {
-                this.title = value;
-                explicitResourceKeyParser.HandleResourceAttribute("description", ref title, ref explicitResourceKeys);
+                //this.title = value;
+                //explicitResourceKeyParser.HandleResourceAttribute("description", ref title, ref explicitResourceKeys);
+                this.description = localizationService.ExtractExplicitResourceKey("description", value);
             }
         }
 
@@ -369,7 +381,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                         var pair = (KeyValuePair<string, string>)item;
                         string value = pair.Value;
 
-                        explicitResourceKeyParser.HandleResourceAttribute(pair.Key, ref value, ref explicitResourceKeys);
+                        //explicitResourceKeyParser.HandleResourceAttribute(pair.Key, ref value, ref explicitResourceKeys);
 
                         // Update the node in the collection if it changed
                         if (this.Attributes[pair.Key] != value)
@@ -820,90 +832,90 @@ namespace MvcSiteMapProvider.Core.SiteMap
 //        #endregion
 
 
-        /// <summary>
-        /// Gets the localized text for the attribute.
-        /// </summary>
-        /// <param name="attributeName">The name of the attribute (as it is in the original XML file).</param>
-        /// <param name="attributeValue">The current value of the attribute in the object.</param>
-        /// <returns></returns>
-        protected string GetResourceValue(string attributeName, string attributeValue)
-        {
-            if (this.siteMap.EnableLocalization)
-            {
-                string resourceString = this.GetImplicitResourceString(attributeName);
-                if (resourceString != null)
-                {
-                    return resourceString;
-                }
-                resourceString = this.GetExplicitResourceString(attributeName, attributeValue, true);
-                if (resourceString != null)
-                {
-                    return resourceString;
-                }
-            }
-            if (attributeValue != null)
-            {
-                return attributeValue;
-            }
-            return string.Empty;
-        }
+        ///// <summary>
+        ///// Gets the localized text for the attribute.
+        ///// </summary>
+        ///// <param name="attributeName">The name of the attribute (as it is in the original XML file).</param>
+        ///// <param name="attributeValue">The current value of the attribute in the object.</param>
+        ///// <returns></returns>
+        //protected string GetResourceValue(string attributeName, string attributeValue)
+        //{
+        //    if (this.siteMap.EnableLocalization)
+        //    {
+        //        string resourceString = this.GetImplicitResourceString(attributeName);
+        //        if (resourceString != null)
+        //        {
+        //            return resourceString;
+        //        }
+        //        resourceString = this.GetExplicitResourceString(attributeName, attributeValue, true);
+        //        if (resourceString != null)
+        //        {
+        //            return resourceString;
+        //        }
+        //    }
+        //    if (attributeValue != null)
+        //    {
+        //        return attributeValue;
+        //    }
+        //    return string.Empty;
+        //}
 
 
 
-        // TODO: Move to either an injected service or a base class
-        protected string GetImplicitResourceString(string attributeName)
-        {
-            if (attributeName == null)
-            {
-                throw new ArgumentNullException("attributeName");
-            }
-            string globalResourceObject = null;
-            if (!string.IsNullOrEmpty(this.ResourceKey))
-            {
-                try
-                {
-                    globalResourceObject = HttpContext.GetGlobalResourceObject(this.siteMap.ResourceKey, this.ResourceKey + "." + attributeName) as string;
-                }
-                catch
-                {
-                }
-            }
-            return globalResourceObject;
-        }
+        //// TODO: Move to either an injected service or a base class
+        //protected string GetImplicitResourceString(string attributeName)
+        //{
+        //    if (attributeName == null)
+        //    {
+        //        throw new ArgumentNullException("attributeName");
+        //    }
+        //    string globalResourceObject = null;
+        //    if (!string.IsNullOrEmpty(this.ResourceKey))
+        //    {
+        //        try
+        //        {
+        //            globalResourceObject = HttpContext.GetGlobalResourceObject(this.siteMap.ResourceKey, this.ResourceKey + "." + attributeName) as string;
+        //        }
+        //        catch
+        //        {
+        //        }
+        //    }
+        //    return globalResourceObject;
+        //}
 
-        // TODO: Move to either an injected service or a base class
-        protected string GetExplicitResourceString(string attributeName, string defaultValue, bool throwIfNotFound)
-        {
-            if (attributeName == null)
-            {
-                throw new ArgumentNullException("attributeName");
-            }
-            string globalResourceObject = null;
-            if (this.explicitResourceKeys != null)
-            {
-                string[] values = this.explicitResourceKeys.GetValues(attributeName);
-                if ((values == null) || (values.Length <= 1))
-                {
-                    return globalResourceObject;
-                }
-                try
-                {
-                    globalResourceObject = HttpContext.GetGlobalResourceObject(values[0], values[1]) as string;
-                }
-                catch (System.Resources.MissingManifestResourceException)
-                {
-                    if (defaultValue != null)
-                    {
-                        return defaultValue;
-                    }
-                }
-                if ((globalResourceObject == null) && throwIfNotFound)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.ResourceNotFoundWithClassAndKey, values[0], values[1]));
-                }
-            }
-            return globalResourceObject;
-        }
+        //// TODO: Move to either an injected service or a base class
+        //protected string GetExplicitResourceString(string attributeName, string defaultValue, bool throwIfNotFound)
+        //{
+        //    if (attributeName == null)
+        //    {
+        //        throw new ArgumentNullException("attributeName");
+        //    }
+        //    string globalResourceObject = null;
+        //    if (this.explicitResourceKeys != null)
+        //    {
+        //        string[] values = this.explicitResourceKeys.GetValues(attributeName);
+        //        if ((values == null) || (values.Length <= 1))
+        //        {
+        //            return globalResourceObject;
+        //        }
+        //        try
+        //        {
+        //            globalResourceObject = HttpContext.GetGlobalResourceObject(values[0], values[1]) as string;
+        //        }
+        //        catch (System.Resources.MissingManifestResourceException)
+        //        {
+        //            if (defaultValue != null)
+        //            {
+        //                return defaultValue;
+        //            }
+        //        }
+        //        if ((globalResourceObject == null) && throwIfNotFound)
+        //        {
+        //            throw new InvalidOperationException(String.Format(Resources.Messages.ResourceNotFoundWithClassAndKey, values[0], values[1]));
+        //        }
+        //    }
+        //    return globalResourceObject;
+        //}
 
 
     }

@@ -20,28 +20,23 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
     {
         public ReflectionSiteMapBuilderFactory(
             INodeKeyGenerator nodeKeyGenerator,
-            INodeLocalizer nodeLocalizer,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory
             )
         {
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
-            if (nodeLocalizer == null)
-                throw new ArgumentNullException("nodeLocalizer");
             if (dynamicNodeBuilder == null)
                 throw new ArgumentNullException("dynamicNodeBuilder");
             if (siteMapNodeFactory == null)
                 throw new ArgumentNullException("siteMapNodeFactory");
 
             this.nodeKeyGenerator = nodeKeyGenerator;
-            this.nodeLocalizer = nodeLocalizer;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
         protected readonly INodeKeyGenerator nodeKeyGenerator;
-        protected readonly INodeLocalizer nodeLocalizer;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
 
@@ -54,7 +49,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 includeAssemblies, 
                 excludeAssemblies, 
                 nodeKeyGenerator, 
-                nodeLocalizer,
                 dynamicNodeBuilder, 
                 siteMapNodeFactory);
         }
