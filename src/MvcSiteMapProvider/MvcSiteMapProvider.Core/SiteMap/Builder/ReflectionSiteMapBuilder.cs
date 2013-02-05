@@ -1,22 +1,18 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ReflectionSiteMapBuilder.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Reflection;
+using System.Web.Mvc;
+using System.Web;
+using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap.Builder
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Reflection;
-    using System.Web.Mvc;
-    using System.Web;
-    using MvcSiteMapProvider.Core.Globalization;
-
     /// <summary>
-    /// ReflectionSiteMapBuilder class (copied from ReflectionSiteMapSource class).
+    /// ReflectionSiteMapBuilder class (copied from ReflectionSiteMapSource class). 
+    /// Builds a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> tree based on a
+    /// set of attributes within an assembly.
     /// </summary>
     public class ReflectionSiteMapBuilder : ISiteMapBuilder
     {
@@ -67,42 +63,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// The exclude assemblies.
         /// </value>
         protected IEnumerable<string> ExcludeAssemblies { get; set; }
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="ReflectionSiteMapSource" /> class.
-        ///// </summary>
-        ///// <param name="providerName">Name of the provider.</param>
-        //public ReflectionSiteMapSource(string providerName)
-        //    : this(providerName, null, null)
-        //{  
-        //}
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="ReflectionSiteMapSource" /> class.
-        ///// </summary>
-        ///// <param name="providerName">Name of the provider.</param>
-        ///// <param name="includeAssemblies">The include assemblies.</param>
-        ///// <param name="excludeAssemblies">The exclude assemblies.</param>
-        //public ReflectionSiteMapSource(string providerName, string includeAssemblies, string excludeAssemblies)
-        //{
-        //    ProviderName = providerName;
-        //    if (!string.IsNullOrEmpty(includeAssemblies))
-        //    {
-        //        IncludeAssemblies = includeAssemblies.Split(new[] {',', ';'}, StringSplitOptions.RemoveEmptyEntries).ToList();
-        //    }
-        //    else
-        //    {
-        //        IncludeAssemblies = new List<string>();
-        //    }
-        //    if (!string.IsNullOrEmpty(excludeAssemblies))
-        //    {
-        //        ExcludeAssemblies = excludeAssemblies.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-        //    }
-        //    else
-        //    {
-        //        ExcludeAssemblies = new List<string>();
-        //    }
-        //}
 
         /// <summary>
         /// Provides the base data on which the context-aware provider can generate a full tree.
@@ -534,8 +494,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             // Add route values to sitemap node
             //siteMapNode.RouteValues = routeValues;
 
-
-            siteMapNode.PreservedRouteParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            AcquirePreservedRouteParametersFrom(attribute, siteMapNode.PreservedRouteParameters);
+            //siteMapNode.PreservedRouteParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             //// Handle MVC details
             //siteMapNode.Area = area;
@@ -554,7 +514,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
 
         /// <summary>
-        /// Acquires the roles list from a given XElement
+        /// Acquires the roles list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
         /// <param name="node">The node.</param>
         /// <param name="roles">The roles IList to populate.</param>
@@ -563,6 +523,20 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             foreach (var role in attribute.Roles)
             {
                 roles.Add(role);
+            }
+        }
+
+        /// <summary>
+        /// Acquires the preserved route parameters list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="roles">The preserved route parameters IList to populate.</param>
+        protected virtual void AcquirePreservedRouteParametersFrom(IMvcSiteMapNodeAttribute attribute, IList<string> preservedRouteParameters)
+        {
+            var localParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var parameter in localParameters)
+            {
+                preservedRouteParameters.Add(parameter);
             }
         }
     }

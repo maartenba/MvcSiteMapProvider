@@ -1,28 +1,23 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="XmlSiteMapBuilder.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Hosting;
+using System.Xml.Linq;
+using System.IO;
+using System.Globalization;
+using MvcSiteMapProvider.Core.Xml;
+using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap.Builder
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-    using System.Web.Mvc;
-    using System.Web.Routing;
-    using System.Web.Hosting;
-    using System.Xml.Linq;
-    using System.IO;
-    using System.Globalization;
-    using MvcSiteMapProvider.Core.Xml;
-    using MvcSiteMapProvider.Core.Globalization;
-
     /// <summary>
-    /// TODO: Update summary.
+    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> tree based on an 
+    /// XML file.
     /// </summary>
     public class XmlSiteMapBuilder : ISiteMapBuilder
     {
@@ -272,8 +267,8 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 routeNode.Route = node.GetAttributeValue("route");
                 //routeNode.RouteValues = AcquireRouteValuesFrom(node);
                 AcquireRouteValuesFrom(node, routeNode.RouteValues);
-
-                routeNode.PreservedRouteParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                AcquirePreservedRouteParametersFrom(node, routeNode.PreservedRouteParameters);
+                //routeNode.PreservedRouteParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
                 //routeNode.Url = "";
 
                 // TODO: move this to sitemapnode constructor so they can't be changed at runtime.
@@ -469,12 +464,24 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <param name="roles">The roles IList to populate.</param>
         protected virtual void AcquireRolesFrom(XAttribute attribute, IList<string> roles)
         {
-            //siteMapNode.Roles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
             var localRoles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var role in localRoles)
             {
                 roles.Add(role);
+            }
+        }
+
+        /// <summary>
+        /// Acquires the preserved route parameters list from a given XElement
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="roles">The preserved route parameters IList to populate.</param>
+        protected virtual void AcquirePreservedRouteParametersFrom(XElement node, IList<string> preservedRouteParameters)
+        {
+            var localParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var parameter in localParameters)
+            {
+                preservedRouteParameters.Add(parameter);
             }
         }
 

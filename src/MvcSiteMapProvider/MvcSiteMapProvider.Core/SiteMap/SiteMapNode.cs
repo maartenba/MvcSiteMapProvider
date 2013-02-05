@@ -12,7 +12,8 @@ using MvcSiteMapProvider.Core.Globalization;
 namespace MvcSiteMapProvider.Core.SiteMap
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// SiteMapNode class. This class represents a node within the SiteMap hierarchy.
+    /// It contains all business logic to maintain the node's internal state.
     /// </summary>
     public class SiteMapNode
         : ISiteMapNode
@@ -524,7 +525,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>The attributes.</value>
-        public IList<string> PreservedRouteParameters { get; set; }
+        public IList<string> PreservedRouteParameters { get; protected set; }
 
 
         /// <summary>
@@ -549,24 +550,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         #endregion
 
         #region MVC
-
-        ///// <summary>
-        ///// Gets or sets the area (optional).
-        ///// </summary>
-        ///// <value>The area.</value>
-        //public string Area { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the controller (optional).
-        ///// </summary>
-        ///// <value>The controller.</value>
-        //public string Controller { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the action (optional).
-        ///// </summary>
-        ///// <value>The action.</value>
-        //public string Action { get; set; }
 
         /// <summary>
         /// Gets or sets the area.

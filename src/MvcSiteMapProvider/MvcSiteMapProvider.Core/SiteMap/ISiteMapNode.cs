@@ -42,7 +42,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         DateTime LastModifiedDate { get; set; }
         ISiteMapNode NextSibling { get; }
         ISiteMapNode ParentNode { get; set; }
-        IList<string> PreservedRouteParameters { get; set; }
+        IList<string> PreservedRouteParameters { get; }
         ISiteMapNode PreviousSibling { get; }
         string ResourceKey { get; }
         IList<string> Roles { get; }
