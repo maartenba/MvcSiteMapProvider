@@ -25,7 +25,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IDictionary<string, string> attributes,
             ILocalizationService localizationService,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
-            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
+            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
+            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy
             )
         {
             if (siteMap == null)
@@ -40,6 +41,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
+            if (siteMapNodeVisibilityProviderStrategy == null)
+                throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
 
             this.siteMap = siteMap;
             this.key = key;
@@ -48,18 +51,18 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.localizationService = localizationService;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
+            this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
 
             // Initialize child objects
             Roles = new List<string>();
             PreservedRouteParameters = new List<string>();
-
-            //this.attributes.CollectionChanged += new NotifyCollectionChangedEventHandler(Attributes_CollectionChanged);
         }
 
         // Services
         protected readonly ILocalizationService localizationService;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
+        protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
 
         // Object State
         protected string key = String.Empty;
@@ -87,7 +90,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
             protected set { this.key = value; }
         }
 
+        /// <summary>
+        /// Gets whether the current node was created from a dynamic source.
+        /// </summary>
+        /// <value>True if the current node is dynamic.</value>
         public virtual bool IsDynamic { get; protected set; }
+
 
         #region Node Map Positioning
 
@@ -233,6 +241,61 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
+        // TODO: rework... (maartenba)
+
+        /// <summary>
+        /// Determines whether the specified node is in current path.
+        /// </summary>
+        /// <param name="current">The current.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified node is in current path; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInCurrentPath()
+        {
+            ISiteMapNode node = this;
+            return (this.siteMap.CurrentNode != null && (node == this.siteMap.CurrentNode || this.siteMap.CurrentNode.IsDescendantOf(node)));
+        }
+
+
+        public virtual bool HasChildNodes
+        {
+            get
+            {
+                IList childNodes = this.ChildNodes;
+                return ((childNodes != null) && (childNodes.Count > 0));
+            }
+        }
+
+        /// <summary>
+        /// Gets the level of the current SiteMapNode
+        /// </summary>
+        /// <param name="current">The current SiteMapNode</param>
+        /// <returns>The level of the current SiteMapNode</returns>
+        public int GetNodeLevel()
+        {
+            var level = 0;
+            ISiteMapNode node = this;
+
+            if (node != null)
+            {
+                while (node.ParentNode != null)
+                {
+                    level++;
+                    node = node.ParentNode;
+                }
+            }
+
+            return level;
+        }
+
+        public virtual ISiteMap SiteMap
+        {
+            get
+            {
+                return this.siteMap;
+            }
+        }
+
         #endregion
 
 
@@ -255,8 +318,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// The HTTP method.
         /// </value>
         public string HttpMethod { get; set; }
-
-
 
         /// <summary>
         /// Gets the implicit resource key (optional).
@@ -317,47 +378,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The attributes.</value>
         public IDictionary<string, string> Attributes { get { return this.attributes; } }
 
-        //private void Attributes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    switch (e.Action)
-        //    {
-        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-
-        //            foreach (var item in e.NewItems)
-        //            {
-        //                var pair = (KeyValuePair<string, string>)item;
-        //                string value = pair.Value;
-
-        //                //explicitResourceKeyParser.HandleResourceAttribute(pair.Key, ref value, ref explicitResourceKeys);
-
-        //                // Update the node in the collection if it changed
-        //                if (this.Attributes[pair.Key] != value)
-        //                {
-        //                    this.Attributes[pair.Key] = value;
-        //                }
-        //            }
-        //            break;
-        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
-
-        //            break;
-        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-
-        //            foreach (var item in e.NewItems)
-        //            {
-        //                var pair = (KeyValuePair<string, string>)item;
-        //                explicitResourceKeys.Remove(pair.Key);
-        //            }
-        //            break;
-        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-
-        //            break;
-        //        case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-
-        //            break;
-        //    }
-
-        //}
-
         /// <summary>
         /// Gets or sets the roles.
         /// </summary>
@@ -406,9 +426,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </returns>
         public virtual bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata)
         {
-            // TODO: use strategy factory to provide implementation logic from concrete provider
+            // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return true;
+            return siteMapNodeVisibilityProviderStrategy.IsVisible(this.VisibilityProvider, this, context, sourceMetadata);
         }
 
         #endregion
@@ -513,8 +533,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The route.</value>
         public string Route { get; set; }
 
-
-        // TODO: Change this to readonly property with class that inherits from RouteValueDictionary
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>
@@ -639,62 +657,5 @@ namespace MvcSiteMapProvider.Core.SiteMap
         //}
 
         //#endregion
-
-
-        /// <summary>
-        /// Gets the level of the current SiteMapNode
-        /// </summary>
-        /// <param name="current">The current SiteMapNode</param>
-        /// <returns>The level of the current SiteMapNode</returns>
-        public int GetNodeLevel()
-        {
-            var level = 0;
-            ISiteMapNode node = this;
-
-            if (node != null)
-            {
-                while (node.ParentNode != null)
-                {
-                    level++;
-                    node = node.ParentNode;
-                }
-            }
-
-            return level;
-        }
-
-        // TODO: rework... (maartenba)
-
-        /// <summary>
-        /// Determines whether the specified node is in current path.
-        /// </summary>
-        /// <param name="current">The current.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified node is in current path; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsInCurrentPath()
-        {
-            ISiteMapNode node = this;
-            return (this.siteMap.CurrentNode != null && (node == this.siteMap.CurrentNode || this.siteMap.CurrentNode.IsDescendantOf(node)));
-        }
-
-
-        public virtual bool HasChildNodes
-        {
-            get
-            {
-                IList childNodes = this.ChildNodes;
-                return ((childNodes != null) && (childNodes.Count > 0));
-            }
-        }
-
-        public virtual ISiteMap SiteMap
-        {
-            get
-            {
-                return this.siteMap;
-            }
-        }
-
     }
 }

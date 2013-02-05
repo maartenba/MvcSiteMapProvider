@@ -110,6 +110,21 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.Mvc.UrlResolver.SiteMapNodeUrlResolverStrategy>()
             );
 
+            // Get all types that implement ISiteMapNodeVisibilityProvider in an array
+            container.Configure(x => x.Scan(scan =>
+            {
+                scan.TheCallingAssembly();
+                scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMap.SiteMaps>();
+                scan.WithDefaultConventions();
+                scan.AddAllTypesOf<MvcSiteMapProvider.Core.SiteMap.ISiteMapNodeVisibilityProvider>();
+            }
+            ));
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.SiteMap.ISiteMapNodeVisibilityProviderStrategy>()
+                .Use<MvcSiteMapProvider.Core.SiteMap.ISiteMapNodeVisibilityProviderStrategy>()
+            );
+
             // Get all types that implement ISiteMapNodeResolver in an array
             container.Configure(x => x.Scan(scan =>
             {

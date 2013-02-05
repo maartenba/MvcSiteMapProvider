@@ -18,7 +18,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IStringLocalizer stringLocalizer,
             IAttributeCollectionFactory attributeCollectionFactory,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
-            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy
+            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
+            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy
             ) 
         {
             if (explicitResourceKeyParser == null)
@@ -31,12 +32,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
+            if (siteMapNodeVisibilityProviderStrategy == null)
+                throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
 
             this.explicitResourceKeyParser = explicitResourceKeyParser;
             this.stringLocalizer = stringLocalizer;
             this.attributeCollectionFactory = attributeCollectionFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
+            this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
         }
 
         // Services
@@ -45,6 +49,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly IAttributeCollectionFactory attributeCollectionFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
+        protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
 
 
         #region ISiteMapNodeFactory Members
@@ -72,7 +77,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 attributes,
                 localizationService,
                 dynamicNodeProviderStrategy,
-                siteMapNodeUrlResolverStrategy);
+                siteMapNodeUrlResolverStrategy,
+                siteMapNodeVisibilityProviderStrategy);
         }
 
 
