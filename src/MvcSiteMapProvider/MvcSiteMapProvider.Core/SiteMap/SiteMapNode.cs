@@ -223,7 +223,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The sibling nodes.
         /// </value>
-        private SiteMapNodeCollection SiblingNodes
+        protected virtual SiteMapNodeCollection SiblingNodes
         {
             get
             {
@@ -245,7 +245,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// 	<c>true</c> if the specified node is in current path; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsInCurrentPath()
+        public virtual bool IsInCurrentPath()
         {
             ISiteMapNode node = this;
             return (this.siteMap.CurrentNode != null && (node == this.siteMap.CurrentNode || this.siteMap.CurrentNode.IsDescendantOf(node)));
@@ -266,7 +266,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         /// <param name="current">The current SiteMapNode</param>
         /// <returns>The level of the current SiteMapNode</returns>
-        public int GetNodeLevel()
+        public virtual int GetNodeLevel()
         {
             var level = 0;
             ISiteMapNode node = this;
@@ -312,13 +312,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The HTTP method.
         /// </value>
-        public string HttpMethod { get; set; }
+        public virtual string HttpMethod { get; set; }
 
         /// <summary>
         /// Gets the implicit resource key (optional).
         /// </summary>
         /// <value>The implicit resource key.</value>
-        public string ResourceKey
+        public virtual string ResourceKey
         {
             get { return this.localizationService.ResourceKey; }
         }
@@ -327,7 +327,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the title (optional).
         /// </summary>
         /// <value>The title.</value>
-        public string Title 
+        public virtual string Title 
         {
             get 
             {
@@ -343,7 +343,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the description (optional).
         /// </summary>
         /// <value>The description.</value>
-        public string Description 
+        public virtual string Description 
         {
             get
             {
@@ -359,43 +359,43 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the target frame (optional).
         /// </summary>
         /// <value>The target frame.</value>
-        public string TargetFrame { get; set; }
+        public virtual string TargetFrame { get; set; }
 
         /// <summary>
         /// Gets or sets the image URL (optional).
         /// </summary>
         /// <value>The image URL.</value>
-        public string ImageUrl { get; set; }
+        public virtual string ImageUrl { get; set; }
 
         /// <summary>
         /// Gets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
-        public IDictionary<string, string> Attributes { get { return this.attributes; } }
+        public virtual IDictionary<string, string> Attributes { get { return this.attributes; } }
 
         /// <summary>
         /// Gets or sets the roles.
         /// </summary>
         /// <value>The roles.</value>
-        public IList<string> Roles { get; protected set; }
+        public virtual IList<string> Roles { get; protected set; }
 
         /// <summary>
         /// Gets or sets the last modified date.
         /// </summary>
         /// <value>The last modified date.</value>
-        public DateTime LastModifiedDate { get; set; }
+        public virtual DateTime LastModifiedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the change frequency.
         /// </summary>
         /// <value>The change frequency.</value>
-        public ChangeFrequency ChangeFrequency { get; set; }
+        public virtual ChangeFrequency ChangeFrequency { get; set; }
 
         /// <summary>
         /// Gets or sets the update priority.
         /// </summary>
         /// <value>The update priority.</value>
-        public UpdatePriority UpdatePriority { get; set; }
+        public virtual UpdatePriority UpdatePriority { get; set; }
 
 
         #region Visibility
@@ -408,7 +408,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the visibility provider.
         /// </value>
-        public string VisibilityProvider { get; set; }
+        public virtual string VisibilityProvider { get; set; }
 
 
         /// <summary>
@@ -436,7 +436,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         ///   <c>true</c> if clickable; otherwise, <c>false</c>.
         /// </value>
-        public bool Clickable { get; set; }
+        public virtual bool Clickable { get; set; }
 
         /// <summary>
         /// Gets or sets the name or type of the URL resolver.
@@ -444,7 +444,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the URL resolver.
         /// </value>
-        public string UrlResolver { get; set; }
+        public virtual string UrlResolver { get; set; }
 
         /// <summary>
         /// Gets the URL.
@@ -452,7 +452,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The URL.
         /// </value>
-        public string Url 
+        public virtual string Url 
         {
             get
             {
@@ -492,13 +492,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the Dynamic Node Provider.
         /// </value>
-        public string DynamicNodeProvider { get; set; }
+        public virtual string DynamicNodeProvider { get; set; }
 
         /// <summary>
         /// Gets the dynamic node collection.
         /// </summary>
         /// <returns>A dynamic node collection.</returns>
-        public IEnumerable<DynamicNode> GetDynamicNodeCollection()
+        public virtual IEnumerable<DynamicNode> GetDynamicNodeCollection()
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
@@ -511,7 +511,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// True if there is a provider.
         /// </value>
-        public bool HasDynamicNodeProvider
+        public virtual bool HasDynamicNodeProvider
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
@@ -526,19 +526,19 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the route.
         /// </summary>
         /// <value>The route.</value>
-        public string Route { get; set; }
+        public virtual string Route { get; set; }
 
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>
         /// <value>The route values.</value>
-        public RouteValueCollection RouteValues { get { return this.routeValues; } }
+        public virtual RouteValueCollection RouteValues { get { return this.routeValues; } }
 
         /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>The attributes.</value>
-        public IList<string> PreservedRouteParameters { get; protected set; }
+        public virtual IList<string> PreservedRouteParameters { get; protected set; }
 
 
         /// <summary>
@@ -546,7 +546,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         /// <param name="httpContext">The HTTP context.</param>
         /// <returns>The route data associated with the current node.</returns>
-        public RouteData GetRouteData(HttpContextBase httpContext)
+        public virtual RouteData GetRouteData(HttpContextBase httpContext)
         {
             RouteData routeData;
             if (!string.IsNullOrEmpty(this.Route))
@@ -568,7 +568,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the area.
         /// </summary>
         /// <value>The area.</value>
-        public string Area
+        public virtual string Area
         {
             get { return RouteValues.ContainsKey("area") && RouteValues["area"] != null ? RouteValues["area"].ToString() : ""; }
             set { RouteValues["area"] = value; }
@@ -578,7 +578,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the controller.
         /// </summary>
         /// <value>The controller.</value>
-        public string Controller
+        public virtual string Controller
         {
             get { return RouteValues.ContainsKey("controller") ? RouteValues["controller"].ToString() : ""; }
             set { RouteValues["controller"] = value; }
@@ -588,7 +588,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the action.
         /// </summary>
         /// <value>The action.</value>
-        public string Action
+        public virtual string Action
         {
             get { return RouteValues.ContainsKey("action") ? RouteValues["action"].ToString() : ""; }
             set { RouteValues["action"] = value; }

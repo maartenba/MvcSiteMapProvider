@@ -263,7 +263,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         /// <returns>A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, 
         /// null, if the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> is not found or cannot be returned for the current user.</returns>
-        public ISiteMapNode CurrentNode
+        public virtual ISiteMapNode CurrentNode
         {
             get 
             {
@@ -293,7 +293,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             set { this.enableLocalization = value; }
         }
 
-        public ISiteMapNode FindSiteMapNode(string rawUrl)
+        public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
         {
             if (rawUrl == null)
             {
@@ -318,7 +318,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> or if the page context is null.
         /// </returns>
-        public ISiteMapNode FindSiteMapNode(System.Web.HttpContext context)
+        public virtual ISiteMapNode FindSiteMapNode(System.Web.HttpContext context)
         {
             var httpContext = new HttpContext2(context);
             var routeData = RouteTable.Routes.GetRouteData(httpContext);
@@ -331,7 +331,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return currentNode;
         }
 
-        public ISiteMapNode FindSiteMapNodeFromKey(string key)
+        public virtual ISiteMapNode FindSiteMapNodeFromKey(string key)
         {
             ISiteMapNode node = this.FindSiteMapNode(key);
             if (node == null)
@@ -357,7 +357,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         }
 
-        public SiteMapNodeCollection GetChildNodes(ISiteMapNode node)
+        public virtual SiteMapNodeCollection GetChildNodes(ISiteMapNode node)
         {
             if (node == null)
             {
@@ -392,17 +392,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return SiteMapNodeCollection.ReadOnly(nodes2);
         }
 
-        public ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel)
+        public virtual ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel)
         {
             if (upLevel < -1)
             {
                 throw new ArgumentOutOfRangeException("upLevel");
             }
             return this.CurrentNode;
-
         }
 
-        public ISiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel)
+        public virtual ISiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel)
         {
             if (upLevel < -1)
             {
@@ -416,7 +415,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         }
 
-        public ISiteMapNode GetParentNode(ISiteMapNode node)
+        public virtual ISiteMapNode GetParentNode(ISiteMapNode node)
         {
             if (node == null)
             {
@@ -438,7 +437,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return this.ReturnNodeIfAccessible(parentNode);
         }
 
-        public ISiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int walkupLevels, int relativeDepthFromWalkup)
+        public virtual ISiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int walkupLevels, int relativeDepthFromWalkup)
         {
             if (walkupLevels < 0)
             {
@@ -463,7 +462,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         }
 
-        public ISiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(ISiteMapNode node, int walkupLevels, int relativeDepthFromWalkup)
+        public virtual ISiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(ISiteMapNode node, int walkupLevels, int relativeDepthFromWalkup)
         {
             if (walkupLevels < 0)
             {
@@ -487,7 +486,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return parentNodesInternal;
         }
 
-        public void HintAncestorNodes(ISiteMapNode node, int upLevel)
+        public virtual void HintAncestorNodes(ISiteMapNode node, int upLevel)
         {
             if (node == null)
             {
@@ -499,7 +498,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        public void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel)
+        public virtual void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel)
         {
             if (node == null)
             {
@@ -529,7 +528,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// - or -
         /// <paramref name="node"/> is null.
         /// </exception>
-        public bool IsAccessibleToUser(System.Web.HttpContext context, ISiteMapNode node)
+        public virtual bool IsAccessibleToUser(HttpContext context, ISiteMapNode node)
         {
             if (!SecurityTrimmingEnabled)
             {
@@ -552,7 +551,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return aclCacheItem[node];
         }
 
-        //public SiteMap ParentProvider
+        //public virtual SiteMap ParentProvider
         //{
         //    get
         //    {
@@ -575,7 +574,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object, the GetImplicitResourceString method takes precedence over the 
         /// GetExplicitResourceString when the localization is enabled with the EnableLocalization property set to true. 
         /// </remarks>
-        public string ResourceKey
+        public virtual string ResourceKey
         {
             get { return this.resourceKey; }
             set { this.resourceKey = value; }
@@ -584,7 +583,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <summary>
         /// Gets the root <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object of the site map data that the current provider represents.
         /// </summary>
-        public ISiteMapNode RootNode
+        public virtual ISiteMapNode RootNode
         {
             get { return this.ReturnNodeIfAccessible(root); }
         }
@@ -592,6 +591,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <summary>
         /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
         /// </summary>
+        /// <remarks>Once security trimming is enabled, it cannot be disabled again.</remarks>
         public bool SecurityTrimmingEnabled
         {
             get { return this.securityTrimmingEnabled; }
@@ -603,7 +603,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        public ISiteMapNode BuildSiteMap()
+        public virtual ISiteMapNode BuildSiteMap()
         {
             // Return immediately if this method has been called before
             if (root != null) 
@@ -627,7 +627,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
-        public ISiteMapNode FindSiteMapNode(ControllerContext context)
+        public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
             return FindSiteMapNode(HttpContext.Current, context.RouteData);
         }
@@ -638,7 +638,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <param name="context">The context.</param>
         /// <param name="routeData">The route data.</param>
         /// <returns></returns>
-        private ISiteMapNode FindSiteMapNode(HttpContext context, RouteData routeData)
+        protected virtual ISiteMapNode FindSiteMapNode(HttpContext context, RouteData routeData)
         {
             // Node
             ISiteMapNode node = null;
@@ -914,7 +914,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <param name="mvcNodeRouteValues">The route values of the original node.</param>
         /// <param name="routeValues">The route values to check in the given node.</param>
         /// <returns><c>True</c> if the <paramref name="mvcNodeRouteValues"/> contains all keys and the same values as the given <paramref name="routeValues"/>, otherwise <c>false</c>.</returns>
-        private static bool CompareMustMatchRouteValues(IDictionary<string, object> mvcNodeRouteValues, IDictionary<string, object> routeValues)
+        private bool CompareMustMatchRouteValues(IDictionary<string, object> mvcNodeRouteValues, IDictionary<string, object> routeValues)
         {
             var routeKeys = mvcNodeRouteValues.Keys;
 
@@ -953,7 +953,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return null;
         }
 
-        private IDictionary ChildNodeCollectionTable
+        protected IDictionary ChildNodeCollectionTable
         {
             get
             {
@@ -971,7 +971,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        private IDictionary KeyTable
+        protected IDictionary KeyTable
         {
             get
             {
@@ -989,7 +989,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        private IDictionary ParentNodeTable
+        protected IDictionary ParentNodeTable
         {
             get
             {
@@ -1007,7 +1007,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        private IDictionary UrlTable
+        protected IDictionary UrlTable
         {
             get
             {
