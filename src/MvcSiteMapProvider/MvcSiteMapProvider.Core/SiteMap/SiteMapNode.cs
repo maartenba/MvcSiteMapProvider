@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
 
             this.siteMap = siteMap;
-            this.key = key;
+            this.Key = key;
             this.IsDynamic = isDynamic;
             this.attributes = attributes;
             this.localizationService = localizationService;
@@ -65,7 +65,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
 
         // Object State
-        protected string key = String.Empty;
         protected ISiteMap siteMap;
         protected ISiteMapNode parentNode;
         protected bool isParentNodeSet = false;
@@ -84,11 +83,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets the key.
         /// </summary>
         /// <value>The key.</value>
-        public virtual string Key 
-        { 
-            get { return this.key; }
-            protected set { this.key = value; }
-        }
+        public virtual string Key { get; protected set; }
 
         /// <summary>
         /// Gets whether the current node was created from a dynamic source.
