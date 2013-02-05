@@ -122,7 +122,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.SiteMap.ISiteMapNodeVisibilityProviderStrategy>()
-                .Use<MvcSiteMapProvider.Core.SiteMap.ISiteMapNodeVisibilityProviderStrategy>()
+                .Use<MvcSiteMapProvider.Core.SiteMap.SiteMapNodeVisibilityProviderStrategy>()
             );
 
             // Get all types that implement ISiteMapNodeResolver in an array

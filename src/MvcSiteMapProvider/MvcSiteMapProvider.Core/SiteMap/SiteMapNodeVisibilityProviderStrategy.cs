@@ -38,7 +38,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public bool IsVisible(string providerName, ISiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata)
         {
             var provider = GetProvider(providerName);
-            if (provider == null) return false;
+            if (provider == null) return true; // If no provider configured, then always visible.
             return provider.IsVisible(node, context, sourceMetadata);
         }
 
