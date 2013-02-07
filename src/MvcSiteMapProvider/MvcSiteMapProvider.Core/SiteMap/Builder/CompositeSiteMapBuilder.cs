@@ -1,18 +1,13 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="CompositeSiteMapBuilder.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace MvcSiteMapProvider.Core.SiteMap.Builder
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
-    /// TODO: Update summary.
+    /// Used to chain several builders in succession. The builders will be processed in the same order
+    /// as they are specified in the constructor.
     /// </summary>
     public class CompositeSiteMapBuilder : ISiteMapBuilder
     {

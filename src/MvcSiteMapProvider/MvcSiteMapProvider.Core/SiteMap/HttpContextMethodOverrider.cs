@@ -1,9 +1,5 @@
-﻿#region Using directives
-
-using System;
+﻿using System;
 using System.Web;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {

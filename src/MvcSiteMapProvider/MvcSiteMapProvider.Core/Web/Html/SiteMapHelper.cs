@@ -1,6 +1,4 @@
-﻿#region Using directives
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -9,8 +7,6 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Core.Web.Html.Models;
 using MvcSiteMapProvider.Core.SiteMap;
 using System.Collections.Specialized;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.Web.Html
 {

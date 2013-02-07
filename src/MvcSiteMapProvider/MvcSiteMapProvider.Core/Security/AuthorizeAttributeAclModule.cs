@@ -1,6 +1,4 @@
-﻿#region Using directives
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,7 +8,6 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.SiteMap;
 using Telerik.Web.Mvc.Infrastructure.Implementation;
-#endregion
 
 namespace MvcSiteMapProvider.Core.Security
 {

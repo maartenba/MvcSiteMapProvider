@@ -1,11 +1,7 @@
-﻿#region Using directives
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.Mvc
 {

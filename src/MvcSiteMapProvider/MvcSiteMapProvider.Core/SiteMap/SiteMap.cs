@@ -11,6 +11,11 @@ using MvcSiteMapProvider.Core.SiteMap.Builder;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
+
+    // TODO: test whether SiteMap and SiteMapNode can be garbage collected because
+    // there is a circular reference. Perhaps IDisposable or some other technique is
+    // needed to deref them.
+
     /// <summary>
     /// This class acts as the root of a SiteMap object graph and maintains a map
     /// between the child <see cref="T:MvcSiteMapProvider.Core.SiteMapNode"/> nodes.

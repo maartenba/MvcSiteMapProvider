@@ -1,25 +1,15 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="RouteValueCollection.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using MvcSiteMapProvider.Core.Collections;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using MvcSiteMapProvider.Core.Collections;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class RouteValueCollection
         : ObservableDictionary<string, object>
     {
-
-
         // TODO: Use this to replace the "Node matches route" method...?
         public bool MatchesRoute(IDictionary<string, object> routeValues)
         {

@@ -1,33 +1,27 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapCache.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Caching;
+using MvcSiteMapProvider.Core.SiteMap;
 
 namespace MvcSiteMapProvider.Core.Cache
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-    using System.Web.Caching;
-    using MvcSiteMapProvider.Core.SiteMap;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class SiteMapCache 
         : ISiteMapCache
     {
-        public SiteMapCache(Cache cache)
+        public SiteMapCache(System.Web.Caching.Cache cache)
         {
             if (cache == null)
                 throw new ArgumentNullException("cache");
             this.cache = cache;
         }
 
-        private readonly Cache cache;
+        private readonly System.Web.Caching.Cache cache;
 
 
         public virtual ISiteMap this[string key]

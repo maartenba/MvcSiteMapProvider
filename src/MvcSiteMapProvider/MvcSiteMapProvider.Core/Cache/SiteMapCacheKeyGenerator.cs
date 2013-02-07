@@ -1,19 +1,14 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapCacheKeyGenerator.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
 
 namespace MvcSiteMapProvider.Core.Cache
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-
     /// <summary>
-    /// TODO: Update summary.
+    /// The default cache key generator. This class generates a unique cache key for each 
+    /// DnsSafeHost.
     /// </summary>
     public class SiteMapCacheKeyGenerator
         : ISiteMapCacheKeyGenerator

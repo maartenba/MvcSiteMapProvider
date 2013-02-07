@@ -3,11 +3,7 @@
 // See http://www.microsoft.com/opensource/licenses.mspx#Ms-PL. 
 // All other rights reserved.
 
-#region Using directives
-
 using System.Web;
-
-#endregion
 
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {

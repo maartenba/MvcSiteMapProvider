@@ -1,17 +1,11 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ISiteMapNodeUrlResolverStrategy.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using MvcSiteMapProvider.Core.SiteMap;
 
 namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using MvcSiteMapProvider.Core.SiteMap;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

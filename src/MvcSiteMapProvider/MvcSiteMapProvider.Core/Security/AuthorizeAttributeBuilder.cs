@@ -5,14 +5,10 @@
 
 // Modified by Maarten Balliauw - http://mvcsitemap.codeplex.com
 
-#region Using directives
-
 using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Web;
-
-#endregion
 
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {

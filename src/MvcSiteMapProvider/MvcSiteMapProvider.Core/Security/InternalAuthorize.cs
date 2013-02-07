@@ -1,10 +1,6 @@
-﻿#region Using directives
-
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using Telerik.Web.Mvc.Infrastructure.Implementation;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.Security
 {

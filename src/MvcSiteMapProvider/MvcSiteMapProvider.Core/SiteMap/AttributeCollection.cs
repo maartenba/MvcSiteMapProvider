@@ -1,19 +1,13 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapNodeAttributeCollection.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.Linq;
-    using System.Text;
-    using MvcSiteMapProvider.Core.Collections;
-    using MvcSiteMapProvider.Core.Globalization;
-
     // TODO: It is probably not necessary to inherit from ObservableDictionary. Need to find another Dictionary to inherit from.
 
     /// <summary>
@@ -22,7 +16,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
     public class AttributeCollection
         : ObservableDictionary<string, string>
     {
-
         public AttributeCollection(
             ISiteMap siteMap,
             ILocalizationService localizationService

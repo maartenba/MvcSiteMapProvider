@@ -1,19 +1,14 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="TypeExtensions.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Reflection;
 
 namespace MvcSiteMapProvider.Core.Reflection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Reflection;
-
+    
     /// <summary>
-    /// TODO: Update summary.
+    /// Extensions to the Type type.
     /// </summary>
     public static class TypeExtensions
     {

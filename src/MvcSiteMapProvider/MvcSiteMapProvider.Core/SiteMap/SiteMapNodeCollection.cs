@@ -1,16 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapNodeCollection.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections;
+using System.Web.UI;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections;
-    using System.Web.UI;
-    //using System.Web.UI.WebControls;
-
     // TODO: make this a generic type to accept only ISiteMapNode objects
     /// <summary>
     /// TODO: Update summary.

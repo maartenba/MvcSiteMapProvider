@@ -1,8 +1,4 @@
-﻿#region Using directives
-
-using System.Xml.Linq;
-
-#endregion
+﻿using System.Xml.Linq;
 
 namespace MvcSiteMapProvider.Core.Xml
 {

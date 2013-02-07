@@ -1,18 +1,10 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="UrlPath.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections;
+using System.Text;
+using System.Web;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

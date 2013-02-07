@@ -1,16 +1,7 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapBuilderSet.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
 
 namespace MvcSiteMapProvider.Core.SiteMap.Builder
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

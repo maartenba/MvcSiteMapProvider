@@ -1,8 +1,4 @@
-﻿#region Using directives
-
-using System.Collections.Generic;
-
-#endregion
+﻿using System.Collections.Generic;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {

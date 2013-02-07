@@ -3,13 +3,13 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
 namespace Telerik.Web.Mvc.Infrastructure.Implementation
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
     /// <summary>
     /// ObjectCopier
     /// </summary>

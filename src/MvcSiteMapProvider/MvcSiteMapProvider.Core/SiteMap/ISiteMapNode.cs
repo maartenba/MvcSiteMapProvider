@@ -1,17 +1,11 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ISiteMapNode.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using MvcSiteMapProvider.Core;
+using System.Web;
+using System.Web.Routing;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-    using MvcSiteMapProvider.Core;
-    using System.Web;
-    using System.Web.Routing;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

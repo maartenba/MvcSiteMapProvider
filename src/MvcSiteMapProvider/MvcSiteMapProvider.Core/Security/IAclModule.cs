@@ -1,10 +1,6 @@
-﻿#region Using directives
-
-using System.Web;
+﻿using System.Web;
 using MvcSiteMapProvider.Core.SiteMap;
 using MvcSiteMapProvider.Core.Mvc;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.Security
 {

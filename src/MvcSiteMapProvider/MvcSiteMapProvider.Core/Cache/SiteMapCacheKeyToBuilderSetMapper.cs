@@ -1,16 +1,10 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapCacheKeyToBuilderSetMapper.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace MvcSiteMapProvider.Core.Cache
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

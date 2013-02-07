@@ -1,21 +1,15 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SiteMapLoader.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Threading;
+using MvcSiteMapProvider.Core.Cache;
+using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core.SiteMap.Builder;
 
 namespace MvcSiteMapProvider.Core.Loader
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web;
-    using System.Threading;
-    using MvcSiteMapProvider.Core.Cache;
-    using MvcSiteMapProvider.Core.SiteMap;
-    using MvcSiteMapProvider.Core.SiteMap.Builder;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

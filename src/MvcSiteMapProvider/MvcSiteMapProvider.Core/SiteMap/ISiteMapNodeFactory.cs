@@ -1,16 +1,7 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ISiteMapNodeFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// An abstract factory interface for creating sitemap nodes at runtime.
     /// </summary>

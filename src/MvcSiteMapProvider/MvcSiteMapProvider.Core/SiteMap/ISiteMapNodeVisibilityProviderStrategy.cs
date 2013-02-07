@@ -1,15 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ISiteMapNodeVisibilityProviderStrategy.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Web;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Web;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

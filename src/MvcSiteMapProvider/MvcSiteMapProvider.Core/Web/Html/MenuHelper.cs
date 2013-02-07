@@ -1,14 +1,10 @@
-﻿#region Using directives
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using MvcSiteMapProvider.Core.Web.Html.Models;
 using MvcSiteMapProvider.Core.SiteMap;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.Web.Html
 {

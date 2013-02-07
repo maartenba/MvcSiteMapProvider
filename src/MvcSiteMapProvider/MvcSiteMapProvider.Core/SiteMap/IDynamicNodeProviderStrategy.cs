@@ -1,14 +1,8 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="IDynamicNodeProviderStrategy.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
-    using System;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Provides a means to yield control of the lifetime of provider
     /// instances to the DI container, while allowing the right instance

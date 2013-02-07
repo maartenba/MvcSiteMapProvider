@@ -1,17 +1,10 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ISiteMapLoader.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
+﻿using System;
 using MvcSiteMapProvider.Core;
 
 namespace MvcSiteMapProvider.Core.SiteMap.Builder
 {
-    using System;
-
     /// <summary>
-    /// TODO: Update summary.
+    /// Implement this interface to make a custom implementation that will build a sitemap.
     /// </summary>
     public interface ISiteMapBuilder
     {

@@ -1,10 +1,6 @@
-﻿#region Using directives
-
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Core.SiteMap;
-
-#endregion
 
 namespace MvcSiteMapProvider.Core.Mvc.Filters
 {
