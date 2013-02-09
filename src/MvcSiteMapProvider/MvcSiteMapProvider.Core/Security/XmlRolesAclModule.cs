@@ -33,25 +33,6 @@ namespace MvcSiteMapProvider.Core.Security
 
             // Is it a regular node?
             var mvcNode = node as ISiteMapNode;
-            //if (mvcNode == null)
-            //{
-            //    if (provider.ParentProvider != null)
-            //    {
-            //        return provider.ParentProvider.IsAccessibleToUser(context, node);
-            //    }
-            //}
-
-            // NOTE: parent provider is the provider that is configured above the current one in the config file.
-            // Need to verify the original logic intended this.
-
-            //if (mvcNode == null)
-            //{
-            //    var parentNode = provider.GetParentNode(node);
-            //    if (parentNode != null)
-            //    {
-            //        return provider.IsAccessibleToUser(context, parentNode);
-            //    }
-            //}
 
             // If we have roles assigned, check them against the roles defined in the sitemap
             if (node.Roles != null && node.Roles.Count > 0)

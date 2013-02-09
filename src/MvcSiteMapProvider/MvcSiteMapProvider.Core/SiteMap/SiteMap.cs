@@ -63,9 +63,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         #region SiteMapProvider state
 
         private bool enableLocalization;
-        //private SiteMap _parentProvider;
         private string resourceKey;
-        //private SiteMap _rootProvider;
         private bool securityTrimmingEnabled;
 
         #endregion
@@ -344,22 +342,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 node = (ISiteMapNode)this.KeyTable[key];
             }
             return this.ReturnNodeIfAccessible(node);
-
-            //SiteMapNode node = this.FindSiteMapNode(key);
-            //if (node == null)
-            //{
-            //    foreach (SiteMapProvider provider in this.ChildProviderList)
-            //    {
-            //        this.EnsureChildSiteMapProviderUpToDate(provider);
-            //        node = provider.FindSiteMapNodeFromKey(key);
-            //        if (node != null)
-            //        {
-            //            return node;
-            //        }
-            //    }
-            //}
-            //return node;
-
         }
 
         public virtual SiteMapNodeCollection GetChildNodes(ISiteMapNode node)
@@ -435,10 +417,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     parentNode = (ISiteMapNode)this.ParentNodeTable[node3];
                 }
             }
-            //if ((parentNode == null) && (this.ParentProvider != null))
-            //{
-            //    parentNode = this.ParentProvider.GetParentNode(node);
-            //}
             return this.ReturnNodeIfAccessible(parentNode);
         }
 
@@ -555,20 +533,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             return aclCacheItem[node];
         }
-
-        //public virtual SiteMap ParentProvider
-        //{
-        //    get
-        //    {
-        //        return this._parentProvider;
-
-        //    }
-        //    set
-        //    {
-        //        this._parentProvider = value;
-
-        //    }
-        //}
 
         /// <summary>
         /// Get or sets the resource key that is used for localizing <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> attributes. 
