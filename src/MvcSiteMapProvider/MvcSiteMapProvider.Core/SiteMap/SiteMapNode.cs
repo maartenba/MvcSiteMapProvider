@@ -716,6 +716,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return routeData;
         }
 
+        /// <summary>
+        /// Determines whether this node matches the supplied route values.
+        /// </summary>
+        /// <param name="routeValues">An IDictionary<string, object> of route values.</param>
+        /// <returns>True if the route matches this node's RouteValues and Attributes collections.</returns>
         public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
         {
             var result = RouteValues.MatchesRoute(routeValues);
