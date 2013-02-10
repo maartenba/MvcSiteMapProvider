@@ -14,7 +14,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMapFactory(
             IAclModule aclModule,
-            IActionMethodParameterResolver actionMethodParameterResolver,
             IControllerTypeResolver controllerTypeResolver,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory
@@ -22,8 +21,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
-            if (actionMethodParameterResolver == null)
-                throw new ArgumentNullException("actionMethodParameterResolver");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
             if (siteMapNodeCollectionFactory == null)
@@ -32,14 +29,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("genericDictionaryFactory");
 
             this.aclModule = aclModule;
-            this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
         }
 
         private readonly IAclModule aclModule;
-        private readonly IActionMethodParameterResolver actionMethodParameterResolver;
         private readonly IControllerTypeResolver controllerTypeResolver;
         private readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         private readonly IGenericDictionaryFactory genericDictionaryFactory;
@@ -51,7 +46,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return new SiteMap(
                 siteMapBuilder, 
                 aclModule, 
-                actionMethodParameterResolver, 
                 controllerTypeResolver, 
                 siteMapNodeCollectionFactory,
                 genericDictionaryFactory);

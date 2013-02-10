@@ -30,7 +30,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
             IAclModule aclModule, 
-            IActionMethodParameterResolver actionMethodParameterResolver,
             IControllerTypeResolver controllerTypeResolver,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory
@@ -40,8 +39,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapBuilder");
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
-            if (actionMethodParameterResolver == null)
-                throw new ArgumentNullException("actionMethodParameterResolver");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
             if (siteMapNodeCollectionFactory == null)
@@ -51,7 +48,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
             this.siteMapBuilder = siteMapBuilder;
             this.aclModule = aclModule;
-            this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
@@ -70,7 +66,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly IAclModule aclModule;
-        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
@@ -777,7 +772,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 ISiteMapNode mvcNode = node as ISiteMapNode;
                 if (mvcNode == null || routeData.Route != RouteTable.Routes[mvcNode.Route])
                 {
-                    //if (NodeMatchesRoute(RootNode as ISiteMapNode, routeData.Values))
                     if (RootNode.MatchesRoute(routeData.Values))
                     {
                         node = RootNode;
@@ -840,14 +834,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
                             {
                                 // This looks a bit weird, but if i set up a node to a general route ie /Controller/Action/ID
                                 // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route
-                                //if (NodeMatchesRoute(mvcNode, values))
                                 if (mvcNode.MatchesRoute(values))
                                 {
                                     return mvcNode;
                                 }
                             }
                         }
-                        //else if (NodeMatchesRoute(mvcNode, values))
                         else if (mvcNode.MatchesRoute(values))
                         {
                             return mvcNode;
@@ -868,175 +860,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
             return null;
         }
-
-        ///// <summary>
-        ///// Nodes the matches route.
-        ///// </summary>
-        ///// <param name="mvcNode">The MVC node.</param>
-        ///// <param name="values">The values.</param>
-        ///// <returns>
-        ///// A matches route represented as a <see cref="bool"/> instance 
-        ///// </returns>
-        //private bool NodeMatchesRoute(ISiteMapNode mvcNode, IDictionary<string, object> values)
-        //{
-        //    var nodeValid = true;
-
-        //    if (mvcNode != null)
-        //    {
-        //        // Find action method parameters?
-        //        IEnumerable<string> actionParameters = new List<string>();
-        //        if (mvcNode.IsDynamic == false)
-        //        {
-        //            actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
-        //                controllerTypeResolver, mvcNode.Area, mvcNode.Controller, mvcNode.Action);
-        //        }
-
-        //        // Verify route values
-        //        if (values.Count > 0)
-        //        {
-        //            // Checking for same keys and values.
-        //            if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
-        //            {
-        //                return false;
-        //            }
-
-        //            foreach (var pair in values)
-        //            {
-        //                if (mvcNode.Attributes.ContainsKey(pair.Key) && !string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
-        //                {
-        //                    if (mvcNode.Attributes[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
-        //                    {
-        //                        continue;
-        //                    }
-        //                    else
-        //                    {
-        //                        // Is the current pair.Key a parameter on the action method?
-        //                        if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
-        //                        {
-        //                            return false;
-        //                        }
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
-        //                    {
-        //                        continue;
-        //                    }
-        //                    else if (pair.Key == "area")
-        //                    {
-        //                        return false;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        nodeValid = false;
-        //    }
-
-        //    return nodeValid;
-        //}
-
-        ///// <summary>
-        ///// Nodes the matches route.
-        ///// </summary>
-        ///// <param name="mvcNode">The MVC node.</param>
-        ///// <param name="values">The values.</param>
-        ///// <returns>
-        ///// A matches route represented as a <see cref="bool"/> instance 
-        ///// </returns>
-        //private bool NodeMatchesRoute(ISiteMapNode mvcNode, IDictionary<string, object> values)
-        //{
-        //    // Temporary Thread Lock to help with debugging
-        //    lock (this.synclock)
-        //    {
-
-        //        var nodeValid = true;
-
-        //        if (mvcNode != null)
-        //        {
-        //            // Find action method parameters?
-        //            IEnumerable<string> actionParameters = new List<string>();
-        //            //if (mvcNode.DynamicNodeProvider == null && mvcNode.IsDynamic == false)
-        //            if (mvcNode.IsDynamic == false)
-        //            {
-        //                actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
-        //                    controllerTypeResolver, mvcNode.Area, mvcNode.Controller, mvcNode.Action);
-        //            }
-
-        //            // Verify route values
-        //            if (values.Count > 0)
-        //            {
-        //                // Checking for same keys and values.
-        //                if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
-        //                {
-        //                    return false;
-        //                }
-
-        //                foreach (var pair in values)
-        //                {
-        //                    if (!string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
-        //                    {
-        //                        if (mvcNode.Attributes[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
-        //                        {
-        //                            continue;
-        //                        }
-        //                        else
-        //                        {
-        //                            // Is the current pair.Key a parameter on the action method?
-        //                            if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
-        //                            {
-        //                                return false;
-        //                            }
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
-        //                        {
-        //                            continue;
-        //                        }
-        //                        else if (pair.Key == "area")
-        //                        {
-        //                            return false;
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            nodeValid = false;
-        //        }
-
-        //        return nodeValid;
-
-        //    }
-        //}
-
-        /// <summary>
-        /// Returns whether the two route value collections have same keys and same values.
-        /// </summary>
-        /// <param name="mvcNodeRouteValues">The route values of the original node.</param>
-        /// <param name="routeValues">The route values to check in the given node.</param>
-        /// <returns><c>True</c> if the <paramref name="mvcNodeRouteValues"/> contains all keys and the same values as the given <paramref name="routeValues"/>, otherwise <c>false</c>.</returns>
-        private bool CompareMustMatchRouteValues(IDictionary<string, object> mvcNodeRouteValues, IDictionary<string, object> routeValues)
-        {
-            var routeKeys = mvcNodeRouteValues.Keys;
-
-            foreach (var pair in routeValues)
-            {
-                if (routeKeys.Contains(pair.Key) && !mvcNodeRouteValues[pair.Key].ToString().Equals(pair.Value.ToString(), StringComparison.OrdinalIgnoreCase))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-
 
         private ISiteMapNode GetParentNodesInternal(ISiteMapNode node, int walkupLevels)
         {
