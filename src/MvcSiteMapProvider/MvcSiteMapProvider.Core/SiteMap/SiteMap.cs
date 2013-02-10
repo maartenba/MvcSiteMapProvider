@@ -59,6 +59,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         private readonly IControllerTypeResolver controllerTypeResolver;
 
         private readonly Guid instanceId;
+        protected bool isReadOnly = false;
 
         #region SiteMapProvider state
 
@@ -90,12 +91,22 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region ISiteMap Members
 
+        public virtual bool IsReadOnly
+        {
+            get { return this.isReadOnly; }
+        }
+
         /// <summary>
         /// Adds a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object to the node collection that is maintained by the site map provider.
         /// </summary>
         /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> to add to the node collection maintained by the provider.</param>
         public virtual void AddNode(ISiteMapNode node)
         {
+            if (this.isReadOnly)
+            {
+                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+            }
+
             this.AddNode(node, null);
         }
 
@@ -114,6 +125,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
+            if (this.isReadOnly)
+            {
+                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+            }
+
             //if (SiteMapProviderEventHandler.OnAddingSiteMapNode(new SiteMapProviderEventContext(this, node, root)))
             //{
 
@@ -155,6 +171,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (node == null)
             {
                 throw new ArgumentNullException("node");
+            }
+            if (this.isReadOnly)
+            {
+                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
             lock (this.synclock)
             {
@@ -208,6 +228,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
+            if (this.isReadOnly)
+            {
+                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+            }
             lock (this.synclock)
             {
                 ISiteMapNode node2 = (ISiteMapNode)this.ParentNodeTable[node];
@@ -238,6 +262,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public virtual void Clear()
         {
+            if (this.isReadOnly)
+            {
+                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+            }
             lock (this.synclock)
             {
                 root = null;
@@ -293,7 +321,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public bool EnableLocalization
         {
             get { return this.enableLocalization; }
-            set { this.enableLocalization = value; }
+            set 
+            {
+                if (this.isReadOnly)
+                {
+                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+                }
+                this.enableLocalization = value; 
+            }
         }
 
         public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
@@ -546,7 +581,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual string ResourceKey
         {
             get { return this.resourceKey; }
-            set { this.resourceKey = value; }
+            set 
+            {
+                if (this.isReadOnly)
+                {
+                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+                }
+                this.resourceKey = value; 
+            }
         }
 
         /// <summary>
@@ -566,6 +608,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.securityTrimmingEnabled; }
             set 
             {
+                if (this.isReadOnly)
+                {
+                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
+                }
                 if (value == false && this.securityTrimmingEnabled == true)
                     throw new System.Security.SecurityException(Resources.Messages.SecurityTrimmingCannotBeDisabled);
                 this.securityTrimmingEnabled = value; 
@@ -586,7 +632,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 {
                     return root;
                 }
+                // Set the sitemap to read-write so we can populate it.
+                this.isReadOnly = false;
                 root = siteMapBuilder.BuildSiteMap(this, root);
+                // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
+                this.isReadOnly = true;
                 return root;
             }
         }

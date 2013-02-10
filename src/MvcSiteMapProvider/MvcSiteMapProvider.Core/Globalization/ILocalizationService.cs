@@ -10,6 +10,7 @@ namespace MvcSiteMapProvider.Core.Globalization
     {
         string ResourceKey { get; }
         string ExtractExplicitResourceKey(string attributeName, string value);
+        void RemoveResourceKey(string attributeName);
         string GetResourceString(string attributeName, string value, ISiteMap siteMap);
     }
 }

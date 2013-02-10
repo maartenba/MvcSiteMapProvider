@@ -88,32 +88,15 @@ namespace MvcSiteMapProvider.Core.Mvc.Filters
                         if (Target == AttributeTarget.ParentNode && currentSiteMap.CurrentNode.ParentNode != null)
                         {
                             OriginalTitle = currentSiteMap.CurrentNode.ParentNode.Title;
-                            currentSiteMap.CurrentNode.ParentNode.Title = target.ToString();
+                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(target.ToString());
                         }
                         else
                         {
                             OriginalTitle = currentSiteMap.CurrentNode.Title;
-                            currentSiteMap.CurrentNode.Title = target.ToString();
+                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(target.ToString());
                         }
                     }
                 }
-
-                //if (target != null)
-                //{
-                //    if (SiteMap.CurrentNode != null)
-                //    {
-                //        if (Target == AttributeTarget.ParentNode && SiteMap.CurrentNode.ParentNode != null)
-                //        {
-                //            OriginalTitle = SiteMap.CurrentNode.ParentNode.Title;
-                //            SiteMap.CurrentNode.ParentNode.Title = target.ToString();
-                //        }
-                //        else
-                //        {
-                //            OriginalTitle = SiteMap.CurrentNode.Title;
-                //            SiteMap.CurrentNode.Title = target.ToString();
-                //        }
-                //    }
-                //}
             }
         }
 
@@ -132,27 +115,14 @@ namespace MvcSiteMapProvider.Core.Mvc.Filters
                     {
                         if (Target == AttributeTarget.ParentNode && currentSiteMap.CurrentNode.ParentNode != null)
                         {
-                            currentSiteMap.CurrentNode.ParentNode.Title = OriginalTitle;
+                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(OriginalTitle);
                         }
                         else
                         {
-                            currentSiteMap.CurrentNode.Title = OriginalTitle;
+                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(OriginalTitle);
                         }
                         OriginalTitle = "";
                     }
-
-                    //if (SiteMap.CurrentNode != null)
-                    //{
-                    //    if (Target == AttributeTarget.ParentNode && SiteMap.CurrentNode.ParentNode != null)
-                    //    {
-                    //        SiteMap.CurrentNode.ParentNode.Title = OriginalTitle;
-                    //    }
-                    //    else
-                    //    {
-                    //        SiteMap.CurrentNode.Title = OriginalTitle;
-                    //    }
-                    //    OriginalTitle = "";
-                    //}
                 }
             }
         }

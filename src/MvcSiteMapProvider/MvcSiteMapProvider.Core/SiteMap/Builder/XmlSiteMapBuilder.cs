@@ -427,7 +427,7 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(XElement node, RouteValueCollection routeValues)
+        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueCollection routeValues)
         {
             //var returnValue = new Dictionary<string, object>();
             foreach (XAttribute attribute in node.Attributes())

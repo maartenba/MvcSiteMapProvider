@@ -180,4 +180,10 @@
   <data name="SecurityTrimmingCannotBeDisabled" xml:space="preserve">
     <value>Security trimming cannot be disabled again after it is enabled.</value>
   </data>
+  <data name="SiteMapNodeReadOnly" xml:space="preserve">
+    <value>SiteMapNode is readonly, property {0} cannot be modified.</value>
+  </data>
+  <data name="SiteMapReadOnly" xml:space="preserve">
+    <value>SiteMap is readonly, nodes cannot be modified.</value>
+  </data>
 </root>

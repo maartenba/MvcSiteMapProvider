@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MvcSiteMapProvider.Core.Globalization;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -13,7 +14,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         #region IAttributeCollectionFactory Members
 
-        public IDictionary<string, string> Create(ISiteMap siteMap, Globalization.ILocalizationService localizationService)
+        public IDictionary<string, string> Create(ISiteMap siteMap, ILocalizationService localizationService)
         {
             return new AttributeCollection(siteMap, localizationService);
         }

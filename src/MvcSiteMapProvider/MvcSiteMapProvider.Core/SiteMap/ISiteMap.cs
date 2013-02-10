@@ -62,5 +62,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         void AddNode(ISiteMapNode node, ISiteMapNode parentNode);
         void RemoveNode(ISiteMapNode node);
         void Clear();
+        bool IsReadOnly { get; }
     }
 }

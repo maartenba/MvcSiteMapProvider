@@ -8,8 +8,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// TODO: Update summary.
     /// </summary>
     public class RouteValueCollection
-        : ObservableDictionary<string, object>
+        : LockableDictionary<string, object>, IRouteValueCollection
     {
+        public RouteValueCollection(
+            ISiteMap siteMap
+            ) : base(siteMap)
+        {
+        }
+
         // TODO: Use this to replace the "Node matches route" method...?
         public bool MatchesRoute(IDictionary<string, object> routeValues)
         {

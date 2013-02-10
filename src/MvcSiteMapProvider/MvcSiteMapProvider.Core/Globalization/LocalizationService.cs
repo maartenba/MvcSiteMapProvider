@@ -52,6 +52,14 @@ namespace MvcSiteMapProvider.Core.Globalization
             return currentValue;
         }
 
+        public virtual void RemoveResourceKey(string attributeName)
+        {
+            if (explicitResourceKeys.AllKeys.Contains(attributeName))
+            {
+                explicitResourceKeys.Remove(attributeName);
+            }
+        }
+
         public virtual string GetResourceString(string attributeName, string value, ISiteMap siteMap)
         {
             return stringLocalizer.GetResourceString(

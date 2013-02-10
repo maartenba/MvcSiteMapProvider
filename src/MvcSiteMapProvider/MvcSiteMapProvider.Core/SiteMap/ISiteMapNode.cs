@@ -42,7 +42,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         IList<string> Roles { get; }
         ISiteMapNode RootNode { get; }
         string Route { get; set; }
-        RouteValueCollection RouteValues { get; }
+        IRouteValueCollection RouteValues { get; }
         ISiteMap SiteMap { get; }
         string TargetFrame { get; set; }
         string Title { get; set; }

@@ -54,6 +54,8 @@
     <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Cache\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Collections\LockableDictionary.cs" />
+    <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
     <Compile Include="Globalization\ILocalizationService.cs" />
     <Compile Include="Globalization\IExplicitResourceKeyParser.cs" />
@@ -116,6 +118,8 @@
     <Compile Include="SiteMap\DynamicNodeProviderStrategy.cs" />
     <Compile Include="SiteMap\IDynamicNodeProviderStrategy.cs" />
     <Compile Include="SiteMap\IMvcSiteMapNodeAttribute.cs" />
+    <Compile Include="SiteMap\IRouteValueCollection.cs" />
+    <Compile Include="SiteMap\IRouteValueCollectionFactory.cs" />
     <Compile Include="SiteMap\ISiteMapFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNode.cs" />
     <Compile Include="SiteMap\ISiteMapNodeAttributeCollection.cs" />
@@ -127,6 +131,7 @@
     <Compile Include="Collections\NameValueCollection.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
     <Compile Include="SiteMap\RouteValueCollection.cs" />
+    <Compile Include="SiteMap\RouteValueCollectionFactory.cs" />
     <Compile Include="SiteMap\SiteMapFactory.cs" />
     <Compile Include="SiteMap\SiteMapNode.cs" />
     <Compile Include="SiteMap\AttributeCollection.cs" />
