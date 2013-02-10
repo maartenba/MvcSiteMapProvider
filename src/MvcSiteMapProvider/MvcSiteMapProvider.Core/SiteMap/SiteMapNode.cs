@@ -77,8 +77,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly IRouteValueCollection routeValues;
         protected readonly IList<string> preservedRouteParameters;
         protected readonly IList<string> roles;
-        //protected ISiteMapNodeCollection childNodes;
-        //protected bool isChildNodesSet = false;
 
         // Object State
         protected readonly string key;
@@ -144,34 +142,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        //// TODO: Make SiteMapNodeCollection lockable.
-        ///// <summary>
-        ///// Gets or sets the child nodes.
-        ///// </summary>
-        ///// <value>
-        ///// The child nodes.
-        ///// </value>
-        //public virtual SiteMapNodeCollection ChildNodes
-        //{
-        //    get
-        //    {
-        //        if (this.isChildNodesSet)
-        //        {
-        //            return this.childNodes;
-        //        }
-        //        return this.siteMap.GetChildNodes(this);
-        //    }
-        //    set
-        //    {
-        //        if (this.siteMap.IsReadOnly)
-        //        {
-        //            throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ChildNodes"));
-        //        }
-        //        this.childNodes = value;
-        //        this.isChildNodesSet = true;
-        //    }
-        //}
-
         /// <summary>
         /// Gets or sets the child nodes.
         /// </summary>
@@ -180,23 +150,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public virtual ISiteMapNodeCollection ChildNodes
         {
-            get
-            {
-                //if (this.isChildNodesSet)
-                //{
-                //    return this.childNodes;
-                //}
-                return this.siteMap.GetChildNodes(this);
-            }
-            //set
-            //{
-            //    if (this.siteMap.IsReadOnly)
-            //    {
-            //        throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ChildNodes"));
-            //    }
-            //    this.childNodes = value;
-            //    this.isChildNodesSet = true;
-            //}
+            get { return this.siteMap.GetChildNodes(this); }
         }
 
         public virtual bool IsDescendantOf(ISiteMapNode node)
@@ -275,25 +229,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 return rootNode;
             }
         }
-
-        ///// <summary>
-        ///// Gets the sibling nodes relative to the current node.
-        ///// </summary>
-        ///// <value>
-        ///// The sibling nodes.
-        ///// </value>
-        //protected virtual SiteMapNodeCollection SiblingNodes
-        //{
-        //    get
-        //    {
-        //        var parentNode = this.ParentNode;
-        //        if (parentNode != null)
-        //        {
-        //            return parentNode.ChildNodes;
-        //        }
-        //        return null;
-        //    }
-        //}
 
         /// <summary>
         /// Gets the sibling nodes relative to the current node.

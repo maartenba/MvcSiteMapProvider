@@ -198,7 +198,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                         {
                             url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPath, url));
                         }
-                        //if (this.UrlTable[url] != null)
                         if (this.UrlTable.ContainsKey(url))
                         {
                             throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
@@ -219,14 +218,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 if (parentNode != null)
                 {
                     this.ParentNodeTable[node] = parentNode;
-                    //if (this.ChildNodeCollectionTable[parentNode] == null)
                     if (!this.ChildNodeCollectionTable.ContainsKey(parentNode))
                     {
-                        //this.ChildNodeCollectionTable[parentNode] = new SiteMapNodeCollection();
-                        // TODO: make factory so this can be injected
-                        //this.childNodeCollectionTable[parentNode] = new SiteMapNodeCollection(this);
-
-                        this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.Create(this);
+                        this.ChildNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.Create(this);
                     }
                     this.ChildNodeCollectionTable[parentNode].Add(node);
                 }
@@ -264,7 +258,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                         {
                             url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPath, url));
                         }
-                        //if (this.UrlTable[url] != null)
                         if (this.UrlTable.ContainsKey(url))
                         {
                             throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
@@ -285,16 +278,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 if (parentNode != null)
                 {
                     this.ParentNodeTable[node] = parentNode;
-                    //if (this.ChildNodeCollectionTable[parentNode] == null)
                     if (!this.ChildNodeCollectionTable.ContainsKey(parentNode))
                     {
-                        //this.ChildNodeCollectionTable[parentNode] = new SiteMapNodeCollection();
-                        // TODO: make factory so this can be injected
-                        //this.childNodeCollectionTable[parentNode] = new SiteMapNodeCollection(this);
-
                         this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.Create(this);
                     }
-                    //this.ChildNodeCollectionTable[parentNode].Add(node);
                     this.childNodeCollectionTable[parentNode].Insert(index, node);
                 }
             }
@@ -312,17 +299,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             lock (this.synclock)
             {
-                //ISiteMapNode node2 = (ISiteMapNode)this.ParentNodeTable[node];
                 ISiteMapNode parentNode = null;
                 if (this.ParentNodeTable.ContainsKey(node))
                 {
                     parentNode = this.ParentNodeTable[node];
                     this.ParentNodeTable.Remove(node);
                 }
-                //if (node2 != null)
                 if (parentNode != null)
                 {
-                    //SiteMapNodeCollection nodes = (SiteMapNodeCollection)this.ChildNodeCollectionTable[node2];
                     var nodes = this.ChildNodeCollectionTable[parentNode];
                     if ((nodes != null) && nodes.Contains(node))
                     {
@@ -428,8 +412,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 rawUrl = UrlPath.MakeVirtualPathAppAbsolute(rawUrl);
             }
-
-            //return this.ReturnNodeIfAccessible((ISiteMapNode)this.UrlTable[rawUrl]);
             if (this.UrlTable.ContainsKey(rawUrl))
             {
                 return this.ReturnNodeIfAccessible(this.urlTable[rawUrl]);
@@ -474,40 +456,29 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
-            //SiteMapNodeCollection collection = (SiteMapNodeCollection)this.ChildNodeCollectionTable[node];
-            var collection = this.ChildNodeCollectionTable[node];
+            ISiteMapNodeCollection collection = null;
+            if (this.ChildNodeCollectionTable.ContainsKey(node))
+            {
+                collection = this.ChildNodeCollectionTable[node];
+            }
             if (collection == null)
             {
-                var node2 = (ISiteMapNode)this.KeyTable[node.Key];
-                if (node2 != null)
+                var keyNode = this.KeyTable[node.Key];
+                if (keyNode != null && this.childNodeCollectionTable.ContainsKey(keyNode))
                 {
-                    //collection = (SiteMapNodeCollection)this.ChildNodeCollectionTable[node2];
-                    collection = this.childNodeCollectionTable[node2];
+                    collection = this.childNodeCollectionTable[keyNode];
                 }
             }
             if (collection == null)
             {
-                //return SiteMapNodeCollection.Empty;
-                // TODO: make factory so this can be injected
-                //return new SiteMapNodeCollection(this);
-
                 return siteMapNodeCollectionFactory.CreateEmptyReadOnly(this);
             }
             if (!this.SecurityTrimmingEnabled)
             {
-                //return SiteMapNodeCollection.ReadOnly(collection);
-                // TODO: make factory so this can be injected
-                //return new ChildNodeCollection(this, node);
-                // TODO: Make factory so this can be injected
-                //return new ReadOnlySiteMapNodeCollection(collection);
-
                 return siteMapNodeCollectionFactory.CreateReadOnly(collection);
             }
             // TODO: find a way to inject this.
             HttpContext current = HttpContext.Current;
-            //SiteMapNodeCollection nodes2 = new SiteMapNodeCollection(collection.Count);
-            // TODO: make factory so this can be injected
-            //var secureCollection = new SiteMapNodeCollection(this);
             var secureCollection = siteMapNodeCollectionFactory.Create(this);
             foreach (ISiteMapNode secureNode in collection)
             {
@@ -516,10 +487,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     secureCollection.Add(secureNode);
                 }
             }
-            //return SiteMapNodeCollection.ReadOnly(nodes2);
-            // TODO: Make factory so this can be injected
-            //return new ReadOnlySiteMapNodeCollection(secureCollection);
-
             return siteMapNodeCollectionFactory.CreateReadOnly(secureCollection);
         }
 
@@ -552,7 +519,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 throw new ArgumentNullException("node");
             }
-            //var parentNode = (ISiteMapNode)this.ParentNodeTable[node];
             ISiteMapNode parentNode = null;
             if (this.ParentNodeTable.ContainsKey(node))
             {
@@ -560,19 +526,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             if (parentNode == null)
             {
-                //var node3 = (ISiteMapNode)this.KeyTable[node.Key];
-
-                ISiteMapNode node3 = null;
+                ISiteMapNode keyNode = null;
                 if (this.KeyTable.ContainsKey(node.Key))
                 {
-                    node3 = this.KeyTable[node.Key];
+                    keyNode = this.KeyTable[node.Key];
                 }
-                if (node3 != null)
+                if (keyNode != null)
                 {
-                    //parentNode = (ISiteMapNode)this.ParentNodeTable[node3];
-                    if (this.ParentNodeTable.ContainsKey(node3))
+                    if (this.ParentNodeTable.ContainsKey(keyNode))
                     {
-                        parentNode = this.ParentNodeTable[node3];
+                        parentNode = this.ParentNodeTable[keyNode];
                     }
                 }
             }
@@ -682,8 +645,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 context.Items[aclCacheItemKey] = new Dictionary<ISiteMapNode, bool>();
             }
-            Dictionary<ISiteMapNode, bool> aclCacheItem
-                = (Dictionary<ISiteMapNode, bool>)context.Items[aclCacheItemKey];
+            var aclCacheItem = (Dictionary<ISiteMapNode, bool>)context.Items[aclCacheItemKey];
 
             // Is the result of this call cached?
             if (!aclCacheItem.ContainsKey(node))
@@ -836,8 +798,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // Check accessibility
             if (node != null)
             {
-                //if (node.IsAccessibleToUser(context))
-                if (this.IsAccessibleToUser(context, node))
+                if (node.IsAccessibleToUser(context))
                 {
                     return node;
                 }
@@ -863,14 +824,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (rootNode != null)
             {
                 // Get all child nodes
-                //SiteMapNodeCollection childNodes = GetChildNodes(rootNode);
                 var childNodes = GetChildNodes(rootNode);
 
                 // Search current level
-                foreach (ISiteMapNode node in childNodes)
+                foreach (ISiteMapNode mvcNode in childNodes)
                 {
                     // Check if it is an MvcSiteMapNode
-                    var mvcNode = node as ISiteMapNode;
                     if (mvcNode != null)
                     {
                         // Look at the route property
@@ -923,7 +882,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 // Find action method parameters?
                 IEnumerable<string> actionParameters = new List<string>();
-                //if (mvcNode.DynamicNodeProvider == null && mvcNode.IsDynamic == false)
                 if (mvcNode.IsDynamic == false)
                 {
                     actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
