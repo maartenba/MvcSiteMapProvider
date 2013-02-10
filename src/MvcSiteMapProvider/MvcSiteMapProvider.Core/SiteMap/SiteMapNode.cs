@@ -23,10 +23,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             ISiteMap siteMap, 
             string key,
             bool isDynamic,
-            IAttributeCollection attributes,
-            IRouteValueCollection routeValues,
-            IList<string> preservedRouteParameters,
-            IList<string> roles,
+            //IAttributeCollection attributes,
+            //IRouteValueCollection routeValues,
+            //IList<string> preservedRouteParameters,
+            //IList<string> roles,
+            ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
@@ -39,14 +40,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMap");
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("key");
-            if (attributes == null)
-                throw new ArgumentNullException("attributes");
-            if (routeValues == null)
-                throw new ArgumentNullException("routeValues");
-            if (preservedRouteParameters == null)
-                throw new ArgumentNullException("preservedRouteParameters");
-            if (roles == null)
-                throw new ArgumentNullException("roles");
+            //if (attributes == null)
+            //    throw new ArgumentNullException("attributes");
+            //if (routeValues == null)
+            //    throw new ArgumentNullException("routeValues");
+            //if (preservedRouteParameters == null)
+            //    throw new ArgumentNullException("preservedRouteParameters");
+            //if (roles == null)
+            //    throw new ArgumentNullException("roles");
+            if (siteMapNodeChildStateFactory == null)
+                throw new ArgumentNullException("siteMapNodeChildStateFactory");
             if (localizationService == null)
                 throw new ArgumentNullException("localizationService");
             if (dynamicNodeProviderStrategy == null)
@@ -63,16 +66,22 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMap = siteMap;
             this.key = key;
             this.isDynamic = isDynamic;
-            this.attributes = attributes;
-            this.routeValues = routeValues;
-            this.preservedRouteParameters = preservedRouteParameters;
-            this.roles = roles;
+            //this.attributes = attributes;
+            //this.routeValues = routeValues;
+            //this.preservedRouteParameters = preservedRouteParameters;
+            //this.roles = roles;
             this.localizationService = localizationService;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
+
+            // Initialize child collections
+            this.attributes = siteMapNodeChildStateFactory.CreateAttributeCollection(siteMap, localizationService);
+            this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueCollection(siteMap);
+            this.preservedRouteParameters = siteMapNodeChildStateFactory.CreatePreservedRouteParameterCollection(siteMap);
+            this.roles = siteMapNodeChildStateFactory.CreateRoleCollection(siteMap);
         }
 
         // Services
