@@ -723,7 +723,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>True if the route matches this node's RouteValues and Attributes collections.</returns>
         public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
         {
-            var result = RouteValues.MatchesRoute(routeValues);
+            var result = this.RouteValues.MatchesRoute(routeValues);
             if (result == true)
             {
                 // Find action method parameters?
@@ -734,7 +734,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                         controllerTypeResolver, this.Area, this.Controller, this.Action);
                 }
 
-                result = Attributes.MatchesRoute(actionParameters, RouteValues);
+                result = this.Attributes.MatchesRoute(actionParameters, routeValues);
             }
 
             return result;
