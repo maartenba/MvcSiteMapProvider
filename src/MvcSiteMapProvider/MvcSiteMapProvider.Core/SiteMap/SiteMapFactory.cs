@@ -14,7 +14,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public SiteMapFactory(
             IAclModule aclModule,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IControllerTypeResolver controllerTypeResolver
+            IControllerTypeResolver controllerTypeResolver,
+            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory
             )
         {
             if (aclModule == null)
@@ -23,21 +24,30 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("actionMethodParameterResolver");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
+            if (siteMapNodeCollectionFactory == null)
+                throw new ArgumentNullException("siteMapNodeCollectionFactory");
 
             this.aclModule = aclModule;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
+            this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
         }
 
         private readonly IAclModule aclModule;
         private readonly IActionMethodParameterResolver actionMethodParameterResolver;
         private readonly IControllerTypeResolver controllerTypeResolver;
+        private readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
 
         #region ISiteMapFactory Members
 
         public ISiteMap Create(ISiteMapBuilder siteMapBuilder)
         {
-            return new SiteMap(siteMapBuilder, aclModule, actionMethodParameterResolver, controllerTypeResolver);
+            return new SiteMap(
+                siteMapBuilder, 
+                aclModule, 
+                actionMethodParameterResolver, 
+                controllerTypeResolver, 
+                siteMapNodeCollectionFactory);
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMapNode FindSiteMapNode(string rawUrl);
         ISiteMapNode FindSiteMapNode(System.Web.HttpContext context);
         ISiteMapNode FindSiteMapNodeFromKey(string key);
-        SiteMapNodeCollection GetChildNodes(ISiteMapNode node);
+        ISiteMapNodeCollection GetChildNodes(ISiteMapNode node);
         ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel);
         ISiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel);
         ISiteMapNode GetParentNode(ISiteMapNode node);

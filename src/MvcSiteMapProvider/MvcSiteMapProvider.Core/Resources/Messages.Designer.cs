@@ -115,6 +115,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection..
+        /// </summary>
+        internal static string InvalidOffsetLength {
+            get {
+                return ResourceManager.GetString("InvalidOffsetLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An invalid element was found in the sitemap..
         /// </summary>
         internal static string InvalidSiteMapElement {
@@ -147,6 +156,15 @@ namespace MvcSiteMapProvider.Core.Resources {
         internal static string MultipleNodesWithIdenticalUrl {
             get {
                 return ResourceManager.GetString("MultipleNodesWithIdenticalUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Index is less than zero..
+        /// </summary>
+        internal static string NeedNonNegativeNumber {
+            get {
+                return ResourceManager.GetString("NeedNonNegativeNumber", resourceCulture);
             }
         }
         

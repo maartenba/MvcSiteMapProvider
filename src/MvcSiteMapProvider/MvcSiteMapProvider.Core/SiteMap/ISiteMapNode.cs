@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         string Area { get; set; }
         IDictionary<string, string> Attributes { get; }
         ChangeFrequency ChangeFrequency { get; set; }
-        SiteMapNodeCollection ChildNodes { get; set; }
+        ISiteMapNodeCollection ChildNodes { get; }
         bool Clickable { get; set; }
         string Controller { get; set; }
         string Description { get; set; }

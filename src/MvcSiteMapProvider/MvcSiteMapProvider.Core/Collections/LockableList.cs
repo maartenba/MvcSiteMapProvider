@@ -75,22 +75,22 @@ namespace MvcSiteMapProvider.Core.Collections
             get { return this.siteMap.IsReadOnly; }
         }
 
-        new public virtual void Remove(T item)
+        new public virtual bool Remove(T item)
         {
             if (this.siteMap.IsReadOnly)
             {
                 throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
             }
-            base.Remove(item);
+            return base.Remove(item);
         }
 
-        new public virtual void RemoveAll(Predicate<T> match)
+        new public virtual int RemoveAll(Predicate<T> match)
         {
             if (this.siteMap.IsReadOnly)
             {
                 throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
             }
-            base.RemoveAll(match);
+            return base.RemoveAll(match);
         }
 
         new public virtual void RemoveAt(int index)
