@@ -16,10 +16,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         : ISiteMapNodeFactory
     {
         public SiteMapNodeFactory(
-            //IExplicitResourceKeyParser explicitResourceKeyParser,
-            //IStringLocalizer stringLocalizer,
-            //IAttributeCollectionFactory attributeCollectionFactory,
-            //IRouteValueCollectionFactory routeValueCollectionFactory,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
@@ -28,14 +24,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IControllerTypeResolver controllerTypeResolver
             ) 
         {
-            //if (explicitResourceKeyParser == null)
-            //    throw new ArgumentNullException("explicitResourceKeyParser");
-            //if (stringLocalizer == null)
-            //    throw new ArgumentNullException("stringLocalizer");
-            //if (attributeCollectionFactory == null)
-            //    throw new ArgumentNullException("attributeCollectionFactory");
-            //if (routeValueCollectionFactory == null)
-            //    throw new ArgumentNullException("routeValueCollectionFactory");
             if (siteMapNodeChildStateFactory == null)
                 throw new ArgumentNullException("siteMapNodeChildStateFactory");
             if (dynamicNodeProviderStrategy == null)
@@ -49,10 +37,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
 
-            //this.explicitResourceKeyParser = explicitResourceKeyParser;
-            //this.stringLocalizer = stringLocalizer;
-            //this.attributeCollectionFactory = attributeCollectionFactory;
-            //this.routeValueCollectionFactory = routeValueCollectionFactory;
             this.siteMapNodeChildStateFactory = siteMapNodeChildStateFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
@@ -62,10 +46,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         // Services
-        //protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
-        //protected readonly IStringLocalizer stringLocalizer;
-        //protected readonly IAttributeCollectionFactory attributeCollectionFactory;
-        //protected readonly IRouteValueCollectionFactory routeValueCollectionFactory;
         protected readonly ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
@@ -89,13 +69,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected ISiteMapNode CreateInternal(ISiteMap siteMap, string key, string implicitResourceKey, bool isDynamic)
         {
             // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
-            //var localizationService = CreateLocalizationService(implicitResourceKey);
-            //var attributes = CreateAttributeCollection(siteMap, localizationService);
-            //var routeValues = CreateRouteValueCollection(siteMap);
-            //var preservedRouteParameters = CreatePreservedRouteParameterCollection(siteMap);
-            //var roles = CreateRoleCollection(siteMap);
-
-            // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
             var localizationService = siteMapNodeChildStateFactory.CreateLocalizationService(implicitResourceKey);
 
             return new SiteMapNode(
@@ -110,32 +83,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 actionMethodParameterResolver,
                 controllerTypeResolver);
         }
-
-
-        //protected virtual ILocalizationService CreateLocalizationService(string implicitResourceKey)
-        //{
-        //    return new LocalizationService(implicitResourceKey, explicitResourceKeyParser, stringLocalizer);
-        //}
-
-        //protected virtual IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
-        //{
-        //    return attributeCollectionFactory.Create(siteMap, localizationService);
-        //}
-
-        //protected virtual IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap)
-        //{
-        //    return routeValueCollectionFactory.Create(siteMap);
-        //}
-
-        //protected virtual IList<string> CreatePreservedRouteParameterCollection(ISiteMap siteMap)
-        //{
-        //    return new LockableList<string>(siteMap);
-        //}
-
-        //protected virtual IList<string> CreateRoleCollection(ISiteMap siteMap)
-        //{
-        //    return new LockableList<string>(siteMap);
-        //}
 
         #endregion
     }

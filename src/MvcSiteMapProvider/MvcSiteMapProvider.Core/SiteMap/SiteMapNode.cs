@@ -23,10 +23,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             ISiteMap siteMap, 
             string key,
             bool isDynamic,
-            //IAttributeCollection attributes,
-            //IRouteValueCollection routeValues,
-            //IList<string> preservedRouteParameters,
-            //IList<string> roles,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
@@ -40,14 +36,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMap");
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("key");
-            //if (attributes == null)
-            //    throw new ArgumentNullException("attributes");
-            //if (routeValues == null)
-            //    throw new ArgumentNullException("routeValues");
-            //if (preservedRouteParameters == null)
-            //    throw new ArgumentNullException("preservedRouteParameters");
-            //if (roles == null)
-            //    throw new ArgumentNullException("roles");
             if (siteMapNodeChildStateFactory == null)
                 throw new ArgumentNullException("siteMapNodeChildStateFactory");
             if (localizationService == null)
@@ -66,10 +54,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMap = siteMap;
             this.key = key;
             this.isDynamic = isDynamic;
-            //this.attributes = attributes;
-            //this.routeValues = routeValues;
-            //this.preservedRouteParameters = preservedRouteParameters;
-            //this.roles = roles;
             this.localizationService = localizationService;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
@@ -732,6 +716,25 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return routeData;
         }
 
+        public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
+        {
+            var result = RouteValues.MatchesRoute(routeValues);
+            if (result == true)
+            {
+                // Find action method parameters?
+                IEnumerable<string> actionParameters = new List<string>();
+                if (this.IsDynamic == false)
+                {
+                    actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
+                        controllerTypeResolver, this.Area, this.Controller, this.Action);
+                }
+
+                result = Attributes.MatchesRoute(actionParameters, RouteValues);
+            }
+
+            return result;
+        }
+
         #endregion
 
         #region MVC
@@ -788,26 +791,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         #endregion
-
-
-        public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
-        {
-            var result = RouteValues.MatchesRoute(routeValues);
-            if (result == true)
-            {
-                // Find action method parameters?
-                IEnumerable<string> actionParameters = new List<string>();
-                if (this.IsDynamic == false)
-                {
-                    actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
-                        controllerTypeResolver, this.Area, this.Controller, this.Action);
-                }
-
-                result = Attributes.MatchesRoute(actionParameters, RouteValues);
-            }
-
-            return result;
-        }
 
 
         //#region ICloneable Members
