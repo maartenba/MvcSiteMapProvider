@@ -116,6 +116,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>True if the current node is dynamic.</value>
         public virtual bool IsDynamic { get { return this.isDynamic; } }
 
+        /// <summary>
+        /// Gets whether the current node is read-only.
+        /// </summary>
+        /// <value>True if the current node is read-only.</value>
+        public virtual bool IsReadOnly { get { return this.SiteMap.IsReadOnly; } }
 
         #region Node Map Positioning
 
@@ -133,11 +138,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 {
                     return this.parentNode;
                 }
-                return this.siteMap.GetParentNode(this);
+                return this.SiteMap.GetParentNode(this);
             }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ParentNode"));
                 }
@@ -154,7 +159,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public virtual ISiteMapNodeCollection ChildNodes
         {
-            get { return this.siteMap.GetChildNodes(this); }
+            get { return this.SiteMap.GetChildNodes(this); }
         }
 
         public virtual bool IsDescendantOf(ISiteMapNode node)
@@ -225,7 +230,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                var rootNode = this.siteMap.RootNode;
+                var rootNode = this.SiteMap.RootNode;
                 if (rootNode == null)
                 {
                     throw new InvalidOperationException(Resources.Messages.SiteMapInvalidRootNode);
@@ -265,7 +270,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual bool IsInCurrentPath()
         {
             ISiteMapNode node = this;
-            return (this.siteMap.CurrentNode != null && (node == this.siteMap.CurrentNode || this.siteMap.CurrentNode.IsDescendantOf(node)));
+            return (this.SiteMap.CurrentNode != null && (node == this.SiteMap.CurrentNode || this.SiteMap.CurrentNode.IsDescendantOf(node)));
         }
 
 
@@ -319,7 +324,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public virtual bool IsAccessibleToUser(HttpContext context)
         {
-            return this.siteMap.IsAccessibleToUser(context, this);
+            return this.SiteMap.IsAccessibleToUser(context, this);
         }
 
         // TODO: Determine what the value of this property is
@@ -335,7 +340,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             set
             {
                 // TODO: Move lockable logic into another class that wraps this one.
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "HttpMethod"));
                 }
@@ -360,11 +365,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get 
             {
-                return localizationService.GetResourceString("title", this.title, this.siteMap);
+                return localizationService.GetResourceString("title", this.title, this.SiteMap);
             }
             set 
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
                 }
@@ -389,11 +394,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get
             {
-                return localizationService.GetResourceString("description", this.description, this.siteMap);
+                return localizationService.GetResourceString("description", this.description, this.SiteMap);
             }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Description"));
                 }
@@ -410,7 +415,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.targetFrame; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "TargetFrame"));
                 }
@@ -427,7 +432,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.imageUrl; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ImageUrl"));
                 }
@@ -456,7 +461,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.lastModifiedDate; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "LastModifiedDate"));
                 }
@@ -473,7 +478,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.changeFrequency; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ChangeFrequency"));
                 }
@@ -490,7 +495,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.updatePriority; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UpdatePriority"));
                 }
@@ -514,7 +519,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.visibilityProvider; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "VisibilityProvider"));
                 }
@@ -553,7 +558,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.clickable; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Clickable"));
                 }
@@ -572,7 +577,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.urlResolver; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UrlResolver"));
                 }
@@ -606,7 +611,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Url"));
                 }
@@ -631,7 +636,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.dynamicNodeProvider; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "DynamicNodeProvider"));
                 }
@@ -676,7 +681,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.route; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Route"));
                 }
@@ -753,7 +758,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return RouteValues.ContainsKey("area") && RouteValues["area"] != null ? RouteValues["area"].ToString() : ""; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Area"));
                 }
@@ -770,7 +775,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return RouteValues.ContainsKey("controller") ? RouteValues["controller"].ToString() : ""; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Controller"));
                 }
@@ -787,7 +792,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return RouteValues.ContainsKey("action") ? RouteValues["action"].ToString() : ""; }
             set
             {
-                if (this.siteMap.IsReadOnly)
+                if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Action"));
                 }
@@ -808,9 +813,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ///// </returns>
         //public virtual object Clone()
         //{
-        //    //var clone = new SiteMapNode(this.siteMap, this.key, this.ResourceKey);
+        //    //var clone = new SiteMapNode(this.SiteMap, this.key, this.ResourceKey);
 
-        //    var clone = siteMapNodeFactory.Create(this.siteMap, this.key, this.ResourceKey);
+        //    var clone = siteMapNodeFactory.Create(this.SiteMap, this.key, this.ResourceKey);
         //    clone.ParentNode = this.ParentNode;
 
         //    // TODO: implement and cascade call to SiteMapNodeCollection instead of looping here

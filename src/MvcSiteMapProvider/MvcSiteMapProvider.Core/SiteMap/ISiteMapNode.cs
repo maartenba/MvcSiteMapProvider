@@ -31,6 +31,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         bool IsDescendantOf(ISiteMapNode node);
         bool IsDynamic { get; }
         bool IsInCurrentPath();
+        bool IsReadOnly { get; }
         bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata);
         string Key { get; }
         DateTime LastModifiedDate { get; set; }
