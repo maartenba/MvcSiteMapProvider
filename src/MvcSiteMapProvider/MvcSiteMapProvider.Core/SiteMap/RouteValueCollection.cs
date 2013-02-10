@@ -16,7 +16,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
         }
 
-        // TODO: Use this to replace the "Node matches route" method...?
         public bool MatchesRoute(IDictionary<string, object> routeValues)
         {
             var routeKeys = this.Keys;
@@ -30,7 +29,5 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             return true;
         }
-
-
     }
 }

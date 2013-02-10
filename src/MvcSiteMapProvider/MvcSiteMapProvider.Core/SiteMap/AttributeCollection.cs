@@ -103,16 +103,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
         {
-            var result = true;
-
-            //// Find action method parameters?
-            //IEnumerable<string> actionParameters = new List<string>();
-            //if (this.IsDynamic == false)
-            //{
-            //    actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
-            //        controllerTypeResolver, this.Area, this.Controller, this.Action);
-            //}
-
             if (routeValues.Count > 0)
             {
                 foreach (var pair in routeValues)
@@ -145,74 +135,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     }
                 }
             }
-
-            return result;
+            return true;
         }
-
-        
-
-
-        //private bool NodeMatchesRoute(ISiteMapNode mvcNode, IDictionary<string, object> values)
-        //{
-        //    var nodeValid = true;
-
-        //    if (mvcNode != null)
-        //    {
-        //        // Find action method parameters?
-        //        IEnumerable<string> actionParameters = new List<string>();
-        //        if (mvcNode.IsDynamic == false)
-        //        {
-        //            actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
-        //                controllerTypeResolver, mvcNode.Area, mvcNode.Controller, mvcNode.Action);
-        //        }
-
-        //        // Verify route values
-        //        if (values.Count > 0)
-        //        {
-        //            // Checking for same keys and values.
-        //            if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
-        //            {
-        //                return false;
-        //            }
-
-        //            foreach (var pair in values)
-        //            {
-        //                if (mvcNode.Attributes.ContainsKey(pair.Key) && !string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
-        //                {
-        //                    if (mvcNode.Attributes[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
-        //                    {
-        //                        continue;
-        //                    }
-        //                    else
-        //                    {
-        //                        // Is the current pair.Key a parameter on the action method?
-        //                        if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
-        //                        {
-        //                            return false;
-        //                        }
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
-        //                    {
-        //                        continue;
-        //                    }
-        //                    else if (pair.Key == "area")
-        //                    {
-        //                        return false;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        nodeValid = false;
-        //    }
-
-        //    return nodeValid;
-        //}
-
     }
 }
