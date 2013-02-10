@@ -54,6 +54,8 @@
     <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Cache\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Collections\GenericDictionaryFactory.cs" />
+    <Compile Include="Collections\IGenericDictionaryFactory.cs" />
     <Compile Include="Collections\LockableDictionary.cs" />
     <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
