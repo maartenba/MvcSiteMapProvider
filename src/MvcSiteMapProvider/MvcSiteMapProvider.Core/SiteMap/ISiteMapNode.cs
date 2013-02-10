@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         string Action { get; set; }
         string Area { get; set; }
-        IDictionary<string, string> Attributes { get; }
+        IAttributeCollection Attributes { get; }
         ChangeFrequency ChangeFrequency { get; set; }
         ISiteMapNodeCollection ChildNodes { get; }
         bool Clickable { get; set; }
@@ -34,6 +34,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata);
         string Key { get; }
         DateTime LastModifiedDate { get; set; }
+        bool MatchesRoute(IDictionary<string, object> routeValues);
         ISiteMapNode NextSibling { get; }
         ISiteMapNode ParentNode { get; set; }
         IList<string> PreservedRouteParameters { get; }

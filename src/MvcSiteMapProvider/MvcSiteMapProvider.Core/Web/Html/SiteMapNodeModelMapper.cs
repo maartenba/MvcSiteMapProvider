@@ -36,7 +36,7 @@ namespace MvcSiteMapProvider.Core.Web.Html
                 IsClickable = (node == null || node.Clickable),
                 RouteValues = (node != null ? (IDictionary<string, object>)node.RouteValues : new Dictionary<string, object>()),
                 // TODO: rename to Attributes
-                MetaAttributes = (node != null ? node.Attributes : new Dictionary<string, string>()),
+                MetaAttributes = (node != null ? (IDictionary<string, string>)node.Attributes : new Dictionary<string, string>()),
                 SourceMetadata = sourceMetadata
             };
             return nodeToAdd;

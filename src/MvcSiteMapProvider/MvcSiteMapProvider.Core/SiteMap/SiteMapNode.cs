@@ -8,6 +8,7 @@ using System.Linq;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Globalization;
+using MvcSiteMapProvider.Core.Mvc;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -22,14 +23,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
             ISiteMap siteMap, 
             string key,
             bool isDynamic,
-            IDictionary<string, string> attributes,
+            IAttributeCollection attributes,
             IRouteValueCollection routeValues,
             IList<string> preservedRouteParameters,
             IList<string> roles,
             ILocalizationService localizationService,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
-            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy
+            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            IActionMethodParameterResolver actionMethodParameterResolver,
+            IControllerTypeResolver controllerTypeResolver
             )
         {
             if (siteMap == null)
@@ -52,6 +55,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
             if (siteMapNodeVisibilityProviderStrategy == null)
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
+            if (actionMethodParameterResolver == null)
+                throw new ArgumentNullException("actionMethodParameterResolver");
+            if (controllerTypeResolver == null)
+                throw new ArgumentNullException("controllerTypeResolver");
 
             this.siteMap = siteMap;
             this.key = key;
@@ -64,6 +71,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
+            this.actionMethodParameterResolver = actionMethodParameterResolver;
+            this.controllerTypeResolver = controllerTypeResolver;
         }
 
         // Services
@@ -71,9 +80,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
+        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
+        protected readonly IControllerTypeResolver controllerTypeResolver;
 
         // Child collections and dictionaries
-        protected readonly IDictionary<string, string> attributes;
+        protected readonly IAttributeCollection attributes;
         protected readonly IRouteValueCollection routeValues;
         protected readonly IList<string> preservedRouteParameters;
         protected readonly IList<string> roles;
@@ -435,7 +446,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
-        public virtual IDictionary<string, string> Attributes { get { return this.attributes; } }
+        public virtual IAttributeCollection Attributes { get { return this.attributes; } }
 
         /// <summary>
         /// Gets or sets the roles.
@@ -768,6 +779,26 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         #endregion
+
+
+        public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
+        {
+            var result = RouteValues.MatchesRoute(routeValues);
+            if (result == true)
+            {
+                // Find action method parameters?
+                IEnumerable<string> actionParameters = new List<string>();
+                if (this.IsDynamic == false)
+                {
+                    actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
+                        controllerTypeResolver, this.Area, this.Controller, this.Action);
+                }
+
+                result = Attributes.MatchesRoute(actionParameters, RouteValues);
+            }
+
+            return result;
+        }
 
 
         //#region ICloneable Members

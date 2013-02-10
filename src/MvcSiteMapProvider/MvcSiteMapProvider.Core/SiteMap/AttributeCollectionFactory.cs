@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         #region IAttributeCollectionFactory Members
 
-        public IDictionary<string, string> Create(ISiteMap siteMap, ILocalizationService localizationService)
+        public IAttributeCollection Create(ISiteMap siteMap, ILocalizationService localizationService)
         {
             return new AttributeCollection(siteMap, localizationService);
         }

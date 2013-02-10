@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
+using System.Web.Mvc;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Globalization;
+using MvcSiteMapProvider.Core.Mvc;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -14,7 +15,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// TODO: Update summary.
     /// </summary>
     public class AttributeCollection
-        : LockableDictionary<string, string>
+        : LockableDictionary<string, string>, IAttributeCollection
     {
         public AttributeCollection(
             ISiteMap siteMap,
@@ -29,6 +30,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         protected readonly ILocalizationService localizationService;
+        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
 
         public override void Add(string key, string value)
         {
@@ -98,6 +100,119 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 base[key] = localizationService.ExtractExplicitResourceKey(key, value);
             }
         }
+
+        public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
+        {
+            var result = true;
+
+            //// Find action method parameters?
+            //IEnumerable<string> actionParameters = new List<string>();
+            //if (this.IsDynamic == false)
+            //{
+            //    actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
+            //        controllerTypeResolver, this.Area, this.Controller, this.Action);
+            //}
+
+            if (routeValues.Count > 0)
+            {
+                foreach (var pair in routeValues)
+                {
+                    if (this.ContainsKey(pair.Key) && !string.IsNullOrEmpty(this[pair.Key]))
+                    {
+                        if (this[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            // Is the current pair.Key a parameter on the action method?
+                            if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
+                        {
+                            continue;
+                        }
+                        else if (pair.Key == "area")
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        
+
+
+        //private bool NodeMatchesRoute(ISiteMapNode mvcNode, IDictionary<string, object> values)
+        //{
+        //    var nodeValid = true;
+
+        //    if (mvcNode != null)
+        //    {
+        //        // Find action method parameters?
+        //        IEnumerable<string> actionParameters = new List<string>();
+        //        if (mvcNode.IsDynamic == false)
+        //        {
+        //            actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
+        //                controllerTypeResolver, mvcNode.Area, mvcNode.Controller, mvcNode.Action);
+        //        }
+
+        //        // Verify route values
+        //        if (values.Count > 0)
+        //        {
+        //            // Checking for same keys and values.
+        //            if (!CompareMustMatchRouteValues(mvcNode.RouteValues, values))
+        //            {
+        //                return false;
+        //            }
+
+        //            foreach (var pair in values)
+        //            {
+        //                if (mvcNode.Attributes.ContainsKey(pair.Key) && !string.IsNullOrEmpty(mvcNode.Attributes[pair.Key]))
+        //                {
+        //                    if (mvcNode.Attributes[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
+        //                    {
+        //                        continue;
+        //                    }
+        //                    else
+        //                    {
+        //                        // Is the current pair.Key a parameter on the action method?
+        //                        if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
+        //                        {
+        //                            return false;
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
+        //                    {
+        //                        continue;
+        //                    }
+        //                    else if (pair.Key == "area")
+        //                    {
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        nodeValid = false;
+        //    }
+
+        //    return nodeValid;
+        //}
 
     }
 }

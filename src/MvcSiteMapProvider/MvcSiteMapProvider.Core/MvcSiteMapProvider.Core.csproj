@@ -116,6 +116,7 @@
     <Compile Include="SiteMap\Builder\SiteMapBuilderSet.cs" />
     <Compile Include="SiteMap\Builder\XmlSiteMapBuilderFactory.cs" />
     <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolver.cs" />
+    <Compile Include="SiteMap\IAttributeCollection.cs" />
     <Compile Include="SiteMap\ISiteMapNodeCollectionFactory.cs" />
     <Compile Include="SiteMap\ReadOnlySiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />

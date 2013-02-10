@@ -5,6 +5,7 @@ using System.Text;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 using MvcSiteMapProvider.Core.Globalization;
 using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Mvc;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -21,7 +22,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IRouteValueCollectionFactory routeValueCollectionFactory,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
-            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy
+            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            IActionMethodParameterResolver actionMethodParameterResolver,
+            IControllerTypeResolver controllerTypeResolver
             ) 
         {
             if (explicitResourceKeyParser == null)
@@ -38,6 +41,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
             if (siteMapNodeVisibilityProviderStrategy == null)
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
+            if (actionMethodParameterResolver == null)
+                throw new ArgumentNullException("actionMethodParameterResolver");
+            if (controllerTypeResolver == null)
+                throw new ArgumentNullException("controllerTypeResolver");
 
             this.explicitResourceKeyParser = explicitResourceKeyParser;
             this.stringLocalizer = stringLocalizer;
@@ -46,6 +53,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
+            this.actionMethodParameterResolver = actionMethodParameterResolver;
+            this.controllerTypeResolver = controllerTypeResolver;
         }
 
         // Services
@@ -56,6 +65,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
+        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
+        protected readonly IControllerTypeResolver controllerTypeResolver;
 
 
         #region ISiteMapNodeFactory Members
@@ -90,7 +101,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 localizationService,
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy,
-                siteMapNodeVisibilityProviderStrategy);
+                siteMapNodeVisibilityProviderStrategy,
+                actionMethodParameterResolver,
+                controllerTypeResolver);
         }
 
 
@@ -99,7 +112,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return new LocalizationService(implicitResourceKey, explicitResourceKeyParser, stringLocalizer);
         }
 
-        protected virtual IDictionary<string, string> CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
+        protected virtual IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
         {
             return attributeCollectionFactory.Create(siteMap, localizationService);
         }
