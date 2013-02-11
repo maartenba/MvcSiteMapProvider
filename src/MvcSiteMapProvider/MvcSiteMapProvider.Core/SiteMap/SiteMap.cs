@@ -103,6 +103,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region ISiteMap Members
 
+        /// <summary>
+        /// Gets whether the current sitemap is read-only.
+        /// </summary>
+        /// <value><c>true</c> if the current sitemap is read-only; otherwise <c>false</c>.</value>
         public virtual bool IsReadOnly
         {
             get { return this.isReadOnly; }
@@ -349,6 +353,37 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
+        /// <summary>
+        /// Gets the root <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object of the site map data that the current provider represents.
+        /// </summary>
+        public virtual ISiteMapNode RootNode
+        {
+            get { return this.ReturnNodeIfAccessible(root); }
+        }
+
+        public virtual ISiteMapNode BuildSiteMap()
+        {
+            // Return immediately if this method has been called before
+            if (root != null)
+            {
+                return root;
+            }
+            lock (this.synclock)
+            {
+                // Return immediately if the prevous lock called this before
+                if (root != null)
+                {
+                    return root;
+                }
+                // Set the sitemap to read-write so we can populate it.
+                this.isReadOnly = false;
+                root = siteMapBuilder.BuildSiteMap(this, root);
+                // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
+                this.isReadOnly = true;
+                return root;
+            }
+        }
+
 
         /// <summary>
         /// Gets the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page.
@@ -435,12 +470,91 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return currentNode;
         }
 
+        /// <summary>
+        /// Finds the site map node.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
+        {
+            return FindSiteMapNode(HttpContext.Current, context.RouteData);
+        }
+
+        /// <summary>
+        /// Finds the site map node.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="routeData">The route data.</param>
+        /// <returns></returns>
+        protected virtual ISiteMapNode FindSiteMapNode(HttpContext context, RouteData routeData)
+        {
+            // Node
+            ISiteMapNode node = null;
+
+            // TODO: find a way to inject HttpContext2
+
+            // Fetch route data
+            var httpContext = new HttpContext2(context);
+            if (routeData != null)
+            {
+                // TODO: find a way to inject requestcontext
+                RequestContext requestContext = new RequestContext(httpContext, routeData);
+                VirtualPathData vpd = routeData.Route.GetVirtualPath(
+                    requestContext, routeData.Values);
+                string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
+                    ?? string.Empty).TrimEnd('/') + "/";
+                node = this.FindSiteMapNode(httpContext.Request.Path);
+
+                if (!routeData.Values.ContainsKey("area"))
+                {
+                    if (routeData.DataTokens["area"] != null)
+                    {
+                        routeData.Values.Add("area", routeData.DataTokens["area"]);
+                    }
+                    else
+                    {
+                        routeData.Values.Add("area", "");
+                    }
+                }
+
+                ISiteMapNode mvcNode = node;
+                if (mvcNode == null || routeData.Route != RouteTable.Routes[mvcNode.Route])
+                {
+                    if (RootNode.MatchesRoute(routeData.Values))
+                    {
+                        node = RootNode;
+                    }
+                }
+
+                if (node == null)
+                {
+                    node = FindControllerActionNode(RootNode, routeData.Values, routeData.Route);
+                }
+            }
+
+            // Try base class
+            if (node == null)
+            {
+                node = this.FindSiteMapNode(context);
+            }
+
+            // Check accessibility
+            if (node != null)
+            {
+                if (node.IsAccessibleToUser(context))
+                {
+                    return node;
+                }
+            }
+            return null;
+        }
+
         public virtual ISiteMapNode FindSiteMapNodeFromKey(string key)
         {
             ISiteMapNode node = this.FindSiteMapNode(key);
             if (node == null)
             {
-                node = (ISiteMapNode)this.keyTable[key];
+                node = this.keyTable[key];
             }
             return this.ReturnNodeIfAccessible(node);
         }
@@ -672,13 +786,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        /// <summary>
-        /// Gets the root <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object of the site map data that the current provider represents.
-        /// </summary>
-        public virtual ISiteMapNode RootNode
-        {
-            get { return this.ReturnNodeIfAccessible(root); }
-        }
+        
 
         /// <summary>
         /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
@@ -699,107 +807,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        public virtual ISiteMapNode BuildSiteMap()
-        {
-            // Return immediately if this method has been called before
-            if (root != null) 
-            {
-                return root;
-            }
-            lock (this.synclock)
-            {
-                // Return immediately if the prevous lock called this before
-                if (root != null)
-                {
-                    return root;
-                }
-                // Set the sitemap to read-write so we can populate it.
-                this.isReadOnly = false;
-                root = siteMapBuilder.BuildSiteMap(this, root);
-                // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
-                this.isReadOnly = true;
-                return root;
-            }
-        }
+        
 
-        /// <summary>
-        /// Finds the site map node.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns></returns>
-        public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
-        {
-            return FindSiteMapNode(HttpContext.Current, context.RouteData);
-        }
 
-        /// <summary>
-        /// Finds the site map node.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="routeData">The route data.</param>
-        /// <returns></returns>
-        protected virtual ISiteMapNode FindSiteMapNode(HttpContext context, RouteData routeData)
-        {
-            // Node
-            ISiteMapNode node = null;
-
-            // TODO: find a way to inject HttpContext2
-
-            // Fetch route data
-            var httpContext = new HttpContext2(context);
-            if (routeData != null)
-            {
-                // TODO: find a way to inject requestcontext
-                RequestContext requestContext = new RequestContext(httpContext, routeData);
-                VirtualPathData vpd = routeData.Route.GetVirtualPath(
-                    requestContext, routeData.Values);
-                string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
-                    ?? string.Empty).TrimEnd('/') + "/";
-                node = this.FindSiteMapNode(httpContext.Request.Path) as ISiteMapNode;
-
-                if (!routeData.Values.ContainsKey("area"))
-                {
-                    if (routeData.DataTokens["area"] != null)
-                    {
-                        routeData.Values.Add("area", routeData.DataTokens["area"]);
-                    }
-                    else
-                    {
-                        routeData.Values.Add("area", "");
-                    }
-                }
-
-                ISiteMapNode mvcNode = node as ISiteMapNode;
-                if (mvcNode == null || routeData.Route != RouteTable.Routes[mvcNode.Route])
-                {
-                    if (RootNode.MatchesRoute(routeData.Values))
-                    {
-                        node = RootNode;
-                    }
-                }
-
-                if (node == null)
-                {
-                    node = FindControllerActionNode(RootNode, routeData.Values, routeData.Route);
-                }
-            }
-
-            // Try base class
-            if (node == null)
-            {
-                node = this.FindSiteMapNode(context);
-            }
-
-            // Check accessibility
-            if (node != null)
-            {
-                if (node.IsAccessibleToUser(context))
-                {
-                    return node;
-                }
-            }
-            return null;
-        }
 
         #endregion
 

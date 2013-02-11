@@ -152,7 +152,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         /// <summary>
-        /// Gets or sets the child nodes.
+        /// Gets the child nodes.
         /// </summary>
         /// <value>
         /// The child nodes.
@@ -162,6 +162,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.SiteMap.GetChildNodes(this); }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the current site map node is a child or a direct descendant of the specified node.
+        /// </summary>
+        /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.ISiteMapNode"/> to check if the current node is a child or descendant of.</param>
+        /// <returns>true if the current node is a child or descendant of the specified node; otherwise, false.</returns>
         public virtual bool IsDescendantOf(ISiteMapNode node)
         {
             for (var node2 = this.ParentNode; node2 != null; node2 = node2.ParentNode)
@@ -190,7 +195,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     int index = siblingNodes.IndexOf(this);
                     if ((index >= 0) && (index < (siblingNodes.Count - 1)))
                     {
-                        return (ISiteMapNode)siblingNodes[index + 1];
+                        return siblingNodes[index + 1];
                     }
                 }
                 return null;
@@ -213,7 +218,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     int index = siblingNodes.IndexOf(this);
                     if ((index > 0) && (index <= (siblingNodes.Count - 1)))
                     {
-                        return (ISiteMapNode)siblingNodes[index - 1];
+                        return siblingNodes[index - 1];
                     }
                 }
                 return null;
@@ -263,7 +268,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <summary>
         /// Determines whether the specified node is in current path.
         /// </summary>
-        /// <param name="current">The current.</param>
         /// <returns>
         /// 	<c>true</c> if the specified node is in current path; otherwise, <c>false</c>.
         /// </returns>
@@ -273,7 +277,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return (this.SiteMap.CurrentNode != null && (node == this.SiteMap.CurrentNode || this.SiteMap.CurrentNode.IsDescendantOf(node)));
         }
 
-
+        /// <summary>
+        /// Gets a value indicating whether the current SiteMapNode has any child nodes.
+        /// </summary>
         public virtual bool HasChildNodes
         {
             get
@@ -286,7 +292,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <summary>
         /// Gets the level of the current SiteMapNode
         /// </summary>
-        /// <param name="current">The current SiteMapNode</param>
         /// <returns>The level of the current SiteMapNode</returns>
         public virtual int GetNodeLevel()
         {
@@ -305,6 +310,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return level;
         }
 
+        /// <summary>
+        /// A reference to the root SiteMap object for the current graph.
+        /// </summary>
         public virtual ISiteMap SiteMap
         {
             get
@@ -447,7 +455,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual IAttributeCollection Attributes { get { return this.attributes; } }
 
         /// <summary>
-        /// Gets or sets the roles.
+        /// Gets the roles.
         /// </summary>
         /// <value>The roles.</value>
         public virtual IList<string> Roles { get { return this.roles; } }
@@ -619,6 +627,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
+        /// <summary>
+        /// The raw URL before being evaluated by any URL resovler.
+        /// </summary>
         public virtual string UnresolvedUrl { get { return this.url; } }
 
         #endregion
@@ -659,7 +670,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets whether the current node has a dynamic node provider.
         /// </summary>
         /// <value>
-        /// True if there is a provider.
+        /// <c>true</c> if there is a provider; otherwise <c>false</c>.
         /// </value>
         public virtual bool HasDynamicNodeProvider
         {
@@ -690,15 +701,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         /// <summary>
-        /// Gets or sets the route values.
+        /// Gets the route values.
         /// </summary>
         /// <value>The route values.</value>
         public virtual IRouteValueCollection RouteValues { get { return this.routeValues; } }
 
         /// <summary>
-        /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
+        /// Gets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
-        /// <value>The attributes.</value>
+        /// <value>The preserved route parameters.</value>
         public virtual IList<string> PreservedRouteParameters { get { return this.preservedRouteParameters; } }
 
 
@@ -725,7 +736,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Determines whether this node matches the supplied route values.
         /// </summary>
         /// <param name="routeValues">An IDictionary<string, object> of route values.</param>
-        /// <returns>True if the route matches this node's RouteValues and Attributes collections.</returns>
+        /// <returns><c>true</c> if the route matches this node's RouteValues and Attributes collections; otherwise <c>false</c>.</returns>
         public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
         {
             var result = this.RouteValues.MatchesRoute(routeValues);

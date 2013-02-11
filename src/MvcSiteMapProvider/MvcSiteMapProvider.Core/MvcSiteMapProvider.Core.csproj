@@ -80,6 +80,8 @@
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
     <Compile Include="Mvc\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
+    <Compile Include="RequestCache\IRequestCache.cs" />
+    <Compile Include="RequestCache\RequestCache.cs" />
     <Compile Include="SiteMap\AttributeCollectionFactory.cs" />
     <Compile Include="SiteMap\Builder\IReflectionSiteMapBuilderFactory.cs" />
     <Compile Include="SiteMap\Builder\IXmlSiteMapBuilderFactory.cs" />
@@ -119,7 +121,11 @@
     <Compile Include="SiteMap\IAttributeCollection.cs" />
     <Compile Include="SiteMap\ISiteMapNodeChildStateFactory.cs" />
     <Compile Include="SiteMap\ISiteMapNodeCollectionFactory.cs" />
+    <Compile Include="SiteMap\LockableSiteMap.cs" />
+    <Compile Include="SiteMap\LockableSiteMapNode.cs" />
     <Compile Include="SiteMap\ReadOnlySiteMapNodeCollection.cs" />
+    <Compile Include="SiteMap\RequestCacheableSiteMap.cs" />
+    <Compile Include="SiteMap\RequestCacheableSiteMapNode.cs" />
     <Compile Include="SiteMap\SiteMapNodeChildStateFactory.cs" />
     <Compile Include="SiteMap\SiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\DynamicNodeProviderBase.cs" />

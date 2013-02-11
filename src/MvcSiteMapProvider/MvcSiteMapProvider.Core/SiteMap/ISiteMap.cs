@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web;
+using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -7,11 +9,20 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// </summary>
     public interface ISiteMap
     {
-        // ISiteMapProvider members
+        // Data structure management
+        bool IsReadOnly { get; }
+        void AddNode(ISiteMapNode node);
+        void AddNode(ISiteMapNode node, ISiteMapNode parentNode);
+        void RemoveNode(ISiteMapNode node);
+        void Clear();
+        ISiteMapNode RootNode { get; }
+        ISiteMapNode BuildSiteMap();
+
         ISiteMapNode CurrentNode { get; }
         bool EnableLocalization { get; set; }
         ISiteMapNode FindSiteMapNode(string rawUrl);
-        ISiteMapNode FindSiteMapNode(System.Web.HttpContext context);
+        ISiteMapNode FindSiteMapNode(HttpContext context);
+        ISiteMapNode FindSiteMapNode(ControllerContext context);
         ISiteMapNode FindSiteMapNodeFromKey(string key);
         ISiteMapNodeCollection GetChildNodes(ISiteMapNode node);
         ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel);
@@ -21,47 +32,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(ISiteMapNode node, int walkupLevels, int relativeDepthFromWalkup);
         void HintAncestorNodes(ISiteMapNode node, int upLevel);
         void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel);
-        //void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes);
-        bool IsAccessibleToUser(System.Web.HttpContext context, ISiteMapNode node);
-        //SiteMap ParentProvider { get; set; }
+        bool IsAccessibleToUser(HttpContext context, ISiteMapNode node);
         string ResourceKey { get; set; }
-        ISiteMapNode RootNode { get; }
-        //System.Web.SiteMapProvider RootProvider { get; }
         bool SecurityTrimmingEnabled { get; set; }
-        //event System.Web.SiteMapResolveEventHandler SiteMapResolve;
-
-        // IStaticSiteMapProvider members
-
-        ISiteMapNode BuildSiteMap();
-        //System.Web.SiteMapNode FindSiteMapNode(string rawUrl);
-        //System.Web.SiteMapNode FindSiteMapNodeFromKey(string key);
-        //System.Web.SiteMapNodeCollection GetChildNodes(System.Web.SiteMapNode node);
-        //System.Web.SiteMapNode GetParentNode(System.Web.SiteMapNode node);
-
-        // IDefaultSiteMapProvider members
-        //MvcSiteMapProvider.Extensibility.IAclModule AclModule { get; set; }
-        //MvcSiteMapProvider.Extensibility.IActionMethodParameterResolver ActionMethodParameterResolver { get; set; }
-        //System.Web.SiteMapNode BuildSiteMap(); // From IStaticSiteMapProvider
-        //int CacheDuration { get; }
-        //MvcSiteMapProvider.Extensibility.IControllerTypeResolver ControllerTypeResolver { get; set; }
-        //System.Web.SiteMapNode CurrentNode { get; } // From ISiteMapProvider
-        //System.Web.SiteMapNode FindSiteMapNode(System.Web.HttpContext context); // From ISiteMapProvider
-        ISiteMapNode FindSiteMapNode(System.Web.Mvc.ControllerContext context);
-        //void Initialize(string name, System.Collections.Specialized.NameValueCollection attributes); // From ISiteMapProvider
-        //bool IsAccessibleToUser(System.Web.HttpContext context, System.Web.SiteMapNode node); // From ISiteMapProvider
-        //MvcSiteMapProvider.Extensibility.INodeKeyGenerator NodeKeyGenerator { get; set; }
-        //void Refresh();
-        //System.Web.SiteMapNode RootNode { get; } // From ISiteMapProvider
-        //MvcSiteMapProvider.Extensibility.ISiteMapNodeUrlResolver SiteMapNodeUrlResolver { get; set; }
-        //MvcSiteMapProvider.Extensibility.ISiteMapNodeVisibilityProvider SiteMapNodeVisibilityProvider { get; set; }
-        //MvcSiteMapProvider.Extensibility.ISiteMapProviderEventHandler SiteMapProviderEventHandler { get; set; }
-
-
-        // Data structure management
-        void AddNode(ISiteMapNode node);
-        void AddNode(ISiteMapNode node, ISiteMapNode parentNode);
-        void RemoveNode(ISiteMapNode node);
-        void Clear();
-        bool IsReadOnly { get; }
     }
 }
