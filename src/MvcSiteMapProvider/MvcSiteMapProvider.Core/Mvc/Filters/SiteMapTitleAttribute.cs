@@ -88,12 +88,14 @@ namespace MvcSiteMapProvider.Core.Mvc.Filters
                         if (Target == AttributeTarget.ParentNode && currentSiteMap.CurrentNode.ParentNode != null)
                         {
                             OriginalTitle = currentSiteMap.CurrentNode.ParentNode.Title;
-                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(target.ToString());
+                            currentSiteMap.CurrentNode.ParentNode.Title = target.ToString();
+                            //((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(target.ToString());
                         }
                         else
                         {
                             OriginalTitle = currentSiteMap.CurrentNode.Title;
-                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(target.ToString());
+                            currentSiteMap.CurrentNode.Title = target.ToString();
+                            //((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(target.ToString());
                         }
                     }
                 }
@@ -115,11 +117,13 @@ namespace MvcSiteMapProvider.Core.Mvc.Filters
                     {
                         if (Target == AttributeTarget.ParentNode && currentSiteMap.CurrentNode.ParentNode != null)
                         {
-                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(OriginalTitle);
+                            currentSiteMap.CurrentNode.ParentNode.Title = OriginalTitle;
+                            //((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(OriginalTitle);
                         }
                         else
                         {
-                            ((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(OriginalTitle);
+                            currentSiteMap.CurrentNode.Title = OriginalTitle;
+                            //((MvcSiteMapProvider.Core.SiteMap.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(OriginalTitle);
                         }
                         OriginalTitle = "";
                     }

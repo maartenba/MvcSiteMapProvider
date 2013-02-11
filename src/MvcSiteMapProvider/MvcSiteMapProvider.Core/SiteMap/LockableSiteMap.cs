@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MvcSiteMapProvider.Core.SiteMap.Builder;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -23,7 +24,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
         private readonly ISiteMap innerSiteMap;
-
 
 
         #region ISiteMap Members
@@ -71,12 +71,17 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.innerSiteMap.RootNode; }
         }
 
-        public ISiteMapNode BuildSiteMap()
+        public void BuildSiteMap(ISiteMap siteMap)
         {
+            if (siteMap == null)
+            {
+                siteMap = this;
+            }
+            // Set the sitemap to read-write so we can populate it.
             this.IsReadOnly = false;
-            var result = this.innerSiteMap.BuildSiteMap();
+            this.innerSiteMap.BuildSiteMap(siteMap);
+            // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
             this.IsReadOnly = true;
-            return result;
         }
 
         public ISiteMapNode CurrentNode
@@ -154,7 +159,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public bool IsAccessibleToUser(HttpContext context, ISiteMapNode node)
         {
-            return this.IsAccessibleToUser(context, node);
+            return this.innerSiteMap.IsAccessibleToUser(context, node);
         }
 
         public string ResourceKey

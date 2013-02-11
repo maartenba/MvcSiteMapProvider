@@ -50,7 +50,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.aclModule = aclModule;
             this.controllerTypeResolver = controllerTypeResolver;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
-            this.genericDictionaryFactory = genericDictionaryFactory;
+            //this.genericDictionaryFactory = genericDictionaryFactory;
 
             // Initialize dictionaries
             this.childNodeCollectionTable = genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNodeCollection>();
@@ -58,20 +58,19 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.parentNodeTable = genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNode>();
             this.urlTable = genericDictionaryFactory.Create<string, ISiteMapNode>();
 
-            // TODO: move request caching to a different class that wraps this one
-            this.instanceId = Guid.NewGuid();
-            this.aclCacheItemKey = "__MVCSITEMAP_ACL_" + this.instanceId.ToString();
-            this.currentNodeCacheKey = "__MVCSITEMAP_CN_" + this.instanceId.ToString();
+            //// TODO: move request caching to a different class that wraps this one
+            //this.instanceId = Guid.NewGuid();
+            //this.aclCacheItemKey = "__MVCSITEMAP_ACL_" + this.instanceId.ToString();
+            //this.currentNodeCacheKey = "__MVCSITEMAP_CN_" + this.instanceId.ToString();
         }
 
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly IAclModule aclModule;
         protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
-        protected readonly IGenericDictionaryFactory genericDictionaryFactory;
+        //protected readonly IGenericDictionaryFactory genericDictionaryFactory;
 
-        protected readonly Guid instanceId;
-        protected bool isReadOnly = false;
+        //protected readonly Guid instanceId;
 
         #region SiteMapProvider state
 
@@ -93,8 +92,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         #region DefaultSiteMapProvider state
 
         protected readonly object synclock = new object();
-        protected string aclCacheItemKey;
-        protected string currentNodeCacheKey;
+        //protected string aclCacheItemKey;
+        //protected string currentNodeCacheKey;
         protected ISiteMapNode root;
 
         #endregion
@@ -109,7 +108,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value><c>true</c> if the current sitemap is read-only; otherwise <c>false</c>.</value>
         public virtual bool IsReadOnly
         {
-            get { return this.isReadOnly; }
+            get { return false; }
         }
 
         /// <summary>
@@ -118,11 +117,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> to add to the node collection maintained by the provider.</param>
         public virtual void AddNode(ISiteMapNode node)
         {
-            if (this.isReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
-
             this.AddNode(node, null);
         }
 
@@ -141,11 +135,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
-            if (this.isReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
-
             //if (SiteMapProviderEventHandler.OnAddingSiteMapNode(new SiteMapProviderEventContext(this, node, root)))
             //{
 
@@ -187,10 +176,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (node == null)
             {
                 throw new ArgumentNullException("node");
-            }
-            if (this.isReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
             lock (this.synclock)
             {
@@ -238,75 +223,67 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
         }
 
-        public virtual void InsertNode(int index, ISiteMapNode node, ISiteMapNode parentNode)
-        {
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException("index", index, Resources.Messages.NeedNonNegativeNumber);
-            }
-            if (node == null)
-            {
-                throw new ArgumentNullException("node");
-            }
-            if (this.isReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
-            lock (this.synclock)
-            {
-                bool flag = false;
-                string url = node.Url;
-                if (!string.IsNullOrEmpty(url))
-                {
-                    if (url.StartsWith("http") || url.StartsWith("ftp"))
-                    {
-                        // This is an external url, so we will encode it
-                        url = HttpUtility.UrlEncode(url);
-                    }
-                    if (HttpRuntime.AppDomainAppVirtualPath != null)
-                    {
-                        if (!UrlPath.IsAbsolutePhysicalPath(url))
-                        {
-                            url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPath, url));
-                        }
-                        if (this.urlTable.ContainsKey(url))
-                        {
-                            throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
-                        }
-                    }
-                    flag = true;
-                }
-                string key = node.Key;
-                if (this.keyTable.ContainsKey(key))
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalKey, key));
-                }
-                this.keyTable[key] = node;
-                if (flag)
-                {
-                    this.urlTable[url] = node;
-                }
-                if (parentNode != null)
-                {
-                    this.parentNodeTable[node] = parentNode;
-                    if (!this.childNodeCollectionTable.ContainsKey(parentNode))
-                    {
-                        this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.Create(this);
-                    }
-                    this.childNodeCollectionTable[parentNode].Insert(index, node);
-                }
-            }
-        }
+        //public virtual void InsertNode(int index, ISiteMapNode node, ISiteMapNode parentNode)
+        //{
+        //    if (index < 0)
+        //    {
+        //        throw new ArgumentOutOfRangeException("index", index, Resources.Messages.NeedNonNegativeNumber);
+        //    }
+        //    if (node == null)
+        //    {
+        //        throw new ArgumentNullException("node");
+        //    }
+        //    lock (this.synclock)
+        //    {
+        //        bool flag = false;
+        //        string url = node.Url;
+        //        if (!string.IsNullOrEmpty(url))
+        //        {
+        //            if (url.StartsWith("http") || url.StartsWith("ftp"))
+        //            {
+        //                // This is an external url, so we will encode it
+        //                url = HttpUtility.UrlEncode(url);
+        //            }
+        //            if (HttpRuntime.AppDomainAppVirtualPath != null)
+        //            {
+        //                if (!UrlPath.IsAbsolutePhysicalPath(url))
+        //                {
+        //                    url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPath, url));
+        //                }
+        //                if (this.urlTable.ContainsKey(url))
+        //                {
+        //                    throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
+        //                }
+        //            }
+        //            flag = true;
+        //        }
+        //        string key = node.Key;
+        //        if (this.keyTable.ContainsKey(key))
+        //        {
+        //            throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalKey, key));
+        //        }
+        //        this.keyTable[key] = node;
+        //        if (flag)
+        //        {
+        //            this.urlTable[url] = node;
+        //        }
+        //        if (parentNode != null)
+        //        {
+        //            this.parentNodeTable[node] = parentNode;
+        //            if (!this.childNodeCollectionTable.ContainsKey(parentNode))
+        //            {
+        //                this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.Create(this);
+        //            }
+        //            this.childNodeCollectionTable[parentNode].Insert(index, node);
+        //        }
+        //    }
+        //}
 
         public virtual void RemoveNode(ISiteMapNode node)
         {
             if (node == null)
             {
                 throw new ArgumentNullException("node");
-            }
-            if (this.isReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
             lock (this.synclock)
             {
@@ -339,10 +316,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public virtual void Clear()
         {
-            if (this.isReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
             lock (this.synclock)
             {
                 root = null;
@@ -361,28 +334,41 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.ReturnNodeIfAccessible(root); }
         }
 
-        public virtual ISiteMapNode BuildSiteMap()
+        public virtual void BuildSiteMap(ISiteMap siteMap)
         {
-            // Return immediately if this method has been called before
-            if (root != null)
+            // If this was called before, just ignore this call.
+            if (root != null) return;
+
+            if (siteMap == null)
             {
-                return root;
+                siteMap = this;
             }
-            lock (this.synclock)
-            {
-                // Return immediately if the prevous lock called this before
-                if (root != null)
-                {
-                    return root;
-                }
-                // Set the sitemap to read-write so we can populate it.
-                this.isReadOnly = false;
-                root = siteMapBuilder.BuildSiteMap(this, root);
-                // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
-                this.isReadOnly = true;
-                return root;
-            }
+
+            root = siteMapBuilder.BuildSiteMap(siteMap, root);
         }
+
+        //public virtual ISiteMapNode BuildSiteMap()
+        //{
+        //    // Return immediately if this method has been called before
+        //    if (root != null)
+        //    {
+        //        return root;
+        //    }
+        //    lock (this.synclock)
+        //    {
+        //        // Return immediately if the prevous lock called this before
+        //        if (root != null)
+        //        {
+        //            return root;
+        //        }
+        //        // Set the sitemap to read-write so we can populate it.
+        //        this.isReadOnly = false;
+        //        root = siteMapBuilder.BuildSiteMap(this, root);
+        //        // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
+        //        this.isReadOnly = true;
+        //        return root;
+        //    }
+        //}
 
 
         /// <summary>
@@ -394,15 +380,20 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get 
             {
+                // TODO: find a way to inject HttpContext
                 HttpContext current = HttpContext.Current;
-                var currentNode = (ISiteMapNode)current.Items[currentNodeCacheKey];
-                if (currentNode == null)
-                {
-                    currentNode = this.FindSiteMapNode(current);
-                    currentNode = this.ReturnNodeIfAccessible(currentNode);
-                    current.Items[currentNodeCacheKey] = currentNode;
-                }
-                return currentNode;
+                var currentNode = this.FindSiteMapNode(current);
+                return this.ReturnNodeIfAccessible(currentNode);
+
+                //HttpContext current = HttpContext.Current;
+                //var currentNode = (ISiteMapNode)current.Items[currentNodeCacheKey];
+                //if (currentNode == null)
+                //{
+                //    currentNode = this.FindSiteMapNode(current);
+                //    currentNode = this.ReturnNodeIfAccessible(currentNode);
+                //    current.Items[currentNodeCacheKey] = currentNode;
+                //}
+                //return currentNode;
             }
         }
 
@@ -417,14 +408,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public bool EnableLocalization
         {
             get { return this.enableLocalization; }
-            set 
-            {
-                if (this.isReadOnly)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-                }
-                this.enableLocalization = value; 
-            }
+            set { this.enableLocalization = value; }
         }
 
         public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
@@ -456,18 +440,25 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> or if the page context is null.
         /// </returns>
-        public virtual ISiteMapNode FindSiteMapNode(System.Web.HttpContext context)
+        public virtual ISiteMapNode FindSiteMapNode(HttpContext context)
         {
             // TODO: find a way to inject this.
             var httpContext = new HttpContext2(context);
             var routeData = RouteTable.Routes.GetRouteData(httpContext);
 
             var currentNode = FindSiteMapNode(HttpContext.Current, routeData);
-            if (HttpContext.Current.Items[currentNodeCacheKey] == null && currentNode != null)
-            {
-                HttpContext.Current.Items[currentNodeCacheKey] = currentNode;
-            }
             return currentNode;
+
+            //// TODO: find a way to inject this.
+            //var httpContext = new HttpContext2(context);
+            //var routeData = RouteTable.Routes.GetRouteData(httpContext);
+
+            //var currentNode = FindSiteMapNode(HttpContext.Current, routeData);
+            //if (HttpContext.Current.Items[currentNodeCacheKey] == null && currentNode != null)
+            //{
+            //    HttpContext.Current.Items[currentNodeCacheKey] = currentNode;
+            //}
+            //return currentNode;
         }
 
         /// <summary>
@@ -477,6 +468,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns></returns>
         public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
+            // TODO: Find a way to inject HttpContext
             return FindSiteMapNode(HttpContext.Current, context.RouteData);
         }
 
@@ -572,7 +564,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             if (collection == null)
             {
-                var keyNode = this.keyTable[node.Key];
+                ISiteMapNode keyNode = null;
+                if (this.keyTable.ContainsKey(node.Key))
+                {
+                    keyNode = this.keyTable[node.Key];
+                }
                 if (keyNode != null && this.childNodeCollectionTable.ContainsKey(keyNode))
                 {
                     collection = this.childNodeCollectionTable[keyNode];
@@ -748,20 +744,27 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 return true;
             }
+            return aclModule.IsAccessibleToUser(controllerTypeResolver, this, context, node);
 
-            // Construct call cache?
-            if (context.Items[aclCacheItemKey] == null)
-            {
-                context.Items[aclCacheItemKey] = genericDictionaryFactory.Create<ISiteMapNode, bool>();
-            }
-            var aclCacheItem = (IDictionary<ISiteMapNode, bool>)context.Items[aclCacheItemKey];
 
-            // Is the result of this call cached?
-            if (!aclCacheItem.ContainsKey(node))
-            {
-                aclCacheItem[node] = aclModule.IsAccessibleToUser(controllerTypeResolver, this, context, node);
-            }
-            return aclCacheItem[node];
+            //if (!SecurityTrimmingEnabled)
+            //{
+            //    return true;
+            //}
+
+            //// Construct call cache?
+            //if (context.Items[aclCacheItemKey] == null)
+            //{
+            //    context.Items[aclCacheItemKey] = genericDictionaryFactory.Create<ISiteMapNode, bool>();
+            //}
+            //var aclCacheItem = (IDictionary<ISiteMapNode, bool>)context.Items[aclCacheItemKey];
+
+            //// Is the result of this call cached?
+            //if (!aclCacheItem.ContainsKey(node))
+            //{
+            //    aclCacheItem[node] = aclModule.IsAccessibleToUser(controllerTypeResolver, this, context, node);
+            //}
+            //return aclCacheItem[node];
         }
 
         /// <summary>
@@ -776,17 +779,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual string ResourceKey
         {
             get { return this.resourceKey; }
-            set 
-            {
-                if (this.isReadOnly)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-                }
-                this.resourceKey = value; 
-            }
+            set { this.resourceKey = value; }
         }
-
-        
 
         /// <summary>
         /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
@@ -797,19 +791,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.securityTrimmingEnabled; }
             set 
             {
-                if (this.isReadOnly)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-                }
                 if (value == false && this.securityTrimmingEnabled == true)
                     throw new System.Security.SecurityException(Resources.Messages.SecurityTrimmingCannotBeDisabled);
                 this.securityTrimmingEnabled = value; 
             }
         }
-
-        
-
-
 
         #endregion
 

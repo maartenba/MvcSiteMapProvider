@@ -6,6 +6,7 @@ using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 using MvcSiteMapProvider.Core.Globalization;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.RequestCache;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -21,7 +22,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IControllerTypeResolver controllerTypeResolver
+            IControllerTypeResolver controllerTypeResolver,
+            IRequestCache requestCache
             ) 
         {
             if (siteMapNodeChildStateFactory == null)
@@ -36,6 +38,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("actionMethodParameterResolver");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
+            if (requestCache == null)
+                throw new ArgumentNullException("requestCache");
 
             this.siteMapNodeChildStateFactory = siteMapNodeChildStateFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
@@ -43,6 +47,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.controllerTypeResolver = controllerTypeResolver;
+            this.requestCache = requestCache;
         }
 
         // Services
@@ -52,6 +57,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IControllerTypeResolver controllerTypeResolver;
+        protected readonly IRequestCache requestCache;
 
 
         #region ISiteMapNodeFactory Members
@@ -71,7 +77,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
             var localizationService = siteMapNodeChildStateFactory.CreateLocalizationService(implicitResourceKey);
 
-            return new SiteMapNode(
+            var siteMapNode = new SiteMapNode(
                 siteMap,
                 key,
                 isDynamic,
@@ -82,6 +88,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 siteMapNodeVisibilityProviderStrategy,
                 actionMethodParameterResolver,
                 controllerTypeResolver);
+
+            return siteMapNode;
+
+            // Wrap our decorator classes around sitemapnode
+            //var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);
+            //return lockableSiteMapNode;
+            //var requestCacheableSiteMapNode = new RequestCacheableSiteMapNode(lockableSiteMapNode, requestCache);
+            //return requestCacheableSiteMapNode;
         }
 
         #endregion

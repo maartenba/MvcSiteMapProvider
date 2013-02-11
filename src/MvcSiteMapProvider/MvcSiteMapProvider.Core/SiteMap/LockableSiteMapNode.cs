@@ -210,10 +210,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.innerSiteMapNode.Title; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
-                }
+                // TODO: Find out what the attribute is for that overwrites this from the UI layer.
+                //if (this.IsReadOnly)
+                //{
+                //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
+                //}
                 this.innerSiteMapNode.Title = value;
             }
         }

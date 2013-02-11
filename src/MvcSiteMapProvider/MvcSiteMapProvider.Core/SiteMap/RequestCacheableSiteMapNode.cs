@@ -197,13 +197,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata)
         {
             var key = this.GetCacheKey("IsVisible");
-            var result = this.requestCache.GetValue<bool>(key);
+            var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
                 result = this.innerSiteMapNode.IsVisible(context, sourceMetadata);
-                this.requestCache.SetValue<bool>(key, result);
+                this.requestCache.SetValue<bool>(key, (bool)result);
             }
-            return result;
+            return (bool)result;
         }
 
         public bool Clickable

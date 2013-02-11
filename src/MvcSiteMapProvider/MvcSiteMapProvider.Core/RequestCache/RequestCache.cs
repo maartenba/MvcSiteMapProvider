@@ -25,7 +25,11 @@ namespace MvcSiteMapProvider.Core.RequestCache
 
         public virtual T GetValue<T>(string key)
         {
-            return (T)this.context.Items[key];
+            if (this.context.Items.Contains(key))
+            {
+                return (T)this.context.Items[key];
+            }
+            return default(T);
         }
 
         public virtual void SetValue<T>(string key, T value)

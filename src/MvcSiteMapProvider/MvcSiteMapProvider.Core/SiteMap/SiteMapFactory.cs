@@ -3,6 +3,7 @@ using MvcSiteMapProvider.Core.SiteMap.Builder;
 using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.RequestCache;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -16,7 +17,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IAclModule aclModule,
             IControllerTypeResolver controllerTypeResolver,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
-            IGenericDictionaryFactory genericDictionaryFactory
+            IGenericDictionaryFactory genericDictionaryFactory,
+            IRequestCache requestCache
             )
         {
             if (aclModule == null)
@@ -27,28 +29,39 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
                 throw new ArgumentNullException("genericDictionaryFactory");
+            if (requestCache == null)
+                throw new ArgumentNullException("requestCache");
 
             this.aclModule = aclModule;
             this.controllerTypeResolver = controllerTypeResolver;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
+            this.requestCache = requestCache;
         }
 
         private readonly IAclModule aclModule;
         private readonly IControllerTypeResolver controllerTypeResolver;
         private readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         private readonly IGenericDictionaryFactory genericDictionaryFactory;
+        private readonly IRequestCache requestCache;
 
         #region ISiteMapFactory Members
 
         public ISiteMap Create(ISiteMapBuilder siteMapBuilder)
         {
-            return new SiteMap(
+            var siteMap = new SiteMap(
                 siteMapBuilder, 
                 aclModule, 
                 controllerTypeResolver, 
                 siteMapNodeCollectionFactory,
                 genericDictionaryFactory);
+
+            // Decorate the class with additional responsibilities.
+            var lockableSiteMap = new LockableSiteMap(siteMap);
+            var requestCacheableSiteMap = new RequestCacheableSiteMap(lockableSiteMap, requestCache);
+
+
+            return requestCacheableSiteMap;
         }
 
         #endregion

@@ -39,7 +39,9 @@ namespace MvcSiteMapProvider.Web
 
         public override SiteMapNode BuildSiteMap()
         {
-            var rootNode = siteMap.BuildSiteMap();
+            //var rootNode = siteMap.BuildSiteMap();
+
+            SiteMapNode rootNode = null;
 
             //TODO: convert sitemap node to the appropriate type
             //return rootNode;

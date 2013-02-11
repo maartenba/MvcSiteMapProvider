@@ -377,22 +377,24 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             set 
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
-                }
-                SetTitle(value);
+                this.title = localizationService.ExtractExplicitResourceKey("title", value);
+
+                //if (this.IsReadOnly)
+                //{
+                //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
+                //}
+                //SetTitle(value);
             }
         }
 
-        /// <summary>
-        /// Used internally to set the title when the node is in read-only state.
-        /// </summary>
-        /// <param name="title">The new title to use.</param>
-        internal virtual void SetTitle(string title)
-        {
-            this.title = localizationService.ExtractExplicitResourceKey("title", title);
-        }
+        ///// <summary>
+        ///// Used internally to set the title when the node is in read-only state.
+        ///// </summary>
+        ///// <param name="title">The new title to use.</param>
+        //internal virtual void SetTitle(string title)
+        //{
+        //    this.title = localizationService.ExtractExplicitResourceKey("title", title);
+        //}
 
         /// <summary>
         /// Gets or sets the description (optional).

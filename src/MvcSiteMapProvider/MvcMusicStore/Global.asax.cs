@@ -46,29 +46,29 @@ namespace MvcMusicStore
 
             // Create the DI container (for structuremap)
             var container = new Container();
-            var resolver = new Code.IoC.StructureMapResolver(container);
+            //var resolver = new Code.IoC.StructureMapResolver(container);
 
-            // Setup the container in a static member so it can be used
-            // to inject dependencies later.
-            MvcSiteMapProvider.Core.IoC.DI.Container = resolver;
+            //// Setup the container in a static member so it can be used
+            //// to inject dependencies later.
+            //MvcSiteMapProvider.Core.IoC.DI.Container = resolver;
 
 
             // Configure Dependencies
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.SiteMap.ISiteMap>()
-                .Use<MvcSiteMapProvider.Core.SiteMap.SiteMap>()
+                .Use<MvcSiteMapProvider.Core.SiteMap.RequestCacheableSiteMap>()
             );
 
-            // We create a new Setter Injection Policy that
-            // forces StructureMap to inject all public properties
-            // where the Property Type name equals 'ISiteMap'
-            container.Configure(
-                x => x.SetAllProperties(p =>
-                    {
-                        p.TypeMatches(t => t.Name == "ISiteMap");
-                    }
-                )
-            );
+            //// We create a new Setter Injection Policy that
+            //// forces StructureMap to inject all public properties
+            //// where the Property Type name equals 'ISiteMap'
+            //container.Configure(
+            //    x => x.SetAllProperties(p =>
+            //        {
+            //            p.TypeMatches(t => t.Name == "ISiteMap");
+            //        }
+            //    )
+            //);
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.Security.IAclModule>()
@@ -185,6 +185,11 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.SiteMap.Builder.ReflectionSiteMapBuilderFactory>()
             );
 
+            container.Configure(x => x
+                .For<System.Web.HttpContext>()
+                .Use(HttpContext.Current)
+            );
+
             // Configure the SiteMap Builder Sets
 
             var xmlBuilderFactory = container.GetInstance<MvcSiteMapProvider.Core.SiteMap.Builder.IXmlSiteMapBuilderFactory>();
@@ -253,6 +258,8 @@ namespace MvcMusicStore
                 .For<System.Web.Caching.Cache>()
                 .Use(HttpContext.Current.Cache)
             );
+
+            
 
             // Configure the static instance of the SiteMapLoader
             var loader = new MvcSiteMapProvider.Core.Loader.SiteMapLoader(

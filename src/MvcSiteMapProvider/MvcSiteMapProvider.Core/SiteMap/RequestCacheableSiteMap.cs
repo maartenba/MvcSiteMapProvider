@@ -65,23 +65,29 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.innerSiteMap.RootNode; }
         }
 
-        public ISiteMapNode BuildSiteMap()
+        public void BuildSiteMap(ISiteMap siteMap)
         {
-            return this.innerSiteMap.BuildSiteMap();
+            if (siteMap == null)
+            {
+                siteMap = this;
+            }
+            this.innerSiteMap.BuildSiteMap(siteMap);
         }
 
         public ISiteMapNode CurrentNode
         {
             get 
             {
-                var key = this.GetCacheKey("CurrentNode");
-                var result = this.requestCache.GetValue<ISiteMapNode>(key);
-                if (result == null)
-                {
-                    result = this.innerSiteMap.CurrentNode;
-                    this.requestCache.SetValue<ISiteMapNode>(key, result);
-                }
-                return result;
+                return this.innerSiteMap.CurrentNode;
+
+                //var key = this.GetCacheKey("CurrentNode");
+                //var result = this.requestCache.GetValue<ISiteMapNode>(key);
+                //if (result == null)
+                //{
+                //    result = this.innerSiteMap.CurrentNode;
+                //    this.requestCache.SetValue<ISiteMapNode>(key, result);
+                //}
+                //return result;
             }
         }
 
@@ -98,7 +104,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (result == null)
             {
                 result = this.innerSiteMap.FindSiteMapNode(rawUrl);
-                this.requestCache.SetValue<ISiteMapNode>(key, result);
+                if (result != null)
+                {
+                    this.requestCache.SetValue<ISiteMapNode>(key, result);
+                }
             }
             return result;
         }
@@ -110,7 +119,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (result == null)
             {
                 result = this.innerSiteMap.FindSiteMapNode(context);
-                this.requestCache.SetValue<ISiteMapNode>(key, result);
+                if (result != null)
+                {
+                    this.requestCache.SetValue<ISiteMapNode>(key, result);
+                }
             }
             return result;
         }
@@ -122,7 +134,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             if (result == null)
             {
                 result = this.innerSiteMap.FindSiteMapNode(context);
-                this.requestCache.SetValue<ISiteMapNode>(key, result);
+                if (result != null)
+                {
+                    this.requestCache.SetValue<ISiteMapNode>(key, result);
+                }
             }
             return result;
         }
@@ -176,13 +191,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             // TODO: find out what happens if we cast null to boolean
             var key = this.GetCacheKey("IsAccessibleToUser_" + node.Key);
-            var result = this.requestCache.GetValue<bool>(key);
+            var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
                 result = this.innerSiteMap.IsAccessibleToUser(context, node);
-                this.requestCache.SetValue<bool>(key, result);
+                this.requestCache.SetValue<bool>(key, (bool)result);
             }
-            return result;
+            return (bool)result;
         }
 
         public string ResourceKey
