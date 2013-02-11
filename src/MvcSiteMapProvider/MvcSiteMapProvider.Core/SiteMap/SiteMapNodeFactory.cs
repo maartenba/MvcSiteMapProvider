@@ -89,13 +89,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 actionMethodParameterResolver,
                 controllerTypeResolver);
 
-            return siteMapNode;
+            //return siteMapNode;
 
             // Wrap our decorator classes around sitemapnode
-            //var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);
+            var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);
             //return lockableSiteMapNode;
-            //var requestCacheableSiteMapNode = new RequestCacheableSiteMapNode(lockableSiteMapNode, requestCache);
-            //return requestCacheableSiteMapNode;
+            var requestCacheableSiteMapNode = new RequestCacheableSiteMapNode(lockableSiteMapNode, requestCache);
+            return requestCacheableSiteMapNode;
         }
 
         #endregion

@@ -78,7 +78,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public ISiteMapNodeCollection ChildNodes
         {
-            get { return this.innerSiteMapNode.ChildNodes; }
+            get { return this.SiteMap.GetChildNodes(this); }
         }
 
         /// <summary>
@@ -140,7 +140,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         public bool HasChildNodes
         {
-            get { return this.innerSiteMapNode.HasChildNodes; }
+            get
+            {
+                var childNodes = this.ChildNodes;
+                return ((childNodes != null) && (childNodes.Count > 0));
+            }
         }
 
         /// <summary>

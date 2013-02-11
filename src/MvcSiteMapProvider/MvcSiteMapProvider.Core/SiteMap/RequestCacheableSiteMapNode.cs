@@ -57,7 +57,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public ISiteMapNodeCollection ChildNodes
         {
-            get { return this.innerSiteMapNode.ChildNodes; }
+            get { return this.SiteMap.GetChildNodes(this); }
         }
 
         public bool IsDescendantOf(ISiteMapNode node)
@@ -87,7 +87,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public bool HasChildNodes
         {
-            get { return this.innerSiteMapNode.HasChildNodes; }
+            get
+            {
+                var childNodes = this.ChildNodes;
+                return ((childNodes != null) && (childNodes.Count > 0));
+            }
         }
 
         public int GetNodeLevel()
