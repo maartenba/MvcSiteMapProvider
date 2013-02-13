@@ -152,6 +152,8 @@
     <Compile Include="SiteMap\SiteMapNodeCollectionFactory.cs" />
     <Compile Include="SiteMap\SiteMapNodeFactory.cs" />
     <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />
+    <Compile Include="SiteMap\SiteMapNodePositioningBase.cs" />
+    <Compile Include="SiteMap\SiteMapNodeSecurityBase.cs" />
     <Compile Include="SiteMap\SiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="SiteMap\SiteMaps.cs" />
     <Compile Include="Mvc\MvcSiteMapProviderViewEngine.cs" />
