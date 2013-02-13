@@ -17,6 +17,18 @@ namespace MvcSiteMapProvider.Core.Security
     public class AuthorizeAttributeAclModule
         : IAclModule
     {
+        public AuthorizeAttributeAclModule(
+            IControllerTypeResolver controllerTypeResolver
+            )
+        {
+            if (controllerTypeResolver == null)
+                throw new ArgumentNullException("controllerTypeResolver");
+
+            this.controllerTypeResolver = controllerTypeResolver;
+        }
+
+        protected readonly IControllerTypeResolver controllerTypeResolver;
+
         #region IAclModule Members
 
 #if !NET35
@@ -39,17 +51,16 @@ namespace MvcSiteMapProvider.Core.Security
         /// <summary>
         /// Determines whether node is accessible to user.
         /// </summary>
-        /// <param name="controllerTypeResolver">The controller type resolver.</param>
-        /// <param name="provider">The provider.</param>
+        /// <param name="siteMap">The site map.</param>
         /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, ISiteMap provider, HttpContext context, ISiteMapNode node)
+        public bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node)
         {
             // Is security trimming enabled?
-            if (!provider.SecurityTrimmingEnabled)
+            if (!siteMap.SecurityTrimmingEnabled)
             {
                 return true;
             }

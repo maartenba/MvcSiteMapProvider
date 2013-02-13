@@ -22,7 +22,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IControllerTypeResolver controllerTypeResolver,
             IRequestCache requestCache
             ) 
         {
@@ -36,8 +35,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
             if (actionMethodParameterResolver == null)
                 throw new ArgumentNullException("actionMethodParameterResolver");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
 
@@ -46,7 +43,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
-            this.controllerTypeResolver = controllerTypeResolver;
             this.requestCache = requestCache;
         }
 
@@ -56,7 +52,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
-        protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IRequestCache requestCache;
 
 
@@ -86,8 +81,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy,
                 siteMapNodeVisibilityProviderStrategy,
-                actionMethodParameterResolver,
-                controllerTypeResolver);
+                actionMethodParameterResolver);
 
             // Decorate the class with additional responsibilities.
             var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);

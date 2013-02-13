@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.SiteMap;
@@ -17,22 +18,22 @@ namespace MvcSiteMapProvider.Core.Security
         /// Determines whether node is accessible to user.
         /// </summary>
         /// <param name="controllerTypeResolver">The controller type resolver.</param>
-        /// <param name="provider">The provider.</param>
+        /// <param name="siteMap">The site map.</param>
         /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, ISiteMap provider, HttpContext context, ISiteMapNode node)
+        public bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node)
         {
             // Is security trimming enabled?
-            if (!provider.SecurityTrimmingEnabled)
+            if (!siteMap.SecurityTrimmingEnabled)
             {
                 return true;
             }
 
             // Is it a regular node?
-            var mvcNode = node as ISiteMapNode;
+            var mvcNode = node;
 
             // If we have roles assigned, check them against the roles defined in the sitemap
             if (node.Roles != null && node.Roles.Count > 0)

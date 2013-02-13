@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.SiteMap;
@@ -15,36 +16,55 @@ namespace MvcSiteMapProvider.Core.Security
         /// Gets or sets the child modules.
         /// </summary>
         /// <value>The child modules.</value>
-        protected List<IAclModule> ChildModules { get; private set; }
+        protected IEnumerable<IAclModule> ChildModules { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultAclModule"/> class.
         /// </summary>
-        public DefaultAclModule()
+        public DefaultAclModule(
+            params IAclModule[] aclModules
+            )
         {
-            ChildModules = new List<IAclModule>
-            {
-                new XmlRolesAclModule(),
-                new AuthorizeAttributeAclModule()
-            };
+            if (aclModules == null)
+                throw new ArgumentNullException("aclModules");
+
+            this.ChildModules = aclModules;
         }
+
+
+        ///// <summary>
+        ///// Initializes a new instance of the <see cref="DefaultAclModule"/> class.
+        ///// </summary>
+        //public DefaultAclModule(
+        //    IControllerTypeResolver controllerTypeResolver
+        //    )
+        //{
+        //    if (controllerTypeResolver == null)
+        //        throw new ArgumentNullException("controllerTypeResolver");
+
+        //    // TODO: Make factory so these can be injected via DI.
+        //    ChildModules = new List<IAclModule>
+        //    {
+        //        new XmlRolesAclModule(),
+        //        new AuthorizeAttributeAclModule(controllerTypeResolver)
+        //    };
+        //}
 
         #region IAclModule Members
 
         /// <summary>
         /// Determines whether node is accessible to user.
         /// </summary>
-        /// <param name="controllerTypeResolver">The controller type resolver.</param>
-        /// <param name="provider">The provider.</param>
+        /// <param name="siteMap">The site map.</param>
         /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, ISiteMap provider, HttpContext context, ISiteMapNode node)
+        public virtual bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node)
         {
             // Is security trimming enabled?
-            if (!provider.SecurityTrimmingEnabled)
+            if (!siteMap.SecurityTrimmingEnabled)
             {
                 return true;
             }
@@ -55,7 +75,7 @@ namespace MvcSiteMapProvider.Core.Security
             {
                 try
                 {
-                    result &= module.IsAccessibleToUser(controllerTypeResolver, provider, context, node);
+                    result &= module.IsAccessibleToUser(siteMap, context, node);
                 }
                 catch (AclModuleNotSupportedException)
                 {

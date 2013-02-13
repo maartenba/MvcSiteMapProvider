@@ -28,8 +28,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
-            IActionMethodParameterResolver actionMethodParameterResolver,
-            IControllerTypeResolver controllerTypeResolver
+            IActionMethodParameterResolver actionMethodParameterResolver
             )
         {
             if (siteMap == null)
@@ -48,8 +47,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
             if (actionMethodParameterResolver == null)
                 throw new ArgumentNullException("actionMethodParameterResolver");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
 
             this.siteMap = siteMap;
             this.key = key;
@@ -59,7 +56,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
-            this.controllerTypeResolver = controllerTypeResolver;
 
             // Initialize child collections
             this.attributes = siteMapNodeChildStateFactory.CreateAttributeCollection(siteMap, localizationService);
@@ -74,7 +70,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
-        protected readonly IControllerTypeResolver controllerTypeResolver;
 
         // Child collections and dictionaries
         protected readonly IAttributeCollection attributes;
@@ -595,7 +590,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 if (this.IsDynamic == false)
                 {
                     actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
-                        controllerTypeResolver, this.Area, this.Controller, this.Action);
+                        this.Area, this.Controller, this.Action);
                 }
                 result = this.Attributes.MatchesRoute(actionParameters, routeValues);
             }

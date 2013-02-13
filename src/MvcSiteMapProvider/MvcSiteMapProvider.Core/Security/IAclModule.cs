@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using MvcSiteMapProvider.Core.SiteMap;
 using MvcSiteMapProvider.Core.Mvc;
 
@@ -12,13 +13,12 @@ namespace MvcSiteMapProvider.Core.Security
         /// <summary>
         /// Determines whether node is accessible to user.
         /// </summary>
-        /// <param name="controllerTypeResolver">The controller type resolver.</param>
-        /// <param name="provider">The provider.</param>
+        /// <param name="siteMap">The site map.</param>
         /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        bool IsAccessibleToUser(IControllerTypeResolver controllerTypeResolver, ISiteMap provider, HttpContext context, ISiteMapNode node);
+        bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node);
     }
 }

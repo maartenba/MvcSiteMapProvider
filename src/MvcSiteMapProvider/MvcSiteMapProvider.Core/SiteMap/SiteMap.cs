@@ -29,8 +29,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
-            IAclModule aclModule, 
-            IControllerTypeResolver controllerTypeResolver,
+            IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory
             )
@@ -39,8 +38,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapBuilder");
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
             if (siteMapNodeCollectionFactory == null)
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
@@ -48,7 +45,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
             this.siteMapBuilder = siteMapBuilder;
             this.aclModule = aclModule;
-            this.controllerTypeResolver = controllerTypeResolver;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
 
             // Initialize dictionaries
@@ -58,33 +54,21 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.urlTable = genericDictionaryFactory.Create<string, ISiteMapNode>();
         }
 
+        // Services
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly IAclModule aclModule;
-        protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
 
-        #region SiteMapProvider state
-
-        private bool securityTrimmingEnabled;
-
-        #endregion
-
-        #region StaticSiteMapProvider state
-
+        // Child collections
         protected readonly IDictionary<ISiteMapNode, ISiteMapNodeCollection> childNodeCollectionTable;
         protected readonly IDictionary<string, ISiteMapNode> keyTable;
         protected readonly IDictionary<ISiteMapNode, ISiteMapNode> parentNodeTable;
         protected readonly IDictionary<string, ISiteMapNode> urlTable;
 
-        #endregion
-
-        #region DefaultSiteMapProvider state
-
+        // Object state
+        private bool securityTrimmingEnabled;
         protected readonly object synclock = new object();
         protected ISiteMapNode root;
-
-        #endregion
-
 
 
         #region ISiteMap Members
@@ -617,7 +601,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 return true;
             }
-            return aclModule.IsAccessibleToUser(controllerTypeResolver, this, context, node);
+            return aclModule.IsAccessibleToUser(this, context, node);
         }
 
         /// <summary>
@@ -648,7 +632,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #endregion
 
-        #region Private Members 
+        #region Protected Members 
 
         /// <summary>
         /// Finds the controller action node.
@@ -659,7 +643,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// A controller action node represented as a <see cref="SiteMapNode"/> instance
         /// </returns>
-        private ISiteMapNode FindControllerActionNode(ISiteMapNode rootNode, IDictionary<string, object> values, RouteBase route)
+        protected virtual ISiteMapNode FindControllerActionNode(ISiteMapNode rootNode, IDictionary<string, object> values, RouteBase route)
         {
             if (rootNode != null)
             {
@@ -702,7 +686,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return null;
         }
 
-        private ISiteMapNode GetParentNodesInternal(ISiteMapNode node, int walkupLevels)
+        protected virtual ISiteMapNode GetParentNodesInternal(ISiteMapNode node, int walkupLevels)
         {
             if (walkupLevels > 0)
             {
@@ -716,7 +700,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return node;
         }
 
-        private ISiteMapNode ReturnNodeIfAccessible(ISiteMapNode node)
+        protected virtual ISiteMapNode ReturnNodeIfAccessible(ISiteMapNode node)
         {
             // TODO: Find a way to inject HttpContext
             if ((node != null) && node.IsAccessibleToUser(HttpContext.Current))

@@ -15,7 +15,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMapFactory(
             IAclModule aclModule,
-            IControllerTypeResolver controllerTypeResolver,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IRequestCache requestCache
@@ -23,8 +22,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
             if (siteMapNodeCollectionFactory == null)
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
@@ -33,17 +30,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("requestCache");
 
             this.aclModule = aclModule;
-            this.controllerTypeResolver = controllerTypeResolver;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
             this.requestCache = requestCache;
         }
 
-        private readonly IAclModule aclModule;
-        private readonly IControllerTypeResolver controllerTypeResolver;
-        private readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
-        private readonly IGenericDictionaryFactory genericDictionaryFactory;
-        private readonly IRequestCache requestCache;
+        protected readonly IAclModule aclModule;
+        protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
+        protected readonly IGenericDictionaryFactory genericDictionaryFactory;
+        protected readonly IRequestCache requestCache;
 
         #region ISiteMapFactory Members
 
@@ -52,7 +47,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             var siteMap = new SiteMap(
                 siteMapBuilder, 
                 aclModule, 
-                controllerTypeResolver, 
                 siteMapNodeCollectionFactory,
                 genericDictionaryFactory);
 
