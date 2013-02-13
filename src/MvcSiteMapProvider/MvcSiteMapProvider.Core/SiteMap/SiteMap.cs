@@ -246,17 +246,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get { return this.ReturnNodeIfAccessible(root); }
         }
 
-        public virtual void BuildSiteMap(ISiteMap siteMap)
+        public virtual void BuildSiteMap()
         {
             // If this was called before, just ignore this call.
             if (root != null) return;
-
-            if (siteMap == null)
-            {
-                siteMap = this;
-            }
-
-            root = siteMapBuilder.BuildSiteMap(siteMap, root);
+            root = siteMapBuilder.BuildSiteMap(this, root);
         }
 
         /// <summary>

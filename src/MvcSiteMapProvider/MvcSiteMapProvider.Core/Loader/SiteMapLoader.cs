@@ -84,11 +84,7 @@ namespace MvcSiteMapProvider.Core.Loader
                     var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
                     var builder = siteMapBuilderSetStrategy.GetBuilder(builderSetName);
                     siteMap = siteMapFactory.Create(builder);
-
-                    // This looks strange, but it is the best way to deal with building the sitemap within 
-                    // a decorator pattern as we need to pass in the outer-most type instance to the builder 
-                    // to populate the sitemap and its nodes properly.
-                    siteMap.BuildSiteMap(siteMap);
+                    siteMap.BuildSiteMap();
 
                     siteMapCache.Insert(siteMapCacheKey, siteMap, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingCacheExpiration);
                 }

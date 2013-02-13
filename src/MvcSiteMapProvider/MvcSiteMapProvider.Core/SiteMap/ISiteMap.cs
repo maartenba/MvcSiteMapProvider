@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         void RemoveNode(ISiteMapNode node);
         void Clear();
         ISiteMapNode RootNode { get; }
-        void BuildSiteMap(ISiteMap siteMap);
+        void BuildSiteMap();
 
         ISiteMapNode CurrentNode { get; }
         bool EnableLocalization { get; set; }

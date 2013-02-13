@@ -61,15 +61,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             base.Clear();
         }
 
-        public override void BuildSiteMap(ISiteMap siteMap)
+        public override void BuildSiteMap()
         {
-            if (siteMap == null)
-            {
-                siteMap = this;
-            }
             // Set the sitemap to read-write so we can populate it.
             this.IsReadOnly = false;
-            base.BuildSiteMap(siteMap);
+            base.BuildSiteMap();
             // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
             this.IsReadOnly = true;
         }
