@@ -182,7 +182,6 @@
     <Compile Include="SiteMap\HttpContextMethodOverrider.cs" />
     <Compile Include="SiteMap\HttpRequest2.cs" />
     <Compile Include="SiteMap\HttpRequestMethodOverrider.cs" />
-    <Compile Include="SiteMap\IDefaultSiteMapProvider.cs" />
     <Compile Include="SiteMap\IDynamicNodeProvider.cs" />
     <Compile Include="SiteMap\ISiteMap.cs" />
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolver.cs" />
