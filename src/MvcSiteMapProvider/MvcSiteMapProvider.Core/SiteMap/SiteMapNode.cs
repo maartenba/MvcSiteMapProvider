@@ -91,18 +91,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected string url = String.Empty;
         protected string title = String.Empty;
         protected string description = String.Empty;
-        protected string httpMethod = String.Empty;
-        protected string targetFrame = String.Empty;
-        protected string imageUrl = String.Empty;
         protected DateTime lastModifiedDate = DateTime.MinValue;
         protected ChangeFrequency changeFrequency = ChangeFrequency.Always;
         protected UpdatePriority updatePriority = UpdatePriority.Undefined;
-        protected string visibilityProvider = String.Empty;
         protected bool clickable = true;
-        protected string urlResolver = String.Empty;
-        protected string dynamicNodeProvider = String.Empty;
-        protected string route = String.Empty;
-
 
         /// <summary>
         /// Gets the key.
@@ -122,6 +114,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>True if the current node is read-only.</value>
         public virtual bool IsReadOnly { get { return this.SiteMap.IsReadOnly; } }
 
+
+        // TODO: Move these methods to a separate service or base class so they can be shared between
+        // decorator instances of SiteMapNode.
         #region Node Map Positioning
 
         /// <summary>
@@ -142,10 +137,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ParentNode"));
-                }
                 this.parentNode = value;
                 this.isParentNodeSet = true;
             }
@@ -306,7 +297,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     node = node.ParentNode;
                 }
             }
-
             return level;
         }
 
@@ -315,10 +305,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         public virtual ISiteMap SiteMap
         {
-            get
-            {
-                return this.siteMap;
-            }
+            get { return this.siteMap; }
         }
 
         #endregion
@@ -342,19 +329,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The HTTP method.
         /// </value>
-        public virtual string HttpMethod 
-        {
-            get { return this.httpMethod; }
-            set
-            {
-                // TODO: Move lockable logic into another class that wraps this one.
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "HttpMethod"));
-                }
-                this.httpMethod = value;
-            }
-        }
+        public virtual string HttpMethod { get; set; }
 
         /// <summary>
         /// Gets the implicit resource key (optional).
@@ -371,30 +346,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The title.</value>
         public virtual string Title 
         {
-            get 
-            {
-                return localizationService.GetResourceString("title", this.title, this.SiteMap);
-            }
-            set 
-            {
-                this.title = localizationService.ExtractExplicitResourceKey("title", value);
-
-                //if (this.IsReadOnly)
-                //{
-                //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
-                //}
-                //SetTitle(value);
-            }
+            get { return localizationService.GetResourceString("title", this.title, this.SiteMap); }
+            set { this.title = localizationService.ExtractExplicitResourceKey("title", value); }
         }
-
-        ///// <summary>
-        ///// Used internally to set the title when the node is in read-only state.
-        ///// </summary>
-        ///// <param name="title">The new title to use.</param>
-        //internal virtual void SetTitle(string title)
-        //{
-        //    this.title = localizationService.ExtractExplicitResourceKey("title", title);
-        //}
 
         /// <summary>
         /// Gets or sets the description (optional).
@@ -402,53 +356,21 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The description.</value>
         public virtual string Description 
         {
-            get
-            {
-                return localizationService.GetResourceString("description", this.description, this.SiteMap);
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Description"));
-                }
-                this.description = localizationService.ExtractExplicitResourceKey("description", value);
-            }
+            get { return localizationService.GetResourceString("description", this.description, this.SiteMap); }
+            set { this.description = localizationService.ExtractExplicitResourceKey("description", value); }
         }
 
         /// <summary>
         /// Gets or sets the target frame (optional).
         /// </summary>
         /// <value>The target frame.</value>
-        public virtual string TargetFrame 
-        {
-            get { return this.targetFrame; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "TargetFrame"));
-                }
-                this.targetFrame = value;
-            }
-        }
+        public virtual string TargetFrame { get; set; }
 
         /// <summary>
         /// Gets or sets the image URL (optional).
         /// </summary>
         /// <value>The image URL.</value>
-        public virtual string ImageUrl
-        {
-            get { return this.imageUrl; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ImageUrl"));
-                }
-                this.imageUrl = value;
-            }
-        }
+        public virtual string ImageUrl { get; set; }
 
         /// <summary>
         /// Gets the attributes (optional).
@@ -466,34 +388,20 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the last modified date.
         /// </summary>
         /// <value>The last modified date.</value>
-        public virtual DateTime LastModifiedDate
-        {
-            get { return this.lastModifiedDate; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "LastModifiedDate"));
-                }
-                this.lastModifiedDate = value;
-            }
+        public virtual DateTime LastModifiedDate 
+        { 
+            get { return this.lastModifiedDate; } 
+            set { this.lastModifiedDate = value; } 
         }
 
         /// <summary>
         /// Gets or sets the change frequency.
         /// </summary>
         /// <value>The change frequency.</value>
-        public virtual ChangeFrequency ChangeFrequency
-        {
+        public virtual ChangeFrequency ChangeFrequency 
+        { 
             get { return this.changeFrequency; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ChangeFrequency"));
-                }
-                this.changeFrequency = value;
-            }
+            set { this.changeFrequency = value; } 
         }
 
         /// <summary>
@@ -501,16 +409,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </summary>
         /// <value>The update priority.</value>
         public virtual UpdatePriority UpdatePriority
-        {
-            get { return this.updatePriority; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UpdatePriority"));
-                }
-                this.updatePriority = value;
-            }
+        { 
+            get { return this.updatePriority; } 
+            set { this.updatePriority = value; } 
         }
 
 
@@ -524,18 +425,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the visibility provider.
         /// </value>
-        public virtual string VisibilityProvider
-        {
-            get { return this.visibilityProvider; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "VisibilityProvider"));
-                }
-                this.visibilityProvider = value;
-            }
-        }
+        public virtual string VisibilityProvider { get; set; }
 
 
         /// <summary>
@@ -564,16 +454,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ///   <c>true</c> if clickable; otherwise, <c>false</c>.
         /// </value>
         public virtual bool Clickable
-        {
+        { 
             get { return this.clickable; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Clickable"));
-                }
-                this.clickable = value;
-            }
+            set { this.clickable = value; }
         }
 
         /// <summary>
@@ -582,18 +465,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the URL resolver.
         /// </value>
-        public virtual string UrlResolver
-        {
-            get { return this.urlResolver; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UrlResolver"));
-                }
-                this.urlResolver = value;
-            }
-        }
+        public virtual string UrlResolver { get; set; }
 
         /// <summary>
         /// Gets the URL.
@@ -621,10 +493,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Url"));
-                }
                 this.url = value;
             }
         }
@@ -644,18 +512,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the Dynamic Node Provider.
         /// </value>
-        public virtual string DynamicNodeProvider
-        {
-            get { return this.dynamicNodeProvider; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "DynamicNodeProvider"));
-                }
-                this.dynamicNodeProvider = value;
-            }
-        }
+        public virtual string DynamicNodeProvider { get; set; }
 
         /// <summary>
         /// Gets the dynamic node collection.
@@ -689,18 +546,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the route.
         /// </summary>
         /// <value>The route.</value>
-        public virtual string Route
-        {
-            get { return this.route; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Route"));
-                }
-                this.route = value;
-            }
-        }
+        public virtual string Route { get; set; }
 
         /// <summary>
         /// Gets the route values.
@@ -751,10 +597,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
                         controllerTypeResolver, this.Area, this.Controller, this.Action);
                 }
-
                 result = this.Attributes.MatchesRoute(actionParameters, routeValues);
             }
-
             return result;
         }
 
@@ -769,14 +613,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual string Area
         {
             get { return RouteValues.ContainsKey("area") && RouteValues["area"] != null ? RouteValues["area"].ToString() : ""; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Area"));
-                }
-                RouteValues["area"] = value; 
-            }
+            set { RouteValues["area"] = value; }
         }
 
         /// <summary>
@@ -786,14 +623,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual string Controller
         {
             get { return RouteValues.ContainsKey("controller") ? RouteValues["controller"].ToString() : ""; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Controller"));
-                }
-                RouteValues["controller"] = value; 
-            }
+            set { RouteValues["controller"] = value; }
         }
 
         /// <summary>
@@ -803,14 +633,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         public virtual string Action
         {
             get { return RouteValues.ContainsKey("action") ? RouteValues["action"].ToString() : ""; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Action"));
-                }
-                RouteValues["action"] = value;
-            }
+            set { RouteValues["action"] = value; }
         }
 
         #endregion

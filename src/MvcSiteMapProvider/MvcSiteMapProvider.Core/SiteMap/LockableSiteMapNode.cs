@@ -132,7 +132,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </returns>
         public bool IsInCurrentPath()
         {
-            return this.innerSiteMapNode.IsInCurrentPath();
+            ISiteMapNode node = this;
+            return (this.SiteMap.CurrentNode != null && (node == this.SiteMap.CurrentNode || this.SiteMap.CurrentNode.IsDescendantOf(node)));
         }
 
         /// <summary>

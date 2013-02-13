@@ -89,11 +89,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 actionMethodParameterResolver,
                 controllerTypeResolver);
 
-            //return siteMapNode;
-
-            // Wrap our decorator classes around sitemapnode
+            // Decorate the class with additional responsibilities.
             var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);
-            //return lockableSiteMapNode;
             var requestCacheableSiteMapNode = new RequestCacheableSiteMapNode(lockableSiteMapNode, requestCache);
             return requestCacheableSiteMapNode;
         }
