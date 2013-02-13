@@ -2,7 +2,8 @@
 <mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0"
             xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0 MvcSiteMapSchema.xsd"
-            enableLocalization="true">
+            enableLocalization="true"
+						securityTrimmingEnabled="true">
 
   <mvcSiteMapNode title="$resources:SiteMapLocalizations,HomeTitle" controller="Home" action="Index" changeFrequency="Always" updatePriority="Normal" lastModifiedDate="2002-05-30T09:00:00">
     <mvcSiteMapNode title="$resources:SiteMapLocalizations,BrowseGenresTitle" controller="Store" action="Index">

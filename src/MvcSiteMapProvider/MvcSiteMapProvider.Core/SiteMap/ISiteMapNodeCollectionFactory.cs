@@ -7,8 +7,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// </summary>
     public interface ISiteMapNodeCollectionFactory
     {
-        ISiteMapNodeCollection Create(ISiteMap siteMap);
+        ISiteMapNodeCollection Create();
+        ISiteMapNodeCollection CreateLockable(ISiteMap siteMap);
         ISiteMapNodeCollection CreateReadOnly(ISiteMapNodeCollection siteMapNodeCollection);
-        ISiteMapNodeCollection CreateEmptyReadOnly(ISiteMap siteMap);
+        ISiteMapNodeCollection CreateEmptyReadOnly();
     }
 }

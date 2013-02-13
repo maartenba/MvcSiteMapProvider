@@ -9,8 +9,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SiteMapNodeCollection
-        : List<ISiteMapNode>, ISiteMapNodeCollection
+    public class LockableSiteMapNodeCollection
+        : LockableList<ISiteMapNode>, ISiteMapNodeCollection
     {
+        public LockableSiteMapNodeCollection(
+            ISiteMap siteMap
+            )
+            : base(siteMap)
+        {
+        }
+
     }
 }

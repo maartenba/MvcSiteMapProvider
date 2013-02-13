@@ -12,9 +12,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         #region ISiteMapNodeCollectionFactory Members
 
-        public ISiteMapNodeCollection Create(ISiteMap siteMap)
+        public ISiteMapNodeCollection Create()
         {
-            return new SiteMapNodeCollection(siteMap);
+            return new SiteMapNodeCollection();
+        }
+
+        public ISiteMapNodeCollection CreateLockable(ISiteMap siteMap)
+        {
+            return new LockableSiteMapNodeCollection(siteMap);
         }
 
         public ISiteMapNodeCollection CreateReadOnly(ISiteMapNodeCollection siteMapNodeCollection)
@@ -22,9 +27,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return new ReadOnlySiteMapNodeCollection(siteMapNodeCollection);
         }
 
-        public ISiteMapNodeCollection CreateEmptyReadOnly(ISiteMap siteMap)
+        public ISiteMapNodeCollection CreateEmptyReadOnly()
         {
-            return new ReadOnlySiteMapNodeCollection(new SiteMapNodeCollection(siteMap));
+            return new ReadOnlySiteMapNodeCollection(new SiteMapNodeCollection());
         }
 
         #endregion

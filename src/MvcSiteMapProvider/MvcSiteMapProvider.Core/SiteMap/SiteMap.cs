@@ -184,7 +184,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     this.parentNodeTable[node] = parentNode;
                     if (!this.childNodeCollectionTable.ContainsKey(parentNode))
                     {
-                        this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.Create(this);
+                        this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.CreateLockable(this);
                     }
                     this.childNodeCollectionTable[parentNode].Add(node);
                 }
@@ -424,7 +424,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             if (collection == null)
             {
-                return siteMapNodeCollectionFactory.CreateEmptyReadOnly(this);
+                return siteMapNodeCollectionFactory.CreateEmptyReadOnly();
             }
             if (!this.SecurityTrimmingEnabled)
             {
@@ -432,7 +432,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             // TODO: find a way to inject this.
             HttpContext current = HttpContext.Current;
-            var secureCollection = siteMapNodeCollectionFactory.Create(this);
+            var secureCollection = siteMapNodeCollectionFactory.Create();
             foreach (ISiteMapNode secureNode in collection)
             {
                 if (secureNode.IsAccessibleToUser(current))

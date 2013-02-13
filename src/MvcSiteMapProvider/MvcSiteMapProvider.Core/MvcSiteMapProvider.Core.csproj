@@ -123,6 +123,7 @@
     <Compile Include="SiteMap\ISiteMapNodeCollectionFactory.cs" />
     <Compile Include="SiteMap\LockableSiteMap.cs" />
     <Compile Include="SiteMap\LockableSiteMapNode.cs" />
+    <Compile Include="SiteMap\LockableSiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\ReadOnlySiteMapNodeCollection.cs" />
     <Compile Include="SiteMap\RequestCacheableSiteMap.cs" />
     <Compile Include="SiteMap\RequestCacheableSiteMapNode.cs" />
