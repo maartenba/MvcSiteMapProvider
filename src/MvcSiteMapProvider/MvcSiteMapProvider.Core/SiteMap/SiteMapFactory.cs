@@ -44,18 +44,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public ISiteMap Create(ISiteMapBuilder siteMapBuilder)
         {
-            var siteMap = new SiteMap(
-                siteMapBuilder, 
-                aclModule, 
+            return new RequestCacheableSiteMap(
+                siteMapBuilder,
+                aclModule,
                 siteMapNodeCollectionFactory,
-                genericDictionaryFactory);
-
-            // Decorate the class with additional responsibilities.
-            var lockableSiteMap = new LockableSiteMap(siteMap);
-            var requestCacheableSiteMap = new RequestCacheableSiteMap(lockableSiteMap, requestCache);
-
-
-            return requestCacheableSiteMap;
+                genericDictionaryFactory,
+                requestCache);
         }
 
         #endregion

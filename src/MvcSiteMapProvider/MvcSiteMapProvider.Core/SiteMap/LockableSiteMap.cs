@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Core.SiteMap.Builder;
+using MvcSiteMapProvider.Core.Security;
+using MvcSiteMapProvider.Core.Collections;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -11,67 +13,55 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// TODO: Update summary.
     /// </summary>
     public class LockableSiteMap
-        : ISiteMap
+        : SiteMap
     {
         public LockableSiteMap(
-            ISiteMap siteMap
-            )
+            ISiteMapBuilder siteMapBuilder,
+            IAclModule aclModule,
+            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
+            IGenericDictionaryFactory genericDictionaryFactory
+            ) 
+            : base(siteMapBuilder, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
         {
-            if (siteMap == null)
-                throw new ArgumentNullException("siteMap");
-
-            this.innerSiteMap = siteMap;
         }
 
-        private readonly ISiteMap innerSiteMap;
-
-
-        #region ISiteMap Members
-
-        public bool IsReadOnly { get; protected set; }
-
-        public void AddNode(ISiteMapNode node)
+        public override void AddNode(ISiteMapNode node)
         {
             if (this.IsReadOnly)
             {
                 throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
-            this.innerSiteMap.AddNode(node);
+            base.AddNode(node);
         }
 
-        public void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
+        public override void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
             if (this.IsReadOnly)
             {
                 throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
-            this.innerSiteMap.AddNode(node, parentNode);
+            base.AddNode(node, parentNode);
         }
 
-        public void RemoveNode(ISiteMapNode node)
+        public override void RemoveNode(ISiteMapNode node)
         {
             if (this.IsReadOnly)
             {
                 throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
-            this.innerSiteMap.RemoveNode(node);
+            base.RemoveNode(node);
         }
 
-        public void Clear()
+        public override void Clear()
         {
             if (this.IsReadOnly)
             {
                 throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
-            this.innerSiteMap.Clear();
+            base.Clear();
         }
 
-        public ISiteMapNode RootNode
-        {
-            get { return this.innerSiteMap.RootNode; }
-        }
-
-        public void BuildSiteMap(ISiteMap siteMap)
+        public override void BuildSiteMap(ISiteMap siteMap)
         {
             if (siteMap == null)
             {
@@ -79,120 +69,36 @@ namespace MvcSiteMapProvider.Core.SiteMap
             }
             // Set the sitemap to read-write so we can populate it.
             this.IsReadOnly = false;
-            this.innerSiteMap.BuildSiteMap(siteMap);
+            base.BuildSiteMap(siteMap);
             // Set the sitemap to read-only so the nodes cannot be inadvertantly modified by the UI layer.
             this.IsReadOnly = true;
         }
 
-        public ISiteMapNode CurrentNode
-        {
-            get { return this.innerSiteMap.CurrentNode; }
-        }
 
-        public bool EnableLocalization
+        public override bool EnableLocalization
         {
-            get { return this.innerSiteMap.EnableLocalization; }
+            get { return base.EnableLocalization; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
                 }
-                this.innerSiteMap.EnableLocalization = value;
+                base.EnableLocalization = value;
             }
         }
 
-        public ISiteMapNode FindSiteMapNode(string rawUrl)
+        public override string ResourceKey
         {
-            return this.innerSiteMap.FindSiteMapNode(rawUrl);
-        }
-
-        public ISiteMapNode FindSiteMapNode(HttpContext context)
-        {
-            return this.innerSiteMap.FindSiteMapNode(context);
-        }
-
-        public ISiteMapNode FindSiteMapNodeFromKey(string key)
-        {
-            return this.innerSiteMap.FindSiteMapNodeFromKey(key);
-        }
-
-        public ISiteMapNodeCollection GetChildNodes(ISiteMapNode node)
-        {
-            return this.innerSiteMap.GetChildNodes(node);
-        }
-
-        public ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel)
-        {
-            return this.innerSiteMap.GetCurrentNodeAndHintAncestorNodes(upLevel);
-        }
-
-        public ISiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel)
-        {
-            return this.innerSiteMap.GetCurrentNodeAndHintNeighborhoodNodes(upLevel, downLevel);
-        }
-
-        public ISiteMapNode GetParentNode(ISiteMapNode node)
-        {
-            return this.innerSiteMap.GetParentNode(node);
-        }
-
-        public ISiteMapNode GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(int walkupLevels, int relativeDepthFromWalkup)
-        {
-            return this.innerSiteMap.GetParentNodeRelativeToCurrentNodeAndHintDownFromParent(walkupLevels, relativeDepthFromWalkup);
-        }
-
-        public ISiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(ISiteMapNode node, int walkupLevels, int relativeDepthFromWalkup)
-        {
-            return this.innerSiteMap.GetParentNodeRelativeToNodeAndHintDownFromParent(node, walkupLevels, relativeDepthFromWalkup);
-        }
-
-        public void HintAncestorNodes(ISiteMapNode node, int upLevel)
-        {
-            this.innerSiteMap.HintAncestorNodes(node, upLevel);
-        }
-
-        public void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel)
-        {
-            this.innerSiteMap.HintNeighborhoodNodes(node, upLevel, downLevel);
-        }
-
-        public bool IsAccessibleToUser(HttpContext context, ISiteMapNode node)
-        {
-            return this.innerSiteMap.IsAccessibleToUser(context, node);
-        }
-
-        public string ResourceKey
-        {
-            get { return this.innerSiteMap.ResourceKey; }
+            get { return base.ResourceKey; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
                 }
-                this.innerSiteMap.ResourceKey = value;
+                base.ResourceKey = value;
             }
         }
-
-        public bool SecurityTrimmingEnabled
-        {
-            get { return this.innerSiteMap.SecurityTrimmingEnabled; }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-                }
-                this.innerSiteMap.SecurityTrimmingEnabled = value;
-            }
-        }
-
-        public ISiteMapNode FindSiteMapNode(ControllerContext context)
-        {
-            return this.innerSiteMap.FindSiteMapNode(context);
-        }
-
-        #endregion
     }
 }

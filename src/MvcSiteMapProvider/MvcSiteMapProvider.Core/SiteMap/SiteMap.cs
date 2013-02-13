@@ -77,10 +77,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets whether the current sitemap is read-only.
         /// </summary>
         /// <value><c>true</c> if the current sitemap is read-only; otherwise <c>false</c>.</value>
-        public virtual bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly { get; protected set; }
 
         /// <summary>
         /// Adds a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object to the node collection that is maintained by the site map provider.
@@ -286,7 +283,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// The EnableLocalization property is used for the get accessor of the Title and Description properties, as well as additional 
         /// Attributes properties of a SiteMapNode object.
         /// </remarks>
-        public bool EnableLocalization { get; set; }
+        public virtual bool EnableLocalization { get; set; }
 
         public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
         {
