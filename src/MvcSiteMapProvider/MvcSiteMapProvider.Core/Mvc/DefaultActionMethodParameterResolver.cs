@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using MvcSiteMapProvider.Core;
+using MvcSiteMapProvider.Core.Collections;
 
 namespace MvcSiteMapProvider.Core.Mvc
 {

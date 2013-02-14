@@ -56,6 +56,7 @@
     <Compile Include="ChangeFrequency.cs" />
     <Compile Include="Collections\GenericDictionaryFactory.cs" />
     <Compile Include="Collections\IGenericDictionaryFactory.cs" />
+    <Compile Include="Collections\IThreadSafeDictionary.cs" />
     <Compile Include="Collections\LockableDictionary.cs" />
     <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="SiteMap\Builder\ISiteMapBuilderSet.cs" />
     <Compile Include="SiteMap\Builder\MvcSiteMapNodeAttributeDefinitionForAction.cs" />
     <Compile Include="SiteMap\Builder\MvcSiteMapNodeAttributeDefinitionForController.cs" />
-    <Compile Include="Mvc\ThreadSafeDictionary.cs" />
+    <Compile Include="Collections\ThreadSafeDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -143,7 +144,6 @@
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMap\ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="SiteMap\MvcSiteMapNodeAttribute.cs" />
-    <Compile Include="Collections\NameValueCollection.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
     <Compile Include="SiteMap\RouteValueCollection.cs" />
     <Compile Include="SiteMap\RouteValueCollectionFactory.cs" />
