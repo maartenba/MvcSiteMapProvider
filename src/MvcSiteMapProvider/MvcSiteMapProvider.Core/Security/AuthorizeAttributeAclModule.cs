@@ -114,7 +114,7 @@ namespace MvcSiteMapProvider.Core.Security
             //var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
             //httpContext.RewritePath(nodeUrl, true);
 
-            //HttpContextBase httpContext2 = new HttpContext2(context);
+            //HttpContextBase httpContext2 = new MvcHttpContext(context);
             //RouteData routes = mvcNode.GetRouteData(httpContext2);
 
 

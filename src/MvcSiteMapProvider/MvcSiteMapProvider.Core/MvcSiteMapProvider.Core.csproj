@@ -183,10 +183,8 @@
     <Compile Include="SiteMap\Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="SiteMap\CacheDescription.cs" />
     <Compile Include="SiteMap\DynamicNode.cs" />
-    <Compile Include="SiteMap\HttpContext2.cs" />
-    <Compile Include="SiteMap\HttpContextMethodOverrider.cs" />
-    <Compile Include="SiteMap\HttpRequest2.cs" />
-    <Compile Include="SiteMap\HttpRequestMethodOverrider.cs" />
+    <Compile Include="Web\MvcHttpContext.cs" />
+    <Compile Include="Web\MvcHttpRequest.cs" />
     <Compile Include="SiteMap\IDynamicNodeProvider.cs" />
     <Compile Include="SiteMap\ISiteMap.cs" />
     <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolver.cs" />

@@ -2,21 +2,21 @@
 using System.Reflection;
 using System.Web;
 
-namespace MvcSiteMapProvider.Core.SiteMap
+namespace MvcSiteMapProvider.Core.Web
 {
     /// <summary>
-    /// HttpRequest2 wrapper.
+    /// MvcHttpRequest wrapper.
     /// </summary>
-    public class HttpRequest2 : HttpRequestWrapper
+    public class MvcHttpRequest : HttpRequestWrapper
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequest2"/> class.
+        /// Initializes a new instance of the <see cref="MvcHttpRequest"/> class.
         /// </summary>
         /// <param name="httpRequest">The object that this wrapper class provides access to.</param>
         /// <exception cref="T:System.ArgumentNullException">
         /// 	<paramref name="httpRequest"/> is null.
         /// </exception>
-        public HttpRequest2(HttpRequest httpRequest)
+        public MvcHttpRequest(HttpRequest httpRequest)
             : base(httpRequest)
         {
         }

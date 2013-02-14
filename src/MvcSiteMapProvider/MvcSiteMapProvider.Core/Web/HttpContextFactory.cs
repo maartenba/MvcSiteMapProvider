@@ -29,9 +29,9 @@ namespace MvcSiteMapProvider.Core.Web
         {
             // TODO: Change this to HttpContextWrapper to make it generic to pass around and add
             // methods here to wrap in specified classes when needed.
-            //return new HttpContext2(context);
+            //return new MvcHttpContext(context);
 
-            return new HttpContext2(HttpContext.Current);
+            return new MvcHttpContext(HttpContext.Current);
         }
 
         public RequestContext CreateRequestContext(RouteData routeData)
