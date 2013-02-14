@@ -4,6 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.RequestCache;
+using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Globalization;
+using MvcSiteMapProvider.Core.Mvc;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -11,115 +15,43 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// TODO: Update summary.
     /// </summary>
     public class RequestCacheableSiteMapNode
-        : ISiteMapNode
+        : LockableSiteMapNode
     {
         public RequestCacheableSiteMapNode(
-            ISiteMapNode siteMapNode,
+            ISiteMap siteMap,
+            string key,
+            bool isDynamic,
+            ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
+            ILocalizationService localizationService,
+            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
+            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
+            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            IActionMethodParameterResolver actionMethodParameterResolver,
             IRequestCache requestCache
             )
+            : base(
+                siteMap, 
+                key, 
+                isDynamic, 
+                siteMapNodeChildStateFactory, 
+                localizationService, 
+                dynamicNodeProviderStrategy, 
+                siteMapNodeUrlResolverStrategy, 
+                siteMapNodeVisibilityProviderStrategy, 
+                actionMethodParameterResolver
+            )
         {
-            if (siteMapNode == null)
-                throw new ArgumentNullException("siteMapNode");
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
 
-            this.innerSiteMapNode = siteMapNode;
             this.requestCache = requestCache;
         }
 
-        private readonly ISiteMapNode innerSiteMapNode;
         private readonly IRequestCache requestCache;
         private readonly Guid instanceId = Guid.NewGuid();
 
 
         #region ISiteMapNode Members
-
-        public string Key
-        {
-            get { return this.innerSiteMapNode.Key; }
-        }
-
-        public bool IsDynamic
-        {
-            get { return this.innerSiteMapNode.IsDynamic; }
-        }
-
-        public bool IsReadOnly
-        {
-            get { return this.innerSiteMapNode.IsReadOnly; }
-        }
-
-        public ISiteMapNode ParentNode
-        {
-            get { return this.innerSiteMapNode.ParentNode; }
-            set { this.innerSiteMapNode.ParentNode = value; }
-        }
-
-        public ISiteMapNodeCollection ChildNodes
-        {
-            get { return this.SiteMap.GetChildNodes(this); }
-        }
-
-        public bool IsDescendantOf(ISiteMapNode node)
-        {
-            return this.innerSiteMapNode.IsDescendantOf(node);
-        }
-
-        public ISiteMapNode NextSibling
-        {
-            get { return this.innerSiteMapNode.NextSibling; }
-        }
-
-        public ISiteMapNode PreviousSibling
-        {
-            get { return this.innerSiteMapNode.PreviousSibling; }
-        }
-
-        public ISiteMapNode RootNode
-        {
-            get { return this.innerSiteMapNode.RootNode; }
-        }
-
-        public bool IsInCurrentPath()
-        {
-            ISiteMapNode node = this;
-            return (this.SiteMap.CurrentNode != null && (node == this.SiteMap.CurrentNode || this.SiteMap.CurrentNode.IsDescendantOf(node)));
-        }
-
-        public bool HasChildNodes
-        {
-            get
-            {
-                var childNodes = this.ChildNodes;
-                return ((childNodes != null) && (childNodes.Count > 0));
-            }
-        }
-
-        public int GetNodeLevel()
-        {
-            return this.innerSiteMapNode.GetNodeLevel();
-        }
-
-        public ISiteMap SiteMap
-        {
-            get { return this.innerSiteMapNode.SiteMap; }
-        }
-
-        public bool IsAccessibleToUser(HttpContext context)
-        {
-            return this.innerSiteMapNode.IsAccessibleToUser(context);
-        }
-
-        public string HttpMethod
-        {
-            get { return this.innerSiteMapNode.HttpMethod; }
-            set { this.innerSiteMapNode.HttpMethod = value; }
-        }
-
-        public string ResourceKey
-        {
-            get { return this.innerSiteMapNode.ResourceKey; }
-        }
 
         public string Title
         {
@@ -129,12 +61,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 var result = this.requestCache.GetValue<string>(key);
                 if (result == null)
                 {
-                    result = this.innerSiteMapNode.Title;
+                    result = base.Title;
                     this.requestCache.SetValue<string>(key, result);
                 }
                 return result;
             }
-            set { this.innerSiteMapNode.Title = value; }
+            set { base.Title = value; }
         }
 
         public string Description
@@ -145,58 +77,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 var result = this.requestCache.GetValue<string>(key);
                 if (result == null)
                 {
-                    result = this.innerSiteMapNode.Description;
+                    result = base.Description;
                     this.requestCache.SetValue<string>(key, result);
                 }
                 return result;
             }
-            set { this.innerSiteMapNode.Description = value; }
-        }
-
-        public string TargetFrame
-        {
-            get { return this.innerSiteMapNode.TargetFrame; }
-            set { this.innerSiteMapNode.TargetFrame = value; }
-        }
-
-        public string ImageUrl
-        {
-            get { return this.innerSiteMapNode.ImageUrl; }
-            set { this.innerSiteMapNode.ImageUrl = value; }
-        }
-
-        public IAttributeCollection Attributes
-        {
-            get { return this.innerSiteMapNode.Attributes; }
-        }
-
-        public IList<string> Roles
-        {
-            get { return this.innerSiteMapNode.Roles; }
-        }
-
-        public DateTime LastModifiedDate
-        {
-            get { return this.innerSiteMapNode.LastModifiedDate; }
-            set { this.innerSiteMapNode.LastModifiedDate = value; }
-        }
-
-        public ChangeFrequency ChangeFrequency
-        {
-            get { return this.innerSiteMapNode.ChangeFrequency; }
-            set { this.innerSiteMapNode.ChangeFrequency = value; }
-        }
-
-        public UpdatePriority UpdatePriority
-        {
-            get { return this.innerSiteMapNode.UpdatePriority; }
-            set { this.innerSiteMapNode.UpdatePriority = value; }
-        }
-
-        public string VisibilityProvider
-        {
-            get { return this.innerSiteMapNode.VisibilityProvider; }
-            set { this.innerSiteMapNode.VisibilityProvider = value; }
+            set { base.Description = value; }
         }
 
         public bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata)
@@ -205,22 +91,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
-                result = this.innerSiteMapNode.IsVisible(context, sourceMetadata);
+                result = base.IsVisible(context, sourceMetadata);
                 this.requestCache.SetValue<bool>(key, (bool)result);
             }
             return (bool)result;
-        }
-
-        public bool Clickable
-        {
-            get { return this.innerSiteMapNode.Clickable; }
-            set { this.innerSiteMapNode.Clickable = value; }
-        }
-
-        public string UrlResolver
-        {
-            get { return this.innerSiteMapNode.UrlResolver; }
-            set { this.innerSiteMapNode.UrlResolver = value; }
         }
 
         public string Url
@@ -231,23 +105,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 var result = this.requestCache.GetValue<string>(key);
                 if (result == null)
                 {
-                    result = this.innerSiteMapNode.Url;
+                    result = base.Url;
                     this.requestCache.SetValue<string>(key, result);
                 }
                 return result;
             }
-            set { this.innerSiteMapNode.Url = value; }
-        }
-
-        public string UnresolvedUrl
-        {
-            get { return this.innerSiteMapNode.UnresolvedUrl; }
-        }
-
-        public string DynamicNodeProvider
-        {
-            get { return this.innerSiteMapNode.DynamicNodeProvider; }
-            set { this.innerSiteMapNode.DynamicNodeProvider = value; }
+            set { base.Url = value; }
         }
 
         public IEnumerable<DynamicNode> GetDynamicNodeCollection()
@@ -256,59 +119,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             var result = this.requestCache.GetValue<IEnumerable<DynamicNode>>(key);
             if (result == null)
             {
-                result = this.innerSiteMapNode.GetDynamicNodeCollection();
+                result = base.GetDynamicNodeCollection();
                 this.requestCache.SetValue<IEnumerable<DynamicNode>>(key, result);
             }
             return result;
-        }
-
-        public bool HasDynamicNodeProvider
-        {
-            get { return this.innerSiteMapNode.HasDynamicNodeProvider; }
-        }
-
-        public string Route
-        {
-            get { return this.innerSiteMapNode.Route; }
-            set { this.innerSiteMapNode.Route = value; }
-        }
-
-        public IRouteValueCollection RouteValues
-        {
-            get { return this.innerSiteMapNode.RouteValues; }
-        }
-
-        public IList<string> PreservedRouteParameters
-        {
-            get { return this.innerSiteMapNode.PreservedRouteParameters; }
-        }
-
-        public RouteData GetRouteData(HttpContextBase httpContext)
-        {
-            return this.innerSiteMapNode.GetRouteData(httpContext);
-        }
-
-        public bool MatchesRoute(IDictionary<string, object> routeValues)
-        {
-            return this.innerSiteMapNode.MatchesRoute(routeValues);
-        }
-
-        public string Area
-        {
-            get { return this.innerSiteMapNode.Area; }
-            set { this.innerSiteMapNode.Area = value; }
-        }
-
-        public string Controller
-        {
-            get { return this.innerSiteMapNode.Controller; }
-            set { this.innerSiteMapNode.Controller = value; }
-        }
-
-        public string Action
-        {
-            get { return this.innerSiteMapNode.Action; }
-            set { this.innerSiteMapNode.Action = value; }
         }
 
         #endregion
