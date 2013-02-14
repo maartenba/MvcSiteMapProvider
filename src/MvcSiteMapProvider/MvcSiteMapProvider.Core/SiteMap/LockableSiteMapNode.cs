@@ -42,7 +42,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         }
 
 
-        public ISiteMapNode ParentNode
+        public override ISiteMapNode ParentNode
         {
             get { return base.ParentNode; }
             set
@@ -61,7 +61,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The HTTP method.
         /// </value>
-        public string HttpMethod
+        public override string HttpMethod
         {
             get { return base.HttpMethod; }
             set
@@ -78,7 +78,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the title (optional).
         /// </summary>
         /// <value>The title.</value>
-        public string Title
+        public override string Title
         {
             get { return base.Title; }
             set
@@ -96,7 +96,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the description (optional).
         /// </summary>
         /// <value>The description.</value>
-        public string Description
+        public override string Description
         {
             get { return base.Description; }
             set
@@ -113,7 +113,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the target frame (optional).
         /// </summary>
         /// <value>The target frame.</value>
-        public string TargetFrame
+        public override string TargetFrame
         {
             get { return base.TargetFrame; }
             set
@@ -130,7 +130,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the image URL (optional).
         /// </summary>
         /// <value>The image URL.</value>
-        public string ImageUrl
+        public override string ImageUrl
         {
             get { return base.ImageUrl; }
             set
@@ -147,7 +147,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the last modified date.
         /// </summary>
         /// <value>The last modified date.</value>
-        public DateTime LastModifiedDate
+        public override DateTime LastModifiedDate
         {
             get { return base.LastModifiedDate; }
             set
@@ -164,7 +164,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the change frequency.
         /// </summary>
         /// <value>The change frequency.</value>
-        public ChangeFrequency ChangeFrequency
+        public override ChangeFrequency ChangeFrequency
         {
             get { return base.ChangeFrequency; }
             set
@@ -181,7 +181,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the update priority.
         /// </summary>
         /// <value>The update priority.</value>
-        public UpdatePriority UpdatePriority
+        public override UpdatePriority UpdatePriority
         {
             get { return base.UpdatePriority; }
             set
@@ -205,7 +205,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the visibility provider.
         /// </value>
-        public string VisibilityProvider
+        public override string VisibilityProvider
         {
             get { return base.VisibilityProvider; }
             set
@@ -228,7 +228,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         ///   <c>true</c> if clickable; otherwise, <c>false</c>.
         /// </value>
-        public bool Clickable
+        public override bool Clickable
         {
             get { return base.Clickable; }
             set
@@ -247,7 +247,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the URL resolver.
         /// </value>
-        public string UrlResolver
+        public override string UrlResolver
         {
             get { return base.UrlResolver; }
             set
@@ -266,7 +266,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The URL.
         /// </value>
-        public string Url
+        public override string Url
         {
             get { return base.Url; }
             set
@@ -289,7 +289,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// The name or type of the Dynamic Node Provider.
         /// </value>
-        public string DynamicNodeProvider
+        public override string DynamicNodeProvider
         {
             get { return base.DynamicNodeProvider; }
             set
@@ -310,7 +310,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the route.
         /// </summary>
         /// <value>The route.</value>
-        public string Route
+        public override string Route
         {
             get { return base.Route; }
             set
@@ -331,7 +331,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the area.
         /// </summary>
         /// <value>The area.</value>
-        public string Area
+        public override string Area
         {
             get { return base.Area; }
             set
@@ -348,7 +348,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the controller.
         /// </summary>
         /// <value>The controller.</value>
-        public string Controller
+        public override string Controller
         {
             get { return base.Controller; }
             set
@@ -365,7 +365,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Gets or sets the action.
         /// </summary>
         /// <value>The action.</value>
-        public string Action
+        public override string Action
         {
             get { return base.Action; }
             set

@@ -53,7 +53,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         #region ISiteMapNode Members
 
-        public string Title
+        public override string Title
         {
             get 
             {
@@ -69,7 +69,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             set { base.Title = value; }
         }
 
-        public string Description
+        public override string Description
         {
             get
             {
@@ -85,7 +85,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             set { base.Description = value; }
         }
 
-        public bool IsVisible(IDictionary<string, object> sourceMetadata)
+        public override bool IsVisible(IDictionary<string, object> sourceMetadata)
         {
             var key = this.GetCacheKey("IsVisible");
             var result = this.requestCache.GetValue<bool?>(key);
@@ -97,7 +97,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return (bool)result;
         }
 
-        public string Url
+        public override string Url
         {
             get
             {
@@ -113,7 +113,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             set { base.Url = value; }
         }
 
-        public IEnumerable<DynamicNode> GetDynamicNodeCollection()
+        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
         {
             var key = GetCacheKey("GetDynamicNodeCollection");
             var result = this.requestCache.GetValue<IEnumerable<DynamicNode>>(key);

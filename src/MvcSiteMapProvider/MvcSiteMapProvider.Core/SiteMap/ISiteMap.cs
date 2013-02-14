@@ -21,7 +21,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMapNode CurrentNode { get; }
         bool EnableLocalization { get; set; }
         ISiteMapNode FindSiteMapNode(string rawUrl);
-        //ISiteMapNode FindSiteMapNode(HttpContext context);
         ISiteMapNode FindSiteMapNodeFromCurrentContext();
         ISiteMapNode FindSiteMapNode(ControllerContext context);
         ISiteMapNode FindSiteMapNodeFromKey(string key);

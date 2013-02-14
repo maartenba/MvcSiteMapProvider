@@ -121,9 +121,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 this.RemoveNode(node);
             }
 
-            //// Allow for external URLs
-            //var encoded = UrlPath.EncodeExternalUrl(node);
-
             // Add the node
             try
             {
@@ -134,12 +131,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 if (parentNode != null) this.RemoveNode(parentNode);
                 AddNodeInternal(node, parentNode);
             }
-
-            //// Restore the external URL
-            //if (encoded)
-            //{
-            //    UrlPath.DecodeExternalUrl(node);
-            //}
 
             //    SiteMapProviderEventHandler.OnAddedSiteMapNode(new SiteMapProviderEventContext(this, node, root));
             //}
@@ -268,9 +259,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             get 
             {
-                // TODO: find a way to inject HttpContext
-                //HttpContext current = HttpContext.Current;
-                //var currentNode = this.FindSiteMapNode(current);
                 var currentNode = this.FindSiteMapNodeFromCurrentContext();
                 return this.ReturnNodeIfAccessible(currentNode);
             }
@@ -308,22 +296,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return null;
         }
 
-        ///// <summary>
-        ///// Retrieves a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page using the specified <see cref="T:System.Web.HttpContext"/> object.
-        ///// </summary>
-        ///// <param name="context">The <see cref="T:System.Web.HttpContext"/> used to match node information with the URL of the requested page.</param>
-        ///// <returns>
-        ///// A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> or if the page context is null.
-        ///// </returns>
-        //public virtual ISiteMapNode FindSiteMapNode(HttpContext context)
-        //{
-        //    // TODO: find a way to inject this.
-        //    //var httpContext = new HttpContext2(context);
-             
-        //    var routeData = RouteTable.Routes.GetRouteData(httpContext);
-        //    return FindSiteMapNode(context, routeData);
-        //}
-
         /// <summary>
         /// Retrieves a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page using the current <see cref="T:System.Web.HttpContext"/> object.
         /// </summary>
@@ -357,26 +329,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             // Node
             ISiteMapNode node = null;
-
-            // TODO: find a way to inject HttpContext2
-
-            // Fetch route data
-            //var httpContext = new HttpContext2(context);
-            
             if (routeData != null)
             {
-                // TODO: find a way to inject requestcontext
-                //RequestContext requestContext = new RequestContext(httpContext, routeData);
-
-                //var httpContext = httpContextFactory.Create();
+                // Fetch route data
                 var requestContext = httpContextFactory.CreateRequestContext(routeData);
                 VirtualPathData vpd = routeData.Route.GetVirtualPath(
                     requestContext, routeData.Values);
                 string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
                     ?? string.Empty).TrimEnd('/') + "/";
-
-                //requestContext.HttpContext.Request.Path
-                //node = this.FindSiteMapNode(httpContext.Request.Path);
 
                 node = this.FindSiteMapNode(requestContext.HttpContext.Request.Path);
 
@@ -409,7 +369,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // Try base class
             if (node == null)
             {
-                //node = this.FindSiteMapNode(context);
                 node = this.FindSiteMapNodeFromCurrentContext();
             }
 
@@ -667,24 +626,24 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 var childNodes = GetChildNodes(rootNode);
 
                 // Search current level
-                foreach (ISiteMapNode mvcNode in childNodes)
+                foreach (ISiteMapNode node in childNodes)
                 {
                     // Look at the route property
-                    if (!string.IsNullOrEmpty(mvcNode.Route))
+                    if (!string.IsNullOrEmpty(node.Route))
                     {
-                        if (RouteTable.Routes[mvcNode.Route] == route)
+                        if (RouteTable.Routes[node.Route] == route)
                         {
                             // This looks a bit weird, but if i set up a node to a general route ie /Controller/Action/ID
                             // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route
-                            if (mvcNode.MatchesRoute(values))
+                            if (node.MatchesRoute(values))
                             {
-                                return mvcNode;
+                                return node;
                             }
                         }
                     }
-                    else if (mvcNode.MatchesRoute(values))
+                    else if (node.MatchesRoute(values))
                     {
-                        return mvcNode;
+                        return node;
                     }
                 }
 

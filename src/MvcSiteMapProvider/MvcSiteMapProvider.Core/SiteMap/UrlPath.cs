@@ -12,8 +12,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public static string MakeVirtualPathAppAbsolute(string virtualPath)
         {
-            //var path = HttpRuntime.AppDomainAppVirtualPath;
-            //return MakeVirtualPathAppAbsolute(virtualPath, HttpRuntime.AppDomainAppVirtualPathString);
             return MakeVirtualPathAppAbsolute(virtualPath, HttpRuntime.AppDomainAppVirtualPath);
         }
 
@@ -94,7 +92,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public static string Combine(string basepath, string relative)
         {
-            //return Combine(HttpRuntime.AppDomainAppVirtualPathString, basepath, relative);
             return Combine(HttpRuntime.AppDomainAppVirtualPath, basepath, relative);
         }
 
@@ -294,33 +291,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 virtualPath = str;
             }
         }
-
-        ///// <summary>
-        ///// Encodes the external URL.
-        ///// </summary>
-        ///// <param name="node">The node.</param>
-        ///// <returns></returns>
-        //public static bool EncodeExternalUrl(ISiteMapNode node)
-        //{
-        //    var url = node.Url;
-        //    if (url.Contains("http") || url.Contains("ftp"))
-        //    {
-        //        node.Url = HttpUtility.UrlEncode(url);
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        ///// <summary>
-        ///// Decodes the external URL.
-        ///// </summary>
-        ///// <param name="node">The node.</param>
-        //public static void DecodeExternalUrl(ISiteMapNode node)
-        //{
-        //    node.Url = HttpUtility.UrlDecode(node.Url);
-        //}
-
-
 
         /// <summary>
         /// Returns a site relative HTTP path from a partial path starting out with a ~.
