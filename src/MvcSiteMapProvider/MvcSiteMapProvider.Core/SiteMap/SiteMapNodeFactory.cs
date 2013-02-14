@@ -72,7 +72,23 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
             var localizationService = siteMapNodeChildStateFactory.CreateLocalizationService(implicitResourceKey);
 
-            var siteMapNode = new SiteMapNode(
+            //var siteMapNode = new SiteMapNode(
+            //    siteMap,
+            //    key,
+            //    isDynamic,
+            //    siteMapNodeChildStateFactory,
+            //    localizationService,
+            //    dynamicNodeProviderStrategy,
+            //    siteMapNodeUrlResolverStrategy,
+            //    siteMapNodeVisibilityProviderStrategy,
+            //    actionMethodParameterResolver);
+
+            //// Decorate the class with additional responsibilities.
+            //var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);
+            //var requestCacheableSiteMapNode = new RequestCacheableSiteMapNode(lockableSiteMapNode, requestCache);
+            //return requestCacheableSiteMapNode;
+
+            return new LockableSiteMapNode(
                 siteMap,
                 key,
                 isDynamic,
@@ -82,11 +98,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 siteMapNodeUrlResolverStrategy,
                 siteMapNodeVisibilityProviderStrategy,
                 actionMethodParameterResolver);
-
-            // Decorate the class with additional responsibilities.
-            var lockableSiteMapNode = new LockableSiteMapNode(siteMapNode);
-            var requestCacheableSiteMapNode = new RequestCacheableSiteMapNode(lockableSiteMapNode, requestCache);
-            return requestCacheableSiteMapNode;
         }
 
         #endregion

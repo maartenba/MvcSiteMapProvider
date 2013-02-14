@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
+using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Globalization;
+using MvcSiteMapProvider.Core.Mvc;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -10,172 +14,45 @@ namespace MvcSiteMapProvider.Core.SiteMap
     /// This class implements the decorator pattern and can be used to make an instance of ISiteMapNode read-only after the BuildSiteMap method has been called.
     /// </summary>
     public class LockableSiteMapNode
-        : ISiteMapNode
+        : SiteMapNode
     {
         public LockableSiteMapNode(
-            ISiteMapNode siteMapNode
+            ISiteMap siteMap,
+            string key,
+            bool isDynamic,
+            ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
+            ILocalizationService localizationService,
+            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
+            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
+            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            IActionMethodParameterResolver actionMethodParameterResolver
+            )
+            : base(
+                siteMap, 
+                key, 
+                isDynamic, 
+                siteMapNodeChildStateFactory, 
+                localizationService, 
+                dynamicNodeProviderStrategy, 
+                siteMapNodeUrlResolverStrategy, 
+                siteMapNodeVisibilityProviderStrategy, 
+                actionMethodParameterResolver
             )
         {
-            if (siteMapNode == null)
-                throw new ArgumentNullException("siteMapNode");
-
-            this.innerSiteMapNode = siteMapNode;
         }
 
-        private readonly ISiteMapNode innerSiteMapNode;
-
-
-
-        #region ISiteMapNode Members
-
-        /// <summary>
-        /// Gets the key.
-        /// </summary>
-        /// <value>The key.</value>
-        public string Key
-        {
-            get { return this.innerSiteMapNode.Key; }
-        }
-
-        /// <summary>
-        /// Gets whether the current node was created from a dynamic source.
-        /// </summary>
-        /// <value>True if the current node is dynamic.</value>
-        public bool IsDynamic
-        {
-            get { return this.innerSiteMapNode.IsDynamic; }
-        }
-
-        /// <summary>
-        /// Gets whether the current node is read-only.
-        /// </summary>
-        /// <value>True if the current node is read-only.</value>
-        public bool IsReadOnly
-        {
-            get { return this.SiteMap.IsReadOnly; }
-        }
-
-        #region Node Map Positioning
 
         public ISiteMapNode ParentNode
         {
-            get { return this.innerSiteMapNode.ParentNode; }
+            get { return base.ParentNode; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ParentNode"));
                 }
-                this.innerSiteMapNode.ParentNode = value;
+                base.ParentNode = value;
             }
-        }
-
-        /// <summary>
-        /// Gets the child nodes.
-        /// </summary>
-        /// <value>
-        /// The child nodes.
-        /// </value>
-        public ISiteMapNodeCollection ChildNodes
-        {
-            get { return this.SiteMap.GetChildNodes(this); }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the current site map node is a child or a direct descendant of the specified node.
-        /// </summary>
-        /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.ISiteMapNode"/> to check if the current node is a child or descendant of.</param>
-        /// <returns><c>true</c> if the current node is a child or descendant of the specified node; otherwise, <c>false</c>.</returns>
-        public bool IsDescendantOf(ISiteMapNode node)
-        {
-            return this.innerSiteMapNode.IsDescendantOf(node);
-        }
-
-        /// <summary>
-        /// Gets the next sibling in the map relative to this node.
-        /// </summary>
-        /// <value>
-        /// The sibling node.
-        /// </value>
-        public ISiteMapNode NextSibling
-        {
-            get { return this.innerSiteMapNode.NextSibling; }
-        }
-
-        /// <summary>
-        /// Gets the previous sibling in the map relative to this node.
-        /// </summary>
-        /// <value>
-        /// The sibling node.
-        /// </value>
-        public ISiteMapNode PreviousSibling
-        {
-            get { return this.innerSiteMapNode.PreviousSibling; }
-        }
-
-        /// <summary>
-        /// Gets the root node in the current map.
-        /// </summary>
-        /// <value>
-        /// The root node.
-        /// </value>
-        public ISiteMapNode RootNode
-        {
-            get { return this.innerSiteMapNode.RootNode; }
-        }
-
-        /// <summary>
-        /// Determines whether the specified node is in current path.
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if the specified node is in current path; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsInCurrentPath()
-        {
-            ISiteMapNode node = this;
-            return (this.SiteMap.CurrentNode != null && (node == this.SiteMap.CurrentNode || this.SiteMap.CurrentNode.IsDescendantOf(node)));
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the current SiteMapNode has any child nodes.
-        /// </summary>
-        public bool HasChildNodes
-        {
-            get
-            {
-                var childNodes = this.ChildNodes;
-                return ((childNodes != null) && (childNodes.Count > 0));
-            }
-        }
-
-        /// <summary>
-        /// Gets the level of the current SiteMapNode
-        /// </summary>
-        /// <returns>The level of the current SiteMapNode</returns>
-        public int GetNodeLevel()
-        {
-            return this.innerSiteMapNode.GetNodeLevel();
-        }
-
-        /// <summary>
-        /// A reference to the root SiteMap object for the current graph.
-        /// </summary>
-        public ISiteMap SiteMap
-        {
-            get { return this.innerSiteMapNode.SiteMap; }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Determines whether the current node is accessible to the current user based on context.
-        /// </summary>
-        /// <value>
-        /// True if the current node is accessible.
-        /// </value>
-        public bool IsAccessibleToUser(HttpContext context)
-        {
-            return this.innerSiteMapNode.IsAccessibleToUser(context);
         }
 
         /// <summary>
@@ -186,24 +63,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string HttpMethod
         {
-            get { return this.innerSiteMapNode.HttpMethod; }
+            get { return base.HttpMethod; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "HttpMethod"));
                 }
-                this.innerSiteMapNode.HttpMethod = value;
+                base.HttpMethod = value;
             }
-        }
-
-        /// <summary>
-        /// Gets the implicit resource key (optional).
-        /// </summary>
-        /// <value>The implicit resource key.</value>
-        public string ResourceKey
-        {
-            get { return this.innerSiteMapNode.ResourceKey; }
         }
 
         /// <summary>
@@ -212,7 +80,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The title.</value>
         public string Title
         {
-            get { return this.innerSiteMapNode.Title; }
+            get { return base.Title; }
             set
             {
                 // TODO: Find out what the attribute is for that overwrites this from the UI layer.
@@ -220,7 +88,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 //{
                 //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
                 //}
-                this.innerSiteMapNode.Title = value;
+                base.Title = value;
             }
         }
 
@@ -230,14 +98,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The description.</value>
         public string Description
         {
-            get { return this.innerSiteMapNode.Description; }
+            get { return base.Description; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Description"));
                 }
-                this.innerSiteMapNode.Description = value;
+                base.Description = value;
             }
         }
 
@@ -247,14 +115,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The target frame.</value>
         public string TargetFrame
         {
-            get { return this.innerSiteMapNode.TargetFrame; }
+            get { return base.TargetFrame; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "TargetFrame"));
                 }
-                this.innerSiteMapNode.TargetFrame = value;
+                base.TargetFrame = value;
             }
         }
 
@@ -264,33 +132,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The image URL.</value>
         public string ImageUrl
         {
-            get { return this.innerSiteMapNode.ImageUrl; }
+            get { return base.ImageUrl; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ImageUrl"));
                 }
-                this.innerSiteMapNode.ImageUrl = value;
+                base.ImageUrl = value;
             }
-        }
-
-        /// <summary>
-        /// Gets the attributes (optional).
-        /// </summary>
-        /// <value>The attributes.</value>
-        public IAttributeCollection Attributes
-        {
-            get { return this.innerSiteMapNode.Attributes; }
-        }
-
-        /// <summary>
-        /// Gets the roles.
-        /// </summary>
-        /// <value>The roles.</value>
-        public IList<string> Roles
-        {
-            get { return this.innerSiteMapNode.Roles; }
         }
 
         /// <summary>
@@ -299,14 +149,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The last modified date.</value>
         public DateTime LastModifiedDate
         {
-            get { return this.innerSiteMapNode.LastModifiedDate; }
+            get { return base.LastModifiedDate; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "LastModifiedDate"));
                 }
-                this.innerSiteMapNode.LastModifiedDate = value;
+                base.LastModifiedDate = value;
             }
         }
 
@@ -316,14 +166,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The change frequency.</value>
         public ChangeFrequency ChangeFrequency
         {
-            get { return this.innerSiteMapNode.ChangeFrequency; }
+            get { return base.ChangeFrequency; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ChangeFrequency"));
                 }
-                this.innerSiteMapNode.ChangeFrequency = value;
+                base.ChangeFrequency = value;
             }
         }
 
@@ -333,14 +183,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The update priority.</value>
         public UpdatePriority UpdatePriority
         {
-            get { return this.innerSiteMapNode.UpdatePriority; }
+            get { return base.UpdatePriority; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UpdatePriority"));
                 }
-                this.innerSiteMapNode.UpdatePriority = value;
+                base.UpdatePriority = value;
             }
         }
 
@@ -357,28 +207,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string VisibilityProvider
         {
-            get { return this.innerSiteMapNode.VisibilityProvider; }
+            get { return base.VisibilityProvider; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "VisibilityProvider"));
                 }
-                this.innerSiteMapNode.VisibilityProvider = value;
+                base.VisibilityProvider = value;
             }
-        }
-
-        /// <summary>
-        /// Determines whether the node is visible.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="sourceMetadata">The source metadata.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata)
-        {
-            return this.innerSiteMapNode.IsVisible(context, sourceMetadata);
         }
 
         #endregion
@@ -393,14 +230,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public bool Clickable
         {
-            get { return this.innerSiteMapNode.Clickable; }
+            get { return base.Clickable; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Clickable"));
                 }
-                this.innerSiteMapNode.Clickable = value;
+                base.Clickable = value;
             }
         }
 
@@ -412,14 +249,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string UrlResolver
         {
-            get { return this.innerSiteMapNode.UrlResolver; }
+            get { return base.UrlResolver; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UrlResolver"));
                 }
-                this.innerSiteMapNode.UrlResolver = value;
+                base.UrlResolver = value;
             }
         }
 
@@ -431,23 +268,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string Url
         {
-            get { return this.innerSiteMapNode.Url; }
+            get { return base.Url; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Url"));
                 }
-                this.innerSiteMapNode.Url = value;
+                base.Url = value;
             }
-        }
-
-        /// <summary>
-        /// The raw URL before being evaluated by any URL resovler.
-        /// </summary>
-        public string UnresolvedUrl
-        {
-            get { return this.innerSiteMapNode.UnresolvedUrl; }
         }
 
         #endregion
@@ -462,35 +291,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// </value>
         public string DynamicNodeProvider
         {
-            get { return this.innerSiteMapNode.DynamicNodeProvider; }
+            get { return base.DynamicNodeProvider; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "DynamicNodeProvider"));
                 }
-                this.innerSiteMapNode.DynamicNodeProvider = value;
+                base.DynamicNodeProvider = value;
             }
-        }
-
-        /// <summary>
-        /// Gets the dynamic node collection.
-        /// </summary>
-        /// <returns>A dynamic node collection.</returns>
-        public IEnumerable<DynamicNode> GetDynamicNodeCollection()
-        {
-            return this.innerSiteMapNode.GetDynamicNodeCollection();
-        }
-
-        /// <summary>
-        /// Gets whether the current node has a dynamic node provider.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if there is a provider; otherwise <c>false</c>.
-        /// </value>
-        public bool HasDynamicNodeProvider
-        {
-            get { return this.innerSiteMapNode.HasDynamicNodeProvider; }
         }
 
         #endregion
@@ -503,54 +312,15 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The route.</value>
         public string Route
         {
-            get { return this.innerSiteMapNode.Route; }
+            get { return base.Route; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Route"));
                 }
-                this.innerSiteMapNode.Route = value;
+                base.Route = value;
             }
-        }
-
-
-        /// <summary>
-        /// Gets the route values.
-        /// </summary>
-        /// <value>The route values.</value>
-        public IRouteValueCollection RouteValues
-        {
-            get { return this.innerSiteMapNode.RouteValues; }
-        }
-
-        /// <summary>
-        /// Gets the preserved route parameter names (= values that will be used from the current request route).
-        /// </summary>
-        /// <value>The preserved route parameters.</value>
-        public IList<string> PreservedRouteParameters
-        {
-            get { return this.innerSiteMapNode.PreservedRouteParameters; }
-        }
-
-        /// <summary>
-        /// Gets the route data associated with the current node.
-        /// </summary>
-        /// <param name="httpContext">The HTTP context.</param>
-        /// <returns>The route data associated with the current node.</returns>
-        public RouteData GetRouteData(HttpContextBase httpContext)
-        {
-            return this.innerSiteMapNode.GetRouteData(httpContext);
-        }
-
-        /// <summary>
-        /// Determines whether this node matches the supplied route values.
-        /// </summary>
-        /// <param name="routeValues">An IDictionary<string, object> of route values.</param>
-        /// <returns><c>true</c> if the route matches this node's RouteValues and Attributes collections; otherwise <c>false</c>.</returns>
-        public bool MatchesRoute(IDictionary<string, object> routeValues)
-        {
-            return this.innerSiteMapNode.MatchesRoute(routeValues);
         }
 
         #endregion
@@ -563,14 +333,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The area.</value>
         public string Area
         {
-            get { return this.innerSiteMapNode.Area; }
+            get { return base.Area; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Area"));
                 }
-                this.innerSiteMapNode.Area = value;
+                base.Area = value;
             }
         }
 
@@ -580,14 +350,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The controller.</value>
         public string Controller
         {
-            get { return this.innerSiteMapNode.Controller; }
+            get { return base.Controller; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Controller"));
                 }
-                this.innerSiteMapNode.Controller = value;
+                base.Controller = value;
             }
         }
 
@@ -597,19 +367,16 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>The action.</value>
         public string Action
         {
-            get { return this.innerSiteMapNode.Action; }
+            get { return base.Action; }
             set
             {
                 if (this.IsReadOnly)
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Action"));
                 }
-                this.innerSiteMapNode.Action = value;
+                base.Action = value;
             }
         }
-
-        #endregion
-
 
         #endregion
     }
