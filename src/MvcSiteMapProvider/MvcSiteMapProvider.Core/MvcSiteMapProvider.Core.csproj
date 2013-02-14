@@ -181,7 +181,6 @@
     <Compile Include="Mvc\XmlSiteMapResult.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="SiteMap\Builder\XmlSiteMapBuilder.cs" />
-    <Compile Include="SiteMap\CacheDescription.cs" />
     <Compile Include="SiteMap\DynamicNode.cs" />
     <Compile Include="Web\MvcHttpContext.cs" />
     <Compile Include="Web\MvcHttpRequest.cs" />

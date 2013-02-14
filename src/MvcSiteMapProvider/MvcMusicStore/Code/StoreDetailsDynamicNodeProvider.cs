@@ -41,20 +41,5 @@ namespace MvcMusicStore.Code
                 yield return node; 
             }
         }
-
-        /// <summary>
-        /// Gets a cache description for the dynamic node collection 
-        /// or null if there is none.
-        /// </summary>
-        /// <returns>
-        /// A cache description represented as a <see cref="CacheDescription"/> instance .
-        /// </returns>
-        public override CacheDescription GetCacheDescription()
-        {
-            return new CacheDescription("StoreDetailsDynamicNodeProvider")
-            {
-                SlidingExpiration = TimeSpan.FromMinutes(1)
-            };
-        }
     }
 }

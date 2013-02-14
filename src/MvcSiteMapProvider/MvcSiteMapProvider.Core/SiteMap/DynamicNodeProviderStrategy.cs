@@ -34,14 +34,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return provider.GetDynamicNodeCollection();
         }
 
-
-        public CacheDescription GetCacheDescription(string providerName)
-        {
-            var provider = GetProvider(providerName);
-            if (provider == null) return null;
-            return provider.GetCacheDescription();
-        }
-
         #endregion
     }
 }

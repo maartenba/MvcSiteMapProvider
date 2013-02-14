@@ -30,25 +30,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         private readonly INodeKeyGenerator nodeKeyGenerator;
         private readonly ISiteMapNodeFactory siteMapNodeFactory;
 
-        ///// <summary>
-        ///// Determines whether the specified node has dynamic nodes.
-        ///// </summary>
-        ///// <param name="node">The node.</param>
-        ///// <returns>
-        ///// 	<c>true</c> if the specified node has dynamic nodes; otherwise, <c>false</c>.
-        ///// </returns>
-        //protected bool HasDynamicNodes(ISiteMapNode node)
-        //{
-        //    // Dynamic nodes available?
-        //    var mvcNode = node as ISiteMapNode;
-        //    if (mvcNode == null || mvcNode.DynamicNodeProvider == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
         /// <summary>
         /// Adds the dynamic nodes for node.
         /// </summary>
@@ -59,21 +40,13 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             // List of dynamic nodes that have been created
             var createdDynamicNodes = new List<ISiteMapNode>();
 
-            // Dynamic nodes available?
-            //if (!HasDynamicNodes(node))
-            //{
-            //    return createdDynamicNodes;
-            //}
-
             if (!node.HasDynamicNodeProvider)
             {
                 return createdDynamicNodes;
             }
 
             // Build dynamic nodes
-            var mvcNode = node;
-            //foreach (var dynamicNode in mvcNode.DynamicNodeProvider.GetDynamicNodeCollection().ToList())
-            foreach (var dynamicNode in mvcNode.GetDynamicNodeCollection().ToList())
+            foreach (var dynamicNode in node.GetDynamicNodeCollection().ToList())
             {
                 string key = dynamicNode.Key;
                 if (string.IsNullOrEmpty(key))
@@ -81,61 +54,48 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                     key = nodeKeyGenerator.GenerateKey(
                         parentNode == null ? "" : parentNode.Key, 
                         Guid.NewGuid().ToString(), 
-                        mvcNode.Url, 
-                        mvcNode.Title, 
-                        mvcNode.Area, 
-                        mvcNode.Controller, 
-                        mvcNode.Action,
-                        mvcNode.HttpMethod,
-                        mvcNode.Clickable);
+                        node.Url, 
+                        node.Title, 
+                        node.Area, 
+                        node.Controller, 
+                        node.Action,
+                        node.HttpMethod,
+                        node.Clickable);
                 }
 
-                //var clone = mvcNode.Clone(key) as SiteMapNode;
-                ////foreach (var kvp in dynamicNode.RouteValues)
-                ////{
-                ////    clone.RouteValues[kvp.Key] = kvp.Value;
-                ////}
-                ////foreach (var kvp in dynamicNode.Attributes)
-                ////{
-                ////    clone[kvp.Key] = kvp.Value;
-                ////}
-                //clone.DynamicNodeProvider = null;
-                //clone.IsDynamic = true;
-
-                var clone = siteMapNodeFactory.CreateDynamic(siteMap, key, mvcNode.ResourceKey);
+                var clone = siteMapNodeFactory.CreateDynamic(siteMap, key, node.ResourceKey);
 
 
                 // TODO: figure out a better way to create a dynamic node.
-                // It should probably be a different datatype since it has different behavior.
 
                 // Begin Clone
 
 
-                foreach (var attribute in mvcNode.Attributes)
+                foreach (var attribute in node.Attributes)
                 {
                     clone.Attributes[attribute.Key] = attribute.Value;
                 }
-                foreach (var route in mvcNode.RouteValues)
+                foreach (var route in node.RouteValues)
                 {
                     clone.RouteValues[route.Key] = route.Value;
                 }
-                foreach (var param in mvcNode.PreservedRouteParameters)
+                foreach (var param in node.PreservedRouteParameters)
                 {
                     clone.PreservedRouteParameters.Add(param);
                 }
-                foreach (var role in mvcNode.Roles)
+                foreach (var role in node.Roles)
                 {
                     clone.Roles.Add(role);
                 }
-                clone.Area = mvcNode.Area;
-                clone.Action = mvcNode.Action;
-                clone.Controller = mvcNode.Controller;
-                clone.Route = mvcNode.Route;
-                clone.VisibilityProvider = mvcNode.VisibilityProvider;
-                clone.UrlResolver = mvcNode.UrlResolver;
-                clone.Url = mvcNode.UnresolvedUrl;
-                clone.DynamicNodeProvider = mvcNode.DynamicNodeProvider;
-                clone.Clickable = mvcNode.Clickable;
+                clone.Area = node.Area;
+                clone.Action = node.Action;
+                clone.Controller = node.Controller;
+                clone.Route = node.Route;
+                clone.VisibilityProvider = node.VisibilityProvider;
+                clone.UrlResolver = node.UrlResolver;
+                clone.Url = node.UnresolvedUrl;
+                clone.DynamicNodeProvider = node.DynamicNodeProvider;
+                clone.Clickable = node.Clickable;
 
                 // End Clone
 
@@ -190,7 +150,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                 clone.PreservedRouteParameters.Clear();
                 if (dynamicNode.PreservedRouteParameters.Any())
                 {
-                    //clone.PreservedRouteParameters = String.Join(";", dynamicNode.PreservedRouteParameters.ToArray());
                     string[] parameters = dynamicNode.PreservedRouteParameters.ToArray();
                     foreach (var p in parameters)
                     {
@@ -200,7 +159,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
                 if (dynamicNode.Roles != null && dynamicNode.Roles.Any())
                 {
-                    //clone.Roles = dynamicNode.Roles.ToArray();
                     foreach (var role in dynamicNode.Roles)
                     {
                         clone.Roles.Add(role);
@@ -237,20 +195,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                     createdDynamicNodes.Add(clone);
                 }
             }
-
-            //// Insert cache dependency
-            //CacheDescription cacheDescription = mvcNode.DynamicNodeProvider.GetCacheDescription();
-            //if (cacheDescription != null)
-            //{
-            //    HttpContext.Current.Cache.Add(
-            //        cacheDescription.Key,
-            //        "",
-            //        cacheDescription.Dependencies,
-            //        cacheDescription.AbsoluteExpiration,
-            //        cacheDescription.SlidingExpiration,
-            //        cacheDescription.Priority,
-            //        new CacheItemRemovedCallback(OnSiteMapChanged));
-            //}
 
             // Done!
             return createdDynamicNodes;

@@ -14,15 +14,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         IEnumerable<DynamicNode> GetDynamicNodeCollection();
 
         /// <summary>
-        /// Gets a cache description for the dynamic node collection 
-        /// or null if there is none.
-        /// </summary>
-        /// <returns>
-        /// A cache description represented as a <see cref="CacheDescription"/> instance .
-        /// </returns>
-        CacheDescription GetCacheDescription();
-
-        /// <summary>
         /// Determines whether the provider instance matches the name
         /// </summary>
         /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name can be used.</param>

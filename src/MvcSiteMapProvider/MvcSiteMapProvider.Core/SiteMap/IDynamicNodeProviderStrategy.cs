@@ -14,6 +14,5 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         IDynamicNodeProvider GetProvider(string providerName);
         IEnumerable<DynamicNode> GetDynamicNodeCollection(string providerName);
-        CacheDescription GetCacheDescription(string providerName);
     }
 }
