@@ -72,7 +72,7 @@ namespace MvcMusicStore
 
             //container.Configure(x => x
             //    .For<MvcSiteMapProvider.Core.Security.IAclModule>()
-            //    .Use<MvcSiteMapProvider.Core.Security.DefaultAclModule>()
+            //    .Use<MvcSiteMapProvider.Core.Security.CompositeAclModule>()
             //);
 
 
@@ -90,7 +90,7 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.Mvc.DefaultControllerTypeResolver>()
             );
 
-            var aclModules = new MvcSiteMapProvider.Core.Security.DefaultAclModule(
+            var aclModules = new MvcSiteMapProvider.Core.Security.CompositeAclModule(
                 container.GetInstance<MvcSiteMapProvider.Core.Security.AuthorizeAttributeAclModule>(),
                 container.GetInstance<MvcSiteMapProvider.Core.Security.XmlRolesAclModule>()
             );

@@ -104,7 +104,7 @@
     <Compile Include="Security\AclModuleNotSupportedException.cs" />
     <Compile Include="Security\AuthorizeAttributeAclModule.cs" />
     <Compile Include="Security\AuthorizeAttributeBuilder.cs" />
-    <Compile Include="Security\DefaultAclModule.cs" />
+    <Compile Include="Security\CompositeAclModule.cs" />
     <Compile Include="Security\IAclModule.cs" />
     <Compile Include="Security\IAuthorizeAttribute.cs" />
     <Compile Include="Security\InternalAuthorize.cs" />

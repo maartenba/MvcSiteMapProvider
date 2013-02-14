@@ -7,48 +7,25 @@ using MvcSiteMapProvider.Core.SiteMap;
 namespace MvcSiteMapProvider.Core.Security
 {
     /// <summary>
-    /// DefaultAclModule class
+    /// CompositeAclModule class
     /// </summary>
-    public class DefaultAclModule
+    public class CompositeAclModule
         : IAclModule
     {
         /// <summary>
-        /// Gets or sets the child modules.
+        /// Initializes a new instance of the <see cref="CompositeAclModule"/> class.
         /// </summary>
-        /// <value>The child modules.</value>
-        protected IEnumerable<IAclModule> ChildModules { get; private set; }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultAclModule"/> class.
-        /// </summary>
-        public DefaultAclModule(
+        public CompositeAclModule(
             params IAclModule[] aclModules
             )
         {
             if (aclModules == null)
                 throw new ArgumentNullException("aclModules");
 
-            this.ChildModules = aclModules;
+            this.aclModules = aclModules;
         }
 
-
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="DefaultAclModule"/> class.
-        ///// </summary>
-        //public DefaultAclModule(
-        //    IControllerTypeResolver controllerTypeResolver
-        //    )
-        //{
-        //    if (controllerTypeResolver == null)
-        //        throw new ArgumentNullException("controllerTypeResolver");
-
-        //    // TODO: Make factory so these can be injected via DI.
-        //    ChildModules = new List<IAclModule>
-        //    {
-        //        new XmlRolesAclModule(),
-        //        new AuthorizeAttributeAclModule(controllerTypeResolver)
-        //    };
-        //}
+        protected readonly IEnumerable<IAclModule> aclModules;
 
         #region IAclModule Members
 
@@ -71,7 +48,7 @@ namespace MvcSiteMapProvider.Core.Security
 
             // Use child modules
             bool result = true;
-            foreach (var module in ChildModules)
+            foreach (var module in aclModules)
             {
                 try
                 {
