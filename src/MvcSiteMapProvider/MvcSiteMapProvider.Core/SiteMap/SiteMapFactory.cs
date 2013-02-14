@@ -19,6 +19,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IHttpContextFactory httpContextFactory,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
+            IUrlPath urlPath,
             IRequestCache requestCache
             )
         {
@@ -30,6 +31,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
                 throw new ArgumentNullException("genericDictionaryFactory");
+            if (urlPath == null)
+                throw new ArgumentNullException("urlPath");
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
 
@@ -37,6 +40,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
             this.httpContextFactory = httpContextFactory;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
+            this.urlPath = urlPath;
             this.requestCache = requestCache;
         }
 
@@ -44,6 +48,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
+        protected readonly IUrlPath urlPath;
         protected readonly IRequestCache requestCache;
 
         #region ISiteMapFactory Members
@@ -56,6 +61,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 aclModule,
                 siteMapNodeCollectionFactory,
                 genericDictionaryFactory,
+                urlPath,
                 requestCache);
         }
 

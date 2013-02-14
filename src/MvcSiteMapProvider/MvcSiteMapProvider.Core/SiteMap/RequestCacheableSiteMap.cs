@@ -25,9 +25,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
+            IUrlPath urlPath,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
+            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");

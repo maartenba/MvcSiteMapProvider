@@ -33,7 +33,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
-            IGenericDictionaryFactory genericDictionaryFactory
+            IGenericDictionaryFactory genericDictionaryFactory,
+            IUrlPath urlPath
             )
         {
             if (siteMapBuilder == null)
@@ -46,11 +47,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
                 throw new ArgumentNullException("genericDictionaryFactory");
+            if (urlPath == null)
+                throw new ArgumentNullException("urlPath");
 
             this.siteMapBuilder = siteMapBuilder;
             this.httpContextFactory = httpContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
+            this.urlPath = urlPath;
 
             // Initialize dictionaries
             this.childNodeCollectionTable = genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNodeCollection>();
@@ -64,6 +68,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
+        protected readonly IUrlPath urlPath;
 
         // Child collections
         protected readonly IDictionary<ISiteMapNode, ISiteMapNodeCollection> childNodeCollectionTable;
@@ -151,13 +156,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     if (url.StartsWith("http") || url.StartsWith("ftp"))
                     {
                         // This is an external url, so we will encode it
-                        url = HttpUtility.UrlEncode(url);
+                        url = urlPath.UrlEncode(url);
                     }
-                    if (HttpRuntime.AppDomainAppVirtualPath != null)
+                    if (urlPath.AppDomainAppVirtualPath != null)
                     {
-                        if (!UrlPath.IsAbsolutePhysicalPath(url))
+                        if (!urlPath.IsAbsolutePhysicalPath(url))
                         {
-                            url = UrlPath.MakeVirtualPathAppAbsolute(UrlPath.Combine(HttpRuntime.AppDomainAppVirtualPath, url));
+                            url = urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
                         }
                         if (this.urlTable.ContainsKey(url))
                         {
@@ -285,9 +290,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 return null;
             }
-            if (UrlPath.IsAppRelativePath(rawUrl))
+            if (urlPath.IsAppRelativePath(rawUrl))
             {
-                rawUrl = UrlPath.MakeVirtualPathAppAbsolute(rawUrl);
+                rawUrl = urlPath.MakeVirtualPathAppAbsolute(rawUrl);
             }
             if (this.urlTable.ContainsKey(rawUrl))
             {

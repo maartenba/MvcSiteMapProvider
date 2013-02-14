@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Linq;
 using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core.Web;
 using System.IO;
 using System.IO.Compression;
 

@@ -176,6 +176,7 @@
     <Compile Include="Web\Html\SiteMapNodeModelMapper.cs" />
     <Compile Include="Web\Html\SiteMapPathHelper.cs" />
     <Compile Include="Web\Html\SiteMapTitleHelper.cs" />
+    <Compile Include="Web\IUrlPath.cs" />
     <Compile Include="Web\ViewDataContainer.cs" />
     <Compile Include="Mvc\XmlSiteMapController.cs" />
     <Compile Include="Mvc\XmlSiteMapResult.cs" />
@@ -191,7 +192,7 @@
     <Compile Include="SiteMap\Builder\ISiteMapBuilder.cs" />
     <Compile Include="SiteMap\MvcSiteMapException.cs" />
     <Compile Include="SiteMap\SiteMap.cs" />
-    <Compile Include="SiteMap\UrlPath.cs" />
+    <Compile Include="Web\UrlPath.cs" />
     <Compile Include="UpdatePriority.cs" />
   </ItemGroup>
   <ItemGroup>

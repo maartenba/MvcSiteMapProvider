@@ -21,9 +21,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
-            IGenericDictionaryFactory genericDictionaryFactory
+            IGenericDictionaryFactory genericDictionaryFactory,
+            IUrlPath urlPath
             ) 
-            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
+            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath)
         {
         }
 
