@@ -7,6 +7,7 @@ using System.Threading;
 using MvcSiteMapProvider.Core.Cache;
 using MvcSiteMapProvider.Core.SiteMap;
 using MvcSiteMapProvider.Core.SiteMap.Builder;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.Loader
 {
@@ -23,6 +24,7 @@ namespace MvcSiteMapProvider.Core.Loader
             ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy,
             ISiteMapFactory siteMapFactory,
             ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper
+            
             )
         {
             if (slidingCacheExpiration == null)
@@ -37,6 +39,7 @@ namespace MvcSiteMapProvider.Core.Loader
                 throw new ArgumentNullException("siteMapFactory");
             if (siteMapCacheKeyToBuilderSetMapper == null)
                 throw new ArgumentNullException("siteMapCacheKeyToBuilderSetMapper");
+            
 
             this.slidingCacheExpiration = slidingCacheExpiration;
             this.siteMapCache = siteMapCache;
@@ -44,6 +47,7 @@ namespace MvcSiteMapProvider.Core.Loader
             this.siteMapBuilderSetStrategy = siteMapBuilderSetStrategy;
             this.siteMapFactory = siteMapFactory;
             this.siteMapCacheKeyToBuilderSetMapper = siteMapCacheKeyToBuilderSetMapper;
+            
         }
 
         protected readonly TimeSpan slidingCacheExpiration;
@@ -52,12 +56,13 @@ namespace MvcSiteMapProvider.Core.Loader
         protected readonly ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy;
         protected readonly ISiteMapFactory siteMapFactory;
         protected readonly ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper;
+        
 
         protected readonly ReaderWriterLockSlim synclock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         public virtual ISiteMap GetSiteMap()
         {
-            var key = siteMapCacheKeyGenerator.GenerateKey(HttpContext.Current);
+            var key = siteMapCacheKeyGenerator.GenerateKey();
             return GetSiteMap(key);
         }
 

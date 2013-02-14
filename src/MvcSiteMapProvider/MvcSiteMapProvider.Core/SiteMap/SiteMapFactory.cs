@@ -4,6 +4,7 @@ using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.RequestCache;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -15,6 +16,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMapFactory(
             IAclModule aclModule,
+            IHttpContextFactory httpContextFactory,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IRequestCache requestCache
@@ -22,6 +24,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
             if (siteMapNodeCollectionFactory == null)
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
@@ -30,12 +34,14 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("requestCache");
 
             this.aclModule = aclModule;
+            this.httpContextFactory = httpContextFactory;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
             this.requestCache = requestCache;
         }
 
         protected readonly IAclModule aclModule;
+        protected readonly IHttpContextFactory httpContextFactory;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
         protected readonly IRequestCache requestCache;
@@ -46,6 +52,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             return new RequestCacheableSiteMap(
                 siteMapBuilder,
+                httpContextFactory,
                 aclModule,
                 siteMapNodeCollectionFactory,
                 genericDictionaryFactory,

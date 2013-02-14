@@ -7,6 +7,7 @@ using System.Web.Mvc.Async;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core.Web;
 using Telerik.Web.Mvc.Infrastructure.Implementation;
 
 namespace MvcSiteMapProvider.Core.Security
@@ -18,15 +19,20 @@ namespace MvcSiteMapProvider.Core.Security
         : IAclModule
     {
         public AuthorizeAttributeAclModule(
+            IHttpContextFactory httpContextFactory,
             IControllerTypeResolver controllerTypeResolver
             )
         {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
 
+            this.httpContextFactory = httpContextFactory;
             this.controllerTypeResolver = controllerTypeResolver;
         }
 
+        protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IControllerTypeResolver controllerTypeResolver;
 
         #region IAclModule Members
@@ -52,12 +58,11 @@ namespace MvcSiteMapProvider.Core.Security
         /// Determines whether node is accessible to user.
         /// </summary>
         /// <param name="siteMap">The site map.</param>
-        /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node)
+        public bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
             // Is security trimming enabled?
             if (!siteMap.SecurityTrimmingEnabled)
@@ -94,14 +99,25 @@ namespace MvcSiteMapProvider.Core.Security
                 return false;
             }
 
-            // Find routes for the sitemap node's url
-            HttpContextBase httpContext = new HttpContextMethodOverrider(context, null);
+            // TODO: Check to make sure this works right.
+            HttpContextBase httpContext = httpContextFactory.Create();
             string originalPath = httpContext.Request.Path;
             var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
             httpContext.RewritePath(nodeUrl, true);
 
-            HttpContextBase httpContext2 = new HttpContext2(context);
-            RouteData routes = mvcNode.GetRouteData(httpContext2);
+            RouteData routes = mvcNode.GetRouteData(httpContext);
+
+
+            //// Find routes for the sitemap node's url
+            //HttpContextBase httpContext = new HttpContextMethodOverrider(context, null);
+            //string originalPath = httpContext.Request.Path;
+            //var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
+            //httpContext.RewritePath(nodeUrl, true);
+
+            //HttpContextBase httpContext2 = new HttpContext2(context);
+            //RouteData routes = mvcNode.GetRouteData(httpContext2);
+
+
             if (routes == null)
             {
                 return true; // Static URL's will have no route data, therefore return true.

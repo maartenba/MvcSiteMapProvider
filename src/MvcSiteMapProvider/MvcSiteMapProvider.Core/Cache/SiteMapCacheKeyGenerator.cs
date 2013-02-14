@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.Cache
 {
@@ -13,11 +14,22 @@ namespace MvcSiteMapProvider.Core.Cache
     public class SiteMapCacheKeyGenerator
         : ISiteMapCacheKeyGenerator
     {
+        public SiteMapCacheKeyGenerator(
+            IHttpContextFactory httpContextFactory
+            )
+        {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+            this.httpContextFactory = httpContextFactory;
+        }
+
+        protected readonly IHttpContextFactory httpContextFactory;
 
         #region ISiteMapCacheKeyGenerator Members
 
-        public string GenerateKey(HttpContext context)
+        public string GenerateKey()
         {
+            var context = httpContextFactory.Create();
             var builder = new StringBuilder();
             builder.Append("sitemap://");
             builder.Append(context.Request.Url.DnsSafeHost);

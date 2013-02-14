@@ -27,7 +27,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         int GetNodeLevel();
         ISiteMap SiteMap { get; }
 
-        bool IsAccessibleToUser(HttpContext context);
+        bool IsAccessibleToUser();
         string HttpMethod { get; set; }
         string ResourceKey { get; }
         string Title { get; set; }
@@ -42,7 +42,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         UpdatePriority UpdatePriority { get; set; }
 
         string VisibilityProvider { get; set; }
-        bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata);
+        bool IsVisible(IDictionary<string, object> sourceMetadata);
 
         bool Clickable { get; set; }
         string UrlResolver { get; set; }

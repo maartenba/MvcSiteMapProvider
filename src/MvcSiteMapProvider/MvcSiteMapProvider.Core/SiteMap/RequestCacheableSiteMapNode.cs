@@ -85,13 +85,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
             set { base.Description = value; }
         }
 
-        public bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata)
+        public bool IsVisible(IDictionary<string, object> sourceMetadata)
         {
             var key = this.GetCacheKey("IsVisible");
             var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
-                result = base.IsVisible(context, sourceMetadata);
+                result = base.IsVisible(sourceMetadata);
                 this.requestCache.SetValue<bool>(key, (bool)result);
             }
             return (bool)result;

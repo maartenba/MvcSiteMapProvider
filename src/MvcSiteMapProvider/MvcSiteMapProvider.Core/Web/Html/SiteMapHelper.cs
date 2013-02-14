@@ -128,20 +128,15 @@ namespace MvcSiteMapProvider.Core.Web.Html
             var model = new SiteMapHelperModel();
             var node = startingNode;
 
-            //var mvcNode = node as MvcSiteMapNode;
-
             // Check visibility
             bool nodeVisible = true;
             if (node != null)
             {
-                //nodeVisible = mvcNode.VisibilityProvider.IsVisible(
-                //    node, HttpContext.Current, SourceMetadata);
-
-                nodeVisible = node.IsVisible(HttpContext.Current, SourceMetadata);
+                nodeVisible = node.IsVisible(SourceMetadata);
             }
 
             // Check ACL
-            if (nodeVisible && node.IsAccessibleToUser(HttpContext.Current))
+            if (nodeVisible && node.IsAccessibleToUser())
             {
                 // Add node
                 var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, SourceMetadata);

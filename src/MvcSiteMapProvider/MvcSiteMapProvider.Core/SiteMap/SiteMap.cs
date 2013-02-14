@@ -9,6 +9,7 @@ using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.SiteMap.Builder;
 using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -29,6 +30,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
+            IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory
@@ -36,6 +38,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         {
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
             if (siteMapNodeCollectionFactory == null)
@@ -44,6 +48,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                 throw new ArgumentNullException("genericDictionaryFactory");
 
             this.siteMapBuilder = siteMapBuilder;
+            this.httpContextFactory = httpContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
 
@@ -56,6 +61,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         // Services
         protected readonly ISiteMapBuilder siteMapBuilder;
+        protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
 
@@ -263,8 +269,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
             get 
             {
                 // TODO: find a way to inject HttpContext
-                HttpContext current = HttpContext.Current;
-                var currentNode = this.FindSiteMapNode(current);
+                //HttpContext current = HttpContext.Current;
+                //var currentNode = this.FindSiteMapNode(current);
+                var currentNode = this.FindSiteMapNodeFromCurrentContext();
                 return this.ReturnNodeIfAccessible(currentNode);
             }
         }
@@ -301,19 +308,33 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return null;
         }
 
+        ///// <summary>
+        ///// Retrieves a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page using the specified <see cref="T:System.Web.HttpContext"/> object.
+        ///// </summary>
+        ///// <param name="context">The <see cref="T:System.Web.HttpContext"/> used to match node information with the URL of the requested page.</param>
+        ///// <returns>
+        ///// A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> or if the page context is null.
+        ///// </returns>
+        //public virtual ISiteMapNode FindSiteMapNode(HttpContext context)
+        //{
+        //    // TODO: find a way to inject this.
+        //    //var httpContext = new HttpContext2(context);
+             
+        //    var routeData = RouteTable.Routes.GetRouteData(httpContext);
+        //    return FindSiteMapNode(context, routeData);
+        //}
+
         /// <summary>
-        /// Retrieves a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page using the specified <see cref="T:System.Web.HttpContext"/> object.
+        /// Retrieves a <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object that represents the currently requested page using the current <see cref="T:System.Web.HttpContext"/> object.
         /// </summary>
-        /// <param name="context">The <see cref="T:System.Web.HttpContext"/> used to match node information with the URL of the requested page.</param>
         /// <returns>
         /// A <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> or if the page context is null.
         /// </returns>
-        public virtual ISiteMapNode FindSiteMapNode(HttpContext context)
+        public virtual ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
-            // TODO: find a way to inject this.
-            var httpContext = new HttpContext2(context);
+            var httpContext = httpContextFactory.Create();
             var routeData = RouteTable.Routes.GetRouteData(httpContext);
-            return FindSiteMapNode(context, routeData);
+            return FindSiteMapNode(routeData);
         }
 
         /// <summary>
@@ -323,8 +344,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns></returns>
         public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
-            // TODO: Find a way to inject HttpContext
-            return FindSiteMapNode(HttpContext.Current, context.RouteData);
+            return FindSiteMapNode(context.RouteData);
         }
 
         /// <summary>
@@ -333,7 +353,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <param name="context">The context.</param>
         /// <param name="routeData">The route data.</param>
         /// <returns></returns>
-        protected virtual ISiteMapNode FindSiteMapNode(HttpContext context, RouteData routeData)
+        protected virtual ISiteMapNode FindSiteMapNode(RouteData routeData)
         {
             // Node
             ISiteMapNode node = null;
@@ -341,16 +361,24 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // TODO: find a way to inject HttpContext2
 
             // Fetch route data
-            var httpContext = new HttpContext2(context);
+            //var httpContext = new HttpContext2(context);
+            
             if (routeData != null)
             {
                 // TODO: find a way to inject requestcontext
-                RequestContext requestContext = new RequestContext(httpContext, routeData);
+                //RequestContext requestContext = new RequestContext(httpContext, routeData);
+
+                //var httpContext = httpContextFactory.Create();
+                var requestContext = httpContextFactory.CreateRequestContext(routeData);
                 VirtualPathData vpd = routeData.Route.GetVirtualPath(
                     requestContext, routeData.Values);
                 string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
                     ?? string.Empty).TrimEnd('/') + "/";
-                node = this.FindSiteMapNode(httpContext.Request.Path);
+
+                //requestContext.HttpContext.Request.Path
+                //node = this.FindSiteMapNode(httpContext.Request.Path);
+
+                node = this.FindSiteMapNode(requestContext.HttpContext.Request.Path);
 
                 if (!routeData.Values.ContainsKey("area"))
                 {
@@ -364,8 +392,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
                     }
                 }
 
-                ISiteMapNode mvcNode = node;
-                if (mvcNode == null || routeData.Route != RouteTable.Routes[mvcNode.Route])
+                if (node == null || routeData.Route != RouteTable.Routes[node.Route])
                 {
                     if (RootNode.MatchesRoute(routeData.Values))
                     {
@@ -382,7 +409,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
             // Try base class
             if (node == null)
             {
-                node = this.FindSiteMapNode(context);
+                //node = this.FindSiteMapNode(context);
+                node = this.FindSiteMapNodeFromCurrentContext();
             }
 
             // Check accessibility
@@ -430,12 +458,10 @@ namespace MvcSiteMapProvider.Core.SiteMap
             {
                 return siteMapNodeCollectionFactory.CreateReadOnly(collection);
             }
-            // TODO: find a way to inject this.
-            HttpContext current = HttpContext.Current;
             var secureCollection = siteMapNodeCollectionFactory.Create();
             foreach (ISiteMapNode secureNode in collection)
             {
-                if (secureNode.IsAccessibleToUser(current))
+                if (secureNode.IsAccessibleToUser())
                 {
                     secureCollection.Add(secureNode);
                 }
@@ -576,7 +602,6 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <summary>
         /// Retrieves a Boolean value indicating whether the specified <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> object can be viewed by the user in the specified context.
         /// </summary>
-        /// <param name="context">The <see cref="T:System.Web.HttpContext"/> that contains user information.</param>
         /// <param name="node">The <see cref="T:MvcSiteMapProvider.Core.SiteMap.SiteMapNode"/> that is requested by the user.</param>
         /// <returns>
         /// true if security trimming is enabled and <paramref name="node"/> can be viewed by the user or security trimming is not enabled; otherwise, false.
@@ -586,13 +611,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// - or -
         /// <paramref name="node"/> is null.
         /// </exception>
-        public virtual bool IsAccessibleToUser(HttpContext context, ISiteMapNode node)
+        public virtual bool IsAccessibleToUser(ISiteMapNode node)
         {
             if (!SecurityTrimmingEnabled)
             {
                 return true;
             }
-            return aclModule.IsAccessibleToUser(this, context, node);
+            return aclModule.IsAccessibleToUser(this, node);
         }
 
         /// <summary>
@@ -693,8 +718,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         protected virtual ISiteMapNode ReturnNodeIfAccessible(ISiteMapNode node)
         {
-            // TODO: Find a way to inject HttpContext
-            if ((node != null) && node.IsAccessibleToUser(HttpContext.Current))
+            if ((node != null) && node.IsAccessibleToUser())
             {
                 return node;
             }

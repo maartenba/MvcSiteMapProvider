@@ -55,6 +55,17 @@ namespace MvcMusicStore
 
             // Configure Dependencies
             container.Configure(x => x
+                .For<System.Web.HttpContext>()
+                .Use(HttpContext.Current)
+            );
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.Web.IHttpContextFactory>()
+                .Use<MvcSiteMapProvider.Core.Web.HttpContextFactory>()
+            );
+
+
+            container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.SiteMap.ISiteMap>()
                 .Use<MvcSiteMapProvider.Core.SiteMap.RequestCacheableSiteMap>()
             );
@@ -202,10 +213,10 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.SiteMap.Builder.ReflectionSiteMapBuilderFactory>()
             );
 
-            container.Configure(x => x
-                .For<System.Web.HttpContext>()
-                .Use(HttpContext.Current)
-            );
+            //container.Configure(x => x
+            //    .For<System.Web.HttpContext>()
+            //    .Use(HttpContext.Current)
+            //);
 
             // Configure the SiteMap Builder Sets
 
@@ -270,13 +281,6 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.Cache.SiteMapCacheKeyToBuilderSetMapper>()
             );
 
-
-            container.Configure(x => x
-                .For<System.Web.Caching.Cache>()
-                .Use(HttpContext.Current.Cache)
-            );
-
-            
 
             // Configure the static instance of the SiteMapLoader
             var loader = new MvcSiteMapProvider.Core.Loader.SiteMapLoader(

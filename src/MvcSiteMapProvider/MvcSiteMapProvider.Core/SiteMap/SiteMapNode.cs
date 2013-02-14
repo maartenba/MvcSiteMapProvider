@@ -230,11 +230,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <returns>
         /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
         /// </returns>
-        public override bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata)
+        public override bool IsVisible(IDictionary<string, object> sourceMetadata)
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return siteMapNodeVisibilityProviderStrategy.IsVisible(this.VisibilityProvider, this, context, sourceMetadata);
+            return siteMapNodeVisibilityProviderStrategy.IsVisible(this.VisibilityProvider, this, sourceMetadata);
         }
 
         #endregion

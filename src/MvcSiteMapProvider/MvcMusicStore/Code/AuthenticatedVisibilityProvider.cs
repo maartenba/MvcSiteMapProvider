@@ -20,12 +20,11 @@ namespace MvcMusicStore.Code
         /// Determines whether the node is visible.
         /// </summary>
         /// <param name="node">The node.</param>
-        /// <param name="context">The context.</param>
         /// <param name="sourceMetadata">The source metadata.</param>
         /// <returns>
         /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsVisible(ISiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata)
+        public bool IsVisible(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
         {
             return HttpContext.Current.Request.IsAuthenticated;
         }

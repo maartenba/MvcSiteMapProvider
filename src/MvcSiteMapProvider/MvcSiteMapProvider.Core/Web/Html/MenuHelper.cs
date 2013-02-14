@@ -366,15 +366,11 @@ namespace MvcSiteMapProvider.Core.Web.Html
             bool nodeVisible = true;
             if (node != null)
             {
-                //nodeVisible = mvcNode.VisibilityProvider.IsVisible(
-                //    node, HttpContext.Current, SourceMetadata);
-
-                nodeVisible = node.IsVisible(
-                    HttpContext.Current, SourceMetadata);
+                nodeVisible = node.IsVisible(SourceMetadata);
             }
 
             // Check ACL
-            if (node.IsAccessibleToUser(HttpContext.Current))
+            if (node.IsAccessibleToUser())
             {
                 // Add node?
                 var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, SourceMetadata);

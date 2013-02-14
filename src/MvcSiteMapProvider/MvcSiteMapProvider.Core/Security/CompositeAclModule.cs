@@ -33,12 +33,11 @@ namespace MvcSiteMapProvider.Core.Security
         /// Determines whether node is accessible to user.
         /// </summary>
         /// <param name="siteMap">The site map.</param>
-        /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node)
+        public virtual bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
             // Is security trimming enabled?
             if (!siteMap.SecurityTrimmingEnabled)
@@ -52,7 +51,7 @@ namespace MvcSiteMapProvider.Core.Security
             {
                 try
                 {
-                    result &= module.IsAccessibleToUser(siteMap, context, node);
+                    result &= module.IsAccessibleToUser(siteMap, node);
                 }
                 catch (AclModuleNotSupportedException)
                 {

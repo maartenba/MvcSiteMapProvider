@@ -9,6 +9,7 @@ using MvcSiteMapProvider.Core.RequestCache;
 using MvcSiteMapProvider.Core.SiteMap.Builder;
 using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -20,12 +21,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public RequestCacheableSiteMap(
             ISiteMapBuilder siteMapBuilder,
+            IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
+            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
@@ -53,13 +55,28 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return result;
         }
 
-        public ISiteMapNode FindSiteMapNode(HttpContext context)
+        //public ISiteMapNode FindSiteMapNode(HttpContext context)
+        //{
+        //    var key = this.GetCacheKey("FindSiteMapNode_HttpContext");
+        //    var result = this.requestCache.GetValue<ISiteMapNode>(key);
+        //    if (result == null)
+        //    {
+        //        result = base.FindSiteMapNode(context);
+        //        if (result != null)
+        //        {
+        //            this.requestCache.SetValue<ISiteMapNode>(key, result);
+        //        }
+        //    }
+        //    return result;
+        //}
+
+        public ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
-            var key = this.GetCacheKey("FindSiteMapNode_HttpContext");
+            var key = this.GetCacheKey("FindSiteMapNodeFromCurrentContext");
             var result = this.requestCache.GetValue<ISiteMapNode>(key);
             if (result == null)
             {
-                result = base.FindSiteMapNode(context);
+                result = base.FindSiteMapNodeFromCurrentContext();
                 if (result != null)
                 {
                     this.requestCache.SetValue<ISiteMapNode>(key, result);
@@ -83,13 +100,13 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return result;
         }
 
-        public bool IsAccessibleToUser(HttpContext context, ISiteMapNode node)
+        public bool IsAccessibleToUser(ISiteMapNode node)
         {
             var key = this.GetCacheKey("IsAccessibleToUser_" + node.Key);
             var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
-                result = base.IsAccessibleToUser(context, node);
+                result = base.IsAccessibleToUser(node);
                 this.requestCache.SetValue<bool>(key, (bool)result);
             }
             return (bool)result;

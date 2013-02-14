@@ -14,6 +14,6 @@ namespace MvcSiteMapProvider.Core.Cache
     /// </summary>
     public interface ISiteMapCacheKeyGenerator
     {
-        string GenerateKey(HttpContext context);
+        string GenerateKey();
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.Caching;
 using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.Cache
 {
@@ -14,36 +15,46 @@ namespace MvcSiteMapProvider.Core.Cache
     public class SiteMapCache 
         : ISiteMapCache
     {
-        public SiteMapCache(System.Web.Caching.Cache cache)
+        public SiteMapCache(
+            IHttpContextFactory httpContextFactory
+            )
         {
-            if (cache == null)
-                throw new ArgumentNullException("cache");
-            this.cache = cache;
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+            this.httpContextFactory = httpContextFactory;
         }
 
-        private readonly System.Web.Caching.Cache cache;
+        private readonly IHttpContextFactory httpContextFactory;
 
+        protected System.Web.Caching.Cache Cache
+        {
+            get
+            {
+                var context = httpContextFactory.Create();
+                return context.Cache;
+            }
+        }
 
         public virtual ISiteMap this[string key]
         {
             get
             {
-                return (ISiteMap)cache[key];
+                return (ISiteMap)this.Cache[key];
             }
             set
             {
-                cache[key] = value;
+                this.Cache[key] = value;
             }
         }
 
         public virtual void Insert(string key, ISiteMap siteMap, DateTime absoluteExpiration, TimeSpan slidingExpiration)
         {
-            cache.Insert(key, siteMap, null, absoluteExpiration, slidingExpiration, CacheItemPriority.NotRemovable, null);
+            this.Cache.Insert(key, siteMap, null, absoluteExpiration, slidingExpiration, CacheItemPriority.NotRemovable, null);
         }
 
         public virtual int Count
         {
-            get { return cache.Count; }
+            get { return this.Cache.Count; }
         }
 
         ///// <summary>
@@ -59,7 +70,7 @@ namespace MvcSiteMapProvider.Core.Cache
 
         public virtual void Remove(string key)
         {
-            cache.Remove(key);
+            this.Cache.Remove(key);
         }
     }
 }

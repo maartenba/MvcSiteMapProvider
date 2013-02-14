@@ -21,7 +21,8 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMapNode CurrentNode { get; }
         bool EnableLocalization { get; set; }
         ISiteMapNode FindSiteMapNode(string rawUrl);
-        ISiteMapNode FindSiteMapNode(HttpContext context);
+        //ISiteMapNode FindSiteMapNode(HttpContext context);
+        ISiteMapNode FindSiteMapNodeFromCurrentContext();
         ISiteMapNode FindSiteMapNode(ControllerContext context);
         ISiteMapNode FindSiteMapNodeFromKey(string key);
         ISiteMapNodeCollection GetChildNodes(ISiteMapNode node);
@@ -32,7 +33,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
         ISiteMapNode GetParentNodeRelativeToNodeAndHintDownFromParent(ISiteMapNode node, int walkupLevels, int relativeDepthFromWalkup);
         void HintAncestorNodes(ISiteMapNode node, int upLevel);
         void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel);
-        bool IsAccessibleToUser(HttpContext context, ISiteMapNode node);
+        bool IsAccessibleToUser(ISiteMapNode node);
         string ResourceKey { get; set; }
         bool SecurityTrimmingEnabled { get; set; }
     }

@@ -79,6 +79,8 @@
     <Compile Include="Mvc\Filters\SiteMapTitleTarget.cs" />
     <Compile Include="Mvc\IActionMethodParameterResolver.cs" />
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
+    <Compile Include="Web\HttpContextFactory.cs" />
+    <Compile Include="Web\IHttpContextFactory.cs" />
     <Compile Include="Mvc\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="RequestCache\IRequestCache.cs" />
@@ -192,7 +194,6 @@
     <Compile Include="SiteMap\Builder\ISiteMapBuilder.cs" />
     <Compile Include="SiteMap\MvcSiteMapException.cs" />
     <Compile Include="SiteMap\SiteMap.cs" />
-    <Compile Include="SiteMap\SiteMapResolveEventArgs.cs" />
     <Compile Include="SiteMap\UrlPath.cs" />
     <Compile Include="UpdatePriority.cs" />
   </ItemGroup>

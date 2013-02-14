@@ -19,6 +19,6 @@ namespace MvcSiteMapProvider.Core.Security
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node);
+        bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node);
     }
 }

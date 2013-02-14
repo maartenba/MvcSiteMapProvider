@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web;
+using MvcSiteMapProvider.Core.Web;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.SiteMap;
 
@@ -12,6 +13,18 @@ namespace MvcSiteMapProvider.Core.Security
     public class XmlRolesAclModule
         : IAclModule
     {
+        public XmlRolesAclModule(
+            IHttpContextFactory httpContextFactory
+            )
+        {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+
+            this.httpContextFactory = httpContextFactory;
+        }
+
+        protected readonly IHttpContextFactory httpContextFactory;
+
         #region IAclModule Members
 
         /// <summary>
@@ -19,12 +32,11 @@ namespace MvcSiteMapProvider.Core.Security
         /// </summary>
         /// <param name="controllerTypeResolver">The controller type resolver.</param>
         /// <param name="siteMap">The site map.</param>
-        /// <param name="context">The context.</param>
         /// <param name="node">The node.</param>
         /// <returns>
         /// 	<c>true</c> if accessible to user; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsAccessibleToUser(ISiteMap siteMap, HttpContext context, ISiteMapNode node)
+        public bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
             // Is security trimming enabled?
             if (!siteMap.SecurityTrimmingEnabled)
@@ -38,6 +50,8 @@ namespace MvcSiteMapProvider.Core.Security
             // If we have roles assigned, check them against the roles defined in the sitemap
             if (node.Roles != null && node.Roles.Count > 0)
             {
+                var context = httpContextFactory.Create();
+
                     // if there is an authenticated user and the role allows anyone authenticated ("*"), show it
                 if ((context.User.Identity.IsAuthenticated) && node.Roles.Contains("*"))
                 {

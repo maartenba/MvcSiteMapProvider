@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using MvcSiteMapProvider.Core.Globalization;
+using MvcSiteMapProvider.Core.Web;
 
 
 namespace MvcSiteMapProvider.Core.Globalization
@@ -15,6 +16,16 @@ namespace MvcSiteMapProvider.Core.Globalization
     public class StringLocalizer 
         : IStringLocalizer
     {
+        public StringLocalizer(
+            IHttpContextFactory httpContextFactory
+            )
+        {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+            this.httpContextFactory = httpContextFactory;
+        }
+
+        protected readonly IHttpContextFactory httpContextFactory;
         
         /// <summary>
         /// Gets the localized text for the supplied attributeName.
@@ -57,9 +68,10 @@ namespace MvcSiteMapProvider.Core.Globalization
             string globalResourceObject = null;
             if (!string.IsNullOrEmpty(implicitResourceKey))
             {
+                var httpContext = httpContextFactory.Create();
                 try
                 {
-                    globalResourceObject = HttpContext.GetGlobalResourceObject(classKey, implicitResourceKey + "." + attributeName) as string;
+                    globalResourceObject = httpContext.GetGlobalResourceObject(classKey, implicitResourceKey + "." + attributeName) as string;
                 }
                 catch
                 {
@@ -83,9 +95,10 @@ namespace MvcSiteMapProvider.Core.Globalization
                 {
                     return globalResourceObject;
                 }
+                var httpContext = httpContextFactory.Create();
                 try
                 {
-                    globalResourceObject = HttpContext.GetGlobalResourceObject(values[0], values[1]) as string;
+                    globalResourceObject = httpContext.GetGlobalResourceObject(values[0], values[1]) as string;
                 }
                 catch (System.Resources.MissingManifestResourceException)
                 {

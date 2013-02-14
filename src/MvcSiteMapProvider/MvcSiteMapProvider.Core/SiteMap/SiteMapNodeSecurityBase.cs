@@ -104,9 +104,9 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// <value>
         /// True if the current node is accessible.
         /// </value>
-        public virtual bool IsAccessibleToUser(HttpContext context)
+        public virtual bool IsAccessibleToUser()
         {
-            return this.SiteMap.IsAccessibleToUser(context, this);
+            return this.SiteMap.IsAccessibleToUser(this);
         }
 
         #endregion
@@ -147,7 +147,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public abstract IAttributeCollection Attributes { get; }
 
-        public abstract System.Collections.Generic.IList<string> Roles { get; }
+        public abstract IList<string> Roles { get; }
 
         public abstract DateTime LastModifiedDate { get; set; }
 
@@ -157,7 +157,7 @@ namespace MvcSiteMapProvider.Core.SiteMap
 
         public abstract string VisibilityProvider { get; set; }
 
-        public abstract bool IsVisible(HttpContext context, IDictionary<string, object> sourceMetadata);
+        public abstract bool IsVisible(IDictionary<string, object> sourceMetadata);
 
         public abstract bool Clickable { get; set; }
 

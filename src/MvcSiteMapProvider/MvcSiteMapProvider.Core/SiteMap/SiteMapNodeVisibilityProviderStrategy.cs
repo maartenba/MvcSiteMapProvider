@@ -29,11 +29,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
             return siteMapNodeVisibilityProviders.FirstOrDefault(x => x.AppliesTo(providerName));
         }
 
-        public bool IsVisible(string providerName, ISiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata)
+        public bool IsVisible(string providerName, ISiteMapNode node, IDictionary<string, object> sourceMetadata)
         {
             var provider = GetProvider(providerName);
             if (provider == null) return true; // If no provider configured, then always visible.
-            return provider.IsVisible(node, context, sourceMetadata);
+            return provider.IsVisible(node, sourceMetadata);
         }
 
         #endregion

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using MvcSiteMapProvider.Core.SiteMap.Builder;
 using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Collections;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.SiteMap
 {
@@ -17,11 +18,12 @@ namespace MvcSiteMapProvider.Core.SiteMap
     {
         public LockableSiteMap(
             ISiteMapBuilder siteMapBuilder,
+            IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory
             ) 
-            : base(siteMapBuilder, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
+            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory)
         {
         }
 

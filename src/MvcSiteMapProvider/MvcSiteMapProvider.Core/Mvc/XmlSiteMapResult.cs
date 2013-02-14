@@ -276,17 +276,13 @@ namespace MvcSiteMapProvider.Core.Mvc
                 foreach (ISiteMapNode node in startingNode.ChildNodes)
                 {
                     // Check visibility
-                    //var mvcChildNode = node as MvcSiteMapNode;
                     if (node != null)
                     {
-                        //shouldRender = mvcChildNode.VisibilityProvider.IsVisible(
-                        //    mvcChildNode, HttpContext.Current, SourceMetadata);
-
-                        shouldRender = node.IsVisible(HttpContext.Current, SourceMetadata);
+                        shouldRender = node.IsVisible(SourceMetadata);
                     }
 
                     // Check ACL
-                    if (!node.IsAccessibleToUser(HttpContext.Current))
+                    if (!node.IsAccessibleToUser())
                     {
                         shouldRender = false;
                         break;
@@ -295,7 +291,7 @@ namespace MvcSiteMapProvider.Core.Mvc
                     // Render child nodes?
                     if (shouldRender)
                     {
-                        if (node.IsAccessibleToUser(HttpContext.Current))
+                        if (node.IsAccessibleToUser())
                         {
                             foreach (var childNode in FlattenHierarchy(node, url))
                             {

@@ -12,12 +12,11 @@ namespace MvcSiteMapProvider.Core.SiteMap
         /// Determines whether the node is visible.
         /// </summary>
         /// <param name="node">The node.</param>
-        /// <param name="context">The context.</param>
         /// <param name="sourceMetadata">The source metadata.</param>
         /// <returns>
         /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
         /// </returns>
-        bool IsVisible(ISiteMapNode node, HttpContext context, IDictionary<string, object> sourceMetadata);
+        bool IsVisible(ISiteMapNode node, IDictionary<string, object> sourceMetadata);
 
         /// <summary>
         /// Determines whether the provider instance matches the name
