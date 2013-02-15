@@ -72,7 +72,7 @@
     <Compile Include="Loader\SiteMapLoader.cs" />
     <Compile Include="Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Mvc\DefaultActionMethodParameterResolver.cs" />
-    <Compile Include="Mvc\DefaultControllerTypeResolver.cs" />
+    <Compile Include="Mvc\ControllerTypeResolver.cs" />
     <Compile Include="Mvc\Filters\AttributeTarget.cs" />
     <Compile Include="Mvc\Filters\SiteMapPreserveRouteDataAttribute.cs" />
     <Compile Include="Mvc\Filters\SiteMapTitleAttribute.cs" />

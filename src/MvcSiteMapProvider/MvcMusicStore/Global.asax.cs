@@ -98,7 +98,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.Mvc.IControllerTypeResolver>()
-                .Use<MvcSiteMapProvider.Core.Mvc.DefaultControllerTypeResolver>()
+                .Use<MvcSiteMapProvider.Core.Mvc.ControllerTypeResolver>()
             );
 
             var aclModules = new MvcSiteMapProvider.Core.Security.CompositeAclModule(
