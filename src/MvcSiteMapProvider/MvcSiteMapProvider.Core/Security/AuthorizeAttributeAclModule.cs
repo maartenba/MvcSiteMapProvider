@@ -41,16 +41,14 @@ namespace MvcSiteMapProvider.Core.Security
         protected string filterProviderCacheKey = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
         protected IFilterProvider ResolveFilterProvider()
         {
-            if (HttpContext.Current != null)
+            var httpContext = httpContextFactory.Create();
+            var filterProvider = (IFilterProvider)httpContext.Items[filterProviderCacheKey];
+            if (filterProvider == null)
             {
-                if (!HttpContext.Current.Items.Contains(filterProviderCacheKey))
-                {
-                    HttpContext.Current.Items[filterProviderCacheKey] =
-                        DependencyResolver.Current.GetService<IFilterProvider>();
-                }
-                return (IFilterProvider)HttpContext.Current.Items[filterProviderCacheKey];
+                filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
+                httpContext.Items[filterProviderCacheKey] = filterProvider;    
             }
-            return DependencyResolver.Current.GetService<IFilterProvider>();
+            return filterProvider;
         }
 #endif
 
@@ -77,56 +75,36 @@ namespace MvcSiteMapProvider.Core.Security
                 return true;
             }
 
-            // Is it a regular node?
-            var mvcNode = node;
-            //if (mvcNode == null)
-            //{
-            //    throw new AclModuleNotSupportedException(
-            //        Resources.Messages.AclModuleDoesNotSupportRegularSiteMapNodes);
-            //}
-
             // Clickable? Always accessible.
-            if (mvcNode.Clickable == false)
+            if (node.Clickable == false)
             {
                 return true;
             }
 
             // Time to delve into the AuthorizeAttribute defined on the node.
             // Let's start by getting all metadata for the controller...
-            var controllerType = controllerTypeResolver.ResolveControllerType(mvcNode.Area, mvcNode.Controller);
+            var controllerType = controllerTypeResolver.ResolveControllerType(node.Area, node.Controller);
             if (controllerType == null)
             {
                 return false;
             }
 
-            // TODO: Check to make sure this works right.
+            // Find routes for the sitemap node's url
             HttpContextBase httpContext = httpContextFactory.Create();
             string originalPath = httpContext.Request.Path;
             var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
             httpContext.RewritePath(nodeUrl, true);
 
-            RouteData routes = mvcNode.GetRouteData(httpContext);
-
-
-            //// Find routes for the sitemap node's url
-            //HttpContextBase httpContext = new HttpContextMethodOverrider(context, null);
-            //string originalPath = httpContext.Request.Path;
-            //var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
-            //httpContext.RewritePath(nodeUrl, true);
-
-            //HttpContextBase httpContext2 = new MvcHttpContext(context);
-            //RouteData routes = mvcNode.GetRouteData(httpContext2);
-
-
+            RouteData routes = node.GetRouteData(httpContext);
             if (routes == null)
             {
                 return true; // Static URL's will have no route data, therefore return true.
             }
-            foreach (var routeValue in mvcNode.RouteValues)
+            foreach (var routeValue in node.RouteValues)
             {
                 routes.Values[routeValue.Key] = routeValue.Value;
             }
-            if (originalRoutes != null && (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || mvcNode.Area == String.Empty))
+            if (originalRoutes != null && (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
             {
                 routes.DataTokens.Remove("area");
                 //routes.DataTokens.Remove("Namespaces");
@@ -170,14 +148,14 @@ namespace MvcSiteMapProvider.Core.Security
             ActionDescriptor actionDescriptor = null;
             try
             {
-                actionDescriptor = controllerDescriptor.FindAction(controllerContext, mvcNode.Action);
+                actionDescriptor = controllerDescriptor.FindAction(controllerContext, node.Action);
             }
             catch
             {
             }
             if (actionDescriptor == null)
             {
-                actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == mvcNode.Action).FirstOrDefault();
+                actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == node.Action).FirstOrDefault();
             }
 
             // Verify security
