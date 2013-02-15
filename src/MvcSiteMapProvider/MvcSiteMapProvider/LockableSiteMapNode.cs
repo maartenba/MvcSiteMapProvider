@@ -279,6 +279,37 @@ namespace MvcSiteMapProvider
             }
         }
 
+        /// <summary>
+        /// A value indicating to cache the resolved URL. If false, the URL will be 
+        /// resolved every time it is accessed.
+        /// </summary>
+        public override bool CacheResolvedUrl 
+        {
+            get { return base.CacheResolvedUrl; }
+            set
+            {
+                if (this.IsReadOnly)
+                {
+                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "CacheResolvedUrl"));
+                }
+                base.CacheResolvedUrl = value;
+            }
+        }
+
+
+        /// <summary>
+        /// Sets the ResolvedUrl using the current Url or Url resolver.
+        /// </summary>
+        public override void ResolveUrl()
+        {
+            if (this.IsReadOnly)
+            {
+                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ResolveUrl"));
+            }
+            base.ResolveUrl();
+        }
+
+
         #endregion
 
         #region Dynamic Nodes

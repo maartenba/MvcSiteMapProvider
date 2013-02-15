@@ -59,6 +59,9 @@ namespace MvcSiteMapProvider
         public abstract string UrlResolver { get; set; }
         public abstract string Url { get; set; }
         public abstract string UnresolvedUrl { get; }
+        public abstract string ResolvedUrl { get; }
+        public abstract bool CacheResolvedUrl { get; set; }
+        public abstract void ResolveUrl();
         public abstract string DynamicNodeProvider { get; set; }
         public abstract IEnumerable<DynamicNode> GetDynamicNodeCollection();
         public abstract bool HasDynamicNodeProvider { get; }

@@ -81,13 +81,14 @@ namespace MvcSiteMapProvider
         protected readonly string key;
         protected readonly bool isDynamic;
         protected ISiteMap siteMap;
-        protected string url = String.Empty;
         protected string title = String.Empty;
         protected string description = String.Empty;
         protected DateTime lastModifiedDate = DateTime.MinValue;
         protected ChangeFrequency changeFrequency = ChangeFrequency.Always;
         protected UpdatePriority updatePriority = UpdatePriority.Undefined;
         protected bool clickable = true;
+        protected string url = String.Empty;
+        protected string resolvedUrl = String.Empty;
 
         /// <summary>
         /// Gets the key.
@@ -275,15 +276,11 @@ namespace MvcSiteMapProvider
                 {
                     return string.Empty;
                 }
-                // Only resolve the url if an absolute url is not already set
-                if (String.IsNullOrEmpty(this.url) || (!this.url.StartsWith("http") && !this.url.StartsWith("ftp")))
+                if (!String.IsNullOrEmpty(this.ResolvedUrl))
                 {
-                    // use strategy factory to provide implementation logic from concrete provider
-                    // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-                    return siteMapNodeUrlResolverStrategy.ResolveUrl(
-                        this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
+                    return this.ResolvedUrl;
                 }
-                return this.url;
+                return GetResolvedUrl();
             }
             set
             {
@@ -295,6 +292,41 @@ namespace MvcSiteMapProvider
         /// The raw URL before being evaluated by any URL resovler.
         /// </summary>
         public override string UnresolvedUrl { get { return this.url; } }
+
+        /// <summary>
+        /// The resolved url that has been cached, if any.
+        /// </summary>
+        public override string ResolvedUrl { get { return this.resolvedUrl; } }
+
+        /// <summary>
+        /// A value indicating to cache the resolved URL. If false, the URL will be 
+        /// resolved every time it is accessed.
+        /// </summary>
+        public override bool CacheResolvedUrl { get; set; }
+
+        /// <summary>
+        /// Sets the ResolvedUrl using the current Url or Url resolver.
+        /// </summary>
+        public override void ResolveUrl()
+        {
+            if (this.CacheResolvedUrl)
+            {
+                this.resolvedUrl = this.GetResolvedUrl();
+            }
+        }
+
+        protected string GetResolvedUrl()
+        {
+            // Only resolve the url if an absolute url is not already set
+            if (String.IsNullOrEmpty(this.url) || (!this.url.StartsWith("http") && !this.url.StartsWith("ftp")))
+            {
+                // use strategy factory to provide implementation logic from concrete provider
+                // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
+                return siteMapNodeUrlResolverStrategy.ResolveUrl(
+                    this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
+            }
+            return this.url;
+        }
 
         #endregion
 
