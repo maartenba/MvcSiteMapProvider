@@ -8,7 +8,7 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Core.Web.Mvc;
 using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Web;
-using Telerik.Web.Mvc.Infrastructure.Implementation;
+using MvcSiteMapProvider.Core.Reflection;
 
 namespace MvcSiteMapProvider.Core.Security
 {

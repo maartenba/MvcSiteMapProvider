@@ -5,7 +5,7 @@
 
 using System.Web;
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace MvcSiteMapProvider.Core.Security
 {
     /// <summary>
     /// IAuthorizeAttribute contract

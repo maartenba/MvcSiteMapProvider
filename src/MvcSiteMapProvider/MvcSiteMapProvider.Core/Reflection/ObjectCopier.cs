@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace MvcSiteMapProvider.Core.Reflection
 {
     /// <summary>
     /// ObjectCopier

@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Web;
 
-namespace Telerik.Web.Mvc.Infrastructure.Implementation
+namespace MvcSiteMapProvider.Core.Security
 {
     /// <summary>
     /// AuthorizeAttributeBuilder class

@@ -110,7 +110,7 @@
     <Compile Include="Security\IAclModule.cs" />
     <Compile Include="Security\IAuthorizeAttribute.cs" />
     <Compile Include="Security\InternalAuthorize.cs" />
-    <Compile Include="Security\ObjectCopier.cs" />
+    <Compile Include="Reflection\ObjectCopier.cs" />
     <Compile Include="Security\XmlRolesAclModule.cs" />
     <Compile Include="Builder\IMvcSiteMapNodeAttribute.cs" />
     <Compile Include="Builder\IMvcSiteMapNodeAttributeDefinition.cs" />
@@ -238,9 +238,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Web\Seo\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

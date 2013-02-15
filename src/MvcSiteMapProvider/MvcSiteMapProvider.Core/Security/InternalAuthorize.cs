@@ -1,6 +1,5 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Telerik.Web.Mvc.Infrastructure.Implementation;
 
 namespace MvcSiteMapProvider.Core.Security
 {
