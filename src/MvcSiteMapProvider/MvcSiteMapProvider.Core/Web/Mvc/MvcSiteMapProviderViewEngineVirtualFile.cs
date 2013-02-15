@@ -6,7 +6,7 @@ using System.Web.Hosting;
 using System.IO;
 using System.Reflection;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// MvcSiteMapProviderViewEngineVirtualFile class.

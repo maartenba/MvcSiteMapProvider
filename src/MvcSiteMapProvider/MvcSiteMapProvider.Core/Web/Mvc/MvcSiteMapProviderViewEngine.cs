@@ -3,7 +3,7 @@ using System.Security;
 using System.Web.Hosting;
 using System.Web.Mvc;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// MvcSiteMapProviderViewEngine class

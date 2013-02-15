@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// IActionMethodParameterResolver contract

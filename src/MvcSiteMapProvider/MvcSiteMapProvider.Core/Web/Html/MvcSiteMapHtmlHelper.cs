@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 using MvcSiteMapProvider.Core;
 using System.Web;
 

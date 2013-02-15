@@ -7,7 +7,7 @@ using MvcSiteMapProvider.Core.Caching;
 using MvcSiteMapProvider.Core.Web.UrlResolver;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Globalization;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 
 namespace MvcSiteMapProvider.Core
 {

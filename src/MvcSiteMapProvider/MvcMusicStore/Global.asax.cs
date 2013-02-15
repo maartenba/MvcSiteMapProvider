@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 using StructureMap;
 
 namespace MvcMusicStore
@@ -92,13 +92,13 @@ namespace MvcMusicStore
 
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Mvc.IActionMethodParameterResolver>()
-                .Use<MvcSiteMapProvider.Core.Mvc.ActionMethodParameterResolver>()
+                .For<MvcSiteMapProvider.Core.Web.Mvc.IActionMethodParameterResolver>()
+                .Use<MvcSiteMapProvider.Core.Web.Mvc.ActionMethodParameterResolver>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Mvc.IControllerTypeResolver>()
-                .Use<MvcSiteMapProvider.Core.Mvc.ControllerTypeResolver>()
+                .For<MvcSiteMapProvider.Core.Web.Mvc.IControllerTypeResolver>()
+                .Use<MvcSiteMapProvider.Core.Web.Mvc.ControllerTypeResolver>()
             );
 
             var aclModules = new MvcSiteMapProvider.Core.Security.CompositeAclModule(

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 using MvcSiteMapProvider.Core;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 
 namespace MvcSiteMapProvider.Core.Security
 {

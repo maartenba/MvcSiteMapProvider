@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Globalization;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 
 namespace MvcSiteMapProvider.Core
 {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// XmlSiteMapController class

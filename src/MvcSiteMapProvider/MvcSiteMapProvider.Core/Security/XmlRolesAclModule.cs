@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Web;
 using MvcSiteMapProvider.Core.Web;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 using MvcSiteMapProvider.Core;
 
 namespace MvcSiteMapProvider.Core.Security

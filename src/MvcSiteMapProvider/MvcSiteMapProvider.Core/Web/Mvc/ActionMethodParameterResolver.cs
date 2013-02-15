@@ -6,7 +6,7 @@ using System.Web.Mvc.Async;
 using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Collections;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// ActionMethodParameterResolver class

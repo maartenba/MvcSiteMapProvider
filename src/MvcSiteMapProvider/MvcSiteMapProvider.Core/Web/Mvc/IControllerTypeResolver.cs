@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// IControllerTypeResolver contract

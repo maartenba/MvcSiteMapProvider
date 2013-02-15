@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// ControllerTypeResolver class

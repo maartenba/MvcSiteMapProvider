@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using MvcSiteMapProvider.Core;
 
-namespace MvcSiteMapProvider.Core.Mvc.Filters
+namespace MvcSiteMapProvider.Core.Web.Mvc.Filters
 {
     /// <summary>
     /// Apply this attribute to keep route data when rendering the sitemap (e.g. breadcrumbs).

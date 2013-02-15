@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.Security;
-using MvcSiteMapProvider.Core.Mvc;
+using MvcSiteMapProvider.Core.Web.Mvc;
 using MvcSiteMapProvider.Core.Builder;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Web;

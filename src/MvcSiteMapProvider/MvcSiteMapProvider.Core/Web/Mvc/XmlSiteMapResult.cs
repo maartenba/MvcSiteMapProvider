@@ -10,7 +10,7 @@ using MvcSiteMapProvider.Core.Web;
 using System.IO;
 using System.IO.Compression;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// XmlSiteMapResult class.

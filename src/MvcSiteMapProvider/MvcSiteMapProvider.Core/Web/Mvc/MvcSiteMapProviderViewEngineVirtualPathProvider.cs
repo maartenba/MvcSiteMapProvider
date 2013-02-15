@@ -7,7 +7,7 @@ using System.IO;
 using System.Web;
 using System.Reflection;
 
-namespace MvcSiteMapProvider.Core.Mvc
+namespace MvcSiteMapProvider.Core.Web.Mvc
 {
     /// <summary>
     /// MvcSiteMapProviderViewEnginePathProvider class

@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Core;
 
-namespace MvcSiteMapProvider.Core.Mvc.Filters
+namespace MvcSiteMapProvider.Core.Web.Mvc.Filters
 {
     /// <summary>
     /// SiteMapTitle attribute
@@ -38,17 +38,6 @@ namespace MvcSiteMapProvider.Core.Mvc.Filters
         /// Property name of ViewData to look in
         /// </summary>
         protected readonly string PropertyName;
-
-        /// <summary>
-        /// Gets or sets the site map title target.
-        /// </summary>
-        /// <value>The site map title target.</value>
-        [Obsolete("The SiteMapTitleTarget property is obsolete. Use the Target property instead.")]
-        public SiteMapTitleTarget SiteMapTitleTarget
-        {
-            get { return (SiteMapTitleTarget)(int)Target; }
-            set { Target = (AttributeTarget)(int)value; }
-        }
 
         /// <summary>
         /// Gets or sets the target.
