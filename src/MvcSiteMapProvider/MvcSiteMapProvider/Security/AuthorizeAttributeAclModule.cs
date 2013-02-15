@@ -75,7 +75,7 @@ namespace MvcSiteMapProvider.Security
 
             // Is it an external node?
             var nodeUrl = node.Url;
-            if (nodeUrl.StartsWith("http") || nodeUrl.StartsWith("ftp"))
+            if (node.HasExternalUrl())
             {
                 return true;
             }

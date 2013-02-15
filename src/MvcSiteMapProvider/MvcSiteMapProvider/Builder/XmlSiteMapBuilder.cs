@@ -199,7 +199,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.TargetFrame = node.GetAttributeValue("targetFrame");
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
             siteMapNode.Url = node.GetAttributeValue("url");
-            siteMapNode.CacheResolvedUrl = true;
+            siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
 
             if (!string.IsNullOrEmpty(node.GetAttributeValue("changeFrequency")))
             {

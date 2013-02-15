@@ -144,6 +144,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             // Generate URL set
             var urlSet = new XElement(Ns + "urlset");
             urlSet.Add(GenerateUrlElements(
+                context,
                 flattenedHierarchy.Skip((page - 1)* MaxNumberOfLinksPerFile)
                     .Take(MaxNumberOfLinksPerFile), Url).ToArray());
 
@@ -214,26 +215,32 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="siteMapNodes">The site map nodes.</param>
         /// <param name="url">The URL.</param>
         /// <returns>The URL elements.</returns>
-        protected virtual IEnumerable<XElement> GenerateUrlElements(IEnumerable<ISiteMapNode> siteMapNodes, string url)
+        protected virtual IEnumerable<XElement> GenerateUrlElements(ControllerContext context, IEnumerable<ISiteMapNode> siteMapNodes, string url)
         {
+            bool skip;
             // Iterate all nodes
             foreach (var siteMapNode in siteMapNodes)
             {
-                // Mvc node
-                //var mvcNode = siteMapNode as MvcSiteMapNode;
+                skip = false;
 
                 // Generate element
                 var siteMapNodeUrl = siteMapNode.Url;
                 string nodeUrl = url + siteMapNodeUrl;
-                if (siteMapNodeUrl.Contains("http") || siteMapNodeUrl.Contains("ftp"))
+                if (siteMapNode.HasExternalUrl())
                 {
                     nodeUrl = siteMapNodeUrl;
                 }
+                if (siteMapNode.HasExternalUrl(context.HttpContext))
+                {
+                    // Skip domains that don't match.
+                    skip = true;
+                }
+
                 var urlElement = new XElement(Ns + "url",
                     new XElement(Ns + "loc", nodeUrl));
 
                 // Generate element properties
-                if (siteMapNode != null)
+                if (!skip)
                 {
                     if (siteMapNode.LastModifiedDate > DateTime.MinValue)
                     {
@@ -247,10 +254,10 @@ namespace MvcSiteMapProvider.Web.Mvc
                     {
                         urlElement.Add(new XElement(Ns + "priority", (double)siteMapNode.UpdatePriority / 100));
                     }
+                
+                    // Return
+                    yield return urlElement;
                 }
-
-                // Return
-                yield return urlElement;
             }
         }
 

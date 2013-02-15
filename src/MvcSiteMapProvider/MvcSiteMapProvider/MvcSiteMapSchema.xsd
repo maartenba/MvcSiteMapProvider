@@ -130,6 +130,13 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+		<xs:attribute name="cacheResolvedUrl" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Should the resolved URL be cached (true) or resolved on each request (false)? Default is true.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
     <xs:attribute name="visibility" type="xs:string" use="optional" >
       <xs:annotation>
         <xs:documentation>

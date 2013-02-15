@@ -62,6 +62,8 @@ namespace MvcSiteMapProvider
         public abstract string ResolvedUrl { get; }
         public abstract bool CacheResolvedUrl { get; set; }
         public abstract void ResolveUrl();
+        public abstract bool HasExternalUrl();
+        public abstract bool HasExternalUrl(HttpContextBase httpContext);
         public abstract string DynamicNodeProvider { get; set; }
         public abstract IEnumerable<DynamicNode> GetDynamicNodeCollection();
         public abstract bool HasDynamicNodeProvider { get; }

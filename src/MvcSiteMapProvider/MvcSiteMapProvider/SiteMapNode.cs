@@ -280,7 +280,12 @@ namespace MvcSiteMapProvider
                 {
                     return this.ResolvedUrl;
                 }
-                return GetResolvedUrl();
+                // Only resolve the url if an absolute url is not already set
+                if (String.IsNullOrEmpty(this.UnresolvedUrl) || !this.HasExternalUrl())
+                {
+                    return GetResolvedUrl();
+                }
+                return this.UnresolvedUrl;
             }
             set
             {
@@ -309,7 +314,7 @@ namespace MvcSiteMapProvider
         /// </summary>
         public override void ResolveUrl()
         {
-            if (this.CacheResolvedUrl)
+            if (this.CacheResolvedUrl && String.IsNullOrEmpty(this.UnresolvedUrl))
             {
                 this.resolvedUrl = this.GetResolvedUrl();
             }
@@ -317,15 +322,43 @@ namespace MvcSiteMapProvider
 
         protected string GetResolvedUrl()
         {
-            // Only resolve the url if an absolute url is not already set
-            if (String.IsNullOrEmpty(this.url) || (!this.url.StartsWith("http") && !this.url.StartsWith("ftp")))
+            // use strategy factory to provide implementation logic from concrete provider
+            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
+            return siteMapNodeUrlResolverStrategy.ResolveUrl(
+                this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
+        }
+
+        /// <summary>
+        /// Gets a boolean value that indicates this is an external URL by checking whether it
+        /// looks like an absolute path.
+        /// </summary>
+        /// <returns></returns>
+        public override bool HasExternalUrl()
+        {
+            return (this.url.StartsWith("http") || this.url.StartsWith("ftp"));
+        }
+
+        /// <summary>
+        /// Gets a boolean value that indicates this is an external URL by checking whether it
+        /// looks like an absolute path and comparing the DnsSafeHost with the passed in context.
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <returns></returns>
+        public override bool HasExternalUrl(HttpContextBase httpContext)
+        {
+            if (!this.HasExternalUrl())
             {
-                // use strategy factory to provide implementation logic from concrete provider
-                // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-                return siteMapNodeUrlResolverStrategy.ResolveUrl(
-                    this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
+                return false;
             }
-            return this.url;
+            try
+            {
+                var uri = new Uri(this.url, UriKind.Absolute);
+                return !httpContext.Request.Url.DnsSafeHost.Equals(uri.DnsSafeHost);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion
