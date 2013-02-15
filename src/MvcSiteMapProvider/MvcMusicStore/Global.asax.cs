@@ -93,7 +93,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Core.Mvc.IActionMethodParameterResolver>()
-                .Use<MvcSiteMapProvider.Core.Mvc.DefaultActionMethodParameterResolver>()
+                .Use<MvcSiteMapProvider.Core.Mvc.ActionMethodParameterResolver>()
             );
 
             container.Configure(x => x

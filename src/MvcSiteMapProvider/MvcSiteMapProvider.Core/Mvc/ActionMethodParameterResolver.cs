@@ -9,15 +9,15 @@ using MvcSiteMapProvider.Core.Collections;
 namespace MvcSiteMapProvider.Core.Mvc
 {
     /// <summary>
-    /// DefaultActionMethodParameterResolver class
+    /// ActionMethodParameterResolver class
     /// </summary>
-    public class DefaultActionMethodParameterResolver
+    public class ActionMethodParameterResolver
         : IActionMethodParameterResolver
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultActionMethodParameterResolver"/> class.
+        /// Initializes a new instance of the <see cref="ActionMethodParameterResolver"/> class.
         /// </summary>
-        public DefaultActionMethodParameterResolver(
+        public ActionMethodParameterResolver(
             IControllerTypeResolver controllerTypeResolver
             )
         {
@@ -102,25 +102,6 @@ namespace MvcSiteMapProvider.Core.Mvc
 
             // Return
             return actionParameters;
-        }
-
-
-        /// <summary>
-        /// Resolves the action method parameters.
-        /// </summary>
-        /// <param name="controllerTypeResolver">The controller type resolver.</param>
-        /// <param name="areaName">Name of the area.</param>
-        /// <param name="controllerName">Name of the controller.</param>
-        /// <param name="actionMethodName">Name of the action method.</param>
-        /// <returns>
-        /// A action method parameters represented as a <see cref="string"/> instance
-        /// </returns>
-        [Obsolete("Use ResolveActionMethodParameters(string, string, string) instead.")]
-        public IEnumerable<string> ResolveActionMethodParameters(IControllerTypeResolver controllerTypeResolver,
-                                                                 string areaName, string controllerName,
-                                                                 string actionMethodName)
-        {
-            return this.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);
         }
 
         #endregion
