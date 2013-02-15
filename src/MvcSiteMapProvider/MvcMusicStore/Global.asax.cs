@@ -101,6 +101,11 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Core.Web.Mvc.ControllerTypeResolver>()
             );
 
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Core.Reflection.IObjectCopier>()
+                .Use<MvcSiteMapProvider.Core.Reflection.ObjectCopier>()
+            );
+
             var aclModules = new MvcSiteMapProvider.Core.Security.CompositeAclModule(
                 container.GetInstance<MvcSiteMapProvider.Core.Security.AuthorizeAttributeAclModule>(),
                 container.GetInstance<MvcSiteMapProvider.Core.Security.XmlRolesAclModule>()

@@ -70,6 +70,7 @@
     <Compile Include="IoC\IResolver.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
+    <Compile Include="Reflection\IObjectCopier.cs" />
     <Compile Include="Web\Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Web\Mvc\ActionMethodParameterResolver.cs" />
     <Compile Include="Web\Mvc\ControllerTypeResolver.cs" />

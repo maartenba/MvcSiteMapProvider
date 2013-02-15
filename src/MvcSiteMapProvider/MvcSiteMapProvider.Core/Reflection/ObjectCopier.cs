@@ -13,9 +13,9 @@ namespace MvcSiteMapProvider.Core.Reflection
     /// <summary>
     /// ObjectCopier
     /// </summary>
-    public static class ObjectCopier
+    public class ObjectCopier : MvcSiteMapProvider.Core.Reflection.IObjectCopier
     {
-        public static void Copy(object source, object destination, params string[] excludedMembers)
+        public void Copy(object source, object destination, params string[] excludedMembers)
         {
             bool hasExcludedMembers = ((excludedMembers != null) && (excludedMembers.Length > 0));
             Type sourceType = source.GetType();

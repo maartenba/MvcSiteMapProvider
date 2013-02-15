@@ -20,20 +20,25 @@ namespace MvcSiteMapProvider.Core.Security
     {
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
-            IControllerTypeResolver controllerTypeResolver
+            IControllerTypeResolver controllerTypeResolver,
+            IObjectCopier objectCopier
             )
         {
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
+            if (objectCopier == null)
+                throw new ArgumentNullException("objectCopier");
 
             this.httpContextFactory = httpContextFactory;
             this.controllerTypeResolver = controllerTypeResolver;
+            this.objectCopier = objectCopier;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IControllerTypeResolver controllerTypeResolver;
+        protected readonly IObjectCopier objectCopier;
 
         #region IAclModule Members
 
@@ -205,7 +210,7 @@ namespace MvcSiteMapProvider.Core.Security
                                    (IAuthorizeAttribute)builder.Build(currentAuthorizationAttributeType).Invoke(null);
 
                             // Copy all properties
-                            ObjectCopier.Copy(authorizeAttribute, subclassedAttribute);
+                            objectCopier.Copy(authorizeAttribute, subclassedAttribute);
 
                             if (!subclassedAttribute.IsAuthorized(controllerContext.HttpContext))
                             {
