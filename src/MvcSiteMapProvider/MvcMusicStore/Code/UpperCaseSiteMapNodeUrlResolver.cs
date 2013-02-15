@@ -5,6 +5,7 @@ using System.Web;
 //using MvcSiteMapProvider;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcMusicStore.Code
 {
@@ -14,6 +15,13 @@ namespace MvcMusicStore.Code
     public class UpperCaseSiteMapNodeUrlResolver
         : SiteMapNodeUrlResolver
     {
+        public UpperCaseSiteMapNodeUrlResolver(
+            IHttpContextFactory httpContextFactory
+            ) 
+            : base(httpContextFactory)
+        {
+        }
+
         /// <summary>
         /// Resolves the URL.
         /// </summary>

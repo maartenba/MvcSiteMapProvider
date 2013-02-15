@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.SiteMap;
 using MvcSiteMapProvider.Core.Reflection;
-
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
 {
@@ -15,10 +15,16 @@ namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
     public class SiteMapNodeUrlResolver
         : ISiteMapNodeUrlResolver
     {
-        /// <summary>
-        /// UrlHelperCacheKey
-        /// </summary>
-        private const string UrlHelperCacheKey = "6F0F34DE-2981-454E-888D-28080283EF65";
+        public SiteMapNodeUrlResolver(
+            IHttpContextFactory httpContextFactory
+            )
+        {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+            this.httpContextFactory = httpContextFactory;
+        }
+
+        protected readonly IHttpContextFactory httpContextFactory;
 
         /// <summary>
         /// Gets the URL helper.
@@ -28,19 +34,24 @@ namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
         {
             get
             {
-                if (HttpContext.Current.Items[UrlHelperCacheKey] == null)
+                var key = "6F0F34DE-2981-454E-888D-28080283EF65";
+                var httpContext = httpContextFactory.Create();
+                var requestCache = httpContextFactory.GetRequestCache();
+                var result = requestCache.GetValue<UrlHelper>(key);
+                if (result == null)
                 {
                     RequestContext ctx;
-                    if (HttpContext.Current.Handler is MvcHandler)
-                        ctx = ((MvcHandler)HttpContext.Current.Handler).RequestContext;
+                    if (httpContext.Handler is MvcHandler)
+                        ctx = ((MvcHandler)httpContext.Handler).RequestContext;
                     else
-                        ctx = new RequestContext(new HttpContextWrapper(HttpContext.Current), new RouteData());
+                        ctx = httpContextFactory.CreateRequestContext(new RouteData());
 
-                    HttpContext.Current.Items[UrlHelperCacheKey] = new UrlHelper(ctx);
+                    result = new UrlHelper(ctx);
+                    requestCache.SetValue<UrlHelper>(key, result);
                 }
-                return (UrlHelper)HttpContext.Current.Items[UrlHelperCacheKey];
+                return result;
             }
-        }
+        } 
 
         #region ISiteMapNodeUrlResolver Members
 
@@ -69,18 +80,6 @@ namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
                     return siteMapNode.UnresolvedUrl;
                 }
             }
-
-            //if (siteMapNode["url"] != null)
-            //{
-            //    if (siteMapNode["url"].StartsWith("~"))
-            //    {
-            //        return System.Web.VirtualPathUtility.ToAbsolute(siteMapNode["url"]);
-            //    }
-            //    else
-            //    {
-            //        return siteMapNode["url"];
-            //    }
-            //}
 
             if (siteMapNode.PreservedRouteParameters.Count > 0)
             {
