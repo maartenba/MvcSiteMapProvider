@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
-using MvcSiteMapProvider.Core.RequestCache;
+using MvcSiteMapProvider.Core.Caching;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Globalization;

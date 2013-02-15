@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Text;
-using MvcSiteMapProvider.Core.RequestCache;
+using MvcSiteMapProvider.Core.Caching;
 using MvcSiteMapProvider.Core.Builder;
 using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Collections;

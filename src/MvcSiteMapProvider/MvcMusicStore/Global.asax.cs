@@ -262,13 +262,13 @@ namespace MvcMusicStore
             
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Cache.ISiteMapCache>()
-                .Use<MvcSiteMapProvider.Core.Cache.SiteMapCache>()
+                .For<MvcSiteMapProvider.Core.Caching.ISiteMapCache>()
+                .Use<MvcSiteMapProvider.Core.Caching.SiteMapCache>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyGenerator>()
-                .Use<MvcSiteMapProvider.Core.Cache.SiteMapCacheKeyGenerator>()
+                .For<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyGenerator>()
+                .Use<MvcSiteMapProvider.Core.Caching.SiteMapCacheKeyGenerator>()
             );
 
             container.Configure(x => x
@@ -277,19 +277,19 @@ namespace MvcMusicStore
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyToBuilderSetMapper>()
-                .Use<MvcSiteMapProvider.Core.Cache.SiteMapCacheKeyToBuilderSetMapper>()
+                .For<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
+                .Use<MvcSiteMapProvider.Core.Caching.SiteMapCacheKeyToBuilderSetMapper>()
             );
 
 
             // Configure the static instance of the SiteMapLoader
             var loader = new MvcSiteMapProvider.Core.Loader.SiteMapLoader(
                 TimeSpan.FromMinutes(5),
-                container.GetInstance<MvcSiteMapProvider.Core.Cache.ISiteMapCache>(),
-                container.GetInstance<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyGenerator>(),
+                container.GetInstance<MvcSiteMapProvider.Core.Caching.ISiteMapCache>(),
+                container.GetInstance<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyGenerator>(),
                 container.GetInstance<MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSetStrategy>(),
                 container.GetInstance<MvcSiteMapProvider.Core.ISiteMapFactory>(),
-                container.GetInstance<MvcSiteMapProvider.Core.Cache.ISiteMapCacheKeyToBuilderSetMapper>()
+                container.GetInstance<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
                 );
 
             MvcSiteMapProvider.Core.SiteMaps.Loader = loader;

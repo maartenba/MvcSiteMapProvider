@@ -47,12 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache\ISiteMapCache.cs" />
-    <Compile Include="Cache\ISiteMapCacheKeyGenerator.cs" />
-    <Compile Include="Cache\ISiteMapCacheKeyToBuilderSetMapper.cs" />
-    <Compile Include="Cache\SiteMapCache.cs" />
-    <Compile Include="Cache\SiteMapCacheKeyGenerator.cs" />
-    <Compile Include="Cache\SiteMapCacheKeyToBuilderSetMapper.cs" />
+    <Compile Include="Caching\ISiteMapCache.cs" />
+    <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
+    <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />
+    <Compile Include="Caching\SiteMapCache.cs" />
+    <Compile Include="Caching\SiteMapCacheKeyGenerator.cs" />
+    <Compile Include="Caching\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
     <Compile Include="Collections\GenericDictionaryFactory.cs" />
     <Compile Include="Collections\IGenericDictionaryFactory.cs" />
@@ -83,8 +83,8 @@
     <Compile Include="Web\IHttpContextFactory.cs" />
     <Compile Include="Mvc\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
-    <Compile Include="RequestCache\IRequestCache.cs" />
-    <Compile Include="RequestCache\RequestCache.cs" />
+    <Compile Include="Caching\IRequestCache.cs" />
+    <Compile Include="Caching\RequestCache.cs" />
     <Compile Include="AttributeCollectionFactory.cs" />
     <Compile Include="Builder\IReflectionSiteMapBuilderFactory.cs" />
     <Compile Include="Builder\IXmlSiteMapBuilderFactory.cs" />

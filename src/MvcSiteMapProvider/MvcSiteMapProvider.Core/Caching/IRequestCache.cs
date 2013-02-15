@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvcSiteMapProvider.Core.RequestCache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// TODO: Update summary.

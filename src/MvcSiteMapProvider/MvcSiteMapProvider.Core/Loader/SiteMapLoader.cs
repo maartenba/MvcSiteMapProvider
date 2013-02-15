@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Threading;
-using MvcSiteMapProvider.Core.Cache;
+using MvcSiteMapProvider.Core.Caching;
 using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Builder;
 using MvcSiteMapProvider.Core.Web;

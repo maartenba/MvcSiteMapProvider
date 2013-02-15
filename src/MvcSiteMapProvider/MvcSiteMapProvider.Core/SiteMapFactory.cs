@@ -3,7 +3,7 @@ using MvcSiteMapProvider.Core.Builder;
 using MvcSiteMapProvider.Core.Security;
 using MvcSiteMapProvider.Core.Mvc;
 using MvcSiteMapProvider.Core.Collections;
-using MvcSiteMapProvider.Core.RequestCache;
+using MvcSiteMapProvider.Core.Caching;
 using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core

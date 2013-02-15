@@ -5,7 +5,7 @@ using System.Text;
 using System.Web;
 using MvcSiteMapProvider.Core.Web;
 
-namespace MvcSiteMapProvider.Core.Cache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// The default cache key generator. This class generates a unique cache key for each 

@@ -1,7 +1,7 @@
 ﻿using System;
 using MvcSiteMapProvider.Core;
 
-namespace MvcSiteMapProvider.Core.Cache
+namespace MvcSiteMapProvider.Core.Caching
 {
     public interface ISiteMapCache
     {

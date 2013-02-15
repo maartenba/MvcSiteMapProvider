@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using MvcSiteMapProvider.Core.Web;
 
-namespace MvcSiteMapProvider.Core.RequestCache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// TODO: Update summary.

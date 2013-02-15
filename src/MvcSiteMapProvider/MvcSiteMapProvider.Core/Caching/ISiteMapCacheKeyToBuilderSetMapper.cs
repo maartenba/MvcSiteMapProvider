@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvcSiteMapProvider.Core.Cache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// Implement this interface to control which named builder set is used to build 

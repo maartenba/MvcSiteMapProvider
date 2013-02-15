@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MvcSiteMapProvider.Core.Cache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// TODO: Update summary.

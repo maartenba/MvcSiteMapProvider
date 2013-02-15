@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Routing;
-using MvcSiteMapProvider.Core.RequestCache;
+using MvcSiteMapProvider.Core.Caching;
 
 namespace MvcSiteMapProvider.Core.Web
 {

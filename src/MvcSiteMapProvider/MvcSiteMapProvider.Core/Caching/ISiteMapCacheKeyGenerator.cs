@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace MvcSiteMapProvider.Core.Cache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// ISiteMapCacheKeyGenerator interface. This interface allows the sematics of when a new sitemap

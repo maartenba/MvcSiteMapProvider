@@ -7,7 +7,7 @@ using System.Web.Caching;
 using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Web;
 
-namespace MvcSiteMapProvider.Core.Cache
+namespace MvcSiteMapProvider.Core.Caching
 {
     /// <summary>
     /// TODO: Update summary.
