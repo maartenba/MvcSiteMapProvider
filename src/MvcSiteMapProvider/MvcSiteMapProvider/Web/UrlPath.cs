@@ -303,6 +303,11 @@ namespace MvcSiteMapProvider.Web
             return HttpUtility.UrlEncode(url);
         }
 
+        public string UrlDecode(string url)
+        {
+            return HttpUtility.UrlDecode(url);
+        }
+
         /// <summary>
         /// Returns a site relative HTTP path from a partial path starting out with a ~.
         /// Same syntax that ASP.Net internally supports but this method can be used

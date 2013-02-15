@@ -12,5 +12,6 @@ namespace MvcSiteMapProvider.Web
         string MakeVirtualPathAppAbsolute(string virtualPath);
         string MakeVirtualPathAppAbsolute(string virtualPath, string applicationPath);
         string UrlEncode(string url);
+        string UrlDecode(string url);
     }
 }

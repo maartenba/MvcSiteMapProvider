@@ -149,14 +149,16 @@ namespace MvcSiteMapProvider
             }
             lock (this.synclock)
             {
-                bool flag = false;
+                bool urlPrepared = false;
+                bool urlEncoded = false;
                 string url = node.Url;
                 if (!string.IsNullOrEmpty(url))
                 {
-                    if (url.StartsWith("http") || url.StartsWith("ftp"))
+                    if (node.HasExternalUrl())
                     {
                         // This is an external url, so we will encode it
                         url = urlPath.UrlEncode(url);
+                        urlEncoded = true;
                     }
                     if (urlPath.AppDomainAppVirtualPath != null)
                     {
@@ -166,10 +168,14 @@ namespace MvcSiteMapProvider
                         }
                         if (this.urlTable.ContainsKey(url))
                         {
+                            if (urlEncoded)
+                            {
+                                url = urlPath.UrlDecode(url);
+                            }
                             throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
                         }
                     }
-                    flag = true;
+                    urlPrepared = true;
                 }
                 string key = node.Key;
                 if (this.keyTable.ContainsKey(key))
@@ -177,7 +183,7 @@ namespace MvcSiteMapProvider
                     throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalKey, key));
                 }
                 this.keyTable[key] = node;
-                if (flag)
+                if (urlPrepared)
                 {
                     this.urlTable[url] = node;
                 }
