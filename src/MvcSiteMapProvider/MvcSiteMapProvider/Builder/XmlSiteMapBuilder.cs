@@ -332,6 +332,7 @@ namespace MvcSiteMapProvider.Builder
                && attributeName != "roles"
                && attributeName != "route"
                && attributeName != "url"
+               && attributeName != "cacheResolvedUrl"
                && attributeName != "clickable"
                && attributeName != "httpMethod"
                && attributeName != "dynamicNodeProvider"
