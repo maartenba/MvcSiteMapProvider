@@ -164,23 +164,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             //// Get area, controller and action from node declaration
             string area = node.GetAttributeValue("area");
             string controller = node.GetAttributeValue("controller");
-            //string action = node.GetAttributeValue("action");
-            //string route = node.GetAttributeValue("route");
-
-            //// Determine the node type ??
-            //XSiteMapNode siteMapNode = null;
-            //if (!string.IsNullOrEmpty(area) || !string.IsNullOrEmpty(controller) || !string.IsNullOrEmpty(action))
-            //{
-            //    siteMapNode = new XMvcSiteMapNode();
-            //}
-            //else if (!string.IsNullOrEmpty(route))
-            //{
-            //    siteMapNode = new XRouteSiteMapNode();
-            //}
-            //else
-            //{
-            //    siteMapNode = new XSiteMapNode();
-            //}
 
             // Generate key for node
             string key = nodeKeyGenerator.GenerateKey(
@@ -196,7 +179,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
             // Handle title and description
             var title = node.GetAttributeValue("title");
-            //var description = node.GetAttributeValue("description") ?? title;
             var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
 
             // Handle implicit resources
@@ -208,32 +190,16 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
-            //siteMapNode.ResourceKey = implicitResourceKey;
-            //siteMapNode.Attributes = AcquireAttributesFrom(node);
-
             AcquireAttributesFrom(node, siteMapNode.Attributes);
             AcquireRolesFrom(node, siteMapNode.Roles);
-            //siteMapNode.Roles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
-
-            // TODO: move these to sitemapnode constructor so they can't be changed at runtime.
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
             siteMapNode.DynamicNodeProvider = node.GetAttributeValue("dynamicNodeProvider");
-
-
             siteMapNode.ImageUrl = node.GetAttributeValue("imageUrl");
             siteMapNode.TargetFrame = node.GetAttributeValue("targetFrame");
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
             siteMapNode.Url = node.GetAttributeValue("url");
 
-            //if (!siteMapNode.Clickable)
-            //{
-            //    siteMapNode.Url = "";
-            //}
-            //else
-            //{
-            //    siteMapNode.Url = node.GetAttributeValue("url");
-            //}
             if (!string.IsNullOrEmpty(node.GetAttributeValue("changeFrequency")))
             {
                 siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValue("changeFrequency"));
@@ -260,63 +226,44 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
             }
 
             // Handle route details
-            var routeNode = siteMapNode;
-            if (routeNode != null)
+
+            // Assign to node
+            siteMapNode.Route = node.GetAttributeValue("route");
+            AcquireRouteValuesFrom(node, siteMapNode.RouteValues);
+            AcquirePreservedRouteParametersFrom(node, siteMapNode.PreservedRouteParameters);
+            siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
+
+            // Add inherited route values to sitemap node
+            foreach (var inheritedRouteParameter in node.GetAttributeValue("inheritedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                // Assign to node
-                routeNode.Route = node.GetAttributeValue("route");
-                //routeNode.RouteValues = AcquireRouteValuesFrom(node);
-                AcquireRouteValuesFrom(node, routeNode.RouteValues);
-                AcquirePreservedRouteParametersFrom(node, routeNode.PreservedRouteParameters);
-                //routeNode.PreservedRouteParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-                //routeNode.Url = "";
-
-                // TODO: move this to sitemapnode constructor so they can't be changed at runtime.
-                routeNode.UrlResolver = node.GetAttributeValue("urlResolver");
-
-                // Add inherited route values to sitemap node
-                var parentRouteNode = parentNode;
-                if (parentRouteNode != null)
+                var item = inheritedRouteParameter.Trim();
+                if (parentNode.RouteValues.ContainsKey(item))
                 {
-                    foreach (var inheritedRouteParameter in node.GetAttributeValue("inheritedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        var item = inheritedRouteParameter.Trim();
-                        if (parentRouteNode.RouteValues.ContainsKey(item))
-                        {
-                            routeNode.RouteValues.Add(item, parentRouteNode.RouteValues[item]);
-                        }
-                    }
+                    siteMapNode.RouteValues.Add(item, parentNode.RouteValues[item]);
                 }
             }
 
+
             // Handle MVC details
-            var mvcNode = siteMapNode;
-            if (mvcNode != null)
+
+            // Inherit area and controller from parent
+            if (parentNode != null)
             {
-                //// MVC properties
-                //mvcNode.Area = area;
-                //mvcNode.Controller = controller;
-                //mvcNode.Action = action;
-
-                // Inherit area and controller from parent
-                var parentMvcNode = parentNode;
-                if (parentMvcNode != null)
+                if (string.IsNullOrEmpty(area))
                 {
-                    if (string.IsNullOrEmpty(area))
-                    {
-                        mvcNode.Area = parentMvcNode.Area;
-                    }
-                    if (string.IsNullOrEmpty(controller))
-                    {
-                        mvcNode.Controller = parentMvcNode.Controller;
-                    }
+                    siteMapNode.Area = parentNode.Area;
                 }
-
-                // Add defaults for area
-                if (!mvcNode.RouteValues.ContainsKey("area"))
+                if (string.IsNullOrEmpty(controller))
                 {
-                    mvcNode.RouteValues.Add("area", "");
+                    siteMapNode.Controller = parentNode.Controller;
                 }
+            }
+
+
+            // Add defaults for area
+            if (!siteMapNode.RouteValues.ContainsKey("area"))
+            {
+                siteMapNode.RouteValues.Add("area", "");
             }
 
             return siteMapNode;
@@ -350,8 +297,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
 
                 if (attributeName == "roles")
                 {
-                    //siteMapNode.Roles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
                     AcquireRolesFrom(attribute, siteMapNode.Roles);
                 }
             }
@@ -429,7 +374,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
         /// <returns></returns>
         protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueCollection routeValues)
         {
-            //var returnValue = new Dictionary<string, object>();
             foreach (XAttribute attribute in node.Attributes())
             {
                 var attributeName = attribute.Name.ToString();
@@ -440,7 +384,6 @@ namespace MvcSiteMapProvider.Core.SiteMap.Builder
                     routeValues.Add(attributeName, attributeValue);
                 }
             }
-            //return returnValue;
         }
 
         /// <summary>
