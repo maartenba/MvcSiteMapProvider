@@ -9,9 +9,9 @@ using System.Web.Routing;
 namespace MvcSiteMapProvider.Core.Mvc
 {
     /// <summary>
-    /// DefaultControllerTypeResolver class
+    /// ControllerTypeResolver class
     /// </summary>
-    public class DefaultControllerTypeResolver
+    public class ControllerTypeResolver
         : IControllerTypeResolver
     {
         /// <summary>
@@ -29,9 +29,9 @@ namespace MvcSiteMapProvider.Core.Mvc
         private readonly object synclock = new object();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultControllerTypeResolver"/> class.
+        /// Initializes a new instance of the <see cref="ControllerTypeResolver"/> class.
         /// </summary>
-        public DefaultControllerTypeResolver()
+        public ControllerTypeResolver()
         {
             Cache = new Dictionary<string, Type>();
         }
