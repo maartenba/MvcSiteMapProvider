@@ -1,15 +1,12 @@
-﻿#region Using directives
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Html.Models;
+using MvcSiteMapProvider;
 using System.Collections.Specialized;
-
-#endregion
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -41,7 +38,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName)
         {
-            var model = BuildModel(helper, helper.Provider.CurrentNode);
+            var model = BuildModel(helper, helper.SiteMap.CurrentNode);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -53,28 +50,25 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="helper">The helper.</param>
         /// <param name="startingNode">The starting node.</param>
         /// <returns>The model.</returns>
-        private static SiteMapPathHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SiteMapNode startingNode)
+        private static SiteMapPathHelperModel BuildModel(MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode)
         {
             // Build model
             var model = new SiteMapPathHelperModel();
             var node = startingNode;
             while (node != null)
             {
-                var mvcNode = node as MvcSiteMapNode;
-
                 // Check visibility
                 bool nodeVisible = true;
-                if (mvcNode != null)
+                if (node != null)
                 {
-                    nodeVisible = mvcNode.VisibilityProvider.IsVisible(
-                        node, HttpContext.Current, SourceMetadata);
+                    nodeVisible = node.IsVisible(SourceMetadata);
                 }
 
                 // Check ACL
-                if (nodeVisible && node.IsAccessibleToUser(HttpContext.Current))
+                if (nodeVisible && node.IsAccessibleToUser())
                 {
                     // Add node
-                    var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, mvcNode, SourceMetadata);
+                    var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, SourceMetadata);
                     model.Nodes.Add(nodeToAdd);
                 }
                 node = node.ParentNode;

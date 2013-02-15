@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web;
-using MvcSiteMapProvider.Core.Web.Mvc;
+using MvcSiteMapProvider.Web.Mvc;
 using StructureMap;
 
 namespace MvcMusicStore
@@ -50,7 +50,7 @@ namespace MvcMusicStore
 
             //// Setup the container in a static member so it can be used
             //// to inject dependencies later.
-            //MvcSiteMapProvider.Core.IoC.DI.Container = resolver;
+            //MvcSiteMapProvider.IoC.DI.Container = resolver;
 
 
             // Configure Dependencies
@@ -60,14 +60,14 @@ namespace MvcMusicStore
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Web.IHttpContextFactory>()
-                .Use<MvcSiteMapProvider.Core.Web.HttpContextFactory>()
+                .For<MvcSiteMapProvider.Web.IHttpContextFactory>()
+                .Use<MvcSiteMapProvider.Web.HttpContextFactory>()
             );
 
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.ISiteMap>()
-                .Use<MvcSiteMapProvider.Core.RequestCacheableSiteMap>()
+                .For<MvcSiteMapProvider.ISiteMap>()
+                .Use<MvcSiteMapProvider.RequestCacheableSiteMap>()
             );
 
             //// We create a new Setter Injection Policy that
@@ -82,8 +82,8 @@ namespace MvcMusicStore
             //);
 
             //container.Configure(x => x
-            //    .For<MvcSiteMapProvider.Core.Security.IAclModule>()
-            //    .Use<MvcSiteMapProvider.Core.Security.CompositeAclModule>()
+            //    .For<MvcSiteMapProvider.Security.IAclModule>()
+            //    .Use<MvcSiteMapProvider.Security.CompositeAclModule>()
             //);
 
 
@@ -92,130 +92,130 @@ namespace MvcMusicStore
 
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Web.Mvc.IActionMethodParameterResolver>()
-                .Use<MvcSiteMapProvider.Core.Web.Mvc.ActionMethodParameterResolver>()
+                .For<MvcSiteMapProvider.Web.Mvc.IActionMethodParameterResolver>()
+                .Use<MvcSiteMapProvider.Web.Mvc.ActionMethodParameterResolver>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Web.Mvc.IControllerTypeResolver>()
-                .Use<MvcSiteMapProvider.Core.Web.Mvc.ControllerTypeResolver>()
+                .For<MvcSiteMapProvider.Web.Mvc.IControllerTypeResolver>()
+                .Use<MvcSiteMapProvider.Web.Mvc.ControllerTypeResolver>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Reflection.IObjectCopier>()
-                .Use<MvcSiteMapProvider.Core.Reflection.ObjectCopier>()
+                .For<MvcSiteMapProvider.Reflection.IObjectCopier>()
+                .Use<MvcSiteMapProvider.Reflection.ObjectCopier>()
             );
 
-            var aclModules = new MvcSiteMapProvider.Core.Security.CompositeAclModule(
-                container.GetInstance<MvcSiteMapProvider.Core.Security.AuthorizeAttributeAclModule>(),
-                container.GetInstance<MvcSiteMapProvider.Core.Security.XmlRolesAclModule>()
+            var aclModules = new MvcSiteMapProvider.Security.CompositeAclModule(
+                container.GetInstance<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>(),
+                container.GetInstance<MvcSiteMapProvider.Security.XmlRolesAclModule>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Security.IAclModule>()
+                .For<MvcSiteMapProvider.Security.IAclModule>()
                 .Use(aclModules)
             );
 
 
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.ISiteMapNodeFactory>()
-                .Use<MvcSiteMapProvider.Core.SiteMapNodeFactory>()
+                .For<MvcSiteMapProvider.ISiteMapNodeFactory>()
+                .Use<MvcSiteMapProvider.SiteMapNodeFactory>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.IDynamicNodeProviderStrategy>()
-                .Use<MvcSiteMapProvider.Core.DynamicNodeProviderStrategy>()
+                .For<MvcSiteMapProvider.IDynamicNodeProviderStrategy>()
+                .Use<MvcSiteMapProvider.DynamicNodeProviderStrategy>()
             );
 
             // Get all types that implement IDynamicNodeProvider in an array
             container.Configure(x => x.Scan(scan =>
                 {
                     scan.TheCallingAssembly();
-                    scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMaps>();
+                    scan.AssemblyContainingType<MvcSiteMapProvider.SiteMaps>();
                     scan.WithDefaultConventions();
-                    scan.AddAllTypesOf<MvcSiteMapProvider.Core.IDynamicNodeProvider>();
+                    scan.AddAllTypesOf<MvcSiteMapProvider.IDynamicNodeProvider>();
                 }
             ));
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Web.UrlResolver.ISiteMapNodeUrlResolverStrategy>()
-                .Use<MvcSiteMapProvider.Core.Web.UrlResolver.SiteMapNodeUrlResolverStrategy>()
+                .For<MvcSiteMapProvider.Web.UrlResolver.ISiteMapNodeUrlResolverStrategy>()
+                .Use<MvcSiteMapProvider.Web.UrlResolver.SiteMapNodeUrlResolverStrategy>()
             );
 
             // Get all types that implement ISiteMapNodeVisibilityProvider in an array
             container.Configure(x => x.Scan(scan =>
             {
                 scan.TheCallingAssembly();
-                scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMaps>();
+                scan.AssemblyContainingType<MvcSiteMapProvider.SiteMaps>();
                 scan.WithDefaultConventions();
-                scan.AddAllTypesOf<MvcSiteMapProvider.Core.ISiteMapNodeVisibilityProvider>();
+                scan.AddAllTypesOf<MvcSiteMapProvider.ISiteMapNodeVisibilityProvider>();
             }
             ));
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.ISiteMapNodeVisibilityProviderStrategy>()
-                .Use<MvcSiteMapProvider.Core.SiteMapNodeVisibilityProviderStrategy>()
+                .For<MvcSiteMapProvider.ISiteMapNodeVisibilityProviderStrategy>()
+                .Use<MvcSiteMapProvider.SiteMapNodeVisibilityProviderStrategy>()
             );
 
             // Get all types that implement ISiteMapNodeResolver in an array
             container.Configure(x => x.Scan(scan =>
             {
                 scan.TheCallingAssembly();
-                scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMaps>();
+                scan.AssemblyContainingType<MvcSiteMapProvider.SiteMaps>();
                 scan.WithDefaultConventions();
-                scan.AddAllTypesOf<MvcSiteMapProvider.Core.Web.UrlResolver.ISiteMapNodeUrlResolver>();
+                scan.AddAllTypesOf<MvcSiteMapProvider.Web.UrlResolver.ISiteMapNodeUrlResolver>();
             }
             ));
             
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Builder.INodeKeyGenerator>()
+                .For<MvcSiteMapProvider.Builder.INodeKeyGenerator>()
                 .Singleton()
-                .Use<MvcSiteMapProvider.Core.Builder.NodeKeyGenerator>()
+                .Use<MvcSiteMapProvider.Builder.NodeKeyGenerator>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Globalization.IExplicitResourceKeyParser>()
+                .For<MvcSiteMapProvider.Globalization.IExplicitResourceKeyParser>()
                 .Singleton()
-                .Use<MvcSiteMapProvider.Core.Globalization.ExplicitResourceKeyParser>()
+                .Use<MvcSiteMapProvider.Globalization.ExplicitResourceKeyParser>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Globalization.IStringLocalizer>()
+                .For<MvcSiteMapProvider.Globalization.IStringLocalizer>()
                 .Singleton()
-                .Use<MvcSiteMapProvider.Core.Globalization.StringLocalizer>()
+                .Use<MvcSiteMapProvider.Globalization.StringLocalizer>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Globalization.ILocalizationService>()
-                .Use<MvcSiteMapProvider.Core.Globalization.LocalizationService>()
+                .For<MvcSiteMapProvider.Globalization.ILocalizationService>()
+                .Use<MvcSiteMapProvider.Globalization.LocalizationService>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Builder.IDynamicNodeBuilder>()
+                .For<MvcSiteMapProvider.Builder.IDynamicNodeBuilder>()
                 .Singleton()
-                .Use<MvcSiteMapProvider.Core.Builder.DynamicNodeBuilder>()
+                .Use<MvcSiteMapProvider.Builder.DynamicNodeBuilder>()
             );
 
             //container.Configure(x => x
-            //    .For<MvcSiteMapProvider.Core.Builder.XmlSiteMapBuilder>()
-            //    .Use<MvcSiteMapProvider.Core.Builder.XmlSiteMapBuilder>()
+            //    .For<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+            //    .Use<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
             //);
 
             //container.Configure(x => x
-            //    .For<MvcSiteMapProvider.Core.Builder.ReflectionSiteMapBuilder>()
-            //    .Use<MvcSiteMapProvider.Core.Builder.ReflectionSiteMapBuilder>()
+            //    .For<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+            //    .Use<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
             //);
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Builder.IXmlSiteMapBuilderFactory>()
-                .Use<MvcSiteMapProvider.Core.Builder.XmlSiteMapBuilderFactory>()
+                .For<MvcSiteMapProvider.Builder.IXmlSiteMapBuilderFactory>()
+                .Use<MvcSiteMapProvider.Builder.XmlSiteMapBuilderFactory>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Builder.IReflectionSiteMapBuilderFactory>()
-                .Use<MvcSiteMapProvider.Core.Builder.ReflectionSiteMapBuilderFactory>()
+                .For<MvcSiteMapProvider.Builder.IReflectionSiteMapBuilderFactory>()
+                .Use<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilderFactory>()
             );
 
             //container.Configure(x => x
@@ -225,40 +225,40 @@ namespace MvcMusicStore
 
             // Configure the SiteMap Builder Sets
 
-            var xmlBuilderFactory = container.GetInstance<MvcSiteMapProvider.Core.Builder.IXmlSiteMapBuilderFactory>();
+            var xmlBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IXmlSiteMapBuilderFactory>();
             var xmlBuilder = xmlBuilderFactory.Create("~/Mvc.sitemap", new string[] { "" });
 
 
-            var reflectionBuilderFactory = container.GetInstance<MvcSiteMapProvider.Core.Builder.IReflectionSiteMapBuilderFactory>();
+            var reflectionBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IReflectionSiteMapBuilderFactory>();
             var reflectionBuilder = reflectionBuilderFactory.Create(new string[] { "" }, new string[] { "" });
 
 
-            //var builders = new MvcSiteMapProvider.Core.Builder.CompositeSiteMapBuilder(
-            //    container.GetInstance<MvcSiteMapProvider.Core.Builder.XmlSiteMapBuilder>(),
-            //    container.GetInstance<MvcSiteMapProvider.Core.Builder.ReflectionSiteMapBuilder>()
+            //var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
+            //    container.GetInstance<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>(),
+            //    container.GetInstance<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
             //);
 
-            var builders = new MvcSiteMapProvider.Core.Builder.CompositeSiteMapBuilder(
+            var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
                 xmlBuilder,
                 reflectionBuilder
             );
 
 
 
-            var builderSet = new MvcSiteMapProvider.Core.Builder.SiteMapBuilderSet("default", builders);
-            var builderSets = new MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSet[] { builderSet };
+            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders);
+            var builderSets = new MvcSiteMapProvider.Builder.ISiteMapBuilderSet[] { builderSet };
 
             //container.Configure(x => x
-            //    .For<IEnumerable<MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSet>>()
+            //    .For<IEnumerable<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>>()
             //    .Use(builderSets)
             //);
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSetStrategy>()
-                .Use<MvcSiteMapProvider.Core.Builder.SiteMapBuilderSetStrategy>()
-                //.TheArrayOf<MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSet>()
+                .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>()
+                .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
+                //.TheArrayOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>()
                 //.Contains(y => { y.IsThis(builderSet); })
-                .Ctor<MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSet[]>()
+                .Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilderSet[]>()
                 .Is(builderSets)
             );
 
@@ -267,37 +267,37 @@ namespace MvcMusicStore
             
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Caching.ISiteMapCache>()
-                .Use<MvcSiteMapProvider.Core.Caching.SiteMapCache>()
+                .For<MvcSiteMapProvider.Caching.ISiteMapCache>()
+                .Use<MvcSiteMapProvider.Caching.SiteMapCache>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyGenerator>()
-                .Use<MvcSiteMapProvider.Core.Caching.SiteMapCacheKeyGenerator>()
+                .For<MvcSiteMapProvider.Caching.ISiteMapCacheKeyGenerator>()
+                .Use<MvcSiteMapProvider.Caching.SiteMapCacheKeyGenerator>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.ISiteMapFactory>()
-                .Use<MvcSiteMapProvider.Core.SiteMapFactory>()
+                .For<MvcSiteMapProvider.ISiteMapFactory>()
+                .Use<MvcSiteMapProvider.SiteMapFactory>()
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
-                .Use<MvcSiteMapProvider.Core.Caching.SiteMapCacheKeyToBuilderSetMapper>()
+                .For<MvcSiteMapProvider.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
+                .Use<MvcSiteMapProvider.Caching.SiteMapCacheKeyToBuilderSetMapper>()
             );
 
 
             // Configure the static instance of the SiteMapLoader
-            var loader = new MvcSiteMapProvider.Core.Loader.SiteMapLoader(
+            var loader = new MvcSiteMapProvider.Loader.SiteMapLoader(
                 TimeSpan.FromMinutes(5),
-                container.GetInstance<MvcSiteMapProvider.Core.Caching.ISiteMapCache>(),
-                container.GetInstance<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyGenerator>(),
-                container.GetInstance<MvcSiteMapProvider.Core.Builder.ISiteMapBuilderSetStrategy>(),
-                container.GetInstance<MvcSiteMapProvider.Core.ISiteMapFactory>(),
-                container.GetInstance<MvcSiteMapProvider.Core.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
+                container.GetInstance<MvcSiteMapProvider.Caching.ISiteMapCache>(),
+                container.GetInstance<MvcSiteMapProvider.Caching.ISiteMapCacheKeyGenerator>(),
+                container.GetInstance<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>(),
+                container.GetInstance<MvcSiteMapProvider.ISiteMapFactory>(),
+                container.GetInstance<MvcSiteMapProvider.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
                 );
 
-            MvcSiteMapProvider.Core.SiteMaps.Loader = loader;
+            MvcSiteMapProvider.SiteMaps.Loader = loader;
             
 
         }

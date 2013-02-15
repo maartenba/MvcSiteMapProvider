@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using MvcMusicStore.Models;
 using MvcMusicStore.ViewModels;
-using MvcSiteMapProvider.Core.Web.Mvc.Filters;
+using MvcSiteMapProvider.Web.Mvc.Filters;
 
 namespace MvcMusicStore.Controllers
 {

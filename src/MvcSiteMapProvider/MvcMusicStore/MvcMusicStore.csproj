@@ -233,16 +233,6 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MvcSiteMapProvider.Core\MvcSiteMapProvider.Core.csproj">
-      <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
-      <Name>MvcSiteMapProvider.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MvcSiteMapProvider.Web\MvcSiteMapProvider.Web.csproj">
-      <Project>{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}</Project>
-      <Name>MvcSiteMapProvider.Web</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Mvc.sitemap">
       <SubType>Designer</SubType>
     </Content>
@@ -258,6 +248,12 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>SiteMapLocalizations.Designer.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
+      <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
+      <Name>MvcSiteMapProvider</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

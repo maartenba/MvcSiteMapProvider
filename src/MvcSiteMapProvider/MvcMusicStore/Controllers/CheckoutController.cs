@@ -3,7 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using MvcMusicStore.Models;
 using MvcMusicStore.ViewModels;
-using MvcSiteMapProvider.Core;
+using MvcSiteMapProvider;
 
 namespace MvcMusicStore.Controllers
 {

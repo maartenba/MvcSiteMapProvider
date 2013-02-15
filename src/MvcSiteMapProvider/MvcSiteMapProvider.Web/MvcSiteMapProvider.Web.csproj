@@ -55,12 +55,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MvcSiteMapProvider.Core\MvcSiteMapProvider.Core.csproj">
-      <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
-      <Name>MvcSiteMapProvider.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,15 +1,12 @@
-﻿#region Using directives
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Html.Models;
+using MvcSiteMapProvider;
 using System.Collections.Specialized;
-
-#endregion
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -30,7 +27,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper)
         {
-            return SiteMap(helper, helper.Provider.RootNode);
+            return SiteMap(helper, helper.SiteMap.RootNode);
         }
 
         /// <summary>
@@ -39,7 +36,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="helper">The helper.</param>
         /// <param name="startingNode">The starting node.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, SiteMapNode startingNode)
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode)
         {
             return SiteMap(helper, startingNode, false);
         }
@@ -52,7 +49,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, bool rootInChildLevel)
         {
-            return SiteMap(helper, helper.Provider.RootNode, rootInChildLevel);
+            return SiteMap(helper, helper.SiteMap.RootNode, rootInChildLevel);
         }
 
         /// <summary>
@@ -62,7 +59,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNode">The starting node.</param>
         /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool rootInChildLevel)
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool rootInChildLevel)
         {
             return SiteMap(helper, null, startingNode, rootInChildLevel);
         }
@@ -75,7 +72,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName)
         {
-            return SiteMap(helper, templateName, helper.Provider.RootNode);
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode);
         }
 
         /// <summary>
@@ -85,7 +82,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="templateName">Name of the template.</param>
         /// <param name="startingNode">The starting node.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, SiteMapNode startingNode)
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode)
         {
             return SiteMap(helper, templateName, startingNode, false);
         }
@@ -99,7 +96,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, bool rootInChildLevel)
         {
-            return SiteMap(helper, templateName, helper.Provider.RootNode, false);
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, false);
         }
 
         /// <summary>
@@ -110,7 +107,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNode">The starting node.</param>
         /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, SiteMapNode startingNode, bool rootInChildLevel)
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel)
         {
             var model = BuildModel(helper, startingNode, rootInChildLevel);
             return helper
@@ -125,47 +122,44 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNode">The starting node.</param>
         /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>The model.</returns>
-        private static SiteMapHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SiteMapNode startingNode, bool startingNodeInChildLevel)
+        private static SiteMapHelperModel BuildModel(MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel)
         {
             // Build model
             var model = new SiteMapHelperModel();
             var node = startingNode;
 
-                var mvcNode = node as MvcSiteMapNode;
+            // Check visibility
+            bool nodeVisible = true;
+            if (node != null)
+            {
+                nodeVisible = node.IsVisible(SourceMetadata);
+            }
 
-                // Check visibility
-                bool nodeVisible = true;
-                if (mvcNode != null)
-                {
-                    nodeVisible = mvcNode.VisibilityProvider.IsVisible(
-                        node, HttpContext.Current, SourceMetadata);
-                }
+            // Check ACL
+            if (nodeVisible && node.IsAccessibleToUser())
+            {
+                // Add node
+                var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, SourceMetadata);
+                model.Nodes.Add(nodeToAdd);
 
-                // Check ACL
-                if (nodeVisible && node.IsAccessibleToUser(HttpContext.Current))
-                {
-                    // Add node
-                    var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, mvcNode, SourceMetadata);
-                    model.Nodes.Add(nodeToAdd);
-
-                    // Add child nodes
-                    if (node.HasChildNodes) {
-                        foreach (SiteMapNode childNode in node.ChildNodes)
+                // Add child nodes
+                if (node.HasChildNodes) {
+                    foreach (ISiteMapNode childNode in node.ChildNodes)
+                    {
+                        foreach (var childNodeToAdd in BuildModel(helper, childNode, false).Nodes)
                         {
-                            foreach (var childNodeToAdd in BuildModel(helper, childNode, false).Nodes)
+                            if (!startingNodeInChildLevel)
                             {
-                                if (!startingNodeInChildLevel)
-                                {
-                                    nodeToAdd.Children.Add(childNodeToAdd);
-                                }
-                                else
-                                {
-                                    model.Nodes.Add(childNodeToAdd);
-                                }
+                                nodeToAdd.Children.Add(childNodeToAdd);
+                            }
+                            else
+                            {
+                                model.Nodes.Add(childNodeToAdd);
                             }
                         }
                     }
                 }
+            }
 
             return model;
         }

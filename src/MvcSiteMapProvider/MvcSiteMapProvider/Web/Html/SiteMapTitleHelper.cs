@@ -1,15 +1,12 @@
-﻿#region Using directives
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Html.Models;
+using MvcSiteMapProvider;
 using System.Collections.Specialized;
-
-#endregion
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -45,7 +42,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// </returns>
         public static MvcHtmlString SiteMapTitle(this MvcSiteMapHtmlHelper helper, string templateName)
         {
-            var model = BuildModel(helper.Provider.CurrentNode ?? helper.Provider.RootNode);
+            var model = BuildModel(helper.SiteMap.CurrentNode ?? helper.SiteMap.RootNode);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -56,13 +53,13 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="startingNode">The starting node.</param>
         /// <returns>The model.</returns>
-        private static SiteMapTitleHelperModel BuildModel(SiteMapNode startingNode)
+        private static SiteMapTitleHelperModel BuildModel(ISiteMapNode startingNode)
         {
             // Map to model
-            var mvcNode = startingNode as MvcSiteMapNode;
+            //var mvcNode = startingNode as MvcSiteMapNode;
             return new SiteMapTitleHelperModel
             {
-                CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, mvcNode, SourceMetadata)
+                CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, SourceMetadata)
             };
         }
     }

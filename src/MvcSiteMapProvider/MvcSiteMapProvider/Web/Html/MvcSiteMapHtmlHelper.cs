@@ -1,10 +1,8 @@
-﻿#region Using directives
-
+﻿using System;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Internal;
+using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider;
 using System.Web;
-
-#endregion
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -19,22 +17,33 @@ namespace MvcSiteMapProvider.Web.Html
         /// <value>The HTML helper.</value>
         public HtmlHelper HtmlHelper { get; protected set; }
 
+        ///// <summary>
+        ///// Gets or sets the sitemap provider.
+        ///// </summary>
+        ///// <value>The sitemap provider.</value>
+        //public SiteMapProvider Provider { get; protected set; }
+
         /// <summary>
         /// Gets or sets the sitemap provider.
         /// </summary>
         /// <value>The sitemap provider.</value>
-        public SiteMapProvider Provider { get; protected set; }
+        public ISiteMap SiteMap { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
         /// </summary>
         /// <param name="htmlHelper">The HTML helper.</param>
         /// <param name="provider">The sitemap provider.</param>
-        public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, SiteMapProvider provider)
+        public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap)
         {
+            if (htmlHelper == null)
+                throw new ArgumentNullException("htmlHelper");
+            if (siteMap == null)
+                throw new ArgumentNullException("siteMap");
+
             MvcSiteMapProviderViewEngine.Register();
             HtmlHelper = htmlHelper;
-            Provider = provider;
+            SiteMap = siteMap;
         }
 
         /// <summary>

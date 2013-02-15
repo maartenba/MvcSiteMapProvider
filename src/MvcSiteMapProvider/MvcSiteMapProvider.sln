@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider", "MvcSiteMapProvider\MvcSiteMapProvider.csproj", "{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcMusicStore", "MvcMusicStore\MvcMusicStore.csproj", "{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1112BF40-200B-4180-B63E-50D758145293}"
@@ -12,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider.Web", "MvcSiteMapProvider.Web\MvcSiteMapProvider.Web.csproj", "{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider.Core", "MvcSiteMapProvider.Core\MvcSiteMapProvider.Core.csproj", "{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider", "MvcSiteMapProvider\MvcSiteMapProvider.csproj", "{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +18,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80A397D7-7BDD-4538-8D87-34E90B4FB4B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU

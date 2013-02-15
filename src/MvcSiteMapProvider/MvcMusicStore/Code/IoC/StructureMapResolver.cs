@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Web;
     using StructureMap;
-    using MvcSiteMapProvider.Core.IoC;
+    using MvcSiteMapProvider.IoC;
 
     public class StructureMapResolver : IResolver
     {

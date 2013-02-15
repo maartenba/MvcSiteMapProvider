@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using MvcMusicStore.Models;
 using System.Web.Caching;
-using MvcSiteMapProvider.Core;
+using MvcSiteMapProvider;
 
 namespace MvcMusicStore.Code
 {

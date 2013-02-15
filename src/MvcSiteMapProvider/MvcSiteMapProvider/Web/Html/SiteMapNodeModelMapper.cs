@@ -1,10 +1,7 @@
-﻿#region Using directives
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MvcSiteMapProvider.Web.Html.Models;
+using MvcSiteMapProvider;
 using System.Web;
-
-#endregion
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -13,6 +10,7 @@ namespace MvcSiteMapProvider.Web.Html
     /// </summary>
     public static class SiteMapNodeModelMapper
     {
+
         /// <summary>
         /// Maps to SiteMapNodeModel.
         /// </summary>
@@ -20,27 +18,29 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="mvcNode">The MVC node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
         /// <returns>SiteMapNodeModel instance.</returns>
-        public static SiteMapNodeModel MapToSiteMapNodeModel(SiteMapNode node, MvcSiteMapNode mvcNode, IDictionary<string, object> sourceMetadata)
+        public static SiteMapNodeModel MapToSiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
         {
             var nodeToAdd = new SiteMapNodeModel
             {
-                Area = (mvcNode != null ? mvcNode.Area : ""),
-                Controller = (mvcNode != null ? mvcNode.Controller : ""),
-                Action = (mvcNode != null ? mvcNode.Action : ""),
+                Area = (node != null ? node.Area : ""),
+                Controller = (node != null ? node.Controller : ""),
+                Action = (node != null ? node.Action : ""),
                 Title = node.Title,
                 Description = node.Description,
-                TargetFrame = (mvcNode == null ? "" : mvcNode.TargetFrame),
-                ImageUrl = (mvcNode == null ? "" : mvcNode.ImageUrl),
+                TargetFrame = (node == null ? "" : node.TargetFrame),
+                ImageUrl = (node == null ? "" : node.ImageUrl),
                 Url = node.Url,
-                IsCurrentNode = node == node.Provider.CurrentNode,
+                IsCurrentNode = node == node.SiteMap.CurrentNode,
                 IsInCurrentPath = node.IsInCurrentPath(),
-                IsRootNode = node == node.Provider.RootNode,
-                IsClickable = (mvcNode == null || mvcNode.Clickable),
-                RouteValues = (mvcNode != null ? mvcNode.RouteValues : new Dictionary<string, object>()),
-                MetaAttributes = (mvcNode != null ? mvcNode.MetaAttributes : new Dictionary<string, string>()),
+                IsRootNode = node == node.SiteMap.RootNode,
+                IsClickable = (node == null || node.Clickable),
+                RouteValues = (node != null ? (IDictionary<string, object>)node.RouteValues : new Dictionary<string, object>()),
+                // TODO: rename to Attributes
+                MetaAttributes = (node != null ? (IDictionary<string, string>)node.Attributes : new Dictionary<string, string>()),
                 SourceMetadata = sourceMetadata
             };
             return nodeToAdd;
         }
+
     }
 }
