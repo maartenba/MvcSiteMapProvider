@@ -19,7 +19,7 @@ namespace MvcSiteMapProvider.Builder
             this.siteMapBuilders = siteMapBuilders;
         }
 
-        public readonly IEnumerable<ISiteMapBuilder> siteMapBuilders;
+        protected readonly IEnumerable<ISiteMapBuilder> siteMapBuilders;
 
 
 

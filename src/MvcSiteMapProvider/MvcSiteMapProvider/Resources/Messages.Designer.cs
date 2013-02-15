@@ -284,5 +284,14 @@ namespace MvcSiteMapProvider.Resources {
                 return ResourceManager.GetString("SiteMapReadOnly", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node..
+        /// </summary>
+        internal static string VisitingSiteMapBuilderRequiresRootNode {
+            get {
+                return ResourceManager.GetString("VisitingSiteMapBuilderRequiresRootNode", resourceCulture);
+            }
+        }
     }
 }

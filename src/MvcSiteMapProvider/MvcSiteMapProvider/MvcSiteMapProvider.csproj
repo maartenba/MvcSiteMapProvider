@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builder\IVisitingSiteMapBuilderFactory.cs" />
+    <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
+    <Compile Include="Builder\VisitingSiteMapBuilderFactory.cs" />
     <Compile Include="Caching\ISiteMapCache.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />
@@ -71,6 +74,9 @@
     <Compile Include="Loader\ISiteMapLoader.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
     <Compile Include="Reflection\IObjectCopier.cs" />
+    <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
+    <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />
+    <Compile Include="Visitor\UrlResolvingSiteMapNodeVisitor.cs" />
     <Compile Include="Web\Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Web\Mvc\ActionMethodParameterResolver.cs" />
     <Compile Include="Web\Mvc\ControllerTypeResolver.cs" />

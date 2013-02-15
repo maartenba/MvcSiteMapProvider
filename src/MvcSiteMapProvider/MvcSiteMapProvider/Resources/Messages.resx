@@ -192,4 +192,7 @@
   <data name="SiteMapReadOnly" xml:space="preserve">
     <value>SiteMap is readonly, nodes cannot be modified.</value>
   </data>
+  <data name="VisitingSiteMapBuilderRequiresRootNode" xml:space="preserve">
+    <value>VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node.</value>
+  </data>
 </root>

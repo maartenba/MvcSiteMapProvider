@@ -198,6 +198,11 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Builder.DynamicNodeBuilder>()
             );
 
+            container.Configure(x => x
+               .For<MvcSiteMapProvider.Visitor.ISiteMapNodeVisitor>()
+               .Use<MvcSiteMapProvider.Visitor.UrlResolvingSiteMapNodeVisitor>()
+            );
+
             //container.Configure(x => x
             //    .For<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
             //    .Use<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
@@ -218,6 +223,11 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilderFactory>()
             );
 
+            container.Configure(x => x
+               .For<MvcSiteMapProvider.Builder.IVisitingSiteMapBuilderFactory>()
+               .Use<MvcSiteMapProvider.Builder.VisitingSiteMapBuilderFactory>()
+            );
+
             //container.Configure(x => x
             //    .For<System.Web.HttpContext>()
             //    .Use(HttpContext.Current)
@@ -233,6 +243,10 @@ namespace MvcMusicStore
             var reflectionBuilder = reflectionBuilderFactory.Create(new string[] { "" }, new string[] { "" });
 
 
+            var visitingBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IVisitingSiteMapBuilderFactory>();
+            var visitingBuilder = visitingBuilderFactory.Create();
+
+
             //var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
             //    container.GetInstance<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>(),
             //    container.GetInstance<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
@@ -240,7 +254,8 @@ namespace MvcMusicStore
 
             var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
                 xmlBuilder,
-                reflectionBuilder
+                reflectionBuilder,
+                visitingBuilder
             );
 
 
