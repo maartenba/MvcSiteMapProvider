@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MvcSiteMapProvider.Core.Mvc.UrlResolver;
+using MvcSiteMapProvider.Core.Web.UrlResolver;
 using MvcSiteMapProvider.Core.Globalization;
 using MvcSiteMapProvider.Core.Collections;
 using MvcSiteMapProvider.Core.Mvc;

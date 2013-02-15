@@ -81,7 +81,7 @@
     <Compile Include="Mvc\IControllerTypeResolver.cs" />
     <Compile Include="Web\HttpContextFactory.cs" />
     <Compile Include="Web\IHttpContextFactory.cs" />
-    <Compile Include="Mvc\UrlResolver\UrlResolverException.cs" />
+    <Compile Include="Web\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Caching\IRequestCache.cs" />
     <Compile Include="Caching\RequestCache.cs" />
@@ -120,7 +120,7 @@
     <Compile Include="Builder\ReflectionSiteMapBuilder.cs" />
     <Compile Include="Builder\SiteMapBuilderSet.cs" />
     <Compile Include="Builder\XmlSiteMapBuilderFactory.cs" />
-    <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolver.cs" />
+    <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolver.cs" />
     <Compile Include="IAttributeCollection.cs" />
     <Compile Include="ISiteMapNodeChildStateFactory.cs" />
     <Compile Include="ISiteMapNodeCollectionFactory.cs" />
@@ -143,7 +143,7 @@
     <Compile Include="ISiteMapNode.cs" />
     <Compile Include="IAttributeCollectionFactory.cs" />
     <Compile Include="ISiteMapNodeFactory.cs" />
-    <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
+    <Compile Include="Web\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="MvcSiteMapNodeAttribute.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
@@ -154,7 +154,7 @@
     <Compile Include="AttributeCollection.cs" />
     <Compile Include="SiteMapNodeCollectionFactory.cs" />
     <Compile Include="SiteMapNodeFactory.cs" />
-    <Compile Include="Mvc\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />
+    <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMapNodePositioningBase.cs" />
     <Compile Include="SiteMapNodeSecurityBase.cs" />
     <Compile Include="SiteMapNodeVisibilityProviderStrategy.cs" />
@@ -187,7 +187,7 @@
     <Compile Include="Web\MvcHttpRequest.cs" />
     <Compile Include="IDynamicNodeProvider.cs" />
     <Compile Include="ISiteMap.cs" />
-    <Compile Include="Mvc\UrlResolver\ISiteMapNodeUrlResolver.cs" />
+    <Compile Include="Web\UrlResolver\ISiteMapNodeUrlResolver.cs" />
     <Compile Include="ISiteMapNodeVisibilityProvider.cs" />
     <Compile Include="Builder\ISiteMapBuilder.cs" />
     <Compile Include="MvcSiteMapException.cs" />

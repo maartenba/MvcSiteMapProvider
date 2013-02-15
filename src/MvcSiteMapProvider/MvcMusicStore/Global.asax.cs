@@ -134,8 +134,8 @@ namespace MvcMusicStore
             ));
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Core.Mvc.UrlResolver.ISiteMapNodeUrlResolverStrategy>()
-                .Use<MvcSiteMapProvider.Core.Mvc.UrlResolver.SiteMapNodeUrlResolverStrategy>()
+                .For<MvcSiteMapProvider.Core.Web.UrlResolver.ISiteMapNodeUrlResolverStrategy>()
+                .Use<MvcSiteMapProvider.Core.Web.UrlResolver.SiteMapNodeUrlResolverStrategy>()
             );
 
             // Get all types that implement ISiteMapNodeVisibilityProvider in an array
@@ -159,7 +159,7 @@ namespace MvcMusicStore
                 scan.TheCallingAssembly();
                 scan.AssemblyContainingType<MvcSiteMapProvider.Core.SiteMaps>();
                 scan.WithDefaultConventions();
-                scan.AddAllTypesOf<MvcSiteMapProvider.Core.Mvc.UrlResolver.ISiteMapNodeUrlResolver>();
+                scan.AddAllTypesOf<MvcSiteMapProvider.Core.Web.UrlResolver.ISiteMapNodeUrlResolver>();
             }
             ));
             

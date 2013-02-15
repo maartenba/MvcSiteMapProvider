@@ -7,7 +7,7 @@ using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Reflection;
 using MvcSiteMapProvider.Core.Web;
 
-namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
+namespace MvcSiteMapProvider.Core.Web.UrlResolver
 {
     /// <summary>
     /// Default SiteMapNode URL resolver.

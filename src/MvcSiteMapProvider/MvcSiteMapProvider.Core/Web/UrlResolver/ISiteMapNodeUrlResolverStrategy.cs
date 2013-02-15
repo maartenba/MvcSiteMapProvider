@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MvcSiteMapProvider.Core;
 
-namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
+namespace MvcSiteMapProvider.Core.Web.UrlResolver
 {
     /// <summary>
     /// TODO: Update summary.

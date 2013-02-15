@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MvcSiteMapProvider.Core.Mvc.UrlResolver
+namespace MvcSiteMapProvider.Core.Web.UrlResolver
 {
     /// <summary>
     /// UrlResolverException
