@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using MvcSiteMapProvider.Core.Mvc;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 
 namespace MvcSiteMapProvider.Core.Security
 {

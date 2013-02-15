@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using MvcSiteMapProvider.Core.Web.Html.Models;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 using System.Web;
 
 namespace MvcSiteMapProvider.Core.Web.Html

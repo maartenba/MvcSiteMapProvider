@@ -1,5 +1,5 @@
 ﻿using System;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 
 namespace MvcSiteMapProvider.Core.Loader
 {

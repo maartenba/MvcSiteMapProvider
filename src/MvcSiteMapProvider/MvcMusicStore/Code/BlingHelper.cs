@@ -19,7 +19,7 @@ namespace MvcMusicStore
         public static string Bling(this MvcSiteMapHtmlHelper helper)
         {
             //var node = SiteMap.CurrentNode;
-            var node = MvcSiteMapProvider.Core.SiteMap.SiteMaps.Current.CurrentNode;
+            var node = MvcSiteMapProvider.Core.SiteMaps.Current.CurrentNode;
             if (node != null)
             {
                 if (node.Attributes.ContainsKey("bling"))

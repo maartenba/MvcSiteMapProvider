@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 
 namespace MvcSiteMapProvider.Core.Collections
 {

@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.Mvc;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Web;
 using Telerik.Web.Mvc.Infrastructure.Implementation;
 

@@ -5,8 +5,8 @@ using System.Text;
 using System.Web;
 using System.Threading;
 using MvcSiteMapProvider.Core.Cache;
-using MvcSiteMapProvider.Core.SiteMap;
-using MvcSiteMapProvider.Core.SiteMap.Builder;
+using MvcSiteMapProvider.Core;
+using MvcSiteMapProvider.Core.Builder;
 using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.Loader

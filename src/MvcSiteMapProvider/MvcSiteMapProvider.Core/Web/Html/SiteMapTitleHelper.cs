@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using MvcSiteMapProvider.Core.Web.Html.Models;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 using System.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Core.Web.Html

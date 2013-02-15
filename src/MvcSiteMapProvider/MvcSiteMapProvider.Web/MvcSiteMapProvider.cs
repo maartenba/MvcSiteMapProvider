@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------
 
 using MvcSiteMapProvider.Core;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 
 namespace MvcSiteMapProvider.Web
 {

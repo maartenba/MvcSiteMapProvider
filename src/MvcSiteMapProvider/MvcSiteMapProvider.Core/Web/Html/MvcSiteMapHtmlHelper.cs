@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Core.Mvc;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 using System.Web;
 
 namespace MvcSiteMapProvider.Core.Web.Html

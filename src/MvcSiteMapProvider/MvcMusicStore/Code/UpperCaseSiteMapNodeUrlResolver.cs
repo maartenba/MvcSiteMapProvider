@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-//using MvcSiteMapProvider;
 using MvcSiteMapProvider.Core.Mvc.UrlResolver;
-using MvcSiteMapProvider.Core.SiteMap;
+using MvcSiteMapProvider.Core;
 using MvcSiteMapProvider.Core.Web;
 
 namespace MvcMusicStore.Code
