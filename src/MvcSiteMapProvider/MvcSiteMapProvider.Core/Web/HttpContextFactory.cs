@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
-
+using MvcSiteMapProvider.Core.RequestCache;
 using MvcSiteMapProvider.Core.SiteMap;
 
 namespace MvcSiteMapProvider.Core.Web
@@ -13,15 +14,15 @@ namespace MvcSiteMapProvider.Core.Web
         : IHttpContextFactory
     {
         //public HttpContextFactory(
-        //    HttpContext context
+        //    IRequestCache requestCache
         //    )
         //{
-        //    if (context == null)
-        //        throw new ArgumentNullException("context");
-        //    this.context = context;
+        //    if (requestCache == null)
+        //        throw new ArgumentNullException("requestCache");
+        //    this.requestCache = requestCache;
         //}
 
-        //protected readonly HttpContext context;
+        protected readonly IRequestCache requestCache;
 
         #region IHttpContextFactory Members
 
@@ -36,8 +37,18 @@ namespace MvcSiteMapProvider.Core.Web
 
         public RequestContext CreateRequestContext(RouteData routeData)
         {
-            var context = this.Create();
-            return new RequestContext(context, routeData);
+            var httpContext = this.Create();
+            return new RequestContext(httpContext, routeData);
+
+            //if (httpContext.Handler is MvcHandler)
+            //    return ((MvcHandler)httpContext.Handler).RequestContext;
+            //else
+            //    return new RequestContext(httpContext, new RouteData());
+        }
+
+        public IRequestCache GetRequestCache()
+        {
+            return new RequestCache.RequestCache(this);
         }
 
         #endregion

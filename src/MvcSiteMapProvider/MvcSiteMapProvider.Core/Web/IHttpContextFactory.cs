@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Routing;
+using MvcSiteMapProvider.Core.RequestCache;
 
 namespace MvcSiteMapProvider.Core.Web
 {
@@ -11,5 +12,6 @@ namespace MvcSiteMapProvider.Core.Web
     {
         HttpContextBase Create();
         RequestContext CreateRequestContext(RouteData routeData);
+        IRequestCache GetRequestCache();
     }
 }

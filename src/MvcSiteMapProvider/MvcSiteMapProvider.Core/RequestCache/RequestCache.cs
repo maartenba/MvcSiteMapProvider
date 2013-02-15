@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MvcSiteMapProvider.Core.Web;
 
 namespace MvcSiteMapProvider.Core.RequestCache
 {
@@ -12,29 +13,37 @@ namespace MvcSiteMapProvider.Core.RequestCache
         : IRequestCache
     {
         public RequestCache(
-            HttpContext context
+            IHttpContextFactory httpContextFactory
             )
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
 
-            this.context = context;
+            this.httpContextFactory = httpContextFactory;
         }
 
-        private readonly HttpContext context;
+        private readonly IHttpContextFactory httpContextFactory;
+
+        protected HttpContextBase Context
+        {
+            get 
+            { 
+                return this.httpContextFactory.Create();
+            }
+        }
 
         public virtual T GetValue<T>(string key)
         {
-            if (this.context.Items.Contains(key))
+            if (this.Context.Items.Contains(key))
             {
-                return (T)this.context.Items[key];
+                return (T)this.Context.Items[key];
             }
             return default(T);
         }
 
         public virtual void SetValue<T>(string key, T value)
         {
-            this.context.Items[key] = value;
+            this.Context.Items[key] = value;
         }
     }
 }
