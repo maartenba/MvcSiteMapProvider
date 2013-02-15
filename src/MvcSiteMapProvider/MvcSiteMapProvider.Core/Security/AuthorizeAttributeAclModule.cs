@@ -38,15 +38,15 @@ namespace MvcSiteMapProvider.Core.Security
         #region IAclModule Members
 
 #if !NET35
-        protected string filterProviderCacheKey = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
         protected IFilterProvider ResolveFilterProvider()
         {
-            var httpContext = httpContextFactory.Create();
-            var filterProvider = (IFilterProvider)httpContext.Items[filterProviderCacheKey];
+            var key = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
+            var requestCache = httpContextFactory.GetRequestCache();
+            var filterProvider = requestCache.GetValue<IFilterProvider>(key);
             if (filterProvider == null)
             {
                 filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
-                httpContext.Items[filterProviderCacheKey] = filterProvider;    
+                requestCache.SetValue<IFilterProvider>(key, filterProvider);    
             }
             return filterProvider;
         }
@@ -110,7 +110,7 @@ namespace MvcSiteMapProvider.Core.Security
                 //routes.DataTokens.Remove("Namespaces");
                 //routes.Values.Remove("area");
             }
-            var requestContext = new RequestContext(httpContext, routes);
+            var requestContext = httpContextFactory.CreateRequestContext(routes);
 
             // Create controller context
             var controllerContext = new ControllerContext();
