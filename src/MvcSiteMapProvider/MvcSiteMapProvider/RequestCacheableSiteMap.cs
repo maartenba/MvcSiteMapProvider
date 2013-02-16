@@ -41,7 +41,7 @@ namespace MvcSiteMapProvider
 
         #region Request Cacheable Members
 
-        public ISiteMapNode FindSiteMapNode(string rawUrl)
+        public override ISiteMapNode FindSiteMapNode(string rawUrl)
         {
             var key = this.GetCacheKey("FindSiteMapNode_" + rawUrl);
             var result = this.requestCache.GetValue<ISiteMapNode>(key);
@@ -56,7 +56,7 @@ namespace MvcSiteMapProvider
             return result;
         }
 
-        //public ISiteMapNode FindSiteMapNode(HttpContext context)
+        //public override ISiteMapNode FindSiteMapNode(HttpContext context)
         //{
         //    var key = this.GetCacheKey("FindSiteMapNode_HttpContext");
         //    var result = this.requestCache.GetValue<ISiteMapNode>(key);
@@ -71,7 +71,7 @@ namespace MvcSiteMapProvider
         //    return result;
         //}
 
-        public ISiteMapNode FindSiteMapNodeFromCurrentContext()
+        public override ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
             var key = this.GetCacheKey("FindSiteMapNodeFromCurrentContext");
             var result = this.requestCache.GetValue<ISiteMapNode>(key);
@@ -86,7 +86,7 @@ namespace MvcSiteMapProvider
             return result;
         }
 
-        public ISiteMapNode FindSiteMapNode(ControllerContext context)
+        public override ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
             var key = this.GetCacheKey("FindSiteMapNode_ControllerContext" + this.GetRouteDataValues(context.RouteData));
             var result = this.requestCache.GetValue<ISiteMapNode>(key);
@@ -101,7 +101,7 @@ namespace MvcSiteMapProvider
             return result;
         }
 
-        public bool IsAccessibleToUser(ISiteMapNode node)
+        public override bool IsAccessibleToUser(ISiteMapNode node)
         {
             var key = this.GetCacheKey("IsAccessibleToUser_" + node.Key);
             var result = this.requestCache.GetValue<bool?>(key);
