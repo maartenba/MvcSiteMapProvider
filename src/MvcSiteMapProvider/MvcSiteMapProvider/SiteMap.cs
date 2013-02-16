@@ -109,8 +109,8 @@ namespace MvcSiteMapProvider
         /// 	<paramref name="node"/> is null.
         /// </exception>
         /// <exception cref="T:System.InvalidOperationException">
-        /// The <see cref="P:System.Web.SiteMapNode.Url"/> or <see cref="P:System.Web.SiteMapNode.Key"/> is already registered with 
-        /// the <see cref="T:System.Web.StaticSiteMapProvider"/>. A site map node must be made up of pages with unique URLs or keys.
+        /// The <see cref="P:MvcSiteMapProvider.SiteMapNode.Url"/> or <see cref="P:MvcSiteMapProvider.SiteMapNode.Key"/> is already registered with 
+        /// the <see cref="T:MvcSiteMapProvider.SiteMap"/>. A site map node must be made up of pages with unique URLs or keys.
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
@@ -333,7 +333,6 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Finds the site map node.
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="routeData">The route data.</param>
         /// <returns></returns>
         protected virtual ISiteMapNode FindSiteMapNode(RouteData routeData)
@@ -618,7 +617,7 @@ namespace MvcSiteMapProvider
 
         #endregion
 
-        #region Protected Members 
+        #region Protected Members
 
         /// <summary>
         /// Finds the controller action node.
