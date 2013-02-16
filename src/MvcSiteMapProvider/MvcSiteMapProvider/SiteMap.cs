@@ -339,15 +339,10 @@ namespace MvcSiteMapProvider
         {
             // Node
             ISiteMapNode node = null;
+            var requestContext = httpContextFactory.CreateRequestContext(routeData);
             if (routeData != null)
             {
                 // Fetch route data
-                var requestContext = httpContextFactory.CreateRequestContext(routeData);
-                VirtualPathData vpd = routeData.Route.GetVirtualPath(
-                    requestContext, routeData.Values);
-                string appPathPrefix = (requestContext.HttpContext.Request.ApplicationPath
-                    ?? string.Empty).TrimEnd('/') + "/";
-
                 node = this.FindSiteMapNode(requestContext.HttpContext.Request.Path);
 
                 if (!routeData.Values.ContainsKey("area"))
@@ -379,12 +374,52 @@ namespace MvcSiteMapProvider
             // Try base class
             if (node == null)
             {
-                node = this.FindSiteMapNodeFromCurrentContext();
+                node = this.FindSiteMapNode(requestContext.HttpContext);
             }
 
             // Check accessibility
             return this.ReturnNodeIfAccessible(node);
         }
+
+        protected virtual ISiteMapNode FindSiteMapNode(HttpContextBase context)
+        {
+            if (context == null)
+            {
+                return null;
+            }
+            string rawUrl = context.Request.RawUrl;
+            var node = this.FindSiteMapNode(rawUrl);
+            if (node == null)
+            {
+                int index = rawUrl.IndexOf("?", StringComparison.Ordinal);
+                if (index != -1)
+                {
+                    node = this.FindSiteMapNode(rawUrl.Substring(0, index));
+                }
+                //if (node != null)
+                //{
+                //    return node;
+                //}
+                //Page currentHandler = context.CurrentHandler as Page;
+                //if (currentHandler != null)
+                //{
+                //    string clientQueryString = currentHandler.ClientQueryString;
+                //    if (clientQueryString.Length > 0)
+                //    {
+                //        node = this.FindSiteMapNode(context.Request.Path + "?" + clientQueryString);
+                //    }
+                //}
+
+                if (node == null)
+                {
+                    node = this.FindSiteMapNode(context.Request.Path);
+                }
+            }
+            return node;
+        }
+
+ 
+
 
         public virtual ISiteMapNode FindSiteMapNodeFromKey(string key)
         {
