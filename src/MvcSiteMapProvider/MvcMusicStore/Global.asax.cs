@@ -301,20 +301,17 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Caching.SiteMapCacheKeyToBuilderSetMapper>()
             );
 
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Loader.ISiteMapLoaderFactory>()
+                .Use<MvcSiteMapProvider.Loader.SiteMapLoaderFactory>()
+            );
+
 
             // Configure the static instance of the SiteMapLoader
-            var loader = new MvcSiteMapProvider.Loader.SiteMapLoader(
-                TimeSpan.FromMinutes(5),
-                container.GetInstance<MvcSiteMapProvider.Caching.ISiteMapCache>(),
-                container.GetInstance<MvcSiteMapProvider.Caching.ISiteMapCacheKeyGenerator>(),
-                container.GetInstance<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>(),
-                container.GetInstance<MvcSiteMapProvider.ISiteMapFactory>(),
-                container.GetInstance<MvcSiteMapProvider.Caching.ISiteMapCacheKeyToBuilderSetMapper>()
-                );
+            var loaderFactory = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoaderFactory>();
+            var loader = loaderFactory.Create(TimeSpan.FromMinutes(5), TimeSpan.Zero);
 
             MvcSiteMapProvider.SiteMaps.Loader = loader;
-            
-
         }
 
 

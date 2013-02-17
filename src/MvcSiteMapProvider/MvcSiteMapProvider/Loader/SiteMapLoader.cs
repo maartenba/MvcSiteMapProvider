@@ -18,17 +18,15 @@ namespace MvcSiteMapProvider.Loader
         : ISiteMapLoader
     {
         public SiteMapLoader(
+            TimeSpan absoluteCacheExpiration,
             TimeSpan slidingCacheExpiration,
             ISiteMapCache siteMapCache,
             ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
             ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy,
             ISiteMapFactory siteMapFactory,
             ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper
-            
             )
         {
-            if (slidingCacheExpiration == null)
-                throw new ArgumentNullException("slidingCacheExpiration");
             if (siteMapCache == null)
                 throw new ArgumentNullException("siteMapCache");
             if (siteMapCacheKeyGenerator == null)
@@ -39,17 +37,21 @@ namespace MvcSiteMapProvider.Loader
                 throw new ArgumentNullException("siteMapFactory");
             if (siteMapCacheKeyToBuilderSetMapper == null)
                 throw new ArgumentNullException("siteMapCacheKeyToBuilderSetMapper");
-            
 
+            this.absoluteCacheExpiration = absoluteCacheExpiration;
             this.slidingCacheExpiration = slidingCacheExpiration;
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapBuilderSetStrategy = siteMapBuilderSetStrategy;
             this.siteMapFactory = siteMapFactory;
             this.siteMapCacheKeyToBuilderSetMapper = siteMapCacheKeyToBuilderSetMapper;
-            
+
+            // Attach an event to the cache so when the SiteMap is removed, the Clear() method can be called on it to ensure
+            // we don't have any circular references that aren't GC'd.
+            siteMapCache.SiteMapRemoved += new EventHandler<SiteMapCacheItemRemovedEventArgs>(siteMapCache_SiteMapRemoved);
         }
 
+        protected readonly TimeSpan absoluteCacheExpiration;
         protected readonly TimeSpan slidingCacheExpiration;
         protected readonly ISiteMapCache siteMapCache;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
@@ -68,37 +70,51 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual ISiteMap GetSiteMap(string siteMapCacheKey)
         {
-            ISiteMap siteMap = null;
+            if (String.IsNullOrEmpty(siteMapCacheKey))
+            {
+                throw new ArgumentNullException("siteMapCacheKey");
+            }
 
-            synclock.EnterReadLock();
+            synclock.EnterUpgradeableReadLock();
             try
             {
-                siteMap = siteMapCache[siteMapCacheKey];
+                ISiteMap siteMap = null;
+                if (siteMapCache.TryGetValue(siteMapCacheKey, out siteMap))
+                {
+                    return siteMap;
+                }
+                else
+                {
+                    synclock.EnterWriteLock();
+                    try
+                    {
+                        // Build sitemap
+                        var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
+                        var builder = siteMapBuilderSetStrategy.GetBuilder(builderSetName);
+                        siteMap = siteMapFactory.Create(builder);
+                        siteMap.BuildSiteMap();
+
+                        siteMapCache.Insert(siteMapCacheKey, siteMap, absoluteCacheExpiration, slidingCacheExpiration, builder.GetDependencyFileNames());
+
+                        return siteMap;
+                    }
+                    finally
+                    {
+                        synclock.ExitWriteLock();
+                    }
+                }
             }
             finally
             {
-                synclock.ExitReadLock();
+                synclock.ExitUpgradeableReadLock();
             }
+        }
 
-            if (siteMap == null)
-            {
-                synclock.EnterWriteLock();
-                try
-                {
-                    // Build sitemap
-                    var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
-                    var builder = siteMapBuilderSetStrategy.GetBuilder(builderSetName);
-                    siteMap = siteMapFactory.Create(builder);
-                    siteMap.BuildSiteMap();
-
-                    siteMapCache.Insert(siteMapCacheKey, siteMap, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingCacheExpiration);
-                }
-                finally
-                {
-                    synclock.ExitWriteLock();
-                }
-            }
-            return siteMap;
+        protected virtual void siteMapCache_SiteMapRemoved(object sender, SiteMapCacheItemRemovedEventArgs e)
+        {
+            // Call clear to remove ISiteMap object references from internal collections. This
+            // should be enough to release the circular references and free the memory.
+            e.SiteMap.Clear();
         }
     }
 }

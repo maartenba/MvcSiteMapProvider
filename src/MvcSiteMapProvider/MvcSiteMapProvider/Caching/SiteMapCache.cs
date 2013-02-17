@@ -26,6 +26,9 @@ namespace MvcSiteMapProvider.Caching
 
         private readonly IHttpContextFactory httpContextFactory;
 
+        public event EventHandler<SiteMapCacheItemRemovedEventArgs> SiteMapRemoved;
+
+
         protected System.Web.Caching.Cache Cache
         {
             get
@@ -47,30 +50,88 @@ namespace MvcSiteMapProvider.Caching
             }
         }
 
-        public virtual void Insert(string key, ISiteMap siteMap, DateTime absoluteExpiration, TimeSpan slidingExpiration)
+        public virtual void Insert(string key, ISiteMap siteMap, TimeSpan absoluteExpiration, TimeSpan slidingExpiration)
         {
-            this.Cache.Insert(key, siteMap, null, absoluteExpiration, slidingExpiration, CacheItemPriority.NotRemovable, null);
+            this.Insert(key, siteMap, absoluteExpiration, slidingExpiration, null);
         }
+
+        public virtual void Insert(string key, ISiteMap siteMap, TimeSpan absoluteExpiration, TimeSpan slidingExpiration, IEnumerable<string> fileDependencies)
+        {
+            DateTime absolute = System.Web.Caching.Cache.NoAbsoluteExpiration;
+            TimeSpan sliding = System.Web.Caching.Cache.NoSlidingExpiration;
+            if (absoluteExpiration != TimeSpan.Zero && absoluteExpiration != TimeSpan.MinValue)
+            {
+                absolute = DateTime.UtcNow.Add(absoluteExpiration);
+            }
+            else if (slidingExpiration != TimeSpan.Zero && slidingExpiration != TimeSpan.MinValue)
+            {
+                sliding = slidingExpiration;
+            }
+
+            var dependency = this.GetCacheDependency(fileDependencies);
+
+            this.Cache.Insert(key, siteMap, dependency, absolute, sliding, CacheItemPriority.NotRemovable, OnItemRemoved);
+        }
+
+
+        protected virtual CacheDependency GetCacheDependency(IEnumerable<string> fileDependencies)
+        {
+            CacheDependency dependency = null;
+            if (fileDependencies != null && fileDependencies.Count() > 0)
+            {
+                if (fileDependencies.Count() > 1)
+                {
+                    dependency = new AggregateCacheDependency();
+                    foreach (var file in fileDependencies)
+                    {
+                        ((AggregateCacheDependency)dependency).Add(new CacheDependency(file));
+                    }
+                }
+                else
+                {
+                    dependency = new CacheDependency(fileDependencies.First());
+                }
+            }
+            return dependency;
+        }
+
 
         public virtual int Count
         {
             get { return this.Cache.Count; }
         }
 
-        ///// <summary>
-        ///// When using caching, this method is being used to refresh the sitemap when the root sitemap node identifier is removed from cache.
-        ///// </summary>
-        ///// <param name="key">Cached item key.</param>
-        ///// <param name="item">Cached item.</param>
-        ///// <param name="reason">Reason the cached item was removed.</param>
-        //private void OnSiteMapChanged(string key, object item, CacheItemRemovedReason reason)
-        //{
+        /// <summary>
+        /// This method is called when a sitemap has been removed from the cache.
+        /// </summary>
+        /// <param name="key">Cached item key.</param>
+        /// <param name="item">Cached item.</param>
+        /// <param name="reason">Reason the cached item was removed.</param>
+        private void OnItemRemoved(string key, object item, CacheItemRemovedReason reason)
+        {
+            var args = new SiteMapCacheItemRemovedEventArgs() { SiteMap = (ISiteMap)item };
+            OnSiteMapRemoved(args);
+        }
 
-        //}
+        protected virtual void OnSiteMapRemoved(SiteMapCacheItemRemovedEventArgs e)
+        {
+            if (this.SiteMapRemoved != null)
+                SiteMapRemoved(this, e);
+        }
 
         public virtual void Remove(string key)
         {
             this.Cache.Remove(key);
+        }
+
+        public bool TryGetValue(string key, out ISiteMap value)
+        {
+            value = (ISiteMap)this.Cache.Get(key);
+            if (value != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

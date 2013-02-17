@@ -57,10 +57,8 @@ namespace MvcSiteMapProvider
 
         public override void Clear()
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
+            // Set the sitemap to read-write so we can destroy it.
+            this.IsReadOnly = false;
             base.Clear();
         }
 

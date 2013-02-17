@@ -54,6 +54,7 @@
     <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="Caching\SiteMapCache.cs" />
+    <Compile Include="Caching\SiteMapCacheItemRemovedEventArgs.cs" />
     <Compile Include="Caching\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
@@ -74,7 +75,9 @@
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
+    <Compile Include="Loader\ISiteMapLoaderFactory.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
+    <Compile Include="Loader\SiteMapLoaderFactory.cs" />
     <Compile Include="PreservedRouteParameterCollection.cs" />
     <Compile Include="Reflection\IObjectCopier.cs" />
     <Compile Include="RoleCollection.cs" />

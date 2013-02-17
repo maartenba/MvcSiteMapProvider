@@ -25,10 +25,20 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapBuilder Members
 
+        public virtual IEnumerable<string> GetDependencyFileNames()
+        {
+            var result = new List<string>();
+            foreach (var builder in this.siteMapBuilders)
+            {
+                result.AddRange(builder.GetDependencyFileNames());
+            }
+            return result;
+        }
+
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
             ISiteMapNode result = rootNode;
-            foreach (var builder in siteMapBuilders)
+            foreach (var builder in this.siteMapBuilders)
             {
                 result = builder.BuildSiteMap(siteMap, result);
             }

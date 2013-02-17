@@ -26,6 +26,11 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapBuilder Members
 
+        public virtual IEnumerable<string> GetDependencyFileNames()
+        {
+            return new string[] { };
+        }
+
         public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
             if (rootNode == null)

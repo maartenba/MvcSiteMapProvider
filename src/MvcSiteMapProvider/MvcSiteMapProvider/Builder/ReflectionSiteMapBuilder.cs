@@ -42,7 +42,6 @@ namespace MvcSiteMapProvider.Builder
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
-        //protected readonly ISiteMapNodeVisibilityProvider siteMapNodeVisibilityProvider;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
@@ -63,6 +62,12 @@ namespace MvcSiteMapProvider.Builder
         /// The exclude assemblies.
         /// </value>
         protected IEnumerable<string> ExcludeAssemblies { get; set; }
+
+
+        public virtual IEnumerable<string> GetDependencyFileNames()
+        {
+            return new string[] { };
+        }
 
         /// <summary>
         /// Provides the base data on which the context-aware provider can generate a full tree.

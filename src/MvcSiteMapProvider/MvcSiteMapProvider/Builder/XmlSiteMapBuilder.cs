@@ -61,7 +61,12 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapBuilder Members
 
-        public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
+        public virtual IEnumerable<string> GetDependencyFileNames()
+        {
+            return new string[] { HostingEnvironment.MapPath(this.xmlSiteMapFilePath) };
+        }
+
+        public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
             var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
             if (xml != null)
