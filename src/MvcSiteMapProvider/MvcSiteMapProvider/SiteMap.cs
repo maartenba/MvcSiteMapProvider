@@ -613,7 +613,6 @@ namespace MvcSiteMapProvider
         {
             var rawUrl = httpContext.Request.RawUrl;
             var node = this.FindSiteMapNode(rawUrl);
-
             if (node == null)
             {
                 // Trim off the querystring from RawUrl and try again
@@ -691,11 +690,8 @@ namespace MvcSiteMapProvider
                     {
                         return node;
                     }
-                }
 
-                // Search one deeper level
-                foreach (ISiteMapNode node in childNodes)
-                {
+                    // Search next level
                     var siteMapNode = FindSiteMapNodeFromControllerAction(node, values, route);
                     if (siteMapNode != null)
                     {
