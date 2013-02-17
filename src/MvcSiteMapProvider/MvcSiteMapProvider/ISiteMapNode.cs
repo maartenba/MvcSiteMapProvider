@@ -10,7 +10,6 @@ namespace MvcSiteMapProvider
     /// TODO: Update summary.
     /// </summary>
     public interface ISiteMapNode
-        //: ICloneable
     {
         string Key { get; }
         bool IsDynamic { get; }
