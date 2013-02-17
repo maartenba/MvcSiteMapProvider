@@ -223,6 +223,29 @@ namespace MvcSiteMapProvider
 
         #endregion
 
+        #region Dynamic Nodes
+
+        /// <summary>
+        /// Gets or sets the name or type of the Dynamic Node Provider.
+        /// </summary>
+        /// <value>
+        /// The name or type of the Dynamic Node Provider.
+        /// </value>
+        public override string DynamicNodeProvider
+        {
+            get { return base.DynamicNodeProvider; }
+            set
+            {
+                if (this.IsReadOnly)
+                {
+                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "DynamicNodeProvider"));
+                }
+                base.DynamicNodeProvider = value;
+            }
+        }
+
+        #endregion
+
         #region URL Resolver
 
         /// <summary>
@@ -315,26 +338,42 @@ namespace MvcSiteMapProvider
 
         #endregion
 
-        #region Dynamic Nodes
+        #region Canonical Tag
 
         /// <summary>
-        /// Gets or sets the name or type of the Dynamic Node Provider.
+        /// Gets or sets the canonical URL.
         /// </summary>
-        /// <value>
-        /// The name or type of the Dynamic Node Provider.
-        /// </value>
-        public override string DynamicNodeProvider
+        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        public override string CanonicalUrl
         {
-            get { return base.DynamicNodeProvider; }
+            get { return base.CanonicalUrl; }
             set
             {
                 if (this.IsReadOnly)
                 {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "DynamicNodeProvider"));
+                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "CanonicalUrl"));
                 }
-                base.DynamicNodeProvider = value;
+                base.CanonicalUrl = value;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        public override string CanonicalKey
+        {
+            get { return base.CanonicalKey; }
+            set
+            {
+                if (this.IsReadOnly)
+                {
+                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "CanonicalKey"));
+                }
+                base.CanonicalKey = value;
+            }
+        }
+
 
         #endregion
 

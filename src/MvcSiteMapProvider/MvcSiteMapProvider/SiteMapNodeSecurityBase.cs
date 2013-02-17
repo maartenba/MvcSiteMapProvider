@@ -55,6 +55,9 @@ namespace MvcSiteMapProvider
         public abstract UpdatePriority UpdatePriority { get; set; }
         public abstract string VisibilityProvider { get; set; }
         public abstract bool IsVisible(IDictionary<string, object> sourceMetadata);
+        public abstract string DynamicNodeProvider { get; set; }
+        public abstract IEnumerable<DynamicNode> GetDynamicNodeCollection();
+        public abstract bool HasDynamicNodeProvider { get; }
         public abstract bool Clickable { get; set; }
         public abstract string UrlResolver { get; set; }
         public abstract string Url { get; set; }
@@ -66,9 +69,6 @@ namespace MvcSiteMapProvider
         public abstract bool HasExternalUrl(HttpContextBase httpContext);
         public abstract string CanonicalUrl { get; set; }
         public abstract string CanonicalKey { get; set; }
-        public abstract string DynamicNodeProvider { get; set; }
-        public abstract IEnumerable<DynamicNode> GetDynamicNodeCollection();
-        public abstract bool HasDynamicNodeProvider { get; }
         public abstract string Route { get; set; }
         public abstract IRouteValueCollection RouteValues { get; }
         public abstract IPreservedRouteParameterCollection PreservedRouteParameters { get; }

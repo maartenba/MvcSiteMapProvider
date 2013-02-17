@@ -246,6 +246,42 @@ namespace MvcSiteMapProvider
 
         #endregion
 
+        #region Dynamic Nodes
+
+        /// <summary>
+        /// Gets or sets the name or type of the Dynamic Node Provider.
+        /// </summary>
+        /// <value>
+        /// The name or type of the Dynamic Node Provider.
+        /// </value>
+        public override string DynamicNodeProvider { get; set; }
+
+        /// <summary>
+        /// Gets the dynamic node collection.
+        /// </summary>
+        /// <returns>A dynamic node collection.</returns>
+        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
+        {
+            // use strategy factory to provide implementation logic from concrete provider
+            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
+            return dynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider);
+        }
+
+        /// <summary>
+        /// Gets whether the current node has a dynamic node provider.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if there is a provider; otherwise <c>false</c>.
+        /// </value>
+        public override bool HasDynamicNodeProvider
+        {
+            // use strategy factory to provide implementation logic from concrete provider
+            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
+            get { return (dynamicNodeProviderStrategy.GetProvider(this.DynamicNodeProvider) != null); }
+        }
+
+        #endregion
+
         #region URL Resolver
 
         /// <summary>
@@ -377,10 +413,7 @@ namespace MvcSiteMapProvider
         /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
         public override string CanonicalUrl 
         {
-            get 
-            {
-                return this.GetAbsoluteCanonicalUrl();
-            }
+            get { return this.GetAbsoluteCanonicalUrl(); }
             set
             {
                 if (!this.canonicalUrl.Equals(value))
@@ -394,10 +427,8 @@ namespace MvcSiteMapProvider
             }
         }
 
-        
-
         /// <summary>
-        /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
+        /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
         public override string CanonicalKey 
@@ -416,6 +447,11 @@ namespace MvcSiteMapProvider
             }
         }
 
+        /// <summary>
+        /// Gets the absolute value of the canonical URL, finding the value by 
+        /// <see cref="P:MvcSiteMapProvider.ISiteMapNode.CanonicalKey"/> if necessary.
+        /// </summary>
+        /// <returns>The absolute canonical URL.</returns>
         protected virtual string GetAbsoluteCanonicalUrl()
         {
             var url = this.canonicalUrl;
@@ -437,42 +473,6 @@ namespace MvcSiteMapProvider
                 }
             }
             return String.Empty;
-        }
-
-        #endregion
-
-        #region Dynamic Nodes
-
-        /// <summary>
-        /// Gets or sets the name or type of the Dynamic Node Provider.
-        /// </summary>
-        /// <value>
-        /// The name or type of the Dynamic Node Provider.
-        /// </value>
-        public override string DynamicNodeProvider { get; set; }
-
-        /// <summary>
-        /// Gets the dynamic node collection.
-        /// </summary>
-        /// <returns>A dynamic node collection.</returns>
-        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
-        {
-            // use strategy factory to provide implementation logic from concrete provider
-            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return dynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider);
-        }
-
-        /// <summary>
-        /// Gets whether the current node has a dynamic node provider.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if there is a provider; otherwise <c>false</c>.
-        /// </value>
-        public override bool HasDynamicNodeProvider
-        {
-            // use strategy factory to provide implementation logic from concrete provider
-            // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            get { return (dynamicNodeProviderStrategy.GetProvider(this.DynamicNodeProvider) != null); }
         }
 
         #endregion

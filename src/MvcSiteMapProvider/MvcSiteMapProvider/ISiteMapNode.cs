@@ -44,6 +44,10 @@ namespace MvcSiteMapProvider
         string VisibilityProvider { get; set; }
         bool IsVisible(IDictionary<string, object> sourceMetadata);
 
+        string DynamicNodeProvider { get; set; }
+        IEnumerable<DynamicNode> GetDynamicNodeCollection();
+        bool HasDynamicNodeProvider { get; }
+
         bool Clickable { get; set; }
         string UrlResolver { get; set; }
         string Url { get; set; }
@@ -56,10 +60,6 @@ namespace MvcSiteMapProvider
 
         string CanonicalUrl { get; set; }
         string CanonicalKey { get; set; }
-
-        string DynamicNodeProvider { get; set; }
-        IEnumerable<DynamicNode> GetDynamicNodeCollection();
-        bool HasDynamicNodeProvider { get; }
 
         string Route { get; set; }
         IRouteValueCollection RouteValues { get; }

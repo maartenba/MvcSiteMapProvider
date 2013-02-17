@@ -100,6 +100,18 @@ namespace MvcSiteMapProvider
             return (bool)result;
         }
 
+        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
+        {
+            var key = GetCacheKey("GetDynamicNodeCollection");
+            var result = this.requestCache.GetValue<IEnumerable<DynamicNode>>(key);
+            if (result == null)
+            {
+                result = base.GetDynamicNodeCollection();
+                this.requestCache.SetValue<IEnumerable<DynamicNode>>(key, result);
+            }
+            return result;
+        }
+
         public override string Url
         {
             get
@@ -114,18 +126,6 @@ namespace MvcSiteMapProvider
                 return result;
             }
             set { base.Url = value; }
-        }
-
-        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
-        {
-            var key = GetCacheKey("GetDynamicNodeCollection");
-            var result = this.requestCache.GetValue<IEnumerable<DynamicNode>>(key);
-            if (result == null)
-            {
-                result = base.GetDynamicNodeCollection();
-                this.requestCache.SetValue<IEnumerable<DynamicNode>>(key, result);
-            }
-            return result;
         }
 
         #endregion
