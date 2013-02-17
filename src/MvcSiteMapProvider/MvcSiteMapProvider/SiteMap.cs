@@ -323,7 +323,7 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Finds the site map node.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The controller context.</param>
         /// <returns></returns>
         public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
