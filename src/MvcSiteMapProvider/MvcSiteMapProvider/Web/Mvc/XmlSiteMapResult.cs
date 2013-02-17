@@ -239,9 +239,11 @@ namespace MvcSiteMapProvider.Web.Mvc
                 {
                     nodeUrl = siteMapNodeUrl;
                 }
-                if (siteMapNode.HasExternalUrl(context.HttpContext))
+                if (siteMapNode.HasExternalUrl(context.HttpContext) ||
+                    !String.IsNullOrEmpty(siteMapNode.CanonicalUrl))
                 {
-                    // Skip domains that don't match.
+                    // Skip nodes where domain doesn't match the current one 
+                    // or where canonical url exists.
                     skip = true;
                 }
 
