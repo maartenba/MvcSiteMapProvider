@@ -116,7 +116,6 @@ namespace MvcSiteMapProvider
         /// <value>True if the current node is read-only.</value>
         public override bool IsReadOnly { get { return this.SiteMap.IsReadOnly; } }
 
-
         /// <summary>
         /// A reference to the root SiteMap object for the current graph.
         /// </summary>
@@ -124,7 +123,6 @@ namespace MvcSiteMapProvider
         {
             get { return this.siteMap; }
         }
-
 
         /// <summary>
         /// Gets or sets the HTTP method.
@@ -381,25 +379,7 @@ namespace MvcSiteMapProvider
         {
             get 
             {
-                var url = this.canonicalUrl;
-                if (!String.IsNullOrEmpty(url))
-                {
-                    if (urlPath.IsAbsoluteUrl(url))
-                    {
-                        return url;
-                    }
-                    return urlPath.MakeRelativeUrlAbsolute(url);
-                }
-                var key = this.canonicalKey;
-                if (!String.IsNullOrEmpty(key))
-                {
-                    var node = this.SiteMap.FindSiteMapNodeFromKey(key);
-                    if (node != null)
-                    {
-                        return urlPath.MakeRelativeUrlAbsolute(node.Url);
-                    }
-                }
-                return String.Empty;
+                return this.GetAbsoluteCanonicalUrl();
             }
             set
             {
@@ -434,6 +414,29 @@ namespace MvcSiteMapProvider
                     this.canonicalKey = value;
                 }
             }
+        }
+
+        protected virtual string GetAbsoluteCanonicalUrl()
+        {
+            var url = this.canonicalUrl;
+            if (!String.IsNullOrEmpty(url))
+            {
+                if (urlPath.IsAbsoluteUrl(url))
+                {
+                    return url;
+                }
+                return urlPath.MakeRelativeUrlAbsolute(url);
+            }
+            var key = this.canonicalKey;
+            if (!String.IsNullOrEmpty(key))
+            {
+                var node = this.SiteMap.FindSiteMapNodeFromKey(key);
+                if (node != null)
+                {
+                    return urlPath.MakeRelativeUrlAbsolute(node.Url);
+                }
+            }
+            return String.Empty;
         }
 
         #endregion
@@ -577,17 +580,15 @@ namespace MvcSiteMapProvider
         public override void CopyTo(ISiteMapNode node)
         {
             node.ParentNode = this.parentNode;
+            // NOTE: Expected behavior is to reference the same child nodes,
+            // so this is okay.
             foreach (var child in this.ChildNodes)
                 node.ChildNodes.Add(child);
             node.HttpMethod = this.HttpMethod;
-            node.Title = this.title;
-            node.Description = this.description;
+            node.Title = this.title; // Get protected member
+            node.Description = this.description; // Get protected member
             node.TargetFrame = this.TargetFrame;
             node.ImageUrl = this.ImageUrl;
-            //foreach (var attribute in this.Attributes)
-            //    node.Attributes.Add(attribute);
-            //foreach (var role in this.Roles)
-            //    node.Roles.Add(role);
             this.Attributes.CopyTo(node.Attributes);
             this.Roles.CopyTo(node.Roles);
             node.LastModifiedDate = this.LastModifiedDate;
@@ -596,78 +597,17 @@ namespace MvcSiteMapProvider
             node.VisibilityProvider = this.VisibilityProvider;
             node.Clickable = this.Clickable;
             node.UrlResolver = this.UrlResolver;
-            node.Url = this.url;
+            node.Url = this.url; // Get protected member
             node.CacheResolvedUrl = this.CacheResolvedUrl;
-            node.CanonicalUrl = this.canonicalUrl;
+            node.CanonicalUrl = this.canonicalUrl; // Get protected member
             node.CanonicalKey = this.CanonicalKey;
             node.DynamicNodeProvider = this.DynamicNodeProvider;
             node.Route = this.Route;
-            //foreach (var routeValue in this.RouteValues)
-            //    node.RouteValues.Add(routeValue);
-            //foreach (var parameter in this.PreservedRouteParameters)
-            //    node.PreservedRouteParameters.Add(parameter);
             this.RouteValues.CopyTo(node.RouteValues);
             this.PreservedRouteParameters.CopyTo(node.PreservedRouteParameters);
             // NOTE: Area, Controller, and Action are covered under RouteValues.
         }
 
         #endregion
-
-
-        //#region ICloneable Members
-
-        ///// <summary>
-        ///// Creates a new object that is a copy of the current instance.
-        ///// </summary>
-        ///// <returns>
-        ///// A new object that is a copy of this instance.
-        ///// </returns>
-        //public virtual object Clone()
-        //{
-        //    //var clone = new SiteMapNode(this.SiteMap, this.key, this.ResourceKey);
-
-        //    var clone = siteMapNodeFactory.Create(this.SiteMap, this.key, this.ResourceKey);
-        //    clone.ParentNode = this.ParentNode;
-
-        //    // TODO: implement and cascade call to SiteMapNodeCollection instead of looping here
-        //    //clone.ChildNodes = new SiteMapNodeCollection();
-        //    //foreach (var childNode in ChildNodes)
-        //    //{
-        //    //    var childClone = ((SiteMapNode)childNode).Clone() as SiteMapNode;
-        //    //    childClone.ParentNode = clone;
-        //    //    clone.ChildNodes.Add(childClone);
-        //    //}
-
-        //    clone.ChildNodes = (SiteMapNodeCollection)ChildNodes.Clone();
-        //    clone.Url = this.Url;
-        //    clone.HttpMethod = this.HttpMethod;
-        //    clone.Clickable = this.Clickable;
-        //    //clone.ResourceKey = this.ResourceKey;
-        //    clone.Title = this.Title;
-        //    clone.Description = this.Description;
-        //    clone.TargetFrame = this.TargetFrame;
-        //    clone.ImageUrl = this.ImageUrl;
-        //    clone.Attributes = new Dictionary<string, string>(this.Attributes);
-        //    clone.Roles = new List<string>(this.Roles);
-        //    clone.LastModifiedDate = this.LastModifiedDate;
-        //    clone.ChangeFrequency = this.ChangeFrequency;
-        //    clone.UpdatePriority = this.UpdatePriority;
-        //    clone.VisibilityProvider = this.VisibilityProvider;
-
-        //    // Route
-        //    clone.Route = this.Route;
-        //    clone.RouteValues = new Dictionary<string, object>(this.RouteValues);
-        //    clone.PreservedRouteParameters = this.PreservedRouteParameters;
-        //    clone.UrlResolver = this.UrlResolver;
-
-        //    // MVC
-        //    clone.Action = this.Action;
-        //    clone.Area = this.Area;
-        //    clone.Controller = this.Controller;
-
-        //    return clone;
-        //}
-
-        //#endregion
     }
 }

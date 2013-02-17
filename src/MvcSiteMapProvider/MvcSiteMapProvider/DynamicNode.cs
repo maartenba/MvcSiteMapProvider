@@ -12,7 +12,6 @@ namespace MvcSiteMapProvider
         protected string canonicalUrl = String.Empty;
         protected string canonicalKey = String.Empty;
 
-
         /// <summary>
         /// Gets or sets the route.
         /// </summary>
@@ -165,7 +164,11 @@ namespace MvcSiteMapProvider
             }
         }
 
-
+        /// <summary>
+        /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
+        /// doesn't overwrite any values that are not set in this <see cref="T:MvcSiteMapNodeProvider.DynamicNode"/> instance.
+        /// </summary>
+        /// <param name="node">The site map node to copy the values into.</param>
         public void SafeCopyTo(ISiteMapNode node)
         {
             if (!string.IsNullOrEmpty(this.Route))
