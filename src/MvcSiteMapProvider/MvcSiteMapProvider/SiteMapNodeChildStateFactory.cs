@@ -56,14 +56,14 @@ namespace MvcSiteMapProvider
             return routeValueCollectionFactory.Create(siteMap);
         }
 
-        public IList<string> CreatePreservedRouteParameterCollection(ISiteMap siteMap)
+        public IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap)
         {
-            return new LockableList<string>(siteMap);
+            return new PreservedRouteParameterCollection(siteMap);
         }
 
-        public IList<string> CreateRoleCollection(ISiteMap siteMap)
+        public IRoleCollection CreateRoleCollection(ISiteMap siteMap)
         {
-            return new LockableList<string>(siteMap);
+            return new RoleCollection(siteMap);
         }
 
         #endregion

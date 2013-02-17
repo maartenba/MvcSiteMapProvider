@@ -68,12 +68,16 @@
     <Compile Include="Globalization\IStringLocalizer.cs" />
     <Compile Include="Globalization\LocalizationService.cs" />
     <Compile Include="Globalization\StringLocalizer.cs" />
+    <Compile Include="IPreservedRouteParameterCollection.cs" />
+    <Compile Include="IRoleCollection.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
+    <Compile Include="PreservedRouteParameterCollection.cs" />
     <Compile Include="Reflection\IObjectCopier.cs" />
+    <Compile Include="RoleCollection.cs" />
     <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\UrlResolvingSiteMapNodeVisitor.cs" />

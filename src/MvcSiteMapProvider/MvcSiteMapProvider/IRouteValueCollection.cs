@@ -10,5 +10,6 @@ namespace MvcSiteMapProvider
         : IDictionary<string, object>
     {
         bool MatchesRoute(IDictionary<string, object> routeValues);
+        void CopyTo(IDictionary<string, object> destination);
     }
 }

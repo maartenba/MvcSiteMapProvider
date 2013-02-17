@@ -165,5 +165,17 @@ namespace MvcSiteMapProvider.Collections
         //    base.Sort(index, count, comparer);
         //}
 
+        public void CopyTo(IList<T> destination)
+        {
+            foreach (var item in this)
+            {
+                if (!item.GetType().IsPointer)
+                {
+                    destination.Add(item);
+                }
+                // NOTE: this method doesn't work with object types, only primitive types.
+            }
+        }
+
     }
 }

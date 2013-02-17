@@ -109,5 +109,19 @@ namespace MvcSiteMapProvider.Collections
                 base[key] = value;
             }
         }
+
+        public void CopyTo(IDictionary<TKey, TValue> destination)
+        {
+            foreach (var item in this)
+            {
+                var keyIsPointer = item.Key.GetType().IsPointer;
+                var valueIsPointer = item.Value.GetType().IsPointer;
+                if (!keyIsPointer && !valueIsPointer)
+                {
+                    destination.Add(new KeyValuePair<TKey, TValue>(item.Key, item.Value));
+                }
+                // NOTE: This doesn't support refernece types.
+            }
+        }
     }
 }

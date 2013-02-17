@@ -12,5 +12,6 @@ namespace MvcSiteMapProvider
         : IDictionary<string, string>
     {
         bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues);
+        void CopyTo(IDictionary<string, string> destination);
     }
 }

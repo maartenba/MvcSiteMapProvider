@@ -192,6 +192,9 @@
   <data name="SiteMapReadOnly" xml:space="preserve">
     <value>SiteMap is readonly, nodes cannot be modified.</value>
   </data>
+  <data name="ParentKeyNotFound" xml:space="preserve">
+    <value>The parent key was not found in the SiteMap for the DynamicNode with Area '{0}', Controller '{1}', Action '{2}', and Key '{3]'.</value>
+  </data>
   <data name="SiteMapNodeCanonicalValueAlreadySet" xml:space="preserve">
     <value>The canonical value has already been set. Use of both CanonicalUrl and CanonicalKey is not allowed.</value>
   </data>

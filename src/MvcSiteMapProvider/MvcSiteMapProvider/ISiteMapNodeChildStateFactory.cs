@@ -13,7 +13,7 @@ namespace MvcSiteMapProvider
         ILocalizationService CreateLocalizationService(string implicitResourceKey);
         IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService);
         IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap);
-        IList<string> CreatePreservedRouteParameterCollection(ISiteMap siteMap);
-        IList<string> CreateRoleCollection(ISiteMap siteMap);
+        IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap);
+        IRoleCollection CreateRoleCollection(ISiteMap siteMap);
     }
 }

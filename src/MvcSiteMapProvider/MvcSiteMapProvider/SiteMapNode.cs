@@ -80,8 +80,8 @@ namespace MvcSiteMapProvider
         // Child collections and dictionaries
         protected readonly IAttributeCollection attributes;
         protected readonly IRouteValueCollection routeValues;
-        protected readonly IList<string> preservedRouteParameters;
-        protected readonly IList<string> roles;
+        protected readonly IPreservedRouteParameterCollection preservedRouteParameters;
+        protected readonly IRoleCollection roles;
 
         // Object State
         protected readonly string key;
@@ -185,7 +185,7 @@ namespace MvcSiteMapProvider
         /// Gets the roles.
         /// </summary>
         /// <value>The roles.</value>
-        public override IList<string> Roles { get { return this.roles; } }
+        public override IRoleCollection Roles { get { return this.roles; } }
 
         /// <summary>
         /// Gets or sets the last modified date.
@@ -492,7 +492,7 @@ namespace MvcSiteMapProvider
         /// Gets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>The preserved route parameters.</value>
-        public override IList<string> PreservedRouteParameters { get { return this.preservedRouteParameters; } }
+        public override IPreservedRouteParameterCollection PreservedRouteParameters { get { return this.preservedRouteParameters; } }
 
 
         /// <summary>
@@ -568,6 +568,47 @@ namespace MvcSiteMapProvider
         {
             get { return RouteValues.ContainsKey("action") ? RouteValues["action"].ToString() : ""; }
             set { RouteValues["action"] = value; }
+        }
+
+        #endregion
+
+        #region CopyTo
+
+        public override void CopyTo(ISiteMapNode node)
+        {
+            node.ParentNode = this.parentNode;
+            foreach (var child in this.ChildNodes)
+                node.ChildNodes.Add(child);
+            node.HttpMethod = this.HttpMethod;
+            node.Title = this.title;
+            node.Description = this.description;
+            node.TargetFrame = this.TargetFrame;
+            node.ImageUrl = this.ImageUrl;
+            //foreach (var attribute in this.Attributes)
+            //    node.Attributes.Add(attribute);
+            //foreach (var role in this.Roles)
+            //    node.Roles.Add(role);
+            this.Attributes.CopyTo(node.Attributes);
+            this.Roles.CopyTo(node.Roles);
+            node.LastModifiedDate = this.LastModifiedDate;
+            node.ChangeFrequency = this.ChangeFrequency;
+            node.UpdatePriority = this.UpdatePriority;
+            node.VisibilityProvider = this.VisibilityProvider;
+            node.Clickable = this.Clickable;
+            node.UrlResolver = this.UrlResolver;
+            node.Url = this.url;
+            node.CacheResolvedUrl = this.CacheResolvedUrl;
+            node.CanonicalUrl = this.canonicalUrl;
+            node.CanonicalKey = this.CanonicalKey;
+            node.DynamicNodeProvider = this.DynamicNodeProvider;
+            node.Route = this.Route;
+            //foreach (var routeValue in this.RouteValues)
+            //    node.RouteValues.Add(routeValue);
+            //foreach (var parameter in this.PreservedRouteParameters)
+            //    node.PreservedRouteParameters.Add(parameter);
+            this.RouteValues.CopyTo(node.RouteValues);
+            this.PreservedRouteParameters.CopyTo(node.PreservedRouteParameters);
+            // NOTE: Area, Controller, and Action are covered under RouteValues.
         }
 
         #endregion

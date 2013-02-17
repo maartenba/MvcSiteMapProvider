@@ -49,7 +49,7 @@ namespace MvcSiteMapProvider
         public abstract string TargetFrame { get; set; }
         public abstract string ImageUrl { get; set; }
         public abstract IAttributeCollection Attributes { get; }
-        public abstract IList<string> Roles { get; }
+        public abstract IRoleCollection Roles { get; }
         public abstract DateTime LastModifiedDate { get; set; }
         public abstract ChangeFrequency ChangeFrequency { get; set; }
         public abstract UpdatePriority UpdatePriority { get; set; }
@@ -71,12 +71,13 @@ namespace MvcSiteMapProvider
         public abstract bool HasDynamicNodeProvider { get; }
         public abstract string Route { get; set; }
         public abstract IRouteValueCollection RouteValues { get; }
-        public abstract IList<string> PreservedRouteParameters { get; }
+        public abstract IPreservedRouteParameterCollection PreservedRouteParameters { get; }
         public abstract RouteData GetRouteData(HttpContextBase httpContext);
         public abstract bool MatchesRoute(IDictionary<string, object> routeValues);
         public abstract string Area { get; set; }
         public abstract string Controller { get; set; }
         public abstract string Action { get; set; }
+        public abstract void CopyTo(ISiteMapNode node);
 
         #endregion
     }

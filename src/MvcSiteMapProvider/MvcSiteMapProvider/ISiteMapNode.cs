@@ -35,7 +35,7 @@ namespace MvcSiteMapProvider
         string TargetFrame { get; set; }
         string ImageUrl { get; set; }
         IAttributeCollection Attributes { get; }
-        IList<string> Roles { get; }
+        IRoleCollection Roles { get; }
 
         DateTime LastModifiedDate { get; set; }
         ChangeFrequency ChangeFrequency { get; set; }
@@ -63,12 +63,14 @@ namespace MvcSiteMapProvider
 
         string Route { get; set; }
         IRouteValueCollection RouteValues { get; }
-        IList<string> PreservedRouteParameters { get; }
+        IPreservedRouteParameterCollection PreservedRouteParameters { get; }
         RouteData GetRouteData(HttpContextBase httpContext);
         bool MatchesRoute(IDictionary<string, object> routeValues);
 
         string Area { get; set; }
         string Controller { get; set; }
         string Action { get; set; }
+
+        void CopyTo(ISiteMapNode node);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MvcSiteMapProvider
 {
@@ -118,7 +119,7 @@ namespace MvcSiteMapProvider
         /// A value indicating to cache the resolved URL. If false, the URL will be 
         /// resolved every time it is accessed.
         /// </summary>
-        public bool CacheResolvedUrl { get; set; }
+        public bool? CacheResolvedUrl { get; set; }
 
 
         /// <summary>
@@ -162,6 +163,61 @@ namespace MvcSiteMapProvider
                     this.canonicalKey = value;
                 }
             }
+        }
+
+
+        public void SafeCopyTo(ISiteMapNode node)
+        {
+            if (!string.IsNullOrEmpty(this.Route))
+                node.Route = this.Route;
+            if (!string.IsNullOrEmpty(this.Area))
+                node.Area = this.Area;
+            if (!string.IsNullOrEmpty(this.Controller))
+                node.Controller = this.Controller;
+            if (!string.IsNullOrEmpty(this.Action))
+                node.Action = this.Action;
+            if (!string.IsNullOrEmpty(this.Title))
+                node.Title = this.Title;
+            if (!string.IsNullOrEmpty(this.Description))
+                node.Description = this.Description;
+            if (!string.IsNullOrEmpty(this.TargetFrame))
+                node.TargetFrame = this.TargetFrame;
+            if (!string.IsNullOrEmpty(this.ImageUrl))
+                node.ImageUrl = this.ImageUrl;
+            foreach (var kvp in this.RouteValues)
+            {
+                node.RouteValues[kvp.Key] = kvp.Value;
+            }
+            foreach (var kvp in this.Attributes)
+            {
+                node.Attributes[kvp.Key] = kvp.Value;
+            }
+            if (this.PreservedRouteParameters.Any())
+            {
+                foreach (var p in this.PreservedRouteParameters)
+                {
+                    node.PreservedRouteParameters.Add(p);
+                }
+            }
+            if (this.Roles.Any())
+            {
+                foreach (var role in this.Roles)
+                {
+                    node.Roles.Add(role);
+                }
+            }
+            if (this.LastModifiedDate != null && this.LastModifiedDate.HasValue)
+                node.LastModifiedDate = this.LastModifiedDate.Value;
+            if (this.ChangeFrequency != ChangeFrequency.Undefined)
+                node.ChangeFrequency = this.ChangeFrequency;
+            if (this.UpdatePriority != UpdatePriority.Undefined)
+                node.ChangeFrequency = this.ChangeFrequency;
+            if (this.CacheResolvedUrl != null)
+                node.CacheResolvedUrl = (bool)this.CacheResolvedUrl;
+            if (!string.IsNullOrEmpty(this.CanonicalKey))
+                node.CanonicalKey = this.CanonicalKey;
+            if (!string.IsNullOrEmpty(this.CanonicalUrl))
+                node.CanonicalUrl = this.CanonicalUrl;
         }
 
 
