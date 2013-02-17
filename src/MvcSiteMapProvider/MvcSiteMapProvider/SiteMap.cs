@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Security;
@@ -308,16 +309,15 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// Retrieves a <see cref="T:MvcSiteMapProvider.SiteMapNode"/> object that represents the currently requested page using the current <see cref="T:System.Web.HttpContext"/> object.
+        /// Retrieves a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> object that represents the currently requested page using the current <see cref="T:System.Web.HttpContext"/> object.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:MvcSiteMapProvider.SiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.SiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> or if the page context is null.
+        /// A <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> or if the page context is null.
         /// </returns>
         public virtual ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
             var httpContext = httpContextFactory.Create();
-            var routeData = RouteTable.Routes.GetRouteData(httpContext);
-            return FindSiteMapNode(routeData);
+            return FindSiteMapNode(httpContext);
         }
 
         /// <summary>
@@ -327,99 +327,8 @@ namespace MvcSiteMapProvider
         /// <returns></returns>
         public virtual ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
-            return FindSiteMapNode(context.RouteData);
+            return this.FindSiteMapNode(context.HttpContext);
         }
-
-        /// <summary>
-        /// Finds the site map node.
-        /// </summary>
-        /// <param name="routeData">The route data.</param>
-        /// <returns></returns>
-        protected virtual ISiteMapNode FindSiteMapNode(RouteData routeData)
-        {
-            // Node
-            ISiteMapNode node = null;
-            var requestContext = httpContextFactory.CreateRequestContext(routeData);
-            if (routeData != null)
-            {
-                // Fetch route data
-                node = this.FindSiteMapNode(requestContext.HttpContext.Request.Path);
-
-                if (!routeData.Values.ContainsKey("area"))
-                {
-                    if (routeData.DataTokens["area"] != null)
-                    {
-                        routeData.Values.Add("area", routeData.DataTokens["area"]);
-                    }
-                    else
-                    {
-                        routeData.Values.Add("area", "");
-                    }
-                }
-
-                if (node == null || routeData.Route != RouteTable.Routes[node.Route])
-                {
-                    if (RootNode.MatchesRoute(routeData.Values))
-                    {
-                        node = RootNode;
-                    }
-                }
-
-                if (node == null)
-                {
-                    node = FindControllerActionNode(RootNode, routeData.Values, routeData.Route);
-                }
-            }
-
-            // Try base class
-            if (node == null)
-            {
-                node = this.FindSiteMapNode(requestContext.HttpContext);
-            }
-
-            // Check accessibility
-            return this.ReturnNodeIfAccessible(node);
-        }
-
-        protected virtual ISiteMapNode FindSiteMapNode(HttpContextBase context)
-        {
-            if (context == null)
-            {
-                return null;
-            }
-            string rawUrl = context.Request.RawUrl;
-            var node = this.FindSiteMapNode(rawUrl);
-            if (node == null)
-            {
-                int index = rawUrl.IndexOf("?", StringComparison.Ordinal);
-                if (index != -1)
-                {
-                    node = this.FindSiteMapNode(rawUrl.Substring(0, index));
-                }
-                //if (node != null)
-                //{
-                //    return node;
-                //}
-                //Page currentHandler = context.CurrentHandler as Page;
-                //if (currentHandler != null)
-                //{
-                //    string clientQueryString = currentHandler.ClientQueryString;
-                //    if (clientQueryString.Length > 0)
-                //    {
-                //        node = this.FindSiteMapNode(context.Request.Path + "?" + clientQueryString);
-                //    }
-                //}
-
-                if (node == null)
-                {
-                    node = this.FindSiteMapNode(context.Request.Path);
-                }
-            }
-            return node;
-        }
-
- 
-
 
         public virtual ISiteMapNode FindSiteMapNodeFromKey(string key)
         {
@@ -654,6 +563,98 @@ namespace MvcSiteMapProvider
 
         #region Protected Members
 
+        protected virtual ISiteMapNode GetParentNodesInternal(ISiteMapNode node, int walkupLevels)
+        {
+            if (walkupLevels > 0)
+            {
+                do
+                {
+                    node = node.ParentNode;
+                    walkupLevels--;
+                }
+                while ((node != null) && (walkupLevels != 0));
+            }
+            return node;
+        }
+
+        /// <summary>
+        /// Finds the site map node.
+        /// </summary>
+        /// <param name="httpContext">The context.</param>
+        /// <returns></returns>
+        protected virtual ISiteMapNode FindSiteMapNode(HttpContextBase httpContext)
+        {
+            // Match RawUrl
+            var node = this.FindSiteMapNodeFromRawUrl(httpContext);
+
+            // Try MVC
+            if (node == null)
+            {
+                node = this.FindSiteMapNodeFromMvc(httpContext);
+            }
+
+            // Try ASP.NET Classic (for interop)
+            if (node == null)
+            {
+                node = this.FindSiteMapNodeFromAspNetClassic(httpContext);
+            }
+
+            // Try the path without the querystring
+            if (node == null)
+            {
+                node = this.FindSiteMapNode(httpContext.Request.Path);
+            }
+
+            // Check accessibility
+            return this.ReturnNodeIfAccessible(node);
+        }
+
+        protected virtual ISiteMapNode FindSiteMapNodeFromRawUrl(HttpContextBase httpContext)
+        {
+            var rawUrl = httpContext.Request.RawUrl;
+            var node = this.FindSiteMapNode(rawUrl);
+
+            if (node == null)
+            {
+                // Trim off the querystring from RawUrl and try again
+                int index = rawUrl.IndexOf("?", StringComparison.Ordinal);
+                if (index != -1)
+                {
+                    node = this.FindSiteMapNode(rawUrl.Substring(0, index));
+                }
+            }
+            return node;
+        }
+
+        protected virtual ISiteMapNode FindSiteMapNodeFromMvc(HttpContextBase httpContext)
+        {
+            ISiteMapNode node = null;
+            var routeData = RouteTable.Routes.GetRouteData(httpContext);
+            if (routeData != null)
+            {
+                if (!routeData.Values.ContainsKey("area"))
+                {
+                    if (routeData.DataTokens["area"] != null)
+                    {
+                        routeData.Values.Add("area", routeData.DataTokens["area"]);
+                    }
+                    else
+                    {
+                        routeData.Values.Add("area", "");
+                    }
+                }
+                if (RootNode.MatchesRoute(routeData.Values))
+                {
+                    node = RootNode;
+                }
+                if (node == null)
+                {
+                    node = FindSiteMapNodeFromControllerAction(RootNode, routeData.Values, routeData.Route);
+                }
+            }
+            return node;
+        }
+
         /// <summary>
         /// Finds the controller action node.
         /// </summary>
@@ -663,7 +664,7 @@ namespace MvcSiteMapProvider
         /// <returns>
         /// A controller action node represented as a <see cref="SiteMapNode"/> instance
         /// </returns>
-        protected virtual ISiteMapNode FindControllerActionNode(ISiteMapNode rootNode, IDictionary<string, object> values, RouteBase route)
+        protected virtual ISiteMapNode FindSiteMapNodeFromControllerAction(ISiteMapNode rootNode, IDictionary<string, object> values, RouteBase route)
         {
             if (rootNode != null)
             {
@@ -695,27 +696,27 @@ namespace MvcSiteMapProvider
                 // Search one deeper level
                 foreach (ISiteMapNode node in childNodes)
                 {
-                    var siteMapNode = FindControllerActionNode(node, values, route);
+                    var siteMapNode = FindSiteMapNodeFromControllerAction(node, values, route);
                     if (siteMapNode != null)
                     {
                         return siteMapNode;
                     }
                 }
             }
-
             return null;
         }
 
-        protected virtual ISiteMapNode GetParentNodesInternal(ISiteMapNode node, int walkupLevels)
+        protected virtual ISiteMapNode FindSiteMapNodeFromAspNetClassic(HttpContextBase httpContext)
         {
-            if (walkupLevels > 0)
+            ISiteMapNode node = null;
+            Page currentHandler = httpContext.CurrentHandler as Page;
+            if (currentHandler != null)
             {
-                do
+                string clientQueryString = currentHandler.ClientQueryString;
+                if (clientQueryString.Length > 0)
                 {
-                    node = node.ParentNode;
-                    walkupLevels--;
+                    node = this.FindSiteMapNode(httpContext.Request.Path + "?" + clientQueryString);
                 }
-                while ((node != null) && (walkupLevels != 0));
             }
             return node;
         }
