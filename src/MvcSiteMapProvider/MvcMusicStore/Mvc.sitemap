@@ -6,8 +6,12 @@
 						securityTrimmingEnabled="true">
 
   <mvcSiteMapNode title="$resources:SiteMapLocalizations,HomeTitle" controller="Home" action="Index" changeFrequency="Always" updatePriority="Normal" lastModifiedDate="2002-05-30T09:00:00">
-    <mvcSiteMapNode title="$resources:SiteMapLocalizations,BrowseGenresTitle" controller="Store" action="Index">
-      <mvcSiteMapNode title="Browse" action="Browse" dynamicNodeProvider="MvcMusicStore.Code.StoreBrowseDynamicNodeProvider, Mvc Music Store">
+		<mvcSiteMapNode key="ABC123" title="Jazz 2" action="Browse" controller="Store" id="Jazz" someParameter="hello" canonicalUrl="/Store/Browse/Jazz"/>
+		<mvcSiteMapNode title="$resources:SiteMapLocalizations,BrowseGenresTitle" controller="Store" action="Index">
+			
+			<mvcSiteMapNode title="Jazz 3" action="Browse" controller="Store" id="Jazz" someOtherParameter="whatever" canonicalUrl="http://www.whatever.com/Store/Browse/Jazz"/>
+			<mvcSiteMapNode title="Jazz 4" action="Browse" controller="Store" id="Jazz" someOtherParameter="whatever2" canonicalKey="ABC123"/>
+			<mvcSiteMapNode title="Browse" action="Browse" dynamicNodeProvider="MvcMusicStore.Code.StoreBrowseDynamicNodeProvider, Mvc Music Store">
         <mvcSiteMapNode title="Details" action="Details" dynamicNodeProvider="MvcMusicStore.Code.StoreDetailsDynamicNodeProvider, Mvc Music Store" />
       </mvcSiteMapNode>
     </mvcSiteMapNode>
@@ -23,7 +27,7 @@
       <mvcSiteMapNode title="$resources:SiteMapLocalizations,ChangePasswordTitle" action="ChangePassword" visibilityProvider="MvcMusicStore.Code.AuthenticatedVisibilityProvider, Mvc Music Store" />
     </mvcSiteMapNode>
 
-		<mvcSiteMapNode key="Microsoft" title="Microsoft" url="http://www.microsoft.com/" cacheResolvedUrl="false"/>
+		<!--<mvcSiteMapNode key="Microsoft" title="Microsoft" url="http://www.microsoft.com/" cacheResolvedUrl="false"/>-->
 
     <mvcSiteMapNode title="$resources:SiteMapLocalizations,AdministrationTitle" area="Admin" controller="Home" visibility="SiteMapPathHelper,!*" visibilityProvider="MvcSiteMapProvider.FilteredSiteMapNodeVisibilityProvider, MvcSiteMapProvider">
       <mvcSiteMapNode title="$resources:SiteMapLocalizations,StoreManagerTitle" area="Admin" controller="StoreManager" action="Index">

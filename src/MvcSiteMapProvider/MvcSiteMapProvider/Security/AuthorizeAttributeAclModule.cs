@@ -75,7 +75,7 @@ namespace MvcSiteMapProvider.Security
 
             // Is it an external node?
             var nodeUrl = node.Url;
-            if (node.HasExternalUrl())
+            if (node.HasAbsoluteUrl())
             {
                 return true;
             }

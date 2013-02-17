@@ -177,15 +177,15 @@ namespace MvcSiteMapProvider.Builder
                 node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant(),
                 !(node.GetAttributeValue("clickable") == "false"));
 
-            // Handle title and description
-            var title = node.GetAttributeValue("title");
-            var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
-
             // Handle implicit resources
             var implicitResourceKey = node.GetAttributeValue("resourceKey");
 
             // Create node
             ISiteMapNode siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
+
+            // Handle title and description
+            var title = node.GetAttributeValue("title");
+            var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
 
             // Assign defaults
             siteMapNode.Title = title;
@@ -200,6 +200,8 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
             siteMapNode.Url = node.GetAttributeValue("url");
             siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
+            siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
+            siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");
 
             if (!string.IsNullOrEmpty(node.GetAttributeValue("changeFrequency")))
             {
@@ -346,6 +348,8 @@ namespace MvcSiteMapProvider.Builder
                && attributeName != "imageUrl"
                && attributeName != "inheritedRouteParameters"
                && attributeName != "preservedRouteParameters"
+               && attributeName != "canonicalUrl"
+               && attributeName != "canonicalKey"
                && !attributesToIgnore.Contains(attributeName)
                && !attributeName.StartsWith("data-");
         }

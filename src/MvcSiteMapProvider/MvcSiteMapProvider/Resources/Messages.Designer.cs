@@ -250,6 +250,15 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The canonical value has already been set. Use of both CanonicalUrl and CanonicalKey is not allowed..
+        /// </summary>
+        internal static string SiteMapNodeCanonicalValueAlreadySet {
+            get {
+                return ResourceManager.GetString("SiteMapNodeCanonicalValueAlreadySet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid value of type {0} passed in, value must be of type SiteMapNode..
         /// </summary>
         internal static string SiteMapNodeCollectionInvalidType {

@@ -76,7 +76,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </summary>
         /// <param name="rootNode">The root node.</param>
         public XmlSiteMapResult(ISiteMapNode rootNode)
-            : this(rootNode, UrlPath.ResolveServerUrl("~/", false), "sitemap-{page}.xml")
+            : this(rootNode, String.Empty, "sitemap-{page}.xml")
         {
         }
 
@@ -90,8 +90,17 @@ namespace MvcSiteMapProvider.Web.Mvc
         {
             Ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
             RootNode = rootNode;
-            Url = url;
             SiteMapUrlTemplate = siteMapUrlTemplate;
+
+            if (String.IsNullOrEmpty(url))
+            {
+                var urlPath = new UrlPath();
+                Url = urlPath.ResolveServerUrl("~/", false);
+            }
+            else
+            {
+                Url = url;
+            }
         }
 
         /// <summary>
@@ -226,7 +235,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 // Generate element
                 var siteMapNodeUrl = siteMapNode.Url;
                 string nodeUrl = url + siteMapNodeUrl;
-                if (siteMapNode.HasExternalUrl())
+                if (siteMapNode.HasAbsoluteUrl())
                 {
                     nodeUrl = siteMapNodeUrl;
                 }

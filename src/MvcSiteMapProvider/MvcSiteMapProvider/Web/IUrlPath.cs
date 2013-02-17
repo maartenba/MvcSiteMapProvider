@@ -13,5 +13,10 @@ namespace MvcSiteMapProvider.Web
         string MakeVirtualPathAppAbsolute(string virtualPath, string applicationPath);
         string UrlEncode(string url);
         string UrlDecode(string url);
+        bool IsAbsoluteUrl(string url);
+        string MakeRelativeUrlAbsolute(string url);
+        string ResolveUrl(string originalUrl);
+        string ResolveServerUrl(string serverUrl, bool forceHttps);
+        string ResolveServerUrl(string serverUrl);
     }
 }

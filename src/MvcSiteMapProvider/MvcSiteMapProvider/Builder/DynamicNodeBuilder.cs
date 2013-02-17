@@ -96,6 +96,9 @@ namespace MvcSiteMapProvider.Builder
                 clone.Url = node.UnresolvedUrl;
                 clone.DynamicNodeProvider = node.DynamicNodeProvider;
                 clone.Clickable = node.Clickable;
+                clone.CanonicalUrl = node.CanonicalUrl;
+                clone.CanonicalKey = node.CanonicalKey;
+                clone.CacheResolvedUrl = node.CacheResolvedUrl;
 
                 // End Clone
 
@@ -178,6 +181,10 @@ namespace MvcSiteMapProvider.Builder
                 {
                     clone.Action = dynamicNode.Action;
                 }
+
+                clone.CacheResolvedUrl = dynamicNode.CacheResolvedUrl;
+                clone.CanonicalKey = dynamicNode.CanonicalKey;
+                clone.CanonicalUrl = dynamicNode.CanonicalUrl;
 
                 // If the dynamic node has a parent key set, use that as the parent. Otherwise use the parentNode.
                 if (dynamicNode.ParentKey != null && !string.IsNullOrEmpty(dynamicNode.ParentKey))

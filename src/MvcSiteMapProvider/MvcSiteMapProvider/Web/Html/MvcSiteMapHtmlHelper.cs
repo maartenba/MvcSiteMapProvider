@@ -17,23 +17,17 @@ namespace MvcSiteMapProvider.Web.Html
         /// <value>The HTML helper.</value>
         public HtmlHelper HtmlHelper { get; protected set; }
 
-        ///// <summary>
-        ///// Gets or sets the sitemap provider.
-        ///// </summary>
-        ///// <value>The sitemap provider.</value>
-        //public SiteMapProvider Provider { get; protected set; }
-
         /// <summary>
-        /// Gets or sets the sitemap provider.
+        /// Gets or sets the sitemap.
         /// </summary>
-        /// <value>The sitemap provider.</value>
+        /// <value>The sitemap.</value>
         public ISiteMap SiteMap { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
         /// </summary>
         /// <param name="htmlHelper">The HTML helper.</param>
-        /// <param name="provider">The sitemap provider.</param>
+        /// <param name="provider">The sitemap.</param>
         public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap)
         {
             if (htmlHelper == null)

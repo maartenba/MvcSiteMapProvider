@@ -46,6 +46,12 @@ namespace MvcSiteMapProvider.Web.Html.Models
         public string Url { get; set; }
 
         /// <summary>
+        /// Gets or sets the canonical URL.
+        /// </summary>
+        /// <value>The canonical URL.</value>
+        public string CanonicalUrl { get; set; }
+
+        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>

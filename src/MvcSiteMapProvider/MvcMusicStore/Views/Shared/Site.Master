@@ -5,6 +5,7 @@
 
     <head runat="server">
         <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+        <%=Html.MvcSiteMap().CanonicalTag()%>
         <title>
             <asp:ContentPlaceHolder ID="TitleContent" runat="server" /> (<%=Html.MvcSiteMap().SiteMapTitle() %>)
         </title>

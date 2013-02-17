@@ -51,8 +51,11 @@ namespace MvcSiteMapProvider
         string ResolvedUrl { get; }
         bool CacheResolvedUrl { get; set; }
         void ResolveUrl();
-        bool HasExternalUrl();
+        bool HasAbsoluteUrl();
         bool HasExternalUrl(HttpContextBase httpContext);
+
+        string CanonicalUrl { get; set; }
+        string CanonicalKey { get; set; }
 
         string DynamicNodeProvider { get; set; }
         IEnumerable<DynamicNode> GetDynamicNodeCollection();

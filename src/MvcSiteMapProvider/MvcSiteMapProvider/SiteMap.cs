@@ -155,7 +155,7 @@ namespace MvcSiteMapProvider
                 string url = node.Url;
                 if (!string.IsNullOrEmpty(url))
                 {
-                    if (node.HasExternalUrl())
+                    if (node.HasAbsoluteUrl())
                     {
                         // This is an external url, so we will encode it
                         url = urlPath.UrlEncode(url);

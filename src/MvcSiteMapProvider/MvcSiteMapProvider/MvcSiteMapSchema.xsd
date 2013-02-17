@@ -175,6 +175,22 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+
+		<xs:attribute name="canonicalUrl" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Optional. The primary URL for what is completely or mostly duplicated content on the current node. 
+					The value may be an absolute URL (in the current site or in an external site), a rooted URL starting with '~/', or a relative URL.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="canonicalKey" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Optional. The key value for the node that contains the primary copy of the content for the current node, if it is largely similar.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
   </xs:attributeGroup>
 
   <xs:attributeGroup name="fileNodeAttributes">

@@ -8,6 +8,9 @@ namespace MvcSiteMapProvider
     /// </summary>
     public class DynamicNode
     {
+        protected string canonicalUrl = String.Empty;
+        protected string canonicalKey = String.Empty;
+
 
         /// <summary>
         /// Gets or sets the route.
@@ -110,6 +113,57 @@ namespace MvcSiteMapProvider
         /// </summary>
         /// <value>The update priority.</value>
         public UpdatePriority UpdatePriority { get; set; }
+
+        /// <summary>
+        /// A value indicating to cache the resolved URL. If false, the URL will be 
+        /// resolved every time it is accessed.
+        /// </summary>
+        public bool CacheResolvedUrl { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        public string CanonicalUrl
+        {
+            get
+            {
+                return this.canonicalUrl;
+            }
+            set
+            {
+                if (!this.canonicalUrl.Equals(value))
+                {
+                    if (!String.IsNullOrEmpty(this.canonicalKey))
+                    {
+                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalUrl");
+                    }
+                    this.canonicalUrl = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        public string CanonicalKey
+        {
+            get { return this.canonicalKey; }
+            set
+            {
+                if (!this.canonicalKey.Equals(value))
+                {
+                    if (!String.IsNullOrEmpty(this.canonicalUrl))
+                    {
+                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey");
+                    }
+                    this.canonicalKey = value;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicNode"/> class.

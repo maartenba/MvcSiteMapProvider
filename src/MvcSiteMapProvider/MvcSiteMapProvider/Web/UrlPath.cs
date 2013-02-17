@@ -308,6 +308,21 @@ namespace MvcSiteMapProvider.Web
             return HttpUtility.UrlDecode(url);
         }
 
+        public bool IsAbsoluteUrl(string url)
+        {
+            return (url.StartsWith("http") || url.StartsWith("ftp"));
+        }
+
+        public string MakeRelativeUrlAbsolute(string url)
+        {
+            if (!IsAbsolutePhysicalPath(url))
+            {
+                url = MakeVirtualPathAppAbsolute(Combine(AppDomainAppVirtualPath, url));
+            }
+            var basePath = ResolveServerUrl("~/", false);
+            return basePath + url;
+        }
+
         /// <summary>
         /// Returns a site relative HTTP path from a partial path starting out with a ~.
         /// Same syntax that ASP.Net internally supports but this method can be used
@@ -318,7 +333,7 @@ namespace MvcSiteMapProvider.Web
         /// <remarks>See http://www.west-wind.com/Weblog/posts/154812.aspx for more information.</remarks>
         /// <param name="originalUrl">Any Url including those starting with ~</param>
         /// <returns>Relative url</returns>
-        public static string ResolveUrl(string originalUrl)
+        public string ResolveUrl(string originalUrl)
         {
             if (originalUrl == null)
             {
@@ -362,7 +377,7 @@ namespace MvcSiteMapProvider.Web
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="forceHttps">if true forces the url to use https</param>
         /// <returns>Fully qualified absolute server url.</returns>
-        public static string ResolveServerUrl(string serverUrl, bool forceHttps)
+        public string ResolveServerUrl(string serverUrl, bool forceHttps)
         {
             // Is it already an absolute Url?
             if (serverUrl.IndexOf("://") > -1)
@@ -413,7 +428,7 @@ namespace MvcSiteMapProvider.Web
         /// <remarks>See http://www.west-wind.com/Weblog/posts/154812.aspx for more information.</remarks>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns>Fully qualified absolute server url.</returns>
-        public static string ResolveServerUrl(string serverUrl)
+        public string ResolveServerUrl(string serverUrl)
         {
             return ResolveServerUrl(serverUrl, false);
         }

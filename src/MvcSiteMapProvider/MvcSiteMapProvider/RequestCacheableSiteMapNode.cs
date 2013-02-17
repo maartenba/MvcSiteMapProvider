@@ -8,6 +8,7 @@ using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web;
 
 namespace MvcSiteMapProvider
 {
@@ -27,6 +28,7 @@ namespace MvcSiteMapProvider
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
+            IUrlPath urlPath,
             IRequestCache requestCache
             )
             : base(
@@ -38,7 +40,8 @@ namespace MvcSiteMapProvider
                 dynamicNodeProviderStrategy, 
                 siteMapNodeUrlResolverStrategy, 
                 siteMapNodeVisibilityProviderStrategy, 
-                actionMethodParameterResolver
+                actionMethodParameterResolver,
+                urlPath
             )
         {
             if (requestCache == null)

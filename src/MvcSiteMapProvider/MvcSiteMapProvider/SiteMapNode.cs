@@ -9,6 +9,7 @@ using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web;
 
 namespace MvcSiteMapProvider
 {
@@ -28,7 +29,8 @@ namespace MvcSiteMapProvider
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
-            IActionMethodParameterResolver actionMethodParameterResolver
+            IActionMethodParameterResolver actionMethodParameterResolver,
+            IUrlPath urlPath
             )
         {
             if (siteMap == null)
@@ -47,6 +49,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
             if (actionMethodParameterResolver == null)
                 throw new ArgumentNullException("actionMethodParameterResolver");
+            if (urlPath == null)
+                throw new ArgumentNullException("urlPath");
 
             this.siteMap = siteMap;
             this.key = key;
@@ -56,6 +60,7 @@ namespace MvcSiteMapProvider
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
+            this.urlPath = urlPath;
 
             // Initialize child collections
             this.attributes = siteMapNodeChildStateFactory.CreateAttributeCollection(siteMap, localizationService);
@@ -70,6 +75,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
+        protected readonly IUrlPath urlPath;
 
         // Child collections and dictionaries
         protected readonly IAttributeCollection attributes;
@@ -89,6 +95,8 @@ namespace MvcSiteMapProvider
         protected bool clickable = true;
         protected string url = String.Empty;
         protected string resolvedUrl = String.Empty;
+        protected string canonicalUrl = String.Empty;
+        protected string canonicalKey = String.Empty;
 
         /// <summary>
         /// Gets the key.
@@ -281,7 +289,7 @@ namespace MvcSiteMapProvider
                     return this.ResolvedUrl;
                 }
                 // Only resolve the url if an absolute url is not already set
-                if (String.IsNullOrEmpty(this.UnresolvedUrl) || !this.HasExternalUrl())
+                if (String.IsNullOrEmpty(this.UnresolvedUrl) || !this.HasAbsoluteUrl())
                 {
                     return GetResolvedUrl();
                 }
@@ -333,9 +341,9 @@ namespace MvcSiteMapProvider
         /// looks like an absolute path.
         /// </summary>
         /// <returns></returns>
-        public override bool HasExternalUrl()
+        public override bool HasAbsoluteUrl()
         {
-            return (this.url.StartsWith("http") || this.url.StartsWith("ftp"));
+            return urlPath.IsAbsoluteUrl(this.url);
         }
 
         /// <summary>
@@ -346,7 +354,7 @@ namespace MvcSiteMapProvider
         /// <returns></returns>
         public override bool HasExternalUrl(HttpContextBase httpContext)
         {
-            if (!this.HasExternalUrl())
+            if (!this.HasAbsoluteUrl())
             {
                 return false;
             }
@@ -358,6 +366,73 @@ namespace MvcSiteMapProvider
             catch
             {
                 return false;
+            }
+        }
+
+        #endregion
+
+        #region Canonical Tag
+
+        /// <summary>
+        /// Gets or sets the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        public override string CanonicalUrl 
+        {
+            get 
+            {
+                var url = this.canonicalUrl;
+                if (!String.IsNullOrEmpty(url))
+                {
+                    if (urlPath.IsAbsoluteUrl(url))
+                    {
+                        return url;
+                    }
+                    return urlPath.MakeRelativeUrlAbsolute(url);
+                }
+                var key = this.canonicalKey;
+                if (!String.IsNullOrEmpty(key))
+                {
+                    var node = this.SiteMap.FindSiteMapNodeFromKey(key);
+                    if (node != null)
+                    {
+                        return urlPath.MakeRelativeUrlAbsolute(node.Url);
+                    }
+                }
+                return String.Empty;
+            }
+            set
+            {
+                if (!this.canonicalUrl.Equals(value))
+                {
+                    if (!String.IsNullOrEmpty(this.canonicalKey))
+                    {
+                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalUrl");
+                    }
+                    this.canonicalUrl = value;
+                }
+            }
+        }
+
+        
+
+        /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        public override string CanonicalKey 
+        {
+            get { return this.canonicalKey; }
+            set
+            {
+                if (!this.canonicalKey.Equals(value))
+                {
+                    if (!String.IsNullOrEmpty(this.canonicalUrl))
+                    {
+                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey");
+                    }
+                    this.canonicalKey = value;
+                }
             }
         }
 

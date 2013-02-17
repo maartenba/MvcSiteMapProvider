@@ -6,6 +6,7 @@ using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider
@@ -22,6 +23,7 @@ namespace MvcSiteMapProvider
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
+            IUrlPath urlPath,
             IRequestCache requestCache
             ) 
         {
@@ -35,6 +37,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
             if (actionMethodParameterResolver == null)
                 throw new ArgumentNullException("actionMethodParameterResolver");
+            if (urlPath == null)
+                throw new ArgumentNullException("urlPath");
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
 
@@ -43,6 +47,7 @@ namespace MvcSiteMapProvider
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
+            this.urlPath = urlPath;
             this.requestCache = requestCache;
         }
 
@@ -52,6 +57,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
+        protected readonly IUrlPath urlPath;
         protected readonly IRequestCache requestCache;
 
 
@@ -82,6 +88,7 @@ namespace MvcSiteMapProvider
                 siteMapNodeUrlResolverStrategy,
                 siteMapNodeVisibilityProviderStrategy,
                 actionMethodParameterResolver,
+                urlPath,
                 requestCache);
         }
 
