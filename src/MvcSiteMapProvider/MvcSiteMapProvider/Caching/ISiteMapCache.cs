@@ -7,8 +7,7 @@ namespace MvcSiteMapProvider.Caching
     public interface ISiteMapCache
     {
         int Count { get; }
-        void Insert(string key, ISiteMap siteMap, TimeSpan absoluteExpiration, TimeSpan slidingExpiration);
-        void Insert(string key, ISiteMap siteMap, TimeSpan absoluteExpiration, TimeSpan slidingExpiration, IEnumerable<string> fileDependencies);
+        void Insert(string key, ISiteMap siteMap, ICacheDependency dependencies, TimeSpan absoluteExpiration, TimeSpan slidingExpiration);
         ISiteMap this[string key] { get; set; }
         void Remove(string key);
         bool TryGetValue(string key, out ISiteMap value);

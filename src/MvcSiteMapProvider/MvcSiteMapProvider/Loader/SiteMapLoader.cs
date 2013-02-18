@@ -90,11 +90,11 @@ namespace MvcSiteMapProvider.Loader
                     {
                         // Build sitemap
                         var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
-                        var builder = siteMapBuilderSetStrategy.GetBuilder(builderSetName);
-                        siteMap = siteMapFactory.Create(builder);
+                        var builderSet = siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
+                        siteMap = siteMapFactory.Create(builderSet.Builder);
                         siteMap.BuildSiteMap();
 
-                        siteMapCache.Insert(siteMapCacheKey, siteMap, absoluteCacheExpiration, slidingCacheExpiration, builder.GetDependencyFileNames());
+                        siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CacheDependency, absoluteCacheExpiration, slidingCacheExpiration);
 
                         return siteMap;
                     }
@@ -113,7 +113,7 @@ namespace MvcSiteMapProvider.Loader
         protected virtual void siteMapCache_SiteMapRemoved(object sender, SiteMapCacheItemRemovedEventArgs e)
         {
             // Call clear to remove ISiteMap object references from internal collections. This
-            // should be enough to release the circular references and free the memory.
+            // will release the circular references and free the memory.
             e.SiteMap.Clear();
         }
     }

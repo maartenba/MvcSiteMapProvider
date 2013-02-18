@@ -13,25 +13,20 @@ namespace MvcSiteMapProvider.Caching
     /// This class wraps the <see cref="T:System.Web.Caching.Cache"/> object to allow type-safe
     /// interaction when managing <see cref="T:MvcSiteMapProvider.ISiteMap"/> instances.
     /// </summary>
-    public class SiteMapCache 
+    public class AspNetSiteMapCache 
         : ISiteMapCache
     {
-        public SiteMapCache(
-            IHttpContextFactory httpContextFactory,
-            ICacheDependencyFactory cacheDependencyFactory
+        public AspNetSiteMapCache(
+            IHttpContextFactory httpContextFactory
             )
         {
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
-            if (cacheDependencyFactory == null)
-                throw new ArgumentNullException("cacheDependencyFactory");
 
             this.httpContextFactory = httpContextFactory;
-            this.cacheDependencyFactory = cacheDependencyFactory;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
-        protected readonly ICacheDependencyFactory cacheDependencyFactory;
 
         public event EventHandler<SiteMapCacheItemRemovedEventArgs> SiteMapRemoved;
 
@@ -57,12 +52,7 @@ namespace MvcSiteMapProvider.Caching
             }
         }
 
-        public virtual void Insert(string key, ISiteMap siteMap, TimeSpan absoluteExpiration, TimeSpan slidingExpiration)
-        {
-            this.Insert(key, siteMap, absoluteExpiration, slidingExpiration, null);
-        }
-
-        public virtual void Insert(string key, ISiteMap siteMap, TimeSpan absoluteExpiration, TimeSpan slidingExpiration, IEnumerable<string> fileDependencies)
+        public virtual void Insert(string key, ISiteMap siteMap, ICacheDependency dependencies, TimeSpan absoluteExpiration, TimeSpan slidingExpiration)
         {
             DateTime absolute = System.Web.Caching.Cache.NoAbsoluteExpiration;
             TimeSpan sliding = System.Web.Caching.Cache.NoSlidingExpiration;
@@ -74,32 +64,14 @@ namespace MvcSiteMapProvider.Caching
             {
                 sliding = slidingExpiration;
             }
-            var dependency = this.GetCacheDependency(fileDependencies);
+            CacheDependency dependency = null;
+            if (dependencies != null)
+            {
+                dependency = (CacheDependency)dependencies.Dependency;
+            }
+
             this.Cache.Insert(key, siteMap, dependency, absolute, sliding, CacheItemPriority.NotRemovable, OnItemRemoved);
         }
-
-        protected virtual CacheDependency GetCacheDependency(IEnumerable<string> fileDependencies)
-        {
-            CacheDependency dependency = null;
-            if (fileDependencies != null && fileDependencies.Count() > 0)
-            {
-                if (fileDependencies.Count() == 1)
-                {
-                    dependency = cacheDependencyFactory.CreateFileDependency(fileDependencies.First());
-                }
-                else
-                {
-                    dependency = cacheDependencyFactory.CreateAggregateDependency();
-                    foreach (var file in fileDependencies)
-                    {
-                        var fileDependency = cacheDependencyFactory.CreateFileDependency(file);
-                        ((AggregateCacheDependency)dependency).Add(fileDependency);
-                    }
-                }
-            }
-            return dependency;
-        }
-
 
         public virtual int Count
         {

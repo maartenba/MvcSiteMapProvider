@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -18,20 +19,32 @@ namespace MvcSiteMapProvider.Builder
             this.siteMapBuilderSets = siteMapBuilderSets;
         }
 
-        private readonly ISiteMapBuilderSet[] siteMapBuilderSets;
+        protected readonly ISiteMapBuilderSet[] siteMapBuilderSets;
 
         #region ISiteMapBuilderSetStrategy Members
 
-        public ISiteMapBuilder GetBuilder(string name)
+        public virtual ISiteMapBuilderSet GetBuilderSet(string builderSetName)
         {
-            var builderSet = siteMapBuilderSets.FirstOrDefault(x => x.Name == name);
-            if (builderSet == null)
+            var builderSet = siteMapBuilderSets.FirstOrDefault(x => x.AppliesTo(builderSetName));
+            if (builderSet == null && siteMapBuilderSets.Count() > 0)
             {
-                builderSet = siteMapBuilderSets[0];
+                builderSet = this.GetBuilderSet("default");
             }
             if (builderSet == null)
                 throw new MvcSiteMapException(Resources.Messages.SiteMapNoDefaultBuilderSetConfigured);
+            return builderSet;
+        }
+
+        public virtual ISiteMapBuilder GetBuilder(string builderSetName)
+        {
+            var builderSet = this.GetBuilderSet(builderSetName);
             return builderSet.Builder;
+        }
+
+        public virtual ICacheDependency GetCacheDependency(string builderSetName)
+        {
+            var builderSet = this.GetBuilderSet(builderSetName);
+            return builderSet.CacheDependency;
         }
 
         #endregion

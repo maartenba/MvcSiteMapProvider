@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -10,6 +8,8 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface ISiteMapBuilderSetStrategy
     {
-        ISiteMapBuilder GetBuilder(string name);
+        ISiteMapBuilderSet GetBuilderSet(string builderSetName);
+        ISiteMapBuilder GetBuilder(string builderSetName);
+        ICacheDependency GetCacheDependency(string builderSetName);
     }
 }

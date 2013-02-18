@@ -63,12 +63,6 @@ namespace MvcSiteMapProvider.Builder
         /// </value>
         protected IEnumerable<string> ExcludeAssemblies { get; set; }
 
-
-        public virtual IEnumerable<string> GetDependencyFileNames()
-        {
-            return new string[] { };
-        }
-
         /// <summary>
         /// Provides the base data on which the context-aware provider can generate a full tree.
         /// </summary>

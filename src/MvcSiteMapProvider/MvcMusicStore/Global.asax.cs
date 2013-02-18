@@ -259,8 +259,10 @@ namespace MvcMusicStore
             );
 
 
+            var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+            var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
 
-            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders);
+            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDependency);
             var builderSets = new MvcSiteMapProvider.Builder.ISiteMapBuilderSet[] { builderSet };
 
             //container.Configure(x => x
@@ -283,7 +285,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Caching.ISiteMapCache>()
-                .Use<MvcSiteMapProvider.Caching.SiteMapCache>()
+                .Use<MvcSiteMapProvider.Caching.AspNetSiteMapCache>()
             );
 
             container.Configure(x => x

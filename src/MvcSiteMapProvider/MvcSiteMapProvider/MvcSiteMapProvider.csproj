@@ -50,12 +50,12 @@
     <Compile Include="Builder\IVisitingSiteMapBuilderFactory.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilderFactory.cs" />
-    <Compile Include="Caching\CacheDependencyFactory.cs" />
-    <Compile Include="Caching\ICacheDependencyFactory.cs" />
+    <Compile Include="Caching\AspNetCacheDependency.cs" />
+    <Compile Include="Caching\ICacheDependency.cs" />
     <Compile Include="Caching\ISiteMapCache.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />
-    <Compile Include="Caching\SiteMapCache.cs" />
+    <Compile Include="Caching\AspNetSiteMapCache.cs" />
     <Compile Include="Caching\SiteMapCacheItemRemovedEventArgs.cs" />
     <Compile Include="Caching\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\SiteMapCacheKeyToBuilderSetMapper.cs" />

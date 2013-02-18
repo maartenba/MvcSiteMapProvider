@@ -9,7 +9,6 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface ISiteMapBuilder
     {
-        IEnumerable<string> GetDependencyFileNames();
         ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode);
     }
 }
