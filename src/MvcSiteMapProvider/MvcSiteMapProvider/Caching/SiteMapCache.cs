@@ -10,26 +10,33 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// This class wraps the <see cref="T:System.Web.Caching.Cache"/> object to allow type-safe
+    /// interaction when managing <see cref="T:MvcSiteMapProvider.ISiteMap"/> instances.
     /// </summary>
     public class SiteMapCache 
         : ISiteMapCache
     {
         public SiteMapCache(
-            IHttpContextFactory httpContextFactory
+            IHttpContextFactory httpContextFactory,
+            ICacheDependencyFactory cacheDependencyFactory
             )
         {
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
+            if (cacheDependencyFactory == null)
+                throw new ArgumentNullException("cacheDependencyFactory");
+
             this.httpContextFactory = httpContextFactory;
+            this.cacheDependencyFactory = cacheDependencyFactory;
         }
 
-        private readonly IHttpContextFactory httpContextFactory;
+        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly ICacheDependencyFactory cacheDependencyFactory;
 
         public event EventHandler<SiteMapCacheItemRemovedEventArgs> SiteMapRemoved;
 
 
-        protected System.Web.Caching.Cache Cache
+        protected virtual System.Web.Caching.Cache Cache
         {
             get
             {
@@ -67,12 +74,9 @@ namespace MvcSiteMapProvider.Caching
             {
                 sliding = slidingExpiration;
             }
-
             var dependency = this.GetCacheDependency(fileDependencies);
-
             this.Cache.Insert(key, siteMap, dependency, absolute, sliding, CacheItemPriority.NotRemovable, OnItemRemoved);
         }
-
 
         protected virtual CacheDependency GetCacheDependency(IEnumerable<string> fileDependencies)
         {
@@ -81,10 +85,11 @@ namespace MvcSiteMapProvider.Caching
             {
                 if (fileDependencies.Count() > 1)
                 {
-                    dependency = new AggregateCacheDependency();
+                    dependency = cacheDependencyFactory.CreateAggregateDependency();
                     foreach (var file in fileDependencies)
                     {
-                        ((AggregateCacheDependency)dependency).Add(new CacheDependency(file));
+                        var fileDependency = cacheDependencyFactory.CreateFileDependency(file);
+                        ((AggregateCacheDependency)dependency).Add(fileDependency);
                     }
                 }
                 else
@@ -107,7 +112,7 @@ namespace MvcSiteMapProvider.Caching
         /// <param name="key">Cached item key.</param>
         /// <param name="item">Cached item.</param>
         /// <param name="reason">Reason the cached item was removed.</param>
-        private void OnItemRemoved(string key, object item, CacheItemRemovedReason reason)
+        protected virtual void OnItemRemoved(string key, object item, CacheItemRemovedReason reason)
         {
             var args = new SiteMapCacheItemRemovedEventArgs() { SiteMap = (ISiteMap)item };
             OnSiteMapRemoved(args);
@@ -124,7 +129,7 @@ namespace MvcSiteMapProvider.Caching
             this.Cache.Remove(key);
         }
 
-        public bool TryGetValue(string key, out ISiteMap value)
+        public virtual bool TryGetValue(string key, out ISiteMap value)
         {
             value = (ISiteMap)this.Cache.Get(key);
             if (value != null)
