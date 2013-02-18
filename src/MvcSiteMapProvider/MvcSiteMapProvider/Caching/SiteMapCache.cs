@@ -83,7 +83,11 @@ namespace MvcSiteMapProvider.Caching
             CacheDependency dependency = null;
             if (fileDependencies != null && fileDependencies.Count() > 0)
             {
-                if (fileDependencies.Count() > 1)
+                if (fileDependencies.Count() == 1)
+                {
+                    dependency = cacheDependencyFactory.CreateFileDependency(fileDependencies.First());
+                }
+                else
                 {
                     dependency = cacheDependencyFactory.CreateAggregateDependency();
                     foreach (var file in fileDependencies)
@@ -91,10 +95,6 @@ namespace MvcSiteMapProvider.Caching
                         var fileDependency = cacheDependencyFactory.CreateFileDependency(file);
                         ((AggregateCacheDependency)dependency).Add(fileDependency);
                     }
-                }
-                else
-                {
-                    dependency = new CacheDependency(fileDependencies.First());
                 }
             }
             return dependency;
@@ -121,7 +121,9 @@ namespace MvcSiteMapProvider.Caching
         protected virtual void OnSiteMapRemoved(SiteMapCacheItemRemovedEventArgs e)
         {
             if (this.SiteMapRemoved != null)
+            {
                 SiteMapRemoved(this, e);
+            }
         }
 
         public virtual void Remove(string key)
