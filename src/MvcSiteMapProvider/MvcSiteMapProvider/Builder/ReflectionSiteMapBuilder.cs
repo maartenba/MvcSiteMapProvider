@@ -251,22 +251,17 @@ namespace MvcSiteMapProvider.Builder
                         throw new MvcSiteMapException(string.Format(Resources.Messages.NoParentKeyDefined, nodeToAdd.Controller, nodeToAdd.Action));
                     }
 
-                    //var parentForNode = parentNode != null ? parentNode.FindForKey(assemblyNode.SiteMapNodeAttribute.ParentKey) : null;
                     var parentForNode = parentNode != null ? siteMap.FindSiteMapNodeFromKey(assemblyNode.SiteMapNodeAttribute.ParentKey) : null;
 
                     if (parentForNode != null)
                     {
                         nodeToAdd.ParentNode = parentForNode;
-
-                        //if (dynamicNodeBuilder.HasDynamicNodes(nodeToAdd))
                         if (nodeToAdd.HasDynamicNodeProvider)
                         {
                             var dynamicNodesForChildNode = dynamicNodeBuilder.BuildDynamicNodesFor(siteMap, nodeToAdd, parentForNode);
                             foreach (var dynamicNode in dynamicNodesForChildNode)
                             {
                                 // Verify parent/child relation
-                                //if (dynamicNode.ParentNode == parentNode
-                                //    && parentNode.ChildNodes.All(n => n != dynamicNode))
                                 if (dynamicNode.ParentNode == parentNode
                                     && !siteMap.GetChildNodes(parentNode).Contains(dynamicNode))
                                 {
@@ -333,16 +328,12 @@ namespace MvcSiteMapProvider.Builder
                     if (parentForNode != null)
                     {
                         nodeToAdd.Key.ParentNode = parentForNode;
-
-                        //if (dynamicNodeBuilder.HasDynamicNodes(nodeToAdd.Key))
                         if (nodeToAdd.Key.HasDynamicNodeProvider)
                         {
                             var dynamicNodesForChildNode = dynamicNodeBuilder.BuildDynamicNodesFor(siteMap, nodeToAdd.Key, parentForNode);
                             foreach (var dynamicNode in dynamicNodesForChildNode)
                             {
                                 // Verify parent/child relation
-                                //if (dynamicNode.ParentNode == parentNode
-                                //    && parentNode.ChildNodes.All(n => n != dynamicNode))
                                 if (dynamicNode.ParentNode == parentNode
                                     && !siteMap.GetChildNodes(parentNode).Contains(dynamicNode))
                                 {
@@ -364,6 +355,7 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Gets the site map node from MVC site map node attribute.
         /// </summary>
+        /// <param name="siteMap">The site map.</param>
         /// <param name="attribute">The attribute.</param>
         /// <param name="type">The type.</param>
         /// <param name="methodInfo">The method info.</param>
@@ -435,16 +427,6 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-            // Generate key for node
-            string key = nodeKeyGenerator.GenerateKey(
-                null,
-                attribute.Key,
-                "",
-                attribute.Title,
-                area,
-                controller, action, httpMethod,
-                attribute.Clickable);
-
             // Handle title and description
             var title = attribute.Title;
             var description = attribute.Description;
@@ -452,59 +434,45 @@ namespace MvcSiteMapProvider.Builder
             // Handle implicit resources
             var implicitResourceKey = attribute.ResourceKey;
 
-            // Assign defaults
-            //var siteMapNode = new MvcSiteMapNode();
+            // Generate key for node
+            string key = nodeKeyGenerator.GenerateKey(
+                null,
+                attribute.Key,
+                "",
+                title,
+                area,
+                controller, action, httpMethod,
+                attribute.Clickable);
+
             var siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
-            //siteMapNode.Key = key;
+
+            // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
-            //siteMapNode.ResourceKey = implicitResourceKey;
-            //siteMapNode.Roles = attribute.Roles;
             AcquireRolesFrom(attribute, siteMapNode.Roles);
-
             siteMapNode.Clickable = attribute.Clickable;
-
-            // TODO: Change semantics here so the providers cannot be overridden after node creation.
             siteMapNode.VisibilityProvider = attribute.VisibilityProvider;
             siteMapNode.UrlResolver = attribute.UrlResolver;
             siteMapNode.DynamicNodeProvider = attribute.DynamicNodeProvider;
             siteMapNode.ImageUrl = attribute.ImageUrl;
             siteMapNode.TargetFrame = attribute.TargetFrame;
             siteMapNode.HttpMethod = httpMethod;
-
-            //if (!siteMapNode.Clickable)
-            //{
-            //    siteMapNode.Url = "";
-            //}
-
             siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
             siteMapNode.ChangeFrequency = attribute.ChangeFrequency;
             siteMapNode.UpdatePriority = attribute.UpdatePriority;
 
             // Handle route details
             siteMapNode.Route = attribute.Route;
-
-            // Create a route data dictionary
-            //IDictionary<string, object> routeValues = new Dictionary<string, object>();
             siteMapNode.RouteValues.Add("area", area);
             siteMapNode.RouteValues.Add("controller", controller);
             siteMapNode.RouteValues.Add("action", action);
-
-            // Add route values to sitemap node
-            //siteMapNode.RouteValues = routeValues;
-
             AcquirePreservedRouteParametersFrom(attribute, siteMapNode.PreservedRouteParameters);
-            //siteMapNode.PreservedRouteParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-            //// Handle MVC details
-            //siteMapNode.Area = area;
-            //siteMapNode.Controller = controller;
-            //siteMapNode.Action = action;
+            // Handle MVC details
 
             // Add defaults for area
             if (!siteMapNode.RouteValues.ContainsKey("area"))
             {
-                //siteMapNode.Attributes["area"] = "";
                 siteMapNode.RouteValues.Add("area", "");
             }
 
