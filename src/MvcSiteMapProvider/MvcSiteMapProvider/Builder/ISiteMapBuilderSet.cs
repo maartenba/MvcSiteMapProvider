@@ -13,7 +13,7 @@ namespace MvcSiteMapProvider.Builder
     {
         string Name { get; }
         ISiteMapBuilder Builder { get; }
-        ICacheDependency CacheDependency { get; }
+        ICacheDependency CreateCacheDependency();
 
         /// <summary>
         /// Determines whether the provider instance matches the name

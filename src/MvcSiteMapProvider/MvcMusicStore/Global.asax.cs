@@ -259,10 +259,22 @@ namespace MvcMusicStore
             );
 
 
-            var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
-            var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
 
-            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDependency);
+            //// TODO: Make factory that implements this logic so a new instance is created every time it is requested.
+            //var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+            //var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
+
+            container.Configure(x => x
+               .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
+               .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
+               .Ctor<IEnumerable<string>>()
+                .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
+            );
+
+
+            var cacheDependencyFactory = container.GetInstance<MvcSiteMapProvider.Caching.ICacheDependencyFactory>();
+
+            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDependencyFactory);
             var builderSets = new MvcSiteMapProvider.Builder.ISiteMapBuilderSet[] { builderSet };
 
             //container.Configure(x => x

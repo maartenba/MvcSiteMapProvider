@@ -13,24 +13,24 @@ namespace MvcSiteMapProvider.Builder
         public SiteMapBuilderSet(
             string name,
             ISiteMapBuilder siteMapBuilder,
-            ICacheDependency cacheDependency
+            ICacheDependencyFactory cacheDependencyFactory
             )
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
-            if (cacheDependency == null)
-                throw new ArgumentNullException("cacheDependency");
+            if (cacheDependencyFactory == null)
+                throw new ArgumentNullException("cacheDependencyFactory");
 
             this.name = name;
             this.siteMapBuilder = siteMapBuilder;
-            this.cacheDependency = cacheDependency;
+            this.cacheDependencyFactory = cacheDependencyFactory;
         }
 
         protected readonly string name;
         protected readonly ISiteMapBuilder siteMapBuilder;
-        protected readonly ICacheDependency cacheDependency;
+        protected readonly ICacheDependencyFactory cacheDependencyFactory;
 
 
         #region ISiteMapBuilderSet<CacheDependency> Members
@@ -45,9 +45,9 @@ namespace MvcSiteMapProvider.Builder
             get { return this.siteMapBuilder; }
         }
 
-        public ICacheDependency CacheDependency
+        public ICacheDependency CreateCacheDependency()
         {
-            get { return this.cacheDependency; }
+            return this.cacheDependencyFactory.Create();
         }
 
         public bool AppliesTo(string builderSetName)

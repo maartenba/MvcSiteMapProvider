@@ -94,7 +94,7 @@ namespace MvcSiteMapProvider.Loader
                         siteMap = siteMapFactory.Create(builderSet.Builder);
                         siteMap.BuildSiteMap();
 
-                        siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CacheDependency, absoluteCacheExpiration, slidingCacheExpiration);
+                        siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CreateCacheDependency(), absoluteCacheExpiration, slidingCacheExpiration);
 
                         return siteMap;
                     }

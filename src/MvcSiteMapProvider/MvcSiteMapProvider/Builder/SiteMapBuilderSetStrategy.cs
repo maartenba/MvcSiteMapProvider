@@ -41,10 +41,10 @@ namespace MvcSiteMapProvider.Builder
             return builderSet.Builder;
         }
 
-        public virtual ICacheDependency GetCacheDependency(string builderSetName)
+        public virtual ICacheDependency CreateCacheDependency(string builderSetName)
         {
             var builderSet = this.GetBuilderSet(builderSetName);
-            return builderSet.CacheDependency;
+            return builderSet.CreateCacheDependency();
         }
 
         #endregion
