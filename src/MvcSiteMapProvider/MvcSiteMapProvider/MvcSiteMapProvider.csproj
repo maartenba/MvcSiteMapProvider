@@ -82,12 +82,16 @@
     <Compile Include="Loader\SiteMapLoaderFactory.cs" />
     <Compile Include="PreservedRouteParameterCollection.cs" />
     <Compile Include="Reflection\IObjectCopier.cs" />
+    <Compile Include="IMetaRobotsValueCollection.cs" />
+    <Compile Include="MetaRobotsValueCollection.cs" />
     <Compile Include="RoleCollection.cs" />
     <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\UrlResolvingSiteMapNodeVisitor.cs" />
     <Compile Include="Web\Html\CanonicalHelper.cs" />
+    <Compile Include="Web\Html\MetaRobotsHelper.cs" />
     <Compile Include="Web\Html\Models\CanonicalHelperModel.cs" />
+    <Compile Include="Web\Html\Models\MetaRobotsHelperModel.cs" />
     <Compile Include="Web\Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Web\Mvc\ActionMethodParameterResolver.cs" />
     <Compile Include="Web\Mvc\ControllerTypeResolver.cs" />
@@ -211,6 +215,7 @@
     <Compile Include="SiteMap.cs" />
     <Compile Include="Web\UrlPath.cs" />
     <Compile Include="UpdatePriority.cs" />
+    <Compile Include="Xml\XmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MvcSiteMapProvider.snk" />
@@ -258,6 +263,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Web\Html\DisplayTemplates\CanonicalHelperModel.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\MetaRobotsHelperModel.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>

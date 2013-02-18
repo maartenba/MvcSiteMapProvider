@@ -142,6 +142,42 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; value for the robots meta tag has already been added for node. &apos;follow&apos; and &apos;nofollow&apos; may not be used at the same time..
+        /// </summary>
+        internal static string MetaRobotsValueFollowAmbiguous {
+            get {
+                return ResourceManager.GetString("MetaRobotsValueFollowAmbiguous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; value for the robots meta tag has already been added for node. &apos;index&apos; and &apos;noindex&apos; may not be used at the same time..
+        /// </summary>
+        internal static string MetaRobotsValueIndexAmbiguous {
+            get {
+                return ResourceManager.GetString("MetaRobotsValueIndexAmbiguous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; value for the robots meta tag has already been added for node. &apos;none&apos; cannot be used in conjunction with &apos;index&apos;, &apos;noindex&apos;, &apos;follow&apos;, or &apos;nofollow&apos;. You may use &apos;none&apos; to indicate &apos;noindex&apos; and &apos;nofollow&apos; (not recommended), but do not combine it with these values..
+        /// </summary>
+        internal static string MetaRobotsValueNoneAmbiguous {
+            get {
+                return ResourceManager.GetString("MetaRobotsValueNoneAmbiguous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value &apos;{0}&apos; is not a valid meta robots value..
+        /// </summary>
+        internal static string MetaRobotsValueUnrecognized {
+            get {
+                return ResourceManager.GetString("MetaRobotsValueUnrecognized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Multiple nodes with the same key &apos;{0}&apos; were found. SiteMap requires that sitemap nodes have unique keys..
         /// </summary>
         internal static string MultipleNodesWithIdenticalKey {

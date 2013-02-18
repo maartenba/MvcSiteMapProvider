@@ -31,6 +31,7 @@ namespace MvcSiteMapProvider.Web.Html
                 ImageUrl = (node == null ? "" : node.ImageUrl),
                 Url = node.Url,
                 CanonicalUrl = (node != null ? node.CanonicalUrl : ""),
+                MetaRobotsContent = (node != null ? node.GetMetaRobotsContentString() : ""),
                 IsCurrentNode = node == node.SiteMap.CurrentNode,
                 IsInCurrentPath = node.IsInCurrentPath(),
                 IsRootNode = node == node.SiteMap.RootNode,

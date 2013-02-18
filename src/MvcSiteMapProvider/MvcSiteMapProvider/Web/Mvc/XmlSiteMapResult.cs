@@ -240,10 +240,12 @@ namespace MvcSiteMapProvider.Web.Mvc
                     nodeUrl = siteMapNodeUrl;
                 }
                 if (siteMapNode.HasExternalUrl(context.HttpContext) ||
-                    !String.IsNullOrEmpty(siteMapNode.CanonicalUrl))
+                    !String.IsNullOrEmpty(siteMapNode.CanonicalUrl) ||
+                    siteMapNode.HasNoIndexAndNoFollow)
                 {
                     // Skip nodes where domain doesn't match the current one 
-                    // or where canonical url exists.
+                    // or where canonical url exists, or that
+                    // have both a noindex and nofollow robots meta tag.
                     skip = true;
                 }
 

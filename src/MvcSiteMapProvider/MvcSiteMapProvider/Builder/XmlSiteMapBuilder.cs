@@ -202,6 +202,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
             siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
             siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");
+            this.AcquireMetaRobotsValuesFrom(node, siteMapNode.MetaRobotsValues);
 
             if (!string.IsNullOrEmpty(node.GetAttributeValue("changeFrequency")))
             {
@@ -350,6 +351,7 @@ namespace MvcSiteMapProvider.Builder
                && attributeName != "preservedRouteParameters"
                && attributeName != "canonicalUrl"
                && attributeName != "canonicalKey"
+               && attributeName != "metaRobotsValues"
                && !attributesToIgnore.Contains(attributeName)
                && !attributeName.StartsWith("data-");
         }
@@ -413,7 +415,7 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="roles">The roles IList to populate.</param>
         protected virtual void AcquireRolesFrom(XAttribute attribute, IList<string> roles)
         {
-            var localRoles = attribute.Value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var localRoles = attribute.Value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var role in localRoles)
             {
                 roles.Add(role);
@@ -434,6 +436,19 @@ namespace MvcSiteMapProvider.Builder
             }
         }
 
+        /// <summary>
+        /// Acquires the robots meta values list from a given XAttribute
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="roles">The robots meta values IList to populate.</param>
+        protected virtual void AcquireMetaRobotsValuesFrom(XElement node, IList<string> metaRobotsValues)
+        {
+            var values = node.GetAttributeValue("metaRobotsValues").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var value in values)
+            {
+                metaRobotsValues.Add(value);
+            }
+        }
 
 
         /// <summary>

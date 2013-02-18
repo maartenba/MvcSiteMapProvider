@@ -15,5 +15,6 @@ namespace MvcSiteMapProvider
         IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap);
         IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap);
         IRoleCollection CreateRoleCollection(ISiteMap siteMap);
+        IMetaRobotsValueCollection CreateMetaRobotsValueCollection(ISiteMap siteMap);
     }
 }

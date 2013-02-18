@@ -60,6 +60,10 @@ namespace MvcSiteMapProvider
         string CanonicalUrl { get; set; }
         string CanonicalKey { get; set; }
 
+        IMetaRobotsValueCollection MetaRobotsValues { get; }
+        string GetMetaRobotsContentString();
+        bool HasNoIndexAndNoFollow { get; }
+
         string Route { get; set; }
         IRouteValueCollection RouteValues { get; }
         IPreservedRouteParameterCollection PreservedRouteParameters { get; }

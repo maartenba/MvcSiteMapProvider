@@ -191,6 +191,14 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+
+		<xs:attribute name="metaRobotsValues" type="metarobots_type" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Optional. A space-delimited list of values to apply to the robots meta tag. These will apply to all robots.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
   </xs:attributeGroup>
 
   <xs:attributeGroup name="fileNodeAttributes">
@@ -274,4 +282,24 @@
       <xs:enumeration value="Absolute_100" />
     </xs:restriction>
   </xs:simpleType>
+
+	<xs:simpleType name="metarobots_type">
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="index"/>
+					<xs:enumeration value="noindex"/>
+					<xs:enumeration value="follow"/>
+					<xs:enumeration value="nofollow"/>
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="noarchive"/>
+					<xs:enumeration value="nocache"/>
+					<xs:enumeration value="nosnippet"/>
+					<xs:enumeration value="nopreview"/>
+					<xs:enumeration value="noodp"/>
+					<xs:enumeration value="noydir"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:list>
+	</xs:simpleType>
 </xs:schema>

@@ -201,4 +201,16 @@
   <data name="VisitingSiteMapBuilderRequiresRootNode" xml:space="preserve">
     <value>VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node.</value>
   </data>
+  <data name="MetaRobotsValueFollowAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'follow' and 'nofollow' may not be used at the same time.</value>
+  </data>
+  <data name="MetaRobotsValueIndexAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'index' and 'noindex' may not be used at the same time.</value>
+  </data>
+  <data name="MetaRobotsValueNoneAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'none' cannot be used in conjunction with 'index', 'noindex', 'follow', or 'nofollow'. You may use 'none' to indicate 'noindex' and 'nofollow' (not recommended), but do not combine it with these values.</value>
+  </data>
+  <data name="MetaRobotsValueUnrecognized" xml:space="preserve">
+    <value>The value '{0}' is not a valid meta robots value.</value>
+  </data>
 </root>

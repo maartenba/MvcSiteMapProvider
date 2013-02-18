@@ -66,6 +66,11 @@ namespace MvcSiteMapProvider
             return new RoleCollection(siteMap);
         }
 
+        public IMetaRobotsValueCollection CreateMetaRobotsValueCollection(ISiteMap siteMap)
+        {
+            return new MetaRobotsValueCollection(siteMap);
+        }
+
         #endregion
     }
 }

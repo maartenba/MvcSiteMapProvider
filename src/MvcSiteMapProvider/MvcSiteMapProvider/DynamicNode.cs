@@ -9,9 +9,6 @@ namespace MvcSiteMapProvider
     /// </summary>
     public class DynamicNode
     {
-        protected string canonicalUrl = String.Empty;
-        protected string canonicalKey = String.Empty;
-
         /// <summary>
         /// Gets or sets the route.
         /// </summary>
@@ -125,44 +122,19 @@ namespace MvcSiteMapProvider
         /// Gets or sets the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
-        public string CanonicalUrl
-        {
-            get
-            {
-                return this.canonicalUrl;
-            }
-            set
-            {
-                if (!this.canonicalUrl.Equals(value))
-                {
-                    if (!String.IsNullOrEmpty(this.canonicalKey))
-                    {
-                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalUrl");
-                    }
-                    this.canonicalUrl = value;
-                }
-            }
-        }
+        public string CanonicalUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
-        public string CanonicalKey
-        {
-            get { return this.canonicalKey; }
-            set
-            {
-                if (!this.canonicalKey.Equals(value))
-                {
-                    if (!String.IsNullOrEmpty(this.canonicalUrl))
-                    {
-                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey");
-                    }
-                    this.canonicalKey = value;
-                }
-            }
-        }
+        public string CanonicalKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the robots meta values.
+        /// </summary>
+        /// <value>The robots meta values.</value>
+        public IList<string> MetaRobotsValues { get; set; }
 
         /// <summary>
         /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
@@ -221,6 +193,13 @@ namespace MvcSiteMapProvider
                 node.CanonicalKey = this.CanonicalKey;
             if (!string.IsNullOrEmpty(this.CanonicalUrl))
                 node.CanonicalUrl = this.CanonicalUrl;
+            if (this.MetaRobotsValues.Any())
+            {
+                foreach (var value in this.MetaRobotsValues)
+                {
+                    node.MetaRobotsValues.Add(value);
+                }
+            }
         }
 
 
@@ -233,6 +212,7 @@ namespace MvcSiteMapProvider
             Attributes = new Dictionary<string, string>();
             PreservedRouteParameters = new List<string>();
             Roles = new List<string>();
+            MetaRobotsValues = new List<string>();
         }
 
         /// <summary>

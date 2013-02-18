@@ -642,7 +642,7 @@ namespace MvcSiteMapProvider
                         routeData.Values.Add("area", "");
                     }
                 }
-                if (RootNode.MatchesRoute(routeData.Values))
+                if (this.RootNode != null && this.RootNode.MatchesRoute(routeData.Values))
                 {
                     node = RootNode;
                 }

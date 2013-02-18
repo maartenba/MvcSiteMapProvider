@@ -67,6 +67,7 @@ namespace MvcSiteMapProvider
             this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueCollection(siteMap);
             this.preservedRouteParameters = siteMapNodeChildStateFactory.CreatePreservedRouteParameterCollection(siteMap);
             this.roles = siteMapNodeChildStateFactory.CreateRoleCollection(siteMap);
+            this.metaRobotsValues = siteMapNodeChildStateFactory.CreateMetaRobotsValueCollection(siteMap);
         }
 
         // Services
@@ -82,6 +83,7 @@ namespace MvcSiteMapProvider
         protected readonly IRouteValueCollection routeValues;
         protected readonly IPreservedRouteParameterCollection preservedRouteParameters;
         protected readonly IRoleCollection roles;
+        protected readonly IMetaRobotsValueCollection metaRobotsValues;
 
         // Object State
         protected readonly string key;
@@ -477,6 +479,34 @@ namespace MvcSiteMapProvider
 
         #endregion
 
+        #region Meta Robots Tag
+
+        /// <summary>
+        /// Gets the robots meta values.
+        /// </summary>
+        /// <value>The robots meta values.</value>
+        public override IMetaRobotsValueCollection MetaRobotsValues { get { return this.metaRobotsValues; } }
+
+        /// <summary>
+        /// Gets a string containing the preformatted comma delimited list of values that can be inserted into the
+        /// content attribute of the meta robots tag.
+        /// </summary>
+        public override string GetMetaRobotsContentString()
+        {
+            return this.MetaRobotsValues.GetMetaRobotsContentString();
+        }
+
+        /// <summary>
+        /// Gets a boolean value indicating whether both the noindex and nofollow values are included in the
+        /// list of robots meta values.
+        /// </summary>
+        public override bool HasNoIndexAndNoFollow
+        {
+            get { return this.MetaRobotsValues.HasNoIndexAndNoFollow; }
+        }
+
+        #endregion
+
         #region Route
 
         /// <summary>
@@ -601,6 +631,7 @@ namespace MvcSiteMapProvider
             node.CacheResolvedUrl = this.CacheResolvedUrl;
             node.CanonicalUrl = this.canonicalUrl; // Get protected member
             node.CanonicalKey = this.CanonicalKey;
+            this.MetaRobotsValues.CopyTo(node.MetaRobotsValues);
             node.DynamicNodeProvider = this.DynamicNodeProvider;
             node.Route = this.Route;
             this.RouteValues.CopyTo(node.RouteValues);

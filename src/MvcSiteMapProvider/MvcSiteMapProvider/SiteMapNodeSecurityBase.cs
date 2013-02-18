@@ -69,6 +69,9 @@ namespace MvcSiteMapProvider
         public abstract bool HasExternalUrl(HttpContextBase httpContext);
         public abstract string CanonicalUrl { get; set; }
         public abstract string CanonicalKey { get; set; }
+        public abstract IMetaRobotsValueCollection MetaRobotsValues { get; }
+        public abstract string GetMetaRobotsContentString();
+        public abstract bool HasNoIndexAndNoFollow { get; }
         public abstract string Route { get; set; }
         public abstract IRouteValueCollection RouteValues { get; }
         public abstract IPreservedRouteParameterCollection PreservedRouteParameters { get; }

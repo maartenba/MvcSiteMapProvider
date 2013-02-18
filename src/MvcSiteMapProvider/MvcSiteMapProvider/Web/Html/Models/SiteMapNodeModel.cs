@@ -52,6 +52,12 @@ namespace MvcSiteMapProvider.Web.Html.Models
         public string CanonicalUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets the content value of the meta robots tag.
+        /// </summary>
+        /// <value>The content value of the meta robots tag.</value>
+        public string MetaRobotsContent { get; set; }
+
+        /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
