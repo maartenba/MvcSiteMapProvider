@@ -12,7 +12,9 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider.Loader
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// <see cref="T:MvcSiteMapProvider.SiteMapLoader"/> is responsible for thread-safe access to the cache as well as 
+    /// managing whether a given request will return a cached sitemap or a new sitemap based on a 
+    /// <see cref="T:MvcSiteMapProvider.IBuilderSet"/>.
     /// </summary>
     public class SiteMapLoader 
         : ISiteMapLoader

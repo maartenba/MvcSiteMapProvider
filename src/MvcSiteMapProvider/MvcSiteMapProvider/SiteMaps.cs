@@ -4,7 +4,7 @@ using MvcSiteMapProvider.Loader;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// This class is the static entry point where the presentation layer can request a sitemap by calling Current or passing a siteMapCacheKey.
     /// </summary>
     public class SiteMaps
     {
