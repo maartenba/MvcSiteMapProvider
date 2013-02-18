@@ -25,20 +25,19 @@ namespace MvcSiteMapProvider.Web.Html
                 Area = (node != null ? node.Area : ""),
                 Controller = (node != null ? node.Controller : ""),
                 Action = (node != null ? node.Action : ""),
-                Title = node.Title,
-                Description = node.Description,
+                Title = (node != null ? node.Title : ""),
+                Description = (node != null ? node.Description : ""),
                 TargetFrame = (node == null ? "" : node.TargetFrame),
                 ImageUrl = (node == null ? "" : node.ImageUrl),
-                Url = node.Url,
+                Url = (node != null ? node.Url : "/"),
                 CanonicalUrl = (node != null ? node.CanonicalUrl : ""),
                 MetaRobotsContent = (node != null ? node.GetMetaRobotsContentString() : ""),
                 IsCurrentNode = node == node.SiteMap.CurrentNode,
-                IsInCurrentPath = node.IsInCurrentPath(),
+                IsInCurrentPath = (node != null ? node.IsInCurrentPath() : true),
                 IsRootNode = node == node.SiteMap.RootNode,
                 IsClickable = (node == null || node.Clickable),
                 RouteValues = (node != null ? (IDictionary<string, object>)node.RouteValues : new Dictionary<string, object>()),
-                // TODO: rename to Attributes
-                MetaAttributes = (node != null ? (IDictionary<string, string>)node.Attributes : new Dictionary<string, string>()),
+                Attributes = (node != null ? (IDictionary<string, string>)node.Attributes : new Dictionary<string, string>()),
                 SourceMetadata = sourceMetadata
             };
             return nodeToAdd;
