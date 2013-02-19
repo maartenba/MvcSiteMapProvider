@@ -4,7 +4,7 @@ using MvcSiteMapProvider.Builder;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for the abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.ISiteMapFactory"/> at runtime.
     /// </summary>
     public interface ISiteMapFactory
     {

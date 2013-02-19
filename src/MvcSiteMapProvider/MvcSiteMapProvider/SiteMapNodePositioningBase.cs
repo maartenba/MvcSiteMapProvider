@@ -6,7 +6,8 @@ using System.Web.Routing;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract base class that contains methods that deal with locating the position of the current node within
+    /// the site map.
     /// </summary>
     public abstract class SiteMapNodePositioningBase
         : SiteMapNodeSecurityBase

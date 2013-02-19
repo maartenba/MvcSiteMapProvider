@@ -12,7 +12,8 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// This class implements the decorator pattern and can be used to make an instance of ISiteMapNode read-only after the BuildSiteMap method has been called.
+    /// Provides the means to make the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> instance read-only so it cannot be 
+    /// inadvertently altered while it is in the cache.
     /// </summary>
     public class LockableSiteMapNode
         : SiteMapNode

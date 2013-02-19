@@ -12,7 +12,8 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.RequestCacheableSiteMapNode"/>
+    /// at runtime.
     /// </summary>
     public class SiteMapNodeFactory 
         : ISiteMapNodeFactory

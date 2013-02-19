@@ -106,6 +106,15 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy operation does not support reference types. If you need this functionality, override CopyTo() and provide your own implementation..
+        /// </summary>
+        internal static string CopyOperationDoesNotSupportReferenceTypes {
+            get {
+                return ResourceManager.GetString("CopyOperationDoesNotSupportReferenceTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not resolve URL for sitemap node {0} which represents action {1} in controller {2}. Ensure that the route {3} for this sitemap node can be resolved and that its default values allow resolving the URL for the current sitemap node..
         /// </summary>
         internal static string CouldNotResolve {

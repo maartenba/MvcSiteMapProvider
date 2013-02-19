@@ -25,7 +25,7 @@ namespace MvcSiteMapProvider.Caching
 
         #region ICacheDependencyFactory Members
 
-        public ICacheDependency Create()
+        public virtual ICacheDependency Create()
         {
             return new AspNetCacheDependency(this.CreateCacheDependency());
         }

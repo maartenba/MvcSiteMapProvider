@@ -7,7 +7,8 @@ using MvcSiteMapProvider.Collections;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Abstract factory for creating new instances of types required by the <see cref="T:MvcSiteMapProvider.SiteMapNode"/>
+    /// at runtime.
     /// </summary>
     public class SiteMapNodeChildStateFactory
         : ISiteMapNodeChildStateFactory
@@ -41,32 +42,32 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapNodeChildStateFactory Members
 
-        public ILocalizationService CreateLocalizationService(string implicitResourceKey)
+        public virtual ILocalizationService CreateLocalizationService(string implicitResourceKey)
         {
             return new LocalizationService(implicitResourceKey, explicitResourceKeyParser, stringLocalizer);
         }
 
-        public IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
+        public virtual IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
         {
             return attributeCollectionFactory.Create(siteMap, localizationService);
         }
 
-        public IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap)
+        public virtual IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap)
         {
             return routeValueCollectionFactory.Create(siteMap);
         }
 
-        public IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap)
+        public virtual IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap)
         {
             return new PreservedRouteParameterCollection(siteMap);
         }
 
-        public IRoleCollection CreateRoleCollection(ISiteMap siteMap)
+        public virtual IRoleCollection CreateRoleCollection(ISiteMap siteMap)
         {
             return new RoleCollection(siteMap);
         }
 
-        public IMetaRobotsValueCollection CreateMetaRobotsValueCollection(ISiteMap siteMap)
+        public virtual IMetaRobotsValueCollection CreateMetaRobotsValueCollection(ISiteMap siteMap)
         {
             return new MetaRobotsValueCollection(siteMap);
         }

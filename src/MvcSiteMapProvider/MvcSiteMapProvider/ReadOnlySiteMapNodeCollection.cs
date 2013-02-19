@@ -6,7 +6,7 @@ using System.Linq;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// A specialized collection that provides a read-only wrapper for a <see cref="T:MvcSiteMapProvider.ISiteMapNodeCollection"/>.
     /// </summary>
     public class ReadOnlySiteMapNodeCollection
             : ISiteMapNodeCollection

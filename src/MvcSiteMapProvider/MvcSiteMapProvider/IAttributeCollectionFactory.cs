@@ -7,7 +7,7 @@ using MvcSiteMapProvider.Globalization;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for the abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.IAttributeCollection"/> at runtime.
     /// </summary>
     public interface IAttributeCollectionFactory
     {

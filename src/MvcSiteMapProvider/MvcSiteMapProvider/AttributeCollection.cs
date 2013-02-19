@@ -9,10 +9,9 @@ using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider
 {
-    // TODO: It is probably not necessary to inherit from ObservableDictionary. Need to find another Dictionary to inherit from.
-
     /// <summary>
-    /// TODO: Update summary.
+    /// A specialized dictionary that contains the business logic for handling the attributes collection including
+    /// localization of custom attributes.
     /// </summary>
     public class AttributeCollection
         : LockableDictionary<string, string>, IAttributeCollection

@@ -11,7 +11,8 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Provides the means to make the <see cref="T:MvcSiteMapProvider.SiteMap"/> instance read-only so it cannot be 
+    /// inadvertently altered while it is in the cache. 
     /// </summary>
     public class LockableSiteMap
         : SiteMap

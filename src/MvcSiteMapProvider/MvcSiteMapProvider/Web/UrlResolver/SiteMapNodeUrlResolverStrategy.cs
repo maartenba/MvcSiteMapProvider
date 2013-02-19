@@ -8,7 +8,8 @@ using MvcSiteMapProvider.Reflection;
 namespace MvcSiteMapProvider.Web.UrlResolver
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Tracks all of the registered instances of <see cref="T:MvcSiteMapProvider.ISiteMapNodeUrlResolver"/> and 
+    /// allows the caller to get a specific named instance of this interface at runtime.
     /// </summary>
     public class SiteMapNodeUrlResolverStrategy
         : ISiteMapNodeUrlResolverStrategy

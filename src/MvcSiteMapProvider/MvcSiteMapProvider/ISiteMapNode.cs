@@ -7,7 +7,8 @@ using System.Web.Routing;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for the specialized class that manages the state and business logic of each 
+    /// node in the hierarchy.
     /// </summary>
     public interface ISiteMapNode
     {

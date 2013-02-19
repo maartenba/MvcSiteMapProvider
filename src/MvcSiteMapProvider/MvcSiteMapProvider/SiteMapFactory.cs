@@ -9,7 +9,8 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.RequestCacheableSiteMap"/>
+    /// at runtime.
     /// </summary>
     public class SiteMapFactory
         : ISiteMapFactory
@@ -53,7 +54,7 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapFactory Members
 
-        public ISiteMap Create(ISiteMapBuilder siteMapBuilder)
+        public virtual ISiteMap Create(ISiteMapBuilder siteMapBuilder)
         {
             return new RequestCacheableSiteMap(
                 siteMapBuilder,

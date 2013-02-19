@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider.Collections
 
         #region IGenericDictionaryFactory Members
 
-        public IDictionary<TKey, TValue> Create<TKey, TValue>()
+        public virtual IDictionary<TKey, TValue> Create<TKey, TValue>()
         {
             return new Dictionary<TKey, TValue>();
         }

@@ -6,7 +6,8 @@ using MvcSiteMapProvider.Collections;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Specialized string collection for providing business logic that manages
+    /// the behavior of the preserved route parameters.
     /// </summary>
     public class PreservedRouteParameterCollection
         : LockableList<string>, IPreservedRouteParameterCollection

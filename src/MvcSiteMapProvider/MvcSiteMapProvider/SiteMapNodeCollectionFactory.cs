@@ -5,29 +5,30 @@ using System.Linq;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.ISiteMapNodeCollection"/>
+    /// at runtime.
     /// </summary>
     public class SiteMapNodeCollectionFactory
         : ISiteMapNodeCollectionFactory
     {
         #region ISiteMapNodeCollectionFactory Members
 
-        public ISiteMapNodeCollection Create()
+        public virtual ISiteMapNodeCollection Create()
         {
             return new SiteMapNodeCollection();
         }
 
-        public ISiteMapNodeCollection CreateLockable(ISiteMap siteMap)
+        public virtual ISiteMapNodeCollection CreateLockable(ISiteMap siteMap)
         {
             return new LockableSiteMapNodeCollection(siteMap);
         }
 
-        public ISiteMapNodeCollection CreateReadOnly(ISiteMapNodeCollection siteMapNodeCollection)
+        public virtual ISiteMapNodeCollection CreateReadOnly(ISiteMapNodeCollection siteMapNodeCollection)
         {
             return new ReadOnlySiteMapNodeCollection(siteMapNodeCollection);
         }
 
-        public ISiteMapNodeCollection CreateEmptyReadOnly()
+        public virtual ISiteMapNodeCollection CreateEmptyReadOnly()
         {
             return new ReadOnlySiteMapNodeCollection(new SiteMapNodeCollection());
         }

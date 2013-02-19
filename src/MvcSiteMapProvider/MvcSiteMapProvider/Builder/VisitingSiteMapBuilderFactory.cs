@@ -23,7 +23,7 @@ namespace MvcSiteMapProvider.Builder
 
         #region IVisitingSiteMapBuilderFactory Members
 
-        public ISiteMapBuilder Create()
+        public virtual ISiteMapBuilder Create()
         {
             return new VisitingSiteMapBuilder(siteMapNodeVisitor);
         }

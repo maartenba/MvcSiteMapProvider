@@ -258,9 +258,6 @@ namespace MvcMusicStore
                 visitingBuilder
             );
 
-
-
-            //// TODO: Make factory that implements this logic so a new instance is created every time it is requested.
             //var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
             //var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
 

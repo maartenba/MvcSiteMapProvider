@@ -6,7 +6,7 @@ using System.Text;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for the specialized collection for dealing with custom site map attributes.
     /// </summary>
     public interface IAttributeCollection
         : IDictionary<string, string>

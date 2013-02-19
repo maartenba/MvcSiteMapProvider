@@ -26,7 +26,7 @@ namespace MvcSiteMapProvider.Web
 
         #region IHttpContextFactory Members
 
-        public HttpContextBase Create()
+        public virtual HttpContextBase Create()
         {
             // TODO: Change this to HttpContextWrapper to make it generic to pass around and add
             // methods here to wrap in specified classes when needed.
@@ -35,7 +35,7 @@ namespace MvcSiteMapProvider.Web
             return new MvcHttpContext(HttpContext.Current);
         }
 
-        public RequestContext CreateRequestContext(RouteData routeData)
+        public virtual RequestContext CreateRequestContext(RouteData routeData)
         {
             var httpContext = this.Create();
             return new RequestContext(httpContext, routeData);
@@ -46,7 +46,7 @@ namespace MvcSiteMapProvider.Web
             //    return new RequestContext(httpContext, new RouteData());
         }
 
-        public IRequestCache GetRequestCache()
+        public virtual IRequestCache GetRequestCache()
         {
             return new RequestCache(this);
         }

@@ -34,7 +34,7 @@ namespace MvcSiteMapProvider.Builder
 
         #region IXmlSiteMapBuilderFactory Members
 
-        public ISiteMapBuilder Create(string xmlSiteMapFilePath, IEnumerable<string> attributesToIgnore)
+        public virtual ISiteMapBuilder Create(string xmlSiteMapFilePath, IEnumerable<string> attributesToIgnore)
         {
             return new XmlSiteMapBuilder(
                 xmlSiteMapFilePath, 

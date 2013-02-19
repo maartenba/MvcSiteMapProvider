@@ -7,14 +7,15 @@ using MvcSiteMapProvider.Globalization;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.AttributeCollection"/>
+    /// at runtime.
     /// </summary>
     public class AttributeCollectionFactory
         : IAttributeCollectionFactory
     {
         #region IAttributeCollectionFactory Members
 
-        public IAttributeCollection Create(ISiteMap siteMap, ILocalizationService localizationService)
+        public virtual IAttributeCollection Create(ISiteMap siteMap, ILocalizationService localizationService)
         {
             return new AttributeCollection(siteMap, localizationService);
         }

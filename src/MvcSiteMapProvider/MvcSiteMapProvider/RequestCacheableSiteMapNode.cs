@@ -13,7 +13,8 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Provides overrides of the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> that track the return values of specific 
+    /// resource-intensive members in case they are accessed more than one time during a single request.
     /// </summary>
     public class RequestCacheableSiteMapNode
         : LockableSiteMapNode

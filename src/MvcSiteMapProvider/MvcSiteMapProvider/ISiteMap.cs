@@ -5,7 +5,8 @@ using System.Web.Mvc;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for the specialized class that manages the hierarchial relationship between different 
+    /// <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> instances.
     /// </summary>
     public interface ISiteMap
     {

@@ -3,7 +3,7 @@
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// An abstract factory interface for creating sitemap nodes at runtime.
+    /// Contract for the abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> at runtime.
     /// </summary>
     public interface ISiteMapNodeFactory
     {

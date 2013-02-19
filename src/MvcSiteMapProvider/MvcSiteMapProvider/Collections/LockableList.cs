@@ -6,7 +6,8 @@ using MvcSiteMapProvider;
 namespace MvcSiteMapProvider.Collections
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Generic list that is aware of the ISiteMap interface and can be made read-only
+    /// depending on the IsReadOnly property of ISiteMap.
     /// </summary>
     public class LockableList<T>
         : List<T>
@@ -111,60 +112,6 @@ namespace MvcSiteMapProvider.Collections
             base.RemoveRange(index, count);
         }
 
-        //new public virtual void Reverse()
-        //{
-        //    //if (this.siteMap.IsReadOnly)
-        //    //{
-        //    //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-        //    //}
-        //    base.Reverse();
-        //}
-
-        //new public virtual void Reverse(int index, int count)
-        //{
-        //    //if (this.siteMap.IsReadOnly)
-        //    //{
-        //    //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-        //    //}
-        //    base.Reverse(index, count);
-        //}
-
-        //new public virtual void Sort()
-        //{
-        //    //if (this.siteMap.IsReadOnly)
-        //    //{
-        //    //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-        //    //}
-        //    base.Sort();
-        //}
-
-        //new public virtual void Sort(Comparison<T> comparison)
-        //{
-        //    //if (this.siteMap.IsReadOnly)
-        //    //{
-        //    //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-        //    //}
-        //    base.Sort(comparison);
-        //}
-
-        //new public virtual void Sort(IComparer<T> comparer)
-        //{
-        //    //if (this.siteMap.IsReadOnly)
-        //    //{
-        //    //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-        //    //}
-        //    base.Sort(comparer);
-        //}
-
-        //new public virtual void Sort(int index, int count, IComparer<T> comparer)
-        //{
-        //    //if (this.siteMap.IsReadOnly)
-        //    //{
-        //    //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-        //    //}
-        //    base.Sort(index, count, comparer);
-        //}
-
         public void CopyTo(IList<T> destination)
         {
             foreach (var item in this)
@@ -173,7 +120,10 @@ namespace MvcSiteMapProvider.Collections
                 {
                     destination.Add(item);
                 }
-                // NOTE: this method doesn't work with object types, only primitive types.
+                else
+                {
+                    throw new NotSupportedException(Resources.Messages.CopyOperationDoesNotSupportReferenceTypes);
+                }
             }
         }
 

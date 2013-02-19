@@ -213,4 +213,7 @@
   <data name="MetaRobotsValueUnrecognized" xml:space="preserve">
     <value>The value '{0}' is not a valid meta robots value.</value>
   </data>
+  <data name="CopyOperationDoesNotSupportReferenceTypes" xml:space="preserve">
+    <value>Copy operation does not support reference types. If you need this functionality, override CopyTo() and provide your own implementation.</value>
+  </data>
 </root>

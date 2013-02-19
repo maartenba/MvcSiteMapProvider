@@ -5,7 +5,7 @@ using MvcSiteMapProvider;
 namespace MvcSiteMapProvider.Collections
 {
     /// <summary>
-    /// Dictionary that is aware of the ISiteMap interface and can be made read-only
+    /// Generic dictionary that is aware of the ISiteMap interface and can be made read-only
     /// depending on the IsReadOnly property of ISiteMap.
     /// </summary>
     public class LockableDictionary<TKey, TValue>
@@ -120,7 +120,10 @@ namespace MvcSiteMapProvider.Collections
                 {
                     destination.Add(new KeyValuePair<TKey, TValue>(item.Key, item.Value));
                 }
-                // NOTE: This doesn't support refernece types.
+                else
+                {
+                    throw new NotSupportedException(Resources.Messages.CopyOperationDoesNotSupportReferenceTypes);
+                }
             }
         }
     }

@@ -6,15 +6,15 @@ using System.Text;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.RouteValueCollection"/>
+    /// at runtime.
     /// </summary>
     public class RouteValueCollectionFactory
         : IRouteValueCollectionFactory
     {
-
         #region IRouteValueCollectionFactory Members
 
-        public IRouteValueCollection Create(ISiteMap siteMap)
+        public virtual IRouteValueCollection Create(ISiteMap siteMap)
         {
             return new RouteValueCollection(siteMap);
         }

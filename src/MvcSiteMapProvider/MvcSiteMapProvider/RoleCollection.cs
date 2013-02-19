@@ -6,7 +6,8 @@ using MvcSiteMapProvider.Collections;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Specialized string collection for providing business logic that manages
+    /// the behavior of the roles.
     /// </summary>
     public class RoleCollection
         : LockableList<string>, IRoleCollection

@@ -35,7 +35,7 @@ namespace MvcSiteMapProvider.Builder
 
         #region IReflectionSiteMapBuilderFactory Members
 
-        public ISiteMapBuilder Create(IEnumerable<string> includeAssemblies, IEnumerable<string> excludeAssemblies)
+        public virtual ISiteMapBuilder Create(IEnumerable<string> includeAssemblies, IEnumerable<string> excludeAssemblies)
         {
             return new ReflectionSiteMapBuilder(
                 includeAssemblies, 

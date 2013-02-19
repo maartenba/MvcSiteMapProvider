@@ -7,8 +7,89 @@ using MvcSiteMapProvider.Collections;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// A specialized collection for managing the business rules for handling the
+    /// allowed values in the meta robots tag.
     /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    ///     <listheader>
+    ///         <term>Allowed Values</term>
+    ///     </listheader>
+    ///     <item>
+    ///         <term>index</term>
+    ///         <description>
+    ///             Allow search engine robots to index the page, you don't have to add this to your pages, as it's the default.
+    ///             May not be used in conjunction with noindex or none.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>noindex</term>
+    ///         <description>
+    ///             Disallow search engines from showing this page in their results.
+    ///             May not be used in conjunction with index or none.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>follow</term>
+    ///         <description>
+    ///             Tells the search engine robots to follow the links on the page, whether it can index it or not.
+    ///             May not be used in conjunction with nofollow or none.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>nofollow</term>
+    ///         <description>
+    ///             Tells the search engine robots to not follow any links on the page at all.
+    ///             May not be used in conjunction with follow or none.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>none</term>
+    ///         <description>
+    ///             This is a shortcut for 'noindex,nofollow', or basically saying to search engines: don't do anything with this page at all.
+    ///             May not be used in conjunction with index, noindex, follow, or nofollow.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>noarchive</term>
+    ///         <description>
+    ///             Prevents the search engines from showing a cached copy of this page.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>nocache</term>
+    ///         <description>
+    ///             Same as noarchive, but only used by MSN/Live/Bing.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>nosnippet</term>
+    ///         <description>
+    ///             Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>nopreview</term>
+    ///         <description>
+    ///             Same as nosnippet, but only used by Bing.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>noodp</term>
+    ///         <description>
+    ///             Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <term>noydir</term>
+    ///         <description>
+    ///             Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. 
+    ///             No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.
+    ///         </description>
+    ///     </item>
+    /// </list>
+    /// Any use of a single value more than one time will be ignored.
+    /// </remarks>
     public class MetaRobotsValueCollection
         : LockableList<string>, IMetaRobotsValueCollection
     {

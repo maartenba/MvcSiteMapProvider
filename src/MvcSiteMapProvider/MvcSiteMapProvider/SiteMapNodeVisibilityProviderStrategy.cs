@@ -6,7 +6,8 @@ using System.Web;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Tracks all of the registered instances of <see cref="T:MvcSiteMapProvider.ISiteMapNodeVisiblityProvider"/> and 
+    /// allows the caller to get a specific named instance of this interface at runtime.
     /// </summary>
     public class SiteMapNodeVisibilityProviderStrategy
         : ISiteMapNodeVisibilityProviderStrategy

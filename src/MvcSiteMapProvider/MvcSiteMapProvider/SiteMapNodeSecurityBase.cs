@@ -6,7 +6,7 @@ using System.Web.Routing;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract class that provides business logic for managing security. 
     /// </summary>
     public abstract class SiteMapNodeSecurityBase
         : ISiteMapNode
