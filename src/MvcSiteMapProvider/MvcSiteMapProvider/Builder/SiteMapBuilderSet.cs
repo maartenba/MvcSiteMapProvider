@@ -5,7 +5,7 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// Provides a named set of services that can be used to build a <see cref="T:MvcSiteMapProvider"/>.
+    /// Provides a named set of services that can be used to build a <see cref="T:MvcSiteMapProvider.ISiteMap"/>.
     /// </summary>
     public class SiteMapBuilderSet
         : ISiteMapBuilderSet
@@ -35,22 +35,22 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapBuilderSet<CacheDependency> Members
 
-        public string Name
+        public virtual string Name
         {
             get { return this.name; }
         }
 
-        public ISiteMapBuilder Builder
+        public virtual ISiteMapBuilder Builder
         {
             get { return this.siteMapBuilder; }
         }
 
-        public ICacheDependency CreateCacheDependency()
+        public virtual ICacheDependency CreateCacheDependency()
         {
             return this.cacheDependencyFactory.Create();
         }
 
-        public bool AppliesTo(string builderSetName)
+        public virtual bool AppliesTo(string builderSetName)
         {
             return this.name.Equals(builderSetName);
         }
