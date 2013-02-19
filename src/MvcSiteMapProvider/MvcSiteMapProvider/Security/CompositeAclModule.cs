@@ -13,7 +13,8 @@ namespace MvcSiteMapProvider.Security
         : IAclModule
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompositeAclModule"/> class.
+        /// Used to chain several <see cref="T:MvcSiteMapProvider.Security.IAclModule"/> instances in succession. 
+        /// The builders will be processed in the same order as they are specified in the constructor.
         /// </summary>
         public CompositeAclModule(
             params IAclModule[] aclModules
