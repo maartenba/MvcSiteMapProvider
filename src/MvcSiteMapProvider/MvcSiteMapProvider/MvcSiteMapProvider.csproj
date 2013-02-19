@@ -52,6 +52,8 @@
     <Compile Include="Builder\VisitingSiteMapBuilderFactory.cs" />
     <Compile Include="Caching\AspNetCacheDependency.cs" />
     <Compile Include="Caching\AspNetCacheDependencyFactory.cs" />
+    <Compile Include="Caching\CacheDetails.cs" />
+    <Compile Include="Caching\ICacheDetails.cs" />
     <Compile Include="Caching\ICacheDependency.cs" />
     <Compile Include="Caching\ICacheDependencyFactory.cs" />
     <Compile Include="Caching\ISiteMapCache.cs" />

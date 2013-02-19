@@ -261,17 +261,18 @@ namespace MvcMusicStore
             //var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
             //var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
 
+            // Specify caching details for the default builder set.
             container.Configure(x => x
                .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
                .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
                .Ctor<IEnumerable<string>>()
                 .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
             );
-
-
+            
             var cacheDependencyFactory = container.GetInstance<MvcSiteMapProvider.Caching.ICacheDependencyFactory>();
+            var cacheDetails = new MvcSiteMapProvider.Caching.CacheDetails(TimeSpan.FromMinutes(5), TimeSpan.Zero, cacheDependencyFactory);
 
-            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDependencyFactory);
+            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDetails);
             var builderSets = new MvcSiteMapProvider.Builder.ISiteMapBuilderSet[] { builderSet };
 
             //container.Configure(x => x
@@ -325,8 +326,11 @@ namespace MvcMusicStore
 
 
             // Configure the static instance of the SiteMapLoader
-            var loaderFactory = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoaderFactory>();
-            var loader = loaderFactory.Create(TimeSpan.FromMinutes(5), TimeSpan.Zero);
+            //var loaderFactory = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoaderFactory>();
+            //var loader = loaderFactory.Create();
+
+            // TODO: Evaluate whether we need a SiteMapLoaderFactory
+            var loader = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoader>();
 
             MvcSiteMapProvider.SiteMaps.Loader = loader;
         }

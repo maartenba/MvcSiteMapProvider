@@ -20,8 +20,6 @@ namespace MvcSiteMapProvider.Loader
         : ISiteMapLoader
     {
         public SiteMapLoader(
-            TimeSpan absoluteCacheExpiration,
-            TimeSpan slidingCacheExpiration,
             ISiteMapCache siteMapCache,
             ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
             ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy,
@@ -40,8 +38,6 @@ namespace MvcSiteMapProvider.Loader
             if (siteMapCacheKeyToBuilderSetMapper == null)
                 throw new ArgumentNullException("siteMapCacheKeyToBuilderSetMapper");
 
-            this.absoluteCacheExpiration = absoluteCacheExpiration;
-            this.slidingCacheExpiration = slidingCacheExpiration;
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapBuilderSetStrategy = siteMapBuilderSetStrategy;
@@ -53,8 +49,6 @@ namespace MvcSiteMapProvider.Loader
             siteMapCache.SiteMapRemoved += new EventHandler<SiteMapCacheItemRemovedEventArgs>(siteMapCache_SiteMapRemoved);
         }
 
-        protected readonly TimeSpan absoluteCacheExpiration;
-        protected readonly TimeSpan slidingCacheExpiration;
         protected readonly ISiteMapCache siteMapCache;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
         protected readonly ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy;
@@ -96,7 +90,7 @@ namespace MvcSiteMapProvider.Loader
                         siteMap = siteMapFactory.Create(builderSet.Builder);
                         siteMap.BuildSiteMap();
 
-                        siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CreateCacheDependency(), absoluteCacheExpiration, slidingCacheExpiration);
+                        siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CacheDetails);
 
                         return siteMap;
                     }

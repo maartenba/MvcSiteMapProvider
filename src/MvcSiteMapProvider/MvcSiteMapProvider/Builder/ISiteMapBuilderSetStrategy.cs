@@ -12,6 +12,6 @@ namespace MvcSiteMapProvider.Builder
     {
         ISiteMapBuilderSet GetBuilderSet(string builderSetName);
         ISiteMapBuilder GetBuilder(string builderSetName);
-        ICacheDependency CreateCacheDependency(string builderSetName);
+        ICacheDetails GetCacheDetails(string builderSetName);
     }
 }

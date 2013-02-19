@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Builder
@@ -16,7 +13,7 @@ namespace MvcSiteMapProvider.Builder
     {
         string Name { get; }
         ISiteMapBuilder Builder { get; }
-        ICacheDependency CreateCacheDependency();
+        ICacheDetails CacheDetails { get; }
 
         /// <summary>
         /// Determines whether the provider instance matches the name

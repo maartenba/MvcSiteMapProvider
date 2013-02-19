@@ -42,35 +42,30 @@ namespace MvcSiteMapProvider.Caching
 
         public virtual ISiteMap this[string key]
         {
-            get
-            {
-                return (ISiteMap)this.Cache[key];
-            }
-            set
-            {
-                this.Cache[key] = value;
-            }
+            get { return (ISiteMap)this.Cache[key]; }
+            set { this.Cache[key] = value; }
         }
 
-        public virtual void Insert(string key, ISiteMap siteMap, ICacheDependency dependencies, TimeSpan absoluteExpiration, TimeSpan slidingExpiration)
+        public virtual void Insert(string key, ISiteMap siteMap, ICacheDetails cacheDetails)
         {
             DateTime absolute = System.Web.Caching.Cache.NoAbsoluteExpiration;
             TimeSpan sliding = System.Web.Caching.Cache.NoSlidingExpiration;
-            if (absoluteExpiration != TimeSpan.Zero && absoluteExpiration != TimeSpan.MinValue)
+            if (!this.IsDefaultTimeSpanValue(cacheDetails.AbsoluteCacheExpiration))
             {
-                absolute = DateTime.UtcNow.Add(absoluteExpiration);
+                absolute = DateTime.UtcNow.Add(cacheDetails.AbsoluteCacheExpiration);
             }
-            else if (slidingExpiration != TimeSpan.Zero && slidingExpiration != TimeSpan.MinValue)
+            else if (!this.IsDefaultTimeSpanValue(cacheDetails.SlidingCacheExpiration))
             {
-                sliding = slidingExpiration;
+                sliding = cacheDetails.SlidingCacheExpiration;
             }
             CacheDependency dependency = null;
-            if (dependencies != null)
+            ICacheDependency passedDependencies = cacheDetails.CacheDependencyFactory.Create();
+            if (passedDependencies != null)
             {
-                dependency = (CacheDependency)dependencies.Dependency;
+                dependency = (CacheDependency)passedDependencies.Dependency;
             }
 
-            this.Cache.Insert(key, siteMap, dependency, absolute, sliding, CacheItemPriority.NotRemovable, OnItemRemoved);
+            this.Cache.Insert(key, siteMap, dependency, absolute, sliding, CacheItemPriority.NotRemovable, this.OnItemRemoved);
         }
 
         public virtual int Count
@@ -111,6 +106,11 @@ namespace MvcSiteMapProvider.Caching
                 return true;
             }
             return false;
+        }
+
+        protected virtual bool IsDefaultTimeSpanValue(TimeSpan timeSpan)
+        {
+            return (timeSpan.Equals(TimeSpan.Zero) || timeSpan.Equals(TimeSpan.MinValue));
         }
     }
 }

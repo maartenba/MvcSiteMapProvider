@@ -49,11 +49,9 @@ namespace MvcSiteMapProvider.Loader
 
         #region ISiteMapLoaderFactory Members
 
-        public virtual ISiteMapLoader Create(TimeSpan absoluteCacheExpiration, TimeSpan slidingCacheExpiration)
+        public virtual ISiteMapLoader Create()
         {
             return new SiteMapLoader(
-                absoluteCacheExpiration,
-                slidingCacheExpiration,
                 siteMapCache,
                 siteMapCacheKeyGenerator,
                 siteMapBuilderSetStrategy,

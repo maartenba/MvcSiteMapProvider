@@ -8,6 +8,6 @@ namespace MvcSiteMapProvider.Loader
     /// </summary>
     public interface ISiteMapLoaderFactory
     {
-        ISiteMapLoader Create(TimeSpan absoluteCacheExpiration, TimeSpan slidingCacheExpiration);
+        ISiteMapLoader Create();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Caching;
 using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Builder
@@ -13,24 +12,24 @@ namespace MvcSiteMapProvider.Builder
         public SiteMapBuilderSet(
             string name,
             ISiteMapBuilder siteMapBuilder,
-            ICacheDependencyFactory cacheDependencyFactory
+            ICacheDetails cacheDetails
             )
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
-            if (cacheDependencyFactory == null)
-                throw new ArgumentNullException("cacheDependencyFactory");
+            if (cacheDetails == null)
+                throw new ArgumentNullException("cacheDetails");
 
             this.name = name;
             this.siteMapBuilder = siteMapBuilder;
-            this.cacheDependencyFactory = cacheDependencyFactory;
+            this.cacheDetails = cacheDetails;
         }
 
         protected readonly string name;
         protected readonly ISiteMapBuilder siteMapBuilder;
-        protected readonly ICacheDependencyFactory cacheDependencyFactory;
+        protected readonly ICacheDetails cacheDetails;
 
 
         #region ISiteMapBuilderSet<CacheDependency> Members
@@ -45,9 +44,9 @@ namespace MvcSiteMapProvider.Builder
             get { return this.siteMapBuilder; }
         }
 
-        public virtual ICacheDependency CreateCacheDependency()
+        public virtual ICacheDetails CacheDetails
         {
-            return this.cacheDependencyFactory.Create();
+            get { return this.cacheDetails; }
         }
 
         public virtual bool AppliesTo(string builderSetName)
