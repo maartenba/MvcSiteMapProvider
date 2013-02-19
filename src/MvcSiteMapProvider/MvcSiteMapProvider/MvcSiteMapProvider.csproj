@@ -203,6 +203,7 @@
     <Compile Include="Web\ViewDataContainer.cs" />
     <Compile Include="Web\Mvc\XmlSiteMapController.cs" />
     <Compile Include="Web\Mvc\XmlSiteMapResult.cs" />
+    <Compile Include="Xml\ISiteMapXmlValidator.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="DynamicNode.cs" />
@@ -217,13 +218,13 @@
     <Compile Include="SiteMap.cs" />
     <Compile Include="Web\UrlPath.cs" />
     <Compile Include="UpdatePriority.cs" />
-    <Compile Include="Xml\XmlValidator.cs" />
+    <Compile Include="Xml\SiteMapXmlValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MvcSiteMapProvider.snk" />
-    <None Include="MvcSiteMapSchema.xsd">
+    <EmbeddedResource Include="Xml\MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

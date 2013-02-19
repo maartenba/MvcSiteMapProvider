@@ -288,8 +288,14 @@ namespace MvcMusicStore
                 .Is(builderSets)
             );
 
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Xml.ISiteMapXmlValidator>()
+                .Use<MvcSiteMapProvider.Xml.SiteMapXmlValidator>()
+            );
 
-
+            var validator = container.GetInstance<MvcSiteMapProvider.Xml.ISiteMapXmlValidator>();
+            // Check all configured .sitemap files to ensure they follow the XSD for MvcSiteMapProvider
+            validator.ValidateXml(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
             
 
             container.Configure(x => x

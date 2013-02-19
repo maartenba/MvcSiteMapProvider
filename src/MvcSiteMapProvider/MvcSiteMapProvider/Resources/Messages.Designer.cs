@@ -356,5 +356,14 @@ namespace MvcSiteMapProvider.Resources {
                 return ResourceManager.GetString("VisitingSiteMapBuilderRequiresRootNode", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file at &apos;{0}&apos; contains XML validation errors. See the inner exception for complete details..
+        /// </summary>
+        internal static string XmlValidationFailed {
+            get {
+                return ResourceManager.GetString("XmlValidationFailed", resourceCulture);
+            }
+        }
     }
 }
