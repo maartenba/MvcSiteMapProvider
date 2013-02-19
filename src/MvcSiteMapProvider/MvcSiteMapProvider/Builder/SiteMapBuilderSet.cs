@@ -5,7 +5,7 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Provides a named set of services that can be used to build a <see cref="T:MvcSiteMapProvider"/>.
     /// </summary>
     public class SiteMapBuilderSet
         : ISiteMapBuilderSet

@@ -6,7 +6,7 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider.Web
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for an abstract factory that provides context-related instances at runtime.
     /// </summary>
     public interface IHttpContextFactory
     {

@@ -6,7 +6,8 @@ using System.Text;
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for an abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.Builder.ICacheDependency"/> 
+    /// at runtime.
     /// </summary>
     public interface ICacheDependencyFactory
     {

@@ -3,7 +3,9 @@
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// A specialized <see cref="T:System.EventArgs"/> superclass that provides 
+    /// access to the <see cref="T:MvcSiteMapProvider.ISiteMap"/> instance that was 
+    /// removed from the cache.
     /// </summary>
     public class SiteMapCacheItemRemovedEventArgs
         : EventArgs

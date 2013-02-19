@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for an abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapBuilder"/> at runtime.
     /// </summary>
     public interface IXmlSiteMapBuilderFactory
     {

@@ -6,7 +6,8 @@ using System.Text;
 namespace MvcSiteMapProvider.Visitor
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Used to chain several <see cref="T:MvcSiteMapProvider.Visitor.ISiteMapNodeVisitor"/> instances in succession. 
+    /// The visitors will be processed in the same order as they are specified in the constructor.
     /// </summary>
     public class CompositeSiteMapNodeVisitor
         : ISiteMapNodeVisitor

@@ -5,7 +5,8 @@ using MvcSiteMapProvider.Globalization;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Builder.XmlSiteMapBuilder"/>
+    /// at runtime.
     /// </summary>
     public class XmlSiteMapBuilderFactory
         : IXmlSiteMapBuilderFactory

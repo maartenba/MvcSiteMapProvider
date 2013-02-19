@@ -7,7 +7,7 @@ using System.Web;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for dynamic node builder.
     /// </summary>
     public interface IDynamicNodeBuilder
     {

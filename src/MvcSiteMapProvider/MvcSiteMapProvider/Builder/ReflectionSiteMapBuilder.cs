@@ -11,7 +11,7 @@ namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// ReflectionSiteMapBuilder class (copied from ReflectionSiteMapSource class). 
-    /// Builds a <see cref="T:MvcSiteMapProvider.SiteMapNode"/> tree based on a
+    /// Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a
     /// set of attributes within an assembly.
     /// </summary>
     public class ReflectionSiteMapBuilder : ISiteMapBuilder

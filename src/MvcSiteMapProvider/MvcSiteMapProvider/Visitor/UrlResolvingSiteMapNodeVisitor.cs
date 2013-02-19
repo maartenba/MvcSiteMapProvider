@@ -6,7 +6,8 @@ using System.Text;
 namespace MvcSiteMapProvider.Visitor
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Specialized <see cref="T:MvcSiteMapProvider.Visitor.ISiteMapNodeVisitor"/> class for resolving URLs
+    /// during the build stage so they are aleady resolved before caching.
     /// </summary>
     public class UrlResolvingSiteMapNodeVisitor
         : ISiteMapNodeVisitor

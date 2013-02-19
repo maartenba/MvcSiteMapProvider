@@ -8,7 +8,8 @@ using MvcSiteMapProvider;
 namespace MvcSiteMapProvider.Web
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Web.MvcHttpContext"/>
+    /// at runtime.
     /// </summary>
     public class HttpContextFactory
         : IHttpContextFactory

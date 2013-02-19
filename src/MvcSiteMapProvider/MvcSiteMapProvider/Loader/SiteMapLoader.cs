@@ -12,9 +12,9 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider.Loader
 {
     /// <summary>
-    /// <see cref="T:MvcSiteMapProvider.SiteMapLoader"/> is responsible for thread-safe access to the cache as well as 
+    /// <see cref="T:MvcSiteMapProvider.Loader.SiteMapLoader"/> is responsible for thread-safe access to the cache as well as 
     /// managing whether a given request will return a cached sitemap or a new sitemap based on a 
-    /// <see cref="T:MvcSiteMapProvider.IBuilderSet"/>.
+    /// <see cref="T:MvcSiteMapProvider.Builder.IBuilderSet"/>.
     /// </summary>
     public class SiteMapLoader 
         : ISiteMapLoader

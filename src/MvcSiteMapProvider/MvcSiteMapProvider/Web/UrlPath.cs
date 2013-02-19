@@ -6,7 +6,7 @@ using System.Web;
 namespace MvcSiteMapProvider.Web
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contains methods for working with URLs.
     /// </summary>
     public class UrlPath 
         : IUrlPath

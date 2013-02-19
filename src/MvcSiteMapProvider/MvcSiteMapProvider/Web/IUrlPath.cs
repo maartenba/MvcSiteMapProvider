@@ -2,6 +2,9 @@
 
 namespace MvcSiteMapProvider.Web
 {
+    /// <summary>
+    /// Contract for a class that contains logic for dealing with URLs.
+    /// </summary>
     public interface IUrlPath
     {
         string AppDomainAppVirtualPath { get; }

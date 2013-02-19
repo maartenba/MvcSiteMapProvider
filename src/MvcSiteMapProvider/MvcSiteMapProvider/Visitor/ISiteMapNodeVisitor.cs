@@ -3,7 +3,7 @@
 namespace MvcSiteMapProvider.Visitor
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for a site map node visitor.
     /// </summary>
     public interface ISiteMapNodeVisitor
     {

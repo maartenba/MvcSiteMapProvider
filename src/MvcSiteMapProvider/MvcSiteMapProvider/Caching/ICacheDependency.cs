@@ -3,7 +3,7 @@
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract to provide a caching technology agnostic way of passing a cache depencency.
     /// </summary>
     public interface ICacheDependency
     {

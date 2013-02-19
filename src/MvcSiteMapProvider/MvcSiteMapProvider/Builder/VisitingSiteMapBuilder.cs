@@ -6,7 +6,8 @@ using MvcSiteMapProvider.Visitor;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Provides a means of optimizing <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> instances before they 
+    /// are placed in the cahce.
     /// </summary>
     public class VisitingSiteMapBuilder
         : ISiteMapBuilder
@@ -48,7 +49,6 @@ namespace MvcSiteMapProvider.Builder
                     VisitNodes(childNode);
                 }
             }
-
         }
 
         #endregion

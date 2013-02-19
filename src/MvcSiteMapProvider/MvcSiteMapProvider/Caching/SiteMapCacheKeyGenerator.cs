@@ -27,7 +27,7 @@ namespace MvcSiteMapProvider.Caching
 
         #region ISiteMapCacheKeyGenerator Members
 
-        public string GenerateKey()
+        public virtual string GenerateKey()
         {
             var context = httpContextFactory.Create();
             var builder = new StringBuilder();

@@ -6,10 +6,11 @@ using System.Text;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// Used to chain several builders in succession. The builders will be processed in the same order
-    /// as they are specified in the constructor.
+    /// Used to chain several <see cref="T:MvcSiteMapProvider.Builder.ISiteMapBuilder"/> instances in succession. 
+    /// The builders will be processed in the same order as they are specified in the constructor.
     /// </summary>
-    public class CompositeSiteMapBuilder : ISiteMapBuilder
+    public class CompositeSiteMapBuilder 
+        : ISiteMapBuilder
     {
         public CompositeSiteMapBuilder(params ISiteMapBuilder[] siteMapBuilders)
         {

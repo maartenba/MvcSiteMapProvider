@@ -5,7 +5,8 @@ using System.Web.Caching;
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// A wrapper class to pass a concrete instance of <see cref="System.Web.Caching.CacheDependency"/> without creating
+    /// a dependency on the System.Web library.
     /// </summary>
     public class AspNetCacheDependency
         : ICacheDependency

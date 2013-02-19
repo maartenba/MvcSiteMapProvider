@@ -5,7 +5,8 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Tracks all of the registered instances of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapBuilderSet"/> and 
+    /// allows the caller to get a specific named instance of this interface at runtime.
     /// </summary>
     public class SiteMapBuilderSetStrategy
         : ISiteMapBuilderSetStrategy

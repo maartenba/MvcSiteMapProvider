@@ -4,6 +4,9 @@ using MvcSiteMapProvider;
 
 namespace MvcSiteMapProvider.Caching
 {
+    /// <summary>
+    /// Contract to provide caching-technology agnostic acess to a specific type of cache.
+    /// </summary>
     public interface ISiteMapCache
     {
         int Count { get; }

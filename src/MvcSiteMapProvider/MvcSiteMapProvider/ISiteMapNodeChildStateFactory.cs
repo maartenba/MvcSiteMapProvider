@@ -6,7 +6,7 @@ using MvcSiteMapProvider.Collections;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// Contract for the abstract factory that creates new instances of types required by the <see cref="T:MvcSiteMapProvider.SiteMapNode"/>
+    /// Contract for an abstract factory that creates new instances of types required by the <see cref="T:MvcSiteMapProvider.SiteMapNode"/>
     /// at runtime.
     /// </summary>
     public interface ISiteMapNodeChildStateFactory

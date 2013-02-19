@@ -6,7 +6,9 @@ using System.Web.Caching;
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// A wrapper abstract factory to provide concrete instances of the <see cref="T:System.Web.Caching.CacheDependency"/> at runtime
+    /// without creating a dependency on the System.Web library. If a <see cref="T:System.Web.Caching.SqlCacheDependeny"/> is required, simply
+    /// inherit this class and override the CreateCacheDependency() method.
     /// </summary>
     public class AspNetCacheDependencyFactory
         : ICacheDependencyFactory

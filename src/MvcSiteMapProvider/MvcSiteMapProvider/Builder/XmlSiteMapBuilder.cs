@@ -16,7 +16,7 @@ using MvcSiteMapProvider.Globalization;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.SiteMapNode"/> tree based on an 
+    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on an 
     /// XML file.
     /// </summary>
     public class XmlSiteMapBuilder : ISiteMapBuilder
@@ -75,6 +75,7 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
+        // TODO: Move this method to another class so alternate sources of the XML (other than a file) can be provided.
         protected virtual XDocument GetSiteMapXmlFromFile(string xmlSiteMapFilePath)
         {
             XDocument result = null;

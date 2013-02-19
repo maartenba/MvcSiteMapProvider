@@ -8,7 +8,8 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider.Loader
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Loader.SiteMapLoader"/>
+    /// at runtime.
     /// </summary>
     public class SiteMapLoaderFactory
         : ISiteMapLoaderFactory

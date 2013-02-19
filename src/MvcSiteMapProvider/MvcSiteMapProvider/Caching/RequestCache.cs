@@ -7,7 +7,7 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Provides type-safe access to <see cref="P:System.Web.HttpContext.Items"/>.
     /// </summary>
     public class RequestCache 
         : IRequestCache
