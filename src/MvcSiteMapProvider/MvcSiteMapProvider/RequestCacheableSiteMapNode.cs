@@ -143,9 +143,9 @@ namespace MvcSiteMapProvider
 
         #endregion
 
-        #region Protected Methods
+        #region Protected Members
 
-        protected virtual string GetCacheKey(string memberName)
+        protected string GetCacheKey(string memberName)
         {
             return "__MVCSITEMAPNODE_" + memberName + "_" + this.Key + "_" + this.instanceId.ToString();
         }

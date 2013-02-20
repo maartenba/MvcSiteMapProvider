@@ -57,21 +57,6 @@ namespace MvcSiteMapProvider
             return result;
         }
 
-        //public override ISiteMapNode FindSiteMapNode(HttpContext context)
-        //{
-        //    var key = this.GetCacheKey("FindSiteMapNode_HttpContext");
-        //    var result = this.requestCache.GetValue<ISiteMapNode>(key);
-        //    if (result == null)
-        //    {
-        //        result = base.FindSiteMapNode(context);
-        //        if (result != null)
-        //        {
-        //            this.requestCache.SetValue<ISiteMapNode>(key, result);
-        //        }
-        //    }
-        //    return result;
-        //}
-
         public override ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
             var key = this.GetCacheKey("FindSiteMapNodeFromCurrentContext");
@@ -116,14 +101,14 @@ namespace MvcSiteMapProvider
 
         #endregion
 
-        #region Private Methods
+        #region Protected Members
 
-        private string GetCacheKey(string memberName)
+        protected virtual string GetCacheKey(string memberName)
         {
             return "__MVCSITEMAP_" + memberName + "_" + this.instanceId.ToString();
         }
 
-        private string GetRouteDataValues(RouteData routeData)
+        protected virtual string GetRouteDataValues(RouteData routeData)
         {
             var builder = new StringBuilder();
             foreach (var value in routeData.Values)
