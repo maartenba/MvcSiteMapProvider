@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MvcSiteMapProvider.Globalization;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider
 {
@@ -13,11 +14,23 @@ namespace MvcSiteMapProvider
     public class AttributeCollectionFactory
         : IAttributeCollectionFactory
     {
+        public AttributeCollectionFactory(
+            IRequestCache requestCache
+            )
+        {
+            if (requestCache == null)
+                throw new ArgumentNullException("requestCache");
+
+            this.requestCache = requestCache;
+        }
+
+        protected readonly IRequestCache requestCache;
+
         #region IAttributeCollectionFactory Members
 
         public virtual IAttributeCollection Create(ISiteMap siteMap, ILocalizationService localizationService)
         {
-            return new AttributeCollection(siteMap, localizationService);
+            return new AttributeCollection(siteMap, localizationService, requestCache);
         }
 
         #endregion

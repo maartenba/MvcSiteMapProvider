@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider
 {
@@ -14,13 +15,14 @@ namespace MvcSiteMapProvider
     /// localization of custom attributes.
     /// </summary>
     public class AttributeCollection
-        : LockableDictionary<string, string>, IAttributeCollection
+        : RequestCacheableDictionary<string, string>, IAttributeCollection
     {
         public AttributeCollection(
             ISiteMap siteMap,
-            ILocalizationService localizationService
+            ILocalizationService localizationService,
+            IRequestCache requestCache
             )
-            : base(siteMap)
+            : base(siteMap, requestCache)
         {
             if (localizationService == null)
                 throw new ArgumentNullException("localizationService");

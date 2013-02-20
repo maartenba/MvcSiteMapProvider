@@ -85,13 +85,56 @@ namespace MvcSiteMapProvider.Collections
             base.RemoveRange(index, count);
         }
 
+        new public virtual void Reverse()
+        {
+            this.ThrowIfReadOnly();
+            base.Reverse();
+        }
+
+        new public virtual void Reverse(int index, int count)
+        {
+            this.ThrowIfReadOnly();
+            base.Reverse(index, count);
+        }
+
+        new public virtual void Sort()
+        {
+            this.ThrowIfReadOnly();
+            base.Sort();
+        }
+
+        new public virtual void Sort(Comparison<T> comparison)
+        {
+            this.ThrowIfReadOnly();
+            base.Sort(comparison);
+        }
+
+        new public virtual void Sort(IComparer<T> comparer)
+        {
+            this.ThrowIfReadOnly();
+            base.Sort(comparer);
+        }
+
+        new public virtual void Sort(int index, int count, IComparer<T> comparer)
+        {
+            this.ThrowIfReadOnly();
+            base.Sort(index, count, comparer);
+        }
+
+        new public virtual void TrimExcess()
+        {
+            this.ThrowIfReadOnly();
+            base.TrimExcess();
+        }
+
+
         // Property access to internal list
-        protected IList<T> List
+        protected LockableList<T> List
         {
             get { return this; }
         }
 
-        public void CopyTo(IList<T> destination)
+        public virtual void CopyTo(IList<T> destination)
         {
             foreach (var item in this.List)
             {
