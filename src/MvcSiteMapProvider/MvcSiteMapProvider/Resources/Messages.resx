@@ -216,6 +216,9 @@
   <data name="CopyOperationDoesNotSupportReferenceTypes" xml:space="preserve">
     <value>Copy operation does not support reference types. If you need this functionality, override CopyTo() and provide your own implementation.</value>
   </data>
+  <data name="DictionaryAlreadyContainsKey" xml:space="preserve">
+    <value>An item with the same key has already been added.</value>
+  </data>
   <data name="XmlValidationFailed" xml:space="preserve">
     <value>The file at '{0}' contains XML validation errors. See the inner exception for complete details.</value>
   </data>

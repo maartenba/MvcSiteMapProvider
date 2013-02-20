@@ -28,46 +28,31 @@ namespace MvcSiteMapProvider.Collections
         /// <param name="item">The item to add to the list.</param>
         new public virtual void Add(T item)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Add(item);
         }
 
         new public virtual void AddRange(IEnumerable<T> collection)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.AddRange(collection);
         }
 
         new public virtual void Clear()
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Clear();
         }
 
         new public virtual void Insert(int index, T item)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Insert(index, item);
         }
 
         new public virtual void InsertRange(int index, IEnumerable<T> collection)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.InsertRange(index, collection);
         }
 
@@ -78,43 +63,37 @@ namespace MvcSiteMapProvider.Collections
 
         new public virtual bool Remove(T item)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             return base.Remove(item);
         }
 
         new public virtual int RemoveAll(Predicate<T> match)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             return base.RemoveAll(match);
         }
 
         new public virtual void RemoveAt(int index)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.RemoveAt(index);
         }
 
         new public virtual void RemoveRange(int index, int count)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.RemoveRange(index, count);
+        }
+
+        // Property access to internal list
+        protected IList<T> List
+        {
+            get { return this; }
         }
 
         public void CopyTo(IList<T> destination)
         {
-            foreach (var item in this)
+            foreach (var item in this.List)
             {
                 if (!item.GetType().IsPointer)
                 {
@@ -127,5 +106,12 @@ namespace MvcSiteMapProvider.Collections
             }
         }
 
+        protected virtual void ThrowIfReadOnly()
+        {
+            if (this.IsReadOnly)
+            {
+                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
+            }
+        }
     }
 }

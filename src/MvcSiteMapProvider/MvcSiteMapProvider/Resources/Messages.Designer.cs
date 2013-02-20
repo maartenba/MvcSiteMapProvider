@@ -124,6 +124,15 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An item with the same key has already been added..
+        /// </summary>
+        internal static string DictionaryAlreadyContainsKey {
+            get {
+                return ResourceManager.GetString("DictionaryAlreadyContainsKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection..
         /// </summary>
         internal static string InvalidOffsetLength {

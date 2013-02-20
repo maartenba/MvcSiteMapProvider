@@ -15,25 +15,6 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
     public class SiteMapTitleAttribute
         : ActionFilterAttribute
     {
-        private const string OriginalTitleKey = "F6409AA4-2870-407D-BC2A-31AC3A64F87A";
-
-        /// <summary>
-        /// Gets or sets the original title.
-        /// </summary>
-        /// <value>The original title.</value>
-        protected string OriginalTitle
-        {
-            get
-            {
-                if (HttpContext.Current.Items[OriginalTitleKey] != null)
-                {
-                    return HttpContext.Current.Items[OriginalTitleKey].ToString();
-                }
-                return "";
-            }
-            set { HttpContext.Current.Items[OriginalTitleKey] = value; }
-        }
-
         /// <summary>
         /// Property name of ViewData to look in
         /// </summary>
@@ -70,51 +51,18 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
 
                 if (target != null)
                 {
-                    var currentSiteMap = SiteMaps.Current;
+                    var siteMap = SiteMaps.Current;
 
-                    if (currentSiteMap.CurrentNode != null)
+                    if (siteMap.CurrentNode != null)
                     {
-                        if (Target == AttributeTarget.ParentNode && currentSiteMap.CurrentNode.ParentNode != null)
+                        if (Target == AttributeTarget.ParentNode && siteMap.CurrentNode.ParentNode != null)
                         {
-                            OriginalTitle = currentSiteMap.CurrentNode.ParentNode.Title;
-                            currentSiteMap.CurrentNode.ParentNode.Title = target.ToString();
-                            //((MvcSiteMapProvider.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(target.ToString());
+                            siteMap.CurrentNode.ParentNode.Title = target.ToString();
                         }
                         else
                         {
-                            OriginalTitle = currentSiteMap.CurrentNode.Title;
-                            currentSiteMap.CurrentNode.Title = target.ToString();
-                            //((MvcSiteMapProvider.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(target.ToString());
+                            siteMap.CurrentNode.Title = target.ToString();
                         }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called by the MVC framework after the action result executes.
-        /// </summary>
-        /// <param name="filterContext">The filter context.</param>
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
-        {
-            if (filterContext.Result is ViewResult)
-            {
-                if (!string.IsNullOrEmpty(OriginalTitle))
-                {
-                    var currentSiteMap = SiteMaps.Current;
-                    if (currentSiteMap.CurrentNode != null)
-                    {
-                        if (Target == AttributeTarget.ParentNode && currentSiteMap.CurrentNode.ParentNode != null)
-                        {
-                            currentSiteMap.CurrentNode.ParentNode.Title = OriginalTitle;
-                            //((MvcSiteMapProvider.SiteMapNode)currentSiteMap.CurrentNode.ParentNode).SetTitle(OriginalTitle);
-                        }
-                        else
-                        {
-                            currentSiteMap.CurrentNode.Title = OriginalTitle;
-                            //((MvcSiteMapProvider.SiteMapNode)currentSiteMap.CurrentNode).SetTitle(OriginalTitle);
-                        }
-                        OriginalTitle = "";
                     }
                 }
             }

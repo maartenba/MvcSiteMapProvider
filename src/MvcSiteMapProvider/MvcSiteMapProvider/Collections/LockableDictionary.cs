@@ -25,72 +25,48 @@ namespace MvcSiteMapProvider.Collections
 
         public override void Add(KeyValuePair<TKey, TValue> item)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Add(item);
         }
 
         public override void Add(TKey key, TValue value)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Add(key, value);
         }
 
         public override void AddRange(IDictionary<TKey, TValue> items)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.AddRange(items);
         }
 
         public override void Clear()
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Clear();
         }
 
         protected override void Insert(TKey key, TValue value, bool add)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             base.Insert(key, value, add);
         }
 
         public override bool IsReadOnly
         {
-            get
-            {
-                return this.siteMap.IsReadOnly;
-            }
+            get { return this.siteMap.IsReadOnly; }
         }
 
         public override bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             return base.Remove(item);
         }
 
         public override bool Remove(TKey key)
         {
-            if (this.siteMap.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            this.ThrowIfReadOnly();
             return base.Remove(key);
         }
 
@@ -102,17 +78,14 @@ namespace MvcSiteMapProvider.Collections
             }
             set
             {
-                if (this.siteMap.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-                }
+                this.ThrowIfReadOnly();
                 base[key] = value;
             }
         }
 
-        public void CopyTo(IDictionary<TKey, TValue> destination)
+        public virtual void CopyTo(IDictionary<TKey, TValue> destination)
         {
-            foreach (var item in this)
+            foreach (var item in this.Dictionary)
             {
                 var keyIsPointer = item.Key.GetType().IsPointer;
                 var valueIsPointer = item.Value.GetType().IsPointer;
@@ -124,6 +97,14 @@ namespace MvcSiteMapProvider.Collections
                 {
                     throw new NotSupportedException(Resources.Messages.CopyOperationDoesNotSupportReferenceTypes);
                 }
+            }
+        }
+
+        protected virtual void ThrowIfReadOnly()
+        {
+            if (this.IsReadOnly)
+            {
+                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
             }
         }
     }

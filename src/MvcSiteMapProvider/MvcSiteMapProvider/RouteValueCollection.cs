@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Collections;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider
 {
@@ -9,15 +10,21 @@ namespace MvcSiteMapProvider
     /// the behavior of the route values.
     /// </summary>
     public class RouteValueCollection
-        : LockableDictionary<string, object>, IRouteValueCollection
+        : RequestCacheableDictionary<string, object>, IRouteValueCollection
     {
         public RouteValueCollection(
-            ISiteMap siteMap
-            ) : base(siteMap)
+            ISiteMap siteMap,
+            IRequestCache requestCache
+            ) : base(siteMap, requestCache)
         {
         }
 
-        public bool MatchesRoute(IDictionary<string, object> routeValues)
+        protected override string GetCacheKey()
+        {
+            return "__ROUTE_VALUE_COLLECTION_" + this.instanceId.ToString();
+        }
+
+        public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
         {
             var routeKeys = this.Keys;
 

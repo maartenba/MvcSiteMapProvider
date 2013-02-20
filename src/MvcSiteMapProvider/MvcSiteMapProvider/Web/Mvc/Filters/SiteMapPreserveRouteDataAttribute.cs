@@ -32,18 +32,17 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
         /// <param name="filterContext">The current filter context.</param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var currentSiteMap = SiteMaps.Current;
-            var node = currentSiteMap.CurrentNode;
-            if (Target == AttributeTarget.ParentNode)
+            ISiteMapNode node = null;
+            var siteMap = SiteMaps.Current;
+            if (Target != AttributeTarget.ParentNode)
             {
-                node = currentSiteMap.CurrentNode.ParentNode;
+                node = siteMap.CurrentNode;
+            }
+            else
+            {
+                node = siteMap.CurrentNode.ParentNode;
             }
 
-            //var node = SiteMap.CurrentNode as MvcSiteMapNode;
-            //if (Target == AttributeTarget.ParentNode)
-            //{
-            //    node = SiteMap.CurrentNode.ParentNode as MvcSiteMapNode;
-            //}
             if (node != null)
             {
                 foreach (var routeitem in filterContext.RouteData.Values)

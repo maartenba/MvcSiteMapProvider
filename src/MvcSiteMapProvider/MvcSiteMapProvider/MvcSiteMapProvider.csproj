@@ -69,6 +69,7 @@
     <Compile Include="Collections\IThreadSafeDictionary.cs" />
     <Compile Include="Collections\LockableDictionary.cs" />
     <Compile Include="Collections\LockableList.cs" />
+    <Compile Include="Collections\RequestCacheableDictionary.cs" />
     <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
     <Compile Include="Globalization\ILocalizationService.cs" />
     <Compile Include="Globalization\IExplicitResourceKeyParser.cs" />

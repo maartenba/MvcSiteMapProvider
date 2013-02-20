@@ -31,28 +31,19 @@ namespace MvcSiteMapProvider
 
         public override void AddNode(ISiteMapNode node)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
+            this.ThrowIfReadOnly();
             base.AddNode(node);
         }
 
         public override void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
+            this.ThrowIfReadOnly();
             base.AddNode(node, parentNode);
         }
 
         public override void RemoveNode(ISiteMapNode node)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-            }
+            this.ThrowIfReadOnly();
             base.RemoveNode(node);
         }
 
@@ -78,10 +69,7 @@ namespace MvcSiteMapProvider
             get { return base.EnableLocalization; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-                }
+                this.ThrowIfReadOnly();
                 base.EnableLocalization = value;
             }
         }
@@ -91,11 +79,17 @@ namespace MvcSiteMapProvider
             get { return base.ResourceKey; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
-                }
+                this.ThrowIfReadOnly();
                 base.ResourceKey = value;
+            }
+        }
+
+
+        protected virtual void ThrowIfReadOnly()
+        {
+            if (this.IsReadOnly)
+            {
+                throw new InvalidOperationException(Resources.Messages.SiteMapReadOnly);
             }
         }
     }

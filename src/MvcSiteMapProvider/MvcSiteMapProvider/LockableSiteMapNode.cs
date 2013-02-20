@@ -51,10 +51,7 @@ namespace MvcSiteMapProvider
             get { return base.ParentNode; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ParentNode"));
-                }
+                this.ThrowIfReadOnly("ParentNode");
                 base.ParentNode = value;
             }
         }
@@ -70,10 +67,7 @@ namespace MvcSiteMapProvider
             get { return base.HttpMethod; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "HttpMethod"));
-                }
+                this.ThrowIfReadOnly("HttpMethod");
                 base.HttpMethod = value;
             }
         }
@@ -87,11 +81,7 @@ namespace MvcSiteMapProvider
             get { return base.Title; }
             set
             {
-                // TODO: Find out what the attribute is for that overwrites this from the UI layer.
-                //if (this.IsReadOnly)
-                //{
-                //    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Title"));
-                //}
+                this.ThrowIfReadOnly("Title");
                 base.Title = value;
             }
         }
@@ -105,10 +95,7 @@ namespace MvcSiteMapProvider
             get { return base.Description; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Description"));
-                }
+                this.ThrowIfReadOnly("Description");
                 base.Description = value;
             }
         }
@@ -122,10 +109,7 @@ namespace MvcSiteMapProvider
             get { return base.TargetFrame; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "TargetFrame"));
-                }
+                this.ThrowIfReadOnly("TargetFrame");
                 base.TargetFrame = value;
             }
         }
@@ -139,10 +123,7 @@ namespace MvcSiteMapProvider
             get { return base.ImageUrl; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ImageUrl"));
-                }
+                this.ThrowIfReadOnly("ImageUrl");
                 base.ImageUrl = value;
             }
         }
@@ -156,10 +137,7 @@ namespace MvcSiteMapProvider
             get { return base.LastModifiedDate; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "LastModifiedDate"));
-                }
+                this.ThrowIfReadOnly("LastModifiedDate");
                 base.LastModifiedDate = value;
             }
         }
@@ -173,10 +151,7 @@ namespace MvcSiteMapProvider
             get { return base.ChangeFrequency; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ChangeFrequency"));
-                }
+                this.ThrowIfReadOnly("ChangeFrequency");
                 base.ChangeFrequency = value;
             }
         }
@@ -190,10 +165,7 @@ namespace MvcSiteMapProvider
             get { return base.UpdatePriority; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UpdatePriority"));
-                }
+                this.ThrowIfReadOnly("UpdatePriority");
                 base.UpdatePriority = value;
             }
         }
@@ -214,10 +186,7 @@ namespace MvcSiteMapProvider
             get { return base.VisibilityProvider; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "VisibilityProvider"));
-                }
+                this.ThrowIfReadOnly("VisibilityProvider");
                 base.VisibilityProvider = value;
             }
         }
@@ -237,10 +206,7 @@ namespace MvcSiteMapProvider
             get { return base.DynamicNodeProvider; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "DynamicNodeProvider"));
-                }
+                this.ThrowIfReadOnly("DynamicNodeProvider");
                 base.DynamicNodeProvider = value;
             }
         }
@@ -260,10 +226,7 @@ namespace MvcSiteMapProvider
             get { return base.Clickable; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Clickable"));
-                }
+                this.ThrowIfReadOnly("Clickable");
                 base.Clickable = value;
             }
         }
@@ -279,10 +242,7 @@ namespace MvcSiteMapProvider
             get { return base.UrlResolver; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "UrlResolver"));
-                }
+                this.ThrowIfReadOnly("UrlResolver");
                 base.UrlResolver = value;
             }
         }
@@ -298,10 +258,7 @@ namespace MvcSiteMapProvider
             get { return base.Url; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Url"));
-                }
+                this.ThrowIfReadOnly("Url");
                 base.Url = value;
             }
         }
@@ -315,10 +272,7 @@ namespace MvcSiteMapProvider
             get { return base.CacheResolvedUrl; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "CacheResolvedUrl"));
-                }
+                this.ThrowIfReadOnly("CacheResolvedUrl");
                 base.CacheResolvedUrl = value;
             }
         }
@@ -329,10 +283,7 @@ namespace MvcSiteMapProvider
         /// </summary>
         public override void ResolveUrl()
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "ResolveUrl"));
-            }
+            this.ThrowIfReadOnly("ResolveUrl");
             base.ResolveUrl();
         }
 
@@ -350,10 +301,7 @@ namespace MvcSiteMapProvider
             get { return base.CanonicalUrl; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "CanonicalUrl"));
-                }
+                this.ThrowIfReadOnly("CanonicalUrl");
                 base.CanonicalUrl = value;
             }
         }
@@ -367,10 +315,7 @@ namespace MvcSiteMapProvider
             get { return base.CanonicalKey; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "CanonicalKey"));
-                }
+                this.ThrowIfReadOnly("CanonicalKey");
                 base.CanonicalKey = value;
             }
         }
@@ -389,10 +334,7 @@ namespace MvcSiteMapProvider
             get { return base.Route; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Route"));
-                }
+                this.ThrowIfReadOnly("Route");
                 base.Route = value;
             }
         }
@@ -410,10 +352,7 @@ namespace MvcSiteMapProvider
             get { return base.Area; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Area"));
-                }
+                this.ThrowIfReadOnly("Area");
                 base.Area = value;
             }
         }
@@ -427,10 +366,7 @@ namespace MvcSiteMapProvider
             get { return base.Controller; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Controller"));
-                }
+                this.ThrowIfReadOnly("Controller");
                 base.Controller = value;
             }
         }
@@ -444,14 +380,21 @@ namespace MvcSiteMapProvider
             get { return base.Action; }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, "Action"));
-                }
+                this.ThrowIfReadOnly("Action");
                 base.Action = value;
             }
         }
 
         #endregion
+
+
+        protected virtual void ThrowIfReadOnly(string memberName)
+        {
+            if (this.IsReadOnly)
+            {
+                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, memberName));
+            }
+        }
+
     }
 }
