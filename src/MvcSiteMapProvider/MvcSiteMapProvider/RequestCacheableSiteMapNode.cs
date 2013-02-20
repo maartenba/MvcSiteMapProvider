@@ -60,186 +60,44 @@ namespace MvcSiteMapProvider
 
         public override string Title
         {
-            get 
-            {
-                var key = this.GetCacheKey("Title");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.Title;
-                    this.requestCache.SetValue<string>(key, result);
-                }
-                return result;
-            }
-            set 
-            { 
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("Title");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.Title = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.Title, "Title", true); }
+            set { this.SetCachedOrMemberValue<string>(x => base.Title = x, "Title", value); }
         }
 
         public override string Description
         {
-            get
-            {
-                var key = this.GetCacheKey("Description");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.Description;
-                    this.requestCache.SetValue<string>(key, result);
-                }
-                return result;
-            }
-            set 
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("Description");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.Description = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.Description, "Description", true); }
+            set { this.SetCachedOrMemberValue<string>(x => base.Description = x, "Description", value); }
         }
 
         public override string TargetFrame
         {
-            get
-            {
-                var key = this.GetCacheKey("TargetFrame");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.TargetFrame;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("TargetFrame");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.TargetFrame = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.TargetFrame, "TargetFrame", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.TargetFrame = x, "TargetFrame", value); }
         }
 
         public override string ImageUrl
         {
-            get
-            {
-                var key = this.GetCacheKey("ImageUrl");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.ImageUrl;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("ImageUrl");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.ImageUrl = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.ImageUrl, "ImageUrl", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.ImageUrl = x, "ImageUrl", value); }
         }
 
         public override string VisibilityProvider
         {
-            get
-            {
-                var key = this.GetCacheKey("VisibilityProvider");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.VisibilityProvider;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("VisibilityProvider");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.VisibilityProvider = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.VisibilityProvider, "VisibilityProvider", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.VisibilityProvider = x, "VisibilityProvider", value); }
         }
 
         public override bool Clickable
         {
-            get
-            {
-                var key = this.GetCacheKey("Clickable");
-                var result = this.requestCache.GetValue<bool?>(key);
-                if (result == null)
-                {
-                    result = base.Clickable;
-                }
-                return (bool)result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("Clickable");
-                    this.requestCache.SetValue<bool>(key, value);
-                }
-                else
-                {
-                    base.Clickable = value;
-                }
-            }
+            get { return (bool)this.GetCachedOrMemberValue<bool?>(() => base.Clickable, "Clickable", false); }
+            set { this.SetCachedOrMemberValue<bool>(x => base.Clickable = x, "Clickable", value); }
         }
 
         public override string UrlResolver
         {
-            get
-            {
-                var key = this.GetCacheKey("UrlResolver");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.UrlResolver;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("UrlResolver");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.UrlResolver = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.UrlResolver, "UrlResolver", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.UrlResolver = x, "UrlResolver", value); }
         }
 
         public override bool IsVisible(IDictionary<string, object> sourceMetadata)
@@ -256,108 +114,31 @@ namespace MvcSiteMapProvider
 
         public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
         {
-            var key = GetCacheKey("GetDynamicNodeCollection");
-            var result = this.requestCache.GetValue<IEnumerable<DynamicNode>>(key);
-            if (result == null)
-            {
-                result = base.GetDynamicNodeCollection();
-                this.requestCache.SetValue<IEnumerable<DynamicNode>>(key, result);
-            }
-            return result;
+            return this.GetCachedOrMemberValue<IEnumerable<DynamicNode>>(() => base.GetDynamicNodeCollection(), "GetDynamicNodeCollection", true);
         }
 
         public override string Url
         {
-            get
-            {
-                var key = this.GetCacheKey("Url");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.Url;
-                    this.requestCache.SetValue<string>(key, result);
-                }
-                return result;
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.Url, "Url", true); }
             set { base.Url = value; }
         }
 
         public override string CanonicalUrl
         {
-            get
-            {
-                var key = this.GetCacheKey("CanonicalUrl");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.CanonicalUrl;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("CanonicalUrl");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.CanonicalUrl = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalUrl, "CanonicalUrl", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.CanonicalUrl = x, "CanonicalUrl", value); }
         }
 
         public override string CanonicalKey
         {
-            get
-            {
-                var key = this.GetCacheKey("CanonicalKey");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.CanonicalKey;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("CanonicalKey");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.CanonicalKey = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalKey, "CanonicalKey", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.CanonicalKey = x, "CanonicalKey", value); }
         }
 
         public override string Route
         {
-            get
-            {
-                var key = this.GetCacheKey("Route");
-                var result = this.requestCache.GetValue<string>(key);
-                if (result == null)
-                {
-                    result = base.Route;
-                }
-                return result;
-            }
-            set
-            {
-                if (this.IsReadOnly)
-                {
-                    var key = this.GetCacheKey("Route");
-                    this.requestCache.SetValue<string>(key, value);
-                }
-                else
-                {
-                    base.Route = value;
-                }
-            }
+            get { return this.GetCachedOrMemberValue<string>(() => base.Route, "Route", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.Route = x, "Route", value); }
         }
 
         #endregion
@@ -369,34 +150,33 @@ namespace MvcSiteMapProvider
             return "__MVCSITEMAPNODE_" + memberName + "_" + this.Key + "_" + this.instanceId.ToString();
         }
 
+        protected virtual T GetCachedOrMemberValue<T>(Func<T> member, string memberName, bool storeInCache)
+        {
+            var key = this.GetCacheKey(memberName);
+            var result = this.requestCache.GetValue<T>(key);
+            if (result == null)
+            {
+                result = member.Invoke();
+                if (storeInCache)
+                {
+                    this.requestCache.SetValue<T>(key, result);
+                }
+            }
+            return result;
+        }
 
-        //protected virtual T GetCacheOrValue<T>(Func<T> property, string propertyName, bool storeAlso)
-        //{
-        //    var key = this.GetCacheKey(propertyName);
-        //    var result = this.requestCache.GetValue<T>(key);
-        //    if (result == null)
-        //    {
-        //        result = property.Invoke();
-        //        if (storeAlso)
-        //        {
-        //            this.requestCache.SetValue<T>(key, result);
-        //        }
-        //    }
-        //    return result;
-        //}
-
-        //protected virtual void SetCacheOrValue<T>(Action<T> property, string propertyName, T value)
-        //{
-        //    if (this.IsReadOnly)
-        //    {
-        //        var key = this.GetCacheKey(propertyName);
-        //        this.requestCache.SetValue<T>(key, value);
-        //    }
-        //    else
-        //    {
-        //        property.Invoke(value);
-        //    }
-        //}
+        protected virtual void SetCachedOrMemberValue<T>(Action<T> member, string memberName, T value)
+        {
+            if (this.IsReadOnly)
+            {
+                var key = this.GetCacheKey(memberName);
+                this.requestCache.SetValue<T>(key, value);
+            }
+            else
+            {
+                member(value);
+            }
+        }
 
         #endregion
     }
