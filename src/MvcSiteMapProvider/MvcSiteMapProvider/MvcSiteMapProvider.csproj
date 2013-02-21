@@ -207,6 +207,7 @@
     <Compile Include="Web\ViewDataContainer.cs" />
     <Compile Include="Web\Mvc\XmlSiteMapController.cs" />
     <Compile Include="Web\Mvc\XmlSiteMapResult.cs" />
+    <Compile Include="Xml\FileXmlSource.cs" />
     <Compile Include="Xml\ISiteMapXmlValidator.cs" />
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Builder\XmlSiteMapBuilder.cs" />
@@ -223,6 +224,7 @@
     <Compile Include="Web\UrlPath.cs" />
     <Compile Include="UpdatePriority.cs" />
     <Compile Include="Xml\SiteMapXmlValidator.cs" />
+    <Compile Include="Xml\IXmlSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MvcSiteMapProvider.snk" />

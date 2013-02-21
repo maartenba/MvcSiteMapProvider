@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Globalization;
+using MvcSiteMapProvider.Xml;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -37,9 +38,10 @@ namespace MvcSiteMapProvider.Builder
 
         public virtual ISiteMapBuilder Create(string xmlSiteMapFilePath, IEnumerable<string> attributesToIgnore)
         {
+            var fileXmlSource = new FileXmlSource(xmlSiteMapFilePath);
             return new XmlSiteMapBuilder(
-                xmlSiteMapFilePath, 
-                attributesToIgnore, 
+                attributesToIgnore,
+                fileXmlSource,
                 nodeKeyGenerator, 
                 dynamicNodeBuilder, 
                 siteMapNodeFactory);

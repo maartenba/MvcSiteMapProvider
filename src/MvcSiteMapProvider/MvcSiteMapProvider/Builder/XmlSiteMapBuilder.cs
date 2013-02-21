@@ -16,23 +16,23 @@ using MvcSiteMapProvider.Globalization;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on an 
-    /// XML file.
+    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a 
+    /// <see cref="T:MvcSiteMapProvider.Xml.IXmlSource"/> instance.
     /// </summary>
     public class XmlSiteMapBuilder : ISiteMapBuilder
     {
         public XmlSiteMapBuilder(
-            string xmlSiteMapFilePath,
             IEnumerable<string> attributesToIgnore,
+            IXmlSource xmlSource,
             INodeKeyGenerator nodeKeyGenerator,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory
             )
         {
-            if (string.IsNullOrEmpty(xmlSiteMapFilePath))
-                throw new ArgumentNullException("xmlSiteMapFilePath");
             if (attributesToIgnore == null)
                 throw new ArgumentNullException("attributesToIgnore");
+            if (xmlSource == null)
+                throw new ArgumentNullException("xmlSource");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
             if (dynamicNodeBuilder == null)
@@ -40,15 +40,15 @@ namespace MvcSiteMapProvider.Builder
             if (siteMapNodeFactory == null)
                 throw new ArgumentNullException("siteMapNodeFactory");
 
-            this.xmlSiteMapFilePath = xmlSiteMapFilePath;
             this.attributesToIgnore = attributesToIgnore;
+            this.xmlSource = xmlSource;
             this.nodeKeyGenerator = nodeKeyGenerator;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
-        protected readonly string xmlSiteMapFilePath;
         protected readonly IEnumerable<string> attributesToIgnore;
+        protected readonly IXmlSource xmlSource;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
@@ -63,7 +63,7 @@ namespace MvcSiteMapProvider.Builder
 
         public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
-            var xml = GetSiteMapXmlFromFile(this.xmlSiteMapFilePath);
+            var xml = xmlSource.GetXml();
             if (xml != null)
             {
                 rootNode = LoadSiteMapFromXml(siteMap, xml);
@@ -75,22 +75,6 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        // TODO: Move this method to another class so alternate sources of the XML (other than a file) can be provided.
-        protected virtual XDocument GetSiteMapXmlFromFile(string xmlSiteMapFilePath)
-        {
-            XDocument result = null;
-            var siteMapFileAbsolute = HostingEnvironment.MapPath(this.xmlSiteMapFilePath);
-            if (File.Exists(siteMapFileAbsolute))
-            {
-                result = XDocument.Load(siteMapFileAbsolute);
-            }
-            else
-            {
-                throw new FileNotFoundException(string.Format(Resources.Messages.SiteMapFileNotFound, this.xmlSiteMapFilePath), siteMapFileAbsolute);
-            }
-            return result;
-        }
-
         protected virtual ISiteMapNode LoadSiteMapFromXml(ISiteMap siteMap, XDocument xml)
         {
             FixXmlNamespaces(xml);
@@ -101,7 +85,7 @@ namespace MvcSiteMapProvider.Builder
             var rootElement = GetRootElement(xml);
             var root = GetRootNode(siteMap, xml, rootElement);
 
-            // Process our XML file, passing in the main root sitemap node and xml element.
+            // Process our XML, passing in the main root sitemap node and xml element.
             ProcessXmlNodes(siteMap, root, rootElement);
 
             // Done!
@@ -248,7 +232,6 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-
             // Handle MVC details
 
             // Inherit area and controller from parent
@@ -263,7 +246,6 @@ namespace MvcSiteMapProvider.Builder
                     siteMapNode.Controller = parentNode.Controller;
                 }
             }
-
 
             // Add defaults for area
             if (!siteMapNode.RouteValues.ContainsKey("area"))
@@ -471,7 +453,6 @@ namespace MvcSiteMapProvider.Builder
                     ISiteMapNode parentNode = rootNode;
                     childNode.ParentNode = parentNode;
 
-                    //if (!dynamicNodeBuilder.HasDynamicNodes(childNode))
                     if (!childNode.HasDynamicNodeProvider)
                     {
                         siteMap.AddNode(childNode, parentNode);

@@ -286,15 +286,6 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Site map file {0} could not be found. Verify that the path provided is correct..
-        /// </summary>
-        internal static string SiteMapFileNotFound {
-            get {
-                return ResourceManager.GetString("SiteMapFileNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Root node defined in SiteMap is null, root node cannot be null..
         /// </summary>
         internal static string SiteMapInvalidRootNode {
@@ -363,6 +354,15 @@ namespace MvcSiteMapProvider.Resources {
         internal static string VisitingSiteMapBuilderRequiresRootNode {
             get {
                 return ResourceManager.GetString("VisitingSiteMapBuilderRequiresRootNode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xml file &apos;{0}&apos; could not be found. Verify that the path provided is correct..
+        /// </summary>
+        internal static string XmlFileNotFound {
+            get {
+                return ResourceManager.GetString("XmlFileNotFound", resourceCulture);
             }
         }
         
