@@ -42,21 +42,6 @@ namespace MvcSiteMapProvider.Security
 
         #region IAclModule Members
 
-#if !NET35
-        protected IFilterProvider ResolveFilterProvider()
-        {
-            var key = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
-            var requestCache = httpContextFactory.GetRequestCache();
-            var filterProvider = requestCache.GetValue<IFilterProvider>(key);
-            if (filterProvider == null)
-            {
-                filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
-                requestCache.SetValue<IFilterProvider>(key, filterProvider);    
-            }
-            return filterProvider;
-        }
-#endif
-
         /// <summary>
         /// Determines whether node is accessible to user.
         /// </summary>
@@ -115,104 +100,119 @@ namespace MvcSiteMapProvider.Security
                 //routes.DataTokens.Remove("Namespaces");
                 //routes.Values.Remove("area");
             }
-            var requestContext = httpContextFactory.CreateRequestContext(routes);
+            //var requestContext = httpContextFactory.CreateRequestContext(routes);
 
-            // Create controller context
-            var controllerContext = new ControllerContext();
-            controllerContext.RequestContext = requestContext;
+            //// Create controller context
+            //var controllerContext = new ControllerContext();
+            //controllerContext.RequestContext = requestContext;
 
-            // Whether controller is built by the ControllerFactory (or otherwise by Activator)
+            //// Whether controller is built by the ControllerFactory (or otherwise by Activator)
+            //bool factoryBuiltController = false;
+            //try
+            //{
+            //    string controllerName = requestContext.RouteData.GetRequiredString("controller");
+            //    controllerContext.Controller = ControllerBuilder.Current.GetControllerFactory().CreateController(requestContext, controllerName) as ControllerBase;
+            //    factoryBuiltController = true;
+            //}
+            //catch
+            //{
+            //    try
+            //    {
+            //        controllerContext.Controller = Activator.CreateInstance(controllerType) as ControllerBase;
+            //    }
+            //    catch
+            //    {
+            //    }
+            //}
+
             bool factoryBuiltController = false;
-            try
-            {
-                string controllerName = requestContext.RouteData.GetRequiredString("controller");
-                controllerContext.Controller = ControllerBuilder.Current.GetControllerFactory().CreateController(requestContext, controllerName) as ControllerBase;
-                factoryBuiltController = true;
-            }
-            catch
-            {
-                try
-                {
-                    controllerContext.Controller = Activator.CreateInstance(controllerType) as ControllerBase;
-                }
-                catch
-                {
-                }
-            }
+            var controllerContext = this.CreateControllerContext(routes, controllerType, out factoryBuiltController);
 
-            ControllerDescriptor controllerDescriptor = null;
-            if (typeof(IController).IsAssignableFrom(controllerType))
-            {
-                controllerDescriptor = new ReflectedControllerDescriptor(controllerType);
-            }
-            else if (typeof(IAsyncController).IsAssignableFrom(controllerType))
-            {
-                controllerDescriptor = new ReflectedAsyncControllerDescriptor(controllerType);
-            }
+            //ControllerDescriptor controllerDescriptor = null;
+            //if (typeof(IController).IsAssignableFrom(controllerType))
+            //{
+            //    controllerDescriptor = new ReflectedControllerDescriptor(controllerType);
+            //}
+            //else if (typeof(IAsyncController).IsAssignableFrom(controllerType))
+            //{
+            //    controllerDescriptor = new ReflectedAsyncControllerDescriptor(controllerType);
+            //}
 
-            ActionDescriptor actionDescriptor = null;
-            try
-            {
-                actionDescriptor = controllerDescriptor.FindAction(controllerContext, node.Action);
-            }
-            catch
-            {
-            }
-            if (actionDescriptor == null)
-            {
-                actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == node.Action).FirstOrDefault();
-            }
+            var controllerDescriptor = this.GetControllerDescriptor(controllerType);
+
+
+            //ActionDescriptor actionDescriptor = null;
+            //try
+            //{
+            //    actionDescriptor = controllerDescriptor.FindAction(controllerContext, node.Action);
+            //}
+            //catch
+            //{
+            //}
+            //if (actionDescriptor == null)
+            //{
+            //    actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == node.Action).FirstOrDefault();
+            //}
+
+            var actionDescriptor = this.GetActionDescriptor(node.Action, controllerDescriptor, controllerContext);
 
             // Verify security
             try
             {
                 if (actionDescriptor != null)
                 {
-#if NET35
-                    IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
-                       actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
-                           <AuthorizeAttribute>().ToList()
-                           .Union(
-                               controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
-                                   <AuthorizeAttribute>().ToList());
-#else
-                    IFilterProvider filterProvider = ResolveFilterProvider();
-                    IEnumerable<Filter> filters;
+//#if NET35
+//                    IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
+//                       actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
+//                           <AuthorizeAttribute>().ToList()
+//                           .Union(
+//                               controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
+//                                   <AuthorizeAttribute>().ToList());
+//#else
+//                    IFilterProvider filterProvider = ResolveFilterProvider();
+//                    IEnumerable<Filter> filters;
 
-                    // If depencency resolver has an IFilterProvider registered, use it
-                    if (filterProvider != null)
-                    {
-                        filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
-                    }
-                    // Otherwise use FilterProviders.Providers
-                    else
-                    {
-                        filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
-                    }
+//                    // If depencency resolver has an IFilterProvider registered, use it
+//                    if (filterProvider != null)
+//                    {
+//                        filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
+//                    }
+//                    // Otherwise use FilterProviders.Providers
+//                    else
+//                    {
+//                        filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
+//                    }
 
-                    IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
-                        filters
-                            .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
-                            .Select(f => f.Instance as AuthorizeAttribute);
-#endif
+//                    IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
+//                        filters
+//                            .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
+//                            .Select(f => f.Instance as AuthorizeAttribute);
+//#endif
+                    var authorizeAttributesToCheck = this.GetAuthorizeAttributes(controllerContext, actionDescriptor);
 
                     // Verify all attributes
                     foreach (var authorizeAttribute in authorizeAttributesToCheck)
                     {
                         try
                         {
-                            var currentAuthorizationAttributeType = authorizeAttribute.GetType();
+                            //var currentAuthorizationAttributeType = authorizeAttribute.GetType();
 
-                            var builder = new AuthorizeAttributeBuilder();
-                            var subclassedAttribute =
-                                currentAuthorizationAttributeType == typeof(AuthorizeAttribute) ?
-                                   new InternalAuthorize(authorizeAttribute) : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
-                                   (IAuthorizeAttribute)builder.Build(currentAuthorizationAttributeType).Invoke(null);
+                            //var builder = new AuthorizeAttributeBuilder();
+                            //var subclassedAttribute =
+                            //    currentAuthorizationAttributeType == typeof(AuthorizeAttribute) ?
+                            //       new InternalAuthorize(authorizeAttribute) : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
+                            //       (IAuthorizeAttribute)builder.Build(currentAuthorizationAttributeType).Invoke(null);
 
-                            // Copy all properties
-                            objectCopier.Copy(authorizeAttribute, subclassedAttribute);
+                            //// Copy all properties
+                            //objectCopier.Copy(authorizeAttribute, subclassedAttribute);
 
-                            if (!subclassedAttribute.IsAuthorized(controllerContext.HttpContext))
+                            //if (!subclassedAttribute.IsAuthorized(controllerContext.HttpContext))
+                            //{
+                            //    return false;
+                            //}
+
+                            var authorized = this.VerifyAuthorizeAttribute(authorizeAttribute, controllerContext);
+                            if (!authorized)
                             {
                                 return false;
                             }
@@ -240,5 +240,137 @@ namespace MvcSiteMapProvider.Security
         }
 
         #endregion
+
+
+
+#if NET35
+        protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+        {
+            return actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
+                           <AuthorizeAttribute>().ToList()
+                           .Union(
+                               controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
+                                   <AuthorizeAttribute>().ToList());
+        }
+#else
+        protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+        {
+            IFilterProvider filterProvider = ResolveFilterProvider();
+            IEnumerable<Filter> filters;
+
+            // If depencency resolver has an IFilterProvider registered, use it
+            if (filterProvider != null)
+            {
+                filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
+            }
+            // Otherwise use FilterProviders.Providers
+            else
+            {
+                filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
+            }
+
+            return filters
+                    .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
+                    .Select(f => f.Instance as AuthorizeAttribute);
+        }
+
+        protected virtual IFilterProvider ResolveFilterProvider()
+        {
+            var key = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
+            var requestCache = httpContextFactory.GetRequestCache();
+            var filterProvider = requestCache.GetValue<IFilterProvider>(key);
+            if (filterProvider == null)
+            {
+                filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
+                requestCache.SetValue<IFilterProvider>(key, filterProvider);
+            }
+            return filterProvider;
+        }
+#endif
+
+        protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext)
+        {
+            var currentAuthorizationAttributeType = authorizeAttribute.GetType();
+
+            var builder = new AuthorizeAttributeBuilder();
+            var subclassedAttribute =
+                currentAuthorizationAttributeType == typeof(AuthorizeAttribute) ?
+                   new InternalAuthorize(authorizeAttribute) : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
+                   (IAuthorizeAttribute)builder.Build(currentAuthorizationAttributeType).Invoke(null);
+
+            // Copy all properties
+            objectCopier.Copy(authorizeAttribute, subclassedAttribute);
+
+            if (!subclassedAttribute.IsAuthorized(controllerContext.HttpContext))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        protected virtual ControllerDescriptor GetControllerDescriptor(Type controllerType)
+        {
+            ControllerDescriptor controllerDescriptor = null;
+            if (typeof(IController).IsAssignableFrom(controllerType))
+            {
+                controllerDescriptor = new ReflectedControllerDescriptor(controllerType);
+            }
+            else if (typeof(IAsyncController).IsAssignableFrom(controllerType))
+            {
+                controllerDescriptor = new ReflectedAsyncControllerDescriptor(controllerType);
+            }
+            return controllerDescriptor;
+        }
+
+        protected virtual ActionDescriptor GetActionDescriptor(string action, ControllerDescriptor controllerDescriptor, ControllerContext controllerContext)
+        {
+            ActionDescriptor actionDescriptor = null;
+            try
+            {
+                actionDescriptor = controllerDescriptor.FindAction(controllerContext, action);
+            }
+            catch
+            {
+                // TODO: Find out if there is a way to do this without throwing an exception / try to get the exeption info to throw in all
+                // cases where it should.
+            }
+            if (actionDescriptor == null)
+            {
+                actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == action).FirstOrDefault();
+            }
+            return actionDescriptor;
+        }
+
+        protected virtual ControllerContext CreateControllerContext(RouteData routes, Type controllerType, out bool factoryBuiltController)
+        {
+            var requestContext = httpContextFactory.CreateRequestContext(routes);
+
+            // Create controller context
+            var controllerContext = new ControllerContext();
+            controllerContext.RequestContext = requestContext;
+
+            // Whether controller is built by the ControllerFactory (or otherwise by Activator)
+            //bool factoryBuiltController = false;
+            factoryBuiltController = false;
+            try
+            {
+                string controllerName = requestContext.RouteData.GetRequiredString("controller");
+                controllerContext.Controller = ControllerBuilder.Current.GetControllerFactory().CreateController(requestContext, controllerName) as ControllerBase;
+                factoryBuiltController = true;
+            }
+            catch
+            {
+                // TODO: Try to prevent from swallowing real exceptions here
+
+                try
+                {
+                    controllerContext.Controller = Activator.CreateInstance(controllerType) as ControllerBase;
+                }
+                catch
+                {
+                }
+            }
+            return controllerContext;
+        }
     }
 }
