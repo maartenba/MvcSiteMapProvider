@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Caching;
 
@@ -12,6 +13,7 @@ namespace MvcSiteMapProvider.Web
     {
         HttpContextBase Create();
         RequestContext CreateRequestContext(RouteData routeData);
+        ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller);
         IRequestCache GetRequestCache();
     }
 }

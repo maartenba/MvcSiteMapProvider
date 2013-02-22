@@ -58,9 +58,10 @@ namespace MvcSiteMapProvider.Security
                 return true;
             }
 
-            // Is it an external node?
-            var nodeUrl = node.Url;
-            if (node.HasAbsoluteUrl())
+            var httpContext = httpContextFactory.Create();
+
+            // Is it an external Url?
+            if (node.HasExternalUrl(httpContext))
             {
                 return true;
             }
@@ -76,167 +77,57 @@ namespace MvcSiteMapProvider.Security
             var controllerType = controllerTypeResolver.ResolveControllerType(node.Area, node.Controller);
             if (controllerType == null)
             {
-                return false;
+                return true;
             }
+
+            var originalPath = httpContext.Request.Path;
 
             // Find routes for the sitemap node's url
-            HttpContextBase httpContext = httpContextFactory.Create();
-            string originalPath = httpContext.Request.Path;
-            var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
-            httpContext.RewritePath(nodeUrl, true);
-
-            RouteData routes = node.GetRouteData(httpContext);
-            if (routes == null)
-            {
-                return true; // Static URL's will have no route data, therefore return true.
-            }
-            foreach (var routeValue in node.RouteValues)
-            {
-                routes.Values[routeValue.Key] = routeValue.Value;
-            }
-            if (originalRoutes != null && (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
-            {
-                routes.DataTokens.Remove("area");
-                //routes.DataTokens.Remove("Namespaces");
-                //routes.Values.Remove("area");
-            }
-            //var requestContext = httpContextFactory.CreateRequestContext(routes);
-
-            //// Create controller context
-            //var controllerContext = new ControllerContext();
-            //controllerContext.RequestContext = requestContext;
-
-            //// Whether controller is built by the ControllerFactory (or otherwise by Activator)
-            //bool factoryBuiltController = false;
-            //try
-            //{
-            //    string controllerName = requestContext.RouteData.GetRequiredString("controller");
-            //    controllerContext.Controller = ControllerBuilder.Current.GetControllerFactory().CreateController(requestContext, controllerName) as ControllerBase;
-            //    factoryBuiltController = true;
-            //}
-            //catch
-            //{
-            //    try
-            //    {
-            //        controllerContext.Controller = Activator.CreateInstance(controllerType) as ControllerBase;
-            //    }
-            //    catch
-            //    {
-            //    }
-            //}
-
-            bool factoryBuiltController = false;
-            var controllerContext = this.CreateControllerContext(routes, controllerType, out factoryBuiltController);
-
-            //ControllerDescriptor controllerDescriptor = null;
-            //if (typeof(IController).IsAssignableFrom(controllerType))
-            //{
-            //    controllerDescriptor = new ReflectedControllerDescriptor(controllerType);
-            //}
-            //else if (typeof(IAsyncController).IsAssignableFrom(controllerType))
-            //{
-            //    controllerDescriptor = new ReflectedAsyncControllerDescriptor(controllerType);
-            //}
-
-            var controllerDescriptor = this.GetControllerDescriptor(controllerType);
-
-
-            //ActionDescriptor actionDescriptor = null;
-            //try
-            //{
-            //    actionDescriptor = controllerDescriptor.FindAction(controllerContext, node.Action);
-            //}
-            //catch
-            //{
-            //}
-            //if (actionDescriptor == null)
-            //{
-            //    actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == node.Action).FirstOrDefault();
-            //}
-
-            var actionDescriptor = this.GetActionDescriptor(node.Action, controllerDescriptor, controllerContext);
-
-            // Verify security
+            // NOTE: this changes the path on HttpContext, from this point on we need to restore it whenever we return.
+            var routes = this.FindRoutesForNode(node, originalPath, httpContext);
             try
             {
-                if (actionDescriptor != null)
+                if (routes == null)
                 {
-//#if NET35
-//                    IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
-//                       actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
-//                           <AuthorizeAttribute>().ToList()
-//                           .Union(
-//                               controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
-//                                   <AuthorizeAttribute>().ToList());
-//#else
-//                    IFilterProvider filterProvider = ResolveFilterProvider();
-//                    IEnumerable<Filter> filters;
-
-//                    // If depencency resolver has an IFilterProvider registered, use it
-//                    if (filterProvider != null)
-//                    {
-//                        filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
-//                    }
-//                    // Otherwise use FilterProviders.Providers
-//                    else
-//                    {
-//                        filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
-//                    }
-
-//                    IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
-//                        filters
-//                            .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
-//                            .Select(f => f.Instance as AuthorizeAttribute);
-//#endif
-                    var authorizeAttributesToCheck = this.GetAuthorizeAttributes(controllerContext, actionDescriptor);
-
-                    // Verify all attributes
-                    foreach (var authorizeAttribute in authorizeAttributesToCheck)
-                    {
-                        try
-                        {
-                            //var currentAuthorizationAttributeType = authorizeAttribute.GetType();
-
-                            //var builder = new AuthorizeAttributeBuilder();
-                            //var subclassedAttribute =
-                            //    currentAuthorizationAttributeType == typeof(AuthorizeAttribute) ?
-                            //       new InternalAuthorize(authorizeAttribute) : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
-                            //       (IAuthorizeAttribute)builder.Build(currentAuthorizationAttributeType).Invoke(null);
-
-                            //// Copy all properties
-                            //objectCopier.Copy(authorizeAttribute, subclassedAttribute);
-
-                            //if (!subclassedAttribute.IsAuthorized(controllerContext.HttpContext))
-                            //{
-                            //    return false;
-                            //}
-
-                            var authorized = this.VerifyAuthorizeAttribute(authorizeAttribute, controllerContext);
-                            if (!authorized)
-                            {
-                                return false;
-                            }
-                        }
-                        catch
-                        {
-                            // do not allow on exception
-                            return false;
-                        }
-                    }
+                    return true; // Static URL's will have no route data, therefore return true.
                 }
 
-                // No objection.
-                return true;
+                // Get controller factory
+                var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
+
+                // Create controller context
+                bool factoryBuiltController = false;
+                var controllerContext = this.CreateControllerContext(routes, controllerType, controllerFactory, out factoryBuiltController);
+                try
+                {
+                    return this.VerifyController(node, controllerType, controllerContext);
+
+                    //// Get controller descriptor
+                    //var controllerDescriptor = this.GetControllerDescriptor(controllerType);
+                    //if (controllerDescriptor == null)
+                    //    return true;
+
+                    //// Get action descriptor
+                    //var actionDescriptor = this.GetActionDescriptor(node.Action, controllerDescriptor, controllerContext);
+                    //if (actionDescriptor == null)
+                    //    return true;
+
+                    //// Verify security
+                    //var authorizeAttributes = this.GetAuthorizeAttributes(actionDescriptor, controllerContext);
+                    //return this.VerifyAuthorizeAttributes(authorizeAttributes, controllerContext);
+                }
+                finally
+                {
+                    // Release controller
+                    if (factoryBuiltController)
+                        controllerFactory.ReleaseController(controllerContext.Controller);
+                }
             }
             finally
             {
-                // Restore HttpContext
-                httpContext.RewritePath(originalPath, true);
-
-                // Release controller
-                if (factoryBuiltController)
-                    ControllerBuilder.Current.GetControllerFactory().ReleaseController(controllerContext.Controller);
+                this.RestoreHttpContext(originalPath, httpContext);
             }
+
         }
 
         #endregion
@@ -244,7 +135,7 @@ namespace MvcSiteMapProvider.Security
 
 
 #if NET35
-        protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+        protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ActionDescriptor actionDescriptor, ControllerContext controllerContext)
         {
             return actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
                            <AuthorizeAttribute>().ToList()
@@ -253,7 +144,7 @@ namespace MvcSiteMapProvider.Security
                                    <AuthorizeAttribute>().ToList());
         }
 #else
-        protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+        protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ActionDescriptor actionDescriptor, ControllerContext controllerContext)
         {
             IFilterProvider filterProvider = ResolveFilterProvider();
             IEnumerable<Filter> filters;
@@ -301,11 +192,67 @@ namespace MvcSiteMapProvider.Security
             // Copy all properties
             objectCopier.Copy(authorizeAttribute, subclassedAttribute);
 
-            if (!subclassedAttribute.IsAuthorized(controllerContext.HttpContext))
+            return subclassedAttribute.IsAuthorized(controllerContext.HttpContext);
+        }
+
+        protected virtual bool VerifyAuthorizeAttributes(IEnumerable<AuthorizeAttribute> authorizeAttributes, ControllerContext controllerContext)
+        {
+            // Verify all attributes
+            foreach (var authorizeAttribute in authorizeAttributes)
             {
-                return false;
+                try
+                {
+                    var authorized = this.VerifyAuthorizeAttribute(authorizeAttribute, controllerContext);
+                    if (!authorized)
+                        return false;
+                }
+                catch
+                {
+                    // do not allow on exception
+                    return false;
+                }
             }
             return true;
+        }
+
+        protected virtual bool VerifyController(ISiteMapNode node, Type controllerType, ControllerContext controllerContext)
+        {
+            // Get controller descriptor
+            var controllerDescriptor = this.GetControllerDescriptor(controllerType);
+            if (controllerDescriptor == null)
+                return true;
+
+            // Get action descriptor
+            var actionDescriptor = this.GetActionDescriptor(node.Action, controllerDescriptor, controllerContext);
+            if (actionDescriptor == null)
+                return true;
+
+            // Verify security
+            var authorizeAttributes = this.GetAuthorizeAttributes(actionDescriptor, controllerContext);
+            return this.VerifyAuthorizeAttributes(authorizeAttributes, controllerContext);
+        }
+
+        protected virtual RouteData FindRoutesForNode(ISiteMapNode node, string originalPath, HttpContextBase httpContext)
+        {
+            var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
+            var nodeUrl = node.Url;
+            httpContext.RewritePath(nodeUrl, true);
+
+            RouteData routes = node.GetRouteData(httpContext);
+            if (routes != null)
+            {
+                foreach (var routeValue in node.RouteValues)
+                {
+                    routes.Values[routeValue.Key] = routeValue.Value;
+                }
+                if (originalRoutes != null && (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
+                {
+                    routes.DataTokens.Remove("area");
+                    //routes.DataTokens.Remove("Namespaces");
+                    //routes.Values.Remove("area");
+                }
+            }
+            return routes;
         }
 
         protected virtual ControllerDescriptor GetControllerDescriptor(Type controllerType)
@@ -325,52 +272,88 @@ namespace MvcSiteMapProvider.Security
         protected virtual ActionDescriptor GetActionDescriptor(string action, ControllerDescriptor controllerDescriptor, ControllerContext controllerContext)
         {
             ActionDescriptor actionDescriptor = null;
-            try
-            {
-                actionDescriptor = controllerDescriptor.FindAction(controllerContext, action);
-            }
-            catch
-            {
-                // TODO: Find out if there is a way to do this without throwing an exception / try to get the exeption info to throw in all
-                // cases where it should.
-            }
-            if (actionDescriptor == null)
+            var found = this.TryFindActionDescriptor(action, controllerContext, controllerDescriptor, out actionDescriptor);
+            if (!found)
             {
                 actionDescriptor = controllerDescriptor.GetCanonicalActions().Where(a => a.ActionName == action).FirstOrDefault();
             }
             return actionDescriptor;
         }
 
-        protected virtual ControllerContext CreateControllerContext(RouteData routes, Type controllerType, out bool factoryBuiltController)
+        protected virtual bool TryFindActionDescriptor(string action, ControllerContext controllerContext, ControllerDescriptor controllerDescriptor, out ActionDescriptor actionDescriptor)
         {
-            var requestContext = httpContextFactory.CreateRequestContext(routes);
-
-            // Create controller context
-            var controllerContext = new ControllerContext();
-            controllerContext.RequestContext = requestContext;
-
-            // Whether controller is built by the ControllerFactory (or otherwise by Activator)
-            //bool factoryBuiltController = false;
-            factoryBuiltController = false;
+            actionDescriptor = null;
             try
             {
-                string controllerName = requestContext.RouteData.GetRequiredString("controller");
-                controllerContext.Controller = ControllerBuilder.Current.GetControllerFactory().CreateController(requestContext, controllerName) as ControllerBase;
-                factoryBuiltController = true;
+                actionDescriptor = controllerDescriptor.FindAction(controllerContext, action);
+                if (actionDescriptor != null)
+                    return true;
             }
             catch
             {
-                // TODO: Try to prevent from swallowing real exceptions here
+                return false;
+            }
+            return false;
+        }
 
+
+        protected virtual ControllerContext CreateControllerContext(RouteData routes, Type controllerType, IControllerFactory controllerFactory, out bool factoryBuiltController)
+        {
+            var requestContext = this.httpContextFactory.CreateRequestContext(routes);
+            ControllerBase controller = null;
+            string controllerName = requestContext.RouteData.GetRequiredString("controller");
+
+            // Whether controller is built by the ControllerFactory (or otherwise by Activator)
+            factoryBuiltController = TryCreateController(requestContext, controllerName, controllerFactory, out controller);
+            if (!factoryBuiltController)
+            {
+                TryCreateController(controllerType, out controller);
+            }
+
+            // Create controller context
+            var controllerContext = httpContextFactory.CreateControllerContext(requestContext, controller);
+            return controllerContext;
+        }
+
+        protected virtual bool TryCreateController(RequestContext requestContext, string controllerName, IControllerFactory controllerFactory, out ControllerBase controller)
+        {
+            controller = null;
+            if (controllerFactory != null)
+            {
                 try
                 {
-                    controllerContext.Controller = Activator.CreateInstance(controllerType) as ControllerBase;
+                    controller = controllerFactory.CreateController(requestContext, controllerName) as ControllerBase;
+                    if (controller != null)
+                        return true;
                 }
                 catch
                 {
+                    return false;
                 }
             }
-            return controllerContext;
+            return false;
+        }
+
+        protected virtual bool TryCreateController(Type controllerType, out ControllerBase controller)
+        {
+            controller = null;
+            try
+            {
+                controller = Activator.CreateInstance(controllerType) as ControllerBase;
+                if (controller != null)
+                    return true;
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
+        protected virtual void RestoreHttpContext(string originalPath, HttpContextBase httpContext)
+        {
+            // Restore HttpContext
+            httpContext.RewritePath(originalPath, true);
         }
     }
 }

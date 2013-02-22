@@ -47,6 +47,11 @@ namespace MvcSiteMapProvider.Web
             //    return new RequestContext(httpContext, new RouteData());
         }
 
+        public virtual ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller)
+        {
+            return new ControllerContext(requestContext, controller);
+        }
+
         public virtual IRequestCache GetRequestCache()
         {
             return new RequestCache(this);
