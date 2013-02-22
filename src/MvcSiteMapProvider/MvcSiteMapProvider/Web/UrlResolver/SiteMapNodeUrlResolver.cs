@@ -30,24 +30,17 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         /// Gets the URL helper.
         /// </summary>
         /// <value>The URL helper.</value>
-        protected UrlHelper UrlHelper
+        protected IUrlHelper UrlHelper
         {
             get
             {
                 var key = "6F0F34DE-2981-454E-888D-28080283EF65";
-                var httpContext = httpContextFactory.Create();
                 var requestCache = httpContextFactory.GetRequestCache();
-                var result = requestCache.GetValue<UrlHelper>(key);
+                var result = requestCache.GetValue<IUrlHelper>(key);
                 if (result == null)
                 {
-                    RequestContext ctx;
-                    if (httpContext.Handler is MvcHandler)
-                        ctx = ((MvcHandler)httpContext.Handler).RequestContext;
-                    else
-                        ctx = httpContextFactory.CreateRequestContext(new RouteData());
-
-                    result = new UrlHelper(ctx);
-                    requestCache.SetValue<UrlHelper>(key, result);
+                    result = httpContextFactory.CreateUrlHelper();
+                    requestCache.SetValue<IUrlHelper>(key, result);
                 }
                 return result;
             }

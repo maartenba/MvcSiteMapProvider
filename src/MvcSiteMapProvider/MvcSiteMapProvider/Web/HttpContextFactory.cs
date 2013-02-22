@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web
 {
@@ -14,17 +15,6 @@ namespace MvcSiteMapProvider.Web
     public class HttpContextFactory
         : IHttpContextFactory
     {
-        //public HttpContextFactory(
-        //    IRequestCache requestCache
-        //    )
-        //{
-        //    if (requestCache == null)
-        //        throw new ArgumentNullException("requestCache");
-        //    this.requestCache = requestCache;
-        //}
-
-        protected readonly IRequestCache requestCache;
-
         #region IHttpContextFactory Members
 
         public virtual HttpContextBase Create()
@@ -39,12 +29,21 @@ namespace MvcSiteMapProvider.Web
         public virtual RequestContext CreateRequestContext(RouteData routeData)
         {
             var httpContext = this.Create();
-            return new RequestContext(httpContext, routeData);
+            //return new RequestContext(httpContext, routeData);
 
-            //if (httpContext.Handler is MvcHandler)
-            //    return ((MvcHandler)httpContext.Handler).RequestContext;
-            //else
-            //    return new RequestContext(httpContext, new RouteData());
+            if (httpContext.Handler is MvcHandler)
+                return ((MvcHandler)httpContext.Handler).RequestContext;
+            else
+                return new RequestContext(httpContext, routeData);
+        }
+
+        public virtual RequestContext CreateRequestContext()
+        {
+            var httpContext = this.Create();
+            if (httpContext.Handler is MvcHandler)
+                return ((MvcHandler)httpContext.Handler).RequestContext;
+            else
+                return new RequestContext(httpContext, new RouteData());
         }
 
         public virtual ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller)
@@ -55,6 +54,17 @@ namespace MvcSiteMapProvider.Web
         public virtual IRequestCache GetRequestCache()
         {
             return new RequestCache(this);
+        }
+
+        public virtual IUrlHelper CreateUrlHelper(RequestContext requestContext)
+        {
+            return new UrlHelperAdaptor(requestContext);
+        }
+
+        public virtual IUrlHelper CreateUrlHelper()
+        {
+            var requestContext = this.CreateRequestContext();
+            return new UrlHelperAdaptor(requestContext);
         }
 
         #endregion

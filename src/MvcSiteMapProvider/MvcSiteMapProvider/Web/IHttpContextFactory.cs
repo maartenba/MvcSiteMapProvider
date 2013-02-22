@@ -13,7 +13,10 @@ namespace MvcSiteMapProvider.Web
     {
         HttpContextBase Create();
         RequestContext CreateRequestContext(RouteData routeData);
+        RequestContext CreateRequestContext();
         ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller);
         IRequestCache GetRequestCache();
+        IUrlHelper CreateUrlHelper(RequestContext requestContext);
+        IUrlHelper CreateUrlHelper();
     }
 }
