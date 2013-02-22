@@ -1,14 +1,13 @@
 ﻿using System;
-//using System.Globalization;
-//using System.Runtime.CompilerServices;
 using System.Web;
 using System.Web.Mvc;
-//using System.Web.Mvc.Properties;
 using System.Web.Routing;
-//using System.Web.WebPages;
 
 namespace MvcSiteMapProvider.Web
 {
+    /// <summary>
+    /// Wraps the <see cref="T:System.Web.Mvc.UrlHelper"/> class so a test double can be passed between methods.
+    /// </summary>
     public class UrlHelperAdaptor 
         : UrlHelper, IUrlHelper
     {
@@ -21,10 +20,5 @@ namespace MvcSiteMapProvider.Web
             : base(requestContext, routeCollection)
         {
         }
- 
-        //public UrlHelperAdaptor(UrlHelper helper)
-        //    : base(helper.RequestContext, helper.RouteCollection)
-        //{
-        //}
     }
 }
