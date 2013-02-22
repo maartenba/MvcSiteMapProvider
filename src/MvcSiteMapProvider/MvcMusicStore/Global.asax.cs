@@ -32,7 +32,13 @@ namespace MvcMusicStore
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional },  // Parameter defaults
                 new string[] { "MvcMusicStore.Controllers" }
             );
-        } 
+        }
+
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new HandleErrorAttribute());
+            //filters.Add(new AuthorizeAttribute());
+        }
 
         protected void Application_Start()
         {
@@ -42,6 +48,7 @@ namespace MvcMusicStore
             XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
 
             RegisterRoutes(RouteTable.Routes);
+            RegisterGlobalFilters(System.Web.Mvc.GlobalFilters.Filters);
 
 
             // Create the DI container (for structuremap)
