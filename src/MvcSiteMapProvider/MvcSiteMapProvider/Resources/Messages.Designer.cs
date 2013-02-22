@@ -241,15 +241,6 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The parent key was not found in the SiteMap for the DynamicNode with Area &apos;{0}&apos;, Controller &apos;{1}&apos;, Action &apos;{2}&apos;, and Key &apos;{3]&apos;..
-        /// </summary>
-        internal static string ParentKeyNotFound {
-            get {
-                return ResourceManager.GetString("ParentKeyNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a physical path, but a virtual path was expected..
         /// </summary>
         internal static string PhysicalPathNotAllowed {

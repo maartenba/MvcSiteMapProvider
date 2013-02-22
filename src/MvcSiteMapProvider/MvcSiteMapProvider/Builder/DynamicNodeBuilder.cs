@@ -80,10 +80,6 @@ namespace MvcSiteMapProvider.Builder
                         siteMap.AddNode(newNode, parent);
                         createdDynamicNodes.Add(newNode);
                     }
-                    else
-                    {
-                        throw new KeyNotFoundException(String.Format(Resources.Messages.ParentKeyNotFound, dynamicNode.Area, dynamicNode.Controller, dynamicNode.Action, dynamicNode.Key));
-                    }
                 }
                 else
                 {
