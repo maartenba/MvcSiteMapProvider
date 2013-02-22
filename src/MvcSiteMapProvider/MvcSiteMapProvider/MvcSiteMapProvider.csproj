@@ -27,7 +27,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>MVC4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\MvcSiteMapProvider.XML</DocumentationFile>
@@ -48,11 +48,14 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>MvcSiteMapProvider.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(DefineConstants)' == 'NET35' ">
+  <ItemGroup Condition=" '$(DefineConstants)' == 'MVC2' ">
     <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(DefineConstants)' != 'NET35' ">
+  <ItemGroup Condition=" '$(DefineConstants)' == 'MVC3' ">
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(DefineConstants)' != 'MVC2' AND '$(DefineConstants)' != 'MVC3' ">
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
