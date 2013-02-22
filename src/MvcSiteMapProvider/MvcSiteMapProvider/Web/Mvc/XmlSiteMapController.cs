@@ -10,7 +10,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     /// <summary>
     /// XmlSiteMapController class
     /// </summary>
-#if !NET35    
+#if MVC4    
     [AllowAnonymous]
 #endif
     public class XmlSiteMapController

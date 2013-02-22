@@ -100,7 +100,8 @@ namespace MvcSiteMapProvider.Security
             }
             finally
             {
-                this.RestoreHttpContext(originalPath, httpContext);
+                // Restore HttpContext
+                httpContext.RewritePath(originalPath, true);
             }
         }
 
@@ -191,7 +192,7 @@ namespace MvcSiteMapProvider.Security
 
 
 
-#if NET35
+#if MVC2
         protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ActionDescriptor actionDescriptor, ControllerContext controllerContext)
         {
             return actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
@@ -239,7 +240,7 @@ namespace MvcSiteMapProvider.Security
         }
 #endif
 
-#if NET35
+#if !MVC4
         protected virtual bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
         {
             return false;
@@ -363,12 +364,6 @@ namespace MvcSiteMapProvider.Security
                 return false;
             }
             return false;
-        }
-
-        protected virtual void RestoreHttpContext(string originalPath, HttpContextBase httpContext)
-        {
-            // Restore HttpContext
-            httpContext.RewritePath(originalPath, true);
         }
 
         #endregion
