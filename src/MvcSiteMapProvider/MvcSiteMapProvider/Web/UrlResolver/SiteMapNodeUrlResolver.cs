@@ -127,12 +127,15 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
             if (string.IsNullOrEmpty(returnValue))
             {
-                throw new UrlResolverException(string.Format(Resources.Messages.CouldNotResolve, siteMapNode.Title, action, controller, siteMapNode.Route ?? ""));
+                // fixes #115 - UrlResolver should not throw exception.
+                return Guid.NewGuid().ToString();
             }
-
-            _urlkey = key;
-            _url = returnValue;
-            return returnValue;
+            else
+            {
+                _urlkey = key;
+                _url = returnValue;
+                return returnValue;
+            }
         }
 
         /// <summary>

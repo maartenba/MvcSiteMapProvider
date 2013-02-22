@@ -168,9 +168,6 @@
   <data name="SiteMapNoDefaultBuilderSetConfigured" xml:space="preserve">
     <value>There is no default builder set configured.</value>
   </data>
-  <data name="CouldNotResolve" xml:space="preserve">
-    <value>Could not resolve URL for sitemap node {0} which represents action {1} in controller {2}. Ensure that the route {3} for this sitemap node can be resolved and that its default values allow resolving the URL for the current sitemap node.</value>
-  </data>
   <data name="ResourceNotFoundWithClassAndKey" xml:space="preserve">
     <value>The resource object with classname '{0}' and key '{1}' was not found.</value>
   </data>
