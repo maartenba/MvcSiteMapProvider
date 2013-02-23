@@ -104,8 +104,8 @@ namespace MvcMusicStore
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Web.Mvc.IControllerTypeResolver>()
-                .Use<MvcSiteMapProvider.Web.Mvc.ControllerTypeResolver>()
+                .For<MvcSiteMapProvider.Web.Mvc.IControllerTypeResolverFactory>()
+                .Use<MvcSiteMapProvider.Web.Mvc.ControllerTypeResolverFactory>()
             );
 
             container.Configure(x => x
