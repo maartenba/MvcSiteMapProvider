@@ -563,7 +563,7 @@ namespace MvcSiteMapProvider
                 {
                     // Pass controllertyperesolver to this method (from the current sitemap)
                     // because we need to ensure 1 instance per sitemap instance for the resolver's internal
-                    // cache to work on multi-tenant sites that have controller and action name collisions.
+                    // cache to work on multi-tenant sites that would potentailly have controller and action name collisions.
                     actionParameters = this.SiteMap.ActionMethodParameterResolver.ResolveActionMethodParameters(
                         this.SiteMap.ControllerTypeResolver, this.Area, this.Controller, this.Action);
                 }
