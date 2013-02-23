@@ -198,7 +198,7 @@ namespace MvcSiteMapProvider.Security
             return actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
                            <AuthorizeAttribute>().ToList()
                            .Union(
-                               controllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
+                               actionDescriptor.ControllerDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
                                    <AuthorizeAttribute>().ToList());
         }
 #else
