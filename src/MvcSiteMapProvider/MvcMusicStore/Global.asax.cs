@@ -122,6 +122,14 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Web.Mvc.Filters.FilterProvider>()
             );
 
+            // Pass in the global route collection
+            container.Configure(x => x
+                .For<System.Web.Routing.RouteCollection>()
+                .Use(RouteTable.Routes)
+            );
+
+            
+
 
             var aclModules = new MvcSiteMapProvider.Security.CompositeAclModule(
                 container.GetInstance<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>(),

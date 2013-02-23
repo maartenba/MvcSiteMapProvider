@@ -28,7 +28,8 @@ namespace MvcSiteMapProvider
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            RouteCollection routes
             )
             : base(
                 siteMap, 
@@ -40,7 +41,8 @@ namespace MvcSiteMapProvider
                 siteMapNodeUrlResolverStrategy, 
                 siteMapNodeVisibilityProviderStrategy, 
                 actionMethodParameterResolver,
-                urlPath
+                urlPath,
+                routes
             )
         {
         }

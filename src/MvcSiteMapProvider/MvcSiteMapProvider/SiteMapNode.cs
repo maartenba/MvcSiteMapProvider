@@ -30,7 +30,8 @@ namespace MvcSiteMapProvider
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            RouteCollection routes
             )
         {
             if (siteMap == null)
@@ -51,6 +52,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("actionMethodParameterResolver");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (routes == null)
+                throw new ArgumentNullException("routes");
 
             this.siteMap = siteMap;
             this.key = key;
@@ -61,6 +64,7 @@ namespace MvcSiteMapProvider
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.urlPath = urlPath;
+            this.routes = routes;
 
             // Initialize child collections
             this.attributes = siteMapNodeChildStateFactory.CreateAttributeCollection(siteMap, localizationService);
@@ -77,6 +81,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IUrlPath urlPath;
+        protected readonly RouteCollection routes;
 
         // Child collections and dictionaries
         protected readonly IAttributeCollection attributes;
@@ -538,11 +543,11 @@ namespace MvcSiteMapProvider
             RouteData routeData;
             if (!string.IsNullOrEmpty(this.Route))
             {
-                routeData = RouteTable.Routes[this.Route].GetRouteData(httpContext);
+                routeData = this.routes[this.Route].GetRouteData(httpContext);
             }
             else
             {
-                routeData = RouteTable.Routes.GetRouteData(httpContext);
+                routeData = this.routes.GetRouteData(httpContext);
             }
             return routeData;
         }

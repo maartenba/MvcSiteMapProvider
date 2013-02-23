@@ -31,6 +31,7 @@ namespace MvcSiteMapProvider
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
             IUrlPath urlPath,
+            RouteCollection routes,
             IRequestCache requestCache
             )
             : base(
@@ -43,7 +44,8 @@ namespace MvcSiteMapProvider
                 siteMapNodeUrlResolverStrategy, 
                 siteMapNodeVisibilityProviderStrategy, 
                 actionMethodParameterResolver,
-                urlPath
+                urlPath,
+                routes
             )
         {
             if (requestCache == null)

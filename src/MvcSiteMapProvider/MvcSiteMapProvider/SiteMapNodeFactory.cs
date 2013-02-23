@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Web.Routing;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Collections;
@@ -25,6 +24,7 @@ namespace MvcSiteMapProvider
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IActionMethodParameterResolver actionMethodParameterResolver,
             IUrlPath urlPath,
+            RouteCollection routes,
             IRequestCache requestCache
             ) 
         {
@@ -40,6 +40,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("actionMethodParameterResolver");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (routes == null)
+                throw new ArgumentNullException("routes");
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
 
@@ -49,6 +51,7 @@ namespace MvcSiteMapProvider
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.urlPath = urlPath;
+            this.routes = routes;
             this.requestCache = requestCache;
         }
 
@@ -59,6 +62,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IUrlPath urlPath;
+        protected readonly RouteCollection routes;
         protected readonly IRequestCache requestCache;
 
 
@@ -90,6 +94,7 @@ namespace MvcSiteMapProvider
                 siteMapNodeVisibilityProviderStrategy,
                 actionMethodParameterResolver,
                 urlPath,
+                routes,
                 requestCache);
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Collections;
@@ -23,9 +24,10 @@ namespace MvcSiteMapProvider
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            RouteCollection routes
             ) 
-            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath)
+            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
         }
 

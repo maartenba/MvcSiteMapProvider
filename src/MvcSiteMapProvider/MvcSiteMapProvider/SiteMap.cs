@@ -30,7 +30,8 @@ namespace MvcSiteMapProvider
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            RouteCollection routes
             )
         {
             if (siteMapBuilder == null)
@@ -45,12 +46,15 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("genericDictionaryFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (routes == null)
+                throw new ArgumentNullException("routes");
 
             this.siteMapBuilder = siteMapBuilder;
             this.httpContextFactory = httpContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.urlPath = urlPath;
+            this.routes = routes;
 
             // Initialize dictionaries
             this.childNodeCollectionTable = genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNodeCollection>();
@@ -65,6 +69,7 @@ namespace MvcSiteMapProvider
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IUrlPath urlPath;
+        protected readonly RouteCollection routes;
 
         // Child collections
         protected readonly IDictionary<ISiteMapNode, ISiteMapNodeCollection> childNodeCollectionTable;
@@ -623,7 +628,7 @@ namespace MvcSiteMapProvider
         protected virtual ISiteMapNode FindSiteMapNodeFromMvc(HttpContextBase httpContext)
         {
             ISiteMapNode node = null;
-            var routeData = RouteTable.Routes.GetRouteData(httpContext);
+            var routeData = this.routes.GetRouteData(httpContext);
             if (routeData != null)
             {
                 if (!routeData.Values.ContainsKey("area"))
@@ -671,7 +676,7 @@ namespace MvcSiteMapProvider
                     // Look at the route property
                     if (!string.IsNullOrEmpty(node.Route))
                     {
-                        if (RouteTable.Routes[node.Route] == route)
+                        if (this.routes[node.Route] == route)
                         {
                             // This looks a bit weird, but if i set up a node to a general route ie /Controller/Action/ID
                             // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route

@@ -27,9 +27,10 @@ namespace MvcSiteMapProvider
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IUrlPath urlPath,
+            RouteCollection routes,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath)
+            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");

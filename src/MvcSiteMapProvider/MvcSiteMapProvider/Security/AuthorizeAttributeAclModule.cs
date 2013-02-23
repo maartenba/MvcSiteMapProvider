@@ -22,7 +22,8 @@ namespace MvcSiteMapProvider.Security
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
             IControllerTypeResolver controllerTypeResolver,
-            IObjectCopier objectCopier
+            IObjectCopier objectCopier,
+            RouteCollection routes
         )
         {
             if (httpContextFactory == null)
@@ -31,20 +32,25 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("controllerTypeResolver");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
+            if (routes == null)
+                throw new ArgumentNullException("routes");
 
             this.httpContextFactory = httpContextFactory;
             this.controllerTypeResolver = controllerTypeResolver;
             this.objectCopier = objectCopier;
+            this.routes = routes;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IObjectCopier objectCopier;
+        protected readonly RouteCollection routes;
 #else
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
             IControllerTypeResolver controllerTypeResolver,
             IObjectCopier objectCopier,
+            RouteCollection routes,
             IFilterProvider filterProvider
             )
         {
@@ -54,18 +60,22 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("controllerTypeResolver");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
+            if (routes == null)
+                throw new ArgumentNullException("routes");
             if (filterProvider == null)
                 throw new ArgumentNullException("filterProvider");
 
             this.httpContextFactory = httpContextFactory;
             this.controllerTypeResolver = controllerTypeResolver;
             this.objectCopier = objectCopier;
+            this.routes = routes;
             this.filterProvider = filterProvider;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IObjectCopier objectCopier;
+        protected readonly RouteCollection routes;
         protected readonly IFilterProvider filterProvider;
 #endif
 
@@ -156,7 +166,7 @@ namespace MvcSiteMapProvider.Security
 
         protected virtual RouteData FindRoutesForNode(ISiteMapNode node, string originalPath, HttpContextBase httpContext)
         {
-            var originalRoutes = RouteTable.Routes.GetRouteData(httpContext);
+            var originalRoutes = this.routes.GetRouteData(httpContext);
             var nodeUrl = node.Url;
             httpContext.RewritePath(nodeUrl, true);
 

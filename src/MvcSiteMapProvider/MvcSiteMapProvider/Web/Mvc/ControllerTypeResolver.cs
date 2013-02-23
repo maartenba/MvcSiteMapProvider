@@ -14,6 +14,22 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class ControllerTypeResolver
         : IControllerTypeResolver
     {
+        public ControllerTypeResolver(
+            RouteCollection routes
+            )
+        {
+            if (routes == null)
+                throw new ArgumentNullException("routes");
+
+            this.routes = routes;
+
+            Cache = new Dictionary<string, Type>();
+        }
+
+        protected readonly RouteCollection routes;
+
+        private readonly object synclock = new object();
+
         /// <summary>
         /// Gets or sets the cache.
         /// </summary>
@@ -26,15 +42,6 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <value>The assembly cache.</value>
         protected Dictionary<string, ILookup<string, Type>> AssemblyCache { get; private set; }
 
-        private readonly object synclock = new object();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ControllerTypeResolver"/> class.
-        /// </summary>
-        public ControllerTypeResolver()
-        {
-            Cache = new Dictionary<string, Type>();
-        }
 
         #region IControllerTypeResolver Members
 
@@ -54,7 +61,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
 
             // Find controller details
-            IEnumerable<string> areaNamespaces = FindNamespacesForArea(areaName, RouteTable.Routes);
+            IEnumerable<string> areaNamespaces = FindNamespacesForArea(areaName, this.routes);
             string area = areaName;
             string controller = controllerName;
 
