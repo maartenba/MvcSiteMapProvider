@@ -31,7 +31,6 @@ namespace MvcSiteMapProvider
         }
 
         protected readonly ILocalizationService localizationService;
-        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
 
         public override void Add(string key, string value)
         {
