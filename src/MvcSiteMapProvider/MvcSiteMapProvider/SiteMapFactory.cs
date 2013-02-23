@@ -24,7 +24,8 @@ namespace MvcSiteMapProvider
             IUrlPath urlPath,
             RouteCollection routes,
             IRequestCache requestCache,
-            IControllerTypeResolverFactory controllerTypeResolverFactory
+            IControllerTypeResolverFactory controllerTypeResolverFactory,
+            IActionMethodParameterResolverFactory actionMethodParameterResolverFactory
             )
         {
             if (aclModule == null)
@@ -43,6 +44,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("requestCache");
             if (controllerTypeResolverFactory == null)
                 throw new ArgumentNullException("controllerTypeResolverFactory");
+            if (actionMethodParameterResolverFactory == null)
+                throw new ArgumentNullException("actionMethodParameterResolverFactory");
 
             this.aclModule = aclModule;
             this.httpContextFactory = httpContextFactory;
@@ -52,6 +55,7 @@ namespace MvcSiteMapProvider
             this.routes = routes;
             this.requestCache = requestCache;
             this.controllerTypeResolverFactory = controllerTypeResolverFactory;
+            this.actionMethodParameterResolverFactory = actionMethodParameterResolverFactory;
         }
 
         protected readonly IAclModule aclModule;
@@ -62,6 +66,7 @@ namespace MvcSiteMapProvider
         protected readonly RouteCollection routes;
         protected readonly IRequestCache requestCache;
         protected readonly IControllerTypeResolverFactory controllerTypeResolverFactory;
+        protected readonly IActionMethodParameterResolverFactory actionMethodParameterResolverFactory;
 
         #region ISiteMapFactory Members
 
@@ -70,9 +75,7 @@ namespace MvcSiteMapProvider
             // IMPORTANT: We need to ensure there is one instance of controllerTypeResolver and 
             // one instance of ActionMethodParameterResolver per SiteMap instance.
             var controllerTypeResolver = this.controllerTypeResolverFactory.Create(routes);
-
-            // TODO: create factories for ControllerTypeResolver and ActionMethodParameterResolver
-            var actionMethodParameterResolver = new ActionMethodParameterResolver();
+            var actionMethodParameterResolver = actionMethodParameterResolverFactory.Create();
 
             return new RequestCacheableSiteMap(
                 siteMapBuilder,

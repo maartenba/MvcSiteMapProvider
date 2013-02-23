@@ -103,8 +103,10 @@
     <Compile Include="Web\Html\MetaRobotsHelper.cs" />
     <Compile Include="Web\Html\Models\CanonicalHelperModel.cs" />
     <Compile Include="Web\Html\Models\MetaRobotsHelperModel.cs" />
+    <Compile Include="Web\Mvc\ActionMethodParameterResolverFactory.cs" />
     <Compile Include="Web\Mvc\ControllerTypeResolverFactory.cs" />
     <Compile Include="Web\Mvc\Filters\FilterProvider.cs" />
+    <Compile Include="Web\Mvc\IActionMethodParameterResolverFactory.cs" />
     <Compile Include="Web\Mvc\IControllerTypeResolverFactory.cs" />
     <Compile Include="Web\Mvc\IUrlHelper.cs" />
     <Compile Include="Web\Mvc\AmbiguousControllerException.cs" />
