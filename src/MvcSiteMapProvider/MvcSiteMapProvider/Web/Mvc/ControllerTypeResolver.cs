@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcSiteMapProvider.Web.Compilation;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
@@ -15,18 +16,29 @@ namespace MvcSiteMapProvider.Web.Mvc
         : IControllerTypeResolver
     {
         public ControllerTypeResolver(
-            RouteCollection routes
+            RouteCollection routes,
+            IControllerBuilder controllerBuilder,
+            IBuildManager buildManager            
             )
         {
             if (routes == null)
                 throw new ArgumentNullException("routes");
+            if (controllerBuilder == null)
+                throw new ArgumentNullException("controllerBuilder");
+            if (buildManager == null)
+                throw new ArgumentNullException("buildManager");
 
             this.routes = routes;
-
+            this.controllerBuilder = controllerBuilder;
+            this.buildManager = buildManager;
+            
             Cache = new Dictionary<string, Type>();
         }
 
         protected readonly RouteCollection routes;
+        protected readonly IControllerBuilder controllerBuilder;
+        protected readonly IBuildManager buildManager;
+        
 
         private readonly object synclock = new object();
 
@@ -73,12 +85,12 @@ namespace MvcSiteMapProvider.Web.Mvc
                 namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
                 if (string.IsNullOrEmpty(areaName))
     			{
-					namespaces = new HashSet<string>(namespaces.Union(ControllerBuilder.Current.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
+					namespaces = new HashSet<string>(namespaces.Union(this.controllerBuilder.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
 				}
             }
-            else if (ControllerBuilder.Current.DefaultNamespaces.Count > 0)
+            else if (this.controllerBuilder.DefaultNamespaces.Count > 0)
             {
-                namespaces = ControllerBuilder.Current.DefaultNamespaces;
+                namespaces = this.controllerBuilder.DefaultNamespaces;
             }
             controllerType = GetControllerTypeWithinNamespaces(area, controller, namespaces);
 
@@ -166,7 +178,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected virtual List<Type> GetListOfControllerTypes()
         {
             IEnumerable<Type> typesSoFar = Type.EmptyTypes;
-            ICollection assemblies = System.Web.Compilation.BuildManager.GetReferencedAssemblies();
+            ICollection assemblies = this.buildManager.GetReferencedAssemblies();
             foreach (Assembly assembly in assemblies)
             {
                 Type[] typesInAsm;

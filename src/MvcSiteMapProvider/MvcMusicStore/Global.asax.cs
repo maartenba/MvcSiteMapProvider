@@ -94,9 +94,25 @@ namespace MvcMusicStore
             //);
 
 
+
+
+            // Pass in the global ControllerBuilder reference
+            container.Configure(x => x
+                .For<System.Web.Mvc.ControllerBuilder>()
+                .Use(ControllerBuilder.Current)
+            );
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Web.Mvc.IControllerBuilder>()
+                .Use<MvcSiteMapProvider.Web.Mvc.ControllerBuilderAdaptor>()
+            );
+
             
-
-
+            
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Web.Compilation.IBuildManager>()
+                .Use<MvcSiteMapProvider.Web.Compilation.BuildManagerAdaptor>()
+            );
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Web.Mvc.IActionMethodParameterResolverFactory>()
