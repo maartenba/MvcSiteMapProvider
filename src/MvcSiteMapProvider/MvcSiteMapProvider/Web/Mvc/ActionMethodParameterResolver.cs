@@ -17,19 +17,10 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionMethodParameterResolver"/> class.
         /// </summary>
-        public ActionMethodParameterResolver(
-            IControllerTypeResolver controllerTypeResolver
-            )
+        public ActionMethodParameterResolver()
         {
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
-
-            this.controllerTypeResolver = controllerTypeResolver;
-
             Cache = new ThreadSafeDictionary<string, IEnumerable<string>>();
         }
-
-        protected readonly IControllerTypeResolver controllerTypeResolver;
 
         /// <summary>
         /// Gets or sets the cache.
@@ -42,14 +33,16 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <summary>
         /// Resolves the action method parameters.
         /// </summary>
+        /// <param name="controllerTypeResolver">The controller type resolver.</param>
         /// <param name="areaName">Name of the area.</param>
         /// <param name="controllerName">Name of the controller.</param>
         /// <param name="actionMethodName">Name of the action method.</param>
         /// <returns>
         /// A action method parameters represented as a <see cref="string"/> instance
         /// </returns>
-        public IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName,
-                                                                 string actionMethodName)
+        public IEnumerable<string> ResolveActionMethodParameters(IControllerTypeResolver controllerTypeResolver,
+                                                                string areaName, string controllerName,
+                                                                string actionMethodName)
         {
             // Is the request cached?
             string cacheKey = areaName + "_" + controllerName + "_" + actionMethodName;
@@ -65,6 +58,9 @@ namespace MvcSiteMapProvider.Web.Mvc
             var actionParameters = new List<string>();
             if (controllerType != null)
             {
+
+                // TODO: Create service for creating controller descriptor, as this is done
+                // in more than one place in the project.
                 ControllerDescriptor controllerDescriptor = null;
                 if (typeof(IController).IsAssignableFrom(controllerType))
                 {

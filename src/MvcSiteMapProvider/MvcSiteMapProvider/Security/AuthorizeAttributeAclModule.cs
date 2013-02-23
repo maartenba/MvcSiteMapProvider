@@ -21,34 +21,28 @@ namespace MvcSiteMapProvider.Security
 #if MVC2
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
-            IControllerTypeResolver controllerTypeResolver,
             IObjectCopier objectCopier,
             RouteCollection routes
         )
         {
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
             if (routes == null)
                 throw new ArgumentNullException("routes");
 
             this.httpContextFactory = httpContextFactory;
-            this.controllerTypeResolver = controllerTypeResolver;
             this.objectCopier = objectCopier;
             this.routes = routes;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
-        protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IObjectCopier objectCopier;
         protected readonly RouteCollection routes;
 #else
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
-            IControllerTypeResolver controllerTypeResolver,
             IObjectCopier objectCopier,
             RouteCollection routes,
             IFilterProvider filterProvider
@@ -56,8 +50,6 @@ namespace MvcSiteMapProvider.Security
         {
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
             if (routes == null)
@@ -66,14 +58,12 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("filterProvider");
 
             this.httpContextFactory = httpContextFactory;
-            this.controllerTypeResolver = controllerTypeResolver;
             this.objectCopier = objectCopier;
             this.routes = routes;
             this.filterProvider = filterProvider;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
-        protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IObjectCopier objectCopier;
         protected readonly RouteCollection routes;
         protected readonly IFilterProvider filterProvider;
@@ -111,18 +101,18 @@ namespace MvcSiteMapProvider.Security
                 return true;
             }
 
-            return this.VerifyNode(node, httpContext);
+            return this.VerifyNode(siteMap, node, httpContext);
         }
 
         #endregion
 
         #region Protected Members
 
-        protected virtual bool VerifyNode(ISiteMapNode node, HttpContextBase httpContext)
+        protected virtual bool VerifyNode(ISiteMap siteMap, ISiteMapNode node, HttpContextBase httpContext)
         {
             // Time to delve into the AuthorizeAttribute defined on the node.
             // Let's start by getting all metadata for the controller...
-            var controllerType = controllerTypeResolver.ResolveControllerType(node.Area, node.Controller);
+            var controllerType = siteMap.ControllerTypeResolver.ResolveControllerType(node.Area, node.Controller);
             if (controllerType == null)
                 return true;
 

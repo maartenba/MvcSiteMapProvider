@@ -8,6 +8,7 @@ using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider
 {
@@ -20,6 +21,7 @@ namespace MvcSiteMapProvider
     {
         public LockableSiteMap(
             ISiteMapBuilder siteMapBuilder,
+            IControllerTypeResolver controllerTypeResolver,
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -27,7 +29,7 @@ namespace MvcSiteMapProvider
             IUrlPath urlPath,
             RouteCollection routes
             ) 
-            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
+            : base(siteMapBuilder, controllerTypeResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
         }
 

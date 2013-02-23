@@ -26,6 +26,7 @@ namespace MvcSiteMapProvider
     {
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
+            IControllerTypeResolver controllerTypeResolver,
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -36,6 +37,8 @@ namespace MvcSiteMapProvider
         {
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
+            if (controllerTypeResolver == null)
+                throw new ArgumentNullException("controllerTypeResolver");
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
             if (aclModule == null)
@@ -50,6 +53,7 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("routes");
 
             this.siteMapBuilder = siteMapBuilder;
+            this.controllerTypeResolver = controllerTypeResolver;
             this.httpContextFactory = httpContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
@@ -65,6 +69,9 @@ namespace MvcSiteMapProvider
 
         // Services
         protected readonly ISiteMapBuilder siteMapBuilder;
+        // This one is here because we need to keep its lifetime in sync with the sitemap object's lifetime
+        // for the controllerTypeResolver's internal caching to work.
+        protected readonly IControllerTypeResolver controllerTypeResolver; 
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
@@ -557,6 +564,14 @@ namespace MvcSiteMapProvider
                     throw new System.Security.SecurityException(Resources.Messages.SecurityTrimmingCannotBeDisabled);
                 this.securityTrimmingEnabled = value; 
             }
+        }
+
+        /// <summary>
+        /// Gets the ControllerTypeResolver for the current SiteMap instance.
+        /// </summary>
+        public IControllerTypeResolver ControllerTypeResolver
+        {
+            get { return this.controllerTypeResolver; }
         }
 
         #endregion

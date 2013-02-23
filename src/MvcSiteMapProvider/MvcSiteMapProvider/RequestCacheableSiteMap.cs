@@ -10,6 +10,7 @@ using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider
 {
@@ -22,6 +23,7 @@ namespace MvcSiteMapProvider
     {
         public RequestCacheableSiteMap(
             ISiteMapBuilder siteMapBuilder,
+            IControllerTypeResolver controllerTypeResolver,
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -30,7 +32,7 @@ namespace MvcSiteMapProvider
             RouteCollection routes,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
+            : base(siteMapBuilder, controllerTypeResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
