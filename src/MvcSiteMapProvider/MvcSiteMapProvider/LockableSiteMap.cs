@@ -22,6 +22,7 @@ namespace MvcSiteMapProvider
         public LockableSiteMap(
             ISiteMapBuilder siteMapBuilder,
             IControllerTypeResolver controllerTypeResolver,
+            IActionMethodParameterResolver actionMethodParameterResolver,
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -29,7 +30,7 @@ namespace MvcSiteMapProvider
             IUrlPath urlPath,
             RouteCollection routes
             ) 
-            : base(siteMapBuilder, controllerTypeResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
+            : base(siteMapBuilder, controllerTypeResolver, actionMethodParameterResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
         }
 

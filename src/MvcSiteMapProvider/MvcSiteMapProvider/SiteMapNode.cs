@@ -29,7 +29,6 @@ namespace MvcSiteMapProvider
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
-            IActionMethodParameterResolver actionMethodParameterResolver,
             IUrlPath urlPath,
             RouteCollection routes
             )
@@ -48,8 +47,6 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
             if (siteMapNodeVisibilityProviderStrategy == null)
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
-            if (actionMethodParameterResolver == null)
-                throw new ArgumentNullException("actionMethodParameterResolver");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
             if (routes == null)
@@ -62,7 +59,6 @@ namespace MvcSiteMapProvider
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
-            this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.urlPath = urlPath;
             this.routes = routes;
 
@@ -79,7 +75,6 @@ namespace MvcSiteMapProvider
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
-        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IUrlPath urlPath;
         protected readonly RouteCollection routes;
 
@@ -567,9 +562,9 @@ namespace MvcSiteMapProvider
                 if (this.IsDynamic == false)
                 {
                     // Pass controllertyperesolver to this method (from the current sitemap)
-                    // because we need to ensure 1 instance per sitemap instance for the cache to work on 
-                    // multi-tenant sites that have controller and action name collisions.
-                    actionParameters = actionMethodParameterResolver.ResolveActionMethodParameters(
+                    // because we need to ensure 1 instance per sitemap instance for the resolver's internal
+                    // cache to work on multi-tenant sites that have controller and action name collisions.
+                    actionParameters = this.SiteMap.ActionMethodParameterResolver.ResolveActionMethodParameters(
                         this.SiteMap.ControllerTypeResolver, this.Area, this.Controller, this.Action);
                 }
                 result = this.Attributes.MatchesRoute(actionParameters, routeValues);

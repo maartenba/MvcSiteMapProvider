@@ -38,5 +38,6 @@ namespace MvcSiteMapProvider
         string ResourceKey { get; set; }
         bool SecurityTrimmingEnabled { get; set; }
         IControllerTypeResolver ControllerTypeResolver { get; }
+        IActionMethodParameterResolver ActionMethodParameterResolver { get; }
     }
 }

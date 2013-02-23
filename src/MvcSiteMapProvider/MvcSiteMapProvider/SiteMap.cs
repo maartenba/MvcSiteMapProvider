@@ -27,6 +27,7 @@ namespace MvcSiteMapProvider
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
             IControllerTypeResolver controllerTypeResolver,
+            IActionMethodParameterResolver actionMethodParameterResolver,
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -39,6 +40,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapBuilder");
             if (controllerTypeResolver == null)
                 throw new ArgumentNullException("controllerTypeResolver");
+            if (actionMethodParameterResolver == null)
+                throw new ArgumentNullException("actionMethodParameterResolver");
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
             if (aclModule == null)
@@ -54,6 +57,7 @@ namespace MvcSiteMapProvider
 
             this.siteMapBuilder = siteMapBuilder;
             this.controllerTypeResolver = controllerTypeResolver;
+            this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.httpContextFactory = httpContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
@@ -71,7 +75,8 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapBuilder siteMapBuilder;
         // This one is here because we need to keep its lifetime in sync with the sitemap object's lifetime
         // for the controllerTypeResolver's internal caching to work.
-        protected readonly IControllerTypeResolver controllerTypeResolver; 
+        protected readonly IControllerTypeResolver controllerTypeResolver;
+        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
@@ -569,9 +574,19 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets the ControllerTypeResolver for the current SiteMap instance.
         /// </summary>
+        /// <remarks>There is 1 instance of controller type resolver per site map.</remarks>
         public IControllerTypeResolver ControllerTypeResolver
         {
             get { return this.controllerTypeResolver; }
+        }
+
+        /// <summary>
+        /// Gets the ActionMethodParameterResolver for the current SiteMap instance.
+        /// </summary>
+        /// <remarks>There is 1 instance of controller type resolver per site map.</remarks>
+        public IActionMethodParameterResolver ActionMethodParameterResolver
+        {
+            get { return this.actionMethodParameterResolver; }
         }
 
         #endregion

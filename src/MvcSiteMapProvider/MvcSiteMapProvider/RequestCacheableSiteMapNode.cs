@@ -29,7 +29,6 @@ namespace MvcSiteMapProvider
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
-            IActionMethodParameterResolver actionMethodParameterResolver,
             IUrlPath urlPath,
             RouteCollection routes,
             IRequestCache requestCache
@@ -43,7 +42,6 @@ namespace MvcSiteMapProvider
                 dynamicNodeProviderStrategy, 
                 siteMapNodeUrlResolverStrategy, 
                 siteMapNodeVisibilityProviderStrategy, 
-                actionMethodParameterResolver,
                 urlPath,
                 routes
             )

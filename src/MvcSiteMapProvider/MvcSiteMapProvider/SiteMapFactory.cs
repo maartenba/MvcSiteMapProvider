@@ -65,11 +65,13 @@ namespace MvcSiteMapProvider
             // IMPORTANT: We need to ensure there is one instance of controllerTypeResolver per SiteMap instance.
             var controllerTypeResolver = new ControllerTypeResolver(routes);
 
-            // TODO: Move actionMethodParameterResolver to SiteMap because its cache needs to be in sync with SiteMap
+            // TODO: create factories for ControllerTypeResolver and ActionMethodParameterResolver
+            var actionMethodParameterResolver = new ActionMethodParameterResolver();
 
             return new RequestCacheableSiteMap(
                 siteMapBuilder,
                 controllerTypeResolver,
+                actionMethodParameterResolver,
                 httpContextFactory,
                 aclModule,
                 siteMapNodeCollectionFactory,

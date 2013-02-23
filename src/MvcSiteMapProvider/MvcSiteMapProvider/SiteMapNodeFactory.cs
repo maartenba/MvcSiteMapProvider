@@ -22,7 +22,6 @@ namespace MvcSiteMapProvider
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
-            IActionMethodParameterResolver actionMethodParameterResolver,
             IUrlPath urlPath,
             RouteCollection routes,
             IRequestCache requestCache
@@ -36,8 +35,6 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
             if (siteMapNodeVisibilityProviderStrategy == null)
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
-            if (actionMethodParameterResolver == null)
-                throw new ArgumentNullException("actionMethodParameterResolver");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
             if (routes == null)
@@ -49,7 +46,6 @@ namespace MvcSiteMapProvider
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
-            this.actionMethodParameterResolver = actionMethodParameterResolver;
             this.urlPath = urlPath;
             this.routes = routes;
             this.requestCache = requestCache;
@@ -60,7 +56,6 @@ namespace MvcSiteMapProvider
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
-        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
         protected readonly IUrlPath urlPath;
         protected readonly RouteCollection routes;
         protected readonly IRequestCache requestCache;
@@ -92,7 +87,6 @@ namespace MvcSiteMapProvider
                 dynamicNodeProviderStrategy,
                 siteMapNodeUrlResolverStrategy,
                 siteMapNodeVisibilityProviderStrategy,
-                actionMethodParameterResolver,
                 urlPath,
                 routes,
                 requestCache);

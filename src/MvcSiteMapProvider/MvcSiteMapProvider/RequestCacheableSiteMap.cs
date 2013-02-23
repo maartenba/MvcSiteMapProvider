@@ -24,6 +24,7 @@ namespace MvcSiteMapProvider
         public RequestCacheableSiteMap(
             ISiteMapBuilder siteMapBuilder,
             IControllerTypeResolver controllerTypeResolver,
+            IActionMethodParameterResolver actionMethodParameterResolver,
             IHttpContextFactory httpContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -32,7 +33,7 @@ namespace MvcSiteMapProvider
             RouteCollection routes,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, controllerTypeResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
+            : base(siteMapBuilder, controllerTypeResolver, actionMethodParameterResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");
