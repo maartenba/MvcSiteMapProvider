@@ -110,8 +110,18 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Reflection.IObjectCopier>()
+                .Singleton()
                 .Use<MvcSiteMapProvider.Reflection.ObjectCopier>()
             );
+
+            // Configure default filter provider with one that provides filters
+            // from the global filter collection.
+            container.Configure(x => x
+                .For<System.Web.Mvc.IFilterProvider>()
+                .Singleton()
+                .Use<MvcSiteMapProvider.Web.Mvc.Filters.FilterProvider>()
+            );
+
 
             var aclModules = new MvcSiteMapProvider.Security.CompositeAclModule(
                 container.GetInstance<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>(),

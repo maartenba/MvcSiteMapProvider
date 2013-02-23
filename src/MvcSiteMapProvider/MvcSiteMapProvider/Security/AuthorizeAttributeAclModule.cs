@@ -18,11 +18,12 @@ namespace MvcSiteMapProvider.Security
     public class AuthorizeAttributeAclModule
         : IAclModule
     {
+#if MVC2
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
             IControllerTypeResolver controllerTypeResolver,
             IObjectCopier objectCopier
-            )
+        )
         {
             if (httpContextFactory == null)
                 throw new ArgumentNullException("httpContextFactory");
@@ -39,6 +40,34 @@ namespace MvcSiteMapProvider.Security
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IObjectCopier objectCopier;
+#else
+        public AuthorizeAttributeAclModule(
+            IHttpContextFactory httpContextFactory,
+            IControllerTypeResolver controllerTypeResolver,
+            IObjectCopier objectCopier,
+            IFilterProvider filterProvider
+            )
+        {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+            if (controllerTypeResolver == null)
+                throw new ArgumentNullException("controllerTypeResolver");
+            if (objectCopier == null)
+                throw new ArgumentNullException("objectCopier");
+            if (filterProvider == null)
+                throw new ArgumentNullException("filterProvider");
+
+            this.httpContextFactory = httpContextFactory;
+            this.controllerTypeResolver = controllerTypeResolver;
+            this.objectCopier = objectCopier;
+            this.filterProvider = filterProvider;
+        }
+
+        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IControllerTypeResolver controllerTypeResolver;
+        protected readonly IObjectCopier objectCopier;
+        protected readonly IFilterProvider filterProvider;
+#endif
 
         #region IAclModule Members
 
@@ -160,7 +189,7 @@ namespace MvcSiteMapProvider.Security
             if (actionDescriptor == null)
                 return true;
 
-            // fixes #130 - Check whether we have an AllowAnonymous Attribute
+            // Fixes #130 - Check whether we have an AllowAnonymous Attribute
             var ignoreAuthorization = this.HasAllowAnonymousAttribute(actionDescriptor);
             if (ignoreAuthorization)
                 return true;
@@ -204,39 +233,11 @@ namespace MvcSiteMapProvider.Security
 #else
         protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ActionDescriptor actionDescriptor, ControllerContext controllerContext)
         {
-            IFilterProvider filterProvider = ResolveFilterProvider();
-            IEnumerable<Filter> filters;
-
-            // TODO: Inject the IFilterProvider rather than using DependencyResolver
-
-            // If depencency resolver has an IFilterProvider registered, use it
-            if (filterProvider != null)
-            {
-                filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
-            }
-            // Otherwise use FilterProviders.Providers
-            else
-            {
-                filters = FilterProviders.Providers.GetFilters(controllerContext, actionDescriptor);
-            }
+            var filters = filterProvider.GetFilters(controllerContext, actionDescriptor);
 
             return filters
                     .Where(f => typeof(AuthorizeAttribute).IsAssignableFrom(f.Instance.GetType()))
                     .Select(f => f.Instance as AuthorizeAttribute);
-        }
-
-
-        protected virtual IFilterProvider ResolveFilterProvider()
-        {
-            var key = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
-            var requestCache = httpContextFactory.GetRequestCache();
-            var filterProvider = requestCache.GetValue<IFilterProvider>(key);
-            if (filterProvider == null)
-            {
-                filterProvider = DependencyResolver.Current.GetService<IFilterProvider>();
-                requestCache.SetValue<IFilterProvider>(key, filterProvider);
-            }
-            return filterProvider;
         }
 #endif
 
