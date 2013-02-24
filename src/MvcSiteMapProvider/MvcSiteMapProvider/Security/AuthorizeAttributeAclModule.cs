@@ -22,8 +22,7 @@ namespace MvcSiteMapProvider.Security
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
-            IControllerDescriptorFactory controllerDescriptorFactory,
-            RouteCollection routes
+            IControllerDescriptorFactory controllerDescriptorFactory
         )
         {
             if (mvcContextFactory == null)
@@ -32,25 +31,20 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
                 throw new ArgumentNullException("controllerDescriptorFactory");
-            if (routes == null)
-                throw new ArgumentNullException("routes");
 
             this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
-            this.routes = routes;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
-        protected readonly RouteCollection routes;
 #else
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
-            RouteCollection routes,
             IFilterProvider filterProvider
             )
         {
@@ -60,22 +54,18 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
                 throw new ArgumentNullException("controllerDescriptorFactory");
-            if (routes == null)
-                throw new ArgumentNullException("routes");
             if (filterProvider == null)
                 throw new ArgumentNullException("filterProvider");
 
             this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
-            this.routes = routes;
             this.filterProvider = filterProvider;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
-        protected readonly RouteCollection routes;
         protected readonly IFilterProvider filterProvider;
 #endif
 
@@ -166,25 +156,26 @@ namespace MvcSiteMapProvider.Security
 
         protected virtual RouteData FindRoutesForNode(ISiteMapNode node, string originalPath, HttpContextBase httpContext)
         {
-            var originalRoutes = this.routes.GetRouteData(httpContext);
+            var routes = mvcContextFactory.GetRoutes();
+            var originalRoutes = routes.GetRouteData(httpContext);
             var nodeUrl = node.Url;
             httpContext.RewritePath(nodeUrl, true);
 
-            RouteData routes = node.GetRouteData(httpContext);
-            if (routes != null)
+            RouteData routeData = node.GetRouteData(httpContext);
+            if (routeData != null)
             {
                 foreach (var routeValue in node.RouteValues)
                 {
-                    routes.Values[routeValue.Key] = routeValue.Value;
+                    routeData.Values[routeValue.Key] = routeValue.Value;
                 }
-                if (originalRoutes != null && (!routes.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
+                if (originalRoutes != null && (!routeData.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
                 {
-                    routes.DataTokens.Remove("area");
+                    routeData.DataTokens.Remove("area");
                     //routes.DataTokens.Remove("Namespaces");
                     //routes.Values.Remove("area");
                 }
             }
-            return routes;
+            return routeData;
         }
 
         protected virtual bool VerifyControllerAttributes(ISiteMapNode node, Type controllerType, ControllerContext controllerContext)

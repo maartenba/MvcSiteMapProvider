@@ -9,8 +9,8 @@ using MvcSiteMapProvider.Web;
 namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
-    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Web.MvcHttpContext"/>
-    /// at runtime.
+    /// An abstract factory that can be used to create new instances of MVC
+    /// context-related instances at runtime.
     /// </summary>
     public class MvcContextFactory
         : IMvcContextFactory
@@ -54,6 +54,11 @@ namespace MvcSiteMapProvider.Web.Mvc
         public virtual IRequestCache GetRequestCache()
         {
             return new RequestCache(this);
+        }
+
+        public virtual RouteCollection GetRoutes()
+        {
+            return RouteTable.Routes;
         }
 
         public virtual IUrlHelper CreateUrlHelper(RequestContext requestContext)

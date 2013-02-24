@@ -23,8 +23,7 @@ namespace MvcSiteMapProvider
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
             IUrlPath urlPath,
-            RouteCollection routes,
-            IRequestCache requestCache
+            IMvcContextFactory mvcContextFactory
             ) 
         {
             if (siteMapNodeChildStateFactory == null)
@@ -37,18 +36,15 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
-            if (routes == null)
-                throw new ArgumentNullException("routes");
-            if (requestCache == null)
-                throw new ArgumentNullException("requestCache");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
 
             this.siteMapNodeChildStateFactory = siteMapNodeChildStateFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
             this.urlPath = urlPath;
-            this.routes = routes;
-            this.requestCache = requestCache;
+            this.mvcContextFactory = mvcContextFactory;
         }
 
         // Services
@@ -57,8 +53,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
         protected readonly IUrlPath urlPath;
-        protected readonly RouteCollection routes;
-        protected readonly IRequestCache requestCache;
+        protected readonly IMvcContextFactory mvcContextFactory;
 
 
         #region ISiteMapNodeFactory Members
@@ -77,6 +72,9 @@ namespace MvcSiteMapProvider
         {
             // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
             var localizationService = siteMapNodeChildStateFactory.CreateLocalizationService(implicitResourceKey);
+
+            var routes = mvcContextFactory.GetRoutes();
+            var requestCache = mvcContextFactory.GetRequestCache();
 
             return new RequestCacheableSiteMapNode(
                 siteMap,

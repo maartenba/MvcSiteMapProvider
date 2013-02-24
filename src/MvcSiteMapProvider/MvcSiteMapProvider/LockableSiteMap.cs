@@ -26,10 +26,9 @@ namespace MvcSiteMapProvider
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
-            IUrlPath urlPath,
-            RouteCollection routes
+            IUrlPath urlPath
             ) 
-            : base(siteMapBuilder, mvcResolver, mvcContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
+            : base(siteMapBuilder, mvcResolver, mvcContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath)
         {
         }
 

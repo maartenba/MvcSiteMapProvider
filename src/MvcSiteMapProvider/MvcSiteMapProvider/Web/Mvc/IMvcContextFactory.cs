@@ -16,6 +16,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         RequestContext CreateRequestContext();
         ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller);
         IRequestCache GetRequestCache();
+        RouteCollection GetRoutes();
         IUrlHelper CreateUrlHelper(RequestContext requestContext);
         IUrlHelper CreateUrlHelper();
     }
