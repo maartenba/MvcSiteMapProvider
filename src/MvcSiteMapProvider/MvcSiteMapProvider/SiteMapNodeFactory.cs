@@ -19,6 +19,7 @@ namespace MvcSiteMapProvider
     {
         public SiteMapNodeFactory(
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
+            ILocalizationServiceFactory localizationServiceFactory,
             IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
             ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
             ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
@@ -28,6 +29,8 @@ namespace MvcSiteMapProvider
         {
             if (siteMapNodeChildStateFactory == null)
                 throw new ArgumentNullException("siteMapNodeChildStateFactory");
+            if (localizationServiceFactory == null)
+                throw new ArgumentNullException("localizationServiceFactory");
             if (dynamicNodeProviderStrategy == null)
                 throw new ArgumentNullException("dynamicNodeProviderStrategy");
             if (siteMapNodeUrlResolverStrategy == null)
@@ -40,6 +43,7 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("mvcContextFactory");
 
             this.siteMapNodeChildStateFactory = siteMapNodeChildStateFactory;
+            this.localizationServiceFactory = localizationServiceFactory;
             this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
             this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
             this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
@@ -49,6 +53,7 @@ namespace MvcSiteMapProvider
 
         // Services
         protected readonly ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory;
+        protected readonly ILocalizationServiceFactory localizationServiceFactory;
         protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
         protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
         protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
@@ -70,11 +75,11 @@ namespace MvcSiteMapProvider
 
         protected ISiteMapNode CreateInternal(ISiteMap siteMap, string key, string implicitResourceKey, bool isDynamic)
         {
-            // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
-            var localizationService = siteMapNodeChildStateFactory.CreateLocalizationService(implicitResourceKey);
-
             var routes = mvcContextFactory.GetRoutes();
             var requestCache = mvcContextFactory.GetRequestCache();
+
+            // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
+            var localizationService = localizationServiceFactory.Create(implicitResourceKey);
 
             return new RequestCacheableSiteMapNode(
                 siteMap,

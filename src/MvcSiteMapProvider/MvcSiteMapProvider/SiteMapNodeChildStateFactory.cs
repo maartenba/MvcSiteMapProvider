@@ -14,38 +14,23 @@ namespace MvcSiteMapProvider
         : ISiteMapNodeChildStateFactory
     {
         public SiteMapNodeChildStateFactory(
-            IExplicitResourceKeyParser explicitResourceKeyParser,
-            IStringLocalizer stringLocalizer,
             IAttributeCollectionFactory attributeCollectionFactory,
             IRouteValueCollectionFactory routeValueCollectionFactory
             )
         {
-            if (explicitResourceKeyParser == null)
-                throw new ArgumentNullException("explicitResourceKeyParser");
-            if (stringLocalizer == null)
-                throw new ArgumentNullException("stringLocalizer");
             if (attributeCollectionFactory == null)
                 throw new ArgumentNullException("attributeCollectionFactory");
             if (routeValueCollectionFactory == null)
                 throw new ArgumentNullException("routeValueCollectionFactory");
 
-            this.explicitResourceKeyParser = explicitResourceKeyParser;
-            this.stringLocalizer = stringLocalizer;
             this.attributeCollectionFactory = attributeCollectionFactory;
             this.routeValueCollectionFactory = routeValueCollectionFactory;
         }
 
-        protected readonly IExplicitResourceKeyParser explicitResourceKeyParser;
-        protected readonly IStringLocalizer stringLocalizer;
         protected readonly IAttributeCollectionFactory attributeCollectionFactory;
         protected readonly IRouteValueCollectionFactory routeValueCollectionFactory;
 
         #region ISiteMapNodeChildStateFactory Members
-
-        public virtual ILocalizationService CreateLocalizationService(string implicitResourceKey)
-        {
-            return new LocalizationService(implicitResourceKey, explicitResourceKeyParser, stringLocalizer);
-        }
 
         public virtual IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
         {
