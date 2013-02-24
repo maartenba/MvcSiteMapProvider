@@ -22,6 +22,7 @@ namespace MvcSiteMapProvider.Security
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
             IObjectCopier objectCopier,
+            IControllerDescriptorFactory controllerDescriptorFactory,
             RouteCollection routes
         )
         {
@@ -29,21 +30,26 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("httpContextFactory");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
+            if (controllerDescriptorFactory == null)
+                throw new ArgumentNullException("controllerDescriptorFactory");
             if (routes == null)
                 throw new ArgumentNullException("routes");
 
             this.httpContextFactory = httpContextFactory;
             this.objectCopier = objectCopier;
+            this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.routes = routes;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IObjectCopier objectCopier;
+        protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly RouteCollection routes;
 #else
         public AuthorizeAttributeAclModule(
             IHttpContextFactory httpContextFactory,
             IObjectCopier objectCopier,
+            IControllerDescriptorFactory controllerDescriptorFactory,
             RouteCollection routes,
             IFilterProvider filterProvider
             )
@@ -52,6 +58,8 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("httpContextFactory");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
+            if (controllerDescriptorFactory == null)
+                throw new ArgumentNullException("controllerDescriptorFactory");
             if (routes == null)
                 throw new ArgumentNullException("routes");
             if (filterProvider == null)
@@ -59,12 +67,14 @@ namespace MvcSiteMapProvider.Security
 
             this.httpContextFactory = httpContextFactory;
             this.objectCopier = objectCopier;
+            this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.routes = routes;
             this.filterProvider = filterProvider;
         }
 
         protected readonly IHttpContextFactory httpContextFactory;
         protected readonly IObjectCopier objectCopier;
+        protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly RouteCollection routes;
         protected readonly IFilterProvider filterProvider;
 #endif
@@ -180,7 +190,7 @@ namespace MvcSiteMapProvider.Security
         protected virtual bool VerifyControllerAttributes(ISiteMapNode node, Type controllerType, ControllerContext controllerContext)
         {
             // Get controller descriptor
-            var controllerDescriptor = this.GetControllerDescriptor(controllerType);
+            var controllerDescriptor = controllerDescriptorFactory.Create(controllerType);
             if (controllerDescriptor == null)
                 return true;
 
@@ -255,8 +265,6 @@ namespace MvcSiteMapProvider.Security
         }
 #endif
 
-
-
         protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext)
         {
             var currentAuthorizationAttributeType = authorizeAttribute.GetType();
@@ -271,20 +279,6 @@ namespace MvcSiteMapProvider.Security
             objectCopier.Copy(authorizeAttribute, subclassedAttribute);
 
             return subclassedAttribute.IsAuthorized(controllerContext.HttpContext);
-        }
-
-        protected virtual ControllerDescriptor GetControllerDescriptor(Type controllerType)
-        {
-            ControllerDescriptor controllerDescriptor = null;
-            if (typeof(IController).IsAssignableFrom(controllerType))
-            {
-                controllerDescriptor = new ReflectedControllerDescriptor(controllerType);
-            }
-            else if (typeof(IAsyncController).IsAssignableFrom(controllerType))
-            {
-                controllerDescriptor = new ReflectedAsyncControllerDescriptor(controllerType);
-            }
-            return controllerDescriptor;
         }
 
         protected virtual ActionDescriptor GetActionDescriptor(string action, ControllerDescriptor controllerDescriptor, ControllerContext controllerContext)

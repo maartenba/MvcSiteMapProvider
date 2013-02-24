@@ -144,7 +144,12 @@ namespace MvcMusicStore
                 .Use(RouteTable.Routes)
             );
 
-            
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Web.Mvc.IControllerDescriptorFactory>()
+                .Singleton()
+                .Use<MvcSiteMapProvider.Web.Mvc.ControllerDescriptorFactory>()
+            );
+
 
 
             var aclModules = new MvcSiteMapProvider.Security.CompositeAclModule(

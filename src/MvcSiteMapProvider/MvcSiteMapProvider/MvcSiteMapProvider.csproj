@@ -107,6 +107,8 @@
     <Compile Include="Web\Compilation\IBuildManager.cs" />
     <Compile Include="Web\Mvc\ActionMethodParameterResolverFactory.cs" />
     <Compile Include="Web\Mvc\ControllerBuilderAdaptor.cs" />
+    <Compile Include="Web\Mvc\ControllerDescriptorFactory.cs" />
+    <Compile Include="Web\Mvc\IControllerDescriptorFactory.cs" />
     <Compile Include="Web\Mvc\ControllerTypeResolverFactory.cs" />
     <Compile Include="Web\Mvc\Filters\FilterProvider.cs" />
     <Compile Include="Web\Mvc\IActionMethodParameterResolverFactory.cs" />

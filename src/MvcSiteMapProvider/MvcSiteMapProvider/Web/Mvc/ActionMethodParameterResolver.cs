@@ -17,10 +17,19 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <summary>
         /// Initializes a new instance of the <see cref="ActionMethodParameterResolver"/> class.
         /// </summary>
-        public ActionMethodParameterResolver()
+        public ActionMethodParameterResolver(
+            IControllerDescriptorFactory controllerDescriptorFactory
+            )
         {
+            if (controllerDescriptorFactory == null)
+                throw new ArgumentNullException("controllerDescriptorFactory");
+
+            this.controllerDescriptorFactory = controllerDescriptorFactory;
+
             Cache = new ThreadSafeDictionary<string, IEnumerable<string>>();
         }
+
+        protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
 
         /// <summary>
         /// Gets or sets the cache.
@@ -58,18 +67,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             var actionParameters = new List<string>();
             if (controllerType != null)
             {
-
-                // TODO: Create service for creating controller descriptor, as this is done
-                // in more than one place in the project.
-                ControllerDescriptor controllerDescriptor = null;
-                if (typeof(IController).IsAssignableFrom(controllerType))
-                {
-                    controllerDescriptor = new ReflectedControllerDescriptor(controllerType);
-                }
-                else if (typeof(IAsyncController).IsAssignableFrom(controllerType))
-                {
-                    controllerDescriptor = new ReflectedAsyncControllerDescriptor(controllerType);
-                }
+                var controllerDescriptor = controllerDescriptorFactory.Create(controllerType);
 
                 ActionDescriptor[] actionDescriptors = controllerDescriptor.GetCanonicalActions()
                     .Where(a => a.ActionName == actionMethodName).ToArray();

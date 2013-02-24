@@ -9,11 +9,24 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class ActionMethodParameterResolverFactory
         : IActionMethodParameterResolverFactory
     {
+        public ActionMethodParameterResolverFactory(
+            IControllerDescriptorFactory controllerDescriptorFactory
+            )
+        {
+            if (controllerDescriptorFactory == null)
+                throw new ArgumentNullException("controllerDescriptorFactory");
+
+            this.controllerDescriptorFactory = controllerDescriptorFactory;
+        }
+
+        protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
+
+
         #region IActionMethodParameterResolverFactory Members
 
         public IActionMethodParameterResolver Create()
         {
-            return new ActionMethodParameterResolver();
+            return new ActionMethodParameterResolver(controllerDescriptorFactory);
         }
 
         #endregion
