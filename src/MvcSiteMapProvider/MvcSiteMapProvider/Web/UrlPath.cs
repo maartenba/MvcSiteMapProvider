@@ -11,6 +11,18 @@ namespace MvcSiteMapProvider.Web
     public class UrlPath 
         : IUrlPath
     {
+        public UrlPath(
+            IHttpContextFactory httpContextFactory
+            )
+        {
+            if (httpContextFactory == null)
+                throw new ArgumentNullException("httpContextFactory");
+
+            this.httpContextFactory = httpContextFactory;
+        }
+
+        protected readonly IHttpContextFactory httpContextFactory;
+
         public string AppDomainAppVirtualPath
         {
             get { return HttpRuntime.AppDomainAppVirtualPath; }
@@ -346,25 +358,8 @@ namespace MvcSiteMapProvider.Web
                 return originalUrl;
             }
 
-            // Fix up image path for ~ root app dir directory    
-            if (originalUrl.StartsWith("~"))
-            {
-                string newUrl = "";
-                if (HttpContext.Current != null)
-                {
-                    newUrl = HttpContext.Current.Request.ApplicationPath +
-                             originalUrl.Substring(1).Replace("//", "/");
-                }
-                else
-                {
-                    // Not context: assume current directory is the base directory   
-                    throw new ArgumentException(Resources.Messages.RelativeUrlNotAllowed, "originalUrl");
-                }
-
-                // Just to be sure fix up any double slashes     
-                return newUrl;
-            }
-            return originalUrl;
+            // Fix up image path for ~ root app dir directory
+            return this.MakeVirtualPathAppAbsolute(originalUrl);
         }
 
         /// <summary>
@@ -394,15 +389,17 @@ namespace MvcSiteMapProvider.Web
             // So we use a variable that (at least from what I can tell) gives us	
             // the public URL:
             Uri originalUri = null;
-            if (HttpContext.Current.Request.Headers["Host"] != null)
+            var httpContext = httpContextFactory.Create();
+
+            if (httpContext.Request.Headers["Host"] != null)
             {
-                string scheme = HttpContext.Current.Request.Headers["HTTP_X_FORWARDED_PROTO"]
-                    ?? HttpContext.Current.Request.Url.Scheme;
-                originalUri = new Uri(scheme + Uri.SchemeDelimiter + HttpContext.Current.Request.Headers["Host"]);
+                string scheme = httpContext.Request.Headers["HTTP_X_FORWARDED_PROTO"]
+                    ?? httpContext.Request.Url.Scheme;
+                originalUri = new Uri(scheme + Uri.SchemeDelimiter + httpContext.Request.Headers["Host"]);
             }
             else
             {
-                originalUri = HttpContext.Current.Request.Url;
+                originalUri = httpContext.Request.Url;
             }
 
             newUrl = (forceHttps ? "https" : originalUri.Scheme) +
