@@ -22,7 +22,6 @@ namespace MvcSiteMapProvider
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IUrlPath urlPath,
-            IRequestCache requestCache,
             IControllerTypeResolverFactory controllerTypeResolverFactory,
             IActionMethodParameterResolverFactory actionMethodParameterResolverFactory,
             IMvcResolverFactory mvcResolverFactory
@@ -38,8 +37,6 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("genericDictionaryFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
-            if (requestCache == null)
-                throw new ArgumentNullException("requestCache");
             if (controllerTypeResolverFactory == null)
                 throw new ArgumentNullException("controllerTypeResolverFactory");
             if (actionMethodParameterResolverFactory == null)
@@ -52,7 +49,6 @@ namespace MvcSiteMapProvider
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
             this.urlPath = urlPath;
-            this.requestCache = requestCache;
             this.controllerTypeResolverFactory = controllerTypeResolverFactory;
             this.actionMethodParameterResolverFactory = actionMethodParameterResolverFactory;
             this.mvcResolverFactory = mvcResolverFactory;
@@ -63,7 +59,6 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
         protected readonly IUrlPath urlPath;
-        protected readonly IRequestCache requestCache;
         protected readonly IControllerTypeResolverFactory controllerTypeResolverFactory;
         protected readonly IActionMethodParameterResolverFactory actionMethodParameterResolverFactory;
         protected readonly IMvcResolverFactory mvcResolverFactory;
@@ -72,7 +67,8 @@ namespace MvcSiteMapProvider
 
         public virtual ISiteMap Create(ISiteMapBuilder siteMapBuilder)
         {
-            var routes = this.mvcContextFactory.GetRoutes();
+            var routes = mvcContextFactory.GetRoutes();
+            var requestCache = mvcContextFactory.GetRequestCache();
 
             // IMPORTANT: We need to ensure there is one instance of controllerTypeResolver and 
             // one instance of ActionMethodParameterResolver per SiteMap instance.
