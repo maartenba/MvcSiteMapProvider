@@ -3,6 +3,8 @@
 // See http://www.gnu.org/licenses/gpl-2.0.html. 
 // All other rights reserved.
 
+// Modified by Shad Storhaug
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,8 @@ namespace MvcSiteMapProvider.Reflection
     /// <summary>
     /// ObjectCopier
     /// </summary>
-    public class ObjectCopier : MvcSiteMapProvider.Reflection.IObjectCopier
+    public class ObjectCopier 
+        : IObjectCopier
     {
         public void Copy(object source, object destination, params string[] excludedMembers)
         {
