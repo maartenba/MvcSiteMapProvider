@@ -561,9 +561,9 @@ namespace MvcSiteMapProvider
                 IEnumerable<string> actionParameters = new List<string>();
                 if (this.IsDynamic == false)
                 {
-                    // Pass controllertyperesolver to this method (from the current sitemap)
-                    // because we need to ensure 1 instance per sitemap instance for the resolver's internal
-                    // cache to work on multi-tenant sites that would potentailly have controller and action name collisions.
+                    // We need to ensure 1 instance per sitemap instance for the resolver's internal
+                    // cache to work on multi-tenant sites that would potentailly have area, 
+                    // controller and action name collisions.
                     actionParameters = this.SiteMap.ResolveActionMethodParameters(
                         this.Area, this.Controller, this.Action);
                 }
