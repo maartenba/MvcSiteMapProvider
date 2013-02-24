@@ -86,6 +86,7 @@
     <Compile Include="Globalization\StringLocalizer.cs" />
     <Compile Include="IPreservedRouteParameterCollection.cs" />
     <Compile Include="IRoleCollection.cs" />
+    <Compile Include="ISiteMapNodePluginProvider.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="RoleCollection.cs" />
     <Compile Include="ISiteMapChildStateFactory.cs" />
     <Compile Include="SiteMapChildStateFactory.cs" />
+    <Compile Include="SiteMapNodePluginProvider.cs" />
     <Compile Include="SiteMapNodeVisibilityProviderBase.cs" />
     <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />

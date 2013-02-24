@@ -178,6 +178,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.IDynamicNodeProviderStrategy>()
+                .Singleton()
                 .Use<MvcSiteMapProvider.DynamicNodeProviderStrategy>()
             );
 
@@ -193,6 +194,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Web.UrlResolver.ISiteMapNodeUrlResolverStrategy>()
+                .Singleton()
                 .Use<MvcSiteMapProvider.Web.UrlResolver.SiteMapNodeUrlResolverStrategy>()
             );
 
@@ -208,6 +210,7 @@ namespace MvcMusicStore
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.ISiteMapNodeVisibilityProviderStrategy>()
+                .Singleton()
                 .Use<MvcSiteMapProvider.SiteMapNodeVisibilityProviderStrategy>()
             );
 

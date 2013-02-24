@@ -24,9 +24,7 @@ namespace MvcSiteMapProvider
             bool isDynamic,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
-            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
-            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
-            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            ISiteMapNodePluginProvider pluginProvider,
             IUrlPath urlPath,
             RouteCollection routes
             )
@@ -36,9 +34,7 @@ namespace MvcSiteMapProvider
                 isDynamic, 
                 siteMapNodeChildStateFactory, 
                 localizationService, 
-                dynamicNodeProviderStrategy, 
-                siteMapNodeUrlResolverStrategy, 
-                siteMapNodeVisibilityProviderStrategy, 
+                pluginProvider,
                 urlPath,
                 routes
             )

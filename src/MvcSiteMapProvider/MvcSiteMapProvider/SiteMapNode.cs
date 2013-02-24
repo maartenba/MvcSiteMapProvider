@@ -26,9 +26,7 @@ namespace MvcSiteMapProvider
             bool isDynamic,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
-            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
-            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
-            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            ISiteMapNodePluginProvider pluginProvider,
             IUrlPath urlPath,
             RouteCollection routes
             )
@@ -41,12 +39,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeChildStateFactory");
             if (localizationService == null)
                 throw new ArgumentNullException("localizationService");
-            if (dynamicNodeProviderStrategy == null)
-                throw new ArgumentNullException("dynamicNodeProviderStrategy");
-            if (siteMapNodeUrlResolverStrategy == null)
-                throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
-            if (siteMapNodeVisibilityProviderStrategy == null)
-                throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
+            if (pluginProvider == null)
+                throw new ArgumentNullException("pluginProvider");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
             if (routes == null)
@@ -56,9 +50,7 @@ namespace MvcSiteMapProvider
             this.key = key;
             this.isDynamic = isDynamic;
             this.localizationService = localizationService;
-            this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
-            this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
-            this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
+            this.pluginProvider = pluginProvider;
             this.urlPath = urlPath;
             this.routes = routes;
 
@@ -72,9 +64,7 @@ namespace MvcSiteMapProvider
 
         // Services
         protected readonly ILocalizationService localizationService;
-        protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
-        protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
-        protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
+        protected readonly ISiteMapNodePluginProvider pluginProvider;
         protected readonly IUrlPath urlPath;
         protected readonly RouteCollection routes;
 
@@ -86,9 +76,9 @@ namespace MvcSiteMapProvider
         protected readonly IMetaRobotsValueCollection metaRobotsValues;
 
         // Object State
+        protected readonly ISiteMap siteMap;
         protected readonly string key;
         protected readonly bool isDynamic;
-        protected ISiteMap siteMap;
         protected string title = String.Empty;
         protected string description = String.Empty;
         protected DateTime lastModifiedDate = DateTime.MinValue;
@@ -243,7 +233,7 @@ namespace MvcSiteMapProvider
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return siteMapNodeVisibilityProviderStrategy.IsVisible(this.VisibilityProvider, this, sourceMetadata);
+            return pluginProvider.VisibilityProviderStrategy.IsVisible(this.VisibilityProvider, this, sourceMetadata);
         }
 
         #endregion
@@ -266,7 +256,7 @@ namespace MvcSiteMapProvider
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return dynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider);
+            return pluginProvider.DynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider);
         }
 
         /// <summary>
@@ -279,7 +269,7 @@ namespace MvcSiteMapProvider
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            get { return (dynamicNodeProviderStrategy.GetProvider(this.DynamicNodeProvider) != null); }
+            get { return (pluginProvider.DynamicNodeProviderStrategy.GetProvider(this.DynamicNodeProvider) != null); }
         }
 
         #endregion
@@ -368,7 +358,7 @@ namespace MvcSiteMapProvider
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return siteMapNodeUrlResolverStrategy.ResolveUrl(
+            return pluginProvider.UrlResolverStrategy.ResolveUrl(
                 this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
         }
 

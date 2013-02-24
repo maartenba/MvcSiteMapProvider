@@ -20,9 +20,7 @@ namespace MvcSiteMapProvider
         public SiteMapNodeFactory(
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationServiceFactory localizationServiceFactory,
-            IDynamicNodeProviderStrategy dynamicNodeProviderStrategy,
-            ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy,
-            ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy,
+            ISiteMapNodePluginProvider pluginProvider,
             IUrlPath urlPath,
             IMvcContextFactory mvcContextFactory
             ) 
@@ -31,12 +29,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeChildStateFactory");
             if (localizationServiceFactory == null)
                 throw new ArgumentNullException("localizationServiceFactory");
-            if (dynamicNodeProviderStrategy == null)
-                throw new ArgumentNullException("dynamicNodeProviderStrategy");
-            if (siteMapNodeUrlResolverStrategy == null)
-                throw new ArgumentNullException("siteMapNodeUrlResolverStrategy");
-            if (siteMapNodeVisibilityProviderStrategy == null)
-                throw new ArgumentNullException("siteMapNodeVisibilityProviderStrategy");
+            if (pluginProvider == null)
+                throw new ArgumentNullException("pluginProvider");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
             if (mvcContextFactory == null)
@@ -44,9 +38,7 @@ namespace MvcSiteMapProvider
 
             this.siteMapNodeChildStateFactory = siteMapNodeChildStateFactory;
             this.localizationServiceFactory = localizationServiceFactory;
-            this.dynamicNodeProviderStrategy = dynamicNodeProviderStrategy;
-            this.siteMapNodeUrlResolverStrategy = siteMapNodeUrlResolverStrategy;
-            this.siteMapNodeVisibilityProviderStrategy = siteMapNodeVisibilityProviderStrategy;
+            this.pluginProvider = pluginProvider;
             this.urlPath = urlPath;
             this.mvcContextFactory = mvcContextFactory;
         }
@@ -54,9 +46,7 @@ namespace MvcSiteMapProvider
         // Services
         protected readonly ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory;
         protected readonly ILocalizationServiceFactory localizationServiceFactory;
-        protected readonly IDynamicNodeProviderStrategy dynamicNodeProviderStrategy;
-        protected readonly ISiteMapNodeUrlResolverStrategy siteMapNodeUrlResolverStrategy;
-        protected readonly ISiteMapNodeVisibilityProviderStrategy siteMapNodeVisibilityProviderStrategy;
+        protected readonly ISiteMapNodePluginProvider pluginProvider;
         protected readonly IUrlPath urlPath;
         protected readonly IMvcContextFactory mvcContextFactory;
 
@@ -87,9 +77,7 @@ namespace MvcSiteMapProvider
                 isDynamic,
                 siteMapNodeChildStateFactory,
                 localizationService,
-                dynamicNodeProviderStrategy,
-                siteMapNodeUrlResolverStrategy,
-                siteMapNodeVisibilityProviderStrategy,
+                pluginProvider,
                 urlPath,
                 routes,
                 requestCache);
