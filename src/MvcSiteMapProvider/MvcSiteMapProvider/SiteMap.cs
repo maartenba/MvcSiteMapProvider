@@ -27,8 +27,7 @@ namespace MvcSiteMapProvider
         // TODO: Refactor to aggregate services to cut down on the number of dependencies.
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
-            IControllerTypeResolver controllerTypeResolver,
-            IActionMethodParameterResolver actionMethodParameterResolver,
+            IMvcResolver mvcResolver,
             IMvcContextFactory mvcContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
@@ -39,10 +38,8 @@ namespace MvcSiteMapProvider
         {
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
-            if (controllerTypeResolver == null)
-                throw new ArgumentNullException("controllerTypeResolver");
-            if (actionMethodParameterResolver == null)
-                throw new ArgumentNullException("actionMethodParameterResolver");
+            if (mvcResolver == null)
+                throw new ArgumentNullException("mvcResolver");
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
             if (aclModule == null)
@@ -57,8 +54,7 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("routes");
 
             this.siteMapBuilder = siteMapBuilder;
-            this.controllerTypeResolver = controllerTypeResolver;
-            this.actionMethodParameterResolver = actionMethodParameterResolver;
+            this.mvcResolver = mvcResolver;
             this.mvcContextFactory = mvcContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
@@ -75,9 +71,8 @@ namespace MvcSiteMapProvider
         // Services
         protected readonly ISiteMapBuilder siteMapBuilder;
         // This one is here because we need to keep its lifetime in sync with the sitemap object's lifetime
-        // for the controllerTypeResolver's internal caching to work.
-        protected readonly IControllerTypeResolver controllerTypeResolver;
-        protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
+        // for the controllerTypeResolver and actionMethodParameterResolver's internal caching to work.
+        protected readonly IMvcResolver mvcResolver;
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
@@ -570,21 +565,21 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// Gets the ControllerTypeResolver for the current SiteMap instance.
+        /// Resolves the controller type based on the current SiteMap instance.
         /// </summary>
         /// <remarks>There is 1 instance of controller type resolver per site map.</remarks>
-        public IControllerTypeResolver ControllerTypeResolver
+        public Type ResolveControllerType(string areaName, string controllerName)
         {
-            get { return this.controllerTypeResolver; }
+            return mvcResolver.ResolveControllerType(areaName, controllerName);
         }
 
         /// <summary>
-        /// Gets the ActionMethodParameterResolver for the current SiteMap instance.
+        /// Resolves the action method parameters based on the current SiteMap instance.
         /// </summary>
-        /// <remarks>There is 1 instance of controller type resolver per site map.</remarks>
-        public IActionMethodParameterResolver ActionMethodParameterResolver
+        /// <remarks>There is 1 instance of action method parameter resolver per site map.</remarks>
+        public IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName)
         {
-            get { return this.actionMethodParameterResolver; }
+            return mvcResolver.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);
         }
 
         #endregion

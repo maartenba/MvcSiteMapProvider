@@ -61,10 +61,10 @@ namespace MvcMusicStore
 
 
             // Configure Dependencies
-            container.Configure(x => x
-                .For<System.Web.HttpContext>()
-                .Use(HttpContext.Current)
-            );
+            //container.Configure(x => x
+            //    .For<System.Web.HttpContext>()
+            //    .Use(HttpContext.Current)
+            //);
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Web.Mvc.IMvcContextFactory>()
@@ -122,6 +122,11 @@ namespace MvcMusicStore
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Web.Mvc.IControllerTypeResolverFactory>()
                 .Use<MvcSiteMapProvider.Web.Mvc.ControllerTypeResolverFactory>()
+            );
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Web.Mvc.IMvcResolverFactory>()
+                .Use<MvcSiteMapProvider.Web.Mvc.MvcResolverFactory>()
             );
 
             container.Configure(x => x

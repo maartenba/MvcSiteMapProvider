@@ -122,7 +122,7 @@ namespace MvcSiteMapProvider.Security
         {
             // Time to delve into the AuthorizeAttribute defined on the node.
             // Let's start by getting all metadata for the controller...
-            var controllerType = siteMap.ControllerTypeResolver.ResolveControllerType(node.Area, node.Controller);
+            var controllerType = siteMap.ResolveControllerType(node.Area, node.Controller);
             if (controllerType == null)
                 return true;
 

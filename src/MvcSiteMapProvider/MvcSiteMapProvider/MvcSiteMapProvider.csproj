@@ -114,6 +114,8 @@
     <Compile Include="Web\Mvc\IActionMethodParameterResolverFactory.cs" />
     <Compile Include="Web\Mvc\IControllerBuilder.cs" />
     <Compile Include="Web\Mvc\IControllerTypeResolverFactory.cs" />
+    <Compile Include="Web\Mvc\IMvcResolver.cs" />
+    <Compile Include="Web\Mvc\IMvcResolverFactory.cs" />
     <Compile Include="Web\Mvc\IUrlHelper.cs" />
     <Compile Include="Web\Mvc\AmbiguousControllerException.cs" />
     <Compile Include="Web\Mvc\ActionMethodParameterResolver.cs" />
@@ -125,6 +127,8 @@
     <Compile Include="Web\Mvc\IControllerTypeResolver.cs" />
     <Compile Include="Web\Mvc\MvcContextFactory.cs" />
     <Compile Include="Web\Mvc\IMvcContextFactory.cs" />
+    <Compile Include="Web\Mvc\MvcResolver.cs" />
+    <Compile Include="Web\Mvc\MvcResolverFactory.cs" />
     <Compile Include="Web\Mvc\UrlHelperAdaptor.cs" />
     <Compile Include="Web\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />

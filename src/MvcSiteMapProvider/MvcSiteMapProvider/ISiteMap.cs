@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using System.Collections.Generic;
 using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider
@@ -37,7 +38,7 @@ namespace MvcSiteMapProvider
         bool IsAccessibleToUser(ISiteMapNode node);
         string ResourceKey { get; set; }
         bool SecurityTrimmingEnabled { get; set; }
-        IControllerTypeResolver ControllerTypeResolver { get; }
-        IActionMethodParameterResolver ActionMethodParameterResolver { get; }
+        Type ResolveControllerType(string areaName, string controllerName);
+        IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);
     }
 }
