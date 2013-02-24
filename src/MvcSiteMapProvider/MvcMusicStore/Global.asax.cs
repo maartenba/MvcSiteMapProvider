@@ -130,6 +130,7 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Reflection.ObjectCopier>()
             );
 
+#if !MVC2
             // Configure default filter provider with one that provides filters
             // from the global filter collection.
             container.Configure(x => x
@@ -137,6 +138,7 @@ namespace MvcMusicStore
                 .Singleton()
                 .Use<MvcSiteMapProvider.Web.Mvc.Filters.FilterProvider>()
             );
+#endif
 
             // Pass in the global route collection
             container.Configure(x => x
