@@ -96,6 +96,8 @@
     <Compile Include="IMetaRobotsValueCollection.cs" />
     <Compile Include="MetaRobotsValueCollection.cs" />
     <Compile Include="RoleCollection.cs" />
+    <Compile Include="ISiteMapChildStateFactory.cs" />
+    <Compile Include="SiteMapChildStateFactory.cs" />
     <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\UrlResolvingSiteMapNodeVisitor.cs" />

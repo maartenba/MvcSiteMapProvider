@@ -17,51 +17,47 @@ namespace MvcSiteMapProvider
         : ISiteMapFactory
     {
         public SiteMapFactory(
-            IAclModule aclModule,
+            IMvcResolverFactory mvcResolverFactory,
             IMvcContextFactory mvcContextFactory,
-            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
-            IGenericDictionaryFactory genericDictionaryFactory,
+            IAclModule aclModule,
+            ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
             IControllerTypeResolverFactory controllerTypeResolverFactory,
-            IActionMethodParameterResolverFactory actionMethodParameterResolverFactory,
-            IMvcResolverFactory mvcResolverFactory
+            IActionMethodParameterResolverFactory actionMethodParameterResolverFactory
             )
         {
-            if (aclModule == null)
-                throw new ArgumentNullException("aclModule");
+            if (mvcResolverFactory == null)
+                throw new ArgumentNullException("mvcResolverFactory");
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
-            if (siteMapNodeCollectionFactory == null)
-                throw new ArgumentNullException("siteMapNodeCollectionFactory");
-            if (genericDictionaryFactory == null)
-                throw new ArgumentNullException("genericDictionaryFactory");
+            if (aclModule == null)
+                throw new ArgumentNullException("aclModule");
+            if (siteMapChildStateFactory == null)
+                throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
             if (controllerTypeResolverFactory == null)
                 throw new ArgumentNullException("controllerTypeResolverFactory");
             if (actionMethodParameterResolverFactory == null)
                 throw new ArgumentNullException("actionMethodParameterResolverFactory");
-            if (mvcResolverFactory == null)
-                throw new ArgumentNullException("mvcResolverFactory");
 
-            this.aclModule = aclModule;
+            this.mvcResolverFactory = mvcResolverFactory;
             this.mvcContextFactory = mvcContextFactory;
-            this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
-            this.genericDictionaryFactory = genericDictionaryFactory;
+            this.aclModule = aclModule;
+            this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
             this.controllerTypeResolverFactory = controllerTypeResolverFactory;
             this.actionMethodParameterResolverFactory = actionMethodParameterResolverFactory;
-            this.mvcResolverFactory = mvcResolverFactory;
         }
 
-        protected readonly IAclModule aclModule;
+        protected readonly IMvcResolverFactory mvcResolverFactory;
         protected readonly IMvcContextFactory mvcContextFactory;
-        protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
-        protected readonly IGenericDictionaryFactory genericDictionaryFactory;
+        protected readonly IAclModule aclModule;
+        protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
         protected readonly IControllerTypeResolverFactory controllerTypeResolverFactory;
         protected readonly IActionMethodParameterResolverFactory actionMethodParameterResolverFactory;
-        protected readonly IMvcResolverFactory mvcResolverFactory;
+        
 
         #region ISiteMapFactory Members
 
@@ -82,8 +78,7 @@ namespace MvcSiteMapProvider
                 mvcResolver,
                 mvcContextFactory,
                 aclModule,
-                siteMapNodeCollectionFactory,
-                genericDictionaryFactory,
+                siteMapChildStateFactory,
                 urlPath,
                 requestCache);
         }

@@ -26,12 +26,11 @@ namespace MvcSiteMapProvider
             IMvcResolver mvcResolver,
             IMvcContextFactory mvcContextFactory,
             IAclModule aclModule,
-            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
-            IGenericDictionaryFactory genericDictionaryFactory,
+            ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, mvcResolver, mvcContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath)
+            : base(siteMapBuilder, mvcResolver, mvcContextFactory, aclModule, siteMapChildStateFactory, urlPath)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");

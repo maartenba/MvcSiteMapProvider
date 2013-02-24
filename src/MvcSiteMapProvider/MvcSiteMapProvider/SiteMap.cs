@@ -24,14 +24,12 @@ namespace MvcSiteMapProvider
     /// </remarks>
     public class SiteMap : ISiteMap
     {
-        // TODO: Refactor to aggregate services to cut down on the number of dependencies.
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
             IMvcResolver mvcResolver,
             IMvcContextFactory mvcContextFactory,
             IAclModule aclModule,
-            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
-            IGenericDictionaryFactory genericDictionaryFactory,
+            ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath
             )
         {
@@ -43,10 +41,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("mvcContextFactory");
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
-            if (siteMapNodeCollectionFactory == null)
-                throw new ArgumentNullException("siteMapNodeCollectionFactory");
-            if (genericDictionaryFactory == null)
-                throw new ArgumentNullException("genericDictionaryFactory");
+            if (siteMapChildStateFactory == null)
+                throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
 
@@ -54,14 +50,14 @@ namespace MvcSiteMapProvider
             this.mvcResolver = mvcResolver;
             this.mvcContextFactory = mvcContextFactory;
             this.aclModule = aclModule;
-            this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
+            this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
 
             // Initialize dictionaries
-            this.childNodeCollectionTable = genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNodeCollection>();
-            this.keyTable = genericDictionaryFactory.Create<string, ISiteMapNode>();
-            this.parentNodeTable = genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNode>();
-            this.urlTable = genericDictionaryFactory.Create<string, ISiteMapNode>();
+            this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
+            this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
+            this.parentNodeTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNode>();
+            this.urlTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
         }
 
         // Services
@@ -71,7 +67,7 @@ namespace MvcSiteMapProvider
         protected readonly IMvcResolver mvcResolver;
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IAclModule aclModule;
-        protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
+        protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
 
         // Child collections
@@ -193,7 +189,7 @@ namespace MvcSiteMapProvider
                     this.parentNodeTable[node] = parentNode;
                     if (!this.childNodeCollectionTable.ContainsKey(parentNode))
                     {
-                        this.childNodeCollectionTable[parentNode] = siteMapNodeCollectionFactory.CreateLockable(this);
+                        this.childNodeCollectionTable[parentNode] = siteMapChildStateFactory.CreateLockableSiteMapNodeCollection(this);
                     }
                     this.childNodeCollectionTable[parentNode].Add(node);
                 }
@@ -365,13 +361,13 @@ namespace MvcSiteMapProvider
             }
             if (collection == null)
             {
-                return siteMapNodeCollectionFactory.CreateEmptyReadOnly();
+                return siteMapChildStateFactory.CreateEmptyReadOnlySiteMapNodeCollection();
             }
             if (!this.SecurityTrimmingEnabled)
             {
-                return siteMapNodeCollectionFactory.CreateReadOnly(collection);
+                return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(collection);
             }
-            var secureCollection = siteMapNodeCollectionFactory.Create();
+            var secureCollection = siteMapChildStateFactory.CreateSiteMapNodeCollection();
             foreach (ISiteMapNode secureNode in collection)
             {
                 if (secureNode.IsAccessibleToUser())
@@ -379,7 +375,7 @@ namespace MvcSiteMapProvider
                     secureCollection.Add(secureNode);
                 }
             }
-            return siteMapNodeCollectionFactory.CreateReadOnly(secureCollection);
+            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(secureCollection);
         }
 
         public virtual ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel)
