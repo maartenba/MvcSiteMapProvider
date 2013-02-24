@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Reflection;
-using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.UrlResolver
 {
@@ -16,15 +16,15 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         : ISiteMapNodeUrlResolver
     {
         public SiteMapNodeUrlResolver(
-            IHttpContextFactory httpContextFactory
+            IMvcContextFactory mvcContextFactory
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
-            this.httpContextFactory = httpContextFactory;
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
+            this.mvcContextFactory = mvcContextFactory;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
 
         /// <summary>
         /// Gets the URL helper.
@@ -35,11 +35,11 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             get
             {
                 var key = "6F0F34DE-2981-454E-888D-28080283EF65";
-                var requestCache = httpContextFactory.GetRequestCache();
+                var requestCache = mvcContextFactory.GetRequestCache();
                 var result = requestCache.GetValue<IUrlHelper>(key);
                 if (result == null)
                 {
-                    result = httpContextFactory.CreateUrlHelper();
+                    result = mvcContextFactory.CreateUrlHelper();
                     requestCache.SetValue<IUrlHelper>(key, result);
                 }
                 return result;

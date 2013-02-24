@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using MvcSiteMapProvider.Globalization;
-using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 
 namespace MvcSiteMapProvider.Globalization
@@ -17,15 +17,15 @@ namespace MvcSiteMapProvider.Globalization
         : IStringLocalizer
     {
         public StringLocalizer(
-            IHttpContextFactory httpContextFactory
+            IMvcContextFactory mvcContextFactory
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
-            this.httpContextFactory = httpContextFactory;
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
+            this.mvcContextFactory = mvcContextFactory;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
         
         /// <summary>
         /// Gets the localized text for the supplied attributeName.
@@ -68,7 +68,7 @@ namespace MvcSiteMapProvider.Globalization
             string globalResourceObject = null;
             if (!string.IsNullOrEmpty(implicitResourceKey))
             {
-                var httpContext = httpContextFactory.Create();
+                var httpContext = mvcContextFactory.CreateHttpContext();
                 try
                 {
                     globalResourceObject = httpContext.GetGlobalResourceObject(classKey, implicitResourceKey + "." + attributeName) as string;
@@ -94,7 +94,7 @@ namespace MvcSiteMapProvider.Globalization
                 {
                     return globalResourceObject;
                 }
-                var httpContext = httpContextFactory.Create();
+                var httpContext = mvcContextFactory.CreateHttpContext();
                 try
                 {
                     globalResourceObject = httpContext.GetGlobalResourceObject(values[0], values[1]) as string;

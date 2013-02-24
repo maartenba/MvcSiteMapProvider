@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Text;
 using System.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web
 {
@@ -12,16 +13,16 @@ namespace MvcSiteMapProvider.Web
         : IUrlPath
     {
         public UrlPath(
-            IHttpContextFactory httpContextFactory
+            IMvcContextFactory mvcContextFactory
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
 
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
 
         public string AppDomainAppVirtualPath
         {
@@ -389,7 +390,7 @@ namespace MvcSiteMapProvider.Web
             // So we use a variable that (at least from what I can tell) gives us	
             // the public URL:
             Uri originalUri = null;
-            var httpContext = httpContextFactory.Create();
+            var httpContext = mvcContextFactory.CreateHttpContext();
 
             if (httpContext.Request.Headers["Host"] != null)
             {

@@ -95,7 +95,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             if (String.IsNullOrEmpty(url))
             {
                 // TODO: Make this DI friendly
-                var urlPath = new UrlPath(new HttpContextFactory());
+                var urlPath = new UrlPath(new MvcContextFactory());
                 Url = urlPath.ResolveServerUrl("~/", false);
             }
             else

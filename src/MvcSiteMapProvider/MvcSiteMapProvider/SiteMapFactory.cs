@@ -18,7 +18,7 @@ namespace MvcSiteMapProvider
     {
         public SiteMapFactory(
             IAclModule aclModule,
-            IHttpContextFactory httpContextFactory,
+            IMvcContextFactory mvcContextFactory,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IUrlPath urlPath,
@@ -30,8 +30,8 @@ namespace MvcSiteMapProvider
         {
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
             if (siteMapNodeCollectionFactory == null)
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
             if (genericDictionaryFactory == null)
@@ -48,7 +48,7 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("actionMethodParameterResolverFactory");
 
             this.aclModule = aclModule;
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.genericDictionaryFactory = genericDictionaryFactory;
             this.urlPath = urlPath;
@@ -59,7 +59,7 @@ namespace MvcSiteMapProvider
         }
 
         protected readonly IAclModule aclModule;
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
         protected readonly IUrlPath urlPath;
@@ -81,7 +81,7 @@ namespace MvcSiteMapProvider
                 siteMapBuilder,
                 controllerTypeResolver,
                 actionMethodParameterResolver,
-                httpContextFactory,
+                mvcContextFactory,
                 aclModule,
                 siteMapNodeCollectionFactory,
                 genericDictionaryFactory,

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Caching;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Caching
 {
@@ -17,16 +16,16 @@ namespace MvcSiteMapProvider.Caching
         : ISiteMapCache
     {
         public AspNetSiteMapCache(
-            IHttpContextFactory httpContextFactory
+            IMvcContextFactory mvcContextFactory
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
 
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
 
         public event EventHandler<SiteMapCacheItemRemovedEventArgs> SiteMapRemoved;
 
@@ -35,7 +34,7 @@ namespace MvcSiteMapProvider.Caching
         {
             get
             {
-                var context = httpContextFactory.Create();
+                var context = mvcContextFactory.CreateHttpContext();
                 return context.Cache;
             }
         }

@@ -4,14 +4,14 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Caching;
 
-namespace MvcSiteMapProvider.Web
+namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
     /// Contract for an abstract factory that provides context-related instances at runtime.
     /// </summary>
-    public interface IHttpContextFactory
+    public interface IMvcContextFactory
     {
-        HttpContextBase Create();
+        HttpContextBase CreateHttpContext();
         RequestContext CreateRequestContext(RouteData routeData);
         RequestContext CreateRequestContext();
         ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller);

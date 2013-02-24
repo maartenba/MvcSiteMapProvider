@@ -67,8 +67,8 @@ namespace MvcMusicStore
             );
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Web.IHttpContextFactory>()
-                .Use<MvcSiteMapProvider.Web.HttpContextFactory>()
+                .For<MvcSiteMapProvider.Web.Mvc.IMvcContextFactory>()
+                .Use<MvcSiteMapProvider.Web.Mvc.MvcContextFactory>()
             );
 
 

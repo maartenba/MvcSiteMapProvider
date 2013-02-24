@@ -29,7 +29,7 @@ namespace MvcSiteMapProvider
             ISiteMapBuilder siteMapBuilder,
             IControllerTypeResolver controllerTypeResolver,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IHttpContextFactory httpContextFactory,
+            IMvcContextFactory mvcContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
@@ -43,8 +43,8 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("controllerTypeResolver");
             if (actionMethodParameterResolver == null)
                 throw new ArgumentNullException("actionMethodParameterResolver");
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
             if (aclModule == null)
                 throw new ArgumentNullException("aclModule");
             if (siteMapNodeCollectionFactory == null)
@@ -59,7 +59,7 @@ namespace MvcSiteMapProvider
             this.siteMapBuilder = siteMapBuilder;
             this.controllerTypeResolver = controllerTypeResolver;
             this.actionMethodParameterResolver = actionMethodParameterResolver;
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
             this.aclModule = aclModule;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
             this.urlPath = urlPath;
@@ -78,7 +78,7 @@ namespace MvcSiteMapProvider
         // for the controllerTypeResolver's internal caching to work.
         protected readonly IControllerTypeResolver controllerTypeResolver;
         protected readonly IActionMethodParameterResolver actionMethodParameterResolver;
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IAclModule aclModule;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
         protected readonly IUrlPath urlPath;
@@ -326,7 +326,7 @@ namespace MvcSiteMapProvider
         /// </returns>
         public virtual ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
-            var httpContext = httpContextFactory.Create();
+            var httpContext = mvcContextFactory.CreateHttpContext();
             return FindSiteMapNode(httpContext);
         }
 

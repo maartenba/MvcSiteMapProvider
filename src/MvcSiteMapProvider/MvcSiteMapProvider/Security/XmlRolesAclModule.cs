@@ -14,16 +14,16 @@ namespace MvcSiteMapProvider.Security
         : IAclModule
     {
         public XmlRolesAclModule(
-            IHttpContextFactory httpContextFactory
+            IMvcContextFactory mvcContextFactory
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
 
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
 
         #region IAclModule Members
 
@@ -46,7 +46,7 @@ namespace MvcSiteMapProvider.Security
             // If we have roles assigned, check them against the roles defined in the sitemap
             if (node.Roles != null && node.Roles.Count > 0)
             {
-                var context = httpContextFactory.Create();
+                var context = mvcContextFactory.CreateHttpContext();
 
                     // if there is an authenticated user and the role allows anyone authenticated ("*"), show it
                 if ((context.User.Identity.IsAuthenticated) && node.Roles.Contains("*"))

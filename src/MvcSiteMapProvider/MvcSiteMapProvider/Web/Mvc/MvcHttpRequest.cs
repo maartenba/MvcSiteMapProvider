@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Web;
 
-namespace MvcSiteMapProvider.Web
+namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
     /// MvcHttpRequest wrapper.

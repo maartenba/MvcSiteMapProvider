@@ -123,8 +123,8 @@
     <Compile Include="Web\Mvc\Filters\SiteMapTitleAttribute.cs" />
     <Compile Include="Web\Mvc\IActionMethodParameterResolver.cs" />
     <Compile Include="Web\Mvc\IControllerTypeResolver.cs" />
-    <Compile Include="Web\HttpContextFactory.cs" />
-    <Compile Include="Web\IHttpContextFactory.cs" />
+    <Compile Include="Web\Mvc\MvcContextFactory.cs" />
+    <Compile Include="Web\Mvc\IMvcContextFactory.cs" />
     <Compile Include="Web\Mvc\UrlHelperAdaptor.cs" />
     <Compile Include="Web\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
@@ -230,8 +230,8 @@
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="DynamicNode.cs" />
-    <Compile Include="Web\MvcHttpContext.cs" />
-    <Compile Include="Web\MvcHttpRequest.cs" />
+    <Compile Include="Web\Mvc\MvcHttpContext.cs" />
+    <Compile Include="Web\Mvc\MvcHttpRequest.cs" />
     <Compile Include="IDynamicNodeProvider.cs" />
     <Compile Include="ISiteMap.cs" />
     <Compile Include="Web\UrlResolver\ISiteMapNodeUrlResolver.cs" />

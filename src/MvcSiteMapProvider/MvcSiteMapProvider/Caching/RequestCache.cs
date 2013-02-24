@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Caching
 {
@@ -13,22 +13,22 @@ namespace MvcSiteMapProvider.Caching
         : IRequestCache
     {
         public RequestCache(
-            IHttpContextFactory httpContextFactory
+            IMvcContextFactory mvcContextFactory
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
 
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
         }
 
-        private readonly IHttpContextFactory httpContextFactory;
+        private readonly IMvcContextFactory mvcContextFactory;
 
         protected HttpContextBase Context
         {
             get 
             { 
-                return this.httpContextFactory.Create();
+                return this.mvcContextFactory.CreateHttpContext();
             }
         }
 

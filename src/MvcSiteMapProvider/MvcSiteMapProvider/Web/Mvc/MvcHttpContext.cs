@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web;
 
-namespace MvcSiteMapProvider.Web
+namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
     /// MvcHttpContext wrapper.

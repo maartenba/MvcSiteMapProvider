@@ -4,20 +4,20 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web;
 
-namespace MvcSiteMapProvider.Web
+namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Web.MvcHttpContext"/>
     /// at runtime.
     /// </summary>
-    public class HttpContextFactory
-        : IHttpContextFactory
+    public class MvcContextFactory
+        : IMvcContextFactory
     {
-        #region IHttpContextFactory Members
+        #region IMvcContextFactory Members
 
-        public virtual HttpContextBase Create()
+        public virtual HttpContextBase CreateHttpContext()
         {
             // TODO: Change this to HttpContextWrapper to make it generic to pass around and add
             // methods here to wrap in specified classes when needed.
@@ -28,18 +28,18 @@ namespace MvcSiteMapProvider.Web
 
         public virtual RequestContext CreateRequestContext(RouteData routeData)
         {
-            var httpContext = this.Create();
-            //return new RequestContext(httpContext, routeData);
+            var httpContext = this.CreateHttpContext();
+            return new RequestContext(httpContext, routeData);
 
-            if (httpContext.Handler is MvcHandler)
-                return ((MvcHandler)httpContext.Handler).RequestContext;
-            else
-                return new RequestContext(httpContext, routeData);
+            //if (httpContext.Handler is MvcHandler)
+            //    return ((MvcHandler)httpContext.Handler).RequestContext;
+            //else
+            //    return new RequestContext(httpContext, routeData);
         }
 
         public virtual RequestContext CreateRequestContext()
         {
-            var httpContext = this.Create();
+            var httpContext = this.CreateHttpContext();
             if (httpContext.Handler is MvcHandler)
                 return ((MvcHandler)httpContext.Handler).RequestContext;
             else

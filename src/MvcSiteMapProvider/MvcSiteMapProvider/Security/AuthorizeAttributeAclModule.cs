@@ -20,14 +20,14 @@ namespace MvcSiteMapProvider.Security
     {
 #if MVC2
         public AuthorizeAttributeAclModule(
-            IHttpContextFactory httpContextFactory,
+            IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
             RouteCollection routes
         )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
@@ -35,27 +35,27 @@ namespace MvcSiteMapProvider.Security
             if (routes == null)
                 throw new ArgumentNullException("routes");
 
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.routes = routes;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly RouteCollection routes;
 #else
         public AuthorizeAttributeAclModule(
-            IHttpContextFactory httpContextFactory,
+            IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
             RouteCollection routes,
             IFilterProvider filterProvider
             )
         {
-            if (httpContextFactory == null)
-                throw new ArgumentNullException("httpContextFactory");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
             if (objectCopier == null)
                 throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
@@ -65,14 +65,14 @@ namespace MvcSiteMapProvider.Security
             if (filterProvider == null)
                 throw new ArgumentNullException("filterProvider");
 
-            this.httpContextFactory = httpContextFactory;
+            this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.routes = routes;
             this.filterProvider = filterProvider;
         }
 
-        protected readonly IHttpContextFactory httpContextFactory;
+        protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly RouteCollection routes;
@@ -97,7 +97,7 @@ namespace MvcSiteMapProvider.Security
                 return true;
             }
 
-            var httpContext = httpContextFactory.Create();
+            var httpContext = mvcContextFactory.CreateHttpContext();
 
             // Is it an external Url?
             if (node.HasExternalUrl(httpContext))
@@ -310,7 +310,7 @@ namespace MvcSiteMapProvider.Security
 
         protected virtual ControllerContext CreateControllerContext(RouteData routes, Type controllerType, IControllerFactory controllerFactory, out bool factoryBuiltController)
         {
-            var requestContext = this.httpContextFactory.CreateRequestContext(routes);
+            var requestContext = this.mvcContextFactory.CreateRequestContext(routes);
             ControllerBase controller = null;
             string controllerName = requestContext.RouteData.GetRequiredString("controller");
 
@@ -322,7 +322,7 @@ namespace MvcSiteMapProvider.Security
             }
 
             // Create controller context
-            var controllerContext = httpContextFactory.CreateControllerContext(requestContext, controller);
+            var controllerContext = mvcContextFactory.CreateControllerContext(requestContext, controller);
             return controllerContext;
         }
 

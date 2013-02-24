@@ -23,14 +23,14 @@ namespace MvcSiteMapProvider
             ISiteMapBuilder siteMapBuilder,
             IControllerTypeResolver controllerTypeResolver,
             IActionMethodParameterResolver actionMethodParameterResolver,
-            IHttpContextFactory httpContextFactory,
+            IMvcContextFactory mvcContextFactory,
             IAclModule aclModule,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
             IGenericDictionaryFactory genericDictionaryFactory,
             IUrlPath urlPath,
             RouteCollection routes
             ) 
-            : base(siteMapBuilder, controllerTypeResolver, actionMethodParameterResolver, httpContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
+            : base(siteMapBuilder, controllerTypeResolver, actionMethodParameterResolver, mvcContextFactory, aclModule, siteMapNodeCollectionFactory, genericDictionaryFactory, urlPath, routes)
         {
         }
 
