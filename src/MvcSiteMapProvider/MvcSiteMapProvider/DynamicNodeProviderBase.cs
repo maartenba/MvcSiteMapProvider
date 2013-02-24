@@ -30,7 +30,7 @@ namespace MvcSiteMapProvider
         /// </returns>
         public virtual bool AppliesTo(string providerName)
         {
-            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName);
+            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName, StringComparison.InvariantCulture);
         }
 
         #endregion

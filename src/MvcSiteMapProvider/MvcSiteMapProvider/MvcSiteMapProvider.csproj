@@ -100,6 +100,7 @@
     <Compile Include="RoleCollection.cs" />
     <Compile Include="ISiteMapChildStateFactory.cs" />
     <Compile Include="SiteMapChildStateFactory.cs" />
+    <Compile Include="SiteMapNodeVisibilityProviderBase.cs" />
     <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\UrlResolvingSiteMapNodeVisitor.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Web\Mvc\MvcResolver.cs" />
     <Compile Include="Web\Mvc\MvcResolverFactory.cs" />
     <Compile Include="Web\Mvc\UrlHelperAdaptor.cs" />
+    <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolverBase.cs" />
     <Compile Include="Web\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Caching\IRequestCache.cs" />

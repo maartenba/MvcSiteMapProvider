@@ -21,7 +21,7 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Determines whether the provider instance matches the name
         /// </summary>
-        /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name can be used.</param>
+        /// <param name="providerName">The name of the visibility provider. This can be any string, but for backward compatibility the type name can be used.</param>
         /// <returns>
         /// True if the provider name matches.
         /// </returns>

@@ -13,7 +13,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
     /// Default SiteMapNode URL resolver.
     /// </summary>
     public class SiteMapNodeUrlResolver
-        : ISiteMapNodeUrlResolver
+        : SiteMapNodeUrlResolverBase
     {
         public SiteMapNodeUrlResolver(
             IMvcContextFactory mvcContextFactory
@@ -60,7 +60,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         /// <param name="action">The action.</param>
         /// <param name="routeValues">The route values.</param>
         /// <returns>The resolved URL.</returns>
-        public virtual string ResolveUrl(ISiteMapNode siteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
+        public override string ResolveUrl(ISiteMapNode siteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
         {
             if (!String.IsNullOrEmpty(siteMapNode.UnresolvedUrl))
             {
@@ -129,18 +129,6 @@ namespace MvcSiteMapProvider.Web.UrlResolver
                 _url = returnValue;
                 return returnValue;
             }
-        }
-
-        /// <summary>
-        /// Determines whether the provider instance matches the name
-        /// </summary>
-        /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name can be used.</param>
-        /// <returns>
-        /// True if the provider name matches.
-        /// </returns>
-        public virtual bool AppliesTo(string providerName)
-        {
-            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName);
         }
 
         #endregion
