@@ -75,7 +75,6 @@ namespace MvcSiteMapProvider.Globalization
                 }
                 catch
                 {
-                    // TODO: it would be nice if we had a way to log or otherwise send this error to the developer for inspection.
                 }
             }
             return globalResourceObject;

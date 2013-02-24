@@ -1,16 +1,10 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="IoC.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace MvcSiteMapProvider.IoC
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// Provides static access to a dependency injection container.
     /// </summary>

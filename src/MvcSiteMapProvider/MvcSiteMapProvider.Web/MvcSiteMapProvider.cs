@@ -36,7 +36,6 @@
 
 //            SiteMapNode rootNode = null;
 
-//            //TODO: convert sitemap node to the appropriate type
 //            //return rootNode;
 
 //            return new SiteMapNode(this, rootNode.Key);

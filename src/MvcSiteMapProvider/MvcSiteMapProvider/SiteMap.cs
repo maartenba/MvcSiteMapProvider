@@ -24,6 +24,7 @@ namespace MvcSiteMapProvider
     /// </remarks>
     public class SiteMap : ISiteMap
     {
+        // TODO: Refactor to aggregate services to cut down on the number of dependencies.
         public SiteMap(
             ISiteMapBuilder siteMapBuilder,
             IControllerTypeResolver controllerTypeResolver,
@@ -130,9 +131,6 @@ namespace MvcSiteMapProvider
             //if (SiteMapProviderEventHandler.OnAddingSiteMapNode(new SiteMapProviderEventContext(this, node, root)))
             //{
 
-            // TODO: Investigate why this could be the case - perhaps the clear or remove
-            // method needs attention instead. This will go into an endless loop when building
-            // a sitemap, so we can't do this here.
             // Avoid issue with url table not clearing correctly.
             if (this.FindSiteMapNode(node.Url) != null)
             {
