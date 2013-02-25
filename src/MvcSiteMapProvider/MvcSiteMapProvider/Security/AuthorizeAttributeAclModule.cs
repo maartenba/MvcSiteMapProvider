@@ -5,7 +5,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
-using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Reflection;
@@ -171,8 +170,8 @@ namespace MvcSiteMapProvider.Security
                 if (originalRoutes != null && (!routeData.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
                 {
                     routeData.DataTokens.Remove("area");
-                    //routes.DataTokens.Remove("Namespaces");
-                    //routes.Values.Remove("area");
+                    //routeData.DataTokens.Remove("Namespaces");
+                    //routeData.Values.Remove("area");
                 }
             }
             return routeData;
