@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Web;
 using System.Web.Routing;
-using System.Linq;
-using MvcSiteMapProvider.Web.UrlResolver;
-using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Globalization;
-using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
+
 
 namespace MvcSiteMapProvider
 {
