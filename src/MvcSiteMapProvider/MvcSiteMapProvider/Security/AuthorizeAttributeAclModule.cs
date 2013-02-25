@@ -257,6 +257,8 @@ namespace MvcSiteMapProvider.Security
 
         protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext)
         {
+            // Reasoning for using Reflection and AuthorizeAttribute rather than IAuthorizationFilter
+            // http://weblogs.asp.net/rashid/archive/2009/09/06/asp-net-mvc-and-authorization-and-monkey-patching.aspx
             var currentAuthorizationAttributeType = authorizeAttribute.GetType();
 
             var builder = new AuthorizeAttributeBuilder();
