@@ -34,17 +34,17 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapNodePluginService Members
 
-        public IDynamicNodeProviderStrategy DynamicNodeProviderStrategy
+        public virtual IDynamicNodeProviderStrategy DynamicNodeProviderStrategy
         {
             get { return this.dynamicNodeProviderStrategy; }
         }
 
-        public ISiteMapNodeUrlResolverStrategy UrlResolverStrategy
+        public virtual ISiteMapNodeUrlResolverStrategy UrlResolverStrategy
         {
             get { return this.siteMapNodeUrlResolverStrategy; }
         }
 
-        public ISiteMapNodeVisibilityProviderStrategy VisibilityProviderStrategy
+        public virtual ISiteMapNodeVisibilityProviderStrategy VisibilityProviderStrategy
         {
             get { return this.siteMapNodeVisibilityProviderStrategy; }
         }

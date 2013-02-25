@@ -24,28 +24,27 @@ namespace MvcSiteMapProvider
             ISiteMap siteMap,
             string key,
             bool isDynamic,
+            ISiteMapNodePluginProvider pluginProvider,
+            IMvcContextFactory mvcContextFactory,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
-            ISiteMapNodePluginProvider pluginProvider,
-            IUrlPath urlPath,
-            RouteCollection routes,
-            IRequestCache requestCache
+            IUrlPath urlPath
             )
             : base(
                 siteMap, 
                 key, 
-                isDynamic, 
-                siteMapNodeChildStateFactory, 
-                localizationService, 
+                isDynamic,
                 pluginProvider,
-                urlPath,
-                routes
+                mvcContextFactory,
+                siteMapNodeChildStateFactory,
+                localizationService,
+                urlPath
             )
         {
-            if (requestCache == null)
-                throw new ArgumentNullException("requestCache");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
 
-            this.requestCache = requestCache;
+            this.requestCache = mvcContextFactory.GetRequestCache();
         }
 
         private readonly IRequestCache requestCache;

@@ -65,9 +65,6 @@ namespace MvcSiteMapProvider
 
         protected ISiteMapNode CreateInternal(ISiteMap siteMap, string key, string implicitResourceKey, bool isDynamic)
         {
-            var routes = mvcContextFactory.GetRoutes();
-            var requestCache = mvcContextFactory.GetRequestCache();
-
             // IMPORTANT: we must create one localization service per node because the service contains its own state that applies to the node
             var localizationService = localizationServiceFactory.Create(implicitResourceKey);
 
@@ -75,12 +72,11 @@ namespace MvcSiteMapProvider
                 siteMap,
                 key,
                 isDynamic,
+                pluginProvider,
+                mvcContextFactory,
                 siteMapNodeChildStateFactory,
                 localizationService,
-                pluginProvider,
-                urlPath,
-                routes,
-                requestCache);
+                urlPath);
         }
 
         #endregion

@@ -22,21 +22,21 @@ namespace MvcSiteMapProvider
             ISiteMap siteMap,
             string key,
             bool isDynamic,
+            ISiteMapNodePluginProvider pluginProvider,
+            IMvcContextFactory mvcContextFactory,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
-            ISiteMapNodePluginProvider pluginProvider,
-            IUrlPath urlPath,
-            RouteCollection routes
+            IUrlPath urlPath
             )
             : base(
                 siteMap, 
                 key, 
-                isDynamic, 
+                isDynamic,
+                pluginProvider,
+                mvcContextFactory,
                 siteMapNodeChildStateFactory, 
                 localizationService, 
-                pluginProvider,
-                urlPath,
-                routes
+                urlPath
             )
         {
         }

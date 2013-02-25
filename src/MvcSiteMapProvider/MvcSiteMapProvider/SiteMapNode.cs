@@ -24,35 +24,35 @@ namespace MvcSiteMapProvider
             ISiteMap siteMap, 
             string key,
             bool isDynamic,
+            ISiteMapNodePluginProvider pluginProvider,
+            IMvcContextFactory mvcContextFactory,
             ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory,
             ILocalizationService localizationService,
-            ISiteMapNodePluginProvider pluginProvider,
-            IUrlPath urlPath,
-            RouteCollection routes
+            IUrlPath urlPath
             )
         {
             if (siteMap == null)
                 throw new ArgumentNullException("siteMap");
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("key");
+            if (pluginProvider == null)
+                throw new ArgumentNullException("pluginProvider");
+            if (mvcContextFactory == null)
+                throw new ArgumentNullException("mvcContextFactory");
             if (siteMapNodeChildStateFactory == null)
                 throw new ArgumentNullException("siteMapNodeChildStateFactory");
             if (localizationService == null)
                 throw new ArgumentNullException("localizationService");
-            if (pluginProvider == null)
-                throw new ArgumentNullException("pluginProvider");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
-            if (routes == null)
-                throw new ArgumentNullException("routes");
-
+            
             this.siteMap = siteMap;
             this.key = key;
             this.isDynamic = isDynamic;
-            this.localizationService = localizationService;
             this.pluginProvider = pluginProvider;
+            this.mvcContextFactory = mvcContextFactory;
+            this.localizationService = localizationService;
             this.urlPath = urlPath;
-            this.routes = routes;
 
             // Initialize child collections
             this.attributes = siteMapNodeChildStateFactory.CreateAttributeCollection(siteMap, localizationService);
@@ -63,10 +63,10 @@ namespace MvcSiteMapProvider
         }
 
         // Services
-        protected readonly ILocalizationService localizationService;
         protected readonly ISiteMapNodePluginProvider pluginProvider;
+        protected readonly IMvcContextFactory mvcContextFactory;
+        protected readonly ILocalizationService localizationService;
         protected readonly IUrlPath urlPath;
-        protected readonly RouteCollection routes;
 
         // Child collections and dictionaries
         protected readonly IAttributeCollection attributes;
@@ -525,14 +525,15 @@ namespace MvcSiteMapProvider
         /// <returns>The route data associated with the current node.</returns>
         public override RouteData GetRouteData(HttpContextBase httpContext)
         {
+            var routes = mvcContextFactory.GetRoutes();
             RouteData routeData;
             if (!string.IsNullOrEmpty(this.Route))
             {
-                routeData = this.routes[this.Route].GetRouteData(httpContext);
+                routeData = routes[this.Route].GetRouteData(httpContext);
             }
             else
             {
-                routeData = this.routes.GetRouteData(httpContext);
+                routeData = routes.GetRouteData(httpContext);
             }
             return routeData;
         }
