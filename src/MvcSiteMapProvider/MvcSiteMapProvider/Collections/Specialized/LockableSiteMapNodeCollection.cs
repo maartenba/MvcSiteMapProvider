@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Collections;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// Provides the means to make the <see cref="T:MvcSiteMapProvider.ISiteMapNodeCollection"/> instance read-only so it cannot be 

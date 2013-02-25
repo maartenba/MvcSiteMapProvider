@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvcSiteMapProvider;
 using System.Web;
 using System.Web.Routing;
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {

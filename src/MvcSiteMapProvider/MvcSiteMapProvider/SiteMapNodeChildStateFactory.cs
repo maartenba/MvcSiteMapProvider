@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Collections;
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {

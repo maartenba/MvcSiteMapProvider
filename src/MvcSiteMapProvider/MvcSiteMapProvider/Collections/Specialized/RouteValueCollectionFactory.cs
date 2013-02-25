@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MvcSiteMapProvider.Caching;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.RouteValueCollection"/>

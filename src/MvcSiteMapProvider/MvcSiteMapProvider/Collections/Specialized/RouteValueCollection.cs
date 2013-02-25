@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Caching;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// Specialized dictionary for providing business logic that manages

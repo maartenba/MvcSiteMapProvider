@@ -8,7 +8,7 @@ using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Caching;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// A specialized dictionary that contains the business logic for handling the attributes collection including

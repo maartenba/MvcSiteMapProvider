@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Collections;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// Specialized string collection for providing business logic that manages

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.ISiteMapNodeCollection"/>

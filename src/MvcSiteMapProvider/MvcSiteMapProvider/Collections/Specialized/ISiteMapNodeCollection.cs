@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Collections;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// Contract for specialized collection that manages relationships between <see cref="T:MvcSiteMapNode.ISiteMapNode"/>

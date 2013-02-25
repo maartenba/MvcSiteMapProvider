@@ -5,7 +5,7 @@ using System.Text;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Caching;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.AttributeCollection"/>

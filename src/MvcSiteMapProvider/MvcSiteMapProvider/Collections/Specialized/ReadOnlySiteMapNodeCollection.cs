@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// A specialized collection that provides a read-only wrapper for a <see cref="T:MvcSiteMapProvider.ISiteMapNodeCollection"/>.

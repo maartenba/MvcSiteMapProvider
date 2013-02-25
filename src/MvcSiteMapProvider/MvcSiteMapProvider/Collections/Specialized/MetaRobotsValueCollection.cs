@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MvcSiteMapProvider.Collections;
 
-namespace MvcSiteMapProvider
+namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
     /// A specialized collection for managing the business rules for handling the

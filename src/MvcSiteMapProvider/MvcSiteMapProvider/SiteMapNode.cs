@@ -5,7 +5,7 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
-
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {

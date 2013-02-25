@@ -84,8 +84,8 @@
     <Compile Include="Globalization\LocalizationService.cs" />
     <Compile Include="Globalization\LocalizationServiceFactory.cs" />
     <Compile Include="Globalization\StringLocalizer.cs" />
-    <Compile Include="IPreservedRouteParameterCollection.cs" />
-    <Compile Include="IRoleCollection.cs" />
+    <Compile Include="Collections\Specialized\IPreservedRouteParameterCollection.cs" />
+    <Compile Include="Collections\Specialized\IRoleCollection.cs" />
     <Compile Include="ISiteMapNodePluginProvider.cs" />
     <Compile Include="ISiteMapPluginProvider.cs" />
     <Compile Include="ISiteMapPluginProviderFactory.cs" />
@@ -96,11 +96,11 @@
     <Compile Include="Loader\ISiteMapLoaderFactory.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
     <Compile Include="Loader\SiteMapLoaderFactory.cs" />
-    <Compile Include="PreservedRouteParameterCollection.cs" />
+    <Compile Include="Collections\Specialized\PreservedRouteParameterCollection.cs" />
     <Compile Include="Reflection\IObjectCopier.cs" />
-    <Compile Include="IMetaRobotsValueCollection.cs" />
-    <Compile Include="MetaRobotsValueCollection.cs" />
-    <Compile Include="RoleCollection.cs" />
+    <Compile Include="Collections\Specialized\IMetaRobotsValueCollection.cs" />
+    <Compile Include="Collections\Specialized\MetaRobotsValueCollection.cs" />
+    <Compile Include="Collections\Specialized\RoleCollection.cs" />
     <Compile Include="ISiteMapChildStateFactory.cs" />
     <Compile Include="SiteMapChildStateFactory.cs" />
     <Compile Include="SiteMapNodePluginProvider.cs" />
@@ -146,7 +146,7 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Caching\IRequestCache.cs" />
     <Compile Include="Caching\RequestCache.cs" />
-    <Compile Include="AttributeCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\AttributeCollectionFactory.cs" />
     <Compile Include="Builder\IReflectionSiteMapBuilderFactory.cs" />
     <Compile Include="Builder\IXmlSiteMapBuilderFactory.cs" />
     <Compile Include="Builder\ReflectionSiteMapBuilderFactory.cs" />
@@ -182,38 +182,38 @@
     <Compile Include="Builder\SiteMapBuilderSet.cs" />
     <Compile Include="Builder\XmlSiteMapBuilderFactory.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolver.cs" />
-    <Compile Include="IAttributeCollection.cs" />
+    <Compile Include="Collections\Specialized\IAttributeCollection.cs" />
     <Compile Include="ISiteMapNodeChildStateFactory.cs" />
-    <Compile Include="ISiteMapNodeCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\ISiteMapNodeCollectionFactory.cs" />
     <Compile Include="LockableSiteMap.cs" />
     <Compile Include="LockableSiteMapNode.cs" />
-    <Compile Include="LockableSiteMapNodeCollection.cs" />
-    <Compile Include="ReadOnlySiteMapNodeCollection.cs" />
+    <Compile Include="Collections\Specialized\LockableSiteMapNodeCollection.cs" />
+    <Compile Include="Collections\Specialized\ReadOnlySiteMapNodeCollection.cs" />
     <Compile Include="RequestCacheableSiteMap.cs" />
     <Compile Include="RequestCacheableSiteMapNode.cs" />
     <Compile Include="SiteMapNodeChildStateFactory.cs" />
-    <Compile Include="SiteMapNodeCollection.cs" />
+    <Compile Include="Collections\Specialized\SiteMapNodeCollection.cs" />
     <Compile Include="DynamicNodeProviderBase.cs" />
     <Compile Include="DynamicNodeProviderStrategy.cs" />
-    <Compile Include="ISiteMapNodeCollection.cs" />
+    <Compile Include="Collections\Specialized\ISiteMapNodeCollection.cs" />
     <Compile Include="IDynamicNodeProviderStrategy.cs" />
     <Compile Include="IMvcSiteMapNodeAttribute.cs" />
-    <Compile Include="IRouteValueCollection.cs" />
-    <Compile Include="IRouteValueCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\IRouteValueCollection.cs" />
+    <Compile Include="Collections\Specialized\IRouteValueCollectionFactory.cs" />
     <Compile Include="ISiteMapFactory.cs" />
     <Compile Include="ISiteMapNode.cs" />
-    <Compile Include="IAttributeCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\IAttributeCollectionFactory.cs" />
     <Compile Include="ISiteMapNodeFactory.cs" />
     <Compile Include="Web\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="MvcSiteMapNodeAttribute.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
-    <Compile Include="RouteValueCollection.cs" />
-    <Compile Include="RouteValueCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\RouteValueCollection.cs" />
+    <Compile Include="Collections\Specialized\RouteValueCollectionFactory.cs" />
     <Compile Include="SiteMapFactory.cs" />
     <Compile Include="SiteMapNode.cs" />
-    <Compile Include="AttributeCollection.cs" />
-    <Compile Include="SiteMapNodeCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\AttributeCollection.cs" />
+    <Compile Include="Collections\Specialized\SiteMapNodeCollectionFactory.cs" />
     <Compile Include="SiteMapNodeFactory.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="SiteMapNodePositioningBase.cs" />
@@ -314,6 +314,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

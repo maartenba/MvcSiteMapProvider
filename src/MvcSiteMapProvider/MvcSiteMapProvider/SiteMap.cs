@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {
@@ -18,7 +19,8 @@ namespace MvcSiteMapProvider
     /// This class was created by extracting the public intefaces of SiteMapProvider, 
     /// StaticSiteMapProvider, and MvcSiteMapProvider.DefaultSiteMapProvider.
     /// </remarks>
-    public class SiteMap : ISiteMap
+    public class SiteMap 
+        : ISiteMap
     {
         public SiteMap(
             ISiteMapPluginProvider pluginProvider,

@@ -12,6 +12,7 @@ using System.IO;
 using System.Globalization;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Globalization;
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Builder
 {

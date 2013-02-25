@@ -5,10 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Linq;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web;
 using System.IO;
 using System.IO.Compression;
+using MvcSiteMapProvider;
+using MvcSiteMapProvider.Web;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
