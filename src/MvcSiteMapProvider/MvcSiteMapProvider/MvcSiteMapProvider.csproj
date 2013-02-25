@@ -87,6 +87,8 @@
     <Compile Include="IPreservedRouteParameterCollection.cs" />
     <Compile Include="IRoleCollection.cs" />
     <Compile Include="ISiteMapNodePluginProvider.cs" />
+    <Compile Include="ISiteMapPluginProvider.cs" />
+    <Compile Include="ISiteMapPluginProviderFactory.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
@@ -103,6 +105,8 @@
     <Compile Include="SiteMapChildStateFactory.cs" />
     <Compile Include="SiteMapNodePluginProvider.cs" />
     <Compile Include="SiteMapNodeVisibilityProviderBase.cs" />
+    <Compile Include="SiteMapPluginProvider.cs" />
+    <Compile Include="SiteMapPluginProviderFactory.cs" />
     <Compile Include="Visitor\CompositeSiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\ISiteMapNodeVisitor.cs" />
     <Compile Include="Visitor\UrlResolvingSiteMapNodeVisitor.cs" />

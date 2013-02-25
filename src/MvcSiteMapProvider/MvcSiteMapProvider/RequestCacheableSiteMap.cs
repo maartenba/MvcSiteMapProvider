@@ -22,15 +22,13 @@ namespace MvcSiteMapProvider
         : LockableSiteMap
     {
         public RequestCacheableSiteMap(
-            ISiteMapBuilder siteMapBuilder,
-            IMvcResolver mvcResolver,
+            ISiteMapPluginProvider pluginProvider,
             IMvcContextFactory mvcContextFactory,
-            IAclModule aclModule,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
             IRequestCache requestCache
             )
-            : base(siteMapBuilder, mvcResolver, mvcContextFactory, aclModule, siteMapChildStateFactory, urlPath)
+            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");

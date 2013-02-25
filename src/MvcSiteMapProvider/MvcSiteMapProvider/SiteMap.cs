@@ -25,31 +25,23 @@ namespace MvcSiteMapProvider
     public class SiteMap : ISiteMap
     {
         public SiteMap(
-            ISiteMapBuilder siteMapBuilder,
-            IMvcResolver mvcResolver,
+            ISiteMapPluginProvider pluginProvider,
             IMvcContextFactory mvcContextFactory,
-            IAclModule aclModule,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath
             )
         {
-            if (siteMapBuilder == null)
-                throw new ArgumentNullException("siteMapBuilder");
-            if (mvcResolver == null)
-                throw new ArgumentNullException("mvcResolver");
+            if (pluginProvider == null)
+                throw new ArgumentNullException("pluginProvider");
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
-            if (aclModule == null)
-                throw new ArgumentNullException("aclModule");
             if (siteMapChildStateFactory == null)
                 throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
 
-            this.siteMapBuilder = siteMapBuilder;
-            this.mvcResolver = mvcResolver;
+            this.pluginProvider = pluginProvider;
             this.mvcContextFactory = mvcContextFactory;
-            this.aclModule = aclModule;
             this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
 
@@ -61,12 +53,8 @@ namespace MvcSiteMapProvider
         }
 
         // Services
-        protected readonly ISiteMapBuilder siteMapBuilder;
-        // This one is here because we need to keep its lifetime in sync with the sitemap object's lifetime
-        // for the controllerTypeResolver and actionMethodParameterResolver's internal caching to work.
-        protected readonly IMvcResolver mvcResolver;
+        protected readonly ISiteMapPluginProvider pluginProvider;
         protected readonly IMvcContextFactory mvcContextFactory;
-        protected readonly IAclModule aclModule;
         protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
 
@@ -255,7 +243,7 @@ namespace MvcSiteMapProvider
         {
             // If this was called before, just ignore this call.
             if (root != null) return;
-            root = siteMapBuilder.BuildSiteMap(this, root);
+            root = pluginProvider.SiteMapBuilder.BuildSiteMap(this, root);
         }
 
         /// <summary>
@@ -526,7 +514,7 @@ namespace MvcSiteMapProvider
             {
                 return true;
             }
-            return aclModule.IsAccessibleToUser(this, node);
+            return pluginProvider.AclModule.IsAccessibleToUser(this, node);
         }
 
         /// <summary>
@@ -561,7 +549,7 @@ namespace MvcSiteMapProvider
         /// <remarks>There is 1 instance of controller type resolver per site map.</remarks>
         public Type ResolveControllerType(string areaName, string controllerName)
         {
-            return mvcResolver.ResolveControllerType(areaName, controllerName);
+            return pluginProvider.MvcResolver.ResolveControllerType(areaName, controllerName);
         }
 
         /// <summary>
@@ -570,7 +558,7 @@ namespace MvcSiteMapProvider
         /// <remarks>There is 1 instance of action method parameter resolver per site map.</remarks>
         public IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName)
         {
-            return mvcResolver.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);
+            return pluginProvider.MvcResolver.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);
         }
 
         #endregion

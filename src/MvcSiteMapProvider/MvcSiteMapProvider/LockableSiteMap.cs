@@ -20,14 +20,12 @@ namespace MvcSiteMapProvider
         : SiteMap
     {
         public LockableSiteMap(
-            ISiteMapBuilder siteMapBuilder,
-            IMvcResolver mvcResolver,
+            ISiteMapPluginProvider pluginProvider,
             IMvcContextFactory mvcContextFactory,
-            IAclModule aclModule,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath
-            ) 
-            : base(siteMapBuilder, mvcResolver, mvcContextFactory, aclModule, siteMapChildStateFactory, urlPath)
+            )
+            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath)
         {
         }
 

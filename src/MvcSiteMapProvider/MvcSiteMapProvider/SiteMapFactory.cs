@@ -17,21 +17,21 @@ namespace MvcSiteMapProvider
         : ISiteMapFactory
     {
         public SiteMapFactory(
+            ISiteMapPluginProviderFactory pluginProviderFactory,
             IMvcResolverFactory mvcResolverFactory,
             IMvcContextFactory mvcContextFactory,
-            IAclModule aclModule,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
             IControllerTypeResolverFactory controllerTypeResolverFactory,
             IActionMethodParameterResolverFactory actionMethodParameterResolverFactory
             )
         {
+            if (pluginProviderFactory == null)
+                throw new ArgumentNullException("pluginProviderFactory");
             if (mvcResolverFactory == null)
                 throw new ArgumentNullException("mvcResolverFactory");
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
-            if (aclModule == null)
-                throw new ArgumentNullException("aclModule");
             if (siteMapChildStateFactory == null)
                 throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
@@ -41,18 +41,18 @@ namespace MvcSiteMapProvider
             if (actionMethodParameterResolverFactory == null)
                 throw new ArgumentNullException("actionMethodParameterResolverFactory");
 
+            this.pluginProviderFactory = pluginProviderFactory;
             this.mvcResolverFactory = mvcResolverFactory;
             this.mvcContextFactory = mvcContextFactory;
-            this.aclModule = aclModule;
             this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
             this.controllerTypeResolverFactory = controllerTypeResolverFactory;
             this.actionMethodParameterResolverFactory = actionMethodParameterResolverFactory;
         }
 
+        protected readonly ISiteMapPluginProviderFactory pluginProviderFactory;
         protected readonly IMvcResolverFactory mvcResolverFactory;
         protected readonly IMvcContextFactory mvcContextFactory;
-        protected readonly IAclModule aclModule;
         protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
         protected readonly IControllerTypeResolverFactory controllerTypeResolverFactory;
@@ -67,17 +67,16 @@ namespace MvcSiteMapProvider
             var requestCache = mvcContextFactory.GetRequestCache();
 
             // IMPORTANT: We need to ensure there is one instance of controllerTypeResolver and 
-            // one instance of ActionMethodParameterResolver per SiteMap instance.
-            var controllerTypeResolver = this.controllerTypeResolverFactory.Create(routes);
+            // one instance of ActionMethodParameterResolver per SiteMap instance because each of
+            // these classes does internal caching.
+            var controllerTypeResolver = controllerTypeResolverFactory.Create(routes);
             var actionMethodParameterResolver = actionMethodParameterResolverFactory.Create();
-
             var mvcResolver = mvcResolverFactory.Create(controllerTypeResolver, actionMethodParameterResolver);
+            var pluginProvider = pluginProviderFactory.Create(siteMapBuilder, mvcResolver);
 
             return new RequestCacheableSiteMap(
-                siteMapBuilder,
-                mvcResolver,
+                pluginProvider,
                 mvcContextFactory,
-                aclModule,
                 siteMapChildStateFactory,
                 urlPath,
                 requestCache);
