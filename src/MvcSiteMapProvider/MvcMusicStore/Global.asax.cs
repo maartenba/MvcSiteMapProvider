@@ -159,15 +159,25 @@ namespace MvcMusicStore
 
 
 
-            var aclModules = new MvcSiteMapProvider.Security.CompositeAclModule(
-                container.GetInstance<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>(),
-                container.GetInstance<MvcSiteMapProvider.Security.XmlRolesAclModule>()
-            );
+            //var aclModules = new MvcSiteMapProvider.Security.CompositeAclModule(
+            //    container.GetInstance<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>(),
+            //    container.GetInstance<MvcSiteMapProvider.Security.XmlRolesAclModule>()
+            //);
+
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Security.IAclModule>()
+            //    .Use(aclModules)
+            //);
 
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Security.IAclModule>()
-                .Use(aclModules)
-            );
+                .For<MvcSiteMapProvider.Security.IAclModule>().Use<MvcSiteMapProvider.Security.CompositeAclModule>()
+                .EnumerableOf<MvcSiteMapProvider.Security.IAclModule>().Contains(y =>
+                {
+                    y.Type<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>();
+                    y.Type<MvcSiteMapProvider.Security.XmlRolesAclModule>();
+                }
+            ));
+
 
 
 
@@ -289,51 +299,77 @@ namespace MvcMusicStore
             //    .Use(HttpContext.Current)
             //);
 
-            // Configure the SiteMap Builder Sets
-
-            var xmlBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IXmlSiteMapBuilderFactory>();
-            var xmlBuilder = xmlBuilderFactory.Create("~/Mvc.sitemap", new string[] { "" });
-
-
-            var reflectionBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IReflectionSiteMapBuilderFactory>();
-            var reflectionBuilder = reflectionBuilderFactory.Create(new string[] { "" }, new string[] { "" });
-
-
-            var visitingBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IVisitingSiteMapBuilderFactory>();
-            var visitingBuilder = visitingBuilderFactory.Create();
-
-
-            //var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
-            //    container.GetInstance<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>(),
-            //    container.GetInstance<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
-            //);
-
-            var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
-                xmlBuilder,
-                reflectionBuilder,
-                visitingBuilder
+            // Setup cache
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Caching.ISiteMapCache>()
+                .Use<MvcSiteMapProvider.Caching.AspNetSiteMapCache>()
             );
 
-            //var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
-            //var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
-
-            // Specify caching details for the default builder set.
             container.Configure(x => x
-               .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
-               .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
-               .Ctor<IEnumerable<string>>()
+                .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
+                .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
+                .Ctor<IEnumerable<string>>()
                 .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
             );
-            
-            var cacheDependencyFactory = container.GetInstance<MvcSiteMapProvider.Caching.ICacheDependencyFactory>();
-            var cacheDetails = new MvcSiteMapProvider.Caching.CacheDetails(TimeSpan.FromMinutes(5), TimeSpan.Zero, cacheDependencyFactory);
 
-            var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDetails);
-            var builderSets = new MvcSiteMapProvider.Builder.ISiteMapBuilderSet[] { builderSet };
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Caching.ICacheDetails>().Use<MvcSiteMapProvider.Caching.CacheDetails>()
+                .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+                .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
+            );
+
+            // Configure the SiteMap Builder Sets
+
+            //var xmlBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IXmlSiteMapBuilderFactory>();
+            //var xmlBuilder = xmlBuilderFactory.Create("~/Mvc.sitemap", new string[] { "" });
+
+
+            //var reflectionBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IReflectionSiteMapBuilderFactory>();
+            //var reflectionBuilder = reflectionBuilderFactory.Create(new string[] { "" }, new string[] { "" });
+
+
+            //var visitingBuilderFactory = container.GetInstance<MvcSiteMapProvider.Builder.IVisitingSiteMapBuilderFactory>();
+            //var visitingBuilder = visitingBuilderFactory.Create();
+
+
+            ////var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
+            ////    container.GetInstance<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>(),
+            ////    container.GetInstance<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+            ////);
+
+            //var builders = new MvcSiteMapProvider.Builder.CompositeSiteMapBuilder(
+            //    xmlBuilder,
+            //    reflectionBuilder,
+            //    visitingBuilder
+            //);
+
+            // Configure the SiteMap Builder Sets
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Builder.I
+            //);
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Xml.IXmlSource>()
+                .Use<MvcSiteMapProvider.Xml.FileXmlSource>()
+                .Ctor<string>("xmlFileName").Is("~/Mvc.sitemap")
+            );
+
+            container.Configure(x => x
+                .For<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Use<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+                .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+                {
+                    y.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+                        .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
+                    y.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+                        .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+                        .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+                    y.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+                })
+            );
 
             //container.Configure(x => x
-            //    .For<IEnumerable<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>>()
-            //    .Use(builderSets)
+            //    .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Use<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+            //    .Ctor<string>("name").Is("default")
             //);
 
             container.Configure(x => x
@@ -341,24 +377,58 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
                 //.TheArrayOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>()
                 //.Contains(y => { y.IsThis(builderSet); })
-                .Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilderSet[]>()
-                .Is(builderSets)
+
+                //.Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilderSet[]>()
+                //.Is(builderSets)
+                .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
+                {
+                    y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+                        .Ctor<string>("name").Is("default");
+                })
             );
+
+
+            ////var dependency = new System.Web.Caching.CacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+            ////var cacheDependency = new MvcSiteMapProvider.Caching.AspNetCacheDependency(dependency);
+
+            //// Specify caching details for the default builder set.
+            ////container.Configure(x => x
+            ////   .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
+            ////   .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
+            ////   .Ctor<IEnumerable<string>>()
+            ////    .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
+            ////);
+            
+            //var cacheDependencyFactory = container.GetInstance<MvcSiteMapProvider.Caching.ICacheDependencyFactory>();
+            //var cacheDetails = new MvcSiteMapProvider.Caching.CacheDetails(TimeSpan.FromMinutes(5), TimeSpan.Zero, cacheDependencyFactory);
+
+            //var builderSet = new MvcSiteMapProvider.Builder.SiteMapBuilderSet("default", builders, cacheDetails);
+            //var builderSets = new MvcSiteMapProvider.Builder.ISiteMapBuilderSet[] { builderSet };
+
+            ////container.Configure(x => x
+            ////    .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>()
+            ////    .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
+            ////    //.TheArrayOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>()
+            ////    //.Contains(y => { y.IsThis(builderSet); })
+            ////    .Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilderSet[]>()
+            ////    .Is(builderSets)
+            ////);
+
+
+
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Xml.ISiteMapXmlValidator>()
                 .Use<MvcSiteMapProvider.Xml.SiteMapXmlValidator>()
             );
 
-            var validator = container.GetInstance<MvcSiteMapProvider.Xml.ISiteMapXmlValidator>();
-            // Check all configured .sitemap files to ensure they follow the XSD for MvcSiteMapProvider
-            validator.ValidateXml(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+
             
 
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Caching.ISiteMapCache>()
-                .Use<MvcSiteMapProvider.Caching.AspNetSiteMapCache>()
-            );
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ISiteMapCache>()
+            //    .Use<MvcSiteMapProvider.Caching.AspNetSiteMapCache>()
+            //);
 
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Caching.ISiteMapCacheKeyGenerator>()
@@ -385,10 +455,20 @@ namespace MvcMusicStore
             //var loaderFactory = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoaderFactory>();
             //var loader = loaderFactory.Create();
 
+
+
+
+
+
+
             // TODO: Evaluate whether we need a SiteMapLoaderFactory
             var loader = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoader>();
 
             MvcSiteMapProvider.SiteMaps.Loader = loader;
+
+            var validator = container.GetInstance<MvcSiteMapProvider.Xml.ISiteMapXmlValidator>();
+            // Check all configured .sitemap files to ensure they follow the XSD for MvcSiteMapProvider
+            validator.ValidateXml(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
         }
 
 
