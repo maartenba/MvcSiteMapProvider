@@ -15,9 +15,6 @@ namespace MvcSiteMapProvider.Caching
             CacheDependency cacheDependency
             )
         {
-            if (cacheDependency == null)
-                throw new ArgumentNullException("cacheDependency");
-
             this.cacheDependency = cacheDependency;
         }
 

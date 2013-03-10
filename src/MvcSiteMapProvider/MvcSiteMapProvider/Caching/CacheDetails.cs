@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace MvcSiteMapProvider.Caching
 {
+    // TODO: Create CacheDetialsStrategy for registering multiple named instances that can be selected at runtime.
+
     /// <summary>
     /// Container for passing caching instructions around as a group.
     /// </summary>
