@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Html;
 
 namespace MvcMusicStore
@@ -18,18 +19,12 @@ namespace MvcMusicStore
         /// <returns>Node bling.</returns>
         public static string Bling(this MvcSiteMapHtmlHelper helper)
         {
-            //var node = SiteMap.CurrentNode;
-            var node = MvcSiteMapProvider.SiteMaps.Current.CurrentNode;
-            if (node != null)
+            var node = SiteMaps.Current.CurrentNode;
+            if (node != null && node.Attributes.ContainsKey("bling"))
             {
-                if (node.Attributes.ContainsKey("bling"))
-                    return node.Attributes["bling"];
-                else
-                    return string.Empty;
-
-                //return node["bling"] ?? "";
+                return node.Attributes["bling"];
             }
-            return "";
+            return string.Empty;
         }
     }
 }
