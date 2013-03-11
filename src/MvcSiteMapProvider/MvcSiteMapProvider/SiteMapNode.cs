@@ -252,7 +252,7 @@ namespace MvcSiteMapProvider
         {
             // use strategy factory to provide implementation logic from concrete provider
             // http://stackoverflow.com/questions/1499442/best-way-to-use-structuremap-to-implement-strategy-pattern
-            return pluginProvider.DynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider);
+            return pluginProvider.DynamicNodeProviderStrategy.GetDynamicNodeCollection(this.DynamicNodeProvider, this);
         }
 
         /// <summary>

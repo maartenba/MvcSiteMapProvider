@@ -10,8 +10,9 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets the dynamic node collection.
         /// </summary>
+        /// <param name="node">The current node.</param>
         /// <returns>A dynamic node collection.</returns>
-        IEnumerable<DynamicNode> GetDynamicNodeCollection();
+        IEnumerable<DynamicNode> GetDynamicNodeCollection(ISiteMapNode node);
 
         /// <summary>
         /// Determines whether the provider instance matches the name

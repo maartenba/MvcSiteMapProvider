@@ -28,11 +28,11 @@ namespace MvcSiteMapProvider
             return dynamicNodeProviders.FirstOrDefault(x => x.AppliesTo(providerName));
         }
 
-        public IEnumerable<DynamicNode> GetDynamicNodeCollection(string providerName)
+        public IEnumerable<DynamicNode> GetDynamicNodeCollection(string providerName, ISiteMapNode node)
         {
             var provider = GetProvider(providerName);
             if (provider == null) return new List<DynamicNode>();
-            return provider.GetDynamicNodeCollection();
+            return provider.GetDynamicNodeCollection(node);
         }
 
         #endregion
