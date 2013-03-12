@@ -25,7 +25,15 @@ namespace MvcSiteMapProvider
     public class DefaultSiteMapProvider
         : StaticSiteMapProvider
     {
+        #region Attribute names
+
+        protected const string AttributesToInheritKey = "attributesToInherit";
+
+        #endregion
+
         #region Private
+
+        private readonly char[] configValueSeparators = new[] { ';', ',' };
 
         protected const string RootName = "mvcSiteMap";
         protected const string NodeName = "mvcSiteMapNode";
@@ -42,6 +50,8 @@ namespace MvcSiteMapProvider
         protected List<string> excludeAssembliesForScan = new List<string>();
         protected List<string> includeAssembliesForScan = new List<string>();
         protected List<string> attributesToIgnore = new List<string>();
+        protected string[] attributesToInherit = new string[0];
+
         #endregion
 
         #region Properties
@@ -294,6 +304,12 @@ namespace MvcSiteMapProvider
                 {
                     attributesToIgnore = tempAttributesToIgnore.Split(';', ',').ToList();
                 }
+            }
+
+            // Which attributes in the sitemap XML should be inherited from parent nodes?
+            if(!string.IsNullOrEmpty(attributes[AttributesToInheritKey]))
+            {
+                attributesToInherit = attributes[AttributesToInheritKey].Split(configValueSeparators);
             }
 
             // Is a node key generator given?
@@ -1449,6 +1465,11 @@ namespace MvcSiteMapProvider
             LoadInheritedAttribute("area", node, siteMapNode, parentMvcNode, defaultValue: string.Empty, isRouteValue: true);
             LoadInheritedAttribute("controller", node, siteMapNode, parentMvcNode, isRouteValue: true);
             LoadInheritedAttribute("action", node, siteMapNode, parentMvcNode, isRouteValue: true);
+
+            foreach(var attributeName in attributesToInherit)
+            {
+                LoadInheritedAttribute(attributeName, node, siteMapNode, parentMvcNode);
+            }
 
             // Add defaults for SiteMapNodeUrlResolver
             if (siteMapNode.UrlResolver == null)
