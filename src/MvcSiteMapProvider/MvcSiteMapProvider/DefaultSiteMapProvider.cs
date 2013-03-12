@@ -1442,36 +1442,13 @@ namespace MvcSiteMapProvider
             siteMapNode.ResourceKey = implicitResourceKey;
 
             // Create a route data dictionary
-            IDictionary<string, object> routeValues = new Dictionary<string, object>();
-            AttributesToRouteValues(node, siteMapNode, routeValues);
+            siteMapNode.RouteValues = new Dictionary<string, object>();
+            AttributesToRouteValues(node, siteMapNode, siteMapNode.RouteValues);
 
-            // Inherit area and controller from parent
-            if (parentMvcNode != null)
-            {
-                if (siteMapNode["area"] == null)
-                {
-                    siteMapNode["area"] = parentMvcNode.Area;
-                    routeValues.Add("area", parentMvcNode.Area);
-                }
-                if (node.GetAttributeValue("controller") == "")
-                {
-                    siteMapNode["controller"] = parentMvcNode.Controller;
-                    routeValues.Add("controller", parentMvcNode.Controller);
-                }
-                var action = "action";
-                if (node.GetAttributeValue(action) == String.Empty)
-                {
-                    siteMapNode[action] = parentMvcNode.Action;
-                    routeValues.Add(action, parentMvcNode.Action);
-                }
-            }
-
-            // Add defaults for area
-            if (!routeValues.ContainsKey("area"))
-            {
-                siteMapNode["area"] = "";
-                routeValues.Add("area", "");
-            }
+            // Load inherited attributes
+            LoadInheritedAttribute("area", node, siteMapNode, parentMvcNode, defaultValue: string.Empty, isRouteValue: true);
+            LoadInheritedAttribute("controller", node, siteMapNode, parentMvcNode, isRouteValue: true);
+            LoadInheritedAttribute("action", node, siteMapNode, parentMvcNode, isRouteValue: true);
 
             // Add defaults for SiteMapNodeUrlResolver
             if (siteMapNode.UrlResolver == null)
@@ -1497,12 +1474,9 @@ namespace MvcSiteMapProvider
                 var item = inheritedRouteParameter.Trim();
                 if (parentMvcNode != null && parentMvcNode.RouteValues.ContainsKey(item))
                 {
-                    routeValues[item] = parentMvcNode.RouteValues[item];
+                    siteMapNode.RouteValues[item] = parentMvcNode.RouteValues[item];
                 }
             }
-
-            // Add route values to sitemap node
-            siteMapNode.RouteValues = routeValues;
 
             // Add node's route defaults
             var httpContext = new HttpContextWrapper(HttpContext.Current);
@@ -1789,6 +1763,33 @@ namespace MvcSiteMapProvider
         protected void DecodeExternalUrl(SiteMapNode node)
         {
             node.Url = HttpContext.Current.Server.UrlDecode(node.Url);
+        }
+
+        /// <summary>
+        /// Get the attribute value from current node or from the parent nodes
+        /// </summary>
+        /// <param name="attributeName">Name of the attribute</param>
+        /// <param name="xmlNode">Xml node</param>
+        /// <param name="siteMapNode">MvcSiteMapNode to set the attribute to.</param>
+        /// <param name="parentNode">Parent MvcSiteMapNode</param>
+        /// <param name="defaultValue">Default attribute value</param>
+        /// <param name="isRouteValue">If this flag is set to "true", than the attribute value will also be added to routeValues</param>
+        private void LoadInheritedAttribute(string attributeName, XElement xmlNode, MvcSiteMapNode siteMapNode, MvcSiteMapNode parentNode, string defaultValue = null, bool isRouteValue = false)
+        {
+            var value = xmlNode.GetAttributeValue(attributeName);
+            var currentNode = parentNode;
+
+            while(currentNode != null && string.IsNullOrEmpty(value))
+            {
+	            value = currentNode[attributeName];
+                currentNode = currentNode.ParentNode as MvcSiteMapNode;
+            }
+
+            siteMapNode[attributeName] = value ?? defaultValue;
+            if(isRouteValue)
+            {
+                siteMapNode.RouteValues[attributeName] = value ?? defaultValue;
+            }
         }
 
         #endregion
