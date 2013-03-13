@@ -136,11 +136,13 @@
     <Compile Include="Web\Mvc\Filters\SiteMapTitleAttribute.cs" />
     <Compile Include="Web\Mvc\IActionMethodParameterResolver.cs" />
     <Compile Include="Web\Mvc\IControllerTypeResolver.cs" />
+    <Compile Include="Web\Mvc\IXmlSiteMapResultFactory.cs" />
     <Compile Include="Web\Mvc\MvcContextFactory.cs" />
     <Compile Include="Web\Mvc\IMvcContextFactory.cs" />
     <Compile Include="Web\Mvc\MvcResolver.cs" />
     <Compile Include="Web\Mvc\MvcResolverFactory.cs" />
     <Compile Include="Web\Mvc\UrlHelperAdaptor.cs" />
+    <Compile Include="Web\Mvc\XmlSiteMapResultFactory.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolverBase.cs" />
     <Compile Include="Web\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />

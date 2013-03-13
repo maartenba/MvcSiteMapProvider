@@ -216,4 +216,7 @@
   <data name="XmlValidationFailed" xml:space="preserve">
     <value>The file at '{0}' contains XML validation errors. See the inner exception for complete details.</value>
   </data>
+  <data name="UnknownSiteMap" xml:space="preserve">
+    <value>Unknown SiteMap: '{0}'.</value>
+  </data>
 </root>

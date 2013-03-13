@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Loader;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
@@ -18,6 +19,28 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class XmlSiteMapResult
         : ActionResult
     {
+        public XmlSiteMapResult(
+            int page,
+            ISiteMapNode rootNode,
+            IEnumerable<string> siteMapCacheKeys,
+            string baseUrl,
+            string siteMapUrlTemplate,
+            ISiteMapLoader siteMapLoader)
+        {
+            if (siteMapLoader == null)
+                throw new ArgumentNullException("siteMapLoader");
+
+            this.Ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
+            this.Page = page;
+            this.RootNode = rootNode;
+            this.SiteMapCacheKeys = siteMapCacheKeys;
+            this.BaseUrl = baseUrl;
+            this.SiteMapUrlTemplate = siteMapUrlTemplate;
+            this.siteMapLoader = siteMapLoader;
+        }
+
+        private readonly ISiteMapLoader siteMapLoader;
+
         /// <summary>
         /// Maximal number of links per sitemap file.
         /// </summary>
@@ -46,10 +69,16 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected ISiteMapNode RootNode { get; private set; }
 
         /// <summary>
-        /// Gets or sets the URL.
+        /// Gets or sets the site map cache keys.
         /// </summary>
-        /// <value>The URL.</value>
-        protected string Url { get; private set; }
+        /// <value>The site map cache keys.</value>
+        protected IEnumerable<string> SiteMapCacheKeys { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the base URL.
+        /// </summary>
+        /// <value>The base URL.</value>
+        protected string BaseUrl { get; private set; }
 
         /// <summary>
         /// Gets or sets the site map URL template.
@@ -61,48 +90,8 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// Gets or sets the page.
         /// </summary>
         /// <value>The page.</value>
-        public int Page { get; set; }
+        protected int Page { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlSiteMapResult"/> class.
-        /// </summary>
-        public XmlSiteMapResult()
-            : this(SiteMaps.Current.RootNode)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlSiteMapResult"/> class.
-        /// </summary>
-        /// <param name="rootNode">The root node.</param>
-        public XmlSiteMapResult(ISiteMapNode rootNode)
-            : this(rootNode, String.Empty, "sitemap-{page}.xml")
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XmlSiteMapResult"/> class.
-        /// </summary>
-        /// <param name="rootNode">The root node.</param>
-        /// <param name="url">The base URL.</param>
-        /// <param name="siteMapUrlTemplate">The site map URL template.</param>
-        public XmlSiteMapResult(ISiteMapNode rootNode, string url, string siteMapUrlTemplate)
-        {
-            Ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
-            RootNode = rootNode;
-            SiteMapUrlTemplate = siteMapUrlTemplate;
-
-            if (String.IsNullOrEmpty(url))
-            {
-                // TODO: Make this DI friendly
-                var urlPath = new UrlPath(new MvcContextFactory());
-                Url = urlPath.ResolveServerUrl("~/", false);
-            }
-            else
-            {
-                Url = url;
-            }
-        }
 
         /// <summary>
         /// Executes the sitemap index result.
@@ -120,7 +109,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 
             // Generate sitemap sitemapindex
             var sitemapIndex = new XElement(Ns + "sitemapindex");
-            sitemapIndex.Add(GenerateSiteMapIndexElements(Convert.ToInt32(numPages), Url, SiteMapUrlTemplate).ToArray());
+            sitemapIndex.Add(GenerateSiteMapIndexElements(Convert.ToInt32(numPages), BaseUrl, SiteMapUrlTemplate).ToArray());
 
             // Generate sitemap
             var xmlSiteMap = new XDocument(
@@ -156,7 +145,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             urlSet.Add(GenerateUrlElements(
                 context,
                 flattenedHierarchy.Skip((page - 1)* MaxNumberOfLinksPerFile)
-                    .Take(MaxNumberOfLinksPerFile), Url).ToArray());
+                    .Take(MaxNumberOfLinksPerFile), BaseUrl).ToArray());
 
             // Generate sitemap
             var xmlSiteMap = new XDocument(
@@ -180,8 +169,26 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="context">The context in which the result is executed. The context information includes the controller, HTTP content, request context, and route data.</param>
         public override void ExecuteResult(ControllerContext context)
         {
+            var flattenedHierarchy = new List<ISiteMapNode>();
+
             // Flatten link hierarchy
-            var flattenedHierarchy = FlattenHierarchy(RootNode, Url);
+            if (SiteMapCacheKeys.Count() > 0)
+            {
+                foreach (var key in SiteMapCacheKeys)
+                {
+                    var siteMap = siteMapLoader.GetSiteMap(key);
+                    if (siteMap == null)
+                    {
+                        throw new UnknownSiteMapException(Resources.Messages.UnknownSiteMap);
+                    }
+
+                    flattenedHierarchy.AddRange(FlattenHierarchy(siteMap.RootNode, BaseUrl));
+                }
+            }
+            else
+            {
+                flattenedHierarchy.AddRange(FlattenHierarchy(this.RootNode, BaseUrl));
+            }
             var flattenedHierarchyCount = flattenedHierarchy.LongCount();
 
             // Determine type of sitemap to generate: sitemap index file or sitemap file

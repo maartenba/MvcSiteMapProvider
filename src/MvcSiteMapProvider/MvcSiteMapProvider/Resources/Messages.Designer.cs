@@ -331,6 +331,15 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown SiteMap: &apos;{0}&apos;..
+        /// </summary>
+        internal static string UnknownSiteMap {
+            get {
+                return ResourceManager.GetString("UnknownSiteMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node..
         /// </summary>
         internal static string VisitingSiteMapBuilderRequiresRootNode {

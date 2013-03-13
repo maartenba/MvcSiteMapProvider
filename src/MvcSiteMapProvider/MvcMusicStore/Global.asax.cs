@@ -7,6 +7,7 @@ using System.Web.Routing;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using StructureMap;
+using MvcMusicStore.Code.IoC;
 
 namespace MvcMusicStore
 {
@@ -53,11 +54,18 @@ namespace MvcMusicStore
 
             // Create the DI container (for structuremap)
             var container = new Container();
+            var diContainer = new StructureMapContainer(container);
+
             //var resolver = new Code.IoC.StructureMapResolver(container);
 
             //// Setup the container in a static member so it can be used
             //// to inject dependencies later.
             //MvcSiteMapProvider.IoC.DI.Container = resolver;
+
+            
+
+
+            
 
 
             // Configure Dependencies
@@ -333,6 +341,28 @@ namespace MvcMusicStore
             container.Configure(x => x
                 .For<MvcSiteMapProvider.Loader.ISiteMapLoaderFactory>()
                 .Use<MvcSiteMapProvider.Loader.SiteMapLoaderFactory>()
+            );
+
+
+
+
+            // Fix for controllers - need to ensure they are transient scoped or
+            // there will be problems.
+            //http://code-inside.de/blog/2011/01/18/fix-a-single-instance-of-controller-foocontroller-cannot-be-used-to-handle-multiple-requests-mvc3/
+            container.Configure(x => x
+                .Scan(scan =>
+                {
+                    scan.TheCallingAssembly();
+                    scan.AssemblyContainingType<MvcSiteMapProvider.Web.Mvc.XmlSiteMapController>();
+                    scan.AddAllTypesOf<IController>();
+                    scan.Include(t => typeof(IController).IsAssignableFrom(t));
+                    scan.Convention<TransientConvention>();
+                })
+            );
+
+            // Reconfigure MVC to use StructureMap for DI
+            ControllerBuilder.Current.SetControllerFactory(
+                new InjectableControllerFactory(diContainer)
             );
 
 

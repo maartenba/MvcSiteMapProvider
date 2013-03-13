@@ -16,6 +16,17 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class XmlSiteMapController
         : Controller
     {
+        public XmlSiteMapController(
+            IXmlSiteMapResultFactory xmlSiteMapResultFactory
+            )
+        {
+            if (xmlSiteMapResultFactory == null)
+                throw new ArgumentNullException("xmlSiteMapResultFactory");
+            this.xmlSiteMapResultFactory = xmlSiteMapResultFactory;
+        }
+
+        private readonly IXmlSiteMapResultFactory xmlSiteMapResultFactory;
+
         /// <summary>
         /// GET: /XmlSiteMap/Index
         /// </summary>
@@ -23,7 +34,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <returns>XmlSiteMapResult instance</returns>
         public ActionResult Index(int page)
         {
-            return new XmlSiteMapResult() { Page = page };
+            return xmlSiteMapResultFactory.Create(page);
         }
 
         /// <summary>
