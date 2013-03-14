@@ -84,14 +84,16 @@ namespace MvcSiteMapProvider.Loader
                     synclock.EnterWriteLock();
                     try
                     {
-                        // Build sitemap
-                        var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
-                        var builderSet = siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
-                        siteMap = siteMapFactory.Create(builderSet.Builder);
-                        siteMap.BuildSiteMap();
+                        if (!siteMapCache.TryGetValue(siteMapCacheKey, out siteMap))
+                        {
+                            // Build sitemap
+                            var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
+                            var builderSet = siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
+                            siteMap = siteMapFactory.Create(builderSet.Builder);
+                            siteMap.BuildSiteMap();
 
-                        siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CacheDetails);
-
+                            siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CacheDetails);
+                        }
                         return siteMap;
                     }
                     finally
