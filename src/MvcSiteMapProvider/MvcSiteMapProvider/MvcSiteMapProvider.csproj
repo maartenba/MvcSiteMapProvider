@@ -52,9 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder\IVisitingSiteMapBuilderFactory.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
-    <Compile Include="Builder\VisitingSiteMapBuilderFactory.cs" />
     <Compile Include="Caching\AspNetCompositeCacheDependency.cs" />
     <Compile Include="Caching\AspNetFileCacheDependency.cs" />
     <Compile Include="Caching\CacheDetails.cs" />
@@ -149,9 +147,6 @@
     <Compile Include="Caching\IRequestCache.cs" />
     <Compile Include="Caching\RequestCache.cs" />
     <Compile Include="Collections\Specialized\AttributeCollectionFactory.cs" />
-    <Compile Include="Builder\IReflectionSiteMapBuilderFactory.cs" />
-    <Compile Include="Builder\IXmlSiteMapBuilderFactory.cs" />
-    <Compile Include="Builder\ReflectionSiteMapBuilderFactory.cs" />
     <Compile Include="Builder\SiteMapBuilderSetStrategy.cs" />
     <Compile Include="Builder\CompositeSiteMapBuilder.cs" />
     <Compile Include="Builder\DynamicNodeBuilder.cs" />
@@ -182,7 +177,6 @@
     <Compile Include="Builder\NodeKeyGenerator.cs" />
     <Compile Include="Builder\ReflectionSiteMapBuilder.cs" />
     <Compile Include="Builder\SiteMapBuilderSet.cs" />
-    <Compile Include="Builder\XmlSiteMapBuilderFactory.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolver.cs" />
     <Compile Include="Collections\Specialized\IAttributeCollection.cs" />
     <Compile Include="ISiteMapNodeChildStateFactory.cs" />
