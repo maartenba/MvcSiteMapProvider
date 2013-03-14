@@ -27,12 +27,10 @@ namespace MvcSiteMapProvider.Builder
         public virtual ISiteMapBuilderSet GetBuilderSet(string builderSetName)
         {
             var builderSet = siteMapBuilderSets.FirstOrDefault(x => x.AppliesTo(builderSetName));
-            if (builderSet == null && siteMapBuilderSets.Count() > 0)
-            {
-                builderSet = this.GetBuilderSet("default");
-            }
             if (builderSet == null)
-                throw new MvcSiteMapException(Resources.Messages.SiteMapNoDefaultBuilderSetConfigured);
+            {
+                throw new MvcSiteMapException(String.Format(Resources.Messages.NamedBuilderSetNotFound, builderSetName));
+            }
             return builderSet;
         }
 

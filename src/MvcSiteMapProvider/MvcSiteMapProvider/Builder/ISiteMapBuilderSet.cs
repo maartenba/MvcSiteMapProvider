@@ -11,7 +11,6 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface ISiteMapBuilderSet
     {
-        string Name { get; }
         ISiteMapBuilder Builder { get; }
         ICacheDetails CacheDetails { get; }
 

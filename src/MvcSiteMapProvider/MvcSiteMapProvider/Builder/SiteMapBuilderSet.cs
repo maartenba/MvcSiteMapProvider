@@ -10,34 +10,34 @@ namespace MvcSiteMapProvider.Builder
         : ISiteMapBuilderSet
     {
         public SiteMapBuilderSet(
-            string name,
+            string instanceName,
+            string cacheDetailsName,
             ISiteMapBuilder siteMapBuilder,
-            ICacheDetails cacheDetails
+            ICacheDetailsStrategy cacheDetailsStrategy
             )
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(instanceName))
+                throw new ArgumentNullException("instanceName");
+            if (string.IsNullOrEmpty(cacheDetailsName))
+                throw new ArgumentNullException("cacheDetailsName");
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
-            if (cacheDetails == null)
-                throw new ArgumentNullException("cacheDetails");
+            if (cacheDetailsStrategy == null)
+                throw new ArgumentNullException("cacheDetailsStrategy");
 
-            this.name = name;
+            this.instanceName = instanceName;
+            this.cacheDetailsName = cacheDetailsName;
             this.siteMapBuilder = siteMapBuilder;
-            this.cacheDetails = cacheDetails;
+            this.cacheDetailsStrategy = cacheDetailsStrategy;
         }
 
-        protected readonly string name;
+        protected readonly string instanceName;
+        protected readonly string cacheDetailsName;
         protected readonly ISiteMapBuilder siteMapBuilder;
-        protected readonly ICacheDetails cacheDetails;
+        protected readonly ICacheDetailsStrategy cacheDetailsStrategy;
 
 
         #region ISiteMapBuilderSet<CacheDependency> Members
-
-        public virtual string Name
-        {
-            get { return this.name; }
-        }
 
         public virtual ISiteMapBuilder Builder
         {
@@ -46,12 +46,12 @@ namespace MvcSiteMapProvider.Builder
 
         public virtual ICacheDetails CacheDetails
         {
-            get { return this.cacheDetails; }
+            get { return this.cacheDetailsStrategy.GetCacheDetails(this.cacheDetailsName); }
         }
 
         public virtual bool AppliesTo(string builderSetName)
         {
-            return this.name.Equals(builderSetName);
+            return this.instanceName.Equals(builderSetName, StringComparison.InvariantCulture);
         }
 
         #endregion

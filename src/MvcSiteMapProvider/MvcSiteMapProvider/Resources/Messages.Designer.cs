@@ -205,6 +205,24 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The builder set object named &apos;{0}&apos; was not found. Check your DI configuration to ensure a builder set object with this name exists..
+        /// </summary>
+        internal static string NamedBuilderSetNotFound {
+            get {
+                return ResourceManager.GetString("NamedBuilderSetNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The cache details object named &apos;{0}&apos; was not found. Check your DI configuration to ensure a cache details object with this name exists..
+        /// </summary>
+        internal static string NamedCacheDetailsNotFound {
+            get {
+                return ResourceManager.GetString("NamedCacheDetailsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Index is less than zero..
         /// </summary>
         internal static string NeedNonNegativeNumber {
@@ -300,15 +318,6 @@ namespace MvcSiteMapProvider.Resources {
         internal static string SiteMapNodeCollectionInvalidType {
             get {
                 return ResourceManager.GetString("SiteMapNodeCollectionInvalidType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is no default builder set configured..
-        /// </summary>
-        internal static string SiteMapNoDefaultBuilderSetConfigured {
-            get {
-                return ResourceManager.GetString("SiteMapNoDefaultBuilderSetConfigured", resourceCulture);
             }
         }
         

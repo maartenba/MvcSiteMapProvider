@@ -10,5 +10,14 @@ namespace MvcSiteMapProvider.Caching
         TimeSpan AbsoluteCacheExpiration { get; }
         TimeSpan SlidingCacheExpiration { get; }
         ICacheDependencyFactory CacheDependencyFactory { get; }
+
+        /// <summary>
+        /// Determines whether the ICacheDetails instance matches the name
+        /// </summary>
+        /// <param name="providerName">The name of the ICacheDetails instance.</param>
+        /// <returns>
+        /// True if the cache details name matches.
+        /// </returns>
+        bool AppliesTo(string cacheDetailsName);
     }
 }

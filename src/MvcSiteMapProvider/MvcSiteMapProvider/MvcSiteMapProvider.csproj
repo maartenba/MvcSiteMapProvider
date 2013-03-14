@@ -58,9 +58,11 @@
     <Compile Include="Caching\AspNetCacheDependency.cs" />
     <Compile Include="Caching\AspNetCacheDependencyFactory.cs" />
     <Compile Include="Caching\CacheDetails.cs" />
+    <Compile Include="Caching\CacheDetailsStrategy.cs" />
     <Compile Include="Caching\ICacheDetails.cs" />
     <Compile Include="Caching\ICacheDependency.cs" />
     <Compile Include="Caching\ICacheDependencyFactory.cs" />
+    <Compile Include="Caching\ICacheDetailsStrategy.cs" />
     <Compile Include="Caching\ISiteMapCache.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />

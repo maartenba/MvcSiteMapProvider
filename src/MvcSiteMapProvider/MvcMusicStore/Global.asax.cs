@@ -100,7 +100,7 @@ namespace MvcMusicStore
             // Pass in the global ControllerBuilder reference
             container.Configure(x => x
                 .For<System.Web.Mvc.ControllerBuilder>()
-                .Use(ControllerBuilder.Current)
+                .Use(y => ControllerBuilder.Current)
             );
 
             container.Configure(x => x
@@ -165,7 +165,7 @@ namespace MvcMusicStore
                 .EnumerableOf<MvcSiteMapProvider.Security.IAclModule>().Contains(y =>
                 {
                     y.Type<MvcSiteMapProvider.Security.AuthorizeAttributeAclModule>();
-                    y.Type<MvcSiteMapProvider.Security.XmlRolesAclModule>();
+                    y.Type<MvcSiteMapProvider.Security.XmlRolesAclModule>();   
                 }
             ));
 
@@ -275,11 +275,27 @@ namespace MvcMusicStore
                 .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
             );
 
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDetails>().Use<MvcSiteMapProvider.Caching.CacheDetails>()
+            //    .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //    .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
+            //);
+
+            // Configure named instances of ICacheDetails
             container.Configure(x => x
-                .For<MvcSiteMapProvider.Caching.ICacheDetails>().Use<MvcSiteMapProvider.Caching.CacheDetails>()
-                .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
-                .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
-            );
+                .For<MvcSiteMapProvider.Caching.ICacheDetailsStrategy>().Use<MvcSiteMapProvider.Caching.CacheDetailsStrategy>()
+                .EnumerableOf<MvcSiteMapProvider.Caching.ICacheDetails>().Contains(y =>
+                {
+                    y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
+                        .Ctor<string>("instanceName").Is("default")
+                        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+                        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+                    y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
+                        .Ctor<string>("instanceName").Is("alternate")
+                        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.MinValue)
+                        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.FromMinutes(3));
+                }
+            ));
 
             // Configure the SiteMap Builder Sets
 
@@ -313,7 +329,8 @@ namespace MvcMusicStore
                 .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
                 {
                     y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
-                        .Ctor<string>("name").Is("default");
+                        .Ctor<string>("instanceName").Is("default")
+                        .Ctor<string>("cacheDetailsName").Is("alternate");
                 })
             );
 
