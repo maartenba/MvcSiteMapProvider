@@ -54,31 +54,31 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         /// <summary>
         /// Resolves the URL.
         /// </summary>
-        /// <param name="mvcSiteMapNode">The MVC site map node.</param>
+        /// <param name="node">The MVC site map node.</param>
         /// <param name="area">The area.</param>
         /// <param name="controller">The controller.</param>
         /// <param name="action">The action.</param>
         /// <param name="routeValues">The route values.</param>
         /// <returns>The resolved URL.</returns>
-        public override string ResolveUrl(ISiteMapNode siteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
+        public override string ResolveUrl(ISiteMapNode node, string area, string controller, string action, IDictionary<string, object> routeValues)
         {
-            if (!String.IsNullOrEmpty(siteMapNode.UnresolvedUrl))
+            if (!String.IsNullOrEmpty(node.UnresolvedUrl))
             {
-                if (siteMapNode.UnresolvedUrl.StartsWith("~"))
+                if (node.UnresolvedUrl.StartsWith("~"))
                 {
-                    return System.Web.VirtualPathUtility.ToAbsolute(siteMapNode.UnresolvedUrl);
+                    return System.Web.VirtualPathUtility.ToAbsolute(node.UnresolvedUrl);
                 }
                 else
                 {
-                    return siteMapNode.UnresolvedUrl;
+                    return node.UnresolvedUrl;
                 }
             }
 
-            if (siteMapNode.PreservedRouteParameters.Count > 0)
+            if (node.PreservedRouteParameters.Count > 0)
             {
                 var routeDataValues = UrlHelper.RequestContext.RouteData.Values;
                 var queryStringValues = UrlHelper.RequestContext.HttpContext.Request.QueryString;
-                foreach (var item in siteMapNode.PreservedRouteParameters)
+                foreach (var item in node.PreservedRouteParameters)
                 {
                     var preservedParameterName = item.Trim();
                     if (!string.IsNullOrEmpty(preservedParameterName))
@@ -101,17 +101,17 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             //I don't know why the result of Url was not saved to this["url"], perhaps because
             //theoretically it is possible to change RouteValues dynamically. So I decided to 
             //store last version
-            var key = siteMapNode.Route ?? string.Empty;
+            var key = node.Route ?? string.Empty;
             foreach (var routeValue in routeValues)
                 key += routeValue.Key + (routeValue.Value ?? string.Empty);
             if (_urlkey == key) return _url;
 
             string returnValue;
             var routeValueDictionary = new RouteValueDictionary(routeValues);
-            if (!string.IsNullOrEmpty(siteMapNode.Route))
+            if (!string.IsNullOrEmpty(node.Route))
             {
                 routeValueDictionary.Remove("route");
-                returnValue = UrlHelper.RouteUrl(siteMapNode.Route, routeValueDictionary);
+                returnValue = UrlHelper.RouteUrl(node.Route, routeValueDictionary);
             }
             else
             {
