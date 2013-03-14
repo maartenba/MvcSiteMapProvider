@@ -21,7 +21,8 @@ namespace MvcSiteMapProvider.Security
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
-            IControllerDescriptorFactory controllerDescriptorFactory
+            IControllerDescriptorFactory controllerDescriptorFactory,
+            IControllerBuilder controllerBuilder
         )
         {
             if (mvcContextFactory == null)
@@ -30,20 +31,25 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
                 throw new ArgumentNullException("controllerDescriptorFactory");
+            if (controllerBuilder == null)
+                throw new ArgumentNullException("controllerBuilder");
 
             this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
+            this.controllerBuilder = controllerBuilder;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
+        protected readonly IControllerBuilder controllerBuilder;
 #else
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
+            IControllerBuilder controllerBuilder,
             IFilterProvider filterProvider
             )
         {
@@ -53,18 +59,22 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
                 throw new ArgumentNullException("controllerDescriptorFactory");
+            if (controllerBuilder == null)
+                throw new ArgumentNullException("controllerBuilder");
             if (filterProvider == null)
                 throw new ArgumentNullException("filterProvider");
 
             this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
+            this.controllerBuilder = controllerBuilder;
             this.filterProvider = filterProvider;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
+        protected readonly IControllerBuilder controllerBuilder;
         protected readonly IFilterProvider filterProvider;
 #endif
 
@@ -136,7 +146,7 @@ namespace MvcSiteMapProvider.Security
         protected virtual bool VerifyController(ISiteMapNode node, RouteData routes, Type controllerType)
         {
             // Get controller factory
-            var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
+            var controllerFactory = controllerBuilder.GetControllerFactory();
 
             // Create controller context
             bool factoryBuiltController = false;
