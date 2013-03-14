@@ -19,18 +19,9 @@ namespace MvcMusicStore.Code.IoC
 
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
-            if (controllerType == null)
-                return base.GetControllerInstance(requestContext, controllerType);
-            try
-            {
-                return container.Resolve(controllerType) as IController;
-            }
-            catch (Exception ex)
-            {
-                string message = ex.Message;
-                System.Diagnostics.Debug.WriteLine(message);
-                throw new Exception(message);
-            }
+            return controllerType == null ? 
+                base.GetControllerInstance(requestContext, controllerType) :
+                container.Resolve(controllerType) as IController;
         }
     }
 }
