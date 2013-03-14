@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Breaking changes.txt = Breaking changes.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider.Web", "MvcSiteMapProvider.Web\MvcSiteMapProvider.Web.csproj", "{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider", "MvcSiteMapProvider\MvcSiteMapProvider.csproj", "{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}"
 EndProject
 Global
@@ -21,10 +19,6 @@ Global
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC1EEAAB-A031-4E4D-A18A-9FEB7BA5659A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
