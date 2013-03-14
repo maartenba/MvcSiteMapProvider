@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Web;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -7,7 +6,8 @@ namespace MvcSiteMapProvider.Web.Mvc
     /// <summary>
     /// MvcHttpRequest wrapper.
     /// </summary>
-    public class MvcHttpRequest : HttpRequestWrapper
+    public class MvcHttpRequest 
+        : HttpRequestWrapper
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MvcHttpRequest"/> class.

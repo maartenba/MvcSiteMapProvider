@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
-using System.Web;
-using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -14,7 +11,8 @@ namespace MvcSiteMapProvider.Builder
     /// Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a
     /// set of attributes within an assembly.
     /// </summary>
-    public class ReflectionSiteMapBuilder : ISiteMapBuilder
+    public class ReflectionSiteMapBuilder 
+        : ISiteMapBuilder
     {
         public ReflectionSiteMapBuilder(
             IEnumerable<String> includeAssemblies,

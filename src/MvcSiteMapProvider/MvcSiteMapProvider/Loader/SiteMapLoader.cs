@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
 using System.Threading;
 using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider;
 using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Web;
 
 namespace MvcSiteMapProvider.Loader
 {

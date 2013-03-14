@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Globalization;
-using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Collections.Specialized

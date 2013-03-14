@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider;
 
 namespace MvcSiteMapProvider.Security
 {
@@ -26,7 +22,7 @@ namespace MvcSiteMapProvider.Security
             this.aclModules = aclModules;
         }
 
-        protected readonly IEnumerable<IAclModule> aclModules;
+        protected readonly IAclModule[] aclModules;
 
         #region IAclModule Members
 

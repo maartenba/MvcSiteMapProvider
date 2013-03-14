@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Web;
 using System.Web.Mvc;
-using MvcSiteMapProvider;
 
 namespace MvcSiteMapProvider.Web.Mvc.Filters
 {

@@ -3,8 +3,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

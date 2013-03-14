@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Hosting;
+using System.Collections;
 using System.IO;
-using System.Web;
+using System.Web.Caching;
+using System.Web.Hosting;
 using System.Reflection;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -72,7 +70,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <returns>
         /// A <see cref="T:System.Web.Caching.CacheDependency"/> object for the specified virtual resources.
         /// </returns>
-        public override System.Web.Caching.CacheDependency GetCacheDependency(string virtualPath, System.Collections.IEnumerable virtualPathDependencies, DateTime utcStart)
+        public override CacheDependency GetCacheDependency(string virtualPath, IEnumerable virtualPathDependencies, DateTime utcStart)
         {
             return null;
         }

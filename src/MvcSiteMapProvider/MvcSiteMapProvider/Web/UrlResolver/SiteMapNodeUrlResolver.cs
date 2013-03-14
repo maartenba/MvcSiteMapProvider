@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
 using System.Web.Routing;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.UrlResolver

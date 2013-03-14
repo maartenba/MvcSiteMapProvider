@@ -17,9 +17,9 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Determines whether the provider instance matches the name
         /// </summary>
-        /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name can be used.</param>
+        /// <param name="providerName">The name of the builder set.</param>
         /// <returns>
-        /// True if the provider name matches.
+        /// True if the builder set name matches.
         /// </returns>
         bool AppliesTo(string builderSetName);
     }

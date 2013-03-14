@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Web.UI;
-using System.Collections;
 using System.Collections.Generic;
-using MvcSiteMapProvider.Collections;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {

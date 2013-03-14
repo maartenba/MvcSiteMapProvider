@@ -1,6 +1,5 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using MvcSiteMapProvider;
 
 namespace MvcSiteMapProvider.Web.Mvc.Filters
 {

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Web.Routing;
 using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Collections;
-using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Web;
 
 namespace MvcSiteMapProvider

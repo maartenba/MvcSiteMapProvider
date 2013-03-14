@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using System.Web.Hosting;
 using System.Xml.Linq;
-using System.IO;
-using System.Globalization;
 using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Builder
