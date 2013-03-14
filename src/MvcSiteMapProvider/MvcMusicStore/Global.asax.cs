@@ -268,12 +268,30 @@ namespace MvcMusicStore
                 .Use<MvcSiteMapProvider.Caching.AspNetSiteMapCache>()
             );
 
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
-                .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
-                .Ctor<IEnumerable<string>>()
-                .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
-            );
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDependency>()
+            //    .Use<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //    .Ctor<string>("fileName")
+            //    .Is(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"))
+            //);
+
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDependency>()
+            //    .Use<MvcSiteMapProvider.Caching.AspNetCompositeCacheDependency>()
+            //    .EnumerableOf<MvcSiteMapProvider.Caching.ICacheDependency>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //            .Ctor<string>("fileName")
+            //            .Is(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+            //    })
+            //);
+
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDependencyFactory>()
+            //    .Use<MvcSiteMapProvider.Caching.AspNetCacheDependencyFactory>()
+            //    .Ctor<IEnumerable<string>>()
+            //    .Is(new string[] { System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap") })
+            //);
 
             //container.Configure(x => x
             //    .For<MvcSiteMapProvider.Caching.ICacheDetails>().Use<MvcSiteMapProvider.Caching.CacheDetails>()
@@ -281,21 +299,53 @@ namespace MvcMusicStore
             //    .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
             //);
 
-            // Configure named instances of ICacheDetails
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Caching.ICacheDetailsStrategy>().Use<MvcSiteMapProvider.Caching.CacheDetailsStrategy>()
-                .EnumerableOf<MvcSiteMapProvider.Caching.ICacheDetails>().Contains(y =>
-                {
-                    y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
-                        .Ctor<string>("instanceName").Is("default")
-                        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
-                        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
-                    y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
-                        .Ctor<string>("instanceName").Is("alternate")
-                        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.MinValue)
-                        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.FromMinutes(3));
-                }
-            ));
+            //// Configure named instances of ICacheDependency
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDependencyStrategy>().Use<MvcSiteMapProvider.Caching.CacheDependencyStrategy>()
+            //    .EnumerableOf<MvcSiteMapProvider.Caching.ICacheDependency>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //            .Ctor<string>("instanceName").Is("default")
+            //            .Ctor<string>("fileName").Is(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+            //        y.Type<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //            .Ctor<string>("instanceName").Is("super-duper")
+            //            .Ctor<string>("fileName").Is(System.Web.Hosting.HostingEnvironment.MapPath("~/AnotherFile.sitemap"));
+            //    }
+            //));
+
+            //// Configure named instances of ICacheDetails
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDetailsStrategy>().Use<MvcSiteMapProvider.Caching.CacheDetailsStrategy>()
+            //    .EnumerableOf<MvcSiteMapProvider.Caching.ICacheDetails>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
+            //            .Ctor<string>("instanceName").Is("default")
+            //            .Ctor<string>("cacheDependencyName").Is("default")
+            //            .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //            .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+            //        y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
+            //            .Ctor<string>("instanceName").Is("super-duper")
+            //            .Ctor<string>("cacheDependencyName").Is("super-duper")
+            //            .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(30))
+            //            .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+            //    }
+            //));
+
+            //// Configure named instances of ICacheDetails
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Caching.ICacheDetailsStrategy>().Use<MvcSiteMapProvider.Caching.CacheDetailsStrategy>()
+            //    .EnumerableOf<MvcSiteMapProvider.Caching.ICacheDetails>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
+            //            .Ctor<string>("instanceName").Is("default")
+            //            .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //            .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+            //        y.Type<MvcSiteMapProvider.Caching.CacheDetails>()
+            //            .Ctor<string>("instanceName").Is("super-duper")
+            //            .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(30))
+            //            .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+            //    }
+            //));
 
             // Configure the SiteMap Builder Sets
 
@@ -303,36 +353,212 @@ namespace MvcMusicStore
             // because they serve no purpose in setup - the DI container should handle this.
 
 
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Xml.IXmlSource>()
-                .Use<MvcSiteMapProvider.Xml.FileXmlSource>()
-                .Ctor<string>("xmlFileName").Is("~/Mvc.sitemap")
-            );
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Xml.IXmlSource>()
+            //    .Use<MvcSiteMapProvider.Xml.FileXmlSource>()
+            //    .Ctor<string>("xmlFileName").Is("~/Mvc.sitemap")
+            //);
 
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Use<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
-                .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Use<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+            //    .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+            //            .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
+            //        y.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+            //            .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+            //            .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+            //        y.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+            //    })
+            //);
+
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Use<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+            //    .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+            //            .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0])
+            //            .Ctor<MvcSiteMapProvider.Xml.IXmlSource>().Is(new MvcSiteMapProvider.Xml.FileXmlSource("~/Mvc.sitemap"));
+                           
+                                
+            //        y.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+            //            .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+            //            .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+            //        y.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+            //    })
+            //);
+
+
+
+
+            container.Configure(x =>
                 {
-                    y.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
-                        .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
-                    y.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
-                        .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
-                        .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
-                    y.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
-                })
+
+                    var xmlSource = x.For<MvcSiteMapProvider.Xml.IXmlSource>().Use<MvcSiteMapProvider.Xml.FileXmlSource>()
+                        .Ctor<string>("xmlFileName").Is("~/Mvc.sitemap");
+
+                    var builder =  x.For<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Use<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+                        .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+                        {
+                            y.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+                                .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0])
+                                .Ctor<MvcSiteMapProvider.Xml.IXmlSource>().Is(xmlSource);
+                            y.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+                                .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+                                .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+                            y.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+                        });
+
+                    var cacheDependency = x.For<MvcSiteMapProvider.Caching.ICacheDependency>()
+                        .Use<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+                        .Ctor<string>("fileName")
+                        .Is(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"));
+
+                    var cacheDetails = x.For<MvcSiteMapProvider.Caching.ICacheDetails>().Use<MvcSiteMapProvider.Caching.CacheDetails>()
+                        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+                        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
+                        .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is(cacheDependency);
+
+
+                //    var xmlSource2 = x.For<MvcSiteMapProvider.Xml.IXmlSource>().Use<MvcSiteMapProvider.Xml.FileXmlSource>()
+                //        .Ctor<string>("xmlFileName").Is("~/AnotherFile.sitemap");
+
+                //    var builder2 = x.For<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Use<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+                //        .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+                //        {
+                //            y.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+                //                .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0])
+                //                .Ctor<MvcSiteMapProvider.Xml.IXmlSource>().Is(xmlSource2);
+                //            y.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+                //                .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+                //                .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+                //            y.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+                //        });
+
+                //    var cacheDependency2 = x.For<MvcSiteMapProvider.Caching.ICacheDependency>()
+                //        .Use<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+                //        .Ctor<string>("fileName")
+                //        .Is(System.Web.Hosting.HostingEnvironment.MapPath("~/AnotherFile.sitemap"));
+
+                //    var cacheDetails2 = x.For<MvcSiteMapProvider.Caching.ICacheDetails>().Use<MvcSiteMapProvider.Caching.CacheDetails>()
+                //        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(30))
+                //        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
+                //        .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is(cacheDependency1);
+
+                    x.For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>().Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
+                        .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
+                        {
+                            y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+                                .Ctor<string>("instanceName").Is("default")
+                                .Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Is(builder)
+                                .Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is(cacheDetails);
+                            //y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+                            //    .Ctor<string>("instanceName").Is("super-duper")
+                            //    .Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Is(builder2)
+                            //    .Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is(cacheDetails2);
+                        });
+                }
             );
 
 
-            container.Configure(x => x
-                .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>()
-                .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
-                .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
-                {
-                    y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
-                        .Ctor<string>("instanceName").Is("default")
-                        .Ctor<string>("cacheDetailsName").Is("alternate");
-                })
-            );
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>()
+            //    .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
+            //    .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+            //            .Ctor<string>("instanceName").Is("default")
+            //            //.Ctor<string>("cacheDetailsName").Is("alternate")
+            //            .Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is<MvcSiteMapProvider.Caching.CacheDetails>()
+            //                .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //                    .Ctor<string>("fileName").Is(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"))
+            //                .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //                .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+            //    })
+            //);
+
+            //// Configure builder sets
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>()
+            //    .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
+            //    .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
+            //    {
+            //        y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+            //            .Ctor<string>("instanceName").Is("default")
+            //            .Ctor<string>("cacheDetailsName").Is("default");
+            //        y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+            //            .Ctor<string>("instanceName").Is("super-duper")
+            //            .Ctor<string>("cacheDetailsName").Is("super-duper");
+            //    })
+            //);
+
+            //container.Configure(x => x
+            //    .For<MvcSiteMapProvider.Builder.ISiteMapBuilderSetStrategy>()
+            //    .Use<MvcSiteMapProvider.Builder.SiteMapBuilderSetStrategy>()
+            //    .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilderSet>().Contains(y =>
+            //    {
+            //        y.ConstructedBy( => new MvcSiteMapProvider.Builder.SiteMapBuilderSet(
+            //            "default",
+
+
+            //        y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+            //            .Ctor<string>("instanceName").Is("default")
+            //            //.Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilder>("siteMapBuilder").Is<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+            //            //    .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(z =>
+            //            //    {
+            //            //        z.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+            //            //            .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0])
+            //            //            .Ctor<MvcSiteMapProvider.Xml.IXmlSource>().Is<MvcSiteMapProvider.Xml.FileXmlSource>()
+            //            //                .Ctor<string>("xmlFileName").Is("~/Mvc.sitemap");
+            //            //        z.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+            //            //            .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+            //            //            .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+            //            //        z.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+            //            //    })
+            //            ////.Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is<MvcSiteMapProvider.Caching.CacheDetails>()
+            //            ////    .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //            ////        .Ctor<string>("fileName").Is(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap"))
+            //            ////    .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //            ////    .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+
+            //            //.Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is<MvcSiteMapProvider.Caching.CacheDetails>()
+                            
+
+            //            //    .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is(new MvcSiteMapProvider.Caching.AspNetFileCacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap")))
+            //            //    .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //            //    .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+
+
+            //            .Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is<MvcSiteMapProvider.Caching.CacheDetails>()
+
+
+            //                .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is(new MvcSiteMapProvider.Caching.AspNetFileCacheDependency(System.Web.Hosting.HostingEnvironment.MapPath("~/Mvc.sitemap")))
+            //                .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(5))
+            //                .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+
+
+            //        //y.Type<MvcSiteMapProvider.Builder.SiteMapBuilderSet>()
+            //        //    .Ctor<string>("instanceName").Is("super-duper")
+            //        //    .Ctor<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Is<MvcSiteMapProvider.Builder.CompositeSiteMapBuilder>()
+            //        //        .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(z =>
+            //        //        {
+            //        //            z.Type<MvcSiteMapProvider.Builder.XmlSiteMapBuilder>()
+            //        //                .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0])
+            //        //                .Ctor<MvcSiteMapProvider.Xml.IXmlSource>().Is<MvcSiteMapProvider.Xml.FileXmlSource>()
+            //        //                    .Ctor<string>("xmlFileName").Is("~/AnotherFile.sitemap");
+            //        //            z.Type<MvcSiteMapProvider.Builder.ReflectionSiteMapBuilder>()
+            //        //                .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+            //        //                .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+            //        //            z.Type<MvcSiteMapProvider.Builder.VisitingSiteMapBuilder>();
+            //        //        })
+            //        //    .Ctor<MvcSiteMapProvider.Caching.ICacheDetails>().Is<MvcSiteMapProvider.Caching.CacheDetails>()
+            //        //        .Ctor<MvcSiteMapProvider.Caching.ICacheDependency>().Is<MvcSiteMapProvider.Caching.AspNetFileCacheDependency>()
+            //        //            .Ctor<string>("fileName").Is(System.Web.Hosting.HostingEnvironment.MapPath("~/AnotherFile.sitemap"))
+            //        //        .Ctor<TimeSpan>("absoluteCacheExpiration").Is(TimeSpan.FromMinutes(30))
+            //        //        .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue);
+            //    })
+            //);
+
 
 
             container.Configure(x => x

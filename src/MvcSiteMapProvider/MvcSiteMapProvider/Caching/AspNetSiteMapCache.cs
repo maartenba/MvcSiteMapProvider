@@ -57,12 +57,7 @@ namespace MvcSiteMapProvider.Caching
             {
                 sliding = cacheDetails.SlidingCacheExpiration;
             }
-            CacheDependency dependency = null;
-            ICacheDependency passedDependencies = cacheDetails.CacheDependencyFactory.Create();
-            if (passedDependencies != null)
-            {
-                dependency = (CacheDependency)passedDependencies.Dependency;
-            }
+            var dependency = (CacheDependency)cacheDetails.CacheDependency.Dependency;
 
             this.Cache.Insert(key, siteMap, dependency, absolute, sliding, CacheItemPriority.NotRemovable, this.OnItemRemoved);
         }

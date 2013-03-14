@@ -11,31 +11,26 @@ namespace MvcSiteMapProvider.Caching
         : ICacheDetails
     {
         public CacheDetails(
-            string instanceName,
             TimeSpan absoluteCacheExpiration,
             TimeSpan slidingCacheExpiration,
-            ICacheDependencyFactory cacheDependencyFactory
+            ICacheDependency cacheDependency
             )
         {
-            if (String.IsNullOrEmpty(instanceName))
-                throw new ArgumentNullException("instanceName");
             if (absoluteCacheExpiration == null)
                 throw new ArgumentNullException("absoluteCacheExpiration");
             if (slidingCacheExpiration == null)
                 throw new ArgumentNullException("slidingCacheExpiration");
-            if (cacheDependencyFactory == null)
-                throw new ArgumentNullException("cacheDependencyFactory");
+            if (cacheDependency == null)
+                throw new ArgumentNullException("cacheDependency");
 
-            this.instanceName = instanceName;
             this.absoluteCacheExpiration = absoluteCacheExpiration;
             this.slidingCacheExpiration = slidingCacheExpiration;
-            this.cacheDependencyFactory = cacheDependencyFactory;
+            this.cacheDependency = cacheDependency;
         }
 
-        protected readonly string instanceName;
         protected readonly TimeSpan absoluteCacheExpiration;
         protected readonly TimeSpan slidingCacheExpiration;
-        protected readonly ICacheDependencyFactory cacheDependencyFactory;
+        protected readonly ICacheDependency cacheDependency;
 
         #region ICacheDetails Members
 
@@ -49,14 +44,9 @@ namespace MvcSiteMapProvider.Caching
             get { return this.slidingCacheExpiration; }
         }
 
-        public ICacheDependencyFactory CacheDependencyFactory
+        public ICacheDependency CacheDependency
         {
-            get { return this.cacheDependencyFactory; }
-        }
-
-        public bool AppliesTo(string cacheDetailsName)
-        {
-            return this.instanceName.Equals(cacheDetailsName, StringComparison.InvariantCulture);
+            get { return this.cacheDependency; }
         }
 
         #endregion

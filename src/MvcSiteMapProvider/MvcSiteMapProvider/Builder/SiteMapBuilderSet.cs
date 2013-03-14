@@ -11,30 +11,25 @@ namespace MvcSiteMapProvider.Builder
     {
         public SiteMapBuilderSet(
             string instanceName,
-            string cacheDetailsName,
             ISiteMapBuilder siteMapBuilder,
-            ICacheDetailsStrategy cacheDetailsStrategy
+            ICacheDetails cacheDetails
             )
         {
             if (string.IsNullOrEmpty(instanceName))
                 throw new ArgumentNullException("instanceName");
-            if (string.IsNullOrEmpty(cacheDetailsName))
-                throw new ArgumentNullException("cacheDetailsName");
             if (siteMapBuilder == null)
                 throw new ArgumentNullException("siteMapBuilder");
-            if (cacheDetailsStrategy == null)
-                throw new ArgumentNullException("cacheDetailsStrategy");
+            if (cacheDetails == null)
+                throw new ArgumentNullException("cacheDetails");
 
             this.instanceName = instanceName;
-            this.cacheDetailsName = cacheDetailsName;
             this.siteMapBuilder = siteMapBuilder;
-            this.cacheDetailsStrategy = cacheDetailsStrategy;
+            this.cacheDetails = cacheDetails;
         }
 
         protected readonly string instanceName;
-        protected readonly string cacheDetailsName;
         protected readonly ISiteMapBuilder siteMapBuilder;
-        protected readonly ICacheDetailsStrategy cacheDetailsStrategy;
+        protected readonly ICacheDetails cacheDetails;
 
 
         #region ISiteMapBuilderSet<CacheDependency> Members
@@ -46,7 +41,7 @@ namespace MvcSiteMapProvider.Builder
 
         public virtual ICacheDetails CacheDetails
         {
-            get { return this.cacheDetailsStrategy.GetCacheDetails(this.cacheDetailsName); }
+            get { return this.cacheDetails; }
         }
 
         public virtual bool AppliesTo(string builderSetName)
