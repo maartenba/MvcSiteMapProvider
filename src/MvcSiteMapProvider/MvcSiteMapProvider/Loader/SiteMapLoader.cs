@@ -55,7 +55,13 @@ namespace MvcSiteMapProvider.Loader
             {
                 throw new ArgumentNullException("siteMapCacheKey");
             }
+            return RetrieveSiteMap(siteMapCacheKey);
+        }
 
+        #endregion
+
+        protected virtual ISiteMap RetrieveSiteMap(string siteMapCacheKey)
+        {
             synclock.EnterUpgradeableReadLock();
             try
             {
@@ -89,8 +95,6 @@ namespace MvcSiteMapProvider.Loader
                 synclock.ExitUpgradeableReadLock();
             }
         }
-
-        #endregion
 
         protected virtual void siteMapCache_SiteMapRemoved(object sender, SiteMapCacheItemRemovedEventArgs e)
         {
