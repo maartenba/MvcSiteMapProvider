@@ -96,7 +96,11 @@
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="IoC\DI.cs" />
     <Compile Include="IoC\IResolver.cs" />
+    <Compile Include="Loader\ISiteMapCreator.cs" />
+    <Compile Include="Loader\ISiteMapCreatorResult.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
+    <Compile Include="Loader\SiteMapCreator.cs" />
+    <Compile Include="Loader\SiteMapCreatorResult.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
     <Compile Include="Collections\Specialized\PreservedRouteParameterCollection.cs" />
     <Compile Include="Reflection\IObjectCopier.cs" />

@@ -16,27 +16,19 @@ namespace MvcSiteMapProvider.Loader
         public SiteMapLoader(
             ISiteMapCache siteMapCache,
             ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
-            ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy,
-            ISiteMapFactory siteMapFactory,
-            ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper
+            ISiteMapCreator siteMapCreator
             )
         {
             if (siteMapCache == null)
                 throw new ArgumentNullException("siteMapCache");
             if (siteMapCacheKeyGenerator == null)
                 throw new ArgumentNullException("siteMapCacheKeyGenerator");
-            if (siteMapBuilderSetStrategy == null)
-                throw new ArgumentNullException("siteMapBuilderSetStrategy");
-            if (siteMapFactory == null)
-                throw new ArgumentNullException("siteMapFactory");
-            if (siteMapCacheKeyToBuilderSetMapper == null)
-                throw new ArgumentNullException("siteMapCacheKeyToBuilderSetMapper");
+            if (siteMapCreator == null)
+                throw new ArgumentNullException("siteMapCreator");
 
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
-            this.siteMapBuilderSetStrategy = siteMapBuilderSetStrategy;
-            this.siteMapFactory = siteMapFactory;
-            this.siteMapCacheKeyToBuilderSetMapper = siteMapCacheKeyToBuilderSetMapper;
+            this.siteMapCreator = siteMapCreator;
 
             // Attach an event to the cache so when the SiteMap is removed, the Clear() method can be called on it to ensure
             // we don't have any circular references that aren't GC'd.
@@ -45,12 +37,11 @@ namespace MvcSiteMapProvider.Loader
 
         protected readonly ISiteMapCache siteMapCache;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
-        protected readonly ISiteMapBuilderSetStrategy siteMapBuilderSetStrategy;
-        protected readonly ISiteMapFactory siteMapFactory;
-        protected readonly ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper;
-        
-
+        protected readonly ISiteMapCreator siteMapCreator;
         protected readonly ReaderWriterLockSlim synclock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
+
+        #region ISiteMapLoader Members
 
         public virtual ISiteMap GetSiteMap()
         {
@@ -80,13 +71,10 @@ namespace MvcSiteMapProvider.Loader
                     {
                         if (!siteMapCache.TryGetValue(siteMapCacheKey, out siteMap))
                         {
-                            // Build sitemap
-                            var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
-                            var builderSet = siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
-                            siteMap = siteMapFactory.Create(builderSet.Builder);
-                            siteMap.BuildSiteMap();
+                            var siteMapCreatorResult = siteMapCreator.CreateSiteMap(siteMapCacheKey);
+                            siteMap = siteMapCreatorResult.SiteMap;
 
-                            siteMapCache.Insert(siteMapCacheKey, siteMap, builderSet.CacheDetails);
+                            siteMapCache.Insert(siteMapCacheKey, siteMap, siteMapCreatorResult.CacheDetails);
                         }
                         return siteMap;
                     }
@@ -101,6 +89,8 @@ namespace MvcSiteMapProvider.Loader
                 synclock.ExitUpgradeableReadLock();
             }
         }
+
+        #endregion
 
         protected virtual void siteMapCache_SiteMapRemoved(object sender, SiteMapCacheItemRemovedEventArgs e)
         {
