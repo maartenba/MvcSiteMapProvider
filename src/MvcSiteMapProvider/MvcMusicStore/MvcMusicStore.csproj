@@ -123,7 +123,6 @@
     <Compile Include="Code\IoC\IDependencyInjectionContainer.cs" />
     <Compile Include="Code\IoC\InjectableControllerFactory.cs" />
     <Compile Include="Code\IoC\StructureMapContainer.cs" />
-    <Compile Include="Code\IoC\StructureMapResolver.cs" />
     <Compile Include="Code\NonAuthenticatedVisibilityProvider.cs" />
     <Compile Include="Code\StoreBrowseDynamicNodeProvider.cs" />
     <Compile Include="Code\StoreDetailsDynamicNodeProvider.cs" />

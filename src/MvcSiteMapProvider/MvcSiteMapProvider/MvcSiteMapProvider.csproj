@@ -111,8 +111,6 @@
     <Compile Include="ISiteMapPluginProvider.cs" />
     <Compile Include="ISiteMapPluginProviderFactory.cs" />
     <Compile Include="Linq\Dynamic.cs" />
-    <Compile Include="IoC\DI.cs" />
-    <Compile Include="IoC\IResolver.cs" />
     <Compile Include="Loader\ISiteMapCreator.cs" />
     <Compile Include="Loader\ISiteMapCreatorResult.cs" />
     <Compile Include="Loader\ISiteMapLoader.cs" />
