@@ -94,7 +94,7 @@ namespace MvcSiteMapProvider.Loader
 
         protected virtual void siteMapCache_SiteMapRemoved(object sender, SiteMapCacheItemRemovedEventArgs e)
         {
-            // Call clear to remove ISiteMap object references from internal collections. This
+            // Call clear to remove ISiteMapNode object references from internal collections. This
             // will release the circular references and free the memory.
             e.SiteMap.Clear();
         }
