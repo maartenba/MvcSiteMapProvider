@@ -353,11 +353,7 @@ namespace MvcMusicStore
 
 
             // Configure the static instance of the SiteMapLoader
-
-            // TODO: Evaluate whether we need a SiteMapLoaderFactory
-            var loader = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoader>();
-
-            MvcSiteMapProvider.SiteMaps.Loader = loader;
+            MvcSiteMapProvider.SiteMaps.Loader = container.GetInstance<MvcSiteMapProvider.Loader.ISiteMapLoader>();
 
             var validator = container.GetInstance<MvcSiteMapProvider.Xml.ISiteMapXmlValidator>();
             // Check all configured .sitemap files to ensure they follow the XSD for MvcSiteMapProvider
