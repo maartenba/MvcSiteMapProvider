@@ -11,7 +11,8 @@ namespace MvcSiteMapProvider.Builder
     /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a 
     /// <see cref="T:MvcSiteMapProvider.Xml.IXmlSource"/> instance.
     /// </summary>
-    public class XmlSiteMapBuilder : ISiteMapBuilder
+    public class XmlSiteMapBuilder 
+        : ISiteMapBuilder
     {
         public XmlSiteMapBuilder(
             IEnumerable<string> attributesToIgnore,
@@ -180,31 +181,9 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
             siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");
             this.AcquireMetaRobotsValuesFrom(node, siteMapNode.MetaRobotsValues);
-
-            if (!string.IsNullOrEmpty(node.GetAttributeValue("changeFrequency")))
-            {
-                siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValue("changeFrequency"));
-            }
-            else
-            {
-                siteMapNode.ChangeFrequency = ChangeFrequency.Undefined;
-            }
-            if (!string.IsNullOrEmpty(node.GetAttributeValue("updatePriority")))
-            {
-                siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValue("updatePriority"));
-            }
-            else
-            {
-                siteMapNode.UpdatePriority = UpdatePriority.Undefined;
-            }
-            if (!string.IsNullOrEmpty(node.GetAttributeValue("lastModifiedDate")))
-            {
-                siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValue("lastModifiedDate"));
-            }
-            else
-            {
-                siteMapNode.LastModifiedDate = DateTime.MinValue;
-            }
+            siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValueOrFallback("changeFrequency", "Undefined"));
+            siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValueOrFallback("updatePriority", "Undefined"));
+            siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()));
 
             // Handle route details
 
