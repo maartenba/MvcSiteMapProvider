@@ -17,10 +17,6 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual HttpContextBase CreateHttpContext()
         {
-            // TODO: Change this to HttpContextWrapper to make it generic to pass around and add
-            // methods here to wrap in specified classes when needed.
-            //return new MvcHttpContext(context);
-
             return new MvcHttpContext(HttpContext.Current);
         }
 
