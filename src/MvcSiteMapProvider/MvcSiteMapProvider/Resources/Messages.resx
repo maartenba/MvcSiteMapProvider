@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AclModuleDoesNotSupportRegularSiteMapNodes" xml:space="preserve">
-    <value>The current ACL module does not provide functionality for regular SiteMapNode objects.</value>
-  </data>
   <data name="AmbiguousControllerFoundMultipleControllers" xml:space="preserve">
     <value>Ambiguous controller. Found multiple controller types for {0}Controller. Consider narrowing the places to search by adding you controller namespaces to ControllerBuilder.Current.DefaultNamespaces.</value>
   </data>
@@ -145,16 +142,13 @@
     <value>Multiple nodes with the same URL '{0}' were found. SiteMap requires that sitemap nodes have unique URLs.</value>
   </data>
   <data name="NoParentKeyDefined" xml:space="preserve">
-    <value>Multiple root nodes defined. Are you missing a ParentKey definition on the {0} controller, {1}?</value>
+    <value>Multiple root nodes defined. Are you missing a ParentKey definition on the '{0}' controller, '{1}'?</value>
   </data>
-  <data name="NoUrlResolverProvided" xml:space="preserve">
-    <value>No ISiteMapNodeUrlResolver is provided for the current node.</value>
+  <data name="NamedUrlResolverNotFound" xml:space="preserve">
+    <value>The URL resolver instance named '{0}' was not found. Check your DI configuration to ensure a URL resolver instance with this name exists.</value>
   </data>
   <data name="PhysicalPathNotAllowed" xml:space="preserve">
     <value>'{0}' is a physical path, but a virtual path was expected.</value>
-  </data>
-  <data name="RelativeUrlNotAllowed" xml:space="preserve">
-    <value>Relative URL is not allowed.</value>
   </data>
   <data name="SiteMapInvalidRootNode" xml:space="preserve">
     <value>Root node defined in SiteMap is null, root node cannot be null.</value>
@@ -162,29 +156,20 @@
   <data name="SiteMapLoaderAlreadySet" xml:space="preserve">
     <value>The sitemap loader may only be set in the App_Initialize event of Global.asax and must not be set again.</value>
   </data>
-  <data name="SiteMapNodeCollectionInvalidType" xml:space="preserve">
-    <value>Invalid value of type {0} passed in, value must be of type SiteMapNode.</value>
-  </data>
   <data name="ResourceNotFoundWithClassAndKey" xml:space="preserve">
     <value>The resource object with classname '{0}' and key '{1}' was not found.</value>
   </data>
   <data name="SecurityTrimmingCannotBeDisabled" xml:space="preserve">
     <value>Security trimming cannot be disabled again after it is enabled.</value>
   </data>
-  <data name="InvalidOffsetLength" xml:space="preserve">
-    <value>Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection.</value>
-  </data>
-  <data name="NeedNonNegativeNumber" xml:space="preserve">
-    <value>Index is less than zero.</value>
-  </data>
   <data name="SiteMapNodeReadOnly" xml:space="preserve">
-    <value>SiteMapNode is readonly, property {0} cannot be modified.</value>
+    <value>SiteMapNode is readonly, property '{0}' cannot be modified.</value>
   </data>
   <data name="SiteMapReadOnly" xml:space="preserve">
     <value>SiteMap is readonly, nodes cannot be modified.</value>
   </data>
   <data name="SiteMapNodeCanonicalValueAlreadySet" xml:space="preserve">
-    <value>The canonical value has already been set. Use of both CanonicalUrl and CanonicalKey is not allowed.</value>
+    <value>The '{0}' has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed.</value>
   </data>
   <data name="VisitingSiteMapBuilderRequiresRootNode" xml:space="preserve">
     <value>VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node.</value>
@@ -217,9 +202,6 @@
     <value>Unknown SiteMap: '{0}'.</value>
   </data>
   <data name="NamedBuilderSetNotFound" xml:space="preserve">
-    <value>The builder set object named '{0}' was not found. Check your DI configuration to ensure a builder set object with this name exists.</value>
-  </data>
-  <data name="NamedCacheDetailsNotFound" xml:space="preserve">
-    <value>The cache details object named '{0}' was not found. Check your DI configuration to ensure a cache details object with this name exists.</value>
+    <value>The builder set instance named '{0}' was not found. Check your DI configuration to ensure a builder set instance with this name exists.</value>
   </data>
 </root>

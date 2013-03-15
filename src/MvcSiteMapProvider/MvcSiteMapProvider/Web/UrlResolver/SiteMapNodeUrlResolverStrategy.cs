@@ -29,10 +29,11 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             var provider = siteMapUrlResolvers.FirstOrDefault(x => x.AppliesTo(providerName));
             if (provider == null)
             {
-                // Return the SiteMapNodeUrlResolver type by default if the requested type is not found.
-
-                // TODO: evaluate whether it makes sense to return the default only in the case where the provider name is empty string or "default"
-                // and throw an exception if resolving fails.
+                if (!String.IsNullOrEmpty(providerName) && !providerName.Equals("default", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    throw new MvcSiteMapException(String.Format(Resources.Messages.NamedUrlResolverNotFound, providerName));
+                }
+                // Return the SiteMapNodeUrlResolver type by default if the requested type is empty string or "default".
                 provider = siteMapUrlResolvers.FirstOrDefault(x => x.GetType().Equals(typeof(SiteMapNodeUrlResolver)));
             }
             return provider;

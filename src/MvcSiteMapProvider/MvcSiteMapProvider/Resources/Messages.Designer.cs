@@ -61,15 +61,6 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current ACL module does not provide functionality for regular SiteMapNode objects..
-        /// </summary>
-        internal static string AclModuleDoesNotSupportRegularSiteMapNodes {
-            get {
-                return ResourceManager.GetString("AclModuleDoesNotSupportRegularSiteMapNodes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Ambiguous controller. Found multiple controller types for {0}Controller. Consider narrowing the places to search by adding you controller namespaces to ControllerBuilder.Current.DefaultNamespaces..
         /// </summary>
         internal static string AmbiguousControllerFoundMultipleControllers {
@@ -120,15 +111,6 @@ namespace MvcSiteMapProvider.Resources {
         internal static string DictionaryAlreadyContainsKey {
             get {
                 return ResourceManager.GetString("DictionaryAlreadyContainsKey", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Offset and length were out of bounds for the array or count is greater than the number of elements from index to the end of the source collection..
-        /// </summary>
-        internal static string InvalidOffsetLength {
-            get {
-                return ResourceManager.GetString("InvalidOffsetLength", resourceCulture);
             }
         }
         
@@ -205,7 +187,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The builder set object named &apos;{0}&apos; was not found. Check your DI configuration to ensure a builder set object with this name exists..
+        ///   Looks up a localized string similar to The builder set instance named &apos;{0}&apos; was not found. Check your DI configuration to ensure a builder set instance with this name exists..
         /// </summary>
         internal static string NamedBuilderSetNotFound {
             get {
@@ -214,38 +196,20 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The cache details object named &apos;{0}&apos; was not found. Check your DI configuration to ensure a cache details object with this name exists..
+        ///   Looks up a localized string similar to The URL resolver instance named &apos;{0}&apos; was not found. Check your DI configuration to ensure a URL resolver instance with this name exists..
         /// </summary>
-        internal static string NamedCacheDetailsNotFound {
+        internal static string NamedUrlResolverNotFound {
             get {
-                return ResourceManager.GetString("NamedCacheDetailsNotFound", resourceCulture);
+                return ResourceManager.GetString("NamedUrlResolverNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Index is less than zero..
-        /// </summary>
-        internal static string NeedNonNegativeNumber {
-            get {
-                return ResourceManager.GetString("NeedNonNegativeNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Multiple root nodes defined. Are you missing a ParentKey definition on the {0} controller, {1}?.
+        ///   Looks up a localized string similar to Multiple root nodes defined. Are you missing a ParentKey definition on the &apos;{0}&apos; controller, &apos;{1}&apos;?.
         /// </summary>
         internal static string NoParentKeyDefined {
             get {
                 return ResourceManager.GetString("NoParentKeyDefined", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No ISiteMapNodeUrlResolver is provided for the current node..
-        /// </summary>
-        internal static string NoUrlResolverProvided {
-            get {
-                return ResourceManager.GetString("NoUrlResolverProvided", resourceCulture);
             }
         }
         
@@ -255,15 +219,6 @@ namespace MvcSiteMapProvider.Resources {
         internal static string PhysicalPathNotAllowed {
             get {
                 return ResourceManager.GetString("PhysicalPathNotAllowed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Relative URL is not allowed..
-        /// </summary>
-        internal static string RelativeUrlNotAllowed {
-            get {
-                return ResourceManager.GetString("RelativeUrlNotAllowed", resourceCulture);
             }
         }
         
@@ -304,7 +259,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The canonical value has already been set. Use of both CanonicalUrl and CanonicalKey is not allowed..
+        ///   Looks up a localized string similar to The &apos;{0}&apos; has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed..
         /// </summary>
         internal static string SiteMapNodeCanonicalValueAlreadySet {
             get {
@@ -313,16 +268,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid value of type {0} passed in, value must be of type SiteMapNode..
-        /// </summary>
-        internal static string SiteMapNodeCollectionInvalidType {
-            get {
-                return ResourceManager.GetString("SiteMapNodeCollectionInvalidType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SiteMapNode is readonly, property {0} cannot be modified..
+        ///   Looks up a localized string similar to SiteMapNode is readonly, property &apos;{0}&apos; cannot be modified..
         /// </summary>
         internal static string SiteMapNodeReadOnly {
             get {
