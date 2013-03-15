@@ -36,5 +36,15 @@ namespace MvcSiteMapProvider
         {
             return loader.GetSiteMap();
         }
+
+        public static void ReleaseSiteMap(string siteMapCacheKey)
+        {
+            loader.ReleaseSiteMap(siteMapCacheKey);
+        }
+
+        public static void ReleaseSiteMap()
+        {
+            loader.ReleaseSiteMap();
+        }
     }
 }

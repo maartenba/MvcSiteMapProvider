@@ -9,6 +9,8 @@ namespace MvcSiteMapProvider.Loader
     public interface ISiteMapLoader
     {
         ISiteMap GetSiteMap();
-        ISiteMap GetSiteMap(string siteMapKey);
+        ISiteMap GetSiteMap(string siteMapCacheKey);
+        void ReleaseSiteMap();
+        void ReleaseSiteMap(string siteMapCacheKey);
     }
 }

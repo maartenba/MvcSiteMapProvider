@@ -58,6 +58,21 @@ namespace MvcSiteMapProvider.Loader
             return RetrieveSiteMap(siteMapCacheKey);
         }
 
+        public virtual void ReleaseSiteMap()
+        {
+            var key = siteMapCacheKeyGenerator.GenerateKey();
+            ReleaseSiteMap(key);
+        }
+
+        public virtual void ReleaseSiteMap(string siteMapCacheKey)
+        {
+            if (String.IsNullOrEmpty(siteMapCacheKey))
+            {
+                throw new ArgumentNullException("siteMapCacheKey");
+            }
+            siteMapCache.Remove(siteMapCacheKey);
+        }
+
         #endregion
 
         protected virtual ISiteMap RetrieveSiteMap(string siteMapCacheKey)
