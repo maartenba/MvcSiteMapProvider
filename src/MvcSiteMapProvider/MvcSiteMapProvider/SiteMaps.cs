@@ -29,22 +29,34 @@ namespace MvcSiteMapProvider
 
         public static ISiteMap GetSiteMap(string siteMapCacheKey)
         {
+            ThrowIfLoaderNotInitialized();
             return loader.GetSiteMap(siteMapCacheKey);
         }
 
         public static ISiteMap GetSiteMap()
         {
+            ThrowIfLoaderNotInitialized();
             return loader.GetSiteMap();
         }
 
         public static void ReleaseSiteMap(string siteMapCacheKey)
         {
+            ThrowIfLoaderNotInitialized();
             loader.ReleaseSiteMap(siteMapCacheKey);
         }
 
         public static void ReleaseSiteMap()
         {
+            ThrowIfLoaderNotInitialized();
             loader.ReleaseSiteMap();
+        }
+
+        private static void ThrowIfLoaderNotInitialized()
+        {
+            if (loader == null)
+            {
+                throw new MvcSiteMapException(Resources.Messages.SiteMapLoaderNotInitialized);
+            }
         }
     }
 }

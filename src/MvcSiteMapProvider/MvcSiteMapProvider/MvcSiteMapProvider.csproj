@@ -47,6 +47,10 @@
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -56,6 +60,9 @@
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.1\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
@@ -80,6 +87,15 @@
     <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Collections\RequestCacheableDictionary.cs" />
     <Compile Include="Collections\RequestCacheableList.cs" />
+    <Compile Include="DI\Composer.cs" />
+    <Compile Include="DI\ConfigurationSettings.cs" />
+    <Compile Include="DI\ControllerFactoryDecorator.cs" />
+    <Compile Include="DI\PluginInstantiator.cs" />
+    <Compile Include="DI\SiteMapFactoryContainer.cs" />
+    <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
+    <Compile Include="DI\XmlDistinctAttributeAggregator.cs" />
+    <Compile Include="DI\XmlSiteMapResultFactoryContainer.cs" />
+    <Compile Include="FilteredSiteMapNodeVisibilityProvider.cs" />
     <Compile Include="Globalization\ExplicitResourceKeyParser.cs" />
     <Compile Include="Globalization\ILocalizationService.cs" />
     <Compile Include="Globalization\IExplicitResourceKeyParser.cs" />
@@ -90,6 +106,7 @@
     <Compile Include="Globalization\StringLocalizer.cs" />
     <Compile Include="Collections\Specialized\IPreservedRouteParameterCollection.cs" />
     <Compile Include="Collections\Specialized\IRoleCollection.cs" />
+    <Compile Include="DI\SiteMapLoaderContainer.cs" />
     <Compile Include="ISiteMapNodePluginProvider.cs" />
     <Compile Include="ISiteMapPluginProvider.cs" />
     <Compile Include="ISiteMapPluginProviderFactory.cs" />

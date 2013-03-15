@@ -154,7 +154,7 @@
     <value>Root node defined in SiteMap is null, root node cannot be null.</value>
   </data>
   <data name="SiteMapLoaderAlreadySet" xml:space="preserve">
-    <value>The sitemap loader may only be set in the App_Initialize event of Global.asax and must not be set again.</value>
+    <value>The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the 'MvcSiteMapProvider_UseExternalDIContainer' in the AppSettings section of the web.config file to 'true' if you are using an external dependency injection container.</value>
   </data>
   <data name="ResourceNotFoundWithClassAndKey" xml:space="preserve">
     <value>The resource object with classname '{0}' and key '{1}' was not found.</value>
@@ -203,5 +203,8 @@
   </data>
   <data name="NamedBuilderSetNotFound" xml:space="preserve">
     <value>The builder set instance named '{0}' was not found. Check your DI configuration to ensure a builder set instance with this name exists.</value>
+  </data>
+  <data name="SiteMapLoaderNotInitialized" xml:space="preserve">
+    <value>The SiteMapLoader has not been initialized. You must set the SiteMaps.Loader property during Application_Start in Global.asax if the 'MvcSiteMapProvider_UseExternalDIContainer' setting is set to 'true' in the AppSettings section of web.config.</value>
   </data>
 </root>

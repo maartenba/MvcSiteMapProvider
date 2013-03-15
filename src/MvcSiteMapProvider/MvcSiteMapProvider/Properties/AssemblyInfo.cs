@@ -34,3 +34,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+// Startup using WebActivatorEx (which allows multiple things to be started up, as opposed to the System.Web version).
+[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(MvcSiteMapProvider.DI.Composer), "Compose")]

@@ -250,11 +250,20 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The sitemap loader may only be set in the App_Initialize event of Global.asax and must not be set again..
+        ///   Looks up a localized string similar to The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the &apos;MvcSiteMapProvider_UseExternalDIContainer&apos; in the AppSettings section of the web.config file to &apos;true&apos; if you are using an external dependency injection container..
         /// </summary>
         internal static string SiteMapLoaderAlreadySet {
             get {
                 return ResourceManager.GetString("SiteMapLoaderAlreadySet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The SiteMapLoader has not been initialized. You must set the SiteMaps.Loader property during Application_Start in Global.asax if the &apos;MvcSiteMapProvider_UseExternalDIContainer&apos; setting is set to &apos;true&apos; in the AppSettings section of web.config..
+        /// </summary>
+        internal static string SiteMapLoaderNotInitialized {
+            get {
+                return ResourceManager.GetString("SiteMapLoaderNotInitialized", resourceCulture);
             }
         }
         
