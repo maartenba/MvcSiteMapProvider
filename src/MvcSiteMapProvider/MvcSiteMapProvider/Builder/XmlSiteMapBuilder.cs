@@ -19,7 +19,8 @@ namespace MvcSiteMapProvider.Builder
             IXmlSource xmlSource,
             INodeKeyGenerator nodeKeyGenerator,
             IDynamicNodeBuilder dynamicNodeBuilder,
-            ISiteMapNodeFactory siteMapNodeFactory
+            ISiteMapNodeFactory siteMapNodeFactory,
+            ISiteMapXmlNameProvider xmlNameProvider
             )
         {
             if (attributesToIgnore == null)
@@ -32,12 +33,15 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("dynamicNodeBuilder");
             if (siteMapNodeFactory == null)
                 throw new ArgumentNullException("siteMapNodeFactory");
+            if (xmlNameProvider == null)
+                throw new ArgumentNullException("xmlNameProvider");
 
             this.attributesToIgnore = attributesToIgnore;
             this.xmlSource = xmlSource;
             this.nodeKeyGenerator = nodeKeyGenerator;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
+            this.xmlNameProvider = xmlNameProvider;
         }
 
         protected readonly IEnumerable<string> attributesToIgnore;
@@ -45,12 +49,8 @@ namespace MvcSiteMapProvider.Builder
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
+        protected readonly ISiteMapXmlNameProvider xmlNameProvider;
         
-
-        protected const string xmlRootName = "mvcSiteMap";
-        protected const string xmlNodeName = "mvcSiteMapNode";
-        protected readonly XNamespace xmlSiteMapNamespace = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0";
-
 
         #region ISiteMapBuilder Members
 
@@ -70,7 +70,7 @@ namespace MvcSiteMapProvider.Builder
 
         protected virtual ISiteMapNode LoadSiteMapFromXml(ISiteMap siteMap, XDocument xml)
         {
-            FixXmlNamespaces(xml);
+            xmlNameProvider.FixXmlNamespaces(xml);
             SetEnableLocalization(siteMap, xml);
             SetSecurityTrimmingEnabled(siteMap, xml);
 
@@ -85,44 +85,24 @@ namespace MvcSiteMapProvider.Builder
             return root;
         }
 
-        protected virtual void FixXmlNamespaces(XDocument xml)
-        {
-            // If no namespace is present (or the wrong one is present), replace it
-            foreach (var node in xml.Descendants())
-            {
-                if (string.IsNullOrEmpty(node.Name.Namespace.NamespaceName) || node.Name.Namespace != this.xmlSiteMapNamespace)
-                {
-                    node.Name = XName.Get(node.Name.LocalName, this.xmlSiteMapNamespace.ToString());
-                }
-            }
-        }
-
         protected virtual void SetEnableLocalization(ISiteMap siteMap, XDocument xml)
         {
             // Enable Localization?
-            string enableLocalization =
-                xml.Element(this.xmlSiteMapNamespace + xmlRootName).GetAttributeValue("enableLocalization");
-            if (!string.IsNullOrEmpty(enableLocalization))
-            {
-                siteMap.EnableLocalization = Boolean.Parse(enableLocalization);
-            }
+            siteMap.EnableLocalization = 
+                bool.Parse(xml.Element(xmlNameProvider.RootName).GetAttributeValueOrFallback("enableLocalization", "false"));
         }
 
         protected virtual void SetSecurityTrimmingEnabled(ISiteMap siteMap, XDocument xml)
         {
             // Enable Security Trimming?
-            string securityTrimmingEnabled =
-                xml.Element(this.xmlSiteMapNamespace + xmlRootName).GetAttributeValue("securityTrimmingEnabled");
-            if (!string.IsNullOrEmpty(securityTrimmingEnabled))
-            {
-                siteMap.SecurityTrimmingEnabled = Boolean.Parse(securityTrimmingEnabled);
-            }
+            siteMap.SecurityTrimmingEnabled = 
+                bool.Parse(xml.Element(xmlNameProvider.RootName).GetAttributeValueOrFallback("securityTrimmingEnabled", "false"));
         }
 
         protected virtual XElement GetRootElement(XDocument xml)
         {
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
-            return xml.Element(this.xmlSiteMapNamespace + xmlRootName).Element(this.xmlSiteMapNamespace + xmlNodeName);
+            return xml.Element(xmlNameProvider.RootName).Element(xmlNameProvider.NodeName);
         }
 
         protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, XDocument xml, XElement rootElement)
@@ -416,7 +396,7 @@ namespace MvcSiteMapProvider.Builder
             foreach (XElement node in rootElement.Elements())
             {
                 ISiteMapNode childNode;
-                if (node.Name == this.xmlSiteMapNamespace + xmlNodeName)
+                if (node.Name == xmlNameProvider.NodeName)
                 {
                     // If this is a normal mvcSiteMapNode then map the xml element
                     // to an MvcSiteMapNode, and add the node to the current root.

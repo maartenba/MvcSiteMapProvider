@@ -12,7 +12,7 @@ using MvcSiteMapProvider.Reflection;
 namespace MvcSiteMapProvider.DI
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// A specialized dependency injection container for resolving a <see cref="T:MvcSiteMapProvider.SiteMapNodeFactory"/> instance.
     /// </summary>
     public class SiteMapNodeFactoryContainer
     {

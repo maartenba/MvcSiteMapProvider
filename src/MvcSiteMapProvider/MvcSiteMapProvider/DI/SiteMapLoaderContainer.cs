@@ -29,6 +29,7 @@ namespace MvcSiteMapProvider.DI
             this.nodeKeyGenerator = new NodeKeyGenerator();
             var siteMapNodeFactoryContainer = new SiteMapNodeFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
             this.siteMapNodeFactory = siteMapNodeFactoryContainer.ResolveSiteMapNodeFactory();
+            this.siteMapXmlNameProvider = new SiteMapXmlNameProvider();
             this.dynamicNodeBuilder = new DynamicNodeBuilder(this.nodeKeyGenerator, this.siteMapNodeFactory);
             this.siteMapBuiderSetStrategy = this.ResolveSiteMapBuilderSetStrategy(settings);
             var siteMapFactoryContainer = new SiteMapFactoryContainer(this.mvcContextFactory, this.urlPath);
@@ -45,6 +46,7 @@ namespace MvcSiteMapProvider.DI
         private readonly ISiteMapBuilderSetStrategy siteMapBuiderSetStrategy;
         private readonly INodeKeyGenerator nodeKeyGenerator;
         private readonly ISiteMapNodeFactory siteMapNodeFactory;
+        private readonly ISiteMapXmlNameProvider siteMapXmlNameProvider;
         private readonly IDynamicNodeBuilder dynamicNodeBuilder;
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
@@ -96,7 +98,8 @@ namespace MvcSiteMapProvider.DI
                 new FileXmlSource(siteMapFile), 
                 this.nodeKeyGenerator, 
                 this.dynamicNodeBuilder, 
-                this.siteMapNodeFactory);
+                this.siteMapNodeFactory,
+                this.siteMapXmlNameProvider);
         }
 
         private ISiteMapBuilder ResolveReflectionSiteMapBuilder(IEnumerable<string> includeAssemblies, IEnumerable<string> excludeAssemblies)
