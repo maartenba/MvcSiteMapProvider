@@ -92,10 +92,10 @@ namespace MvcSiteMapProvider.Loader
                     {
                         if (!siteMapCache.TryGetValue(siteMapCacheKey, out siteMap))
                         {
-                            var siteMapCreatorResult = siteMapCreator.CreateSiteMap(siteMapCacheKey);
-                            siteMap = siteMapCreatorResult.SiteMap;
+                            var cacheDetails = siteMapCreator.GetCacheDetails(siteMapCacheKey);
+                            siteMap = siteMapCreator.CreateSiteMap(siteMapCacheKey);
 
-                            siteMapCache.Insert(siteMapCacheKey, siteMap, siteMapCreatorResult.CacheDetails);
+                            siteMapCache.Insert(siteMapCacheKey, siteMap, cacheDetails);
                         }
                         return siteMap;
                     }

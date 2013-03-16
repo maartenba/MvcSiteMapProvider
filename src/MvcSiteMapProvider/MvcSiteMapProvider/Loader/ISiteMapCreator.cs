@@ -1,4 +1,5 @@
 ﻿using System;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Loader
 {
@@ -7,6 +8,7 @@ namespace MvcSiteMapProvider.Loader
     /// </summary>
     public interface ISiteMapCreator
     {
-        ISiteMapCreatorResult CreateSiteMap(string siteMapCacheKey);
+        ISiteMap CreateSiteMap(string siteMapCacheKey);
+        ICacheDetails GetCacheDetails(string siteMapCacheKey);
     }
 }

@@ -34,21 +34,32 @@ namespace MvcSiteMapProvider.Loader
 
         #region ISiteMapCreator Members
 
-        public virtual ISiteMapCreatorResult CreateSiteMap(string siteMapCacheKey)
+        public virtual ISiteMap CreateSiteMap(string siteMapCacheKey)
         {
             if (String.IsNullOrEmpty(siteMapCacheKey))
             {
                 throw new ArgumentNullException("siteMapCacheKey");
             }
 
-            var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
-            var builderSet = siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
+            var builderSet = this.GetBuilderSet(siteMapCacheKey);
             var siteMap = siteMapFactory.Create(builderSet.Builder);
             siteMap.BuildSiteMap();
 
-            return new SiteMapCreatorResult(siteMap, builderSet.CacheDetails);
+            return siteMap;
+        }
+
+        public virtual ICacheDetails GetCacheDetails(string siteMapCacheKey)
+        {
+            var builderSet = this.GetBuilderSet(siteMapCacheKey);
+            return builderSet.CacheDetails;
         }
 
         #endregion
+
+        protected virtual ISiteMapBuilderSet GetBuilderSet(string siteMapCacheKey)
+        {
+            var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
+            return siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
+        }
     }
 }
