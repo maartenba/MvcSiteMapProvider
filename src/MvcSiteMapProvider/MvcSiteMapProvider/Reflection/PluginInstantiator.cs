@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MvcSiteMapProvider.DI
+namespace MvcSiteMapProvider.Reflection
 {
     /// <summary>
     /// A class that uses reflection to instantiate types using their assembly qualified names.

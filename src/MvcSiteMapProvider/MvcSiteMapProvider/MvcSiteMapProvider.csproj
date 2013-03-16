@@ -104,7 +104,7 @@
     <Compile Include="DI\Composer.cs" />
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
-    <Compile Include="DI\PluginInstantiator.cs" />
+    <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
     <Compile Include="DI\XmlDistinctAttributeAggregator.cs" />
