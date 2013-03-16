@@ -7,14 +7,23 @@ using MvcSiteMapProvider.Xml;
 namespace MvcSiteMapProvider.DI
 {
     /// <summary>
-    /// Parses and aggregates the values of a named attribute in an XML file.
+    /// Parses and aggregates the values of a named attribute in an XML source.
     /// </summary>
     public class XmlDistinctAttributeAggregator
     {
-        public IList<string> GetAttributeValues(string filePath, string attributeName)
+        public XmlDistinctAttributeAggregator(
+            ISiteMapXmlNameProvider xmlNameProvider
+            )
         {
-            var xmlNameProvider = new SiteMapXmlNameProvider();
-            var xmlSource = new FileXmlSource(filePath);
+            if (xmlNameProvider == null)
+                throw new ArgumentNullException("xmlNameProvider");
+            this.xmlNameProvider = xmlNameProvider;
+        }
+
+        private readonly ISiteMapXmlNameProvider xmlNameProvider;
+
+        public IList<string> GetAttributeValues(IXmlSource xmlSource, string attributeName)
+        {
             var xml = xmlSource.GetXml();
             xmlNameProvider.FixXmlNamespaces(xml);
 
@@ -24,7 +33,6 @@ namespace MvcSiteMapProvider.DI
                             .Where(x => x != null)
                             .Distinct()
                             .ToList();
-
             return result;
         }
     }

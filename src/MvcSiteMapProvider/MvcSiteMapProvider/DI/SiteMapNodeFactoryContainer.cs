@@ -8,6 +8,7 @@ using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Reflection;
+using MvcSiteMapProvider.Xml;
 
 namespace MvcSiteMapProvider.DI
 {
@@ -37,6 +38,9 @@ namespace MvcSiteMapProvider.DI
         private readonly IDynamicNodeProvider[] dynamicNodeProviders;
         private readonly ISiteMapNodeUrlResolver[] siteMapNodeUrlResolvers;
         private readonly ISiteMapNodeVisibilityProvider[] siteMapNodeVisibilityProviders;
+
+        private readonly XmlDistinctAttributeAggregator xmlAggergator 
+            = new XmlDistinctAttributeAggregator(new SiteMapXmlNameProvider());
 
         public ISiteMapNodeFactory ResolveSiteMapNodeFactory()
         {
@@ -72,18 +76,18 @@ namespace MvcSiteMapProvider.DI
 
         private IDynamicNodeProvider[] ResolveDynamicNodeProviders()
         {
-            var aggregator = new XmlDistinctAttributeAggregator();
             var instantiator = new PluginInstantiator<IDynamicNodeProvider>();
-            var typeNames = aggregator.GetAttributeValues(this.settings.SiteMapFileName, "dynamicNodeProvider");
+            var xmlSource = new FileXmlSource(this.settings.SiteMapFileName);
+            var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "dynamicNodeProvider");
             var providers = instantiator.GetInstances(typeNames);
             return providers.ToArray();
         }
 
         private ISiteMapNodeUrlResolver[] ResolveSiteMapNodeUrlResolvers()
         {
-            var aggregator = new XmlDistinctAttributeAggregator();
             var instantiator = new PluginInstantiator<ISiteMapNodeUrlResolver>();
-            var typeNames = aggregator.GetAttributeValues(this.settings.SiteMapFileName, "urlResolver");
+            var xmlSource = new FileXmlSource(this.settings.SiteMapFileName);
+            var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "urlResolver");
 
             // Add the default provider if it is missing
             var defaultName = typeof(SiteMapNodeUrlResolver).ShortAssemblyQualifiedName();
@@ -98,9 +102,9 @@ namespace MvcSiteMapProvider.DI
 
         private ISiteMapNodeVisibilityProvider[] ResolveSiteMapNodeVisibilityProviders()
         {
-            var aggregator = new XmlDistinctAttributeAggregator();
             var instantiator = new PluginInstantiator<ISiteMapNodeVisibilityProvider>();
-            var typeNames = aggregator.GetAttributeValues(this.settings.SiteMapFileName, "visibilityProvider");
+            var xmlSource = new FileXmlSource(this.settings.SiteMapFileName);
+            var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "visibilityProvider");
             var providers = instantiator.GetInstances(typeNames);
             return providers.ToArray();
         }
