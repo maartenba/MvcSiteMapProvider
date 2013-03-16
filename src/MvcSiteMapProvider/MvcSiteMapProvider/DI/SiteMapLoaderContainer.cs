@@ -21,7 +21,11 @@ namespace MvcSiteMapProvider.DI
         {
             // Singleton instances
             this.mvcContextFactory = new MvcContextFactory();
+#if NET35
             this.siteMapCache = new AspNetSiteMapCache(this.mvcContextFactory);
+#else
+            this.siteMapCache = new RuntimeSiteMapCache(System.Runtime.Caching.MemoryCache.Default);
+#endif
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = new UrlPath(this.mvcContextFactory);
             this.siteMapCacheKeyGenerator = new SiteMapCacheKeyGenerator(this.mvcContextFactory);
@@ -51,9 +55,6 @@ namespace MvcSiteMapProvider.DI
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
         
-        // TODO: Take into consideration multi-threading and rework singleton lifestyle types in all
-        // specialized DI containers.
-
         public ISiteMapLoader ResolveSiteMapLoader()
         {
             return new SiteMapLoader(
@@ -120,10 +121,15 @@ namespace MvcSiteMapProvider.DI
 
         private ICacheDetails ResolveCacheDetails(ConfigurationSettings settings)
         {
+            var fileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
             return new CacheDetails(
                 TimeSpan.FromMinutes(settings.CacheDuration),
                 TimeSpan.MinValue,
-                new AspNetFileCacheDependency(HostingEnvironment.MapPath(settings.SiteMapFileName))
+#if NET35
+                new AspNetFileCacheDependency(fileName)
+#else
+                new RuntimeFileCacheDependency(fileName)
+#endif
                 );
         }
     }

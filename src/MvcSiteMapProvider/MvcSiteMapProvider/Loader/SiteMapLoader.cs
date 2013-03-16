@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Threading;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Builder;
 
 namespace MvcSiteMapProvider.Loader
 {
     /// <summary>
-    /// <see cref="T:MvcSiteMapProvider.Loader.SiteMapLoader"/> is responsible for thread-safe access to the cache as well as 
-    /// managing whether a given request will return a cached sitemap or a new sitemap based on a 
-    /// <see cref="T:MvcSiteMapProvider.Builder.IBuilderSet"/>.
+    /// <see cref="T:MvcSiteMapProvider.Loader.SiteMapLoader"/> is responsible for loading or unloading
+    /// an <see cref="T:MvcSitemapProvider.ISiteMap"/> instance from the cache.
     /// </summary>
     public class SiteMapLoader 
         : ISiteMapLoader
@@ -32,14 +30,13 @@ namespace MvcSiteMapProvider.Loader
 
             // Attach an event to the cache so when the SiteMap is removed, the Clear() method can be called on it to ensure
             // we don't have any circular references that aren't GC'd.
-            siteMapCache.SiteMapRemoved += new EventHandler<SiteMapCacheItemRemovedEventArgs>(siteMapCache_SiteMapRemoved);
+            siteMapCache.ItemRemoved += new EventHandler<MicroCacheItemRemovedEventArgs<ISiteMap>>(siteMapCache_ItemRemoved);
+
         }
 
         protected readonly ISiteMapCache siteMapCache;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
         protected readonly ISiteMapCreator siteMapCreator;
-        protected readonly ReaderWriterLockSlim synclock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-
 
         #region ISiteMapLoader Members
 
@@ -55,7 +52,10 @@ namespace MvcSiteMapProvider.Loader
             {
                 throw new ArgumentNullException("siteMapCacheKey");
             }
-            return RetrieveSiteMap(siteMapCacheKey);
+            return siteMapCache.GetOrAdd(
+                siteMapCacheKey,
+                () => siteMapCreator.CreateSiteMap(siteMapCacheKey),
+                () => siteMapCreator.GetCacheDetails(siteMapCacheKey));
         }
 
         public virtual void ReleaseSiteMap()
@@ -75,47 +75,11 @@ namespace MvcSiteMapProvider.Loader
 
         #endregion
 
-        protected virtual ISiteMap RetrieveSiteMap(string siteMapCacheKey)
-        {
-            synclock.EnterUpgradeableReadLock();
-            try
-            {
-                ISiteMap siteMap = null;
-                if (siteMapCache.TryGetValue(siteMapCacheKey, out siteMap))
-                {
-                    return siteMap;
-                }
-                else
-                {
-                    synclock.EnterWriteLock();
-                    try
-                    {
-                        if (!siteMapCache.TryGetValue(siteMapCacheKey, out siteMap))
-                        {
-                            var cacheDetails = siteMapCreator.GetCacheDetails(siteMapCacheKey);
-                            siteMap = siteMapCreator.CreateSiteMap(siteMapCacheKey);
-
-                            siteMapCache.Insert(siteMapCacheKey, siteMap, cacheDetails);
-                        }
-                        return siteMap;
-                    }
-                    finally
-                    {
-                        synclock.ExitWriteLock();
-                    }
-                }
-            }
-            finally
-            {
-                synclock.ExitUpgradeableReadLock();
-            }
-        }
-
-        protected virtual void siteMapCache_SiteMapRemoved(object sender, SiteMapCacheItemRemovedEventArgs e)
+        protected virtual void siteMapCache_ItemRemoved(object sender, MicroCacheItemRemovedEventArgs<ISiteMap> e)
         {
             // Call clear to remove ISiteMapNode object references from internal collections. This
             // will release the circular references and free the memory.
-            e.SiteMap.Clear();
+            e.Item.Clear();
         }
     }
 }
