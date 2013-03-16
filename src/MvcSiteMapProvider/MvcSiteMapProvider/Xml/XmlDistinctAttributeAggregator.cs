@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using MvcSiteMapProvider.Xml;
 
-namespace MvcSiteMapProvider.DI
+namespace MvcSiteMapProvider.Xml
 {
     /// <summary>
     /// Parses and aggregates the values of a named attribute in an XML source.
