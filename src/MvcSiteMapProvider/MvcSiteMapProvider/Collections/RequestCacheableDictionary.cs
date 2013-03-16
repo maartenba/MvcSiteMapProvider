@@ -63,14 +63,16 @@ namespace MvcSiteMapProvider.Collections
                 if (add) throw new ArgumentException(Resources.Messages.DictionaryAlreadyContainsKey);
                 if (Equals(item, value)) return;
                 this.WriteOperationDictionary[key] = value;
-
+#if !NET35
                 OnCollectionChanged(NotifyCollectionChangedAction.Replace, new KeyValuePair<TKey, TValue>(key, value), new KeyValuePair<TKey, TValue>(key, item));
+#endif
             }
             else
             {
                 this.WriteOperationDictionary[key] = value;
-
+#if !NET35
                 OnCollectionChanged(NotifyCollectionChangedAction.Add, new KeyValuePair<TKey, TValue>(key, value));
+#endif
             }
         }
 

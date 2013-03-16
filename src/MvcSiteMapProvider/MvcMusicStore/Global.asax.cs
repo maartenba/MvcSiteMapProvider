@@ -51,6 +51,10 @@ namespace MvcMusicStore
             RegisterRoutes(RouteTable.Routes);
             RegisterGlobalFilters(System.Web.Mvc.GlobalFilters.Filters);
 
+//#if NET35
+//            MvcSiteMapProvider.DI.Composer.Compose();
+//#endif
+
 
 //            // Create the DI container (for structuremap)
 //            var container = new Container();

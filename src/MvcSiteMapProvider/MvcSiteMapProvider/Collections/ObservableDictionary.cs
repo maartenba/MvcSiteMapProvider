@@ -7,10 +7,14 @@ using System.Collections.Specialized;
 
 // Source: http://blogs.microsoft.co.il/blogs/shimmy/archive/2010/12/26/observabledictionary-lt-tkey-tvalue-gt-c.aspx
 
-//namespace System.Collections.ObjectModel
 namespace MvcSiteMapProvider.Collections
 {
-    public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
+    public class ObservableDictionary<TKey, TValue> 
+        : IDictionary<TKey, TValue>,
+#if !NET35
+        INotifyCollectionChanged,
+#endif
+        INotifyPropertyChanged
     {
         private const string CountString = "Count";
         private const string IndexerName = "Item[]";
@@ -169,9 +173,9 @@ namespace MvcSiteMapProvider.Collections
         #endregion
 
         #region INotifyCollectionChanged Members
-
+#if !NET35
         public event NotifyCollectionChangedEventHandler CollectionChanged;
-
+#endif
         #endregion
 
         #region INotifyPropertyChanged Members
@@ -195,8 +199,9 @@ namespace MvcSiteMapProvider.Collections
                 }
                 else
                     dictionary = new Dictionary<TKey, TValue>(items);
-
+#if !NET35
                 OnCollectionChanged(NotifyCollectionChangedAction.Add, items.ToArray());
+#endif
             }
         }
 
@@ -210,14 +215,16 @@ namespace MvcSiteMapProvider.Collections
                 if (add) throw new ArgumentException(Resources.Messages.DictionaryAlreadyContainsKey);
                 if (Equals(item, value)) return;
                 Dictionary[key] = value;
-
+#if !NET35
                 OnCollectionChanged(NotifyCollectionChangedAction.Replace, new KeyValuePair<TKey, TValue>(key, value), new KeyValuePair<TKey, TValue>(key, item));
+#endif
             }
             else
             {
                 Dictionary[key] = value;
-
+#if !NET35
                 OnCollectionChanged(NotifyCollectionChangedAction.Add, new KeyValuePair<TKey, TValue>(key, value));
+#endif
             }
         }
 
@@ -234,12 +241,16 @@ namespace MvcSiteMapProvider.Collections
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
+
         protected void OnCollectionChanged()
         {
             OnPropertyChanged();
+#if !NET35
             if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+#endif
         }
 
+#if !NET35
         protected void OnCollectionChanged(NotifyCollectionChangedAction action, KeyValuePair<TKey, TValue> changedItem)
         {
             OnPropertyChanged();
@@ -257,5 +268,6 @@ namespace MvcSiteMapProvider.Collections
             OnPropertyChanged();
             if (CollectionChanged != null) CollectionChanged(this, new NotifyCollectionChangedEventArgs(action, newItems));
         }
+#endif
     }
 }

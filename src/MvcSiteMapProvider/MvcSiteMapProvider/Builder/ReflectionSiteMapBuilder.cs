@@ -421,7 +421,7 @@ namespace MvcSiteMapProvider.Builder
                 var acceptVerbsAttribute = methodInfo.GetCustomAttributes(typeof(AcceptVerbsAttribute), true).FirstOrDefault() as AcceptVerbsAttribute;
                 if (acceptVerbsAttribute != null)
                 {
-                    httpMethod = string.Join(",", acceptVerbsAttribute.Verbs);
+                    httpMethod = string.Join(",", acceptVerbsAttribute.Verbs.ToArray());
                 }
             }
 
