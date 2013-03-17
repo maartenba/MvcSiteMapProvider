@@ -54,7 +54,6 @@ namespace MvcSiteMapProvider.Web.Html
         private static CanonicalHelperModel BuildModel(ISiteMapNode startingNode)
         {
             // Map to model
-            //var mvcNode = startingNode as MvcSiteMapNode;
             return new CanonicalHelperModel
             {
                 CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, SourceMetadata)

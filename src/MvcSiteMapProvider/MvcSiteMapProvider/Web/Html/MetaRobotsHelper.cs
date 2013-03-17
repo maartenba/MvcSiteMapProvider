@@ -54,7 +54,6 @@ namespace MvcSiteMapProvider.Web.Html
         private static MetaRobotsHelperModel BuildModel(ISiteMapNode startingNode)
         {
             // Map to model
-            //var mvcNode = startingNode as MvcSiteMapNode;
             return new MetaRobotsHelperModel
             {
                 CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, SourceMetadata)

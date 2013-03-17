@@ -39,11 +39,11 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             return provider;
         }
 
-        public string ResolveUrl(string providerName, ISiteMapNode mvcSiteMapNode, string area, string controller, string action, IDictionary<string, object> routeValues)
+        public string ResolveUrl(string providerName, ISiteMapNode node, string area, string controller, string action, IDictionary<string, object> routeValues)
         {
             var provider = GetProvider(providerName);
             if (provider == null) return string.Empty;
-            return provider.ResolveUrl(mvcSiteMapNode, area, controller, action, routeValues);
+            return provider.ResolveUrl(node, area, controller, action, routeValues);
         }
 
         #endregion
