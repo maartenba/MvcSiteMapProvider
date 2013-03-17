@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Text;
@@ -67,7 +68,7 @@ namespace MvcSiteMapProvider
 
         public override ISiteMapNode FindSiteMapNode(ControllerContext context)
         {
-            var key = this.GetCacheKey("FindSiteMapNode_ControllerContext" + this.GetRouteDataValues(context.RouteData));
+            var key = this.GetCacheKey("FindSiteMapNode_ControllerContext" + this.GetDictionaryKey(context.RouteData.Values));
             var result = this.requestCache.GetValue<ISiteMapNode>(key);
             if (result == null)
             {
@@ -101,17 +102,26 @@ namespace MvcSiteMapProvider
             return "__MVCSITEMAP_" + memberName + "_" + this.instanceId.ToString();
         }
 
-        protected virtual string GetRouteDataValues(RouteData routeData)
+        protected virtual string GetDictionaryKey(IDictionary<string, object> dictionary)
         {
             var builder = new StringBuilder();
-            foreach (var value in routeData.Values)
+            foreach (var pair in dictionary)
             {
-                builder.Append(value.Key);
+                builder.Append(pair.Key);
                 builder.Append("_");
-                builder.Append(value.Value);
+                builder.Append(GetStringFromValue(pair.Value));
                 builder.Append("|");
             }
             return builder.ToString();
+        }
+
+        protected virtual string GetStringFromValue(object value)
+        {
+            if (value.GetType().Equals(typeof(string)))
+            {
+                return value.ToString();
+            }
+            return value.GetHashCode().ToString();
         }
 
         #endregion

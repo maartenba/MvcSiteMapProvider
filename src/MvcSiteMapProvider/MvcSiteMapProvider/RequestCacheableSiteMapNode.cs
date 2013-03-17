@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Globalization;
@@ -92,7 +93,7 @@ namespace MvcSiteMapProvider
 
         public override bool IsVisible(IDictionary<string, object> sourceMetadata)
         {
-            var key = this.GetCacheKey("IsVisible");
+            var key = this.GetCacheKey("IsVisible" + this.GetDictionaryKey(sourceMetadata));
             var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
@@ -138,6 +139,28 @@ namespace MvcSiteMapProvider
         protected string GetCacheKey(string memberName)
         {
             return "__MVCSITEMAPNODE_" + memberName + "_" + this.Key + "_" + this.instanceId.ToString();
+        }
+
+        protected virtual string GetDictionaryKey(IDictionary<string, object> dictionary)
+        {
+            var builder = new StringBuilder();
+            foreach (var pair in dictionary)
+            {
+                builder.Append(pair.Key);
+                builder.Append("_");
+                builder.Append(GetStringFromValue(pair.Value));
+                builder.Append("|");
+            }
+            return builder.ToString();
+        }
+
+        protected virtual string GetStringFromValue(object value)
+        {
+            if (value.GetType().Equals(typeof(string)))
+            {
+                return value.ToString();
+            }
+            return value.GetHashCode().ToString();
         }
 
         protected virtual T GetCachedOrMemberValue<T>(Func<T> member, string memberName, bool storeInCache)
