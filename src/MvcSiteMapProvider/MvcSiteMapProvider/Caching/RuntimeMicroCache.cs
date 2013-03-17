@@ -133,6 +133,10 @@ namespace MvcSiteMapProvider.Caching
                 }
             }
 
+            // Setting priority to not removable ensures an 
+            // app pool recycle doesn't unload the item, but a timeout will.
+            policy.Priority = CacheItemPriority.NotRemovable;
+
             // Setup callback
             policy.RemovedCallback = CacheItemRemoved;
 
