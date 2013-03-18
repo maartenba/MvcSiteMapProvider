@@ -401,7 +401,19 @@ namespace MvcSiteMapProvider
         /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
         public override string CanonicalUrl 
         {
-            get { return this.GetAbsoluteCanonicalUrl(); }
+            get 
+            { 
+                var absoluteCanonicalUrl = this.GetAbsoluteCanonicalUrl();
+                if (!String.IsNullOrEmpty(absoluteCanonicalUrl))
+                {
+                    var httpContext = mvcContextFactory.CreateHttpContext();
+                    if (absoluteCanonicalUrl.Equals(httpContext.Request.Url.AbsoluteUri))
+                    {
+                        return String.Empty;
+                    }
+                }
+                return absoluteCanonicalUrl;
+            }
             set
             {
                 if (!this.canonicalUrl.Equals(value))
@@ -457,7 +469,12 @@ namespace MvcSiteMapProvider
                 var node = this.SiteMap.FindSiteMapNodeFromKey(key);
                 if (node != null)
                 {
-                    return urlPath.MakeRelativeUrlAbsolute(node.Url);
+                    url = node.Url;
+                    if (urlPath.IsAbsoluteUrl(url))
+                    {
+                        return url;
+                    }
+                    return urlPath.MakeRelativeUrlAbsolute(url);
                 }
             }
             return String.Empty;
