@@ -25,7 +25,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper)
         {
-            //return Menu(helper, helper.Provider.RootNode, true, true, Int32.MaxValue, false);
             return Menu(helper, helper.SiteMap.RootNode, true, true, Int32.MaxValue, false);
         }
 
