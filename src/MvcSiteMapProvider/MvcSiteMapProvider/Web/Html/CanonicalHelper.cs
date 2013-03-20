@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using MvcSiteMapProvider.Web.Html.Models;
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -14,20 +15,35 @@ namespace MvcSiteMapProvider.Web.Html
     public static class CanonicalHelper
     {
         /// <summary>
-        /// Source metadata
+        /// Gets the CanonicalUrl of SiteMap.CurrentNode
         /// </summary>
-        private static readonly Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(CanonicalHelper).FullName } };
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <returns>The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)</returns>
+        public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper)
+        {
+            return CanonicalTag(helper, null, new SourceMetadataDictionary());
+        }
 
         /// <summary>
         /// Gets the CanonicalUrl of SiteMap.CurrentNode
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
-        /// <returns>
-        /// The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)
-        /// </returns>
-        public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper)
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)</returns>
+        public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper, object sourceMetadata)
         {
-            return CanonicalTag(helper, null);
+            return CanonicalTag(helper, null, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Gets the CanonicalUrl of SiteMap.CurrentNode
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)</returns>
+        public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata)
+        {
+            return CanonicalTag(helper, null, sourceMetadata);
         }
 
         /// <summary>
@@ -35,12 +51,34 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
         /// <param name="templateName">Name of the template.</param>
-        /// <returns>
-        /// The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)
-        /// </returns>
+        /// <returns>The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)</returns>
         public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper, string templateName)
         {
-            var model = BuildModel(helper.SiteMap.CurrentNode ?? helper.SiteMap.RootNode);
+            return CanonicalTag(helper, templateName, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Gets the CanonicalUrl of SiteMap.CurrentNode
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)</returns>
+        public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper, string templateName, object sourceMetadata)
+        {
+            return CanonicalTag(helper, templateName, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Gets the CanonicalUrl of SiteMap.CurrentNode
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>The CanonicalUrl of the CurrentNode or the RootNode (if CurrentNode is null)</returns>
+        public static MvcHtmlString CanonicalTag(this MvcSiteMapHtmlHelper helper, string templateName, SourceMetadataDictionary sourceMetadata)
+        {
+            var model = BuildModel(GetSourceMetadata(sourceMetadata), helper.SiteMap.CurrentNode ?? helper.SiteMap.RootNode);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -51,13 +89,25 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="startingNode">The starting node.</param>
         /// <returns>The model.</returns>
-        private static CanonicalHelperModel BuildModel(ISiteMapNode startingNode)
+        private static CanonicalHelperModel BuildModel(SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode)
         {
             // Map to model
             return new CanonicalHelperModel
             {
-                CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, SourceMetadata)
+                CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, sourceMetadata)
             };
+        }
+
+        /// <summary>
+        /// Gets the source meta data for the current context.
+        /// </summary>
+        /// <param name="sourceMetadata">User-defined metadata.</param>
+        /// <returns>SourceMetadataDictionary for the current request.</returns>
+        private static SourceMetadataDictionary GetSourceMetadata(IDictionary<string, object> sourceMetadata)
+        {
+            var result = new SourceMetadataDictionary(sourceMetadata);
+            result.Add("HtmlHelper", typeof(CanonicalHelper).FullName);
+            return result;
         }
     }
 }

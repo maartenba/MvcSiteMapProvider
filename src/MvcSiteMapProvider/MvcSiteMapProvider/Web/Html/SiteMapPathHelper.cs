@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Html.Models;
-using MvcSiteMapProvider;
+using MvcSiteMapProvider.Collections.Specialized;
 using System.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Web.Html
@@ -16,18 +16,47 @@ namespace MvcSiteMapProvider.Web.Html
     public static class SiteMapPathHelper
     {
         /// <summary>
-        /// Source metadata
-        /// </summary>
-        private static Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(SiteMapPathHelper).FullName } };
-
-        /// <summary>
         /// Gets SiteMap path for the current request
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper)
         {
-            return SiteMapPath(helper, null);
+            return SiteMapPath(helper, null, string.Empty);
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The starting node (the last node in the site map path).</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode)
+        {
+            return SiteMapPath(helper, null, startingNode);
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, object sourceMetadata)
+        {
+            return SiteMapPath(helper, null, string.Empty, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMapPath(helper, null, sourceMetadata);
         }
 
         /// <summary>
@@ -38,7 +67,111 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName)
         {
-            var model = BuildModel(helper, helper.SiteMap.CurrentNode);
+            return SiteMapPath(helper, templateName, string.Empty);
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, object sourceMetadata)
+        {
+            return SiteMapPath(helper, templateName, string.Empty, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMapPath(helper, templateName, string.Empty, sourceMetadata);
+        }
+
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, string startingNodeKey)
+        {
+            return SiteMapPath(helper, templateName, startingNodeKey, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, string startingNodeKey, object sourceMetadata)
+        {
+            return SiteMapPath(helper, templateName, startingNodeKey, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, string startingNodeKey, SourceMetadataDictionary sourceMetadata)
+        {
+            ISiteMapNode startingNode = helper.SiteMap.CurrentNode;
+            if (!string.IsNullOrEmpty(startingNodeKey))
+            {
+                startingNode = helper.SiteMap.FindSiteMapNodeFromKey(startingNodeKey);
+            }
+            return SiteMapPath(helper, templateName, startingNode, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode)
+        {
+            return SiteMapPath(helper, templateName, startingNode, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, object sourceMetadata)
+        {
+            return SiteMapPath(helper, templateName, startingNode, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Gets SiteMap path for the current request
+        /// </summary>
+        /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>SiteMap path for the current request</returns>
+        public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, SourceMetadataDictionary sourceMetadata)
+        {
+            var model = BuildModel(helper, GetSourceMetadata(sourceMetadata), startingNode);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -49,26 +182,20 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">The helper.</param>
         /// <param name="startingNode">The starting node.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>The model.</returns>
-        private static SiteMapPathHelperModel BuildModel(MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode)
+        private static SiteMapPathHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode)
         {
             // Build model
             var model = new SiteMapPathHelperModel();
             var node = startingNode;
             while (node != null)
             {
-                // Check visibility
-                bool nodeVisible = true;
-                if (node != null)
-                {
-                    nodeVisible = node.IsVisible(SourceMetadata);
-                }
-
-                // Check ACL
-                if (nodeVisible && node.IsAccessibleToUser())
+                // Check visibility and ACL
+                if (node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
                 {
                     // Add node
-                    var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, SourceMetadata);
+                    var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, sourceMetadata);
                     model.Nodes.Add(nodeToAdd);
                 }
                 node = node.ParentNode;
@@ -77,5 +204,19 @@ namespace MvcSiteMapProvider.Web.Html
 
             return model;
         }
+
+        /// <summary>
+        /// Gets the source meta data for the current context.
+        /// </summary>
+        /// <param name="sourceMetadata">User-defined metadata.</param>
+        /// <returns>SourceMetadataDictionary for the current request.</returns>
+        private static SourceMetadataDictionary GetSourceMetadata(IDictionary<string, object> sourceMetadata)
+        {
+            var result = new SourceMetadataDictionary(sourceMetadata);
+            if (!result.ContainsKey("HtmlHelper"))
+                result.Add("HtmlHelper", typeof(SiteMapPathHelper).FullName);
+            return result;
+        }
+
     }
 }

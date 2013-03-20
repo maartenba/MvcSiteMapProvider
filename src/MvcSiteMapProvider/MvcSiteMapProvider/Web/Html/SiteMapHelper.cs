@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Html.Models;
-using MvcSiteMapProvider;
+using MvcSiteMapProvider.Collections.Specialized;
 using System.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Web.Html
@@ -16,11 +16,6 @@ namespace MvcSiteMapProvider.Web.Html
     public static class SiteMapHelper
     {
         /// <summary>
-        /// Source metadata
-        /// </summary>
-        private static readonly Dictionary<string, object> SourceMetadata = new Dictionary<string, object> { { "HtmlHelper", typeof(SiteMapHelper).FullName } };
-
-        /// <summary>
         /// Build a sitemap tree, based on the MvcSiteMap
         /// </summary>
         /// <param name="helper">The helper.</param>
@@ -28,6 +23,28 @@ namespace MvcSiteMapProvider.Web.Html
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper)
         {
             return SiteMap(helper, helper.SiteMap.RootNode);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, object sourceMetadata)
+        {
+            return SiteMap(helper, helper.SiteMap.RootNode, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, helper.SiteMap.RootNode, sourceMetadata);
         }
 
         /// <summary>
@@ -45,11 +62,59 @@ namespace MvcSiteMapProvider.Web.Html
         /// Build a sitemap tree, based on the MvcSiteMap
         /// </summary>
         /// <param name="helper">The helper.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, object sourceMetadata)
+        {
+            return SiteMap(helper, startingNode, false, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, startingNode, false, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
         /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, bool rootInChildLevel)
         {
             return SiteMap(helper, helper.SiteMap.RootNode, rootInChildLevel);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, bool rootInChildLevel, object sourceMetadata)
+        {
+            return SiteMap(helper, helper.SiteMap.RootNode, rootInChildLevel, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, bool rootInChildLevel, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, helper.SiteMap.RootNode, rootInChildLevel, sourceMetadata);
         }
 
         /// <summary>
@@ -68,11 +133,61 @@ namespace MvcSiteMapProvider.Web.Html
         /// Build a sitemap tree, based on the MvcSiteMap
         /// </summary>
         /// <param name="helper">The helper.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool rootInChildLevel, object sourceMetadata)
+        {
+            return SiteMap(helper, null, startingNode, rootInChildLevel, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool rootInChildLevel, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, null, startingNode, rootInChildLevel, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
         /// <param name="templateName">Name of the template.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName)
         {
             return SiteMap(helper, templateName, helper.SiteMap.RootNode);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, object sourceMetadata)
+        {
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, sourceMetadata);
         }
 
         /// <summary>
@@ -92,11 +207,63 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">The helper.</param>
         /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, object sourceMetadata)
+        {
+            return SiteMap(helper, templateName, startingNode, false, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, templateName, startingNode, false, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
         /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, bool rootInChildLevel)
         {
-            return SiteMap(helper, templateName, helper.SiteMap.RootNode, false);
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, rootInChildLevel);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, bool rootInChildLevel, object sourceMetaData)
+        {
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, rootInChildLevel, sourceMetaData);
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, bool rootInChildLevel, SourceMetadataDictionary sourceMetadata)
+        {
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, rootInChildLevel, sourceMetadata);
         }
 
         /// <summary>
@@ -109,7 +276,35 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel)
         {
-            var model = BuildModel(helper, startingNode, rootInChildLevel);
+            return SiteMap(helper, templateName, startingNode, rootInChildLevel, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, object sourceMetadata)
+        {
+            return SiteMap(helper, templateName, startingNode, rootInChildLevel, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, SourceMetadataDictionary sourceMetadata)
+        {
+            var model = BuildModel(helper, GetSourceMetadata(sourceMetadata), startingNode, rootInChildLevel);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -119,34 +314,28 @@ namespace MvcSiteMapProvider.Web.Html
         /// Builds the model.
         /// </summary>
         /// <param name="helper">The helper.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <param name="startingNode">The starting node.</param>
         /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>The model.</returns>
-        private static SiteMapHelperModel BuildModel(MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel)
+        private static SiteMapHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel)
         {
             // Build model
             var model = new SiteMapHelperModel();
             var node = startingNode;
 
-            // Check visibility
-            bool nodeVisible = true;
-            if (node != null)
-            {
-                nodeVisible = node.IsVisible(SourceMetadata);
-            }
-
-            // Check ACL
-            if (nodeVisible && node.IsAccessibleToUser())
+            // Check visibility and ACL
+            if (node != null && node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
             {
                 // Add node
-                var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, SourceMetadata);
+                var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, sourceMetadata);
                 model.Nodes.Add(nodeToAdd);
 
                 // Add child nodes
                 if (node.HasChildNodes) {
                     foreach (ISiteMapNode childNode in node.ChildNodes)
                     {
-                        foreach (var childNodeToAdd in BuildModel(helper, childNode, false).Nodes)
+                        foreach (var childNodeToAdd in BuildModel(helper, sourceMetadata, childNode, false).Nodes)
                         {
                             if (!startingNodeInChildLevel)
                             {
@@ -162,6 +351,18 @@ namespace MvcSiteMapProvider.Web.Html
             }
 
             return model;
+        }
+
+        /// <summary>
+        /// Gets the source meta data for the current context.
+        /// </summary>
+        /// <param name="sourceMetadata">User-defined metadata.</param>
+        /// <returns>SourceMetadataDictionary for the current request.</returns>
+        private static SourceMetadataDictionary GetSourceMetadata(IDictionary<string, object> sourceMetadata)
+        {
+            var result = new SourceMetadataDictionary(sourceMetadata);
+            result.Add("HtmlHelper", typeof(SiteMapHelper).FullName);
+            return result;
         }
     }
 }
