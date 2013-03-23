@@ -108,6 +108,7 @@
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
+    <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Xml\XmlDistinctAttributeAggregator.cs" />
     <Compile Include="DI\XmlSiteMapResultFactoryContainer.cs" />
     <Compile Include="FilteredSiteMapNodeVisibilityProvider.cs" />
