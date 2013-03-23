@@ -13,7 +13,7 @@ namespace MvcSiteMapProvider.Xml
     {
         protected const string xmlRootName = "mvcSiteMap";
         protected const string xmlNodeName = "mvcSiteMapNode";
-        protected readonly XNamespace xmlSiteMapNamespace = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0";
+        protected readonly XNamespace xmlSiteMapNamespace = "http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0";
 
         #region ISiteMapXmlNameProvider Members
 
