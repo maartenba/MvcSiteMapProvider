@@ -117,43 +117,94 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AclModuleDoesNotSupportRegularSiteMapNodes" xml:space="preserve">
-    <value>The current ACL module does not provide functionality for regular SiteMapNode objects.</value>
-  </data>
   <data name="AmbiguousControllerFoundMultipleControllers" xml:space="preserve">
     <value>Ambiguous controller. Found multiple controller types for {0}Controller. Consider narrowing the places to search by adding you controller namespaces to ControllerBuilder.Current.DefaultNamespaces.</value>
-  </data>
-  <data name="AssemblyScanTrustLevelNotSupported" xml:space="preserve">
-    <value>Scanning assemblies for sitemap nodes is not supported in the current trust level. Consider a higher trust level or disable scanning assemblies for SiteMap nodes.</value>
   </data>
   <data name="CannotEnumerateThreadSafeDictionary" xml:space="preserve">
     <value>Cannot enumerate a threadsafe dictionary. Instead, enumerate the keys or values collection.</value>
   </data>
-  <data name="CouldNotDetermineRootNode" xml:space="preserve">
-    <value>Root node could not be determined. Check that the XML SiteMap file exists or that there is an MvcSiteMapNode attribute defined that does not have the ParentKey defined.</value>
+  <data name="CannotExitUpTopDirectory" xml:space="preserve">
+    <value>Cannot use a leading .. to exit above the top directory.</value>
   </data>
-  <data name="CouldNotResolve" xml:space="preserve">
-    <value>Could not resolve URL for sitemap node {0} which represents action {1} in controller {2}. Ensure that the route {3} for this sitemap node can be resolved and that its default values allow resolving the URL for the current sitemap node.</value>
-  </data>
-  <data name="DuplicateRootNodeDetected" xml:space="preserve">
-    <value>Duplicate root node detected. This usually happens when a rootnode is defined in the SiteMap XML file and/or one or more MvcSiteMapNode attributes have been defined without a ParentKey.</value>
+  <data name="CollectionReadOnly" xml:space="preserve">
+    <value>Collection is read-only.</value>
   </data>
   <data name="InvalidSiteMapElement" xml:space="preserve">
     <value>An invalid element was found in the sitemap.</value>
   </data>
-  <data name="NoUrlResolverProvided" xml:space="preserve">
-    <value>No ISiteMapNodeUrlResolver is provided for the current node.</value>
+  <data name="InvalidVirtualPath" xml:space="preserve">
+    <value>'{0}' is not a valid virtual path.</value>
   </data>
-  <data name="RelativeUrlNotAllowed" xml:space="preserve">
-    <value>Relative URL is not allowed.</value>
+  <data name="MultipleNodesWithIdenticalKey" xml:space="preserve">
+    <value>Multiple nodes with the same key '{0}' were found. SiteMap requires that sitemap nodes have unique keys.</value>
   </data>
-  <data name="SiteMapFileNotFound" xml:space="preserve">
-    <value>Site map file could not be found. Verify that the path provided in Web.config is correct.</value>
+  <data name="MultipleNodesWithIdenticalUrl" xml:space="preserve">
+    <value>Multiple nodes with the same URL '{0}' were found. SiteMap requires that sitemap nodes have unique URLs.</value>
   </data>
-  <data name="UnknownException" xml:space="preserve">
-    <value>An error occured while building the sitemap... Check the InnerException for more details.</value>
+  <data name="NoParentKeyDefined" xml:space="preserve">
+    <value>Multiple root nodes defined. Are you missing a ParentKey definition on the '{0}' controller, '{1}'?</value>
   </data>
-  <data name="UnknownSiteMapProvider" xml:space="preserve">
-    <value>Unknown SiteMap provider: {0}</value>
+  <data name="NamedUrlResolverNotFound" xml:space="preserve">
+    <value>The URL resolver instance named '{0}' was not found. Check your DI configuration to ensure a URL resolver instance with this name exists.</value>
+  </data>
+  <data name="PhysicalPathNotAllowed" xml:space="preserve">
+    <value>'{0}' is a physical path, but a virtual path was expected.</value>
+  </data>
+  <data name="SiteMapInvalidRootNode" xml:space="preserve">
+    <value>Root node defined in SiteMap is null, root node cannot be null.</value>
+  </data>
+  <data name="SiteMapLoaderAlreadySet" xml:space="preserve">
+    <value>The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the 'MvcSiteMapProvider_UseExternalDIContainer' in the AppSettings section of the web.config file to 'true' if you are using an external dependency injection container.</value>
+  </data>
+  <data name="ResourceNotFoundWithClassAndKey" xml:space="preserve">
+    <value>The resource object with classname '{0}' and key '{1}' was not found.</value>
+  </data>
+  <data name="SecurityTrimmingCannotBeDisabled" xml:space="preserve">
+    <value>Security trimming cannot be disabled again after it is enabled.</value>
+  </data>
+  <data name="SiteMapNodeReadOnly" xml:space="preserve">
+    <value>SiteMapNode is readonly, property '{0}' cannot be modified.</value>
+  </data>
+  <data name="SiteMapReadOnly" xml:space="preserve">
+    <value>SiteMap is readonly, nodes cannot be modified.</value>
+  </data>
+  <data name="SiteMapNodeCanonicalValueAlreadySet" xml:space="preserve">
+    <value>The '{0}' has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed.</value>
+  </data>
+  <data name="VisitingSiteMapBuilderRequiresRootNode" xml:space="preserve">
+    <value>VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node.</value>
+  </data>
+  <data name="MetaRobotsValueFollowAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'follow' and 'nofollow' may not be used at the same time.</value>
+  </data>
+  <data name="MetaRobotsValueIndexAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'index' and 'noindex' may not be used at the same time.</value>
+  </data>
+  <data name="MetaRobotsValueNoneAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'none' cannot be used in conjunction with 'index', 'noindex', 'follow', or 'nofollow'. You may use 'none' to indicate 'noindex' and 'nofollow' (not recommended), but do not combine it with these values.</value>
+  </data>
+  <data name="MetaRobotsValueUnrecognized" xml:space="preserve">
+    <value>The value '{0}' is not a valid meta robots value.</value>
+  </data>
+  <data name="CopyOperationDoesNotSupportReferenceTypes" xml:space="preserve">
+    <value>Copy operation does not support reference types. If you need this functionality, override CopyTo() and provide your own implementation.</value>
+  </data>
+  <data name="DictionaryAlreadyContainsKey" xml:space="preserve">
+    <value>An item with the same key has already been added.</value>
+  </data>
+  <data name="XmlFileNotFound" xml:space="preserve">
+    <value>Xml file '{0}' could not be found. Verify that the path provided is correct.</value>
+  </data>
+  <data name="XmlValidationFailed" xml:space="preserve">
+    <value>The file at '{0}' contains XML validation errors. See the inner exception for complete details.</value>
+  </data>
+  <data name="UnknownSiteMap" xml:space="preserve">
+    <value>Unknown SiteMap: '{0}'.</value>
+  </data>
+  <data name="NamedBuilderSetNotFound" xml:space="preserve">
+    <value>The builder set instance named '{0}' was not found. Check your DI configuration to ensure a builder set instance with this name exists.</value>
+  </data>
+  <data name="SiteMapLoaderNotInitialized" xml:space="preserve">
+    <value>The SiteMapLoader has not been initialized. You must set the SiteMaps.Loader property during Application_Start in Global.asax if the 'MvcSiteMapProvider_UseExternalDIContainer' setting is set to 'true' in the AppSettings section of web.config.</value>
   </data>
 </root>

@@ -1,9 +1,6 @@
-﻿#region Using directives
-
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web;
-
-#endregion
+using MvcSiteMapProvider;
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -21,7 +18,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// </returns>
         public static MvcSiteMapHtmlHelper MvcSiteMap(this HtmlHelper helper)
         {
-            return new MvcSiteMapHtmlHelper(helper, SiteMap.Provider);
+            return new MvcSiteMapHtmlHelper(helper, SiteMaps.Current);
         }
 
         /// <summary>
@@ -32,28 +29,26 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>
         /// A <see cref="MvcSiteMapHtmlHelper"/> instance
         /// </returns>
-        public static MvcSiteMapHtmlHelper MvcSiteMap(this HtmlHelper helper, SiteMapProvider provider)
+        public static MvcSiteMapHtmlHelper MvcSiteMap(this HtmlHelper helper, ISiteMap siteMap)
         {
-            return new MvcSiteMapHtmlHelper(helper, provider);
+            return new MvcSiteMapHtmlHelper(helper, siteMap);
         }
 
         /// <summary>
         /// Creates a new MvcSiteMapProvider HtmlHelper.
         /// </summary>
         /// <param name="helper">The helper.</param>
-        /// <param name="providerName">Name of the sitemap provider.</param>
+        /// <param name="siteMapCacheKey">The SiteMap Cache Key.</param>
         /// <returns>
         /// A <see cref="MvcSiteMapHtmlHelper"/> instance
         /// </returns>
-        public static MvcSiteMapHtmlHelper MvcSiteMap(this HtmlHelper helper, string providerName)
+        public static MvcSiteMapHtmlHelper MvcSiteMap(this HtmlHelper helper, string siteMapCacheKey)
         {
-            SiteMapProvider provider = SiteMap.Providers[providerName];
-            if (provider == null)
-            {
-                throw new UnknownSiteMapProviderException(
-                    string.Format(Resources.Messages.UnknownSiteMapProvider, providerName));
-            }
-            return new MvcSiteMapHtmlHelper(helper, provider);
+            ISiteMap siteMap = SiteMaps.GetSiteMap(siteMapCacheKey);
+            if (siteMap == null)
+                throw new UnknownSiteMapException();
+            return MvcSiteMap(helper, siteMap);
         }
+
     }
 }

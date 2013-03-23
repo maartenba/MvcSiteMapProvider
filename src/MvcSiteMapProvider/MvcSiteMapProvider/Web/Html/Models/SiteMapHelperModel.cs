@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MvcSiteMapProvider.Web.Html.Models
 {
     /// <summary>
     /// SiteMapHelperModel
     /// </summary>
-    public class SiteMapHelperModel : IEnumerable<SiteMapNodeModel>
+    public class SiteMapHelperModel 
+        : IEnumerable<SiteMapNodeModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapHelperModel"/> class.
@@ -39,7 +39,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
         /// </returns>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return Nodes.GetEnumerator();
         }
