@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web.Hosting;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -22,6 +23,7 @@ namespace MvcSiteMapProvider.DI
             IMvcContextFactory mvcContextFactory,
             IUrlPath urlPath)
         {
+            this.absoluteFileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
             this.settings = settings;
             this.mvcContextFactory = mvcContextFactory;
             this.requestCache = this.mvcContextFactory.GetRequestCache();
@@ -31,6 +33,7 @@ namespace MvcSiteMapProvider.DI
             this.siteMapNodeVisibilityProviders = this.ResolveSiteMapNodeVisibilityProviders();
         }
 
+        private readonly string absoluteFileName;
         private readonly ConfigurationSettings settings;
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly IRequestCache requestCache;
@@ -77,7 +80,7 @@ namespace MvcSiteMapProvider.DI
         private IDynamicNodeProvider[] ResolveDynamicNodeProviders()
         {
             var instantiator = new PluginInstantiator<IDynamicNodeProvider>();
-            var xmlSource = new FileXmlSource(this.settings.SiteMapFileName);
+            var xmlSource = new FileXmlSource(this.absoluteFileName);
             var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "dynamicNodeProvider");
             var providers = instantiator.GetInstances(typeNames);
             return providers.ToArray();
@@ -86,7 +89,7 @@ namespace MvcSiteMapProvider.DI
         private ISiteMapNodeUrlResolver[] ResolveSiteMapNodeUrlResolvers()
         {
             var instantiator = new PluginInstantiator<ISiteMapNodeUrlResolver>();
-            var xmlSource = new FileXmlSource(this.settings.SiteMapFileName);
+            var xmlSource = new FileXmlSource(this.absoluteFileName);
             var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "urlResolver");
 
             // Add the default provider if it is missing
@@ -103,7 +106,7 @@ namespace MvcSiteMapProvider.DI
         private ISiteMapNodeVisibilityProvider[] ResolveSiteMapNodeVisibilityProviders()
         {
             var instantiator = new PluginInstantiator<ISiteMapNodeVisibilityProvider>();
-            var xmlSource = new FileXmlSource(this.settings.SiteMapFileName);
+            var xmlSource = new FileXmlSource(this.absoluteFileName);
             var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "visibilityProvider");
             var providers = instantiator.GetInstances(typeNames);
             return providers.ToArray();

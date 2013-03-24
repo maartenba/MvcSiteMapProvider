@@ -18,14 +18,13 @@ All destination paths are relative to the root of the ASP.NET MVC web site.
 Add the following lines of code to the Application_Start() method of Global.asax:
 
 
-    // MvcSiteMapProvider Configuration
-    XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
-    var container = DIConfig.Register();
-    MvcSiteMapProviderConfig.Register(container);
-
+            // MvcSiteMapProvider Configuration
 #if NET35
     MvcSiteMapProvider.DI.Composer.Compose();
 #endif
+            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
+            var container = DIConfig.Register();
+            MvcSiteMapProviderConfig.Register(container);
 
 
 

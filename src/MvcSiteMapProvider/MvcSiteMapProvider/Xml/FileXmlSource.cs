@@ -13,31 +13,34 @@ namespace MvcSiteMapProvider.Xml
     public class FileXmlSource
         : IXmlSource
     {
+        /// <summary>
+        /// Creates a new instance of FileXmlSource.
+        /// </summary>
+        /// <param name="fileName">The absolute path to the Xml file.</param>
         public FileXmlSource(
-            string xmlFileName
+            string fileName
             )
         {
-            if (String.IsNullOrEmpty(xmlFileName))
-                throw new ArgumentNullException("xmlFilePath");
+            if (String.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException("fileName");
 
-            this.xmlFileName = xmlFileName;
+            this.fileName = fileName;
         }
 
-        protected readonly string xmlFileName;
+        protected readonly string fileName;
 
         #region IXmlSource Members
 
         public XDocument GetXml()
         {
             XDocument result = null;
-            var siteMapFileAbsolute = HostingEnvironment.MapPath(this.xmlFileName);
-            if (File.Exists(siteMapFileAbsolute))
+            if (File.Exists(this.fileName))
             {
-                result = XDocument.Load(siteMapFileAbsolute);
+                result = XDocument.Load(this.fileName);
             }
             else
             {
-                throw new FileNotFoundException(string.Format(Resources.Messages.XmlFileNotFound, this.xmlFileName), siteMapFileAbsolute);
+                throw new FileNotFoundException(string.Format(Resources.Messages.XmlFileNotFound, this.fileName), this.fileName);
             }
             return result;
         }

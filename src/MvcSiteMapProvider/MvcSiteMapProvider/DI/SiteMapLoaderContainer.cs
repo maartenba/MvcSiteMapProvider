@@ -20,6 +20,7 @@ namespace MvcSiteMapProvider.DI
         public SiteMapLoaderContainer(ConfigurationSettings settings)
         {
             // Singleton instances
+            this.absoluteFileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
             this.mvcContextFactory = new MvcContextFactory();
 #if NET35
             this.siteMapCache = new AspNetSiteMapCache(this.mvcContextFactory);
@@ -41,6 +42,7 @@ namespace MvcSiteMapProvider.DI
             this.siteMapCreator = new SiteMapCreator(this.siteMapCacheKeyToBuilderSetMapper, this.siteMapBuiderSetStrategy, this.siteMapFactory);
         }
 
+        private readonly string absoluteFileName;
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly ISiteMapCache siteMapCache;
         private readonly IRequestCache requestCache;
@@ -96,7 +98,7 @@ namespace MvcSiteMapProvider.DI
         {
             return new XmlSiteMapBuilder(
                 attributesToIgnore, 
-                new FileXmlSource(siteMapFile), 
+                new FileXmlSource(this.absoluteFileName), 
                 this.nodeKeyGenerator, 
                 this.dynamicNodeBuilder, 
                 this.siteMapNodeFactory,
@@ -121,14 +123,14 @@ namespace MvcSiteMapProvider.DI
 
         private ICacheDetails ResolveCacheDetails(ConfigurationSettings settings)
         {
-            var fileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
+            
             return new CacheDetails(
                 TimeSpan.FromMinutes(settings.CacheDuration),
                 TimeSpan.MinValue,
 #if NET35
-                new AspNetFileCacheDependency(fileName)
+                new AspNetFileCacheDependency(absoluteFileName)
 #else
-                new RuntimeFileCacheDependency(fileName)
+                new RuntimeFileCacheDependency(absoluteFileName)
 #endif
                 );
         }

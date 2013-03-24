@@ -29,7 +29,7 @@ namespace DI.StructureMap.Registries
     {
         public MvcSiteMapProviderRegistry()
         {
-            string fileName = "~/Mvc.sitemap";
+            string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
 
             this.Scan(scan =>
@@ -118,7 +118,7 @@ namespace DI.StructureMap.Registries
 
             var cacheDependency =
                 this.For<ICacheDependency>().Use<RuntimeFileCacheDependency>()
-                    .Ctor<string>("fileName").Is(HostingEnvironment.MapPath(fileName));
+                    .Ctor<string>("fileName").Is(absoluteFileName);
 
             cacheDetails =
                 this.For<ICacheDetails>().Use<CacheDetails>()
@@ -133,7 +133,7 @@ namespace DI.StructureMap.Registries
 
             // Register the sitemap builder
             var xmlSource = this.For<IXmlSource>().Use<FileXmlSource>()
-                           .Ctor<string>("xmlFileName").Is(fileName);
+                           .Ctor<string>("fileName").Is(absoluteFileName);
 
             var builder = this.For<ISiteMapBuilder>().Use<CompositeSiteMapBuilder>()
                 .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>

@@ -48,14 +48,13 @@ namespace MvcMusicStore
             RegisterGlobalFilters(System.Web.Mvc.GlobalFilters.Filters);
 
 
-//            // MvcSiteMapProvider Configuration
-//            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
-//            var container = DIConfig.Register();
-//            MvcSiteMapProviderConfig.Register(container);
-
+            // MvcSiteMapProvider Configuration
 #if NET35
     MvcSiteMapProvider.DI.Composer.Compose();
 #endif
+            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
+            var container = DIConfig.Register();
+            MvcSiteMapProviderConfig.Register(container);
         }
     }
 }

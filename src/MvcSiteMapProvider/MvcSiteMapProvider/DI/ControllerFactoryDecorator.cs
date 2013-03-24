@@ -54,7 +54,7 @@ namespace MvcSiteMapProvider.DI
 
             // Yield control back to the original controller factory if this isn't an
             // internal controller.
-            if (!controllerType.Equals(typeof(XmlSiteMapController)))
+            if (controllerType != null && !controllerType.Equals(typeof(XmlSiteMapController)))
             {
                 return this.innerControllerFactory.CreateController(requestContext, controllerName);
             }
