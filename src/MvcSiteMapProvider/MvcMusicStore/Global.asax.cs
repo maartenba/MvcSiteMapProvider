@@ -53,8 +53,8 @@ namespace MvcMusicStore
     MvcSiteMapProvider.DI.Composer.Compose();
 #endif
             XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
-            var container = DIConfig.Register();
-            MvcSiteMapProviderConfig.Register(container);
+            //var container = DIConfig.Register();
+            //MvcSiteMapProviderConfig.Register(container);
         }
     }
 }

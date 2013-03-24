@@ -112,7 +112,7 @@
 			configured in the compilation constants -->
   <ItemGroup Condition=" $(DefineConstants.Contains('StructureMap')) ">
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DIConfig.cs">
-      <Link>App_Start\DIConfig.cs</Link>
+      <Link>DI\StructureMap\DIConfig.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
