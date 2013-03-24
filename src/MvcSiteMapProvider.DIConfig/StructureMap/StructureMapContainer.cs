@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using StructureMap;
 
-namespace MvcMusicStore.Code.IoC
+namespace DI.StructureMap
 {
-    public class StructureMapContainer 
+    internal class StructureMapContainer
         : IDependencyInjectionContainer
     {
-        private readonly StructureMap.IContainer container;
+        private readonly IContainer container;
 
-        public StructureMapContainer(StructureMap.IContainer container)
+        public StructureMapContainer(IContainer container)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
             this.container = container;
         }
 

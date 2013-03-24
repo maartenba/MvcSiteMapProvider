@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace MvcMusicStore.Code.IoC
+namespace DI
 {
     public interface IDependencyInjectionContainer
     {

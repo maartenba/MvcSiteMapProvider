@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Configuration.DSL;
 
-namespace MvcMusicStore.Code.IoC
+namespace DI.StructureMap.Conventions
 {
     internal class TransientConvention
         : IRegistrationConvention
@@ -14,7 +12,7 @@ namespace MvcMusicStore.Code.IoC
 
         public void Process(Type type, Registry registry)
         {
-            registry.For(type).LifecycleIs(StructureMap.InstanceScope.Transient);
+            registry.For(type).LifecycleIs(InstanceScope.Transient);
         }
 
         #endregion

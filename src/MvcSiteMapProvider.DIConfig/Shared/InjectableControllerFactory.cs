@@ -1,25 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Routing;
 using System.Web.Mvc;
 
-namespace MvcMusicStore.Code.IoC
+namespace DI
 {
-    public class InjectableControllerFactory 
+    internal class InjectableControllerFactory
         : DefaultControllerFactory
     {
         private readonly IDependencyInjectionContainer container;
 
         public InjectableControllerFactory(IDependencyInjectionContainer container)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
             this.container = container;
         }
 
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
-            return controllerType == null ? 
+            return controllerType == null ?
                 base.GetControllerInstance(requestContext, controllerType) :
                 container.Resolve(controllerType) as IController;
         }

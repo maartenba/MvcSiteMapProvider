@@ -29,8 +29,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>MVC4;NET40;StructureMap</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -109,7 +108,41 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
+  <!-- Conditionally include the right version of DiConfig.cs for the current DI container 
+			configured in the compilation constants -->
+  <ItemGroup Condition=" $(DefineConstants.Contains('StructureMap')) ">
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DIConfig.cs">
+      <Link>App_Start\DIConfig.cs</Link>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\IDependencyInjectionContainer.cs">
+      <Link>DI\IDependencyInjectionContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableControllerFactory.cs">
+      <Link>DI\InjectableControllerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\MvcSiteMapProviderConfig.cs">
+      <Link>App_Start\MvcSiteMapProviderConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\SingletonConvention.cs">
+      <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\TransientConvention.cs">
+      <Link>DI\StructureMap\Conventions\TransientConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcControllerFactoryRegistry.cs">
+      <Link>DI\StructureMap\Registries\MvcControllerFactoryRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
+      <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\StructureMapRegistry.cs">
+      <Link>DI\StructureMap\Registries\StructureMapRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\StructureMapContainer.cs">
+      <Link>DI\StructureMap\StructureMapContainer.cs</Link>
+    </Compile>
     <Compile Include="App_GlobalResources\SiteMapLocalizations.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -120,10 +153,6 @@
     <Compile Include="Areas\Admin\Controllers\StoreManagerController.cs" />
     <Compile Include="Code\AuthenticatedVisibilityProvider.cs" />
     <Compile Include="Code\BlingHelper.cs" />
-    <Compile Include="Code\IoC\TransientConvention.cs" />
-    <Compile Include="Code\IoC\IDependencyInjectionContainer.cs" />
-    <Compile Include="Code\IoC\InjectableControllerFactory.cs" />
-    <Compile Include="Code\IoC\StructureMapContainer.cs" />
     <Compile Include="Code\NonAuthenticatedVisibilityProvider.cs" />
     <Compile Include="Code\StoreBrowseDynamicNodeProvider.cs" />
     <Compile Include="Code\StoreDetailsDynamicNodeProvider.cs" />
@@ -155,6 +184,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Instructions.txt">
+      <Link>DI\StructureMap\Instructions.txt</Link>
+    </Content>
     <Content Include="App_Data\ASPNETDB.MDF" />
     <Content Include="App_Data\aspnetdb_log.ldf">
       <DependentUpon>ASPNETDB.MDF</DependentUpon>
