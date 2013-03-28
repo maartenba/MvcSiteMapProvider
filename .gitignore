@@ -1,7 +1,10 @@
+# Custom folders
+/_ReSharper.*
 nuget/lib/*
-release/MvcSiteMapProvider/net35/*
-release/MvcSiteMapProvider/net40/*
+/release/*
+packages/*
 *.nupkg
+*.DotSettings
 
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 [Bb]in/
