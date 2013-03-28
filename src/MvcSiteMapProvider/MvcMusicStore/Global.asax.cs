@@ -35,6 +35,9 @@ namespace MvcMusicStore
             //MvcSiteMapProviderConfig.Register(container);
         }
 
+        /// <summary>
+        /// Used to fake roles in this demo application
+        /// </summary>
         protected void Application_PostAuthenticateRequest(object sender, EventArgs eventArgs)
         {
             var user = HttpContext.Current.User;
@@ -57,7 +60,7 @@ namespace MvcMusicStore
 
             public bool IsInRole(string role)
             {
-                return true;
+                return true; // we satisfy *any* role
             }
 
             public IIdentity Identity { get; private set; }
