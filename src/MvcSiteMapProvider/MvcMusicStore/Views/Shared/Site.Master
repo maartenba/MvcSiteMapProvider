@@ -10,6 +10,11 @@
         <title>
             <asp:ContentPlaceHolder ID="TitleContent" runat="server" /> (<%=Html.MvcSiteMap().SiteMapTitle() %>)
         </title>
+        
+        <script src="/Scripts/jquery-1.9.1.min.js"></script>
+        <script src="/Scripts/jquery.validate.min.js"></script>
+        <script src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+        <script src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
     </head>
 
     <body>

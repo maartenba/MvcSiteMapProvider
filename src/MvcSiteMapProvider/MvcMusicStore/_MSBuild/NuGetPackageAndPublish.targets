@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--NuGetPackageAndPublish.targets v0.6.0.1 - See https://github.com/JoelHT-Landmark/NuGet-PackageNPublish for more information -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <PropertyGroup>
+
+    <RegenerateNuSpecFiles Condition="$(RegenerateNuSpecFiles) == ''">true</RegenerateNuSpecFiles>
+    <CreateNuGetPackage Condition="$(CreateNuGetPackage) == ''">true</CreateNuGetPackage>
+    <PublishNuGetPackage Condition="$(PublishNuGetPackage) == ''">false</PublishNuGetPackage>
+    <CreateSymbolPackage Condition="$(CreateSymbolPackage) == ''">true</CreateSymbolPackage>
+    <PublishSymbolPackage Condition="$(PublishSymbolPackage) == ''">false</PublishSymbolPackage>
+    
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
+
+    <NuGetToolsPath Condition="$(NuGetToolsPath) == '' Or $(NuGetToolsPath) == '*Undefined*'">$([System.IO.Path]::Combine($(SolutionDir), ".nuget"))</NuGetToolsPath>
+    <NuGetExePath Condition="$(NuGetExePath) == '' Or $(NuGetExePath) == '*Undefined*'">$(NuGetToolsPath)\nuget.exe</NuGetExePath>
+    <PackagesConfig Condition="$(PackagesConfig) == '' Or $(PackagesConfig) == '*Undefined*'">$([System.IO.Path]::Combine($(ProjectDir), "packages.config"))</PackagesConfig>
+    <PackagesDir Condition="$(PackagesDir) == '' Or $(PackagesDir) == '*Undefined*'">$([System.IO.Path]::Combine($(SolutionDir), "packages"))</PackagesDir>
+
+    <TTGenPath Condition="($(TTGenPath) == '' Or $(TTGenPath) == '*Undefined*') And (Exists('$(MSBuildExtensionsPath)\..\Common Files\Microsoft Shared\TextTemplating\10.0\TextTransform.exe'))">$(MSBuildExtensionsPath32)\..\Common Files\Microsoft Shared\TextTemplating\10.0\TextTransform.exe</TTGenPath>
+    <TTGenPath Condition="($(TTGenPath) == '' Or $(TTGenPath) == '*Undefined*') And (Exists('$(MSBuildExtensionsPath32)\..\Common Files\Microsoft Shared\TextTemplating\11.0\TextTransform.exe'))">$(MSBuildExtensionsPath32)\..\Common Files\Microsoft Shared\TextTemplating\11.0\TextTransform.exe</TTGenPath>
+    <TFPath Condition="$(TFPath) == '' Or $(NuGetToolsPathTFPath) == '*Undefined*'">$(MSBuildExtensionsPath32)\..\Microsoft Visual Studio 10.0\Common7\IDE\tf.exe</TFPath>
+
+    <NuGetPackageName>$(ProjectDir)$(AssemblyName.Replace(".NuGetPackage", ""))</NuGetPackageName>
+    
+    <PublishNuGetPackageTarget Condition="$(PublishNuGetPackageTarget) == '' Or $(PublishNuGetPackageTarget) == '*Undefined*'">http://nuget.org/</PublishNuGetPackageTarget>
+    <PublishNuGetPackageTargetKey Condition="$(PublishNuGetPackageTargetKey) == '' Or $(PublishNuGetPackageTargetKey) == '*Undefined*'"></PublishNuGetPackageTargetKey>
+    <PublishSymbolPackageTarget Condition="$(PublishSymbolPackageTarget) == '' Or $(PublishSymbolPackageTarget) == '*Undefined*'">http://symbolsource.org/</PublishSymbolPackageTarget>
+    <PublishSymbolPackageTargetKey Condition="$(PublishSymbolPackageTargetKey) == '' Or $(PublishSymbolPackageTargetKey) == '*Undefined*'"></PublishSymbolPackageTargetKey>
+
+    <BuildDependsOn Condition="$(CreateNuGetPackage) == 'true'">
+	  GenerateNuSpecFiles;
+      $(BuildDependsOn);
+      CreateNuGetPackage;
+      CopyPackageToDropLocation;
+    </BuildDependsOn>
+
+    <BuildDependsOn Condition="$(PublishNuGetPackage) == 'true' and $(PublishNuGetPackageTarget) != '' and $(PublishNuGetPackageTarget) != '*Undefined*'">
+      $(BuildDependsOn);
+      PublishNuGetPackage;
+    </BuildDependsOn>
+
+    <BuildDependsOn Condition="$(PublishSymbolPackage) == 'true' and $(PublishSymbolPackageTarget) != '' and $(PublishSymbolPackageTarget) != '*Undefined*'">
+      $(BuildDependsOn);
+      PublishSymbolPackage;
+    </BuildDependsOn>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <NuSpecFiles Include="**\*.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NuSpecTemplateFiles Include="@(NuSpecFiles->'.\%(FileName).tt')" />
+  </ItemGroup>
+  
+  <Choose>
+    <When Condition="$(OutDir) != '' and $(OutDir) != '*Undefined*'">
+      <PropertyGroup>
+        <CopySourceFolder>$(OutDir)</CopySourceFolder>
+      </PropertyGroup>
+    </When>
+    <When Condition="$(BinariesRoot) != '' and $(BinariesRoot) != '*Undefined*'">
+      <PropertyGroup>
+        <CopySourceFolder>$(BinariesRoot)</CopySourceFolder>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <CopySourceFolder>$(OutputPath)</CopySourceFolder>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  
+  <!-- Check all the pre-requisites are in place -->
+    <Target Name="CheckNuGetPackageAndPublishPrerequisites">
+      <!-- Raise an error if we're unable to locate nuget.exe  -->
+      <Error Condition="!Exists('$(NuGetExePath)') and ($(CreateNuGetPackage) == 'true' or $(PublishNuGetPackage) == 'true')" Text="Unable to locate '$(NuGetExePath)'" />
+      <Error Condition="!Exists('$(TTGenPath)') and $(RegenerateNuSpecFiles) == 'true'" Text="Unable to locate '$(TTGenPath)'" />
+      <Message Condition="!Exists('$(TFPath)') and $(RegenerateNuSpecFiles) == 'true'" Text="Unable to locate '$(TFPath)'" />
+    </Target>
+
+    <!-- Get the version info from the assembly to use as the version number of the assembly -->
+    <Target Name="ExtractVersionInfo">      
+      <GetAssemblyIdentity AssemblyFiles="$(IntermediateOutputPath)\$(AssemblyName).dll">
+        <Output TaskParameter="Assemblies" ItemName="MyAssembly" />
+      </GetAssemblyIdentity>
+    </Target>
+
+    <!-- write the version info out to an xml file for use by powershell scrips, etc -->
+    <Target Name="WriteVersionsFile" DependsOnTargets="ExtractVersionInfo">
+      <ItemGroup>
+        <Line Include="true">
+          <Text>&lt;?xml version="1.0" encoding="utf-8" ?&gt;</Text>
+        </Line>
+        <Line Include="true">
+          <Text>&lt;package&gt;</Text>
+        </Line>
+        <Line Include="true">
+          <Text>&lt;version&gt;%(MyAssembly.FileVersion)&lt;/version&gt;</Text>
+        </Line>
+        <Line Include="true">
+          <Text>&lt;/package&gt;</Text>
+        </Line>
+        <LineText Include="%(Line.Text)" />
+      </ItemGroup>
+      <WriteLinesToFile File="$(ProjectDir)$(AssemblyName).VersionInfo.xml" Lines="@(LineText)" Overwrite="true" />
+    </Target>
+
+    <!-- Copies the assemblies and symbol files we're packaging into the correct locations-->
+    <Target Name="CopyAssembliesToLibDirectories">
+      <ItemGroup>
+        <Net40Assemblies Include="$(CopySourceFolder)\*.dll" Exclude="$(CopySourceFolder)\*.Silverlight.dll;$(CopySourceFolder)\*.Tests.dll" />
+        <Net40Symbols Include="$(CopySourceFolder)\*.pdb" Exclude="$(CopySourceFolder)\*.Silverlight.pdb;$(CopySourceFolder)\*.Tests.pdb" />
+        <SL40Assemblies Include="$(CopySourceFolder)\*.Silverlight.dll" />
+        <SL40Symbols Include="$(CopySourceFolder)\*.Silverlight.pdb" />
+      </ItemGroup>
+      <Copy DestinationFolder="$(ProjectDir)Package\lib\Net40" SourceFiles="@(Net40Assemblies)" SkipUnchangedFiles="false"  />
+      <Copy DestinationFolder="$(ProjectDir)Package\lib\Net40" SourceFiles="@(Net40Symbols)" SkipUnchangedFiles="false"  />
+      <Copy DestinationFolder="$(ProjectDir)Package\lib\SL40" SourceFiles="@(SL40Assemblies)" SkipUnchangedFiles="false" />
+      <Copy DestinationFolder="$(ProjectDir)Package\lib\SL40" SourceFiles="@(SL40Symbols)" SkipUnchangedFiles="false" />
+    </Target>
+
+  <Target Name="CheckOutNuSpecFiles" DependsOnTargets="CheckNuGetPackageAndPublishPrerequisites" Condition="@(NuSpecFiles) != '' and Exists('$(TFPath)') and $(RegenerateNuSpecFiles) == 'true'">
+    <Exec ContinueOnError="true" Command="&quot;$(TFPath)&quot; checkout &quot;%(NuSpecFiles.FullPath)&quot;" Condition="($(SccProvider) == 'SAK')" />
+  </Target>
+  
+  <Target Name="GenerateNuSpecFiles" DependsOnTargets="CheckNuGetPackageAndPublishPrerequisites;CheckOutNuSpecFiles" Condition="@(NuSpecTemplateFiles) != '' and Exists('$(TTGenPath)') and $(RegenerateNuSpecFiles) == 'true'">
+    <Exec ContinueOnError="true" Command="attrib -r &quot;%(NuSpecFiles.FullPath)&quot;" />
+    <Exec Command="&quot;$(TTGenPath)&quot; &quot;%(NuSpecTemplateFiles.FullPath)&quot;" />
+  </Target>
+  
+  <Target Name="CreateNuGetPackage" DependsOnTargets="CheckNuGetPackageAndPublishPrerequisites;ExtractVersionInfo;CopyAssembliesToLibDirectories">
+    <!-- Build without symbols if $(CreateSymbolPackage) == 'False' -->
+    <Exec Command="&quot;$(NuGetExePath)&quot; pack &quot;$(ProjectDir)$(AssemblyName).nuspec&quot; -BasePath &quot;$(ProjectDir)Package&quot; -Verbose -Exclude &quot;**\$(AssemblyName).dll;**\$(AssemblyName).pdb&quot;" Condition="$(CreateSymbolPackage) == 'False'" />
+    <!-- Build with symbols if $(CreateSymbolPackage) == 'True' -->
+    <Exec Command="&quot;$(NuGetExePath)&quot; pack &quot;$(ProjectDir)$(AssemblyName).nuspec&quot; -Symbols -BasePath &quot;$(ProjectDir)Package&quot; -Verbose -Exclude &quot;**\$(AssemblyName).dll;**\$(AssemblyName).pdb&quot;" Condition="$(CreateSymbolPackage) == 'True'" />
+  </Target>
+
+  <Target Name="PublishNuGetPackage" DependsOnTargets="CreateNuGetPackage" Condition="$(PublishNuGetPackage) == 'True'">
+    <ItemGroup>
+      <NuPkgFiles Include="*.nupkg" Exclude="*.Symbols.nupkg" />
+    </ItemGroup>
+    
+    <Exec Command="&quot;$(NuGetExePath)&quot; push &quot;@(NuPkgFiles)&quot; -s $(PublishNuGetPackageTarget) &quot;$(PublishNuGetPackageTargetKey)&quot;" />
+  </Target>
+
+  <Target Name="PublishSymbolPackage" DependsOnTargets="CreateNuGetPackage" Condition="$(PublishSymbolPackage) == 'True'">
+    <ItemGroup>
+      <SymbolNuPkgFiles Include="*.symbols.nupkg" />
+    </ItemGroup>
+
+    <Exec Command="&quot;$(NuGetExePath)&quot; push &quot;@(SymbolNuPkgFiles)&quot; -s $(PublishSymbolPackageTarget) &quot;$(PublishSymbolPackageTargetKey)&quot;" />
+  </Target>
+
+  <!-- Copies the .nupkg file to the drop location if we're doing a TFS build-->
+  <Target Name="CopyPackageToDropLocation" DependsOnTargets="WriteVersionsFile;CreateNuGetPackage" Condition="$(DropLocation) != '' and $(DropLocation) != '*Undefined*'">
+    <Copy DestinationFolder="$(DropLocation)" SourceFiles="$(ProjectDir)$(AssemblyName).nupkg" SkipUnchangedFiles="false" />
+    <Copy DestinationFolder="$(DropLocation)" SourceFiles="$(ProjectDir)$(AssemblyName).symbols.nupkg" SkipUnchangedFiles="false" />
+    <Copy DestinationFolder="$(DropLocation)" SourceFiles="$(ProjectDir)$(AssemblyName).VersionInfo.xml" SkipUnchangedFiles="false" />
+  </Target>
+
+</Project>

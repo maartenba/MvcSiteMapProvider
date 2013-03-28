@@ -14,9 +14,7 @@ namespace MvcMusicStore.Code
     public class UpperCaseSiteMapNodeUrlResolver
         : SiteMapNodeUrlResolver
     {
-        public UpperCaseSiteMapNodeUrlResolver(
-            IMvcContextFactory mvcContextFactory
-            ) 
+        public UpperCaseSiteMapNodeUrlResolver(IMvcContextFactory mvcContextFactory) 
             : base(mvcContextFactory)
         {
         }

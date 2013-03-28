@@ -2,10 +2,6 @@
 
 <%@ Control Language="C#" Inherits="System.Web.Mvc.ViewUserControl<MvcMusicStore.Models.Album>" %>
 
-<script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-<script src="/Scripts/MicrosoftMvcAjax.js" type="text/javascript"></script>
-<script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
-
 <p>
     <%: Html.LabelFor(model => model.Title)%>
     <%: Html.TextBoxFor(model => model.Title)%>

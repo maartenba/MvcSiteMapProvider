@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Web.Mvc;
+using Microsoft.Practices.ServiceLocation;
 using StructureMap;
 using DI;
 using DI.StructureMap.Registries;
 
 internal class DIConfig
 {
-    public static IDependencyInjectionContainer Register()
+    public static IServiceLocator Register()
     {
         // Create the DI container
         var container = new Container();
@@ -24,6 +25,6 @@ internal class DIConfig
         ControllerBuilder.Current.SetControllerFactory(container.GetInstance<IControllerFactory>());
 
         // Return our DI container wrapper instance
-        return container.GetInstance<IDependencyInjectionContainer>();
+        return container.GetInstance<IServiceLocator>();
     }
 }

@@ -5,12 +5,6 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-
-    <script src="/Scripts/MicrosoftAjax.js" type="text/javascript"></script>
-    <script src="/Scripts/MicrosoftMvcAjax.js" type="text/javascript"></script>
-    <script src="/Scripts/MicrosoftMvcValidation.js" type="text/javascript"></script>
-    <script src="/Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
-
     <% Html.EnableClientValidation(); %>
     <% using (Html.BeginForm()) {%>
 
