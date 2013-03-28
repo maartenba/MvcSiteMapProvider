@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
@@ -171,6 +172,7 @@ namespace MvcMusicStore.Models
         private ObjectSet<OrderDetail> _OrderDetails;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -222,11 +224,11 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -259,6 +261,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -409,6 +412,7 @@ namespace MvcMusicStore.Models
         partial void OnAlbumArtUrlChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -533,6 +537,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -557,6 +562,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -611,6 +617,7 @@ namespace MvcMusicStore.Models
         partial void OnNameChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -637,6 +644,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -669,6 +677,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -795,6 +804,7 @@ namespace MvcMusicStore.Models
         partial void OnDateCreatedChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -837,6 +847,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -861,6 +872,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -939,6 +951,7 @@ namespace MvcMusicStore.Models
         partial void OnDescriptionChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -965,6 +978,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -993,6 +1007,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1311,6 +1326,7 @@ namespace MvcMusicStore.Models
         partial void OnTotalChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1337,6 +1353,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1369,6 +1386,7 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1495,6 +1513,7 @@ namespace MvcMusicStore.Models
         partial void OnUnitPriceChanged();
 
         #endregion
+
     
         #region Navigation Properties
     
@@ -1575,8 +1594,10 @@ namespace MvcMusicStore.Models
         }
 
         #endregion
+
     }
 
     #endregion
+
     
 }
