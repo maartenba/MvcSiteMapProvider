@@ -30,19 +30,6 @@ namespace DI.StructureMap
             }
         }
 
-        public T Resolve<T>()
-        {
-            try
-            {
-                return container.GetInstance<T>();
-            }
-            catch (StructureMapException ex)
-            {
-                string message = ex.Message + "\n" + container.WhatDoIHave();
-                throw new Exception(message);
-            }
-        }
-
         #endregion
     }
 }
