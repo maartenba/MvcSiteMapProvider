@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
+using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -19,7 +20,8 @@ namespace MvcSiteMapProvider.Builder
             IEnumerable<String> excludeAssemblies,
             INodeKeyGenerator nodeKeyGenerator,
             IDynamicNodeBuilder dynamicNodeBuilder,
-            ISiteMapNodeFactory siteMapNodeFactory
+            ISiteMapNodeFactory siteMapNodeFactory,
+            ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator
             )
         {
             if (includeAssemblies == null)
@@ -32,34 +34,23 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("dynamicNodeBuilder");
             if (siteMapNodeFactory == null)
                 throw new ArgumentNullException("siteMapNodeFactory");
+            if (siteMapCacheKeyGenerator == null)
+                throw new ArgumentNullException("siteMapCacheKeyGenerator");
 
-            this.IncludeAssemblies = includeAssemblies;
-            this.ExcludeAssemblies = excludeAssemblies;
+            this.includeAssemblies = includeAssemblies;
+            this.excludeAssemblies = excludeAssemblies;
             this.nodeKeyGenerator = nodeKeyGenerator;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
+            this.siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
         }
-
+        protected readonly IEnumerable<string> includeAssemblies;
+        protected readonly IEnumerable<string> excludeAssemblies;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
-
-
-        /// <summary>
-        /// Gets or sets the include assemblies.
-        /// </summary>
-        /// <value>
-        /// The include assemblies.
-        /// </value>
-        protected IEnumerable<string> IncludeAssemblies { get; set; }
-
-        /// <summary>
-        /// Gets or sets the exclude assemblies.
-        /// </summary>
-        /// <value>
-        /// The exclude assemblies.
-        /// </value>
-        protected IEnumerable<string> ExcludeAssemblies { get; set; }
+        protected readonly string siteMapCacheKey;
+        
 
         /// <summary>
         /// Provides the base data on which the context-aware provider can generate a full tree.
@@ -70,11 +61,11 @@ namespace MvcSiteMapProvider.Builder
         {
             // List of assemblies
             IEnumerable<Assembly> assemblies;
-            if (IncludeAssemblies.Any())
+            if (includeAssemblies.Any())
             {
                 // An include list is given
                 assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                    .Where(a => IncludeAssemblies.Contains(new AssemblyName(a.FullName).Name));
+                    .Where(a => includeAssemblies.Contains(new AssemblyName(a.FullName).Name));
             }
             else
             {
@@ -87,7 +78,7 @@ namespace MvcSiteMapProvider.Builder
                                 && !a.FullName.StartsWith("SMDiagnostics")
                                 && !a.FullName.StartsWith("Anonymously")
                                 && !a.FullName.StartsWith("App_")
-                                && !ExcludeAssemblies.Contains(new AssemblyName(a.FullName).Name));
+                                && !excludeAssemblies.Contains(new AssemblyName(a.FullName).Name));
             }
 
             foreach (Assembly assembly in assemblies)
@@ -111,7 +102,7 @@ namespace MvcSiteMapProvider.Builder
         protected virtual ISiteMapNode ProcessNodesInAssembly(ISiteMap siteMap, Assembly assembly, ISiteMapNode parentNode)
         {
             // Create a list of all nodes defined in the assembly
-            List<IMvcSiteMapNodeAttributeDefinition> assemblyNodes = new List<IMvcSiteMapNodeAttributeDefinition>();
+            var assemblyNodes = new List<IMvcSiteMapNodeAttributeDefinition>();
 
             // Retrieve types
             Type[] types;
@@ -127,44 +118,33 @@ namespace MvcSiteMapProvider.Builder
             // Add all types
             foreach (Type type in types)
             {
-                try
+                var attributes = type.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true) as IMvcSiteMapNodeAttribute[];
+                foreach (var attribute in attributes)
                 {
-                    var attribute = type.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).FirstOrDefault() as IMvcSiteMapNodeAttribute;
-                    if (attribute != null)
+                    assemblyNodes.Add(new MvcSiteMapNodeAttributeDefinitionForController
                     {
-                        assemblyNodes.Add(new MvcSiteMapNodeAttributeDefinitionForController
-                        {
-                            SiteMapNodeAttribute = attribute,
-                            ControllerType = type
-                        });
-                    }
+                        SiteMapNodeAttribute = attribute,
+                        ControllerType = type
+                    });
                 }
-                catch
-                {
-                }
+                
 
                 // Add their methods
-                try
-                {
-                    var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(x => x.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).Any());
+                var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(x => x.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).Any());
 
-                    foreach (var method in methods)
-                    {
-                        var attributes = (IMvcSiteMapNodeAttribute[])method.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), false);
-                        foreach (var attribute in attributes)
-                        {
-                            assemblyNodes.Add(new MvcSiteMapNodeAttributeDefinitionForAction
-                            {
-                                SiteMapNodeAttribute = attribute,
-                                ControllerType = type,
-                                ActionMethodInfo = method
-                            });
-                        }
-                    }
-                }
-                catch
+                foreach (var method in methods)
                 {
+                    attributes = method.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), false) as IMvcSiteMapNodeAttribute[];
+                    foreach (var attribute in attributes)
+                    {
+                        assemblyNodes.Add(new MvcSiteMapNodeAttributeDefinitionForAction
+                        {
+                            SiteMapNodeAttribute = attribute,
+                            ControllerType = type,
+                            ActionMethodInfo = method
+                        });
+                    }
                 }
             }
 
@@ -179,7 +159,7 @@ namespace MvcSiteMapProvider.Builder
         protected virtual ISiteMapNode CreateNodesFromMvcSiteMapNodeAttributeDefinitions(ISiteMap siteMap, ISiteMapNode parentNode, IEnumerable<IMvcSiteMapNodeAttributeDefinition> definitions)
         {
             // A dictionary of nodes to process later (node, parentKey)
-            Dictionary<ISiteMapNode, string> nodesToProcessLater = new Dictionary<ISiteMapNode, string>();
+            var nodesToProcessLater = new Dictionary<ISiteMapNode, string>();
 
             // Find root node
             if (parentNode == null)
@@ -339,6 +319,15 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("type");
             }
 
+            if (!String.IsNullOrEmpty(attribute.SiteMapCacheKey))
+            {
+                // Return null if the attribute doesn't apply to this cache key
+                if (!this.siteMapCacheKey.Equals(attribute.SiteMapCacheKey))
+                {
+                    return null;
+                }
+            }
+
             if (methodInfo == null) // try to find Index action
             {
                 var ms = type.FindMembers(MemberTypes.Method, BindingFlags.Instance | BindingFlags.Public,
@@ -428,6 +417,10 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
             siteMapNode.ChangeFrequency = attribute.ChangeFrequency;
             siteMapNode.UpdatePriority = attribute.UpdatePriority;
+            siteMapNode.CacheResolvedUrl = attribute.CacheResolvedUrl;
+            siteMapNode.CanonicalUrl = attribute.CanonicalUrl;
+            siteMapNode.CanonicalKey = attribute.CanonicalKey;
+            AcquireMetaRobotsValuesFrom(attribute, siteMapNode.MetaRobotsValues);
 
             // Handle route details
             siteMapNode.Route = attribute.Route;
@@ -465,10 +458,26 @@ namespace MvcSiteMapProvider.Builder
         }
 
         /// <summary>
+        /// Acquires the meta robots values list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="metaRobotsValues">The meta robots values IList to populate.</param>
+        protected virtual void AcquireMetaRobotsValuesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> metaRobotsValues)
+        {
+            if (attribute.MetaRobotsValues != null)
+            {
+                foreach (var value in attribute.MetaRobotsValues)
+                {
+                    metaRobotsValues.Add(value);
+                }
+            }
+        }
+
+        /// <summary>
         /// Acquires the preserved route parameters list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
         /// <param name="node">The node.</param>
-        /// <param name="roles">The preserved route parameters IList to populate.</param>
+        /// <param name="preservedRouteParameters">The preserved route parameters IList to populate.</param>
         protected virtual void AcquirePreservedRouteParametersFrom(IMvcSiteMapNodeAttribute attribute, IList<string> preservedRouteParameters)
         {
             var localParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);

@@ -112,7 +112,8 @@ namespace MvcSiteMapProvider.DI
                 excludeAssemblies,
                 this.nodeKeyGenerator,
                 this.dynamicNodeBuilder,
-                this.siteMapNodeFactory);
+                this.siteMapNodeFactory,
+                this.siteMapCacheKeyGenerator);
         }
 
         private ISiteMapBuilder ResolveVisitingSiteMapBuilder()
