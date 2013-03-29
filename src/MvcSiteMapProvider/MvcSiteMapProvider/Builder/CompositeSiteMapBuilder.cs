@@ -20,8 +20,6 @@ namespace MvcSiteMapProvider.Builder
 
         protected readonly IEnumerable<ISiteMapBuilder> siteMapBuilders;
 
-
-
         #region ISiteMapBuilder Members
 
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)

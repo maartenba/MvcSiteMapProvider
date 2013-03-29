@@ -211,7 +211,6 @@
     <Compile Include="Security\InternalAuthorize.cs" />
     <Compile Include="Reflection\ObjectCopier.cs" />
     <Compile Include="Security\XmlRolesAclModule.cs" />
-    <Compile Include="Builder\IMvcSiteMapNodeAttribute.cs" />
     <Compile Include="Builder\IMvcSiteMapNodeAttributeDefinition.cs" />
     <Compile Include="Builder\INodeKeyGenerator.cs" />
     <Compile Include="Builder\NodeKeyGenerator.cs" />

@@ -179,8 +179,7 @@ namespace MvcSiteMapProvider.Builder
         protected virtual ISiteMapNode CreateNodesFromMvcSiteMapNodeAttributeDefinitions(ISiteMap siteMap, ISiteMapNode parentNode, IEnumerable<IMvcSiteMapNodeAttributeDefinition> definitions)
         {
             // A dictionary of nodes to process later (node, parentKey)
-            Dictionary<ISiteMapNode, string> nodesToProcessLater
-                = new Dictionary<ISiteMapNode, string>();
+            Dictionary<ISiteMapNode, string> nodesToProcessLater = new Dictionary<ISiteMapNode, string>();
 
             // Find root node
             if (parentNode == null)
@@ -485,9 +484,12 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="roles">The roles IList to populate.</param>
         protected virtual void AcquireRolesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> roles)
         {
-            foreach (var role in attribute.Roles)
+            if (attribute.Roles != null)
             {
-                roles.Add(role);
+                foreach (var role in attribute.Roles)
+                {
+                    roles.Add(role);
+                }
             }
         }
 
