@@ -262,13 +262,13 @@ namespace MvcSiteMapProvider.Builder
                                 if (dynamicNode.ParentNode == parentNode
                                     && !siteMap.GetChildNodes(parentNode).Contains(dynamicNode))
                                 {
-                                    parentNode.ChildNodes.Add(dynamicNode);
+                                    siteMap.AddNode(dynamicNode, parentNode);
                                 }
                             }
                         }
                         else
                         {
-                            parentNode.ChildNodes.Add(nodeToAdd);
+                            siteMap.AddNode(nodeToAdd, parentForNode);
                         }
                     }
                     else
@@ -277,35 +277,6 @@ namespace MvcSiteMapProvider.Builder
                     }
                 }
             }
-
-
-            //// Process list of nodes that did not have a parent defined.
-            //// If this does not succeed at this time, parent will default to root node.
-            //foreach (var nodeToAdd in nodesToProcessLater)
-            //{
-            //    var parentNode = siteMap.FindSiteMapNodeFromKey(nodeToAdd.Value);
-            //    if (parentNode == null)
-            //    {
-            //        var temp = nodesToProcessLater.Keys.FirstOrDefault(t => t.Key == nodeToAdd.Value);
-            //        if (temp != null)
-            //        {
-            //            parentNode = temp;
-            //        }
-            //    }
-            //    parentNode = parentNode ?? root;
-
-            //    if (parentNode != null)
-            //    {
-            //        if (!HasDynamicNodes(nodeToAdd.Key))
-            //        {
-            //            AddNode(nodeToAdd.Key, parentNode);
-            //        }
-            //        else
-            //        {
-            //            AddDynamicNodesFor(nodeToAdd.Key, parentNode);
-            //        }
-            //    }
-            //}
 
             // Process list of nodes that did not have a parent defined.
             // If this does not succeed at this time, parent will default to root node.
@@ -334,13 +305,13 @@ namespace MvcSiteMapProvider.Builder
                                 if (dynamicNode.ParentNode == parentNode
                                     && !siteMap.GetChildNodes(parentNode).Contains(dynamicNode))
                                 {
-                                    parentNode.ChildNodes.Add(dynamicNode);
+                                    siteMap.AddNode(dynamicNode, parentNode);
                                 }
                             }
                         }
                         else
                         {
-                            parentNode.ChildNodes.Add(nodeToAdd.Key);
+                            siteMap.AddNode(nodeToAdd.Key, parentForNode);
                         }
                     }
                 }
