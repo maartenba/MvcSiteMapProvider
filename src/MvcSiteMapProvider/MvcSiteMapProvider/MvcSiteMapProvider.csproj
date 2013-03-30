@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builder\AspNetStaticSiteMapBuilder.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
     <Compile Include="Caching\AspNetCompositeCacheDependency.cs" />
     <Compile Include="Caching\AspNetFileCacheDependency.cs" />
@@ -112,6 +113,8 @@
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
+    <Compile Include="Web\SiteMapNodeExtensions.cs" />
+    <Compile Include="Xml\SiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\XmlDistinctAttributeAggregator.cs" />
     <Compile Include="DI\XmlSiteMapResultFactoryContainer.cs" />
     <Compile Include="FilteredSiteMapNodeVisibilityProvider.cs" />
