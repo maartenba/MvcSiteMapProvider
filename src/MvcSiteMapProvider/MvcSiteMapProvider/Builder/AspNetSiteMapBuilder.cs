@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Web;
 using System.Reflection;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a 
-    /// <see cref="T:System.Web.StaticSiteMapProvider"/> instance.
+    /// AspNetSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a 
+    /// <see cref="T:System.Web.SiteMapProvider"/> instance.
     /// </summary>
     /// <remarks>
     /// Use this class for interoperability with ASP.NET classic. To get a sitemap instance, you will need
@@ -20,43 +20,51 @@ namespace MvcSiteMapProvider.Builder
     /// sitemap/providers section of the Web.config file. Consult MSDN for information on how to do this.
     /// 
     /// The sitemap provider can be retrieved from ASP.NET classic for injection into this class using 
+    /// an implementation of IAspNetSiteMapProvider. You may implement this interface to provide custom
+    /// logic for retrieving a provider by name or other means by using 
     /// System.Web.SiteMap.Providers[providerName] or for the default provider System.Web.SiteMap.Provider.
+    /// 
+    /// Attributes and route values are obtained from a protected member variable of the 
+    /// System.Web.SiteMapProvider named _attributes using reflection. You may disable this functionality for 
+    /// performance reasons if the data is not required by setting reflectAttributes and/or reflectRouteValues to false.
     /// </remarks>
-    public class AspNetStaticSiteMapBuilder
+    public class AspNetSiteMapBuilder
         : ISiteMapBuilder
     {
-        public AspNetStaticSiteMapBuilder(
+        public AspNetSiteMapBuilder(
             bool reflectAttributes,
             bool reflectRouteValues,
             ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider,
-            StaticSiteMapProvider provider,
+            IAspNetSiteMapProvider siteMapProvider,
             ISiteMapNodeFactory siteMapNodeFactory
             )
         {
             if (reservedAttributeNameProvider == null)
                 throw new ArgumentNullException("reservedAttributeNameProvider");
-            if (provider == null)
-                throw new ArgumentNullException("provider");
+            if (siteMapProvider == null)
+                throw new ArgumentNullException("siteMapProvider");
             if (siteMapNodeFactory == null)
                 throw new ArgumentNullException("siteMapNodeFactory");
 
             this.reflectAttributes = reflectAttributes;
             this.reflectRouteValues = reflectRouteValues;
             this.reservedAttributeNameProvider = reservedAttributeNameProvider;
-            this.provider = provider;
+            this.siteMapProvider = siteMapProvider;
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
         protected readonly bool reflectAttributes;
         protected readonly bool reflectRouteValues;
         protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
-        protected readonly StaticSiteMapProvider provider;
+        protected readonly IAspNetSiteMapProvider siteMapProvider;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
 
         #region ISiteMapBuilder Members
 
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
+            var provider = siteMapProvider.GetProvider();
+
             siteMap.EnableLocalization = provider.EnableLocalization;
             siteMap.SecurityTrimmingEnabled = provider.SecurityTrimmingEnabled;
 
@@ -69,7 +77,7 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, StaticSiteMapProvider provider)
+        protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, SiteMapProvider provider)
         {
             var root = provider.RootNode;
             return GetSiteMapNodeFromProviderNode(siteMap, root, null);
@@ -182,7 +190,7 @@ namespace MvcSiteMapProvider.Builder
             // Unfortunately, the ASP.NET implementation uses a protected member variable to store
             // the attributes, so there is no way to loop through them without reflection or some
             // fancy dynamic subclass implementation.
-            var attributeCollection = this.GetPrivateFieldValue<NameValueCollection>(node, "_attributes");
+            var attributeCollection = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
             foreach (string key in attributeCollection.Keys)
             {
                 var attributeName = key;
@@ -202,21 +210,18 @@ namespace MvcSiteMapProvider.Builder
         /// <returns></returns>
         protected virtual void AcquireRouteValuesFrom(System.Web.SiteMapNode node, IRouteValueCollection routeValues)
         {
-            if (this.reflectAttributes)
+            // Unfortunately, the ASP.NET implementation uses a protected member variable to store
+            // the attributes, so there is no way to loop through them without reflection or some
+            // fancy dynamic subclass implementation.
+            var attributeCollection = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
+            foreach (string key in attributeCollection.Keys)
             {
-                // Unfortunately, the ASP.NET implementation uses a protected member variable to store
-                // the attributes, so there is no way to loop through them without reflection or some
-                // fancy dynamic subclass implementation.
-                var attributeCollection = this.GetPrivateFieldValue<NameValueCollection>(node, "_attributes");
-                foreach (string key in attributeCollection.Keys)
-                {
-                    var attributeName = key;
-                    var attributeValue = node[key];
+                var attributeName = key;
+                var attributeValue = node[key];
 
-                    if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
-                    {
-                        routeValues.Add(attributeName, attributeValue);
-                    }
+                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
+                {
+                    routeValues.Add(attributeName, attributeValue);
                 }
             }
         }
@@ -261,28 +266,5 @@ namespace MvcSiteMapProvider.Builder
                 metaRobotsValues.Add(value);
             }
         }
-
-        /// <summary>
-        /// Returns a private Property Value from a given Object. Uses Reflection.
-        /// Throws a ArgumentOutOfRangeException if the Property is not found.
-        /// </summary>
-        /// <typeparam name="T">Type of the Property</typeparam>
-        /// <param name="obj">Object from where the Property Value is returned</param>
-        /// <param name="propName">Propertyname as string.</param>
-        /// <returns>PropertyValue</returns>
-        protected T GetPrivateFieldValue<T>(object obj, string propName)
-        {
-            if (obj == null) throw new ArgumentNullException("obj");
-            Type t = obj.GetType();
-            FieldInfo fi = null;
-            while (fi == null && t != null)
-            {
-                fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                t = t.BaseType;
-            }
-            if (fi == null) throw new ArgumentOutOfRangeException("propName", string.Format("Field {0} was not found in Type {1}", propName, obj.GetType().FullName));
-            return (T)fi.GetValue(obj);
-        }
-
     }
 }

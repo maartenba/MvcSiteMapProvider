@@ -6,7 +6,7 @@ using System.Text;
 namespace MvcSiteMapProvider.Xml
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Contract for reserved XML attribute name provider for SiteMap nodes.
     /// </summary>
     public interface ISiteMapXmlReservedAttributeNameProvider
     {

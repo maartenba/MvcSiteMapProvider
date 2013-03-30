@@ -75,7 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder\AspNetStaticSiteMapBuilder.cs" />
+    <Compile Include="Builder\AspNetNamedSiteMapProvider.cs" />
+    <Compile Include="Builder\AspNetSiteMapBuilder.cs" />
+    <Compile Include="Builder\AspNetDefaultSiteMapProvider.cs" />
+    <Compile Include="Builder\IAspNetSiteMapProvider.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
     <Compile Include="Caching\AspNetCompositeCacheDependency.cs" />
     <Compile Include="Caching\AspNetFileCacheDependency.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="DI\Composer.cs" />
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
+    <Compile Include="Reflection\ObjectExtensions.cs" />
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />

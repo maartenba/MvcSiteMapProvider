@@ -3,7 +3,7 @@
 namespace MvcSiteMapProvider.Web
 {
     /// <summary>
-    /// TODO: Update summary.
+    /// Extension methods for getting attribute values from a <see cref="T:System.Web.SiteMapNode"/> instance.
     /// </summary>
     public static class SiteMapNodeExtensions
     {
