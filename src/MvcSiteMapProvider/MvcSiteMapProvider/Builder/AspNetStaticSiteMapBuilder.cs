@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Reflection;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Builder
@@ -27,13 +28,13 @@ namespace MvcSiteMapProvider.Builder
         public AspNetStaticSiteMapBuilder(
             bool reflectAttributes,
             bool reflectRouteValues,
-            IEnumerable<string> attributesToIgnore,
+            ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider,
             StaticSiteMapProvider provider,
             ISiteMapNodeFactory siteMapNodeFactory
             )
         {
-            if (attributesToIgnore == null)
-                throw new ArgumentNullException("attributesToIgnore");
+            if (reservedAttributeNameProvider == null)
+                throw new ArgumentNullException("reservedAttributeNameProvider");
             if (provider == null)
                 throw new ArgumentNullException("provider");
             if (siteMapNodeFactory == null)
@@ -41,14 +42,14 @@ namespace MvcSiteMapProvider.Builder
 
             this.reflectAttributes = reflectAttributes;
             this.reflectRouteValues = reflectRouteValues;
-            this.attributesToIgnore = attributesToIgnore;
+            this.reservedAttributeNameProvider = reservedAttributeNameProvider;
             this.provider = provider;
             this.siteMapNodeFactory = siteMapNodeFactory;
         }
 
         protected readonly bool reflectAttributes;
         protected readonly bool reflectRouteValues;
-        protected readonly IEnumerable<string> attributesToIgnore;
+        protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
         protected readonly StaticSiteMapProvider provider;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
 
@@ -187,7 +188,7 @@ namespace MvcSiteMapProvider.Builder
                 var attributeName = key;
                 var attributeValue = node[key];
 
-                if (IsRegularAttribute(attributeName))
+                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
                 {
                     attributes.Add(attributeName, attributeValue);
                 }
@@ -212,7 +213,7 @@ namespace MvcSiteMapProvider.Builder
                     var attributeName = key;
                     var attributeValue = node[key];
 
-                    if (IsRouteAttribute(attributeName))
+                    if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
                     {
                         routeValues.Add(attributeName, attributeValue);
                     }
@@ -283,58 +284,5 @@ namespace MvcSiteMapProvider.Builder
             return (T)fi.GetValue(obj);
         }
 
-        // TODO: Move to shared service - also used by XmlSiteMapBuilder
-
-        /// <summary>
-        /// Determines whether the attribute is a regular attribute.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <returns>
-        ///   <c>true</c> if the attribute is a regular attribute; otherwise, <c>false</c>.
-        /// </returns>
-        protected virtual bool IsRegularAttribute(string attributeName)
-        {
-            return attributeName != "title"
-                   && attributeName != "description";
-        }
-
-        // TODO: Move to shared service - also used by XmlSiteMapBuilder
-
-        /// <summary>
-        /// Determines whether the attribute is a route attribute.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <returns>
-        ///   <c>true</c> if the attribute is a route attribute; otherwise, <c>false</c>.
-        /// </returns>
-        protected virtual bool IsRouteAttribute(string attributeName)
-        {
-            return attributeName != "title"
-               && attributeName != "description"
-               && attributeName != "resourceKey"
-               && attributeName != "key"
-               && attributeName != "roles"
-               && attributeName != "route"
-               && attributeName != "url"
-               && attributeName != "cacheResolvedUrl"
-               && attributeName != "clickable"
-               && attributeName != "httpMethod"
-               && attributeName != "dynamicNodeProvider"
-               && attributeName != "urlResolver"
-               && attributeName != "visibilityProvider"
-               && attributeName != "visibility"
-               && attributeName != "lastModifiedDate"
-               && attributeName != "changeFrequency"
-               && attributeName != "updatePriority"
-               && attributeName != "targetFrame"
-               && attributeName != "imageUrl"
-               && attributeName != "inheritedRouteParameters"
-               && attributeName != "preservedRouteParameters"
-               && attributeName != "canonicalUrl"
-               && attributeName != "canonicalKey"
-               && attributeName != "metaRobotsValues"
-               && !attributesToIgnore.Contains(attributeName)
-               && !attributeName.StartsWith("data-");
-        }
     }
 }

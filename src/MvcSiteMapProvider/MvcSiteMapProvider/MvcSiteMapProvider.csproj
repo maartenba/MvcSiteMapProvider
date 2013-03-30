@@ -114,6 +114,7 @@
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
+    <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\SiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\XmlDistinctAttributeAggregator.cs" />
     <Compile Include="DI\XmlSiteMapResultFactoryContainer.cs" />

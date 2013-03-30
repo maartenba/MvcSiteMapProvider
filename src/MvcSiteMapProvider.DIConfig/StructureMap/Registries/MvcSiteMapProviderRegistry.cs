@@ -135,11 +135,15 @@ namespace DI.StructureMap.Registries
             var xmlSource = this.For<IXmlSource>().Use<FileXmlSource>()
                            .Ctor<string>("fileName").Is(absoluteFileName);
 
+            var reservedAttributeNameProvider = this.For<ISiteMapXmlReservedAttributeNameProvider>()
+                .Use<SiteMapXmlReservedAttributeNameProvider>()
+                .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
+                
             var builder = this.For<ISiteMapBuilder>().Use<CompositeSiteMapBuilder>()
                 .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
                 {
                     y.Type<XmlSiteMapBuilder>()
-                        .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0])
+                        .Ctor<ISiteMapXmlReservedAttributeNameProvider>().Is(reservedAttributeNameProvider)
                         .Ctor<IXmlSource>().Is(xmlSource);
                     y.Type<ReflectionSiteMapBuilder>()
                         .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])

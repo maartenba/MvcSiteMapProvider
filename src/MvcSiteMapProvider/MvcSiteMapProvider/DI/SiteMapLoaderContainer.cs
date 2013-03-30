@@ -97,8 +97,8 @@ namespace MvcSiteMapProvider.DI
         private ISiteMapBuilder ResolveXmlSiteMapBuilder(string siteMapFile, IEnumerable<string> attributesToIgnore)
         {
             return new XmlSiteMapBuilder(
-                attributesToIgnore, 
-                new FileXmlSource(this.absoluteFileName), 
+                new FileXmlSource(this.absoluteFileName),
+                new SiteMapXmlReservedAttributeNameProvider(attributesToIgnore), 
                 this.nodeKeyGenerator, 
                 this.dynamicNodeBuilder, 
                 this.siteMapNodeFactory,
