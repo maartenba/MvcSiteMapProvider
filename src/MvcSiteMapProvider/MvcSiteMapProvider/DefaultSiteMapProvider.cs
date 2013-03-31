@@ -1774,7 +1774,7 @@ namespace MvcSiteMapProvider
         protected bool EncodeExternalUrl(SiteMapNode node)
         {
             var url = node.Url;
-            if (url.Contains("http") || url.Contains("ftp"))
+            if (url.StartsWith("http") || url.StartsWith("ftp"))
             {
                 node.Url = HttpContext.Current.Server.UrlEncode(url);
                 return true;
