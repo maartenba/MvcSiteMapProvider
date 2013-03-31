@@ -228,7 +228,7 @@ namespace MvcSiteMapProvider.Web
                 // Generate element
                 var siteMapNodeUrl = siteMapNode.Url;
                 string nodeUrl = url + siteMapNodeUrl;
-                if (siteMapNodeUrl.Contains("http") || siteMapNodeUrl.Contains("ftp"))
+                if (siteMapNodeUrl.StartsWith("http") || siteMapNodeUrl.StartsWith("ftp"))
                 {
                     nodeUrl = siteMapNodeUrl;
                 }
