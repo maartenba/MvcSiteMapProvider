@@ -260,20 +260,6 @@ namespace MvcSiteMapProvider.Builder
         }
 
         /// <summary>
-        /// Acquires the roles list from a given XAttribute
-        /// </summary>
-        /// <param name="node">The attribute.</param>
-        /// <param name="roles">The roles IList to populate.</param>
-        protected virtual void AcquireRolesFrom(XAttribute attribute, IList<string> roles)
-        {
-            var localRoles = attribute.Value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var role in localRoles)
-            {
-                roles.Add(role);
-            }
-        }
-
-        /// <summary>
         /// Acquires the preserved route parameters list from a given XElement
         /// </summary>
         /// <param name="node">The node.</param>
