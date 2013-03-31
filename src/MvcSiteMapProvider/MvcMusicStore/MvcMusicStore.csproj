@@ -52,21 +52,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonServiceLocator.StructureMapAdapter.Unofficial">
-      <HintPath>..\packages\CommonServiceLocator.StructureMapAdapter.Unofficial.2.6.4.1\lib\Net40\CommonServiceLocator.StructureMapAdapter.Unofficial.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CommonServiceLocator.StructureMapAdapter.Unofficial.2.6.4.1\lib\Net40\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CommonServiceLocator.StructureMapAdapter.Unofficial.2.6.4.1\lib\Net40\StructureMap.dll</HintPath>
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -134,6 +126,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\IDependencyInjectionContainer.cs">
+      <Link>DI\IDependencyInjectionContainer.cs</Link>
+    </Compile>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableControllerFactory.cs">
       <Link>DI\InjectableControllerFactory.cs</Link>
     </Compile>
@@ -154,6 +149,9 @@
     </Compile>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\StructureMapRegistry.cs">
       <Link>DI\StructureMap\Registries\StructureMapRegistry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\StructureMapContainer.cs">
+      <Link>DI\StructureMap\StructureMapContainer.cs</Link>
     </Compile>
     <Compile Include="App_GlobalResources\SiteMapLocalizations.Designer.cs">
       <AutoGen>True</AutoGen>

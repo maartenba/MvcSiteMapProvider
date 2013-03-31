@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Web.Hosting;
-using Microsoft.Practices.ServiceLocation;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Xml;
 using DI;
 
 public class MvcSiteMapProviderConfig
 {
-    public static void Register(IServiceLocator container)
+    public static void Register(IDependencyInjectionContainer container)
     {
         // Setup global sitemap loader
-        MvcSiteMapProvider.SiteMaps.Loader = container.GetInstance<ISiteMapLoader>();
+        MvcSiteMapProvider.SiteMaps.Loader = container.Resolve<ISiteMapLoader>();
 
         // Check all configured .sitemap files to ensure they follow the XSD for MvcSiteMapProvider
-        var validator = container.GetInstance<ISiteMapXmlValidator>();
+        var validator = container.Resolve<ISiteMapXmlValidator>();
         validator.ValidateXml(HostingEnvironment.MapPath("~/Mvc.sitemap"));
     }
 }

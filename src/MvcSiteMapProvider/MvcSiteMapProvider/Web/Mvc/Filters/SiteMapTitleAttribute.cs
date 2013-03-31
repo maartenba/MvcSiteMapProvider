@@ -6,10 +6,10 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
 {
     /// <summary>
     /// SiteMapTitle attribute
-    /// Can be used for setting sitemap title on an action method.
+    /// Can be used for overriding sitemap title on an action method on a per request basis.
     /// Credits go to Kenny Eliasson - http://mvcsitemap.codeplex.com/Thread/View.aspx?ThreadId=67056
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SiteMapTitleAttribute
         : ActionFilterAttribute
     {
@@ -17,6 +17,12 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
         /// Property name of ViewData to look in
         /// </summary>
         protected readonly string PropertyName;
+
+        /// <summary>
+        /// Cache key for the sitemap instance this attribute applies to.
+        /// If not supplied, the default SiteMap instance for this request will be used.
+        /// </summary>
+        protected readonly string SiteMapCacheKey;
 
         /// <summary>
         /// Gets or sets the target.
@@ -49,7 +55,15 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
 
                 if (target != null)
                 {
-                    var siteMap = SiteMaps.Current;
+                    ISiteMap siteMap;
+                    if (String.IsNullOrEmpty(this.SiteMapCacheKey))
+                    {
+                        siteMap = SiteMaps.Current;
+                    }
+                    else
+                    {
+                        siteMap = SiteMaps.GetSiteMap(this.SiteMapCacheKey);  
+                    }
 
                     if (siteMap.CurrentNode != null)
                     {

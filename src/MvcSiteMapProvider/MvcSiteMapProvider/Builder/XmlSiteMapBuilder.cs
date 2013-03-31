@@ -15,18 +15,18 @@ namespace MvcSiteMapProvider.Builder
         : ISiteMapBuilder
     {
         public XmlSiteMapBuilder(
-            IEnumerable<string> attributesToIgnore,
             IXmlSource xmlSource,
+            ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider,
             INodeKeyGenerator nodeKeyGenerator,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory,
             ISiteMapXmlNameProvider xmlNameProvider
             )
         {
-            if (attributesToIgnore == null)
-                throw new ArgumentNullException("attributesToIgnore");
             if (xmlSource == null)
                 throw new ArgumentNullException("xmlSource");
+            if (reservedAttributeNameProvider == null)
+                throw new ArgumentNullException("reservedAttributeNameProvider");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
             if (dynamicNodeBuilder == null)
@@ -36,16 +36,16 @@ namespace MvcSiteMapProvider.Builder
             if (xmlNameProvider == null)
                 throw new ArgumentNullException("xmlNameProvider");
 
-            this.attributesToIgnore = attributesToIgnore;
             this.xmlSource = xmlSource;
+            this.reservedAttributeNameProvider = reservedAttributeNameProvider;
             this.nodeKeyGenerator = nodeKeyGenerator;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
             this.xmlNameProvider = xmlNameProvider;
         }
 
-        protected readonly IEnumerable<string> attributesToIgnore;
         protected readonly IXmlSource xmlSource;
+        protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
@@ -222,13 +222,13 @@ namespace MvcSiteMapProvider.Builder
                 var attributeName = attribute.Name.ToString();
                 var attributeValue = attribute.Value;
 
-                if (IsRegularAttribute(attributeName))
+                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
                 {
                     siteMapNode.Attributes[attributeName] = attributeValue;
                 }
 
                 // Process route values
-                if (IsRouteAttribute(attributeName))
+                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
                 {
                     routeValues.Add(attributeName, attributeValue);
                 }
@@ -238,56 +238,6 @@ namespace MvcSiteMapProvider.Builder
                     AcquireRolesFrom(attribute, siteMapNode.Roles);
                 }
             }
-        }
-
-        /// <summary>
-        /// Determines whether the attribute is a regular attribute.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <returns>
-        ///   <c>true</c> if the attribute is a regular attribute; otherwise, <c>false</c>.
-        /// </returns>
-        protected virtual bool IsRegularAttribute(string attributeName)
-        {
-            return attributeName != "title"
-                   && attributeName != "description";
-        }
-
-        /// <summary>
-        /// Determines whether the attribute is a route attribute.
-        /// </summary>
-        /// <param name="attributeName">Name of the attribute.</param>
-        /// <returns>
-        ///   <c>true</c> if the attribute is a route attribute; otherwise, <c>false</c>.
-        /// </returns>
-        protected virtual bool IsRouteAttribute(string attributeName)
-        {
-            return attributeName != "title"
-               && attributeName != "description"
-               && attributeName != "resourceKey"
-               && attributeName != "key"
-               && attributeName != "roles"
-               && attributeName != "route"
-               && attributeName != "url"
-               && attributeName != "cacheResolvedUrl"
-               && attributeName != "clickable"
-               && attributeName != "httpMethod"
-               && attributeName != "dynamicNodeProvider"
-               && attributeName != "urlResolver"
-               && attributeName != "visibilityProvider"
-               && attributeName != "visibility"
-               && attributeName != "lastModifiedDate"
-               && attributeName != "changeFrequency"
-               && attributeName != "updatePriority"
-               && attributeName != "targetFrame"
-               && attributeName != "imageUrl"
-               && attributeName != "inheritedRouteParameters"
-               && attributeName != "preservedRouteParameters"
-               && attributeName != "canonicalUrl"
-               && attributeName != "canonicalKey"
-               && attributeName != "metaRobotsValues"
-               && !attributesToIgnore.Contains(attributeName)
-               && !attributeName.StartsWith("data-");
         }
 
         /// <summary>
@@ -302,7 +252,7 @@ namespace MvcSiteMapProvider.Builder
                 var attributeName = attribute.Name.ToString();
                 var attributeValue = attribute.Value;
 
-                if (IsRegularAttribute(attributeName))
+                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
                 {
                     attributes.Add(attributeName, attributeValue);
                 }
@@ -321,7 +271,7 @@ namespace MvcSiteMapProvider.Builder
                 var attributeName = attribute.Name.ToString();
                 var attributeValue = attribute.Value;
 
-                if (IsRouteAttribute(attributeName))
+                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
                 {
                     routeValues.Add(attributeName, attributeValue);
                 }
