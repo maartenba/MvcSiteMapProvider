@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Web.Routing;
 using System.Web.Mvc;
-using Microsoft.Practices.ServiceLocation;
 
 namespace DI
 {
     internal class InjectableControllerFactory
         : DefaultControllerFactory
     {
-        private readonly IServiceLocator container;
+        private readonly IDependencyInjectionContainer container;
 
-        public InjectableControllerFactory(IServiceLocator container)
+        public InjectableControllerFactory(IDependencyInjectionContainer container)
         {
             if (container == null)
                 throw new ArgumentNullException("container");
@@ -21,7 +20,7 @@ namespace DI
         {
             return controllerType == null ?
                 base.GetControllerInstance(requestContext, controllerType) :
-                container.GetInstance(controllerType) as IController;
+                container.Resolve(controllerType) as IController;
         }
     }
 }

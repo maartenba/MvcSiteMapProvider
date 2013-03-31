@@ -120,6 +120,31 @@ namespace MvcSiteMapProvider
         public string ImageUrl { get; set; }
 
         /// <summary>
+        /// A value indicating to cache the resolved URL. If false, the URL will be 
+        /// resolved every time it is accessed.
+        /// </summary>
+        public bool CacheResolvedUrl { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        public string CanonicalUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        public string CanonicalKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the robots meta values.
+        /// </summary>
+        /// <value>The robots meta values.</value>
+        public string[] MetaRobotsValues { get; set; }
+
+        /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>
@@ -128,8 +153,8 @@ namespace MvcSiteMapProvider
         public string PreservedRouteParameters { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the provider this node is associated with
+        /// Gets or sets the name of the cache key this node is associated with
         /// </summary>
-        public string SiteMapProviderName { get; set; }
+        public string SiteMapCacheKey { get; set; }
     }
 }

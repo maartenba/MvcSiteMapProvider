@@ -214,6 +214,24 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Field &apos;{0}&apos; was not found in Type &apos;{1}&apos;..
+        /// </summary>
+        internal static string ObjectFieldNotFound {
+            get {
+                return ResourceManager.GetString("ObjectFieldNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; was not found in Type &apos;{1}&apos;..
+        /// </summary>
+        internal static string ObjectPropertyNotFound {
+            get {
+                return ResourceManager.GetString("ObjectPropertyNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is a physical path, but a virtual path was expected..
         /// </summary>
         internal static string PhysicalPathNotAllowed {
