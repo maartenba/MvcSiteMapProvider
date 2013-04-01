@@ -207,39 +207,6 @@ namespace MvcSiteMapProvider.Builder
             return siteMapNode;
         }
 
-
-        /// <summary>
-        /// Add each attribute to our attributes collection on the siteMapNode
-        /// and to a route data dictionary.
-        /// </summary>
-        /// <param name="node">The element to map.</param>
-        /// <param name="siteMapNode">The SiteMapNode to map to</param>
-        /// <param name="routeValues">The RouteValueDictionary to fill</param>
-        protected virtual void AttributesToRouteValues(XElement node, ISiteMapNode siteMapNode, IDictionary<string, object> routeValues)
-        {
-            foreach (XAttribute attribute in node.Attributes())
-            {
-                var attributeName = attribute.Name.ToString();
-                var attributeValue = attribute.Value;
-
-                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
-                {
-                    siteMapNode.Attributes[attributeName] = attributeValue;
-                }
-
-                // Process route values
-                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
-                {
-                    routeValues.Add(attributeName, attributeValue);
-                }
-
-                if (attributeName == "roles")
-                {
-                    AcquireRolesFrom(attribute, siteMapNode.Roles);
-                }
-            }
-        }
-
         /// <summary>
         /// Acquires the attributes from a given XElement.
         /// </summary>
@@ -286,20 +253,6 @@ namespace MvcSiteMapProvider.Builder
         protected virtual void AcquireRolesFrom(XElement node, IList<string> roles)
         {
             var localRoles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var role in localRoles)
-            {
-                roles.Add(role);
-            }
-        }
-
-        /// <summary>
-        /// Acquires the roles list from a given XAttribute
-        /// </summary>
-        /// <param name="node">The attribute.</param>
-        /// <param name="roles">The roles IList to populate.</param>
-        protected virtual void AcquireRolesFrom(XAttribute attribute, IList<string> roles)
-        {
-            var localRoles = attribute.Value.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var role in localRoles)
             {
                 roles.Add(role);
