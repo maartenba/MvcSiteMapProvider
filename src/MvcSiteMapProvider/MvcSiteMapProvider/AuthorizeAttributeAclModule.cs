@@ -22,7 +22,7 @@ namespace MvcSiteMapProvider
     {
         #region IAclModule Members
 
-#if !NET35
+#if !MVC2
         protected string filterProviderCacheKey = "__MVCSITEMAP_F255D59E-D3E4-4BA9-8A5F-2AF0CAB282F4";
         protected IFilterProvider ResolveFilterProvider()
         {
@@ -161,7 +161,12 @@ namespace MvcSiteMapProvider
             {
                 if (actionDescriptor != null)
                 {
-#if NET35
+                    // fixes #130 - Check whether we have an AllowAnonymous Attribute
+                    var ignoreAuthorization = this.HasAllowAnonymousAttribute(actionDescriptor);
+                    if (ignoreAuthorization)
+                        return true;
+
+#if MVC2
                     IEnumerable<AuthorizeAttribute> authorizeAttributesToCheck =
                        actionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), true).OfType
                            <AuthorizeAttribute>().ToList()
@@ -233,5 +238,22 @@ namespace MvcSiteMapProvider
         }
 
         #endregion
+
+
+#if !MVC4
+        private bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
+        {
+            return false;
+        }
+#else
+        private bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
+        {
+            var allowAnonymousType = typeof(AllowAnonymousAttribute);
+            return (actionDescriptor.IsDefined(allowAnonymousType, true) ||
+                actionDescriptor.ControllerDescriptor.IsDefined(allowAnonymousType, true));
+        }
+#endif
+
+
     }
 }

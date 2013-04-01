@@ -305,7 +305,7 @@ namespace MvcSiteMapProvider
             if (NodeKeyGenerator == null)
             {
                 NodeKeyGenerator =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<INodeKeyGenerator>() ??
 #endif
  new DefaultNodeKeyGenerator();
@@ -320,7 +320,7 @@ namespace MvcSiteMapProvider
             if (ControllerTypeResolver == null)
             {
                 ControllerTypeResolver =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<IControllerTypeResolver>() ??
 #endif
  new DefaultControllerTypeResolver();
@@ -335,7 +335,7 @@ namespace MvcSiteMapProvider
             if (ActionMethodParameterResolver == null)
             {
                 ActionMethodParameterResolver =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<IActionMethodParameterResolver>() ??
 #endif
  new DefaultActionMethodParameterResolver();
@@ -350,7 +350,7 @@ namespace MvcSiteMapProvider
             if (AclModule == null)
             {
                 AclModule =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<IAclModule>() ??
 #endif
  new DefaultAclModule();
@@ -371,7 +371,7 @@ namespace MvcSiteMapProvider
             if (SiteMapNodeUrlResolver == null)
             {
                 SiteMapNodeUrlResolver =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<ISiteMapNodeUrlResolver>() ??
 #endif
  new DefaultSiteMapNodeUrlResolver();
@@ -386,7 +386,7 @@ namespace MvcSiteMapProvider
             if (SiteMapNodeVisibilityProvider == null)
             {
                 SiteMapNodeVisibilityProvider =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<ISiteMapNodeVisibilityProvider>() ??
 #endif
  new DefaultSiteMapNodeVisibilityProvider();
@@ -401,7 +401,7 @@ namespace MvcSiteMapProvider
             if (SiteMapProviderEventHandler == null)
             {
                 SiteMapProviderEventHandler =
-#if !NET35
+#if !MVC2
  DependencyResolver.Current.GetService<ISiteMapProviderEventHandler>() ??
 #endif
  new DefaultSiteMapProviderEventHandler();
