@@ -4,7 +4,13 @@ properties {
     $source_directory = "$base_directory\src\MvcSiteMapProvider"
     $nuget_directory  = "$base_directory\nuget"
     $tools_directory  = "$base_directory\tools"
-    $version          = "3.3.4.0"
+    $version          = "4.0.0"
+    $packageVersion   = "$version-alpha-01"
+	$builds = @(
+		@{Name = "MvcSiteMapProvider.Mvc4"; Constants="MVC4"; NuGetDir = "net40"; TargetFramework="v4.0"},
+		@{Name = "MvcSiteMapProvider.Mvc3"; Constants="MVC3"; NuGetDir = "net35"; TargetFramework="v3.5"}
+		@{Name = "MvcSiteMapProvider.Mvc2"; Constants="MVC2"; NuGetDir = "net20"; TargetFramework="v3.5"}
+	)
 }
 
 include .\psake_ext.ps1
@@ -12,7 +18,7 @@ include .\psake_ext.ps1
 task default -depends Finalize
 
 task Clean -description "This task cleans up the build directory" {
-    Remove-Item $build_directory\\$solution -Force -Recurse -ErrorAction SilentlyContinue
+    Remove-Item $build_directory -Force -Recurse -ErrorAction SilentlyContinue
 }
 
 task Init -description "This tasks makes sure the build environment is correctly setup" {  
@@ -23,39 +29,30 @@ task Init -description "This tasks makes sure the build environment is correctly
 		-company "MvcSiteMapProvider" `
 		-product "MvcSiteMapProvider $version" `
 		-version $version `
-		-copyright "Copyright © Maarten Balliauw 2009 - 2012" `
+		-copyright "Copyright © Maarten Balliauw 2009 - 2013" `
 		-clsCompliant "false"
-        
-    if ((Test-Path $build_directory) -eq $false) {
-        New-Item $build_directory\\$solution\net35 -ItemType Directory
-        New-Item $build_directory\\$solution\net40 -ItemType Directory
-    }
 }
 
-# task Compile35 -depends Clean, Init -description "This task compiles the solution" {
-    # exec { 
-        # msbuild $source_directory\$solution.sln `
-            # /p:outdir=$build_directory\\$solution\\net35\\ `
-            # /verbosity:quiet `
-            # /p:Configuration=Release `
-			# /t:Rebuild `
-			# /property:WarningLevel=3 `
-            # /property:TargetFrameworkVersion=v3.5 `
-            # /property:DefineConstants=NET35
-    # }
-# }
-
 task Compile -depends Clean, Init -description "This task compiles the solution" {
-    exec { 
-        msbuild $source_directory\$solution.sln `
-            /p:outdir=$build_directory\\$solution\\net40\\ `
-            /verbosity:quiet `
-            /p:Configuration=Release `
-			/t:Rebuild `
-			/property:WarningLevel=3 `
-            /property:TargetFrameworkVersion=v4.0 `
-            /property:DefineConstants=NET40
-    }
+	foreach ($build in $builds)
+	{
+		$name = $build.Name
+		$finalDir = $build.NuGetDir
+		$constants = $build.Constants
+		$targetFrameworkVersion = $build.TargetFramework
+
+		exec { 
+			msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
+				/p:outdir=$build_directory\\$finalDir\\ `
+				/verbosity:quiet `
+				/p:Configuration=Release `
+				"/t:Clean;Rebuild" `
+				/p:WarningLevel=3 `
+				/p:TargetFrameworkVersion=$targetFrameworkVersion `
+				/p:DefineConstants=$constants `
+				/p:EnableNuGetPackageRestore=true
+		}
+	}
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {  
@@ -74,6 +71,6 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
     Move-Item *.nupkg $base_directory\release
 }
 
-task Finalize -depends NuGet -description "This tasks finalizes the build" {  
+task Finalize -depends Compile -description "This tasks finalizes the build" {  
 
 }
