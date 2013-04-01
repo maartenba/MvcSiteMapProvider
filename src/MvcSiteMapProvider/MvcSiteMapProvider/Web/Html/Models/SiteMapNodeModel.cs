@@ -11,6 +11,10 @@ namespace MvcSiteMapProvider.Web.Html.Models
     /// </summary>
     public class SiteMapNodeModel
     {
+        SiteMapNode _node;
+        MvcSiteMapNode _mvcNode;
+        IDictionary<string, object> _sourceMetadata;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
         /// </summary>
@@ -19,6 +23,34 @@ namespace MvcSiteMapProvider.Web.Html.Models
             RouteValues = new Dictionary<string, object>();
             MetaAttributes = new Dictionary<string, string>();
             Children = new SiteMapNodeModelList();
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="mvcNode">The MVC node.</param>
+        /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
+        public SiteMapNodeModel(SiteMapNode node, MvcSiteMapNode mvcNode, IDictionary<string, object> sourceMetadata)
+        {
+            _node = node;
+            _mvcNode = mvcNode;
+            _sourceMetadata = sourceMetadata;
+            var mvcNodeExist = mvcNode != null;
+            Area = (mvcNodeExist ? mvcNode.Area : "");
+            Controller = (mvcNodeExist ? mvcNode.Controller : "");
+            Action = (mvcNodeExist ? mvcNode.Action : "");
+            Title = node.Title;
+            Description = node.Description;
+            TargetFrame = (!mvcNodeExist ? "" : mvcNode.TargetFrame);
+            Url = node.Url;
+            IsCurrentNode = node == node.Provider.CurrentNode;
+            IsInCurrentPath = node.IsInCurrentPath();
+            IsRootNode = node == node.Provider.RootNode;
+            IsClickable = (!mvcNodeExist || mvcNode.Clickable);
+            RouteValues = (mvcNodeExist ? mvcNode.RouteValues : new Dictionary<string, object>());
+            MetaAttributes = (mvcNodeExist ? mvcNode.MetaAttributes : new Dictionary<string, string>());
+            SourceMetadata = sourceMetadata;
         }
 
         /// <summary>
@@ -120,9 +152,33 @@ namespace MvcSiteMapProvider.Web.Html.Models
         public IDictionary<string, object> SourceMetadata { get; set; }
 
         /// <summary>
-        /// Gets or sets the children.
+        /// Gets the children.
         /// </summary>
-        /// <value>The children.</value>
-        public SiteMapNodeModelList Children { get; set; }
+        public SiteMapNodeModelList Children
+        {
+            get
+            {
+                var list = new SiteMapNodeModelList();
+                if (_node.HasChildNodes)
+                {
+                    foreach (SiteMapNode child in _node.ChildNodes)
+                    {
+                        list.Add(new SiteMapNodeModel(child, _mvcNode, _sourceMetadata));
+                    }
+                }
+                return list;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the parent
+        /// </summary>
+        public SiteMapNodeModel Parent
+        {
+            get
+            {
+                return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _mvcNode, _sourceMetadata);
+            }
+        }
     }
 }
