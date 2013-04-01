@@ -1,6 +1,9 @@
 # MvcSiteMapProvider
 An ASP.NET MVC SiteMapProvider implementation for the ASP.NET MVC framework.
 
+## Note to contributors
+We are working on v4 of MvcSiteMapProvider and will be discontinuing development on the current version. If you want to provide contributions, please work on the v4 branch. Pull requests on the master branch will not be accepted for now.
+
 ## Like this project?
 [<img src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif">](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C8GLSG8E33NA4) via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C8GLSG8E33NA4).
 
