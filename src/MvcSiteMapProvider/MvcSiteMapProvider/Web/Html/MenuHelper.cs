@@ -984,7 +984,7 @@ namespace MvcSiteMapProvider.Web.Html
             if (node.IsAccessibleToUser())
             {
                 // Add node?
-                var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, sourceMetadata);
+                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent);
                 if (nodeVisible)
                 {
                     if (showStartingNode || !startingNodeInChildLevel)
@@ -994,22 +994,11 @@ namespace MvcSiteMapProvider.Web.Html
                 }
 
                 // Add child nodes
-                if (node.HasChildNodes)
+                if (startingNodeInChildLevel)
                 {
-                    foreach (ISiteMapNode childNode in node.ChildNodes)
+                    foreach (var item in nodeToAdd.Children)
                     {
-                        var childNodes = BuildModel(helper, sourceMetadata, childNode, false, true, maxDepth - 1, drillDownToCurrent).Nodes;
-                        foreach (var childNodeToAdd in childNodes)
-                        {
-                            if (!startingNodeInChildLevel)
-                            {
-                                nodeToAdd.Children.Add(childNodeToAdd);
-                            }
-                            else
-                            {
-                                model.Nodes.Add(childNodeToAdd);
-                            }
-                        }
+                        model.Nodes.AddRange(GetDescendants(item));
                     }
                 }
             }
@@ -1030,6 +1019,23 @@ namespace MvcSiteMapProvider.Web.Html
         private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
             return BuildModel(helper, sourceMetadata, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false);
+        }
+
+        /// <summary>
+        /// Retrieve all descendant children    
+        /// </summary>
+        /// <param name="node">the node</param>
+        /// <returns></returns>
+        private static IEnumerable<SiteMapNodeModel> GetDescendants(SiteMapNodeModel node)
+        {
+            yield return node;
+            foreach (var child in node.Children)
+            {
+                foreach (var deeperchild in GetDescendants(child))
+                {
+                    yield return deeperchild;
+                }
+            }
         }
 
         /// <summary>
