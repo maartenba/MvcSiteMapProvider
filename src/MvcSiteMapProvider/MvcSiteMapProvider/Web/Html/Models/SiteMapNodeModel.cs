@@ -163,7 +163,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                 {
                     foreach (SiteMapNode child in _node.ChildNodes)
                     {
-                        list.Add(new SiteMapNodeModel(child, _mvcNode, _sourceMetadata));
+                        list.Add(new SiteMapNodeModel(child, child as MvcSiteMapNode, _sourceMetadata));
                     }
                 }
                 return list;
@@ -177,7 +177,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         {
             get
             {
-                return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _mvcNode, _sourceMetadata);
+                return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _node.ParentNode as MvcSiteMapNode, _sourceMetadata);
             }
         }
     }
