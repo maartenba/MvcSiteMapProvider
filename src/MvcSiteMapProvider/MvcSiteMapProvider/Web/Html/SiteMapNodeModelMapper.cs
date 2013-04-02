@@ -15,7 +15,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// Maps to SiteMapNodeModel.
         /// </summary>
         /// <param name="node">The node.</param>
-        /// <param name="mvcNode">The MVC node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
         /// <returns>SiteMapNodeModel instance.</returns>
         public static SiteMapNodeModel MapToSiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
