@@ -9,10 +9,6 @@ namespace MvcSiteMapProvider.Web.Html.Models
     /// </summary>
     public class SiteMapNodeModel
     {
-        private ISiteMapNode _node;
-        private IDictionary<string, object> _sourceMetadata;
-        private int _maxDepth;
-        private bool _drillDownToCurrent;
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
         /// </summary>
@@ -20,37 +16,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         {
             RouteValues = new Dictionary<string, object>();
             Attributes = new Dictionary<string, string>();
-            //Children = new SiteMapNodeModelList();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
-        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent)
-        {
-            _node = node;
-            _sourceMetadata = sourceMetadata;
-            _maxDepth = maxDepth;
-            _drillDownToCurrent = drillDownToCurrent;
-            Area = (node != null ? node.Area : "");
-            Controller = (node != null ? node.Controller : "");
-            Action = (node != null ? node.Action : "");
-            Title = (node != null ? node.Title : "");
-            Description = (node != null ? node.Description : "");
-            TargetFrame = (node == null ? "" : node.TargetFrame);
-            ImageUrl = (node == null ? "" : node.ImageUrl);
-            Url = (node != null ? node.Url : "/");
-            CanonicalUrl = (node != null ? node.CanonicalUrl : "");
-            MetaRobotsContent = (node != null ? node.GetMetaRobotsContentString() : "");
-            IsCurrentNode = (node != null ? node == node.SiteMap.CurrentNode : false);
-            IsInCurrentPath = (node != null ? node.IsInCurrentPath() : true);
-            IsRootNode = (node != null ? node == node.SiteMap.RootNode : false);
-            IsClickable = (node == null || node.Clickable);
-            RouteValues = (node != null ? (IDictionary<string, object>)node.RouteValues : new Dictionary<string, object>());
-            Attributes = (node != null ? (IDictionary<string, string>)node.Attributes : new Dictionary<string, string>());
-            SourceMetadata = sourceMetadata;
+            Children = new SiteMapNodeModelList();
         }
 
         /// <summary>
@@ -164,34 +130,9 @@ namespace MvcSiteMapProvider.Web.Html.Models
         public IDictionary<string, object> SourceMetadata { get; set; }
 
         /// <summary>
-        /// Gets the children.
+        /// Gets or sets the children.
         /// </summary>
-        public SiteMapNodeModelList Children
-        {
-            get
-            {
-                var list = new SiteMapNodeModelList();
-                if (_maxDepth > 0 && _node.HasChildNodes)
-                {
-                    foreach (SiteMapNode child in _node.ChildNodes)
-                    {
-                        if (_node.IsAccessibleToUser() && _node.IsVisible(_sourceMetadata))
-                            list.Add(new SiteMapNodeModel(child, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent));
-                    }
-                }
-                return list;
-            }
-        }
-
-        /// <summary>
-        /// Gets the parent
-        /// </summary>
-        public SiteMapNodeModel Parent
-        {
-            get
-            {
-                return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent);
-            }
-        }
+        /// <value>The children.</value>
+        public SiteMapNodeModelList Children { get; set; }
     }
 }
