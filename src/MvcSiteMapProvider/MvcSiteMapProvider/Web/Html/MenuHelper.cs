@@ -209,7 +209,7 @@ namespace MvcSiteMapProvider.Web.Html
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, startingNode, true, false, maxDepth + 1, drillDownToContent, sourceMetadata);
+            return Menu(helper, startingNode, true, false, maxDepth, drillDownToContent, sourceMetadata);
         }
 
         /// <summary>
@@ -343,7 +343,7 @@ namespace MvcSiteMapProvider.Web.Html
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth + 1, drillDownToContent, sourceMetadata);
+            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, sourceMetadata);
         }
 
         /// <summary>
@@ -692,7 +692,7 @@ namespace MvcSiteMapProvider.Web.Html
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, templateName, startingNode, true, true, maxDepth + 1, drillDownToCurrent, sourceMetadata);
+            return Menu(helper, templateName, startingNode, true, true, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
         /// <summary>
@@ -791,7 +791,7 @@ namespace MvcSiteMapProvider.Web.Html
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth + 1, drillDownToCurrent, sourceMetadata);
+            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
 
@@ -965,27 +965,13 @@ namespace MvcSiteMapProvider.Web.Html
                 return model;
             }
 
-            bool continueBuilding = ReachedMaximalNodelevel(maxDepth, node, drillDownToCurrent);
-
-            // Check if maximal node level has not been reached
-            if (!continueBuilding)
-            {
-                return model;
-            }
-
-            // Check visibility
-            bool nodeVisible = true;
-            if (node != null)
-            {
-                nodeVisible = node.IsVisible(sourceMetadata);
-            }
-
             // Check ACL
             if (node.IsAccessibleToUser())
             {
                 // Add node?
                 var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent);
-                if (nodeVisible)
+                // Check visibility
+                if (node.IsVisible(sourceMetadata))
                 {
                     if (showStartingNode || !startingNodeInChildLevel)
                     {
@@ -1162,30 +1148,6 @@ namespace MvcSiteMapProvider.Web.Html
             return null;
         }
 
-        /// <summary>
-        /// Test if the maximal nodelevel has not been reached
-        /// </summary>
-        /// <param name="maxDepth">The normal max depth.</param>
-        /// <param name="node">The starting node</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <returns></returns>
-        private static bool ReachedMaximalNodelevel(int maxDepth, ISiteMapNode node, bool drillDownToCurrent)
-        {
-            if (maxDepth > 0)
-                return true;
-            if (!drillDownToCurrent)
-                return false;
-            if (node.IsInCurrentPath())
-                return true;
-            if (node.ParentNode == node.SiteMap.CurrentNode)
-                return true;
-            foreach (ISiteMapNode sibling in node.ParentNode.ChildNodes)
-            {
-                if (sibling.IsInCurrentPath())
-                    return true;
-            }
-            return false;
-        }
 
         /// <summary>
         /// Gets the source meta data for the current context.
