@@ -171,7 +171,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             get
             {
                 var list = new SiteMapNodeModelList();
-                if (ReachedMaximalNodelevel(_maxDepth,_node,_drillDownToCurrent) && _node.HasChildNodes)
+                if (_maxDepth > 0 && _node.HasChildNodes)
                 {
                     foreach (SiteMapNode child in _node.ChildNodes)
                     {
@@ -192,31 +192,6 @@ namespace MvcSiteMapProvider.Web.Html.Models
             {
                 return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent);
             }
-        }
-
-        /// <summary>
-        /// Test if the maximal nodelevel has not been reached
-        /// </summary>
-        /// <param name="maxDepth">The normal max depth.</param>
-        /// <param name="node">The starting node</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <returns></returns>
-        private bool ReachedMaximalNodelevel(int maxDepth, ISiteMapNode node, bool drillDownToCurrent)
-        {
-            if (maxDepth > 0)
-                return true;
-            if (!drillDownToCurrent)
-                return false;
-            if (node.IsInCurrentPath())
-                return true;
-            if (node.ParentNode == node.SiteMap.CurrentNode)
-                return true;
-            foreach (ISiteMapNode sibling in node.ParentNode.ChildNodes)
-            {
-                if (sibling.IsInCurrentPath())
-                    return true;
-            }
-            return false;
         }
     }
 }
