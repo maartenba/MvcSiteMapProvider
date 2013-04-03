@@ -99,9 +99,6 @@ namespace MvcSiteMapProvider
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
-            //if (SiteMapProviderEventHandler.OnAddingSiteMapNode(new SiteMapProviderEventContext(this, node, root)))
-            //{
-
             // Avoid issue with url table not clearing correctly.
             if (this.FindSiteMapNode(node.Url) != null)
             {
@@ -118,9 +115,6 @@ namespace MvcSiteMapProvider
                 if (parentNode != null) this.RemoveNode(parentNode);
                 AddNodeInternal(node, parentNode);
             }
-
-            //    SiteMapProviderEventHandler.OnAddedSiteMapNode(new SiteMapProviderEventContext(this, node, root));
-            //}
         }
 
         protected virtual void AddNodeInternal(ISiteMapNode node, ISiteMapNode parentNode)
