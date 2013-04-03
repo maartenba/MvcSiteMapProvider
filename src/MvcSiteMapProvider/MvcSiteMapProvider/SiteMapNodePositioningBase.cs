@@ -121,15 +121,7 @@ namespace MvcSiteMapProvider
         /// </value>
         public override ISiteMapNode RootNode
         {
-            get
-            {
-                var rootNode = this.SiteMap.RootNode;
-                if (rootNode == null)
-                {
-                    throw new InvalidOperationException(Resources.Messages.SiteMapInvalidRootNode);
-                }
-                return rootNode;
-            }
+            get { return this.SiteMap.RootNode; }
         }
 
         /// <summary>

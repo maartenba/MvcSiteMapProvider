@@ -150,8 +150,8 @@
   <data name="PhysicalPathNotAllowed" xml:space="preserve">
     <value>'{0}' is a physical path, but a virtual path was expected.</value>
   </data>
-  <data name="SiteMapInvalidRootNode" xml:space="preserve">
-    <value>Root node defined in SiteMap is null, root node cannot be null.</value>
+  <data name="SiteMapRootNodeNotDefined" xml:space="preserve">
+    <value>The site map builders returned null for root node. Root node defined in SiteMap cannot be null. Please make sure you return a root node for each SiteMapBuilderSet and that a root node is set in your sitemap XML file if you are using one.</value>
   </data>
   <data name="SiteMapLoaderAlreadySet" xml:space="preserve">
     <value>The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the 'MvcSiteMapProvider_UseExternalDIContainer' in the AppSettings section of the web.config file to 'true' if you are using an external dependency injection container.</value>

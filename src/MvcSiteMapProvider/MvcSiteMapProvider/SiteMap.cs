@@ -241,6 +241,10 @@ namespace MvcSiteMapProvider
             // If this was called before, just ignore this call.
             if (root != null) return;
             root = pluginProvider.SiteMapBuilder.BuildSiteMap(this, root);
+            if (root == null)
+            {
+                throw new MvcSiteMapException(Resources.Messages.SiteMapRootNodeNotDefined);
+            }
         }
 
         /// <summary>

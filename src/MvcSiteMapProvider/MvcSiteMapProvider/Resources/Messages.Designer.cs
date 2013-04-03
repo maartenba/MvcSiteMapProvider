@@ -259,15 +259,6 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Root node defined in SiteMap is null, root node cannot be null..
-        /// </summary>
-        internal static string SiteMapInvalidRootNode {
-            get {
-                return ResourceManager.GetString("SiteMapInvalidRootNode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the &apos;MvcSiteMapProvider_UseExternalDIContainer&apos; in the AppSettings section of the web.config file to &apos;true&apos; if you are using an external dependency injection container..
         /// </summary>
         internal static string SiteMapLoaderAlreadySet {
@@ -309,6 +300,15 @@ namespace MvcSiteMapProvider.Resources {
         internal static string SiteMapReadOnly {
             get {
                 return ResourceManager.GetString("SiteMapReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The site map builders returned null for root node. Root node defined in SiteMap cannot be null. Please make sure you return a root node for each SiteMapBuilderSet and that a root node is set in your sitemap XML file if you are using one..
+        /// </summary>
+        internal static string SiteMapRootNodeNotDefined {
+            get {
+                return ResourceManager.GetString("SiteMapRootNodeNotDefined", resourceCulture);
             }
         }
         
