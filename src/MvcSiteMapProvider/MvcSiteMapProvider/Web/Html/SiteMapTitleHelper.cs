@@ -96,7 +96,7 @@ namespace MvcSiteMapProvider.Web.Html
             // Map to model
             return new SiteMapTitleHelperModel
             {
-                CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, sourceMetadata)
+                CurrentNode = new SiteMapNodeModel(startingNode, sourceMetadata)
             };
         }
 

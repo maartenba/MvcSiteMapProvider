@@ -22,12 +22,20 @@ namespace MvcSiteMapProvider.Web.Html.Models
             Attributes = new Dictionary<string, string>();
             //Children = new SiteMapNodeModelList();
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
+        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata) : this(node, sourceMetadata, Int32.MaxValue, true) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
         /// </summary>
         /// <param name="node">The node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent)
         {
             _node = node;
@@ -164,22 +172,30 @@ namespace MvcSiteMapProvider.Web.Html.Models
         public IDictionary<string, object> SourceMetadata { get; set; }
 
         /// <summary>
+        /// for storing the children
+        /// </summary>
+        private SiteMapNodeModelList _children;
+
+        /// <summary>
         /// Gets the children.
         /// </summary>
         public SiteMapNodeModelList Children
         {
             get
             {
-                var list = new SiteMapNodeModelList();
-                if (ReachedMaximalNodelevel(_maxDepth,_node,_drillDownToCurrent) && _node.HasChildNodes)
+                if (_children == null)
                 {
-                    foreach (SiteMapNode child in _node.ChildNodes)
+                    _children = new SiteMapNodeModelList();
+                    if (ReachedMaximalNodelevel(_maxDepth, _node, _drillDownToCurrent) && _node.HasChildNodes)
                     {
-                        if (_node.IsAccessibleToUser() && _node.IsVisible(_sourceMetadata))
-                            list.Add(new SiteMapNodeModel(child, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent));
+                        foreach (SiteMapNode child in _node.ChildNodes)
+                        {
+                            if (child.IsAccessibleToUser() && child.IsVisible(_sourceMetadata))
+                                _children.Add(new SiteMapNodeModel(child, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent));
+                        }
                     }
                 }
-                return list;
+                return _children;
             }
         }
 
@@ -191,6 +207,40 @@ namespace MvcSiteMapProvider.Web.Html.Models
             get
             {
                 return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent);
+            }
+        }
+
+        /// <summary>
+        /// for storing the descendents.
+        /// </summary>
+        private List<SiteMapNodeModel> _descendants = new List<SiteMapNodeModel>();
+
+        /// <summary>
+        /// Gets the descendants.
+        /// </summary>
+        public IEnumerable<SiteMapNodeModel> Descendants
+        {
+            get
+            {
+                GetDescendants(this);
+                return _descendants;
+            }
+        }
+
+        /// <summary>
+        /// for storing the ancestors.
+        /// </summary>
+        private List<SiteMapNodeModel> _ancestors = new List<SiteMapNodeModel>();
+
+        /// <summary>
+        /// Gets the ancestors.
+        /// </summary>
+        public IEnumerable<SiteMapNodeModel> Ancestors
+        {
+            get
+            {
+                GetAncestors(this);
+                return _ancestors;
             }
         }
 
@@ -217,6 +267,34 @@ namespace MvcSiteMapProvider.Web.Html.Models
                     return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Retrieve all descendants    
+        /// </summary>
+        /// <param name="node">the node</param>
+        /// <returns></returns>
+        private void GetDescendants(SiteMapNodeModel node)
+        {
+            foreach (var child in node.Children)
+            {
+                _descendants.Add(child);
+                GetDescendants(child);
+            }
+        }
+
+        /// <summary>
+        /// Retrieve all ancestors  
+        /// </summary>
+        /// <param name="node">the node</param>
+        /// <returns></returns>
+        private void GetAncestors(SiteMapNodeModel node)
+        {
+            if (node.Parent != null)
+            {
+                GetAncestors(node.Parent);
+            }
+            _ancestors.Add(node);
         }
     }
 }
