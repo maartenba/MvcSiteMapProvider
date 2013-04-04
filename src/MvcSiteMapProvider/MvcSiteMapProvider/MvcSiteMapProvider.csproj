@@ -277,7 +277,6 @@
     <Compile Include="Web\Html\Models\SiteMapTitleHelperModel.cs" />
     <Compile Include="Web\Html\MvcSiteMapHtmlHelper.cs" />
     <Compile Include="Web\Html\SiteMapHelper.cs" />
-    <Compile Include="Web\Html\SiteMapNodeModelMapper.cs" />
     <Compile Include="Web\Html\SiteMapPathHelper.cs" />
     <Compile Include="Web\Html\SiteMapTitleHelper.cs" />
     <Compile Include="Web\IUrlPath.cs" />
