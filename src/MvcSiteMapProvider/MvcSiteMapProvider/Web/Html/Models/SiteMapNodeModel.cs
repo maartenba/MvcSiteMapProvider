@@ -200,6 +200,17 @@ namespace MvcSiteMapProvider.Web.Html.Models
         }
 
         /// <summary>
+        /// Gets the descendants.
+        /// </summary>
+        public IEnumerable<SiteMapNodeModel> Descendants
+        {
+            get
+            {
+                return GetDescendants(this);
+            }
+        }
+
+        /// <summary>
         /// Gets the parent
         /// </summary>
         public SiteMapNodeModel Parent
@@ -207,40 +218,6 @@ namespace MvcSiteMapProvider.Web.Html.Models
             get
             {
                 return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent);
-            }
-        }
-
-        /// <summary>
-        /// for storing the descendents
-        /// </summary>
-        private List<SiteMapNodeModel> _descendants = new List<SiteMapNodeModel>();
-
-        /// <summary>
-        /// Gets the descendants.
-        /// </summary>
-        public IEnumerable<SiteMapNodeModel> Descendants
-        {
-            get
-            {
-                GetDescendants(this);
-                return _descendants;
-            }
-        }
-
-        /// <summary>
-        /// for storing the descendents
-        /// </summary>
-        private List<SiteMapNodeModel> _ancestors = new List<SiteMapNodeModel>();
-
-        /// <summary>
-        /// Gets the descendants.
-        /// </summary>
-        public IEnumerable<SiteMapNodeModel> Ancestors
-        {
-            get
-            {
-                GetAncestors(this);
-                return _ancestors;
             }
         }
 
@@ -274,27 +251,16 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// </summary>
         /// <param name="node">the node</param>
         /// <returns></returns>
-        private void GetDescendants(SiteMapNodeModel node)
+        private IEnumerable<SiteMapNodeModel> GetDescendants(SiteMapNodeModel node)
         {
             foreach (var child in node.Children)
             {
-                _descendants.Add(child);
-                GetDescendants(child);
+                yield return child;
+                foreach (var deeperchild in GetDescendants(child))
+                {
+                    yield return deeperchild;
+                }
             }
-        }
-
-        /// <summary>
-        /// Retrieve all descendant children    
-        /// </summary>
-        /// <param name="node">the node</param>
-        /// <returns></returns>
-        private void GetAncestors(SiteMapNodeModel node)
-        {
-            if (node.Parent != null)
-            {
-                GetAncestors(node.Parent);
-            }
-            _ancestors.Add(node);
         }
     }
 }

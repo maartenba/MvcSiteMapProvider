@@ -193,9 +193,21 @@ namespace MvcSiteMapProvider.Web.Html
             if (node != null && node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
             {
                 // Add node
-                model.Nodes.AddRange((new SiteMapNodeModel(node, sourceMetadata)).Ancestors);
+                model.Nodes.AddRange(GetAncestors(new SiteMapNodeModel(node, sourceMetadata)));
             }
             return model;
+        }
+
+        private static IEnumerable<SiteMapNodeModel> GetAncestors(SiteMapNodeModel node)
+        {
+            if (node.Parent != null)
+            {
+                foreach (var ancestor in GetAncestors(node.Parent))
+                {
+                    yield return ancestor;
+                }
+            }
+            yield return node;
         }
 
         /// <summary>
