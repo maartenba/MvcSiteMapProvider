@@ -982,10 +982,7 @@ namespace MvcSiteMapProvider.Web.Html
                 // Add child nodes
                 if (startingNodeInChildLevel)
                 {
-                    foreach (var item in nodeToAdd.Children)
-                    {
-                        model.Nodes.AddRange(GetDescendants(item));
-                    }
+                    model.Nodes.AddRange(nodeToAdd.Descendants);
                 }
             }
 
@@ -1005,23 +1002,6 @@ namespace MvcSiteMapProvider.Web.Html
         private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
             return BuildModel(helper, sourceMetadata, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false);
-        }
-
-        /// <summary>
-        /// Retrieve all descendant children    
-        /// </summary>
-        /// <param name="node">the node</param>
-        /// <returns></returns>
-        private static IEnumerable<SiteMapNodeModel> GetDescendants(SiteMapNodeModel node)
-        {
-            yield return node;
-            foreach (var child in node.Children)
-            {
-                foreach (var deeperchild in GetDescendants(child))
-                {
-                    yield return deeperchild;
-                }
-            }
         }
 
         /// <summary>
