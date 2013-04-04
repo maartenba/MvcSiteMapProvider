@@ -9,25 +9,15 @@ namespace MvcSiteMapProvider.Web.Html.Models
     /// </summary>
     public class SiteMapNodeModel
     {
-        private ISiteMapNode _node;
-        private IDictionary<string, object> _sourceMetadata;
-        private int _maxDepth;
-        private bool _drillDownToCurrent;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
-        /// </summary>
-        public SiteMapNodeModel()
-        {
-            RouteValues = new Dictionary<string, object>();
-            Attributes = new Dictionary<string, string>();
-            //Children = new SiteMapNodeModelList();
-        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
         /// </summary>
         /// <param name="node">The node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
-        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata) : this(node, sourceMetadata, Int32.MaxValue, true) { }
+        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata) 
+            : this(node, sourceMetadata, Int32.MaxValue, true) 
+        { 
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
@@ -38,88 +28,102 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent)
         {
-            _node = node;
-            _sourceMetadata = sourceMetadata;
-            _maxDepth = maxDepth;
-            _drillDownToCurrent = drillDownToCurrent;
-            Area = (node != null ? node.Area : "");
-            Controller = (node != null ? node.Controller : "");
-            Action = (node != null ? node.Action : "");
-            Title = (node != null ? node.Title : "");
-            Description = (node != null ? node.Description : "");
-            TargetFrame = (node == null ? "" : node.TargetFrame);
-            ImageUrl = (node == null ? "" : node.ImageUrl);
-            Url = (node != null ? node.Url : "/");
-            CanonicalUrl = (node != null ? node.CanonicalUrl : "");
-            MetaRobotsContent = (node != null ? node.GetMetaRobotsContentString() : "");
-            IsCurrentNode = (node != null ? node == node.SiteMap.CurrentNode : false);
-            IsInCurrentPath = (node != null ? node.IsInCurrentPath() : true);
-            IsRootNode = (node != null ? node == node.SiteMap.RootNode : false);
-            IsClickable = (node == null || node.Clickable);
-            RouteValues = (node != null ? (IDictionary<string, object>)node.RouteValues : new Dictionary<string, object>());
-            Attributes = (node != null ? (IDictionary<string, string>)node.Attributes : new Dictionary<string, string>());
-            SourceMetadata = sourceMetadata;
+            if (node == null)
+                throw new ArgumentNullException("node");
+            if (sourceMetadata == null)
+                throw new ArgumentNullException("sourceMetadata");
+            if (maxDepth < 0)
+                throw new ArgumentOutOfRangeException("maxDepth");
+
+            this.node = node;
+            this.maxDepth = maxDepth;
+            this.drillDownToCurrent = drillDownToCurrent;
+            this.SourceMetadata = sourceMetadata;
+
+            Area = node.Area;
+            Controller = node.Controller;
+            Action = node.Action;
+            Title = node.Title;
+            Description = node.Description;
+            TargetFrame = node.TargetFrame;
+            ImageUrl = node.ImageUrl;
+            Url = node.Url;
+            CanonicalUrl = node.CanonicalUrl;
+            MetaRobotsContent = node.GetMetaRobotsContentString();
+            IsCurrentNode = (node == node.SiteMap.CurrentNode);
+            IsInCurrentPath = node.IsInCurrentPath();
+            IsRootNode = (node == node.SiteMap.RootNode);
+            IsClickable = node.Clickable;
+            RouteValues = node.RouteValues;
+            Attributes = node.Attributes;
         }
+
+        protected readonly ISiteMapNode node;
+        protected readonly int maxDepth;
+        protected readonly bool drillDownToCurrent;
+        protected readonly SiteMapNodeModelList descendants = new SiteMapNodeModelList();
+        protected readonly SiteMapNodeModelList ancestors = new SiteMapNodeModelList();
+        protected SiteMapNodeModelList children;
 
         /// <summary>
         /// Gets or sets the area.
         /// </summary>
         /// <value>The area.</value>
-        public string Area { get; set; }
+        public string Area { get; protected set; }
 
         /// <summary>
         /// Gets or sets the controller.
         /// </summary>
         /// <value>The controller.</value>
-        public string Controller { get; set; }
+        public string Controller { get; protected set; }
 
         /// <summary>
         /// Gets or sets the action.
         /// </summary>
         /// <value>The action.</value>
-        public string Action { get; set; }
+        public string Action { get; protected set; }
 
         /// <summary>
         /// Gets or sets the URL.
         /// </summary>
         /// <value>The URL.</value>
-        public string Url { get; set; }
+        public string Url { get; protected set; }
 
         /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
         /// <value>The canonical URL.</value>
-        public string CanonicalUrl { get; set; }
+        public string CanonicalUrl { get; protected set; }
 
         /// <summary>
         /// Gets or sets the content value of the meta robots tag.
         /// </summary>
         /// <value>The content value of the meta robots tag.</value>
-        public string MetaRobotsContent { get; set; }
+        public string MetaRobotsContent { get; protected set; }
 
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
         /// <value>The title.</value>
-        public string Title { get; set; }
+        public string Title { get; protected set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        public string Description { get; set; }
+        public string Description { get; protected set; }
 
         /// <summary>
         /// Gets or sets the target frame.
         /// </summary>
         /// <value>The target frame.</value>
-        public string TargetFrame { get; set; }
+        public string TargetFrame { get; protected set; }
 
         /// <summary>
         /// Gets or sets the image URL.
         /// </summary>
         /// <value>The image URL.</value>
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is current node.
@@ -127,7 +131,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <value>
         /// 	<c>true</c> if this instance is current node; otherwise, <c>false</c>.
         /// </value>
-        public bool IsCurrentNode { get; set; }
+        public bool IsCurrentNode { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is in current path.
@@ -135,7 +139,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <value>
         /// 	<c>true</c> if this instance is in current path; otherwise, <c>false</c>.
         /// </value>
-        public bool IsInCurrentPath { get; set; }
+        public bool IsInCurrentPath { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is root node.
@@ -143,7 +147,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <value>
         /// 	<c>true</c> if this instance is root node; otherwise, <c>false</c>.
         /// </value>
-        public bool IsRootNode { get; set; }
+        public bool IsRootNode { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is clickable.
@@ -151,30 +155,25 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <value>
         /// 	<c>true</c> if this instance is clickable; otherwise, <c>false</c>.
         /// </value>
-        public bool IsClickable { get; set; }
+        public bool IsClickable { get; protected set; }
 
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>
         /// <value>The route values.</value>
-        public IDictionary<string, object> RouteValues { get; set; }
+        public IDictionary<string, object> RouteValues { get; protected set; }
 
         /// <summary>
         /// Gets or sets the meta attributes.
         /// </summary>
         /// <value>The meta attributes.</value>
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, string> Attributes { get; protected set; }
 
         /// <summary>
         /// Gets or sets the source metadata generated by the HtmlHelper.
         /// </summary>
         /// <value>The source metadata.</value>
-        public IDictionary<string, object> SourceMetadata { get; set; }
-
-        /// <summary>
-        /// for storing the children
-        /// </summary>
-        private SiteMapNodeModelList _children;
+        public IDictionary<string, object> SourceMetadata { get; protected set; }
 
         /// <summary>
         /// Gets the children.
@@ -183,19 +182,19 @@ namespace MvcSiteMapProvider.Web.Html.Models
         {
             get
             {
-                if (_children == null)
+                if (children == null)
                 {
-                    _children = new SiteMapNodeModelList();
-                    if (ReachedMaximalNodelevel(_maxDepth, _node, _drillDownToCurrent) && _node.HasChildNodes)
+                    children = new SiteMapNodeModelList();
+                    if (ReachedMaximalNodelevel(maxDepth, node, drillDownToCurrent) && node.HasChildNodes)
                     {
-                        foreach (SiteMapNode child in _node.ChildNodes)
+                        foreach (SiteMapNode child in node.ChildNodes)
                         {
-                            if (child.IsAccessibleToUser() && child.IsVisible(_sourceMetadata))
-                                _children.Add(new SiteMapNodeModel(child, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent));
+                            if (child.IsAccessibleToUser() && child.IsVisible(SourceMetadata))
+                                children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent));
                         }
                     }
                 }
-                return _children;
+                return children;
             }
         }
 
@@ -206,41 +205,33 @@ namespace MvcSiteMapProvider.Web.Html.Models
         {
             get
             {
-                return _node.ParentNode == null ? null : new SiteMapNodeModel(_node.ParentNode, _sourceMetadata, _maxDepth - 1, _drillDownToCurrent);
+                return node.ParentNode == null
+                    ? null 
+                    : new SiteMapNodeModel(node.ParentNode, SourceMetadata, maxDepth - 1, drillDownToCurrent);
             }
         }
-
-        /// <summary>
-        /// for storing the descendents.
-        /// </summary>
-        private List<SiteMapNodeModel> _descendants = new List<SiteMapNodeModel>();
 
         /// <summary>
         /// Gets the descendants.
         /// </summary>
-        public IEnumerable<SiteMapNodeModel> Descendants
+        public SiteMapNodeModelList Descendants
         {
             get
             {
                 GetDescendants(this);
-                return _descendants;
+                return descendants;
             }
         }
 
         /// <summary>
-        /// for storing the ancestors.
-        /// </summary>
-        private List<SiteMapNodeModel> _ancestors = new List<SiteMapNodeModel>();
-
-        /// <summary>
         /// Gets the ancestors.
         /// </summary>
-        public IEnumerable<SiteMapNodeModel> Ancestors
+        public SiteMapNodeModelList Ancestors
         {
             get
             {
                 GetAncestors(this);
-                return _ancestors;
+                return ancestors;
             }
         }
 
@@ -278,7 +269,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         {
             foreach (var child in node.Children)
             {
-                _descendants.Add(child);
+                descendants.Add(child);
                 GetDescendants(child);
             }
         }
@@ -294,7 +285,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             {
                 GetAncestors(node.Parent);
             }
-            _ancestors.Add(node);
+            ancestors.Add(node);
         }
     }
 }
