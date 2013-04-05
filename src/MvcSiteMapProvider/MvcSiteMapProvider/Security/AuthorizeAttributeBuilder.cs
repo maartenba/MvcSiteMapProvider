@@ -16,6 +16,7 @@ namespace MvcSiteMapProvider.Security
     /// AuthorizeAttributeBuilder class
     /// </summary>
     public class AuthorizeAttributeBuilder
+        : IAuthorizeAttributeBuilder
     {
         private static readonly Type AuthorizeAttributeType = typeof(IAuthorizeAttribute);
         private static readonly ModuleBuilder Module = CreateModuleBuilder();

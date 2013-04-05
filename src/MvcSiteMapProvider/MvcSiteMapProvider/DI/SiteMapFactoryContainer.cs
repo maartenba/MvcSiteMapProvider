@@ -59,7 +59,8 @@ namespace MvcSiteMapProvider.DI
                     this.mvcContextFactory,
                     new ObjectCopier(),
                     new ControllerDescriptorFactory(),
-                    new ControllerBuilderAdaptor(ControllerBuilder.Current)
+                    new ControllerBuilderAdaptor(ControllerBuilder.Current),
+                    new AuthorizeAttributeBuilder()
 #if !MVC2
                     , new FilterProvider()
 #endif

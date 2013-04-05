@@ -36,12 +36,6 @@ namespace MvcSiteMapProvider.Security
         /// </returns>
         public virtual bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
-            // Is security trimming enabled?
-            if (!siteMap.SecurityTrimmingEnabled)
-            {
-                return true;
-            }
-
             // Use child modules
             bool result = true;
             foreach (var module in aclModules)

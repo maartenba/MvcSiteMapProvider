@@ -34,12 +34,6 @@ namespace MvcSiteMapProvider.Security
         /// </returns>
         public bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
-            // Is security trimming enabled?
-            if (!siteMap.SecurityTrimmingEnabled)
-            {
-                return true;
-            }
-
             // If we have roles assigned, check them against the roles defined in the sitemap
             if (node.Roles != null && node.Roles.Count > 0)
             {

@@ -31,9 +31,14 @@ namespace MvcSiteMapProvider.Web
 #if !MVC2
         bool IsLocalUrl(string url);
 #endif
-#if MVC4
+
+#if MVC2
+#else
+#if MVC3
+#else
         string HttpRouteUrl(string routeName, object routeValues);
         string HttpRouteUrl(string routeName, RouteValueDictionary routeValues);
+#endif
 #endif
 
     }

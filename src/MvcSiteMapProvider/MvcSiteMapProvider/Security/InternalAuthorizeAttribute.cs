@@ -6,20 +6,9 @@ namespace MvcSiteMapProvider.Security
     /// <summary>
     /// InternalAuthorize class
     /// </summary>
-    public class InternalAuthorize 
+    public class InternalAuthorizeAttribute 
         : AuthorizeAttribute, IAuthorizeAttribute
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InternalAuthorize"/> class.
-        /// </summary>
-        /// <param name="attribute">The attribute.</param>
-        public InternalAuthorize(AuthorizeAttribute attribute)
-        {
-            Order = attribute.Order;
-            Roles = attribute.Roles;
-            Users = attribute.Users;
-        }
-
         /// <summary>
         /// Determines whether the specified HTTP context is authorized.
         /// </summary>

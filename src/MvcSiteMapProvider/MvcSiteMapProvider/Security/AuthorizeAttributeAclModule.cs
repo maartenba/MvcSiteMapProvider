@@ -21,7 +21,8 @@ namespace MvcSiteMapProvider.Security
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
-            IControllerBuilder controllerBuilder
+            IControllerBuilder controllerBuilder,
+            IAuthorizeAttributeBuilder authorizeAttributeBuilder
         )
         {
             if (mvcContextFactory == null)
@@ -32,23 +33,28 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("controllerDescriptorFactory");
             if (controllerBuilder == null)
                 throw new ArgumentNullException("controllerBuilder");
+            if (authorizeAttributeBuilder == null)
+                throw new ArgumentNullException("authorizeAttributeBuilder");
 
             this.mvcContextFactory = mvcContextFactory;
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.controllerBuilder = controllerBuilder;
+            this.authorizeAttributeBuilder = authorizeAttributeBuilder;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly IControllerBuilder controllerBuilder;
+        protected readonly IAuthorizeAttributeBuilder authorizeAttributeBuilder;
 #else
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
             IControllerBuilder controllerBuilder,
+            IAuthorizeAttributeBuilder authorizeAttributeBuilder,
             IFilterProvider filterProvider
             )
         {
@@ -60,6 +66,8 @@ namespace MvcSiteMapProvider.Security
                 throw new ArgumentNullException("controllerDescriptorFactory");
             if (controllerBuilder == null)
                 throw new ArgumentNullException("controllerBuilder");
+            if (authorizeAttributeBuilder == null)
+                throw new ArgumentNullException("authorizeAttributeBuilder");
             if (filterProvider == null)
                 throw new ArgumentNullException("filterProvider");
 
@@ -67,6 +75,7 @@ namespace MvcSiteMapProvider.Security
             this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.controllerBuilder = controllerBuilder;
+            this.authorizeAttributeBuilder = authorizeAttributeBuilder;
             this.filterProvider = filterProvider;
         }
 
@@ -74,8 +83,11 @@ namespace MvcSiteMapProvider.Security
         protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly IControllerBuilder controllerBuilder;
+        protected readonly IAuthorizeAttributeBuilder authorizeAttributeBuilder;
         protected readonly IFilterProvider filterProvider;
+        
 #endif
+        private static readonly Type defaultAuthorizeAttributeType = typeof(AuthorizeAttribute);
 
         #region IAclModule Members
 
@@ -89,8 +101,8 @@ namespace MvcSiteMapProvider.Security
         /// </returns>
         public bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
-            // Is security trimming enabled?
-            if (!siteMap.SecurityTrimmingEnabled)
+            // Clickable? Always accessible.
+            if (node.Clickable == false)
             {
                 return true;
             }
@@ -99,12 +111,6 @@ namespace MvcSiteMapProvider.Security
 
             // Is it an external Url?
             if (node.HasExternalUrl(httpContext))
-            {
-                return true;
-            }
-
-            // Clickable? Always accessible.
-            if (node.Clickable == false)
             {
                 return true;
             }
@@ -228,8 +234,6 @@ namespace MvcSiteMapProvider.Security
             return true;
         }
 
-
-
 #if MVC2
         protected virtual IEnumerable<AuthorizeAttribute> GetAuthorizeAttributes(ActionDescriptor actionDescriptor, ControllerContext controllerContext)
         {
@@ -250,7 +254,13 @@ namespace MvcSiteMapProvider.Security
         }
 #endif
 
-#if !MVC4
+#if MVC2
+        protected virtual bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
+        {
+            return false;
+        }
+#else
+#if MVC3
         protected virtual bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
         {
             return false;
@@ -263,21 +273,32 @@ namespace MvcSiteMapProvider.Security
                 actionDescriptor.ControllerDescriptor.IsDefined(allowAnonymousType, true));
         }
 #endif
+#endif
 
         protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext)
         {
             // Reasoning for using Reflection and AuthorizeAttribute rather than IAuthorizationFilter
             // http://weblogs.asp.net/rashid/archive/2009/09/06/asp-net-mvc-and-authorization-and-monkey-patching.aspx
+
             var currentAuthorizationAttributeType = authorizeAttribute.GetType();
+            var isDefaultAttribute = (currentAuthorizationAttributeType == defaultAuthorizeAttributeType);
 
-            var builder = new AuthorizeAttributeBuilder();
             var subclassedAttribute =
-                currentAuthorizationAttributeType == typeof(AuthorizeAttribute) ?
-                   new InternalAuthorize(authorizeAttribute) : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
-                   (IAuthorizeAttribute)builder.Build(currentAuthorizationAttributeType).Invoke(null);
+                isDefaultAttribute ?
+                new InternalAuthorizeAttribute() : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
+                authorizeAttribute is IAuthorizeAttribute ?
+                authorizeAttribute as IAuthorizeAttribute :
+                authorizeAttributeBuilder.Build(currentAuthorizationAttributeType).Invoke(new object[0]) as IAuthorizeAttribute;
 
-            // Copy all properties
-            objectCopier.Copy(authorizeAttribute, subclassedAttribute);
+            subclassedAttribute.Order = authorizeAttribute.Order;
+            subclassedAttribute.Roles = authorizeAttribute.Roles;
+            subclassedAttribute.Users = authorizeAttribute.Users;
+
+            if (!isDefaultAttribute)
+            {
+                // Copy remaining properties
+                objectCopier.Copy(authorizeAttribute, subclassedAttribute, "Order", "Roles", "Users");
+            }
 
             return subclassedAttribute.IsAuthorized(controllerContext.HttpContext);
         }
