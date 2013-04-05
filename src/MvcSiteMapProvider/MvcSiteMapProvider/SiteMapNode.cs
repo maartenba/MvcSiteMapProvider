@@ -407,7 +407,7 @@ namespace MvcSiteMapProvider
                 if (!String.IsNullOrEmpty(absoluteCanonicalUrl))
                 {
                     var httpContext = mvcContextFactory.CreateHttpContext();
-                    if (absoluteCanonicalUrl.Equals(httpContext.Request.Url.AbsoluteUri))
+                    if (absoluteCanonicalUrl.Equals(urlPath.UrlDecode(httpContext.Request.Url.AbsoluteUri)))
                     {
                         return String.Empty;
                     }
