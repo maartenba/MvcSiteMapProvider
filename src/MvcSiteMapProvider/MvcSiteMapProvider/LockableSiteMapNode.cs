@@ -35,17 +35,6 @@ namespace MvcSiteMapProvider
         {
         }
 
-
-        public override ISiteMapNode ParentNode
-        {
-            get { return base.ParentNode; }
-            set
-            {
-                this.ThrowIfReadOnly("ParentNode");
-                base.ParentNode = value;
-            }
-        }
-
         /// <summary>
         /// Gets or sets the HTTP method.
         /// </summary>

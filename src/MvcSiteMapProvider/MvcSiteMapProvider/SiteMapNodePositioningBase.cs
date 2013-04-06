@@ -10,14 +10,10 @@ namespace MvcSiteMapProvider
     public abstract class SiteMapNodePositioningBase
         : SiteMapNodeSecurityBase
     {
-        protected ISiteMapNode parentNode;
-        protected bool isParentNodeSet = false;
-
-
         #region Node Map Positioning
 
         /// <summary>
-        /// Gets or sets the parent node.
+        /// Gets the parent node.
         /// </summary>
         /// <value>
         /// The parent node.
@@ -26,16 +22,7 @@ namespace MvcSiteMapProvider
         {
             get
             {
-                if (this.isParentNodeSet)
-                {
-                    return this.parentNode;
-                }
                 return this.SiteMap.GetParentNode(this);
-            }
-            set
-            {
-                this.parentNode = value;
-                this.isParentNodeSet = true;
             }
         }
 

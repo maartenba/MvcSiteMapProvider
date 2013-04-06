@@ -239,7 +239,6 @@ namespace MvcSiteMapProvider.Builder
 
                     if (parentForNode != null)
                     {
-                        nodeToAdd.ParentNode = parentForNode;
                         if (nodeToAdd.HasDynamicNodeProvider)
                         {
                             var dynamicNodesForChildNode = dynamicNodeBuilder.BuildDynamicNodesFor(siteMap, nodeToAdd, parentForNode);
@@ -282,7 +281,6 @@ namespace MvcSiteMapProvider.Builder
                     }
                     if (parentForNode != null)
                     {
-                        nodeToAdd.Key.ParentNode = parentForNode;
                         if (nodeToAdd.Key.HasDynamicNodeProvider)
                         {
                             var dynamicNodesForChildNode = dynamicNodeBuilder.BuildDynamicNodesFor(siteMap, nodeToAdd.Key, parentForNode);

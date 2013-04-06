@@ -616,9 +616,8 @@ namespace MvcSiteMapProvider
 
         public override void CopyTo(ISiteMapNode node)
         {
-            node.ParentNode = this.parentNode;
-            // NOTE: Expected behavior is to reference the same child nodes,
-            // so this is okay.
+            // NOTE: Expected behavior is to reference 
+            // the same child nodes, so this is okay.
             foreach (var child in this.ChildNodes)
                 node.ChildNodes.Add(child);
             node.HttpMethod = this.HttpMethod;

@@ -305,7 +305,6 @@ namespace MvcSiteMapProvider.Builder
                     // to an MvcSiteMapNode, and add the node to the current root.
                     childNode = GetSiteMapNodeFromXmlElement(siteMap, node, rootNode);
                     ISiteMapNode parentNode = rootNode;
-                    childNode.ParentNode = parentNode;
 
                     if (!childNode.HasDynamicNodeProvider)
                     {

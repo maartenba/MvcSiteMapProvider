@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider
         bool IsDynamic { get; }
         bool IsReadOnly { get; }
 
-        ISiteMapNode ParentNode { get; set; }
+        ISiteMapNode ParentNode { get; }
         ISiteMapNodeCollection ChildNodes { get; }
         bool IsDescendantOf(ISiteMapNode node);
         ISiteMapNode NextSibling { get; }
