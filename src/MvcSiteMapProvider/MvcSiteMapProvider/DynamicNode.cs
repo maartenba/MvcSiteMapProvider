@@ -28,6 +28,12 @@ namespace MvcSiteMapProvider
         public string ParentKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the Url (optional).
+        /// </summary>
+        /// <value>The area.</value>
+        public string Url { get; set; }
+
+        /// <summary>
         /// Gets or sets the area (optional).
         /// </summary>
         /// <value>The area.</value>
@@ -145,6 +151,8 @@ namespace MvcSiteMapProvider
         {
             if (!string.IsNullOrEmpty(this.Route))
                 node.Route = this.Route;
+            if (!string.IsNullOrEmpty(this.Url))
+                node.Url = this.Url;
             if (!string.IsNullOrEmpty(this.Area))
                 node.Area = this.Area;
             if (!string.IsNullOrEmpty(this.Controller))
