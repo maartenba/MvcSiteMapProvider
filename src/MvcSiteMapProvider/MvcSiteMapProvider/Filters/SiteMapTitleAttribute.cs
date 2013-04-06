@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider.Filters
     /// Can be used for setting sitemap title on an action method.
     /// Credits go to Kenny Eliasson - http://mvcsitemap.codeplex.com/Thread/View.aspx?ThreadId=67056
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class SiteMapTitleAttribute
         : ActionFilterAttribute
     {
