@@ -37,7 +37,7 @@ namespace MvcSiteMapProvider.DI
             this.siteMapXmlNameProvider = new SiteMapXmlNameProvider();
             this.dynamicNodeBuilder = new DynamicNodeBuilder(this.nodeKeyGenerator, this.siteMapNodeFactory);
             this.siteMapBuiderSetStrategy = this.ResolveSiteMapBuilderSetStrategy(settings);
-            var siteMapFactoryContainer = new SiteMapFactoryContainer(this.mvcContextFactory, this.urlPath);
+            var siteMapFactoryContainer = new SiteMapFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
             this.siteMapFactory = siteMapFactoryContainer.ResolveSiteMapFactory();
             this.siteMapCreator = new SiteMapCreator(this.siteMapCacheKeyToBuilderSetMapper, this.siteMapBuiderSetStrategy, this.siteMapFactory);
         }

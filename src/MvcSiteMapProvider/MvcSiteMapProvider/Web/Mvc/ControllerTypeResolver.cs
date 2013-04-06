@@ -16,11 +16,14 @@ namespace MvcSiteMapProvider.Web.Mvc
         : IControllerTypeResolver
     {
         public ControllerTypeResolver(
+            IEnumerable<string> areaNamespacesToIgnore,
             RouteCollection routes,
             IControllerBuilder controllerBuilder,
             IBuildManager buildManager            
             )
         {
+            if (areaNamespacesToIgnore == null)
+                throw new ArgumentNullException("areaNamespacesToIgnore");
             if (routes == null)
                 throw new ArgumentNullException("routes");
             if (controllerBuilder == null)
@@ -28,6 +31,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             if (buildManager == null)
                 throw new ArgumentNullException("buildManager");
 
+            this.areaNamespacesToIgnore = areaNamespacesToIgnore;
             this.routes = routes;
             this.controllerBuilder = controllerBuilder;
             this.buildManager = buildManager;
@@ -35,6 +39,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             Cache = new Dictionary<string, Type>();
         }
 
+        protected readonly IEnumerable<string> areaNamespacesToIgnore;
         protected readonly RouteCollection routes;
         protected readonly IControllerBuilder controllerBuilder;
         protected readonly IBuildManager buildManager;
@@ -73,7 +78,11 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
 
             // Find controller details
-            IEnumerable<string> areaNamespaces = FindNamespacesForArea(areaName, this.routes);
+            IEnumerable<string> areaNamespaces = (from ns in FindNamespacesForArea(areaName, this.routes)
+                                                 where ns != "Elmah.Mvc"
+                                                 where !this.areaNamespacesToIgnore.Contains(ns)
+                                                 select ns).ToList();
+                
             string area = areaName;
             string controller = controllerName;
 

@@ -22,6 +22,8 @@ namespace MvcSiteMapProvider.DI
             this.AttributesToIgnore = GetConfigurationValueOrFallback("MvcSiteMapProvider_AttributesToIgnore", "")
                 .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             this.CacheDuration = int.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_CacheDuration", "5"));
+            this.ExcludeNamespacesForResolver = GetConfigurationValueOrFallback("MvcSiteMapProvider_ExcludeNamespacesForResolver", "")
+                .Split(new char[] { '|', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
         }
 
         public bool UseExternalDIContainer { get; private set; }
@@ -31,6 +33,7 @@ namespace MvcSiteMapProvider.DI
         public IEnumerable<string> IncludeAssembliesForScan { get; private set; }
         public IEnumerable<string> AttributesToIgnore { get; private set; }
         public int CacheDuration { get; private set; }
+        public IEnumerable<string> ExcludeNamespacesForResolver { get; private set; }
 
 
         private string GetConfigurationValueOrFallback(string name, string defaultValue)

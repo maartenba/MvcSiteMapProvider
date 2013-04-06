@@ -20,14 +20,17 @@ namespace MvcSiteMapProvider.DI
     public class SiteMapFactoryContainer
     {
         public SiteMapFactoryContainer(
+            ConfigurationSettings settings,
             IMvcContextFactory mvcContextFactory,
             IUrlPath urlPath)
         {
+            this.settings = settings;
             this.mvcContextFactory = mvcContextFactory;
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = urlPath;
         }
 
+        private readonly ConfigurationSettings settings;
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly IRequestCache requestCache;
         private readonly IUrlPath urlPath;
@@ -82,6 +85,7 @@ namespace MvcSiteMapProvider.DI
         private IControllerTypeResolverFactory ResolveControllerTypeResolverFactory()
         {
             return new ControllerTypeResolverFactory(
+                settings.ExcludeNamespacesForResolver,
                 new ControllerBuilderAdaptor(ControllerBuilder.Current),
                 new BuildManagerAdaptor()
                 );
