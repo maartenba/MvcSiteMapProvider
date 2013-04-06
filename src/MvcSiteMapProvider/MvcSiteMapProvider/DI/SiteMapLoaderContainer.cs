@@ -85,7 +85,7 @@ namespace MvcSiteMapProvider.DI
 
             if (settings.ScanAssembliesForSiteMapNodes)
             {
-                var reflectionSiteMapBuilder = this.ResolveReflectionSiteMapBuilder(settings.IncludeAssembliesForScan, settings.ExcludeAssembliesForScan);
+                var reflectionSiteMapBuilder = this.ResolveReflectionSiteMapBuilder(settings.IncludeAssembliesForScan, settings.ExcludeAssembliesForScan, settings.AttributesToIgnore);
                 return new CompositeSiteMapBuilder(xmlSiteMapBuilder, reflectionSiteMapBuilder, visitingSiteMapBuilder);
             }
             else
@@ -105,11 +105,12 @@ namespace MvcSiteMapProvider.DI
                 this.siteMapXmlNameProvider);
         }
 
-        private ISiteMapBuilder ResolveReflectionSiteMapBuilder(IEnumerable<string> includeAssemblies, IEnumerable<string> excludeAssemblies)
+        private ISiteMapBuilder ResolveReflectionSiteMapBuilder(IEnumerable<string> includeAssemblies, IEnumerable<string> excludeAssemblies, IEnumerable<string> attributesToIgnore)
         {
             return new ReflectionSiteMapBuilder(
                 includeAssemblies,
                 excludeAssemblies,
+                new SiteMapXmlReservedAttributeNameProvider(attributesToIgnore),
                 this.nodeKeyGenerator,
                 this.dynamicNodeBuilder,
                 this.siteMapNodeFactory,

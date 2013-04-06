@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MvcSiteMapProvider
 {
@@ -14,6 +15,7 @@ namespace MvcSiteMapProvider
         public MvcSiteMapNodeAttribute()
         {
             Clickable = true;
+            Attributes = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -151,6 +153,12 @@ namespace MvcSiteMapProvider
         /// The preserved route parameter names.
         /// </value>
         public string PreservedRouteParameters { get; set; }
+
+        /// <summary>
+        /// Gets or sets the attributes (optional).
+        /// </summary>
+        /// <value>The attributes.</value>
+        public IDictionary<string, string> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the cache key this node is associated with

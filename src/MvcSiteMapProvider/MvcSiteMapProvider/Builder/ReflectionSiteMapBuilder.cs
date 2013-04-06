@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -18,6 +20,7 @@ namespace MvcSiteMapProvider.Builder
         public ReflectionSiteMapBuilder(
             IEnumerable<String> includeAssemblies,
             IEnumerable<String> excludeAssemblies,
+            ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider,
             INodeKeyGenerator nodeKeyGenerator,
             IDynamicNodeBuilder dynamicNodeBuilder,
             ISiteMapNodeFactory siteMapNodeFactory,
@@ -28,6 +31,8 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("includeAssemblies");
             if (excludeAssemblies == null)
                 throw new ArgumentNullException("excludeAssemblies");
+            if (reservedAttributeNameProvider == null)
+                throw new ArgumentNullException("reservedAttributeNameProvider");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
             if (dynamicNodeBuilder == null)
@@ -39,6 +44,7 @@ namespace MvcSiteMapProvider.Builder
 
             this.includeAssemblies = includeAssemblies;
             this.excludeAssemblies = excludeAssemblies;
+            this.reservedAttributeNameProvider = reservedAttributeNameProvider;
             this.nodeKeyGenerator = nodeKeyGenerator;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
@@ -46,6 +52,7 @@ namespace MvcSiteMapProvider.Builder
         }
         protected readonly IEnumerable<string> includeAssemblies;
         protected readonly IEnumerable<string> excludeAssemblies;
+        protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
@@ -406,28 +413,34 @@ namespace MvcSiteMapProvider.Builder
             // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
+            AcquireAttributesFrom(attribute, siteMapNode.Attributes);
             AcquireRolesFrom(attribute, siteMapNode.Roles);
             siteMapNode.Clickable = attribute.Clickable;
             siteMapNode.VisibilityProvider = attribute.VisibilityProvider;
-            siteMapNode.UrlResolver = attribute.UrlResolver;
             siteMapNode.DynamicNodeProvider = attribute.DynamicNodeProvider;
             siteMapNode.ImageUrl = attribute.ImageUrl;
             siteMapNode.TargetFrame = attribute.TargetFrame;
             siteMapNode.HttpMethod = httpMethod;
-            siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
-            siteMapNode.ChangeFrequency = attribute.ChangeFrequency;
-            siteMapNode.UpdatePriority = attribute.UpdatePriority;
+            if (!string.IsNullOrEmpty(attribute.Url)) siteMapNode.Url = attribute.Url;
             siteMapNode.CacheResolvedUrl = attribute.CacheResolvedUrl;
             siteMapNode.CanonicalUrl = attribute.CanonicalUrl;
             siteMapNode.CanonicalKey = attribute.CanonicalKey;
             AcquireMetaRobotsValuesFrom(attribute, siteMapNode.MetaRobotsValues);
+            siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
+            siteMapNode.ChangeFrequency = attribute.ChangeFrequency;
+            siteMapNode.UpdatePriority = attribute.UpdatePriority;
 
             // Handle route details
             siteMapNode.Route = attribute.Route;
-            siteMapNode.RouteValues.Add("area", area);
-            siteMapNode.RouteValues.Add("controller", controller);
-            siteMapNode.RouteValues.Add("action", action);
+            AcquireRouteValuesFrom(attribute, siteMapNode.RouteValues);
             AcquirePreservedRouteParametersFrom(attribute, siteMapNode.PreservedRouteParameters);
+            siteMapNode.UrlResolver = attribute.UrlResolver;
+
+            // Specified area, controller and action properties will override any 
+            // provided in the attributes collection.
+            if (!string.IsNullOrEmpty(area)) siteMapNode.RouteValues.Add("area", area);
+            if (!string.IsNullOrEmpty(controller)) siteMapNode.RouteValues.Add("controller", controller);
+            if (!string.IsNullOrEmpty(action)) siteMapNode.RouteValues.Add("action", action);
 
             // Handle MVC details
 
@@ -440,11 +453,48 @@ namespace MvcSiteMapProvider.Builder
             return siteMapNode;
         }
 
+        /// <summary>
+        /// Acquires the attributes from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
+        /// </summary>
+        /// <param name="attribute">The attribute.</param>
+        /// <returns></returns>
+        protected virtual void AcquireAttributesFrom(IMvcSiteMapNodeAttribute attribute, IDictionary<string, string> attributes)
+        {
+            foreach (var att in attribute.Attributes)
+            {
+                var attributeName = att.Key.ToString();
+                var attributeValue = att.Value;
+
+                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
+                {
+                    attributes[attributeName] = attributeValue;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Acquires the route values from a given XElement.
+        /// </summary>
+        /// <param name="node">The node.</param>
+        /// <returns></returns>
+        protected virtual void AcquireRouteValuesFrom(IMvcSiteMapNodeAttribute attribute, IRouteValueCollection routeValues)
+        {
+            foreach (var att in attribute.Attributes)
+            {
+                var attributeName = att.Key.ToString();
+                var attributeValue = att.Value;
+
+                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
+                {
+                    routeValues[attributeName] = attributeValue;
+                }
+            }
+        }
 
         /// <summary>
         /// Acquires the roles list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
-        /// <param name="node">The node.</param>
+        /// <param name="attribute">The attribute.</param>
         /// <param name="roles">The roles IList to populate.</param>
         protected virtual void AcquireRolesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> roles)
         {
@@ -460,7 +510,7 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Acquires the meta robots values list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
-        /// <param name="node">The node.</param>
+        /// <param name="attribute">The attribute.</param>
         /// <param name="metaRobotsValues">The meta robots values IList to populate.</param>
         protected virtual void AcquireMetaRobotsValuesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> metaRobotsValues)
         {
@@ -476,7 +526,7 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Acquires the preserved route parameters list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
-        /// <param name="node">The node.</param>
+        /// <param name="attribute">The attribute.</param>
         /// <param name="preservedRouteParameters">The preserved route parameters IList to populate.</param>
         protected virtual void AcquirePreservedRouteParametersFrom(IMvcSiteMapNodeAttribute attribute, IList<string> preservedRouteParameters)
         {
