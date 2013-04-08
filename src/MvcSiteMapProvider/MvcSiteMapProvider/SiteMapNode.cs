@@ -77,6 +77,7 @@ namespace MvcSiteMapProvider
         protected readonly bool isDynamic;
         protected string title = String.Empty;
         protected string description = String.Empty;
+        protected string imageUrl = String.Empty;
         protected DateTime lastModifiedDate = DateTime.MinValue;
         protected ChangeFrequency changeFrequency = ChangeFrequency.Always;
         protected UpdatePriority updatePriority = UpdatePriority.Undefined;
@@ -133,6 +134,7 @@ namespace MvcSiteMapProvider
         /// Gets or sets the title (optional).
         /// </summary>
         /// <value>The title.</value>
+        /// <remarks>The title can be localized using a resource provider.</remarks>
         public override string Title 
         {
             get { return localizationService.GetResourceString("title", this.title, this.SiteMap); }
@@ -143,6 +145,7 @@ namespace MvcSiteMapProvider
         /// Gets or sets the description (optional).
         /// </summary>
         /// <value>The description.</value>
+        /// <remarks>The description can be localized using a resource provider.</remarks>
         public override string Description 
         {
             get { return localizationService.GetResourceString("description", this.description, this.SiteMap); }
@@ -159,12 +162,18 @@ namespace MvcSiteMapProvider
         /// Gets or sets the image URL (optional).
         /// </summary>
         /// <value>The image URL.</value>
-        public override string ImageUrl { get; set; }
+        /// <remarks>The image URL can be localized using a resource provider.</remarks>
+        public override string ImageUrl 
+        {
+            get { return localizationService.GetResourceString("imageUrl", this.imageUrl, this.SiteMap); }
+            set { this.imageUrl = localizationService.ExtractExplicitResourceKey("imageUrl", value); }
+        }
 
         /// <summary>
         /// Gets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
+        /// <remarks>The attributes can be localized using a resource provider.</remarks>
         public override IAttributeCollection Attributes { get { return this.attributes; } }
 
         /// <summary>
