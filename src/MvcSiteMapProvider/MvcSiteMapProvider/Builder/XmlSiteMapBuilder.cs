@@ -72,7 +72,6 @@ namespace MvcSiteMapProvider.Builder
         {
             xmlNameProvider.FixXmlNamespaces(xml);
             SetEnableLocalization(siteMap, xml);
-            SetSecurityTrimmingEnabled(siteMap, xml);
 
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
             var rootElement = GetRootElement(xml);
@@ -80,6 +79,9 @@ namespace MvcSiteMapProvider.Builder
 
             // Process our XML, passing in the main root sitemap node and xml element.
             ProcessXmlNodes(siteMap, root, rootElement);
+
+            // NOTE: Setting security trimming as the last step improves performance.
+            SetSecurityTrimmingEnabled(siteMap, xml);
 
             // Done!
             return root;
