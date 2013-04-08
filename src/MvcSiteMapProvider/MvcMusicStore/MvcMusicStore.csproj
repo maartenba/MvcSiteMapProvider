@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>MVC4;NET40;StructureMap;</DefineConstants>
+    <DefineConstants>MVC4;NET40;StructureMap</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -130,9 +130,6 @@
             <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DependencyResolverConfig.cs">
               <Link>DI\StructureMap\DependencyResolverConfig.cs</Link>
             </Compile>
-            <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcDependencyResolverRegistry.cs">
-              <Link>DI\StructureMap\Registries\MvcDependencyResolverRegistry.cs</Link>
-            </Compile>
           </ItemGroup>
         </When>
         <Otherwise>
@@ -140,13 +137,13 @@
             <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\ControllerFactoryConfig.cs">
               <Link>DI\StructureMap\ControllerFactoryConfig.cs</Link>
             </Compile>
-            <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcControllerFactoryRegistry.cs">
-              <Link>DI\StructureMap\Registries\MvcControllerFactoryRegistry.cs</Link>
-            </Compile>
           </ItemGroup>
         </Otherwise>
       </Choose>
       <ItemGroup>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DIConfig.cs">
+          <Link>DI\StructureMap\DIConfig.cs</Link>
+        </Compile>
         <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\SingletonConvention.cs">
           <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
         </Compile>
@@ -158,9 +155,6 @@
         </Compile>
         <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
           <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
-        </Compile>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\StructureMapRegistry.cs">
-          <Link>DI\StructureMap\Registries\StructureMapRegistry.cs</Link>
         </Compile>
         <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\StructureMapContainer.cs">
           <Link>DI\StructureMap\StructureMapContainer.cs</Link>

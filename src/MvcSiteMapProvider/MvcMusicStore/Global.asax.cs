@@ -34,11 +34,12 @@ namespace MvcMusicStore
             // NOTE: This check wouldn't have to be made in a real-world application - we do it
             // in the demo because we want to support both the internal and external DI containers.
             if (new MvcSiteMapProvider.DI.ConfigurationSettings().UseExternalDIContainer == true)
-            {               
+            {
+                var container = DIConfig.Register();
 #if DependencyResolver
-                var container = DependencyResolverConfig.Register();
+                DependencyResolverConfig.Register(container);
 #else
-                var container = ControllerFactoryConfig.Register();
+                ControllerFactoryConfig.Register(container);
 #endif
                 MvcSiteMapProviderConfig.Register(container);
             }
