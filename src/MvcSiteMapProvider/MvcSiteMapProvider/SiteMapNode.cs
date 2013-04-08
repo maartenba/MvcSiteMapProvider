@@ -381,7 +381,7 @@ namespace MvcSiteMapProvider
         /// Gets a boolean value that indicates this is an external URL by checking whether it
         /// looks like an absolute path and comparing the DnsSafeHost with the passed in context.
         /// </summary>
-        /// <param name="httpContext"></param>
+        /// <param name="httpContext">The http context for the current request.</param>
         /// <returns></returns>
         public override bool HasExternalUrl(HttpContextBase httpContext)
         {
@@ -389,15 +389,12 @@ namespace MvcSiteMapProvider
             {
                 return false;
             }
-            try
+            Uri uri = null;
+            if (Uri.TryCreate(this.url, UriKind.Absolute, out uri))
             {
-                var uri = new Uri(this.url, UriKind.Absolute);
                 return !httpContext.Request.Url.DnsSafeHost.Equals(uri.DnsSafeHost);
             }
-            catch
-            {
-                return false;
-            }
+            return false;
         }
 
         #endregion
