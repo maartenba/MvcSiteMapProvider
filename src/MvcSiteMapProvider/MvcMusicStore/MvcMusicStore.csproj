@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>MVC4;NET40;StructureMap</DefineConstants>
+    <DefineConstants>MVC4;NET40;StructureMap;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -118,40 +118,79 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
-  <!-- Conditionally include the right version of DiConfig.cs for the current DI container 
+  <!-- Conditionally include the right version of Config for the current DI container 
 			configured in the compilation constants -->
-  <ItemGroup Condition=" $(DefineConstants.Contains('StructureMap')) ">
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DIConfig.cs">
-      <Link>DI\StructureMap\DIConfig.cs</Link>
-    </Compile>
-  </ItemGroup>
+  <Choose>
+    <!-- Choose between our DI containers -->
+    <When Condition=" $(DefineConstants.Contains('StructureMap')) ">
+      <Choose>
+        <!-- Choose between IDependencyResolver and IControllerFactory -->
+        <When Condition=" $(DefineConstants.Contains('DependencyResolver')) ">
+          <ItemGroup>
+            <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DependencyResolverConfig.cs">
+              <Link>DI\StructureMap\DependencyResolverConfig.cs</Link>
+            </Compile>
+            <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcDependencyResolverRegistry.cs">
+              <Link>DI\StructureMap\Registries\MvcDependencyResolverRegistry.cs</Link>
+            </Compile>
+          </ItemGroup>
+        </When>
+        <Otherwise>
+          <ItemGroup>
+            <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\ControllerFactoryConfig.cs">
+              <Link>DI\StructureMap\ControllerFactoryConfig.cs</Link>
+            </Compile>
+            <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcControllerFactoryRegistry.cs">
+              <Link>DI\StructureMap\Registries\MvcControllerFactoryRegistry.cs</Link>
+            </Compile>
+          </ItemGroup>
+        </Otherwise>
+      </Choose>
+      <ItemGroup>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\SingletonConvention.cs">
+          <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
+        </Compile>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\TransientConvention.cs">
+          <Link>DI\StructureMap\Conventions\TransientConvention.cs</Link>
+        </Compile>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcRegistry.cs">
+          <Link>DI\StructureMap\Registries\MvcRegistry.cs</Link>
+        </Compile>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
+          <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
+        </Compile>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\StructureMapRegistry.cs">
+          <Link>DI\StructureMap\Registries\StructureMapRegistry.cs</Link>
+        </Compile>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\StructureMapContainer.cs">
+          <Link>DI\StructureMap\StructureMapContainer.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
+    <!-- TODO: Define other DI containers here -->
+  </Choose>
+  <Choose>
+    <When Condition=" $(DefineConstants.Contains('DependencyResolver')) ">
+      <ItemGroup>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableDependencyResolver.cs">
+          <Link>DI\InjectableDependencyResolver.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableControllerFactory.cs">
+          <Link>DI\InjectableControllerFactory.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableControllerFactory.cs">
-      <Link>DI\InjectableControllerFactory.cs</Link>
-    </Compile>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\MvcSiteMapProviderConfig.cs">
       <Link>App_Start\MvcSiteMapProviderConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\SingletonConvention.cs">
-      <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\TransientConvention.cs">
-      <Link>DI\StructureMap\Conventions\TransientConvention.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcControllerFactoryRegistry.cs">
-      <Link>DI\StructureMap\Registries\MvcControllerFactoryRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
-      <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\StructureMapRegistry.cs">
-      <Link>DI\StructureMap\Registries\StructureMapRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\StructureMapContainer.cs">
-      <Link>DI\StructureMap\StructureMapContainer.cs</Link>
     </Compile>
     <Compile Include="App_GlobalResources\SiteMapLocalizations.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -196,6 +235,7 @@
       <Link>DI\StructureMap\Instructions.txt</Link>
     </Content>
     <Content Include="Areas\Admin\Views\Home\Index.aspx" />
+    <Content Include="CompilerConstants.txt" />
     <Content Include="Content\Images\content_top_bg.jpg" />
     <Content Include="Content\Images\header_bg.jpg" />
     <Content Include="Content\Images\home-showcase.png" />

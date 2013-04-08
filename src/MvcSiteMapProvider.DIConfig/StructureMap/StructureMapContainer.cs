@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using StructureMap;
 
 namespace DI.StructureMap
@@ -17,11 +19,32 @@ namespace DI.StructureMap
 
         #region IDependencyInjectionContainer Members
 
-        public object Resolve(Type type)
+        public object GetInstance(Type type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return type.IsAbstract || type.IsInterface
+                       ? this.container.TryGetInstance(type)
+                       : this.container.GetInstance(type);
+            }
+            catch (StructureMapException ex)
+            {
+                string message = ex.Message + "\n" + container.WhatDoIHave();
+                throw new Exception(message);
+            }
+        }
+
+        public IEnumerable<object> GetAllInstances(Type type)
         {
             try
             {
-                return container.GetInstance(type);
+                return this.container.GetAllInstances<object>()
+                    .Where(s => s.GetType() == type);
             }
             catch (StructureMapException ex)
             {

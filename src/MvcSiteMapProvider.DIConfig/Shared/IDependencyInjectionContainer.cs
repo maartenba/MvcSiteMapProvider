@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DI
 {
     public interface IDependencyInjectionContainer
     {
-        object Resolve(Type type);
+        object GetInstance(Type type);
+        IEnumerable<object> GetAllInstances(Type type);
     }
 
     public static class DependencyInjectionContainerExtensions
     {
-        public static T Resolve<T>(this IDependencyInjectionContainer container)
+        public static T GetInstance<T>(this IDependencyInjectionContainer container)
         {
-            return (T)container.Resolve(typeof(T));
+            return (T)container.GetInstance(typeof(T));
         }
     }
 }

@@ -3,6 +3,11 @@ using System.Web.Mvc;
 using System.Web.Hosting;
 using MvcSiteMapProvider.Xml;
 
+#if !NET35
+    // Startup using WebActivatorEx (which allows multiple things to be started up, as opposed to the System.Web version).
+    [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(MvcSiteMapProvider.DI.Composer), "Compose")]
+#endif
+
 namespace MvcSiteMapProvider.DI
 {
     /// <summary>
@@ -23,10 +28,22 @@ namespace MvcSiteMapProvider.DI
                 var validator = new SiteMapXmlValidator();
                 validator.ValidateXml(HostingEnvironment.MapPath(settings.SiteMapFileName));
 
-                // Setup the Controller Factory with a decorator that can resolve the internal controllers
-                var currentFactory = ControllerBuilder.Current.GetControllerFactory();
-                ControllerBuilder.Current.SetControllerFactory(
-                    new ControllerFactoryDecorator(currentFactory, settings));
+
+                // If not using a custom DependencyResolver, we prefer to use IControllerFactory
+                if (DependencyResolver.Current.GetType().FullName.Equals("System.Web.Mvc.DependencyResolver+DefaultDependencyResolver"))
+                {
+                    // Setup the Controller Factory with a decorator that can resolve the internal controllers
+                    var currentFactory = ControllerBuilder.Current.GetControllerFactory();
+                    ControllerBuilder.Current.SetControllerFactory(
+                        new ControllerFactoryDecorator(currentFactory, settings));
+                }
+                else
+                {
+                    // If using a custom IDependencyResolver, decorate it with our IDependencyResolver so we can resolve
+                    // our internal controller.
+                    var currentResolver = DependencyResolver.Current;
+                    DependencyResolver.SetResolver(new DependencyResolverDecorator(currentResolver, settings));
+                }
 
                 // Set the static loader instance
                 var siteMapLoaderContainer = new SiteMapLoaderContainer(settings);

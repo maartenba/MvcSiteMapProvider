@@ -20,7 +20,7 @@ namespace DI
         {
             return controllerType == null ?
                 base.GetControllerInstance(requestContext, controllerType) :
-                container.Resolve(controllerType) as IController;
+                container.GetInstance(controllerType) as IController;
         }
     }
 }

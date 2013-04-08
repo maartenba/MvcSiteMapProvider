@@ -2,15 +2,26 @@ To use StructureMap as your dependency injection container,
 add the following files in the specified directories.
 All destination paths are relative to the root of the ASP.NET MVC web site.
 
+Using IControllerFactory:
+
+/Shared/InjectableControllerFactory.cs => /DI/InjectableControllerFactory.cs
+/StructureMap/ControllerFactoryConfig.cs => /App_Start/ControllerFactoryConfig.cs
+/StructureMap/Registries/MvcControllerFactoryRegistry.cs => /DI/StructureMap/Registries/MvcControllerFactoryRegistry.cs
+
+OR using IDependencyResolver (If you don't know the difference, use IControllerFactory):
+
+/Shared/InjectableDependencyResolver.cs => /DI/InjectableDependencyResolver.cs
+/StructureMap/DependencyResolverConfig.cs => /App_Start/DependencyResolverConfig.cs
+/StructureMap/Registries/MvcDependencyResolverRegistry.cs => /DI/StructureMap/Registries/MvcDependencyResolverRegistry.cs
+
+Plus you will need the following in every case:
 
 /Shared/IDependencyInjectionContainer.cs => /DI/IDependencyInjectionContainer.cs
-/Shared/InjectableControllerFactory.cs => /DI/InjectableControllerFactory.cs
 /Shared/MvcSiteMapProviderConfig.cs => /App_Start/MvcSiteMapProviderConfig.cs
-/StructureMap/DIConfig.cs => /App_Start/DIConfig.cs
 /StructureMap/StructureMapContainer.cs => /DI/StructureMap/StructureMapContainer.cs
 /StructureMap/Conventions/SingletonConvention.cs => /DI/StructureMap/Conventions/SingletonConvention.cs
 /StructureMap/Conventions/TransientConvention.cs => /DI/StructureMap/Conventions/TransientConvention.cs
-/StructureMap/Registries/MvcControllerFactoryRegistry.cs => /DI/StructureMap/Registries/MvcControllerFactoryRegistry.cs
+/StructureMap/Registries/MvcRegistry.cs => /DI/StructureMap/Registries/MvcRegistry.cs
 /StructureMap/Registries/MvcSiteMapProviderRegistry.cs => /DI/StructureMap/Registries/MvcSiteMapProviderRegistry.cs
 /StructureMap/Registries/StructureMapRegistry.cs => /DI/StructureMap/Registries/StructureMapRegistry.cs
 

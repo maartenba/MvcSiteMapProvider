@@ -1,0 +1,37 @@
+﻿The following compiler constants are supported for switching between
+implementations. Note that while changing the constants affects compilation
+immediately, changes to referenced files do not show up in the IDE until you
+unload and reload the project file.
+
+Right click MvcMusicStore > Unload Project, right click again, Reload Project.
+
+In each of the following groups, no more than 1 constant should be entered at a time.
+However, you can combine constants from multiple groups at the same time.
+
+DOT NET VERSION:
+
+NET35
+NET40
+NET45
+
+MVC VERSION:
+
+MVC2
+MVC3
+MVC4
+
+DEPENDENCY INJECTION CONTAINER:
+
+StructureMap
+
+DEPENDENCY INJECTION METHOD:
+
+ControllerFactory (default)
+DependencyResolver
+
+
+EXAMPLE USAGE:
+
+The following will compile under MVC4, .NET 4.0, StructureMap, and ControllerFactory
+
+MVC4;NET40;StructureMap

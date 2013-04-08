@@ -6,14 +6,14 @@ using DI.StructureMap.Conventions;
 
 namespace DI.StructureMap.Registries
 {
-    internal class MvcControllerFactoryRegistry
+    internal class MvcDependencyResolverRegistry
         : Registry
     {
-        public MvcControllerFactoryRegistry()
+        public MvcDependencyResolverRegistry()
         {
-            this.For<IControllerFactory>()
+            this.For<IDependencyResolver>()
                 .Singleton()
-                .Use<InjectableControllerFactory>();
+                .Use<InjectableDependencyResolver>();
         }
     }
 }

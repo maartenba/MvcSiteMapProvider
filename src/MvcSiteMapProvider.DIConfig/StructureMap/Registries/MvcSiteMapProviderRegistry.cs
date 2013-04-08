@@ -43,7 +43,6 @@ namespace DI.StructureMap.Registries
             {
                 scan.TheCallingAssembly();
                 scan.AssemblyContainingType<SiteMaps>();
-                scan.AssemblyContainingType<InjectableControllerFactory>();
                 scan.WithDefaultConventions();
                 scan.AddAllTypesOf<IMvcContextFactory>();
                 scan.AddAllTypesOf<ISiteMapCacheKeyToBuilderSetMapper>();
