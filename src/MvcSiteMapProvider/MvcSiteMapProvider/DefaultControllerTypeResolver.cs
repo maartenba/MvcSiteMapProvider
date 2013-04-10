@@ -59,9 +59,7 @@ namespace MvcSiteMapProvider
             }
 
             // Find controller details
-            IEnumerable<string> areaNamespaces = (from ns in FindNamespacesForArea(areaName, RouteTable.Routes)
-                                                  where ns != "Elmah.Mvc"
-                                                  select ns).ToList();
+            IEnumerable<string> areaNamespaces = FindNamespacesForArea(areaName, RouteTable.Routes);
 
             string area = areaName;
             string controller = controllerName;
@@ -71,6 +69,9 @@ namespace MvcSiteMapProvider
             HashSet<string> namespaces = null;
             if (areaNamespaces != null)
             {
+                areaNamespaces = (from ns in areaNamespaces
+                                  where ns != "Elmah.Mvc"
+                                  select ns).ToList();
                 namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
                 if (string.IsNullOrEmpty(areaName))
     			{
