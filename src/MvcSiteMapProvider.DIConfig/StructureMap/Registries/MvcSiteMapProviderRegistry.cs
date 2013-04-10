@@ -72,9 +72,9 @@ namespace DI.StructureMap.Registries
             this.For<IBuildManager>()
                 .Use<BuildManagerAdaptor>();
 
-            // Pass in the global route collection
-            this.For<System.Web.Routing.RouteCollection>()
-                .Use(x => RouteTable.Routes);
+            //// Pass in the global route collection
+            //this.For<System.Web.Routing.RouteCollection>()
+            //    .Use(x => RouteTable.Routes);
 
 #if !MVC2
             // Configure default filter provider with one that provides filters

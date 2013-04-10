@@ -1,0 +1,56 @@
+To use Unity as your dependency injection container,
+add the following files in the specified directories.
+All destination paths are relative to the root of the ASP.NET MVC web site.
+
+Using IControllerFactory:
+
+/Shared/InjectableControllerFactory.cs => /DI/InjectableControllerFactory.cs
+/StructureMap/ControllerFactoryConfig.cs => /App_Start/ControllerFactoryConfig.cs
+
+
+OR using IDependencyResolver (If you don't know the difference, use IControllerFactory):
+
+/Shared/InjectableDependencyResolver.cs => /DI/InjectableDependencyResolver.cs
+/StructureMap/DependencyResolverConfig.cs => /App_Start/DependencyResolverConfig.cs
+
+
+Plus you will need the following in every case:
+
+/Shared/IDependencyInjectionContainer.cs => /DI/IDependencyInjectionContainer.cs
+/Shared/MvcSiteMapProviderConfig.cs => /App_Start/MvcSiteMapProviderConfig.cs
+/Unity/DIConfig.cs => /App_Start/DIConfig.cs
+/Unity/UnityDependencyInjectionContainer.cs => /DI/Unity/UnityDependencyInjectionContainer.cs
+/Unity/ContainerExtensions/MvcSiteMapProviderContainerExtension.cs => /DI/Unity/ContainerExtensions/MvcSiteMapProviderContainerExtension.cs
+/Shared/ExtensionMethods.cs => /DI/ExtensionMethods.cs
+
+
+Add the following lines of code to the Application_Start() method of Global.asax.
+
+For IControllerFactory:
+
+            // MvcSiteMapProvider Configuration
+#if NET35
+            MvcSiteMapProvider.DI.Composer.Compose();
+#endif
+            var container = DIConfig.Register();
+            ControllerFactoryConfig.Register(container);
+            MvcSiteMapProviderConfig.Register(container);
+
+
+For IDependencyResolver:
+
+            // MvcSiteMapProvider Configuration
+#if NET35
+            MvcSiteMapProvider.DI.Composer.Compose();
+#endif
+            var container = DIConfig.Register();
+            DependencyResolverConfig.Register(container);
+            MvcSiteMapProviderConfig.Register(container);
+
+
+
+You will also need to add the following to the AppSettings section of your root Web.Config file:
+
+<add key="MvcSiteMapProvider_UseExternalDIContainer" value="true"/>
+
+
