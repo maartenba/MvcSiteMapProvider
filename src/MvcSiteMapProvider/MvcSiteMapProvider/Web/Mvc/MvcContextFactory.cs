@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Caching;
@@ -27,6 +28,8 @@ namespace MvcSiteMapProvider.Web.Mvc
 
             //if (httpContext.Handler is MvcHandler)
             //    return ((MvcHandler)httpContext.Handler).RequestContext;
+            //else if (httpContext.Handler is Page) // Fixes #15 for interop with ASP.NET Webforms
+            //    return new RequestContext(httpContext, ((Page)HttpContext.Current.Handler).RouteData);
             //else
             //    return new RequestContext(httpContext, routeData);
         }
@@ -36,6 +39,8 @@ namespace MvcSiteMapProvider.Web.Mvc
             var httpContext = this.CreateHttpContext();
             if (httpContext.Handler is MvcHandler)
                 return ((MvcHandler)httpContext.Handler).RequestContext;
+            else if (httpContext.Handler is Page) // Fixes #15 for interop with ASP.NET Webforms
+                return new RequestContext(httpContext, ((Page)HttpContext.Current.Handler).RouteData);
             else
                 return new RequestContext(httpContext, new RouteData());
         }
