@@ -6,11 +6,6 @@ properties {
     $tools_directory  = "$base_directory\tools"
     $version          = "4.0.0"
     $packageVersion   = "$version-alpha-01"
-	$builds = @(
-		@{Name = "MvcSiteMapProvider.Mvc4"; Constants="MVC4"; NuGetDir = "net40"; TargetFramework="v4.0"},
-		@{Name = "MvcSiteMapProvider.Mvc3"; Constants="MVC3"; NuGetDir = "net35"; TargetFramework="v3.5"}
-		@{Name = "MvcSiteMapProvider.Mvc2"; Constants="MVC2"; NuGetDir = "net20"; TargetFramework="v3.5"}
-	)
 }
 
 include .\psake_ext.ps1
@@ -34,43 +29,45 @@ task Init -description "This tasks makes sure the build environment is correctly
 }
 
 task Compile -depends Clean, Init -description "This task compiles the solution" {
-	foreach ($build in $builds)
-	{
-		$name = $build.Name
-		$finalDir = $build.NuGetDir
-		$constants = $build.Constants
-		$targetFrameworkVersion = $build.TargetFramework
-
-		exec { 
-			msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-				/p:outdir=$build_directory\\$finalDir\\ `
-				/verbosity:quiet `
-				/p:Configuration=Release `
-				"/t:Clean;Rebuild" `
-				/p:WarningLevel=3 `
-				/p:TargetFrameworkVersion=$targetFrameworkVersion `
-				/p:DefineConstants=$constants `
-				/p:EnableNuGetPackageRestore=true
-		}
+	exec { 
+		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
+			/property:outdir=$build_directory\lib\net35\ `
+			/verbosity:quiet `
+			/property:Configuration=Release `
+			"/t:Clean;Rebuild" `
+			/property:WarningLevel=3 `
+			/property:DefineConstants=`" MVC3`;NET35`" `
+			/property:EnableNuGetPackageRestore=true
+	}
+		
+	exec { 
+		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
+			/property:outdir=$build_directory\lib\net40\ `
+			/verbosity:quiet `
+			/property:Configuration=Release `
+			"/t:Clean;Rebuild" `
+			/property:WarningLevel=3 `
+			/property:TargetFrameworkVersion=v4.0 `
+			/property:DefineConstants=`" MVC3`;NET40`" `
+			/property:EnableNuGetPackageRestore=true
 	}
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {  
     Generate-Nuspec-File `
-		-file "$nuget_directory\mvcsitemapprovider.nuspec" `
+		-file "$build_directory\mvcsitemapprovider.nuspec" `
 		-version $version
 
-    Copy-Item $source_directory\MvcSiteMapProvider\MvcSiteMapSchema.xsd $nuget_directory\content
-    Copy-Item $base_directory\release\MvcSiteMapProvider\* $nuget_directory\lib\net40 -Recurse
+	Copy-Item $nuget_directory\* $build_directory -Recurse
+    Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\content\MvcSiteMapSchema.xsd
 
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.nuspec -Symbols
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
     }
 
-    Remove-Item $nuget_directory\lib\* -Recurse
     Move-Item *.nupkg $base_directory\release
 }
 
-task Finalize -depends Compile -description "This tasks finalizes the build" {  
+task Finalize -depends NuGet -description "This tasks finalizes the build" {  
 
 }
