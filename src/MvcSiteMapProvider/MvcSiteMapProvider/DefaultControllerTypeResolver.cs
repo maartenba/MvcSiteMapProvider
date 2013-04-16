@@ -72,11 +72,15 @@ namespace MvcSiteMapProvider
                 areaNamespaces = (from ns in areaNamespaces
                                   where ns != "Elmah.Mvc"
                                   select ns).ToList();
-                namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
-                if (string.IsNullOrEmpty(areaName))
-    			{
-					namespaces = new HashSet<string>(namespaces.Union(ControllerBuilder.Current.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
-				}
+
+                if (areaNamespaces.Any())
+                {
+                    namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
+                    if (string.IsNullOrEmpty(areaName))
+                    {
+                        namespaces = new HashSet<string>(namespaces.Union(ControllerBuilder.Current.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
+                    }
+                }
             }
             else if (ControllerBuilder.Current.DefaultNamespaces.Count > 0)
             {
