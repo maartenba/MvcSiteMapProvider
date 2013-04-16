@@ -92,11 +92,14 @@ namespace MvcSiteMapProvider.Web.Mvc
                                   where ns != "Elmah.Mvc"
                                   where !this.areaNamespacesToIgnore.Contains(ns)
                                   select ns).ToList();
-                namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
-                if (string.IsNullOrEmpty(areaName))
-    			{
-					namespaces = new HashSet<string>(namespaces.Union(this.controllerBuilder.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
-				}
+                if (areaNamespaces.Any())
+                {
+                    namespaces = new HashSet<string>(areaNamespaces, StringComparer.OrdinalIgnoreCase);
+                    if (string.IsNullOrEmpty(areaName))
+                    {
+                        namespaces = new HashSet<string>(namespaces.Union(this.controllerBuilder.DefaultNamespaces, StringComparer.OrdinalIgnoreCase), StringComparer.OrdinalIgnoreCase);
+                    }
+                }
             }
             else if (this.controllerBuilder.DefaultNamespaces.Count > 0)
             {
