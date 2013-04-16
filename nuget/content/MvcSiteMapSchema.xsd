@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <xs:schema
-    targetNamespace="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0"
+    targetNamespace="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
     elementFormDefault="qualified"
-    xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-3.0"
+    xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
     xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:annotation>
@@ -130,6 +130,13 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+		<xs:attribute name="cacheResolvedUrl" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Should the resolved URL be cached (true) or resolved on each request (false)? Default is true.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
     <xs:attribute name="visibility" type="xs:string" use="optional" >
       <xs:annotation>
         <xs:documentation>
@@ -168,6 +175,30 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+
+		<xs:attribute name="canonicalUrl" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Optional. The primary URL for what is completely or mostly duplicated content on the current node. 
+					The value may be an absolute URL (in the current site or in an external site), a rooted URL starting with '~/', or a relative URL.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="canonicalKey" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Optional. The key value for the node that contains the primary copy of the content for the current node, if it is largely similar.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+
+		<xs:attribute name="metaRobotsValues" type="metarobots_type" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					Optional. A space-delimited list of values to apply to the robots meta tag. These will apply to all robots.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
   </xs:attributeGroup>
 
   <xs:attributeGroup name="fileNodeAttributes">
@@ -206,6 +237,7 @@
 
   <xs:attributeGroup name="siteMapAttributes">
     <xs:attribute name="enableLocalization" type="small_boolean_Type" default="false" use="optional" />
+		<xs:attribute name="securityTrimmingEnabled" type="small_boolean_Type" default="false" use="optional" />
   </xs:attributeGroup>
 
   <xs:simpleType name="small_boolean_Type">
@@ -250,4 +282,24 @@
       <xs:enumeration value="Absolute_100" />
     </xs:restriction>
   </xs:simpleType>
+
+	<xs:simpleType name="metarobots_type">
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="index"/>
+					<xs:enumeration value="noindex"/>
+					<xs:enumeration value="follow"/>
+					<xs:enumeration value="nofollow"/>
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="noarchive"/>
+					<xs:enumeration value="nocache"/>
+					<xs:enumeration value="nosnippet"/>
+					<xs:enumeration value="nopreview"/>
+					<xs:enumeration value="noodp"/>
+					<xs:enumeration value="noydir"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:list>
+	</xs:simpleType>
 </xs:schema>
