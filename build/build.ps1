@@ -4,7 +4,7 @@ properties {
     $source_directory = "$base_directory\src\MvcSiteMapProvider"
     $nuget_directory  = "$base_directory\nuget"
     $tools_directory  = "$base_directory\tools"
-    $version          = "3.3.4.0"
+    $version          = "3.3.5.0"
 }
 
 include .\psake_ext.ps1
@@ -23,7 +23,7 @@ task Init -description "This tasks makes sure the build environment is correctly
 		-company "MvcSiteMapProvider" `
 		-product "MvcSiteMapProvider $version" `
 		-version $version `
-		-copyright "Copyright © Maarten Balliauw 2009 - 2012" `
+		-copyright "Copyright ï¿½ Maarten Balliauw 2009 - 2013" `
 		-clsCompliant "false"
         
     if ((Test-Path $build_directory) -eq $false) {
@@ -51,10 +51,10 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
             /p:outdir=$build_directory\\$solution\\net40\\ `
             /verbosity:quiet `
             /p:Configuration=Release `
-			/t:Rebuild `
-			/property:WarningLevel=3 `
+            /t:Rebuild `
+            /property:WarningLevel=3 `
             /property:TargetFrameworkVersion=v4.0 `
-            /property:DefineConstants=NET40
+            /property:DefineConstants=`" MVC3`;NET40`" 
     }
 }
 
