@@ -37,11 +37,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>MvcSiteMapProvider.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" !$(DefineConstants.Contains(';NET')) ">$(DefineConstants);$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</DefineConstants>
@@ -314,6 +313,7 @@
     <EmbeddedResource Include="Xml\MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="MvcSiteMapProvider.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
