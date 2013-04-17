@@ -28,14 +28,16 @@ namespace MvcSiteMapProvider.DI
                 var validator = new SiteMapXmlValidator();
                 validator.ValidateXml(HostingEnvironment.MapPath(settings.SiteMapFileName));
 
-
+#if !MVC2
                 // If not using a custom DependencyResolver, we prefer to use IControllerFactory
                 if (DependencyResolver.Current.GetType().FullName.Equals("System.Web.Mvc.DependencyResolver+DefaultDependencyResolver"))
                 {
+#endif
                     // Setup the Controller Factory with a decorator that can resolve the internal controllers
                     var currentFactory = ControllerBuilder.Current.GetControllerFactory();
                     ControllerBuilder.Current.SetControllerFactory(
                         new ControllerFactoryDecorator(currentFactory, settings));
+#if !MVC2
                 }
                 else
                 {
@@ -44,6 +46,7 @@ namespace MvcSiteMapProvider.DI
                     var currentResolver = DependencyResolver.Current;
                     DependencyResolver.SetResolver(new DependencyResolverDecorator(currentResolver, settings));
                 }
+#endif
 
                 // Set the static loader instance
                 var siteMapLoaderContainer = new SiteMapLoaderContainer(settings);
