@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Hosting;
+using System.Web.WebPages.Razor;
 using MvcSiteMapProvider.Xml;
 
 #if !NET35
@@ -18,6 +19,10 @@ namespace MvcSiteMapProvider.DI
     {
         public static void Compose()
         {
+            // Register global namespaces with Razor so we don't have to import them in Web.config
+            WebPageRazorHost.AddGlobalImport("MvcSiteMapProvider.Web.Html");
+            WebPageRazorHost.AddGlobalImport("MvcSiteMapProvider.Web.Html.Models");
+
             // Get the configuration settings
             var settings = new ConfigurationSettings();
 
