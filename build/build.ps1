@@ -5,7 +5,8 @@ properties {
     $nuget_directory  = "$base_directory\nuget"
     $tools_directory  = "$base_directory\tools"
     $version          = "4.0.0"
-    $packageVersion   = "$version-alpha-01"
+    $packageVersion   = "$version-pre"
+    $configuration    = "Release"
 }
 
 include .\psake_ext.ps1
@@ -33,7 +34,7 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
 			/property:outdir=$build_directory\lib\net35\ `
 			/verbosity:quiet `
-			/property:Configuration=Release `
+			/property:Configuration=$configuration `
 			"/t:Clean;Rebuild" `
 			/property:WarningLevel=3 `
 			/property:DefineConstants=`" MVC3`;NET35`" `
@@ -44,7 +45,7 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
 			/property:outdir=$build_directory\lib\net40\ `
 			/verbosity:quiet `
-			/property:Configuration=Release `
+			/property:Configuration=$configuration `
 			"/t:Clean;Rebuild" `
 			/property:WarningLevel=3 `
 			/property:TargetFrameworkVersion=v4.0 `
@@ -58,7 +59,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 		-file "$build_directory\mvcsitemapprovider.nuspec" `
 		-version $version
 
-	Copy-Item $nuget_directory\* $build_directory -Recurse
+    Copy-Item $nuget_directory\* $build_directory -Recurse
     Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\content\MvcSiteMapSchema.xsd
 
     exec { 
