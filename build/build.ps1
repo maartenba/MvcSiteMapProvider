@@ -60,6 +60,8 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 		-file "$build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec" `
 		-version $packageVersion
 		
+	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider -Recurse
+	
     exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec -Symbols
     }
@@ -70,7 +72,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 		-version $packageVersion `
 		-dependencies @("MvcSiteMapProvider `" version=`"4.0")
 
-    Copy-Item $nuget_directory\* $build_directory\mvcsitemapprovider.web -Recurse
+    Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
     Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
 
     exec { 
