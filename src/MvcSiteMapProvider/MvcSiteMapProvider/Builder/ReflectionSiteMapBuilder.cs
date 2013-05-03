@@ -48,7 +48,7 @@ namespace MvcSiteMapProvider.Builder
             this.nodeKeyGenerator = nodeKeyGenerator;
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
-            this.siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
+            this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
         }
         protected readonly IEnumerable<string> includeAssemblies;
         protected readonly IEnumerable<string> excludeAssemblies;
@@ -56,8 +56,29 @@ namespace MvcSiteMapProvider.Builder
         protected readonly INodeKeyGenerator nodeKeyGenerator;
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
-        protected readonly string siteMapCacheKey;
-        
+        protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
+
+
+        protected string siteMapCacheKey;
+        /// <summary>
+        /// Gets the cache key for the current request and caches it, since this class should only be called 1 time per request.
+        /// </summary>
+        /// <remarks>
+        /// Fixes #158 - this key should not be generated in the constructor because HttpContext cannot be accessed
+        /// that early in the application lifecycle when run in IIS Integrated mode.
+        /// </remarks>
+        protected virtual string SiteMapCacheKey
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.siteMapCacheKey))
+                {
+                    this.siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
+                }
+                return this.siteMapCacheKey;
+            }
+        }
+
 
         /// <summary>
         /// Provides the base data on which the context-aware provider can generate a full tree.
@@ -327,7 +348,7 @@ namespace MvcSiteMapProvider.Builder
             if (!String.IsNullOrEmpty(attribute.SiteMapCacheKey))
             {
                 // Return null if the attribute doesn't apply to this cache key
-                if (!this.siteMapCacheKey.Equals(attribute.SiteMapCacheKey))
+                if (!this.SiteMapCacheKey.Equals(attribute.SiteMapCacheKey))
                 {
                     return null;
                 }
@@ -534,5 +555,6 @@ namespace MvcSiteMapProvider.Builder
                 preservedRouteParameters.Add(parameter);
             }
         }
+
     }
 }
