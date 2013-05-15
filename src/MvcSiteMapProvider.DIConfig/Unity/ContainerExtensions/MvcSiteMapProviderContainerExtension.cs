@@ -121,6 +121,7 @@ namespace DI.Unity.ContainerExtensions
         }
 
 
+        // Approach from http://geekswithblogs.net/watsonjon/archive/2009/09/28/unity-convention-based-registration.aspx
         private void AutoRegister(IUnityContainer container, IEnumerable<Assembly> assemblies)
         {
             List<Type> interfaces = new List<Type>();
@@ -130,17 +131,20 @@ namespace DI.Unity.ContainerExtensions
 
             foreach (var interfaceType in interfaces)
             {
-                var currentInterfaceType = interfaceType;
+                if (!container.IsRegistered(interfaceType))
+                {
+                    var currentInterfaceType = interfaceType;
 
-                List<Type> implementations = new List<Type>();
+                    List<Type> implementations = new List<Type>();
 
-                foreach (var assembly in assemblies)
-                    implementations.AddRange(assembly.GetImplementationsOfInterface(interfaceType));
+                    foreach (var assembly in assemblies)
+                        implementations.AddRange(assembly.GetImplementationsOfInterface(interfaceType));
 
-                if (implementations.Count > 1)
-                    implementations.ToList().ForEach(i => container.RegisterType(currentInterfaceType, i, i.Name));
-                else
-                    implementations.ToList().ForEach(i => container.RegisterType(currentInterfaceType, i));
+                    if (implementations.Count > 1)
+                        implementations.ToList().ForEach(i => container.RegisterType(currentInterfaceType, i, i.Name));
+                    else
+                        implementations.ToList().ForEach(i => container.RegisterType(currentInterfaceType, i));
+                }
             }
         }
     }
