@@ -32,7 +32,7 @@ task Init -description "This tasks makes sure the build environment is correctly
 task Compile -depends Clean, Init -description "This task compiles the solution" {
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\lib\net35\ `
+			/property:outdir=$build_directory\mvcsitemapprovider\lib\net35\ `
 			/verbosity:quiet `
 			/property:Configuration=$configuration `
 			"/t:Clean;Rebuild" `
@@ -43,7 +43,7 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 		
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\lib\net40\ `
+			/property:outdir=$build_directory\mvcsitemapprovider\lib\net40\ `
 			/verbosity:quiet `
 			/property:Configuration=$configuration `
 			"/t:Clean;Rebuild" `
@@ -56,14 +56,27 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {  
     Generate-Nuspec-File `
-		-file "$build_directory\mvcsitemapprovider.nuspec" `
-		-version $version
+		-id "MvcSiteMapProvider" `
+		-file "$build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec" `
+		-version $packageVersion
+		
+	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider -Recurse
+	
+    exec { 
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec -Symbols
+    }
+		
+    Generate-Nuspec-File `
+		-id "MvcSiteMapProvider.Web" `
+		-file "$build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec" `
+		-version $packageVersion `
+		-dependencies @("MvcSiteMapProvider `" version=`"4.0")
 
-    Copy-Item $nuget_directory\* $build_directory -Recurse
-    Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\content\MvcSiteMapSchema.xsd
+    Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
+    Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
 
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols
     }
 
     Move-Item *.nupkg $base_directory\release

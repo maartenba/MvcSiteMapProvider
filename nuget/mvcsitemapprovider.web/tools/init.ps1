@@ -1,0 +1,28 @@
+param($rootPath, $toolsPath, $package, $project)
+
+function CountSolutionFilesByExtension($extension) {
+	$files = (Get-Project).DTE.Solution `
+		| ?{ $_.FileName } `
+		| %{ [System.IO.Path]::GetDirectoryName($_.FileName) } `
+		| %{ [System.IO.Directory]::EnumerateFiles($_, "*." + $extension, [System.IO.SearchOption]::AllDirectories) }
+	($files | Measure-Object).Count
+}
+
+function InferPreferredViewEngine() {
+	# Assume you want Razor except if you already have some ASPX views and no Razor ones
+	if ((CountSolutionFilesByExtension aspx) -eq 0) { return "razor" }
+	if (((CountSolutionFilesByExtension cshtml) -gt 0) -or ((CountSolutionFilesByExtension vbhtml) -gt 0)) { return "razor" }
+	return "aspx"
+}
+
+if ([string](InferPreferredViewEngine) -eq 'aspx') { 
+	if ($project) {
+		$project.ProjectItems | ?{ $_.Path.Contains("Views\Shared\DisplayTemplates") -eq $true -and ($_.Name -eq "MenuHelperModel.cshtml" -or  $_.Name -eq "SiteMapHelperModel.cshtml" -or  $_.Name -eq "SiteMapNodeModel.cshtml" -or  $_.Name -eq "SiteMapNodeModelList.cshtml" -or  $_.Name -eq "SiteMapPathHelperModel.cshtml" -or  $_.Name -eq "SiteMapTitleHelperModel.cshtml") } | %{ $_.Delete() }
+	}
+} else {
+	if ($project) {
+		$project.ProjectItems | ?{ $_.Path.Contains("Views\Shared\DisplayTemplates") -eq $true -and ($_.Name -eq "MenuHelperModel.ascx" -or  $_.Name -eq "SiteMapHelperModel.ascx" -or  $_.Name -eq "SiteMapNodeModel.ascx" -or  $_.Name -eq "SiteMapNodeModelList.ascx" -or  $_.Name -eq "SiteMapPathHelperModel.ascx" -or  $_.Name -eq "SiteMapTitleHelperModel.ascx") } | %{ $_.Delete() }
+	}
+}
+
+ 
