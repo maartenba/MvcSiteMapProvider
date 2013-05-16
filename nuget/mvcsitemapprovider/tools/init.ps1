@@ -9,5 +9,5 @@ function CountSolutionFilesByExtension($extension) {
 }
 
 if (CountSolutionFilesByExtension(".cshtml") -gt 1 -or CountSolutionFilesByExtension(".aspx") -gt 1) {
-	Install-Package MvcSiteMapProvider.Web
+	Install-Package MvcSiteMapProvider.Web -IncludePrerelease
 }
