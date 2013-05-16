@@ -70,7 +70,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 		-id "MvcSiteMapProvider.Web" `
 		-file "$build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec" `
 		-version $packageVersion `
-		-dependencies @("MvcSiteMapProvider `" version=`"4.0")
+		-dependencies @("MvcSiteMapProvider `" version=`"4.0", "WebActivatorEx `" version=`"2.0")
 
     Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
     Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
