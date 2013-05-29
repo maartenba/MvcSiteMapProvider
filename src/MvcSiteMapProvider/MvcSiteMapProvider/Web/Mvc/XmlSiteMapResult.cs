@@ -13,8 +13,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     /// <summary>
     /// XmlSiteMapResult class.
     /// </summary>
-    public class XmlSiteMapResult
-        : ActionResult
+    public class XmlSiteMapResult : ActionResult
     {
         public XmlSiteMapResult(
             int page,
@@ -89,7 +88,6 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <value>The page.</value>
         protected int Page { get; set; }
 
-
         /// <summary>
         /// Executes the sitemap index result.
         /// </summary>
@@ -98,30 +96,14 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="flattenedHierarchyCount">The flattened hierarchy count.</param>
         protected virtual void ExecuteSitemapIndexResult(ControllerContext context, IEnumerable<ISiteMapNode> flattenedHierarchy, long flattenedHierarchyCount)
         {
-            // Count the number of pages
             double numPages = Math.Ceiling((double)flattenedHierarchyCount / MaxNumberOfLinksPerFile);
 
-            // Output content type
-            context.HttpContext.Response.ContentType = "text/xml";
-
-            // Generate sitemap sitemapindex
             var sitemapIndex = new XElement(Ns + "sitemapindex");
             sitemapIndex.Add(GenerateSiteMapIndexElements(Convert.ToInt32(numPages), BaseUrl, SiteMapUrlTemplate).ToArray());
 
-            // Generate sitemap
-            var xmlSiteMap = new XDocument(
-                new XDeclaration("1.0", "utf-8", "true"),
-                sitemapIndex);
+            var xmlSiteMap = new XDocument(new XDeclaration("1.0", "utf-8", "true"), sitemapIndex);
 
-            // Write XML
-            using (Stream outputStream = RetrieveOutputStream(context))
-            {
-                using (var writer = XmlWriter.Create(outputStream))
-                {
-                    xmlSiteMap.WriteTo(writer);
-                }
-                outputStream.Flush();
-            }
+            WriteXmlSitemapDocument(context, xmlSiteMap);
         }
 
         /// <summary>
@@ -133,31 +115,9 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="page">The page.</param>
         protected virtual void ExecuteSitemapResult(ControllerContext context, IEnumerable<ISiteMapNode> flattenedHierarchy, long flattenedHierarchyCount, int page)
         {
-
-            // Output content type
-            context.HttpContext.Response.ContentType = "text/xml";
-
-            // Generate URL set
-            var urlSet = new XElement(Ns + "urlset");
-            urlSet.Add(GenerateUrlElements(
-                context,
-                flattenedHierarchy.Skip((page - 1)* MaxNumberOfLinksPerFile)
-                    .Take(MaxNumberOfLinksPerFile), BaseUrl).ToArray());
-
-            // Generate sitemap
-            var xmlSiteMap = new XDocument(
-                new XDeclaration("1.0", "utf-8", "true"),
-                urlSet);
-
-            // Write XML
-            using (Stream outputStream = RetrieveOutputStream(context))
-            {
-                using (var writer = XmlWriter.Create(outputStream))
-                {
-                    xmlSiteMap.WriteTo(writer);
-                }
-                outputStream.Flush();
-            }
+            var urlSet = GenerateSitemapUrlSet(context, flattenedHierarchy, page);
+            var xmlSiteMap = new XDocument(new XDeclaration("1.0", "utf-8", "true"), urlSet);
+            WriteXmlSitemapDocument(context, xmlSiteMap);
         }
 
         /// <summary>
@@ -169,7 +129,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             var flattenedHierarchy = new List<ISiteMapNode>();
 
             // Flatten link hierarchy
-            if (SiteMapCacheKeys.Count() > 0)
+            if (SiteMapCacheKeys.Any())
             {
                 foreach (var key in SiteMapCacheKeys)
                 {
@@ -186,6 +146,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             {
                 flattenedHierarchy.AddRange(FlattenHierarchy(this.RootNode, BaseUrl));
             }
+
             var flattenedHierarchyCount = flattenedHierarchy.LongCount();
 
             // Determine type of sitemap to generate: sitemap index file or sitemap file
@@ -231,51 +192,52 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <returns>The URL elements.</returns>
         protected virtual IEnumerable<XElement> GenerateUrlElements(ControllerContext context, IEnumerable<ISiteMapNode> siteMapNodes, string url)
         {
-            bool skip;
-            // Iterate all nodes
             foreach (var siteMapNode in siteMapNodes)
             {
-                skip = false;
+                var skipNode = siteMapNode.HasExternalUrl(context.HttpContext)
+                            || !String.IsNullOrEmpty(siteMapNode.CanonicalUrl)
+                            || siteMapNode.HasNoIndexAndNoFollow;
 
-                // Generate element
+                if (skipNode)
+                {
+                    continue;
+                }
+
                 var siteMapNodeUrl = siteMapNode.Url;
                 string nodeUrl = url + siteMapNodeUrl;
+
                 if (siteMapNode.HasAbsoluteUrl())
                 {
                     nodeUrl = siteMapNodeUrl;
                 }
-                if (siteMapNode.HasExternalUrl(context.HttpContext) ||
-                    !String.IsNullOrEmpty(siteMapNode.CanonicalUrl) ||
-                    siteMapNode.HasNoIndexAndNoFollow)
-                {
-                    // Skip nodes where domain doesn't match the current one 
-                    // or where canonical url exists, or that
-                    // have both a noindex and nofollow robots meta tag.
-                    skip = true;
-                }
 
-                var urlElement = new XElement(Ns + "url",
-                    new XElement(Ns + "loc", nodeUrl));
+                var urlElement = new XElement(Ns + "url", new XElement(Ns + "loc", nodeUrl));
 
-                // Generate element properties
-                if (!skip)
-                {
-                    if (siteMapNode.LastModifiedDate > DateTime.MinValue)
-                    {
-                        urlElement.Add(new XElement(Ns + "lastmod", siteMapNode.LastModifiedDate.ToUniversalTime()));
-                    }
-                    if (siteMapNode.ChangeFrequency != ChangeFrequency.Undefined)
-                    {
-                        urlElement.Add(new XElement(Ns + "changefreq", siteMapNode.ChangeFrequency.ToString().ToLowerInvariant()));
-                    }
-                    if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
-                    {
-                        urlElement.Add(new XElement(Ns + "priority", (double)siteMapNode.UpdatePriority / 100));
-                    }
-                
-                    // Return
-                    yield return urlElement;
-                }
+                GenerateUrlElementAttributes(siteMapNode, urlElement);
+
+                // Return
+                yield return urlElement;
+            }
+        }
+
+        /// <summary>
+        /// Sets attributes on generated URL elements. Overridable in descendants to provide additional information, e.g. for specialized sitemaps.
+        /// </summary>
+        /// <param name="siteMapNode">The current node</param>
+        /// <param name="urlElement">The URL element for the current node to set attributes on</param>
+        protected virtual void GenerateUrlElementAttributes(ISiteMapNode siteMapNode, XElement urlElement)
+        {
+            if (siteMapNode.LastModifiedDate > DateTime.MinValue)
+            {
+                urlElement.Add(new XElement(Ns + "lastmod", siteMapNode.LastModifiedDate.ToUniversalTime()));
+            }
+            if (siteMapNode.ChangeFrequency != ChangeFrequency.Undefined)
+            {
+                urlElement.Add(new XElement(Ns + "changefreq", siteMapNode.ChangeFrequency.ToString().ToLowerInvariant()));
+            }
+            if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
+            {
+                urlElement.Add(new XElement(Ns + "priority", (double)siteMapNode.UpdatePriority / 100));
             }
         }
 
@@ -352,6 +314,34 @@ namespace MvcSiteMapProvider.Web.Mvc
                 outputStream = new DeflateStream(context.HttpContext.Response.OutputStream, CompressionMode.Compress);
             }
             return outputStream;
+        }
+
+        private void WriteXmlSitemapDocument(ControllerContext context, XDocument xmlSiteMap)
+        {
+            context.HttpContext.Response.ContentType = "text/xml";
+            using (Stream outputStream = RetrieveOutputStream(context))
+            {
+                using (var writer = XmlWriter.Create(outputStream))
+                {
+                    xmlSiteMap.WriteTo(writer);
+                }
+                outputStream.Flush();
+            }
+        }
+
+        private XElement GenerateSitemapUrlSet(ControllerContext context, IEnumerable<ISiteMapNode> flattenedHierarchy, int page)
+        {
+            var urlElements = GenerateUrlElements(
+                context,
+                flattenedHierarchy
+                    .Skip((page - 1) * MaxNumberOfLinksPerFile)
+                    .Take(MaxNumberOfLinksPerFile),
+                BaseUrl
+                ).ToArray();
+
+            var urlSet = new XElement(Ns + "urlset");
+            urlSet.Add(urlElements);
+            return urlSet;
         }
     }
 }
