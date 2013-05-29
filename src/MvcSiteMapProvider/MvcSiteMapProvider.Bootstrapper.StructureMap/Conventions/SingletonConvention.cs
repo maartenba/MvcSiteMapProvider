@@ -1,18 +1,17 @@
 ﻿using System;
-using StructureMap;
-using StructureMap.Graph;
 using StructureMap.Configuration.DSL;
+using StructureMap.Graph;
 
-namespace DI.StructureMap.Conventions
+namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Conventions
 {
-    internal class TransientConvention
+    public class SingletonConvention
         : IRegistrationConvention
     {
         #region IRegistrationConvention Members
 
         public void Process(Type type, Registry registry)
         {
-            registry.For(type).LifecycleIs(InstanceScope.Transient);
+            registry.For(type).Singleton();
         }
 
         #endregion

@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Hosting;
-using StructureMap.Configuration.DSL;
-using StructureMap.Pipeline;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Bootstrapper.StructureMap.Conventions;
 using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.Compilation;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Security;
@@ -20,11 +13,12 @@ using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Globalization;
-using DI.StructureMap.Conventions;
+using StructureMap.Configuration.DSL;
+using StructureMap.Pipeline;
 
-namespace DI.StructureMap.Registries
+namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Registries
 {
-    internal class MvcSiteMapProviderRegistry
+    public class MvcSiteMapProviderRegistry
         : Registry
     {
         public MvcSiteMapProviderRegistry()
@@ -101,7 +95,7 @@ namespace DI.StructureMap.Registries
 
         var cacheDependency =
             this.For<ICacheDependency>().Use<AspNetFileCacheDependency>()
-                .Ctor<string>("fileName").Is(HostingEnvironment.MapPath(fileName));
+                .Ctor<string>("fileName").Is(absoluteFileName);
 
         cacheDetails =
             this.For<ICacheDetails>().Use<CacheDetails>()

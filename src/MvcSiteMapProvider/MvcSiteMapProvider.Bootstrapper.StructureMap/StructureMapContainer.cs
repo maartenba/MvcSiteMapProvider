@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using StructureMap;
 
-namespace DI.StructureMap
+namespace MvcSiteMapProvider.Bootstrapper.StructureMap
 {
-    internal class StructureMapContainer
+    public class StructureMapContainer
         : IDependencyInjectionContainer
     {
         private readonly IContainer container;

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Web.Mvc;
-using StructureMap.Configuration.DSL;
+﻿using System.Web.Mvc;
+using MvcSiteMapProvider.Bootstrapper.StructureMap.Conventions;
 using MvcSiteMapProvider.Web.Mvc;
-using DI.StructureMap.Conventions;
+using StructureMap.Configuration.DSL;
 
-namespace DI.StructureMap.Registries
+namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Registries
 {
-    internal class MvcRegistry
+    public class MvcRegistry
         : Registry
     {
         public MvcRegistry()

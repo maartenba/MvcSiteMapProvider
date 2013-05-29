@@ -68,8 +68,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -130,27 +131,6 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\ExtensionMethods.cs">
-      <Link>DI\ExtensionMethods.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\SingletonConvention.cs">
-      <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Conventions\TransientConvention.cs">
-      <Link>DI\StructureMap\Conventions\TransientConvention.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcRegistry.cs">
-      <Link>DI\StructureMap\Registries\MvcRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
-      <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\IDependencyInjectionContainer.cs">
-      <Link>DI\IDependencyInjectionContainer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\MvcSiteMapProviderConfig.cs">
-      <Link>App_Start\MvcSiteMapProviderConfig.cs</Link>
-    </Compile>
     <Compile Include="App_GlobalResources\SiteMapLocalizations.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -190,9 +170,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Instructions.txt">
-      <Link>DI\StructureMap\Instructions.txt</Link>
-    </Content>
     <Content Include="Areas\Admin\Views\Home\Index.aspx" />
     <Content Include="CompilerConstants.txt" />
     <Content Include="Content\Images\content_top_bg.jpg" />
@@ -281,6 +258,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MvcSiteMapProvider.Bootstrapper.StructureMap\MvcSiteMapProvider.Bootstrapper.StructureMap.csproj">
+      <Project>{92E154F8-6B9E-B454-4DF0-C5F64782AF18}</Project>
+      <Name>MvcSiteMapProvider.Bootstrapper.StructureMap</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
       <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
       <Name>MvcSiteMapProvider</Name>

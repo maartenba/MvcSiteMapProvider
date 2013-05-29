@@ -1,21 +1,20 @@
 ﻿<?xml version="1.0"?>
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <id>MvcSiteMapProvider.Bootstrapper.Unity</id>
+    <id>MvcSiteMapProvider.Bootstrapper.StructureMap</id>
     <version>$version$</version>
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>This package provides integration for MvcSiteMapProvider with Unity.</description>
-    <summary>This package provides integration for MvcSiteMapProvider with Unity.</summary>
+    <description>This package provides integration for MvcSiteMapProvider with StructureMap.</description>
+    <summary>This package provides integration for MvcSiteMapProvider with StructureMap.</summary>
     <language>en-US</language>
-    <tags>mvc sitemap menu breadcrumb navigation unity</tags>
+    <tags>mvc sitemap menu breadcrumb navigation</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
     <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
     <dependencies>
       <group>
         <dependency id="MvcSiteMapProvider " version="4.0" />
-        <dependency id="CommonServiceLocator" version="1.0" />
-        <dependency id="Unity" version="2.1.505.2" />
+        <dependency id="structuremap" version="2.6.3" />
       </group>
       <group targetFramework="net35">
         <dependency id="Microsoft.AspNet.Razor" version="1.0.20105.408" />
