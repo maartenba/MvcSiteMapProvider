@@ -2,26 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Hosting;
 using Microsoft.Practices.Unity;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.Compilation;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Globalization;
 
-namespace DI.Unity.ContainerExtensions
+namespace MvcSiteMapProvider.Bootstrapper.Unity.ContainerExtensions
 {
     public class MvcSiteMapProviderContainerExtension
         : UnityContainerExtension

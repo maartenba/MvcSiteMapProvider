@@ -1,13 +1,9 @@
 function Generate-Assembly-Info
 {
 param(
-	[string]$clsCompliant = "true",
-	[string]$title, 
-	[string]$description, 
-	[string]$company, 
-	[string]$product, 
 	[string]$copyright, 
 	[string]$version,
+	[string]$company,
 	[string]$file = $(throw "file is a required parameter.")
 )
   $asmInfo = "using System;
@@ -15,12 +11,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: CLSCompliantAttribute($clsCompliant )]
+[assembly: CLSCompliantAttribute(false)]
 [assembly: ComVisibleAttribute(false)]
-[assembly: AssemblyTitleAttribute(""$title"")]
-[assembly: AssemblyDescriptionAttribute(""$description"")]
 [assembly: AssemblyCompanyAttribute(""$company"")]
-[assembly: AssemblyProductAttribute(""$product"")]
 [assembly: AssemblyCopyrightAttribute(""$copyright"")]
 [assembly: AssemblyVersionAttribute(""$version"")]
 [assembly: AssemblyInformationalVersionAttribute(""$version"")]

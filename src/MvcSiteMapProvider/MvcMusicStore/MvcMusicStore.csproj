@@ -129,55 +129,6 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
-  <!-- Conditionally include the right version of Config for the current DI container 
-			configured in the compilation constants -->
-  <Choose>
-    <!-- Choose between our DI containers -->
-    <When Condition=" $(DefineConstants.Contains('StructureMap')) ">
-      <ItemGroup>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
-        </Compile>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\StructureMapContainer.cs">
-          <Link>DI\StructureMap\StructureMapContainer.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </When>
-    <When Condition=" $(DefineConstants.Contains('Unity')) ">
-      <ItemGroup>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Unity\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
-        </Compile>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Unity\UnityDependencyInjectionContainer.cs">
-          <Link>DI\Unity\UnityDependencyInjectionContainer.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </When>
-    <!-- TODO: Define other DI containers here -->
-  </Choose>
-  <Choose>
-    <!-- Choose between IDependencyResolver and IControllerFactory -->
-    <When Condition=" $(DefineConstants.Contains('DependencyResolver')) ">
-      <ItemGroup>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableDependencyResolver.cs">
-          <Link>DI\InjectableDependencyResolver.cs</Link>
-        </Compile>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\DependencyResolverConfig.cs">
-          <Link>App_Start\DependencyResolverConfig.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\InjectableControllerFactory.cs">
-          <Link>DI\InjectableControllerFactory.cs</Link>
-        </Compile>
-        <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\ControllerFactoryConfig.cs">
-          <Link>App_Start\ControllerFactoryConfig.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
   <ItemGroup>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\ExtensionMethods.cs">
       <Link>DI\ExtensionMethods.cs</Link>
@@ -193,9 +144,6 @@
     </Compile>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
       <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
-    </Compile>
-    <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs">
-      <Link>DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs</Link>
     </Compile>
     <Compile Include="..\..\MvcSiteMapProvider.DIConfig\Shared\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
@@ -244,9 +192,6 @@
   <ItemGroup>
     <Content Include="..\..\MvcSiteMapProvider.DIConfig\StructureMap\Instructions.txt">
       <Link>DI\StructureMap\Instructions.txt</Link>
-    </Content>
-    <Content Include="..\..\MvcSiteMapProvider.DIConfig\Unity\Instructions.txt">
-      <Link>DI\Unity\Instructions.txt</Link>
     </Content>
     <Content Include="Areas\Admin\Views\Home\Index.aspx" />
     <Content Include="CompilerConstants.txt" />

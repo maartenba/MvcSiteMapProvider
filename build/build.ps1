@@ -19,14 +19,10 @@ task Clean -description "This task cleans up the build directory" {
 
 task Init -description "This tasks makes sure the build environment is correctly setup" {  
     Generate-Assembly-Info `
-		-file "$source_directory\MvcSiteMapProvider\Properties\AssemblyInfo.cs" `
-		-title "MvcSiteMapProvider $version" `
-		-description "An ASP.NET SiteMapProvider implementation for the ASP.NET MVC framework." `
+		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
 		-company "MvcSiteMapProvider" `
-		-product "MvcSiteMapProvider $version" `
 		-version $version `
-		-copyright "Copyright © Maarten Balliauw 2009 - 2013" `
-		-clsCompliant "false"
+		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
 }
 
 task Compile -depends Clean, Init -description "This task compiles the solution" {
@@ -40,7 +36,8 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 			/property:DefineConstants=`" MVC3`;NET35`" `
 			/property:EnableNuGetPackageRestore=true
 	}
-		
+	dir $build_directory\mvcsitemapprovider\lib\net35\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
+	
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
 			/property:outdir=$build_directory\mvcsitemapprovider\lib\net40\ `
@@ -52,18 +49,40 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 			/property:DefineConstants=`" MVC3`;NET40`" `
 			/property:EnableNuGetPackageRestore=true
 	}
+	dir $build_directory\mvcsitemapprovider\lib\net40\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
+	
+	exec { 
+		msbuild $source_directory\MvcSiteMapProvider.Bootstrapper.Unity\MvcSiteMapProvider.Bootstrapper.Unity.csproj `
+			/property:outdir=$build_directory\mvcsitemapprovider.bootstrapper.unity\lib\net35\ `
+			/verbosity:quiet `
+			/property:Configuration=$configuration `
+			"/t:Clean;Rebuild" `
+			/property:WarningLevel=3 `
+			/property:DefineConstants=`" MVC3`;NET35`" `
+			/property:EnableNuGetPackageRestore=true
+	}
+	dir $build_directory\mvcsitemapprovider.bootstrapper.unity\lib\net35\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
+		
+	exec { 
+		msbuild $source_directory\MvcSiteMapProvider.Bootstrapper.Unity\MvcSiteMapProvider.Bootstrapper.Unity.csproj `
+			/property:outdir=$build_directory\mvcsitemapprovider.bootstrapper.unity\lib\net40\ `
+			/verbosity:quiet `
+			/property:Configuration=$configuration `
+			"/t:Clean;Rebuild" `
+			/property:WarningLevel=3 `
+			/property:TargetFrameworkVersion=v4.0 `
+			/property:DefineConstants=`" MVC3`;NET40`" `
+			/property:EnableNuGetPackageRestore=true
+	}
+	dir $build_directory\mvcsitemapprovider.bootstrapper.unity\lib\net40\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {  
-    Generate-Nuspec-File `
-		-id "MvcSiteMapProvider" `
-		-file "$build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec" `
-		-version $packageVersion
-		
+	Copy-Item $source_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec $build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider -Recurse
 	
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec -Symbols
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
     }
 		
     Generate-Nuspec-File `
@@ -78,7 +97,14 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
     Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates -Recurse
 
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
+    }
+
+	Copy-Item $source_directory\mvcsitemapprovider.bootstrapper.unity\mvcsitemapprovider.bootstrapper.unity.nuspec $build_directory\mvcsitemapprovider.bootstrapper.unity\mvcsitemapprovider.bootstrapper.unity.nuspec
+    Copy-Item $nuget_directory\mvcsitemapprovider.bootstrapper.unity\* $build_directory\mvcsitemapprovider.bootstrapper.unity -Recurse
+
+    exec { 
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.bootstrapper.unity\mvcsitemapprovider.bootstrapper.unity.nuspec -Symbols -Version $packageVersion
     }
 
     Move-Item *.nupkg $base_directory\release

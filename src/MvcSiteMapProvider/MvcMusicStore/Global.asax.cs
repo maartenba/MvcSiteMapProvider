@@ -25,24 +25,24 @@ namespace MvcMusicStore
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 
-            // MvcSiteMapProvider Configuration
-#if NET35
-            MvcSiteMapProvider.DI.Composer.Compose();
-#endif
-            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
+//            // MvcSiteMapProvider Configuration
+//#if NET35
+//            MvcSiteMapProvider.DI.Composer.Compose();
+//#endif
+//            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
 
-            // NOTE: This check wouldn't have to be made in a real-world application - we do it
-            // in the demo because we want to support both the internal and external DI containers.
-            if (new MvcSiteMapProvider.DI.ConfigurationSettings().UseExternalDIContainer == true)
-            {
-                var container = DIConfig.Register();
-#if DependencyResolver
-                DependencyResolverConfig.Register(container);
-#else
-                ControllerFactoryConfig.Register(container);
-#endif
-                MvcSiteMapProviderConfig.Register(container);
-            }
+//            // NOTE: This check wouldn't have to be made in a real-world application - we do it
+//            // in the demo because we want to support both the internal and external DI containers.
+//            if (new MvcSiteMapProvider.DI.ConfigurationSettings().UseExternalDIContainer == true)
+//            {
+//                var container = DIConfig.Register();
+//#if DependencyResolver
+//                DependencyResolverConfig.Register(container);
+//#else
+//                ControllerFactoryConfig.Register(container);
+//#endif
+//                MvcSiteMapProviderConfig.Register(container);
+            //}
         }
 
         /// <summary>

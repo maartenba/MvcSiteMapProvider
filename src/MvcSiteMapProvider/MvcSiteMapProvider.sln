@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{0EC6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{EBBE2F83-8F97-4A25-BF8C-C6A43112926A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcSiteMapProvider.Bootstrapper.Unity", "MvcSiteMapProvider.Bootstrapper.Unity\MvcSiteMapProvider.Bootstrapper.Unity.csproj", "{927824F8-6B9E-4DF0-B454-C5F64AFE1518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{927824F8-6B9E-4DF0-B454-C5F64AFE1518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{927824F8-6B9E-4DF0-B454-C5F64AFE1518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{927824F8-6B9E-4DF0-B454-C5F64AFE1518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{927824F8-6B9E-4DF0-B454-C5F64AFE1518}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C83FE52C-47DD-4433-B34E-9C9D72BBFFA1} = {0EC6B430-52BD-4514-9174-8BE70C3029E3}
 		{8625FB9C-BE71-41EF-993D-3C05EA11DEF4} = {EBBE2F83-8F97-4A25-BF8C-C6A43112926A}
+		{927824F8-6B9E-4DF0-B454-C5F64AFE1518} = {EBBE2F83-8F97-4A25-BF8C-C6A43112926A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35

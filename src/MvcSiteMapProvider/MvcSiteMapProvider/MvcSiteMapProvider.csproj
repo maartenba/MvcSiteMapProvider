@@ -102,6 +102,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Builder\AspNetNamedSiteMapProvider.cs" />
     <Compile Include="Builder\AspNetSiteMapBuilder.cs" />
     <Compile Include="Builder\AspNetDefaultSiteMapProvider.cs" />
@@ -337,8 +340,11 @@
     <EmbeddedResource Include="Xml\MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="MvcSiteMapProvider.nuspec" />
     <None Include="MvcSiteMapProvider.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <EmbeddedResource Include="Web\Html\DisplayTemplates\MenuHelperModel.cshtml" />
     <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapHelperModel.cshtml" />
     <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapNodeModel.cshtml" />
