@@ -1,8 +1,8 @@
-﻿using MvcSiteMapProvider.Bootstrapper.StructureMap.Registries;
+﻿using $rootnamespace$.DI.MvcSiteMapProvider.Registries;
 using MvcSiteMapProvider.DI.Bootstrap;
 using StructureMap;
 
-namespace MvcSiteMapProvider.Bootstrapper.StructureMap
+namespace $rootnamespace$.DI.MvcSiteMapProvider
 {
     public class DIConfig
     {

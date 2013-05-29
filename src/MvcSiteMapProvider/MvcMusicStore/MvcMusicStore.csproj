@@ -152,6 +152,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="DI\MvcSiteMapProvider\Conventions\SingletonConvention.cs" />
+    <Compile Include="DI\MvcSiteMapProvider\Conventions\TransientConvention.cs" />
+    <Compile Include="DI\MvcSiteMapProvider\DIConfig.cs" />
+    <Compile Include="DI\MvcSiteMapProvider\Registries\MvcRegistry.cs" />
+    <Compile Include="DI\MvcSiteMapProvider\Registries\MvcSiteMapProviderRegistry.cs" />
+    <Compile Include="DI\MvcSiteMapProvider\StructureMapContainer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -258,10 +264,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MvcSiteMapProvider.Bootstrapper.StructureMap\MvcSiteMapProvider.Bootstrapper.StructureMap.csproj">
-      <Project>{92E154F8-6B9E-B454-4DF0-C5F64782AF18}</Project>
-      <Name>MvcSiteMapProvider.Bootstrapper.StructureMap</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
       <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
       <Name>MvcSiteMapProvider</Name>

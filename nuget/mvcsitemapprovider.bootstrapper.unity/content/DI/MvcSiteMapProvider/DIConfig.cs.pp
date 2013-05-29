@@ -1,8 +1,9 @@
 ﻿using Microsoft.Practices.Unity;
-using MvcSiteMapProvider.Bootstrapper.Unity.ContainerExtensions;
+using $rootnamespace$.DI.MvcSiteMapProvider.ContainerExtensions;
 using MvcSiteMapProvider.DI.Bootstrap;
+using $rootnamespace$.DI.MvcSiteMapProvider.ContainerExtensions;
 
-namespace MvcSiteMapProvider.Bootstrapper.Unity
+namespace $rootnamespace$.DI.MvcSiteMapProvider
 {
     internal class DIConfig
     {

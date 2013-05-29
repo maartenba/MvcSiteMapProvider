@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcMusicStore.App_Start;
-using MvcSiteMapProvider.Bootstrapper;
+using MvcMusicStore.DI.MvcSiteMapProvider;
 using MvcSiteMapProvider.DI.Bootstrap;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -36,7 +36,7 @@ namespace MvcMusicStore
             // in the demo because we want to support both the internal and external DI containers.
             if (new MvcSiteMapProvider.DI.ConfigurationSettings().UseExternalDIContainer == true)
             {
-                var container = MvcSiteMapProvider.Bootstrapper.StructureMap.DIConfig.Register();
+                var container = DIConfig.Register();
 #if DependencyResolver
                 DependencyResolverConfig.Register(container);
 #else

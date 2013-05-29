@@ -1,7 +1,7 @@
-To use StructureMap as your dependency injection container, please follow the instructions below.
+To use Unity as your dependency injection container, please follow the instructions below.
 
 Add the following lines of code to the Application_Start() method of Global.asax.
-Note that if you are using .NET 4, we already created the AppStart_MvcSiteMapProvider_Bootstrapper_StructureMap.cs file which registers the IControllerFactory.
+Note that if you are using .NET 4, we already created the AppStart_MvcSiteMapProvider_Bootstrapper_Unity.cs file which registers the IControllerFactory.
 
 If you are using IControllerFactory:
 
@@ -9,7 +9,7 @@ If you are using IControllerFactory:
 #if NET35
             MvcSiteMapProvider.DI.Composer.Compose();
 #endif
-            var container = MvcSiteMapProvider.Bootstrapper.StructureMap.DIConfig.Register();
+            var container = $rootnamespace$.DI.MvcSiteMapProvider.DIConfig.Register();
             MvcSiteMapProvider.Bootstrapper.ControllerFactoryConfig.Register(container);
             MvcSiteMapProvider.Bootstrapper.MvcSiteMapProviderConfig.Register(container);
 
@@ -20,6 +20,6 @@ If you are using IDependencyResolver (if you don't know the difference, use ICon
 #if NET35
             MvcSiteMapProvider.DI.Composer.Compose();
 #endif
-            var container = MvcSiteMapProvider.Bootstrapper.StructureMap.DIConfig.Register();
+            var container = $rootnamespace$.DI.MvcSiteMapProvider.DIConfig.Register();
             MvcSiteMapProvider.Bootstrapper.DependencyResolverConfig.Register(container);
             MvcSiteMapProvider.Bootstrapper.MvcSiteMapProviderConfig.Register(container);

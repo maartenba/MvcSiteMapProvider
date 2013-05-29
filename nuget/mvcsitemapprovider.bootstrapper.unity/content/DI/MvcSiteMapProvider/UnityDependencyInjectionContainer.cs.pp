@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Practices.Unity;
 using MvcSiteMapProvider.DI.Bootstrap;
+using $rootnamespace$.DI.MvcSiteMapProvider.ContainerExtensions;
 
-namespace MvcSiteMapProvider.Bootstrapper.Unity
+namespace $rootnamespace$.DI.MvcSiteMapProvider
 {
     public class UnityDependencyInjectionContainer
         : IDependencyInjectionContainer

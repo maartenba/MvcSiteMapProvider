@@ -1,9 +1,9 @@
-﻿using System.Web.Mvc;
-using MvcSiteMapProvider.Bootstrapper.StructureMap.Conventions;
+using System.Web.Mvc;
+using MvcMusicStore.DI.MvcSiteMapProvider.Conventions;
 using MvcSiteMapProvider.Web.Mvc;
 using StructureMap.Configuration.DSL;
 
-namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Registries
+namespace MvcMusicStore.DI.MvcSiteMapProvider.Registries
 {
     public class MvcRegistry
         : Registry

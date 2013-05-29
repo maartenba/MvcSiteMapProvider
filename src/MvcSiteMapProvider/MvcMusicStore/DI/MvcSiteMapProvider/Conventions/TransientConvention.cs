@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
-namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Conventions
+namespace MvcMusicStore.DI.MvcSiteMapProvider.Conventions
 {
     public class TransientConvention
         : IRegistrationConvention

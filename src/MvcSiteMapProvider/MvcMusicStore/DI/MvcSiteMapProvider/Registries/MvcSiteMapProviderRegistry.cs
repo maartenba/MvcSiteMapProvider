@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Hosting;
-using MvcSiteMapProvider.Bootstrapper.StructureMap.Conventions;
+using MvcMusicStore.DI.MvcSiteMapProvider.Conventions;
+using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Compilation;
+using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Reflection;
@@ -16,7 +18,7 @@ using MvcSiteMapProvider.Globalization;
 using StructureMap.Configuration.DSL;
 using StructureMap.Pipeline;
 
-namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Registries
+namespace MvcMusicStore.DI.MvcSiteMapProvider.Registries
 {
     public class MvcSiteMapProviderRegistry
         : Registry
@@ -75,7 +77,7 @@ namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Registries
             // from the global filter collection.
             this.For<System.Web.Mvc.IFilterProvider>()
                 .Singleton()
-                .Use<MvcSiteMapProvider.Web.Mvc.Filters.FilterProvider>();
+                .Use<FilterProvider>();
 #endif
 
             // Configure Security
@@ -133,7 +135,7 @@ namespace MvcSiteMapProvider.Bootstrapper.StructureMap.Registries
                 .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
                 
             var builder = this.For<ISiteMapBuilder>().Use<CompositeSiteMapBuilder>()
-                .EnumerableOf<MvcSiteMapProvider.Builder.ISiteMapBuilder>().Contains(y =>
+                .EnumerableOf<ISiteMapBuilder>().Contains(y =>
                 {
                     y.Type<XmlSiteMapBuilder>()
                         .Ctor<ISiteMapXmlReservedAttributeNameProvider>().Is(reservedAttributeNameProvider)

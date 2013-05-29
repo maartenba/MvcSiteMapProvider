@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Hosting;
 using Microsoft.Practices.Unity;
+using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.Compilation;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Security;
@@ -14,7 +16,7 @@ using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Xml;
 
-namespace MvcSiteMapProvider.Bootstrapper.Unity.ContainerExtensions
+namespace $rootnamespace$.DI.MvcSiteMapProvider.ContainerExtensions
 {
     public class MvcSiteMapProviderContainerExtension
         : UnityContainerExtension
@@ -60,7 +62,7 @@ namespace MvcSiteMapProvider.Bootstrapper.Unity.ContainerExtensions
 #if !MVC2
             // Configure default filter provider with one that provides filters
             // from the global filter collection.
-            this.Container.RegisterType<System.Web.Mvc.IFilterProvider, MvcSiteMapProvider.Web.Mvc.Filters.FilterProvider>(
+            this.Container.RegisterType<System.Web.Mvc.IFilterProvider, FilterProvider>(
                 new PerResolveLifetimeManager());
 #endif
             // Configure Security

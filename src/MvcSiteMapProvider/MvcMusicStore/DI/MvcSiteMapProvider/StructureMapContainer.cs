@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.DI.Bootstrap;
 using StructureMap;
 
-namespace MvcSiteMapProvider.Bootstrapper.StructureMap
+namespace MvcMusicStore.DI.MvcSiteMapProvider
 {
     public class StructureMapContainer
         : IDependencyInjectionContainer
