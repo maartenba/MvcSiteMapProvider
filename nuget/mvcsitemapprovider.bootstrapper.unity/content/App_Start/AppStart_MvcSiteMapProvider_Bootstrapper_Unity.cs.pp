@@ -1,4 +1,4 @@
-﻿using MvcSiteMapProvider.Bootstrapper;
+﻿using MvcSiteMapProvider.DI.Bootstrap;
 using MvcSiteMapProvider.Bootstrapper.Unity;
 
 [assembly: WebActivatorEx.PostApplicationStartMethod(typeof($rootnamespace$.AppStart_MvcSiteMapProvider_Bootstrapper_Unity), "Start")]
@@ -14,8 +14,8 @@ namespace $rootnamespace$
             MvcSiteMapProvider.DI.Composer.Compose();
 #endif
             var container = MvcSiteMapProvider.Bootstrapper.Unity.DIConfig.Register();
-            MvcSiteMapProvider.Bootstrapper.ControllerFactoryConfig.Register(container);
-            MvcSiteMapProvider.Bootstrapper.MvcSiteMapProviderConfig.Register(container);
+            MvcSiteMapProvider.DI.Bootstrap.ControllerFactoryConfig.Register(container);
+            MvcSiteMapProvider.DI.Bootstrap.MvcSiteMapProviderConfig.Register(container);
         }
     }
 }

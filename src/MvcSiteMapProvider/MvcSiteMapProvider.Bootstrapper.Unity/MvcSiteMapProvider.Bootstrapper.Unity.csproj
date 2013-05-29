@@ -119,27 +119,6 @@
     <Compile Include="..\Shared\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\ControllerFactoryConfig.cs">
-      <Link>Shared\ControllerFactoryConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\DependencyResolverConfig.cs">
-      <Link>Shared\DependencyResolverConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\ExtensionMethods.cs">
-      <Link>Shared\ExtensionMethods.cs</Link>
-    </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\IDependencyInjectionContainer.cs">
-      <Link>Shared\IDependencyInjectionContainer.cs</Link>
-    </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\InjectableControllerFactory.cs">
-      <Link>Shared\InjectableControllerFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\InjectableDependencyResolver.cs">
-      <Link>Shared\InjectableDependencyResolver.cs</Link>
-    </Compile>
-    <Compile Include="..\Shared\MvcSiteMapProvider.Bootstrapper\MvcSiteMapProviderConfig.cs">
-      <Link>Shared\MvcSiteMapProviderConfig.cs</Link>
-    </Compile>
     <Compile Include="ContainerExtensions\MvcSiteMapProviderContainerExtension.cs" />
     <Compile Include="DIConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

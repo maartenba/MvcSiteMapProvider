@@ -1,4 +1,5 @@
 ﻿using MvcSiteMapProvider.Bootstrapper.StructureMap.Registries;
+using MvcSiteMapProvider.DI.Bootstrap;
 using StructureMap;
 
 namespace MvcSiteMapProvider.Bootstrapper.StructureMap

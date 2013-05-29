@@ -1,9 +1,8 @@
-﻿using System;
-using System.Web.Hosting;
+﻿using System.Web.Hosting;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Xml;
 
-namespace MvcSiteMapProvider.Bootstrapper
+namespace MvcSiteMapProvider.DI.Bootstrap
 {
     public class MvcSiteMapProviderConfig
     {

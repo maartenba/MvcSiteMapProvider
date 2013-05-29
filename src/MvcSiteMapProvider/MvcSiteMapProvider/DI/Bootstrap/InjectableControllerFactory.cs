@@ -2,7 +2,7 @@
 using System.Web.Routing;
 using System.Web.Mvc;
 
-namespace MvcSiteMapProvider.Bootstrapper
+namespace MvcSiteMapProvider.DI.Bootstrap
 {
     internal class InjectableControllerFactory
         : DefaultControllerFactory

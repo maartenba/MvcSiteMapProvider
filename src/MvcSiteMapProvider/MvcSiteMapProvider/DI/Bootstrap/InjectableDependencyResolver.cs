@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Web.Routing;
 using System.Web.Mvc;
 
-namespace MvcSiteMapProvider.Bootstrapper
+namespace MvcSiteMapProvider.DI.Bootstrap
 {
     internal class InjectableDependencyResolver
         : IDependencyResolver

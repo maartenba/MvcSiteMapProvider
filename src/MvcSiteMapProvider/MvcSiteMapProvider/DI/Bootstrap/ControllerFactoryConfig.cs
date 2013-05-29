@@ -1,7 +1,6 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
-namespace MvcSiteMapProvider.Bootstrapper
+namespace MvcSiteMapProvider.DI.Bootstrap
 {
     public class ControllerFactoryConfig
     {

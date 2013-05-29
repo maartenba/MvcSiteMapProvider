@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvcSiteMapProvider.DI.Bootstrap;
 using StructureMap;
 
 namespace MvcSiteMapProvider.Bootstrapper.StructureMap

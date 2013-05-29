@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Unity;
+using MvcSiteMapProvider.DI.Bootstrap;
 
 namespace MvcSiteMapProvider.Bootstrapper.Unity
 {
