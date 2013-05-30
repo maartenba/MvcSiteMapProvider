@@ -1,4 +1,4 @@
-﻿namespace VideoSitemap
+﻿namespace ExtensibleSiteMap
 {
     using System;
 

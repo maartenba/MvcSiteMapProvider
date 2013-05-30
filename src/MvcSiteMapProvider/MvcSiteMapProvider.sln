@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{0EC6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{EBBE2F83-8F97-4A25-BF8C-C6A43112926A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSitemap", "VideoSitemap\VideoSitemap.csproj", "{1856D86E-AEFD-40A6-9983-6E872F202C9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtensibleSiteMap", "VideoSitemap\ExtensibleSiteMap.csproj", "{1856D86E-AEFD-40A6-9983-6E872F202C9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

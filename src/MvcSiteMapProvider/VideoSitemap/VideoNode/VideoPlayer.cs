@@ -1,4 +1,4 @@
-namespace VideoSitemap.SiteMapNode
+namespace ExtensibleSiteMap.VideoNode
 {
     public class VideoPlayer
     {
