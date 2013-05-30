@@ -316,7 +316,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             return outputStream;
         }
 
-        private void WriteXmlSitemapDocument(ControllerContext context, XDocument xmlSiteMap)
+        protected virtual void WriteXmlSitemapDocument(ControllerContext context, XDocument xmlSiteMap)
         {
             context.HttpContext.Response.ContentType = "text/xml";
             using (Stream outputStream = RetrieveOutputStream(context))
@@ -331,17 +331,19 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         private XElement GenerateSitemapUrlSet(ControllerContext context, IEnumerable<ISiteMapNode> flattenedHierarchy, int page)
         {
-            var urlElements = GenerateUrlElements(
-                context,
-                flattenedHierarchy
-                    .Skip((page - 1) * MaxNumberOfLinksPerFile)
-                    .Take(MaxNumberOfLinksPerFile),
-                BaseUrl
-                ).ToArray();
+            var siteMapNodes = flattenedHierarchy.Skip((page - 1)*MaxNumberOfLinksPerFile).Take(MaxNumberOfLinksPerFile);
 
-            var urlSet = new XElement(Ns + "urlset");
+            var urlElements = GenerateUrlElements(context, siteMapNodes, BaseUrl)
+                .ToArray();
+
+            var urlSet = GetRootElement();
             urlSet.Add(urlElements);
             return urlSet;
+        }
+
+        protected virtual XElement GetRootElement()
+        {
+            return new XElement(Ns + "urlset");
         }
     }
 }

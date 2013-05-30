@@ -17,9 +17,11 @@ namespace VideoSitemap
             : base(page, rootNode, siteMapCacheKeys, baseUrl, siteMapUrlTemplate, siteMapLoader)
         {
             VideoNs = "http://www.google.com/schemas/sitemap-video/1.1";
+            VideoNsName = "video";
         }
 
         protected XNamespace VideoNs { get; set; }
+        protected string VideoNsName { get; set; }
 
         protected override void AddAttributesToUrlElement(ISiteMapNode siteMapNode, System.Xml.Linq.XElement urlElement)
         {
@@ -29,25 +31,35 @@ namespace VideoSitemap
 
             if (videoNode != null)
             {
-                var videoElement = new XElement(VideoNs + "video");
-                AddAttributesToVideoElement(videoNode, videoElement);
-                urlElement.Add(videoElement);
+                foreach (var info in videoNode.VideoNodeInformation)
+                {
+                    var videoElement = new XElement(VideoNs + "video");
+                    AddAttributesToVideoElement(info, videoElement);
+                    urlElement.Add(videoElement);
+                }
             }
         }
 
-        private void AddAttributesToVideoElement(VideoSiteMapNode videoNode, XElement e)
+        protected override XElement GetRootElement()
         {
-            if (!string.IsNullOrWhiteSpace(videoNode.ThumbnailUrl))
+            var root = base.GetRootElement();
+            root.SetAttributeValue(XNamespace.Xmlns + VideoNsName, VideoNs);
+            return root;
+        }
+
+        private void AddAttributesToVideoElement(VideoNodeInformation videoInformation, XElement e)
+        {
+            if (!string.IsNullOrWhiteSpace(videoInformation.ThumbnailUrl))
             {
-                Add(e, "thumbnail_loc", videoNode.ThumbnailUrl);
+                Add(e, "thumbnail_loc", videoInformation.ThumbnailUrl);
             }
 
-            if (!string.IsNullOrWhiteSpace(videoNode.ContentUrl))
+            if (!string.IsNullOrWhiteSpace(videoInformation.ContentUrl))
             {
-                Add(e, "content_loc", videoNode.ContentUrl);
+                Add(e, "content_loc", videoInformation.ContentUrl);
             }
 
-            var videoPlayer = videoNode.Player;
+            var videoPlayer = videoInformation.Player;
             if (videoPlayer != null)
             {
                 var playerElement = new XElement(VideoNs + "player_loc");
@@ -59,73 +71,73 @@ namespace VideoSitemap
                 e.Add(playerElement);
             }
 
-            if (videoNode.Duration.HasValue)
+            if (videoInformation.Duration.HasValue)
             {
-                var duration = videoNode.Duration.Value.TotalSeconds;
+                var duration = videoInformation.Duration.Value.TotalSeconds;
                 if (duration > 0 && duration <= 8.Hours().TotalSeconds)
                 {
                     Add(e, "duration", duration.ToString());
                 }
             }
 
-            if (videoNode.ExpirationDate.HasValue)
+            if (videoInformation.ExpirationDate.HasValue)
             {
-                Add(e, "expiration_date", videoNode.ExpirationDate.Value.ToString(DateTimeFormat));
+                Add(e, "expiration_date", videoInformation.ExpirationDate.Value.ToString(DateTimeFormat));
             }
 
-            if (videoNode.Rating.HasValue)
+            if (videoInformation.Rating.HasValue)
             {
-                var rating = videoNode.Rating.Value;
+                var rating = videoInformation.Rating.Value;
                 if (0 <= rating && rating <= 5.0)
                 {
                     Add(e, "rating", rating.ToString());
                 }
             }
 
-            if (videoNode.ViewCount.HasValue)
+            if (videoInformation.ViewCount.HasValue)
             {
-                Add(e, "view_count", videoNode.ViewCount.Value.ToString());
+                Add(e, "view_count", videoInformation.ViewCount.Value.ToString());
             }
 
-            if (videoNode.PublicationDate.HasValue)
+            if (videoInformation.PublicationDate.HasValue)
             {
-                Add(e, "publication_date", videoNode.PublicationDate.Value.ToString(DateTimeFormat));
+                Add(e, "publication_date", videoInformation.PublicationDate.Value.ToString(DateTimeFormat));
             }
 
-            if (!videoNode.IsFamilyFriendly)
+            if (!videoInformation.IsFamilyFriendly)
             {
                 Add(e, "family_friendly", "No");
             }
 
-            if (videoNode.IsLiveStream.HasValue)
+            if (videoInformation.IsLiveStream.HasValue)
             {
-                Add(e, "live", videoNode.IsLiveStream.Value ? "yes" : "no");
+                Add(e, "live", videoInformation.IsLiveStream.Value ? "yes" : "no");
             }
 
-            if (videoNode.RequiresSubscription.HasValue)
+            if (videoInformation.RequiresSubscription.HasValue)
             {
-                Add(e, "requires_subscription", videoNode.RequiresSubscription.Value ? "yes" : "no");
+                Add(e, "requires_subscription", videoInformation.RequiresSubscription.Value ? "yes" : "no");
             }
 
-            if (videoNode.Tags.Any())
+            if (videoInformation.Tags.Any())
             {
-                foreach (var tag in videoNode.Tags)
+                foreach (var tag in videoInformation.Tags)
                 {
                     Add(e, "tag", tag);
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(videoNode.Category))
+            if (!string.IsNullOrWhiteSpace(videoInformation.Category))
             {
-                Add(e, "category", videoNode.Category);
+                Add(e, "category", videoInformation.Category);
             }
 
 
-            if (videoNode.RestrictedCountries.Any())
+            if (videoInformation.RestrictedCountries.Any())
             {
-                string relationshipValue = videoNode.RestrictionRelation == RestrictionRelation.NotThese ? "deny" : "allow";
+                string relationshipValue = videoInformation.RestrictionRelation == RestrictionRelation.NotThese ? "deny" : "allow";
 
-                foreach (var country in videoNode.RestrictedCountries)
+                foreach (var country in videoInformation.RestrictedCountries)
                 {
                     var restriction = new XElement(VideoNs + "restriction", country);
                     restriction.SetAttributeValue("relationship", relationshipValue);
@@ -133,19 +145,19 @@ namespace VideoSitemap
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(videoNode.GalleryUrl))
+            if (!string.IsNullOrWhiteSpace(videoInformation.GalleryUrl))
             {
-                var galleryElement = new XElement(VideoNs + "gallery_loc", videoNode.GalleryUrl);
-                if (!string.IsNullOrWhiteSpace(videoNode.GalleryTitle))
+                var galleryElement = new XElement(VideoNs + "gallery_loc", videoInformation.GalleryUrl);
+                if (!string.IsNullOrWhiteSpace(videoInformation.GalleryTitle))
                 {
-                    galleryElement.SetAttributeValue("title", videoNode.GalleryTitle);
+                    galleryElement.SetAttributeValue("title", videoInformation.GalleryTitle);
                 }
                 e.Add(galleryElement);
             }
 
-            if (videoNode.Prices.Any())
+            if (videoInformation.Prices.Any())
             {
-                foreach (var price in videoNode.Prices)
+                foreach (var price in videoInformation.Prices)
                 {
                     var priceElement = new XElement(VideoNs + "price", price.Price);
                     if (!string.IsNullOrWhiteSpace(price.Currency))
@@ -166,10 +178,10 @@ namespace VideoSitemap
                 }
             }
 
-            if (videoNode.Uploader != null)
+            if (videoInformation.Uploader != null)
             {
-                var uploaderElement = new XElement(VideoNs + "uploader", videoNode.Uploader.Name);
-                string location = videoNode.Uploader.Location;
+                var uploaderElement = new XElement(VideoNs + "uploader", videoInformation.Uploader.Name);
+                string location = videoInformation.Uploader.Location;
                 if (!string.IsNullOrWhiteSpace(location))
                 {
                     uploaderElement.SetAttributeValue("info", location);
@@ -177,7 +189,7 @@ namespace VideoSitemap
                 e.Add(uploaderElement);
             }
 
-            var platform = videoNode.Platform;
+            var platform = videoInformation.Platform;
             if (platform != null)
             {
                 var platformElement = new XElement(VideoNs + "platform", platform.Targets);
