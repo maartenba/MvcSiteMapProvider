@@ -213,7 +213,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 
                 var urlElement = new XElement(Ns + "url", new XElement(Ns + "loc", nodeUrl));
 
-                GenerateUrlElementAttributes(siteMapNode, urlElement);
+                AddAttributesToUrlElement(siteMapNode, urlElement);
 
                 // Return
                 yield return urlElement;
@@ -225,7 +225,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </summary>
         /// <param name="siteMapNode">The current node</param>
         /// <param name="urlElement">The URL element for the current node to set attributes on</param>
-        protected virtual void GenerateUrlElementAttributes(ISiteMapNode siteMapNode, XElement urlElement)
+        protected virtual void AddAttributesToUrlElement(ISiteMapNode siteMapNode, XElement urlElement)
         {
             if (siteMapNode.LastModifiedDate > DateTime.MinValue)
             {
