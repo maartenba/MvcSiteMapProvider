@@ -1,10 +1,9 @@
-﻿namespace ExtensibleSiteMap
+namespace MvcSiteMapProvider
 {
     using System.Collections.Generic;
-    using MvcSiteMapProvider;
-    using MvcSiteMapProvider.Globalization;
-    using MvcSiteMapProvider.Web;
-    using MvcSiteMapProvider.Web.Mvc;
+    using Globalization;
+    using Web;
+    using Web.Mvc;
 
     public class ExtensibleSiteMapNode : MvcSiteMapProvider.SiteMapNode, IExtensibleSiteMapNode
     {

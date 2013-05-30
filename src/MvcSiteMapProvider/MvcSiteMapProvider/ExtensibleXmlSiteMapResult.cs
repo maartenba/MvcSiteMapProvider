@@ -1,10 +1,9 @@
-﻿namespace ExtensibleSiteMap
+namespace MvcSiteMapProvider
 {
     using System.Collections.Generic;
     using System.Xml.Linq;
-    using MvcSiteMapProvider;
-    using MvcSiteMapProvider.Loader;
-    using MvcSiteMapProvider.Web.Mvc;
+    using Loader;
+    using Web.Mvc;
 
     public class ExtensibleXmlSiteMapResult : XmlSiteMapResult
     {

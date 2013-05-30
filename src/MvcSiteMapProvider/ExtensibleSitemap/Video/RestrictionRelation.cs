@@ -1,4 +1,4 @@
-namespace ExtensibleSiteMap.VideoNode
+namespace ExtensibleSiteMap.Video
 {
     public enum RestrictionRelation
     {

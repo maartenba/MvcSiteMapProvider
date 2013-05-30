@@ -120,6 +120,8 @@
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
     <Compile Include="DI\Bootstrap\ControllerFactoryConfig.cs" />
     <Compile Include="DI\Bootstrap\DependencyResolverConfig.cs" />
+    <Compile Include="ExtensibleSiteMapNode.cs" />
+    <Compile Include="ExtensibleXmlSiteMapResult.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="DI\Bootstrap\IDependencyInjectionContainer.cs" />
     <Compile Include="DI\Bootstrap\InjectableControllerFactory.cs" />
@@ -129,6 +131,8 @@
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
     <Compile Include="DI\DependencyResolverDecorator.cs" />
+    <Compile Include="IExtensibleSiteMapNode.cs" />
+    <Compile Include="ISiteMapResultExtension.cs" />
     <Compile Include="Reflection\ObjectExtensions.cs" />
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />

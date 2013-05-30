@@ -1,4 +1,4 @@
-namespace ExtensibleSiteMap.VideoNode
+namespace ExtensibleSiteMap.Video
 {
     using System;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace ExtensibleSiteMap
+namespace ExtensibleSiteMap.Tests
 {
     using System.Collections.Generic;
     using System.Web;
@@ -12,13 +12,13 @@
     using MvcSiteMapProvider.Web;
     using MvcSiteMapProvider.Web.Mvc;
     using NSubstitute;
-    using VideoNode;
+    using Video;
 
     [TestClass]
     public class Test
     {
         [TestMethod]
-        public void TestVideoExtension()
+        public void VideoExtension()
         {
             // A
             var siteMapCacheKeys = new List<string>();
@@ -32,7 +32,9 @@
 
             var context = new ControllerContext(httpContext, routeData, controller);
 
-            ISiteMapNode rootNode = GetTestNodeTree();
+            var rootNode = GetTestNodeTree();
+
+            AddVideoData(rootNode);
 
             // A
             var videoSitemapExtension = new VideoSiteMapExtension();
@@ -46,16 +48,11 @@
 
             var resultString = result.XDocument.ToString();
             Assert.IsFalse(string.IsNullOrWhiteSpace(resultString));
-            Assert.AreEqual("blarg", resultString);
+            Assert.AreEqual("random string", resultString);
         }
-        
-        private ISiteMapNode GetTestNodeTree()
-        {
-            var root = GetEmptyNode("root");
-            root.Title = "test title";
-            root.Description = "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.";
-            root.Url = "zomg.htm";
 
+        private void AddVideoData(ExtensibleSiteMapNode root)
+        {
             var videoData = new VideoSiteMapExtension.VideoData();
 
             var info = new VideoNodeInformation
@@ -73,19 +70,24 @@
             videoData.VideoNodeInformation.Add(info2);
 
             root.DataByExtensionKey.Add(VideoSiteMapExtension.ExtensionDataKey, videoData);
-
-            return root;
         }
 
-        private ExtensibleSiteMapNode GetEmptyNode(string key)
+        private ExtensibleSiteMapNode GetTestNodeTree()
         {
             var siteMap = Substitute.For<ISiteMap>();
             var pluginProvider = Substitute.For<ISiteMapNodePluginProvider>();
             var mvcContextFactory = Substitute.For<IMvcContextFactory>();
             var siteMapNodeChildStateFactory = Substitute.For<ISiteMapNodeChildStateFactory>();
             var localizationService = Substitute.For<ILocalizationService>();
-            var node = new ExtensibleSiteMapNode(siteMap, key, false, pluginProvider, mvcContextFactory, siteMapNodeChildStateFactory, localizationService, new UrlPath(mvcContextFactory));
-            return node;
+            
+            var root = new ExtensibleSiteMapNode(siteMap, "asdf", false, pluginProvider, mvcContextFactory, siteMapNodeChildStateFactory, localizationService, new UrlPath(mvcContextFactory))
+            {
+                Title = "test title",
+                Description = "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.",
+                Url = "zomg.htm"
+            };
+
+            return root;
         }
     }
 

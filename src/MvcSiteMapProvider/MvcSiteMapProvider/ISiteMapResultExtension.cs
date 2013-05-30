@@ -1,4 +1,4 @@
-﻿namespace ExtensibleSiteMap
+namespace MvcSiteMapProvider
 {
     using System.Xml.Linq;
 

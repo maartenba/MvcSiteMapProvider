@@ -1,12 +1,12 @@
-﻿namespace ExtensibleSiteMap
+namespace ExtensibleSiteMap.Video
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Xml.Linq;
-    using VideoNode;
-    
+    using MvcSiteMapProvider;
+
     public class VideoSiteMapExtension : ISiteMapResultExtension
     {
         private const string DateTimeFormat = "yyyy'-'MM'-'dd";

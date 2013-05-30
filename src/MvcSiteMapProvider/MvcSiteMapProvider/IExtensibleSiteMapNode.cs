@@ -1,7 +1,6 @@
-﻿namespace ExtensibleSiteMap
+namespace MvcSiteMapProvider
 {
     using System.Collections.Generic;
-    using MvcSiteMapProvider;
 
     public interface IExtensibleSiteMapNode : ISiteMapNode
     {
