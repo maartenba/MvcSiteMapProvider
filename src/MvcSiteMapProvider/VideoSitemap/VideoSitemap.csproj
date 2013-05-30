@@ -49,6 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExtensibleSiteMapNode.cs" />
+    <Compile Include="ExtensibleXmlSiteMapResult.cs" />
+    <Compile Include="IExtensibleSiteMapNode.cs" />
+    <Compile Include="IntExtensions.cs" />
+    <Compile Include="ISiteMapResultExtension.cs" />
     <Compile Include="SiteMapNode\RestrictionRelation.cs" />
     <Compile Include="SiteMapNode\VideoNodeInformation.cs" />
     <Compile Include="SiteMapNode\VideoPlatform.cs" />
@@ -58,9 +63,6 @@
     <Compile Include="SiteMapNode\VideoUploader.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VideoSitemapNinjectModule.cs" />
-    <Compile Include="VideoSitemapResultFactory.cs" />
-    <Compile Include="VideoXmlSitemapResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
