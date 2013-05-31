@@ -4,7 +4,7 @@ properties {
     $source_directory = "$base_directory\src\MvcSiteMapProvider"
     $nuget_directory  = "$base_directory\nuget"
     $tools_directory  = "$base_directory\tools"
-    $version          = "3.3.5.0"
+    $version          = "3.3.6.0"
 }
 
 include .\psake_ext.ps1
@@ -23,7 +23,7 @@ task Init -description "This tasks makes sure the build environment is correctly
 		-company "MvcSiteMapProvider" `
 		-product "MvcSiteMapProvider $version" `
 		-version $version `
-		-copyright "Copyright � Maarten Balliauw 2009 - 2013" `
+		-copyright "Copyright (c) Maarten Balliauw 2009 - 2013" `
 		-clsCompliant "false"
         
     if ((Test-Path $build_directory) -eq $false) {
