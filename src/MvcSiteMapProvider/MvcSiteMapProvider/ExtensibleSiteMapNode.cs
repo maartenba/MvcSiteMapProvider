@@ -5,7 +5,7 @@ namespace MvcSiteMapProvider
     using Web;
     using Web.Mvc;
 
-    public class ExtensibleSiteMapNode : MvcSiteMapProvider.SiteMapNode, IExtensibleSiteMapNode
+    public class ExtensibleSiteMapNode : SiteMapNode, IExtensibleSiteMapNode
     {
         public ExtensibleSiteMapNode(ISiteMap siteMap, string key, bool isDynamic, ISiteMapNodePluginProvider pluginProvider, IMvcContextFactory mvcContextFactory, ISiteMapNodeChildStateFactory siteMapNodeChildStateFactory, ILocalizationService localizationService, IUrlPath urlPath) 
             : base(siteMap, key, isDynamic, pluginProvider, mvcContextFactory, siteMapNodeChildStateFactory, localizationService, urlPath)

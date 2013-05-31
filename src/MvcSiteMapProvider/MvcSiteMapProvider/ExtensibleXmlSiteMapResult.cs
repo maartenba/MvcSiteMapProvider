@@ -29,9 +29,7 @@ namespace MvcSiteMapProvider
 
             foreach (var extension in _extensions)
             {
-                var element = new XElement(extension.NameSpace + extension.ElementName);
-                extension.AddNodeContentToElement(extensibleNode, element);
-                urlElement.Add(element);
+                extension.AddNodeContentToElement(extensibleNode, urlElement);
             }
         }
     }
