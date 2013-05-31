@@ -7,7 +7,7 @@
   <mvcSiteMapNode title="$resources:SiteMapLocalizations,HomeTitle" controller="Home" action="Index" changeFrequency="Always" updatePriority="Normal" lastModifiedDate="2002-05-30T09:00:00">
 		<mvcSiteMapNode title="$resources:SiteMapLocalizations,BrowseGenresTitle" controller="Store" action="Index">
 			<mvcSiteMapNode title="Jazz 4" action="Browse" controller="Store" id="Jazz" someOtherParameter="whatever2" canonicalKey="ABC123"/>
-			<mvcSiteMapNode title="Browse" action="Browse" dynamicNodeProvider="MvcMusicStore.Code.StoreBrowseDynamicNodeProvider, Mvc Music Store">
+			<mvcSiteMapNode title="Browse" action="Browse" dynamicNodeProvider="MvcMusicStore.Code.StoreBrowseDynamicNodeProvider, Mvc Music Store" preservedRouteParameters="browse">
         <mvcSiteMapNode title="Details" action="Details" dynamicNodeProvider="MvcMusicStore.Code.StoreDetailsDynamicNodeProvider, Mvc Music Store" />
       </mvcSiteMapNode>
 			<mvcSiteMapNode key="ABC123" title="Jazz 2" action="Browse" controller="Store" id="Jazz" someParameter="hello" canonicalUrl="/Store/Browse/Jazz" metaRobotsValues="noindex nofollow noodp"/>

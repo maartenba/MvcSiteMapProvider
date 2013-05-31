@@ -65,9 +65,6 @@ namespace MvcSiteMapProvider.Builder
                 // Copy the values from the original node to the new one
                 node.CopyTo(newNode);
 
-                // Clear preserved route params - we don't need that
-                newNode.PreservedRouteParameters.Clear();
-
                 // Copy any values that were set in the dynamic node and overwrite the new node.
                 dynamicNode.SafeCopyTo(newNode);
 

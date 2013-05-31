@@ -190,14 +190,20 @@ namespace MvcSiteMapProvider
             {
                 foreach (var p in this.PreservedRouteParameters)
                 {
-                    node.PreservedRouteParameters.Add(p);
+                    if (!node.PreservedRouteParameters.Contains(p))
+                    {
+                        node.PreservedRouteParameters.Add(p);
+                    }
                 }
             }
             if (this.Roles.Any())
             {
                 foreach (var role in this.Roles)
                 {
-                    node.Roles.Add(role);
+                    if (!node.Roles.Contains(role))
+                    {
+                        node.Roles.Add(role);
+                    }
                 }
             }
             if (this.LastModifiedDate != null && this.LastModifiedDate.HasValue)
@@ -216,7 +222,10 @@ namespace MvcSiteMapProvider
             {
                 foreach (var value in this.MetaRobotsValues)
                 {
-                    node.MetaRobotsValues.Add(value);
+                    if (!node.MetaRobotsValues.Contains(value))
+                    {
+                        node.MetaRobotsValues.Add(value);
+                    }
                 }
             }
         }
