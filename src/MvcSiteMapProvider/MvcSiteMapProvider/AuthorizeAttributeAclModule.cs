@@ -57,19 +57,24 @@ namespace MvcSiteMapProvider
                 return true;
             }
 
-            // Is it an external node?
-            var nodeUrl = node.Url;
-            if (nodeUrl.StartsWith("http") || nodeUrl.StartsWith("ftp"))
-            {
-                return true;
-            }
-
             // Is it a regular node?
             var mvcNode = node as MvcSiteMapNode;
             if (mvcNode == null)
             {
                 throw new AclModuleNotSupportedException(
                     Resources.Messages.AclModuleDoesNotSupportRegularSiteMapNodes);
+            }
+
+            // Is it an external node?
+            var nodeUrl = mvcNode.Url;
+            if (null == nodeUrl)
+            {
+                throw new Exception(string.Format("NodeUrlResolver couldn't determine Url for Mvc SiteMap Node: {0}\nArea: {1}, Controller: {2}, Action: {3}", mvcNode, mvcNode.Area, mvcNode.Controller, mvcNode.Action));
+            }
+
+            if (nodeUrl.StartsWith("http") || nodeUrl.StartsWith("ftp"))
+            {
+                return true;
             }
 
             // Clickable? Always accessible.

@@ -292,7 +292,7 @@ namespace MvcSiteMapProvider
                 var tempAttributesToIgnore = attributes["attributesToIgnore"];
                 if (!string.IsNullOrEmpty(tempAttributesToIgnore))
                 {
-                    attributesToIgnore = tempAttributesToIgnore.Split(';', ',').ToList();
+                    attributesToIgnore = tempAttributesToIgnore.Split(new[] {';', ',', ' '}, StringSplitOptions.RemoveEmptyEntries).ToList();
                 }
             }
 
@@ -462,6 +462,14 @@ namespace MvcSiteMapProvider
         {
             try
             {
+                if (null == node.Url)
+                {
+                    var mvcNode = node as MvcSiteMapNode;
+                    throw new Exception(
+                        string.Format("Couldn't resolve node Url\nArea: {0}, Controller: {1}, Action: {2}", mvcNode.Area,
+                                      mvcNode.Controller, mvcNode.Action));
+                }
+
                 // Avoid issue with url table not clearing correctly.
                 if (base.FindSiteMapNode(node.Url) != null)
                 {
