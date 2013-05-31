@@ -270,7 +270,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                     }
                     if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
                     {
-                        urlElement.Add(new XElement(Ns + "priority", (double)siteMapNode.UpdatePriority / 100));
+                        urlElement.Add(new XElement(Ns + "priority", string.Format("{0:0.0}", ((double)siteMapNode.UpdatePriority / 100))));
                     }
                 
                     // Return

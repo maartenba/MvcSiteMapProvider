@@ -9,6 +9,9 @@ namespace MvcSiteMapProvider
     /// </summary>
     public class DynamicNode
     {
+        private ChangeFrequency changeFrequency = ChangeFrequency.Undefined;
+        private UpdatePriority updatePriority = UpdatePriority.Undefined;
+
         /// <summary>
         /// Gets or sets the route.
         /// </summary>
@@ -109,13 +112,21 @@ namespace MvcSiteMapProvider
         /// Gets or sets the change frequency.
         /// </summary>
         /// <value>The change frequency.</value>
-        public ChangeFrequency ChangeFrequency { get; set; }
+        public ChangeFrequency ChangeFrequency 
+        { 
+            get { return changeFrequency; } 
+            set { changeFrequency = value; } 
+        }
 
         /// <summary>
         /// Gets or sets the update priority.
         /// </summary>
         /// <value>The update priority.</value>
-        public UpdatePriority UpdatePriority { get; set; }
+        public UpdatePriority UpdatePriority 
+        {
+            get { return updatePriority; }
+            set { updatePriority = value; }
+        }
 
         /// <summary>
         /// A value indicating to cache the resolved URL. If false, the URL will be 
@@ -194,7 +205,7 @@ namespace MvcSiteMapProvider
             if (this.ChangeFrequency != ChangeFrequency.Undefined)
                 node.ChangeFrequency = this.ChangeFrequency;
             if (this.UpdatePriority != UpdatePriority.Undefined)
-                node.ChangeFrequency = this.ChangeFrequency;
+                node.UpdatePriority = this.UpdatePriority;
             if (this.CacheResolvedUrl != null)
                 node.CacheResolvedUrl = (bool)this.CacheResolvedUrl;
             if (!string.IsNullOrEmpty(this.CanonicalKey))
