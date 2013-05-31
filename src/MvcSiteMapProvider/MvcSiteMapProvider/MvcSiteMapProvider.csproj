@@ -102,6 +102,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Builder\AspNetNamedSiteMapProvider.cs" />
     <Compile Include="Builder\AspNetSiteMapBuilder.cs" />
     <Compile Include="Builder\AspNetDefaultSiteMapProvider.cs" />
@@ -136,6 +139,13 @@
     <Compile Include="Collections\RequestCacheableDictionary.cs" />
     <Compile Include="Collections\RequestCacheableList.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
+    <Compile Include="DI\Bootstrap\ControllerFactoryConfig.cs" />
+    <Compile Include="DI\Bootstrap\DependencyResolverConfig.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="DI\Bootstrap\IDependencyInjectionContainer.cs" />
+    <Compile Include="DI\Bootstrap\InjectableControllerFactory.cs" />
+    <Compile Include="DI\Bootstrap\InjectableDependencyResolver.cs" />
+    <Compile Include="DI\Bootstrap\MvcSiteMapProviderConfig.cs" />
     <Compile Include="DI\Composer.cs" />
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
@@ -337,8 +347,17 @@
     <EmbeddedResource Include="Xml\MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="MvcSiteMapProvider.nuspec" />
     <None Include="MvcSiteMapProvider.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\MenuHelperModel.cshtml" />
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapHelperModel.cshtml" />
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapNodeModel.cshtml" />
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapNodeModelList.cshtml" />
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
+    <EmbeddedResource Include="Web\Html\DisplayTemplates\SiteMapTitleHelperModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Web\Html\DisplayTemplates\MenuHelperModel.ascx">
@@ -387,7 +406,12 @@
       <SubType>ASPXCodeBehind</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Web\Html\DisplayTemplates\CanonicalHelperModel.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web\Html\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

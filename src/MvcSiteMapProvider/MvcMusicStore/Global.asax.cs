@@ -7,9 +7,10 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcMusicStore.App_Start;
+using MvcMusicStore.DI.MvcSiteMapProvider;
+using MvcSiteMapProvider.DI.Bootstrap;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
-using StructureMap;
 
 namespace MvcMusicStore
 {

@@ -8,6 +8,6 @@ function CountSolutionFilesByExtension($extension) {
 	($files | Measure-Object).Count
 }
 
-if (CountSolutionFilesByExtension(".cshtml") -gt 1 -or CountSolutionFilesByExtension(".aspx") -gt 1) {
-	Install-Package MvcSiteMapProvider.Web
+if (CountSolutionFilesByExtension("cshtml") -gt 1 -or CountSolutionFilesByExtension("aspx") -gt 1) {
+	Install-Package MvcSiteMapProvider.Web -Prerelease
 }

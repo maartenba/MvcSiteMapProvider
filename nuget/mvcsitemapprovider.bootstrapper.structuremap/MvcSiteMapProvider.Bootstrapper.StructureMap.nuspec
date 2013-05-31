@@ -1,0 +1,34 @@
+﻿<?xml version="1.0"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>MvcSiteMapProvider.Bootstrapper.StructureMap</id>
+    <version>$version$</version>
+    <authors>Maarten Balliauw</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package provides integration for MvcSiteMapProvider with StructureMap.</description>
+    <summary>This package provides integration for MvcSiteMapProvider with StructureMap.</summary>
+    <language>en-US</language>
+    <tags>mvc sitemap menu breadcrumb navigation</tags>
+    <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
+    <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
+    <dependencies>
+      <group targetFramework="net35">
+        <dependency id="MvcSiteMapProvider " version="4.0" />
+        <dependency id="structuremap" version="2.6.3" />
+        <dependency id="Microsoft.AspNet.Razor" version="1.0.20105.408" />
+      </group>
+      <group targetFramework="net40">
+        <dependency id="MvcSiteMapProvider " version="4.0" />
+        <dependency id="structuremap" version="2.6.3" />
+        <dependency id="Microsoft.AspNet.Mvc" version="4.0.20710.0" />
+        <dependency id="Microsoft.AspNet.Razor" version="2.0.20715.0" />
+        <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
+        <dependency id="WebActivatorEx" version="2.0.1" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+	  <frameworkAssembly assemblyName="System.Runtime.Caching" targetFramework="net40" />
+	</frameworkAssemblies>
+  </metadata>
+</package>
+
