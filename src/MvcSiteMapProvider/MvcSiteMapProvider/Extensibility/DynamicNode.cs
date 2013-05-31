@@ -12,6 +12,8 @@ namespace MvcSiteMapProvider.Extensibility
     /// </summary>
     public class DynamicNode
     {
+        private ChangeFrequency changeFrequency = ChangeFrequency.Undefined;
+        private UpdatePriority updatePriority = UpdatePriority.Undefined;
 
         /// <summary>
         /// Gets or sets the route.
@@ -107,13 +109,21 @@ namespace MvcSiteMapProvider.Extensibility
         /// Gets or sets the change frequency.
         /// </summary>
         /// <value>The change frequency.</value>
-        public ChangeFrequency ChangeFrequency { get; set; }
+        public ChangeFrequency ChangeFrequency 
+        {
+            get { return changeFrequency; }
+            set { changeFrequency = value; }
+        }
 
         /// <summary>
         /// Gets or sets the update priority.
         /// </summary>
         /// <value>The update priority.</value>
-        public UpdatePriority UpdatePriority { get; set; }
+        public UpdatePriority UpdatePriority 
+        {
+            get { return updatePriority; }
+            set { updatePriority = value; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DynamicNode"/> class.

@@ -1046,7 +1046,7 @@ namespace MvcSiteMapProvider
 
                 if (dynamicNode.UpdatePriority != UpdatePriority.Undefined)
                 {
-                    clone.ChangeFrequency = dynamicNode.ChangeFrequency;
+                    clone.UpdatePriority = dynamicNode.UpdatePriority;
                 }
 
                 if (dynamicNode.PreservedRouteParameters.Any())

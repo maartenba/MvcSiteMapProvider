@@ -248,7 +248,7 @@ namespace MvcSiteMapProvider.Web
                     }
                     if (mvcNode.UpdatePriority != UpdatePriority.Undefined)
                     {
-                        urlElement.Add(new XElement(Ns + "priority", (double)mvcNode.UpdatePriority / 100));
+                        urlElement.Add(new XElement(Ns + "priority", string.Format("{0:0.0}", (double)mvcNode.UpdatePriority / 100)));
                     }
                 }
 
