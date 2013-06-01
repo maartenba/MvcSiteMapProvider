@@ -257,7 +257,7 @@ namespace MvcSiteMapProvider.Builder
             var localRoles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var role in localRoles)
             {
-                roles.Add(role);
+                roles.Add(role.Trim());
             }
         }
 
@@ -271,7 +271,7 @@ namespace MvcSiteMapProvider.Builder
             var localParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var parameter in localParameters)
             {
-                preservedRouteParameters.Add(parameter);
+                preservedRouteParameters.Add(parameter.Trim());
             }
         }
 

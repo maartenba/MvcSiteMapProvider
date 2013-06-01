@@ -248,7 +248,7 @@ namespace MvcSiteMapProvider.Builder
             var localParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var parameter in localParameters)
             {
-                preservedRouteParameters.Add(parameter);
+                preservedRouteParameters.Add(parameter.Trim());
             }
         }
 
