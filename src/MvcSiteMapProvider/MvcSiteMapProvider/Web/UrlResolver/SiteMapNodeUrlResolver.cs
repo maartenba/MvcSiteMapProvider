@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Mvc;
 
@@ -22,30 +23,10 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
         protected readonly IMvcContextFactory mvcContextFactory;
 
-        /// <summary>
-        /// Gets the URL helper.
-        /// </summary>
-        /// <value>The URL helper.</value>
-        protected IUrlHelper UrlHelper
-        {
-            get
-            {
-                var key = "6F0F34DE-2981-454E-888D-28080283EF65";
-                var requestCache = mvcContextFactory.GetRequestCache();
-                var result = requestCache.GetValue<IUrlHelper>(key);
-                if (result == null)
-                {
-                    result = mvcContextFactory.CreateUrlHelper();
-                    requestCache.SetValue<IUrlHelper>(key, result);
-                }
-                return result;
-            }
-        } 
-
         #region ISiteMapNodeUrlResolver Members
 
-        private string _urlkey = string.Empty;
-        private string _url = string.Empty;
+        private string urlKey = string.Empty;
+        private string url = string.Empty;
 
         /// <summary>
         /// Resolves the URL.
@@ -62,7 +43,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             {
                 if (node.UnresolvedUrl.StartsWith("~"))
                 {
-                    return System.Web.VirtualPathUtility.ToAbsolute(node.UnresolvedUrl);
+                    return VirtualPathUtility.ToAbsolute(node.UnresolvedUrl);
                 }
                 else
                 {
@@ -70,59 +51,38 @@ namespace MvcSiteMapProvider.Web.UrlResolver
                 }
             }
 
-            if (node.PreservedRouteParameters.Count > 0)
-            {
-                var routeDataValues = UrlHelper.RequestContext.RouteData.Values;
-                var queryStringValues = UrlHelper.RequestContext.HttpContext.Request.QueryString;
-                foreach (var item in node.PreservedRouteParameters)
-                {
-                    var preservedParameterName = item.Trim();
-                    if (!string.IsNullOrEmpty(preservedParameterName))
-                    {
-                        if (routeDataValues.ContainsKey(preservedParameterName))
-                        {
-                            routeValues[preservedParameterName] =
-                                routeDataValues[preservedParameterName];
-                        }
-                        else if (queryStringValues[preservedParameterName] != null)
-                        {
-                            routeValues[preservedParameterName] =
-                                queryStringValues[preservedParameterName];
-                        }
-                    }
-                }
-            }
-
-            //cache already generated routes. 
-            //I don't know why the result of Url was not saved to this["url"], perhaps because
-            //theoretically it is possible to change RouteValues dynamically. So I decided to 
-            //store last version
+            // Cache already generated routes. 
+            // Theoretically it is possible to change RouteValues dynamically. So I decided to 
+            // store last version
             var key = node.Route ?? string.Empty;
             foreach (var routeValue in routeValues)
                 key += routeValue.Key + (routeValue.Value ?? string.Empty);
-            if (_urlkey == key) return _url;
+            if (this.urlKey == key) return this.url;
+
+
+            var urlHelper = mvcContextFactory.CreateUrlHelper();
 
             string returnValue;
             var routeValueDictionary = new RouteValueDictionary(routeValues);
             if (!string.IsNullOrEmpty(node.Route))
             {
                 routeValueDictionary.Remove("route");
-                returnValue = UrlHelper.RouteUrl(node.Route, routeValueDictionary);
+                returnValue = urlHelper.RouteUrl(node.Route, routeValueDictionary);
             }
             else
             {
-                returnValue = UrlHelper.Action(action, controller, routeValueDictionary);
+                returnValue = urlHelper.Action(action, controller, routeValueDictionary);
             }
 
             if (string.IsNullOrEmpty(returnValue))
             {
                 // fixes #115 - UrlResolver should not throw exception.
-                return Guid.NewGuid().ToString();
+                return VirtualPathUtility.ToAbsolute("~/") + Guid.NewGuid().ToString();
             }
             else
             {
-                _urlkey = key;
-                _url = returnValue;
+                this.urlKey = key;
+                this.url = returnValue;
                 return returnValue;
             }
         }

@@ -97,42 +97,5 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 base[key] = localizationService.ExtractExplicitResourceKey(key, value);
             }
         }
-
-        public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
-        {
-            if (routeValues.Count > 0)
-            {
-                foreach (var pair in routeValues)
-                {
-                    if (this.ContainsKey(pair.Key) && !string.IsNullOrEmpty(this[pair.Key]))
-                    {
-                        if (this[pair.Key].ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            // Is the current pair.Key a parameter on the action method?
-                            if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
-                        {
-                            continue;
-                        }
-                        else if (pair.Key == "area")
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
     }
 }

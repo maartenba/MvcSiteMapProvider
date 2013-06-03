@@ -353,7 +353,7 @@ namespace MvcSiteMapProvider
         /// </summary>
         public override void ResolveUrl()
         {
-            if (this.CacheResolvedUrl && String.IsNullOrEmpty(this.UnresolvedUrl))
+            if (this.CacheResolvedUrl && String.IsNullOrEmpty(this.UnresolvedUrl) && this.preservedRouteParameters.Count == 0)
             {
                 this.resolvedUrl = this.GetResolvedUrl();
             }
@@ -528,13 +528,56 @@ namespace MvcSiteMapProvider
         /// Gets the route values.
         /// </summary>
         /// <value>The route values.</value>
-        public override IRouteValueCollection RouteValues { get { return this.routeValues; } }
+        public override IRouteValueCollection RouteValues 
+        { 
+            get 
+            {
+                this.PreserveRouteParameters();
+                return this.routeValues; 
+            } 
+        }
 
         /// <summary>
         /// Gets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>The preserved route parameters.</value>
         public override IPreservedRouteParameterCollection PreservedRouteParameters { get { return this.preservedRouteParameters; } }
+
+
+        /// <summary>
+        /// Sets the preserved route parameters of the current request to the routeValues collection.
+        /// </summary>
+        /// <remarks>
+        /// This method relies on the fact that the route value collection is request cached. The
+        /// values written are for the current request only, after which they will be discarded.
+        /// </remarks>
+        protected virtual void PreserveRouteParameters()
+        {
+            if (this.PreservedRouteParameters.Count > 0)
+            {
+                var requestContext = mvcContextFactory.CreateRequestContext();
+                var routeDataValues = requestContext.RouteData.Values;
+                var queryStringValues = requestContext.HttpContext.Request.QueryString;
+
+                foreach (var item in this.PreservedRouteParameters)
+                {
+                    var preservedParameterName = item.Trim();
+                    if (!string.IsNullOrEmpty(preservedParameterName))
+                    {
+                        if (routeDataValues.ContainsKey(preservedParameterName))
+                        {
+                            this.routeValues[preservedParameterName] =
+                                routeDataValues[preservedParameterName];
+                        }
+                        else if (queryStringValues[preservedParameterName] != null)
+                        {
+                            this.routeValues[preservedParameterName] =
+                                queryStringValues[preservedParameterName];
+                        }
+                    }
+                }
+            }
+        }
 
 
         /// <summary>
@@ -564,21 +607,18 @@ namespace MvcSiteMapProvider
         /// <returns><c>true</c> if the route matches this node's RouteValues and Attributes collections; otherwise <c>false</c>.</returns>
         public override bool MatchesRoute(IDictionary<string, object> routeValues)
         {
-            var result = this.RouteValues.MatchesRoute(routeValues);
-            if (result == true)
+            // Find action method parameters?
+            IEnumerable<string> actionParameters = new List<string>();
+            if (this.IsDynamic == false)
             {
-                // Find action method parameters?
-                IEnumerable<string> actionParameters = new List<string>();
-                if (this.IsDynamic == false)
-                {
-                    // We need to ensure 1 instance per sitemap instance for the resolver's internal
-                    // cache to work on multi-tenant sites that would potentailly have area, 
-                    // controller and action name collisions.
-                    actionParameters = this.SiteMap.ResolveActionMethodParameters(
-                        this.Area, this.Controller, this.Action);
-                }
-                result = this.Attributes.MatchesRoute(actionParameters, routeValues);
+                // We need to ensure 1 instance per sitemap instance for the resolver's internal
+                // cache to work on multi-tenant sites that would potentailly have area, 
+                // controller and action name collisions.
+                actionParameters = this.SiteMap.ResolveActionMethodParameters(
+                    this.Area, this.Controller, this.Action);
             }
+
+            var result = this.RouteValues.MatchesRoute(actionParameters, routeValues);
             return result;
         }
 

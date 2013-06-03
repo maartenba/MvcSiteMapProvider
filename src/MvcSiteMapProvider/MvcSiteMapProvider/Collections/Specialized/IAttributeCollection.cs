@@ -9,7 +9,6 @@ namespace MvcSiteMapProvider.Collections.Specialized
     public interface IAttributeCollection
         : IDictionary<string, string>
     {
-        bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues);
         void CopyTo(IDictionary<string, string> destination);
     }
 }

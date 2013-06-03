@@ -10,7 +10,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     public interface IRouteValueCollection
         : IDictionary<string, object>
     {
-        bool MatchesRoute(IDictionary<string, object> routeValues);
+        bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues);
         void CopyTo(IDictionary<string, object> destination);
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -237,7 +237,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
             if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
             {
-                urlElement.Add(new XElement(Ns + "priority", (double)siteMapNode.UpdatePriority / 100));
+                urlElement.Add(new XElement(Ns + "priority", string.Format("{0:0.0}", (double)siteMapNode.UpdatePriority / 100)));
             }
         }
 
@@ -331,7 +331,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         private XElement GenerateSitemapUrlSet(ControllerContext context, IEnumerable<ISiteMapNode> flattenedHierarchy, int page)
         {
-            var siteMapNodes = flattenedHierarchy.Skip((page - 1)*MaxNumberOfLinksPerFile).Take(MaxNumberOfLinksPerFile);
+            var siteMapNodes = flattenedHierarchy.Skip((page - 1) * MaxNumberOfLinksPerFile).Take(MaxNumberOfLinksPerFile);
 
             var urlElements = GenerateUrlElements(context, siteMapNodes, BaseUrl)
                 .ToArray();
