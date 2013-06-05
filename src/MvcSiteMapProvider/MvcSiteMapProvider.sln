@@ -23,7 +23,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAsConfiguration", "CodeAsConfiguration", "{FAADDBE0-A4D5-4EEE-A924-FE2582D734A9}"
 	ProjectSection(SolutionItems) = preProject
 		IMPORTANT_NOTE.txt = IMPORTANT_NOTE.txt
-		Instructions.txt = Instructions.txt
+		ManualInstallInstructions.txt = ManualInstallInstructions.txt
+		ReadMe.txt = ReadMe.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "CodeAsConfiguration\Shared\Shared.csproj", "{7C763B28-50B2-4201-9BD0-659FC155E5F3}"
