@@ -7,6 +7,7 @@ namespace DI
     {
         object GetInstance(Type type);
         IEnumerable<object> GetAllInstances(Type type);
+        void Release(object instance);
     }
 
     public static class DependencyInjectionContainerExtensions

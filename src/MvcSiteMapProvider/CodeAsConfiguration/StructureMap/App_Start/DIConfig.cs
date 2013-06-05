@@ -16,10 +16,6 @@ internal class DIConfig
         container.Configure(r => r.AddRegistry<MvcSiteMapProviderRegistry>());
         container.Configure(r => r.AddRegistry<MvcRegistry>());
 
-        // Verify the configuration
-        // TODO: Move this into a test
-        //container.AssertConfigurationIsValid();
-
         // Return our DI container wrapper instance
         return new StructureMapContainer(container);
     }

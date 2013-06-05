@@ -22,5 +22,10 @@ namespace DI
                 base.GetControllerInstance(requestContext, controllerType) :
                 container.GetInstance(controllerType) as IController;
         }
+
+        public override void ReleaseController(IController controller)
+        {
+            this.container.Release(controller);
+        }
     }
 }

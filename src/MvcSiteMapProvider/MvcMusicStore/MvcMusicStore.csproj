@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>MVC4;NET40;StructureMap;DependencyResolver;</DefineConstants>
+    <DefineConstants>MVC4;NET40;StructureMap;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -57,6 +57,12 @@
     </Reference>
     <Reference Include="Autofac.Configuration">
       <HintPath>..\packages\Autofac.3.0.2\lib\net40\Autofac.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core">
+      <HintPath>..\packages\Castle.Core.3.2.0\lib\net40-client\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\packages\Castle.Windsor.3.2.0\lib\net40\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -187,35 +193,19 @@ configured in the compilation constants -->
         </Compile>
       </ItemGroup>
     </When>
-    <!-- TODO: Define other DI containers here -->
-  </Choose>
-  <Choose>
-    <!-- Choose between IDependencyResolver and IControllerFactory -->
-    <When Condition=" $(DefineConstants.Contains('DependencyResolver')) ">
+    <When Condition=" $(DefineConstants.Contains('Windsor')) ">
       <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Shared\DI\InjectableDependencyResolver.cs">
-          <Link>DI\InjectableDependencyResolver.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Windsor\App_Start\DIConfig.cs">
+          <Link>App_Start\DIConfig.cs</Link>
         </Compile>
-        <Compile Include="..\CodeAsConfiguration\Shared\App_Start\DI_DependencyResolver_Bootstrapper.cs">
-          <Link>App_Start\DI_DependencyResolver_Bootstrapper.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\WindsorDependencyInjectionContainer.cs">
+          <Link>DI\Windsor\WindsorDependencyInjectionContainer.cs</Link>
         </Compile>
       </ItemGroup>
     </When>
-    <Otherwise>
-      <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Shared\DI\InjectableControllerFactory.cs">
-          <Link>DI\InjectableControllerFactory.cs</Link>
-        </Compile>
-        <Compile Include="..\CodeAsConfiguration\Shared\App_Start\DI_ControllerFactory_Bootstrapper.cs">
-          <Link>App_Start\DI_ControllerFactory_Bootstrapper.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </Otherwise>
+    <!-- TODO: Define other DI containers here -->
   </Choose>
   <ItemGroup>
-    <!--<Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\AutofacContainer.cs">
-      <Link>DI\Autofac\AutofacContainer.cs</Link>
-    </Compile>-->
     <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\Modules\MvcModule.cs">
       <Link>DI\Autofac\Modules\MvcModule.cs</Link>
     </Compile>
@@ -228,14 +218,20 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\Modules\MvcSiteMapProviderModule.cs">
       <Link>DI\Ninject\Modules\MvcSiteMapProviderModule.cs</Link>
     </Compile>
-    <!--<Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\NinjectContainer.cs">
-      <Link>DI\Ninject\NinjectContainer.cs</Link>
-    </Compile>-->
+    <Compile Include="..\CodeAsConfiguration\Shared\App_Start\DIConfigBootstrapper.cs">
+      <Link>App_Start\DIConfigBootstrapper.cs</Link>
+    </Compile>
     <Compile Include="..\CodeAsConfiguration\Shared\App_Start\MvcSiteMapProviderConfig.cs">
       <Link>App_Start\MvcSiteMapProviderConfig.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\CodeAsConfiguration\Shared\DI\InjectableControllerFactory.cs">
+      <Link>DI\InjectableControllerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\CodeAsConfiguration\Shared\DI\InjectableDependencyResolver.cs">
+      <Link>DI\InjectableDependencyResolver.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\Conventions\SingletonConvention.cs">
       <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
@@ -249,18 +245,15 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
       <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
     </Compile>
-    <!--<Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\StructureMapContainer.cs">
-      <Link>DI\StructureMap\StructureMapContainer.cs</Link>
-    </Compile>-->
     <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs">
       <Link>DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\ExtensionMethods.cs">
       <Link>DI\Unity\ExtensionMethods.cs</Link>
     </Compile>
-    <!--<Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\UnityDependencyInjectionContainer.cs">
-      <Link>DI\Unity\UnityDependencyInjectionContainer.cs</Link>
-    </Compile>-->
+    <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs">
+      <Link>DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs</Link>
+    </Compile>
     <Compile Include="App_GlobalResources\SiteMapLocalizations.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -282,12 +275,6 @@ configured in the compilation constants -->
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ShoppingCartController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
-    <Compile Include="DI\MvcSiteMapProvider\Conventions\SingletonConvention.cs" />
-    <Compile Include="DI\MvcSiteMapProvider\Conventions\TransientConvention.cs" />
-    <Compile Include="DI\MvcSiteMapProvider\DIConfig.cs" />
-    <Compile Include="DI\MvcSiteMapProvider\Registries\MvcRegistry.cs" />
-    <Compile Include="DI\MvcSiteMapProvider\Registries\MvcSiteMapProviderRegistry.cs" />
-    <Compile Include="DI\MvcSiteMapProvider\StructureMapContainer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

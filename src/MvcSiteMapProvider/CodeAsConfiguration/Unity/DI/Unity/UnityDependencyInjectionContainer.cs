@@ -32,6 +32,11 @@ namespace DI.Unity
             return this.container.ResolveAll(type);
         }
 
+        public void Release(object instance)
+        {
+            // Do nothing
+        }
+
         #endregion
     }
 }

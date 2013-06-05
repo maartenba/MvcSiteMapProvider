@@ -53,6 +53,11 @@ namespace DI.StructureMap
             }
         }
 
+        public void Release(object instance)
+        {
+            // Do nothing
+        }
+
         #endregion
     }
 }

@@ -36,6 +36,11 @@ namespace DI.Autofac
             return (IEnumerable<object>)obj;
         }
 
+        public void Release(object instance)
+        {
+            // Do nothing
+        }
+
         #endregion
     }
 }
