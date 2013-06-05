@@ -24,33 +24,6 @@ namespace MvcMusicStore
 
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-
-//            // MvcSiteMapProvider Configuration
-//#if NET35
-//            MvcSiteMapProvider.DI.Composer.Compose();
-//#endif
-//            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
-
-//            // NOTE: This check wouldn't have to be made in a real-world application - we do it
-//            // in the demo because we want to support both the internal and external DI containers.
-//            if (new MvcSiteMapProvider.DI.ConfigurationSettings().UseExternalDIContainer == true)
-//            {
-//                var container = DIConfig.Register();
-//#if DependencyResolver
-//                // Reconfigure MVC to use Service Location
-
-//                // You will need to use DependencyResolver if there are hard references
-//                // to IDependencyResolver in your code somewhere (don't do that - it limits your options
-//                // and tightly couples your code to MVC!).
-//                var dependencyResolver = new InjectableDependencyResolver(container);
-//                DependencyResolver.SetResolver(dependencyResolver);
-//#else
-//                // Reconfigure MVC to use DI
-//                var controllerFactory = new InjectableControllerFactory(container);
-//                ControllerBuilder.Current.SetControllerFactory(controllerFactory);
-//#endif
-//                MvcSiteMapProviderConfig.Register(container);
-//            }
         }
 
         /// <summary>
