@@ -20,8 +20,21 @@ MVC2
 MVC3
 MVC4
 
+DEPENDENCY INJECTION CONTAINER:
+
+Autofac
+Ninject
+StructureMap
+Unity
+
+DEPENDENCY INJECTION METHOD:
+
+ControllerFactory (default)
+DependencyResolver
+
 
 EXAMPLE USAGE:
 
-The following will compile under MVC4, .NET 4.0
-MVC4;NET40
+The following will compile under MVC4, .NET 4.0, StructureMap, and ControllerFactory
+
+MVC4;NET40;StructureMap

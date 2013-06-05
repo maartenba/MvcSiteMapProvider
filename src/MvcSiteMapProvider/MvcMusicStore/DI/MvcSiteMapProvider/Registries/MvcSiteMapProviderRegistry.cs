@@ -1,161 +1,161 @@
-using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web.Hosting;
-using MvcMusicStore.DI.MvcSiteMapProvider.Conventions;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Compilation;
-using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Web.UrlResolver;
-using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Reflection;
-using MvcSiteMapProvider.Visitor;
-using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Globalization;
-using StructureMap.Configuration.DSL;
-using StructureMap.Pipeline;
+//using System;
+//using System.Collections.Generic;
+//using System.Web.Mvc;
+//using System.Web.Hosting;
+//using MvcMusicStore.DI.MvcSiteMapProvider.Conventions;
+//using MvcSiteMapProvider;
+//using MvcSiteMapProvider.Web.Mvc;
+//using MvcSiteMapProvider.Web.Compilation;
+//using MvcSiteMapProvider.Web.Mvc.Filters;
+//using MvcSiteMapProvider.Web.UrlResolver;
+//using MvcSiteMapProvider.Security;
+//using MvcSiteMapProvider.Reflection;
+//using MvcSiteMapProvider.Visitor;
+//using MvcSiteMapProvider.Builder;
+//using MvcSiteMapProvider.Caching;
+//using MvcSiteMapProvider.Xml;
+//using MvcSiteMapProvider.Globalization;
+//using StructureMap.Configuration.DSL;
+//using StructureMap.Pipeline;
 
-namespace MvcMusicStore.DI.MvcSiteMapProvider.Registries
-{
-    public class MvcSiteMapProviderRegistry
-        : Registry
-    {
-        public MvcSiteMapProviderRegistry()
-        {
-            string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
-            TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+//namespace MvcMusicStore.DI.MvcSiteMapProvider.Registries
+//{
+//    public class MvcSiteMapProviderRegistry
+//        : Registry
+//    {
+//        public MvcSiteMapProviderRegistry()
+//        {
+//            string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
+//            TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
 
-            this.Scan(scan =>
-            {
-                scan.TheCallingAssembly();
-                scan.AssemblyContainingType<SiteMaps>();
-                scan.WithDefaultConventions();
-            });
+//            this.Scan(scan =>
+//            {
+//                scan.TheCallingAssembly();
+//                scan.AssemblyContainingType<SiteMaps>();
+//                scan.WithDefaultConventions();
+//            });
 
-            this.Scan(scan =>
-            {
-                scan.TheCallingAssembly();
-                scan.AssemblyContainingType<SiteMaps>();
-                scan.WithDefaultConventions();
-                scan.AddAllTypesOf<IMvcContextFactory>();
-                scan.AddAllTypesOf<ISiteMapCacheKeyToBuilderSetMapper>();
-                scan.AddAllTypesOf<IDynamicNodeProvider>();
-                scan.AddAllTypesOf<ISiteMapNodeVisibilityProvider>();
-                scan.AddAllTypesOf<ISiteMapNodeUrlResolver>();
-                scan.AddAllTypesOf<IDynamicNodeProviderStrategy>();
-                scan.AddAllTypesOf<ISiteMapNodeUrlResolverStrategy>();
-                scan.AddAllTypesOf<ISiteMapNodeVisibilityProviderStrategy>();
-                scan.AddAllTypesOf<IFilterProvider>();
-                scan.AddAllTypesOf<IControllerDescriptorFactory>();
-                scan.AddAllTypesOf<IObjectCopier>();
-                scan.AddAllTypesOf<INodeKeyGenerator>();
-                scan.AddAllTypesOf<IExplicitResourceKeyParser>();
-                scan.AddAllTypesOf<IStringLocalizer>();
-                scan.AddAllTypesOf<IDynamicNodeBuilder>();
-                scan.Convention<SingletonConvention>();
-            });
+//            this.Scan(scan =>
+//            {
+//                scan.TheCallingAssembly();
+//                scan.AssemblyContainingType<SiteMaps>();
+//                scan.WithDefaultConventions();
+//                scan.AddAllTypesOf<IMvcContextFactory>();
+//                scan.AddAllTypesOf<ISiteMapCacheKeyToBuilderSetMapper>();
+//                scan.AddAllTypesOf<IDynamicNodeProvider>();
+//                scan.AddAllTypesOf<ISiteMapNodeVisibilityProvider>();
+//                scan.AddAllTypesOf<ISiteMapNodeUrlResolver>();
+//                scan.AddAllTypesOf<IDynamicNodeProviderStrategy>();
+//                scan.AddAllTypesOf<ISiteMapNodeUrlResolverStrategy>();
+//                scan.AddAllTypesOf<ISiteMapNodeVisibilityProviderStrategy>();
+//                scan.AddAllTypesOf<IFilterProvider>();
+//                scan.AddAllTypesOf<IControllerDescriptorFactory>();
+//                scan.AddAllTypesOf<IObjectCopier>();
+//                scan.AddAllTypesOf<INodeKeyGenerator>();
+//                scan.AddAllTypesOf<IExplicitResourceKeyParser>();
+//                scan.AddAllTypesOf<IStringLocalizer>();
+//                scan.AddAllTypesOf<IDynamicNodeBuilder>();
+//                scan.Convention<SingletonConvention>();
+//            });
 
-            // Pass in the global controllerBuilder reference
-            this.For<ControllerBuilder>()
-                .Use(x => ControllerBuilder.Current);
+//            // Pass in the global controllerBuilder reference
+//            this.For<ControllerBuilder>()
+//                .Use(x => ControllerBuilder.Current);
 
-            this.For<IControllerBuilder>()
-                .Use<ControllerBuilderAdaptor>();
+//            this.For<IControllerBuilder>()
+//                .Use<ControllerBuilderAdaptor>();
 
-            this.For<IBuildManager>()
-                .Use<BuildManagerAdaptor>();
+//            this.For<IBuildManager>()
+//                .Use<BuildManagerAdaptor>();
 
-            //// Pass in the global route collection
-            //this.For<System.Web.Routing.RouteCollection>()
-            //    .Use(x => RouteTable.Routes);
+//            //// Pass in the global route collection
+//            //this.For<System.Web.Routing.RouteCollection>()
+//            //    .Use(x => RouteTable.Routes);
 
-#if !MVC2
-            // Configure default filter provider with one that provides filters
-            // from the global filter collection.
-            this.For<System.Web.Mvc.IFilterProvider>()
-                .Singleton()
-                .Use<FilterProvider>();
-#endif
+//#if !MVC2
+//            // Configure default filter provider with one that provides filters
+//            // from the global filter collection.
+//            this.For<System.Web.Mvc.IFilterProvider>()
+//                .Singleton()
+//                .Use<FilterProvider>();
+//#endif
 
-            // Configure Security
-            this.For<IAclModule>().Use<CompositeAclModule>()
-                .EnumerableOf<IAclModule>().Contains(x =>
-                {
-                    x.Type<AuthorizeAttributeAclModule>();
-                    x.Type<XmlRolesAclModule>();
-                });
+//            // Configure Security
+//            this.For<IAclModule>().Use<CompositeAclModule>()
+//                .EnumerableOf<IAclModule>().Contains(x =>
+//                {
+//                    x.Type<AuthorizeAttributeAclModule>();
+//                    x.Type<XmlRolesAclModule>();
+//                });
 
-            // Setup cache
-            SmartInstance<CacheDetails> cacheDetails;
+//            // Setup cache
+//            SmartInstance<CacheDetails> cacheDetails;
 
-#if NET35
-        this.For<ISiteMapCache>()
-            .Use<AspNetSiteMapCache>();
+//#if NET35
+//        this.For<ISiteMapCache>()
+//            .Use<AspNetSiteMapCache>();
 
-        var cacheDependency =
-            this.For<ICacheDependency>().Use<AspNetFileCacheDependency>()
-                .Ctor<string>("fileName").Is(absoluteFileName);
+//        var cacheDependency =
+//            this.For<ICacheDependency>().Use<AspNetFileCacheDependency>()
+//                .Ctor<string>("fileName").Is(absoluteFileName);
 
-        cacheDetails =
-            this.For<ICacheDetails>().Use<CacheDetails>()
-                .Ctor<TimeSpan>("absoluteCacheExpiration").Is(absoluteCacheExpiration)
-                .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
-                .Ctor<ICacheDependency>().Is(cacheDependency);
-#else
-            this.For<System.Runtime.Caching.ObjectCache>()
-                .Use(s => System.Runtime.Caching.MemoryCache.Default);
+//        cacheDetails =
+//            this.For<ICacheDetails>().Use<CacheDetails>()
+//                .Ctor<TimeSpan>("absoluteCacheExpiration").Is(absoluteCacheExpiration)
+//                .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
+//                .Ctor<ICacheDependency>().Is(cacheDependency);
+//#else
+//            this.For<System.Runtime.Caching.ObjectCache>()
+//                .Use(s => System.Runtime.Caching.MemoryCache.Default);
 
-            this.For<ISiteMapCache>()
-                .Use<RuntimeSiteMapCache>();
+//            this.For<ISiteMapCache>()
+//                .Use<RuntimeSiteMapCache>();
 
-            var cacheDependency =
-                this.For<ICacheDependency>().Use<RuntimeFileCacheDependency>()
-                    .Ctor<string>("fileName").Is(absoluteFileName);
+//            var cacheDependency =
+//                this.For<ICacheDependency>().Use<RuntimeFileCacheDependency>()
+//                    .Ctor<string>("fileName").Is(absoluteFileName);
 
-            cacheDetails =
-                this.For<ICacheDetails>().Use<CacheDetails>()
-                    .Ctor<TimeSpan>("absoluteCacheExpiration").Is(absoluteCacheExpiration)
-                    .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
-                    .Ctor<ICacheDependency>().Is(cacheDependency);
-#endif
-            // Configure the visitors
-            this.For<ISiteMapNodeVisitor>()
-                .Use<UrlResolvingSiteMapNodeVisitor>();
+//            cacheDetails =
+//                this.For<ICacheDetails>().Use<CacheDetails>()
+//                    .Ctor<TimeSpan>("absoluteCacheExpiration").Is(absoluteCacheExpiration)
+//                    .Ctor<TimeSpan>("slidingCacheExpiration").Is(TimeSpan.MinValue)
+//                    .Ctor<ICacheDependency>().Is(cacheDependency);
+//#endif
+//            // Configure the visitors
+//            this.For<ISiteMapNodeVisitor>()
+//                .Use<UrlResolvingSiteMapNodeVisitor>();
 
 
-            // Register the sitemap builder
-            var xmlSource = this.For<IXmlSource>().Use<FileXmlSource>()
-                           .Ctor<string>("fileName").Is(absoluteFileName);
+//            // Register the sitemap builder
+//            var xmlSource = this.For<IXmlSource>().Use<FileXmlSource>()
+//                           .Ctor<string>("fileName").Is(absoluteFileName);
 
-            var reservedAttributeNameProvider = this.For<ISiteMapXmlReservedAttributeNameProvider>()
-                .Use<SiteMapXmlReservedAttributeNameProvider>()
-                .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
+//            var reservedAttributeNameProvider = this.For<ISiteMapXmlReservedAttributeNameProvider>()
+//                .Use<SiteMapXmlReservedAttributeNameProvider>()
+//                .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
                 
-            var builder = this.For<ISiteMapBuilder>().Use<CompositeSiteMapBuilder>()
-                .EnumerableOf<ISiteMapBuilder>().Contains(y =>
-                {
-                    y.Type<XmlSiteMapBuilder>()
-                        .Ctor<ISiteMapXmlReservedAttributeNameProvider>().Is(reservedAttributeNameProvider)
-                        .Ctor<IXmlSource>().Is(xmlSource);
-                    y.Type<ReflectionSiteMapBuilder>()
-                        .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
-                        .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
-                    y.Type<VisitingSiteMapBuilder>();
-                });
+//            var builder = this.For<ISiteMapBuilder>().Use<CompositeSiteMapBuilder>()
+//                .EnumerableOf<ISiteMapBuilder>().Contains(y =>
+//                {
+//                    y.Type<XmlSiteMapBuilder>()
+//                        .Ctor<ISiteMapXmlReservedAttributeNameProvider>().Is(reservedAttributeNameProvider)
+//                        .Ctor<IXmlSource>().Is(xmlSource);
+//                    y.Type<ReflectionSiteMapBuilder>()
+//                        .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+//                        .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
+//                    y.Type<VisitingSiteMapBuilder>();
+//                });
 
 
-            // Configure the builder sets
-            this.For<ISiteMapBuilderSetStrategy>().Use<SiteMapBuilderSetStrategy>()
-                .EnumerableOf<ISiteMapBuilderSet>().Contains(x =>
-                {
-                    x.Type<SiteMapBuilderSet>()
-                        .Ctor<string>("instanceName").Is("default")
-                        .Ctor<ISiteMapBuilder>().Is(builder)
-                        .Ctor<ICacheDetails>().Is(cacheDetails);
-                });
-        }
-    }
-}
+//            // Configure the builder sets
+//            this.For<ISiteMapBuilderSetStrategy>().Use<SiteMapBuilderSetStrategy>()
+//                .EnumerableOf<ISiteMapBuilderSet>().Contains(x =>
+//                {
+//                    x.Type<SiteMapBuilderSet>()
+//                        .Ctor<string>("instanceName").Is("default")
+//                        .Ctor<ISiteMapBuilder>().Is(builder)
+//                        .Ctor<ICacheDetails>().Is(cacheDetails);
+//                });
+//        }
+//    }
+//}

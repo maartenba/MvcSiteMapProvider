@@ -1,19 +1,19 @@
-using System;
-using StructureMap.Configuration.DSL;
-using StructureMap.Graph;
+//using System;
+//using StructureMap.Configuration.DSL;
+//using StructureMap.Graph;
 
-namespace MvcMusicStore.DI.MvcSiteMapProvider.Conventions
-{
-    public class SingletonConvention
-        : IRegistrationConvention
-    {
-        #region IRegistrationConvention Members
+//namespace MvcMusicStore.DI.MvcSiteMapProvider.Conventions
+//{
+//    public class SingletonConvention
+//        : IRegistrationConvention
+//    {
+//        #region IRegistrationConvention Members
 
-        public void Process(Type type, Registry registry)
-        {
-            registry.For(type).Singleton();
-        }
+//        public void Process(Type type, Registry registry)
+//        {
+//            registry.For(type).Singleton();
+//        }
 
-        #endregion
-    }
-}
+//        #endregion
+//    }
+//}

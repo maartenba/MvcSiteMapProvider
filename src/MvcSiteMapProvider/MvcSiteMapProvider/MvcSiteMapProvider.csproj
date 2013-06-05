@@ -139,13 +139,6 @@
     <Compile Include="Collections\RequestCacheableDictionary.cs" />
     <Compile Include="Collections\RequestCacheableList.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
-    <Compile Include="DI\Bootstrap\ControllerFactoryConfig.cs" />
-    <Compile Include="DI\Bootstrap\DependencyResolverConfig.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="DI\Bootstrap\IDependencyInjectionContainer.cs" />
-    <Compile Include="DI\Bootstrap\InjectableControllerFactory.cs" />
-    <Compile Include="DI\Bootstrap\InjectableDependencyResolver.cs" />
-    <Compile Include="DI\Bootstrap\MvcSiteMapProviderConfig.cs" />
     <Compile Include="DI\Composer.cs" />
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />

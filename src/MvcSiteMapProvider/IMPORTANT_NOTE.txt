@@ -1,0 +1,16 @@
+These projects are NOT intended to be compiled into assemblies. The files are put into 
+Visual Studio projects for organizational purposes only. The code within is
+meant to be deployed as code files into the target project that can be configured
+after the fact.
+This code will almost certainly need to be edited by the end developer to configure 
+other aspects of the application, so compiling it into assemblies defeats its purpose.
+
+The purpose is to configure the dependency injection container for the entire application,
+not just MvcSiteMapProvider. We are using a composition root pattern, which requires the
+code to be as close to the entry point of the application as possible.
+
+http://blog.ploeh.dk/2011/07/28/CompositionRoot/
+
+The general idea is that we want the host application to provide the dependencies for 
+MvcSiteMapProvider and all other classes rather than allow the classes to provide their 
+own dependencies.

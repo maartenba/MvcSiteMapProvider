@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MvcSiteMapProvider.DI.Bootstrap
+namespace DI
 {
     public interface IDependencyInjectionContainer
     {
