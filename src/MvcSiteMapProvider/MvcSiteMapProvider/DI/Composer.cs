@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Hosting;
-using System.Web.WebPages.Razor;
 using MvcSiteMapProvider.Xml;
+#if !MVC2
+using System.Web.WebPages.Razor;
+#endif
 
 #if !NET35
-    // Startup using WebActivatorEx (which allows multiple things to be started up, as opposed to the System.Web version).
+// Startup using WebActivatorEx (which allows multiple things to be started up, as opposed to the System.Web version).
     [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(MvcSiteMapProvider.DI.Composer), "Compose")]
 #endif
 
@@ -19,9 +21,11 @@ namespace MvcSiteMapProvider.DI
     {
         public static void Compose()
         {
+#if !MVC2
             // Register global namespaces with Razor so we don't have to import them in Web.config
             WebPageRazorHost.AddGlobalImport("MvcSiteMapProvider.Web.Html");
             WebPageRazorHost.AddGlobalImport("MvcSiteMapProvider.Web.Html.Models");
+#endif
 
             // Get the configuration settings
             var settings = new ConfigurationSettings();

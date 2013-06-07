@@ -39,6 +39,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninject", "CodeAsConfigurat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Windsor", "CodeAsConfiguration\Windsor\Windsor.csproj", "{B559B084-8AFF-457B-9054-373ECC7F979D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{DBD0D341-B5A1-43E6-AD01-F89FFE9F1EE4}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\Build.bat = ..\..\Build.bat
+		..\..\nuget\MvcSiteMapProvider.MVC2.nuspec = ..\..\nuget\MvcSiteMapProvider.MVC2.nuspec
+		..\..\nuget\MvcSiteMapProvider.MVC3.nuspec = ..\..\nuget\MvcSiteMapProvider.MVC3.nuspec
+		..\..\nuget\MvcSiteMapProvider.MVC4.nuspec = ..\..\nuget\MvcSiteMapProvider.MVC4.nuspec
+		..\..\build\psake.psm1 = ..\..\build\psake.psm1
+		..\..\build\psake_ext.ps1 = ..\..\build\psake_ext.ps1
+		..\..\build\runbuild.ps1 = ..\..\build\runbuild.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
