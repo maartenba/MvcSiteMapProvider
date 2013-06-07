@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Compilation;
