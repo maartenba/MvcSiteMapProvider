@@ -1,27 +1,25 @@
 ﻿<?xml version="1.0"?>
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-    <id>MvcSiteMapProvider.Bootstrapper.Unity</id>
+    <id>MvcSiteMapProvider.Configuration.Autofac</id>
     <version>$version$</version>
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>This package provides integration for MvcSiteMapProvider with Unity.</description>
-    <summary>This package provides integration for MvcSiteMapProvider with Unity.</summary>
+    <description>Autofac dependency injection configuration template for MvcSiteMapProvider.</description>
+    <summary>This package provides a template that automatically wires up a new dependency injection configuration using Autofac using a composition root pattern and injection through either IControllerFactory or IDependencyResolver. You may customize this configuration to allow for replacement of virtually any part of MvcSiteMapProvider by implementing one of its interfaces and injecting an instance of your implementation.</summary>
     <language>en-US</language>
-    <tags>mvc sitemap menu breadcrumb navigation unity</tags>
+    <tags>mvc sitemap menu breadcrumb navigation autofac</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
     <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
     <dependencies>
       <group targetFramework="net35">
         <dependency id="MvcSiteMapProvider " version="4.0" />
-        <dependency id="CommonServiceLocator" version="1.0" />
-        <dependency id="Unity" version="2.1.505.2" />
+        <dependency id="Autofac" version="2.6" />
         <dependency id="Microsoft.AspNet.Razor" version="1.0.20105.408" />
       </group>
       <group targetFramework="net40">
         <dependency id="MvcSiteMapProvider " version="4.0" />
-        <dependency id="CommonServiceLocator" version="1.0" />
-        <dependency id="Unity" version="2.1.505.2" />
+        <dependency id="Autofac" version="2.6" />
         <dependency id="Microsoft.AspNet.Mvc" version="4.0.20710.0" />
         <dependency id="Microsoft.AspNet.Razor" version="2.0.20715.0" />
         <dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />

@@ -175,15 +175,15 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
     }
 
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.bootstrapper.unity\mvcsitemapprovider.bootstrapper.unity.nuspec -Symbols -Version $packageVersion
+        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.configuration.unity\mvcsitemapprovider.configuration.unity.nuspec -Symbols -Version $packageVersion
     }
 	
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.bootstrapper.structuremap\mvcsitemapprovider.bootstrapper.structuremap.nuspec -Symbols -Version $packageVersion
+        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.configuration.structuremap\mvcsitemapprovider.configuration.structuremap.nuspec -Symbols -Version $packageVersion
     }
 	
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.bootstrapper.autofac\mvcsitemapprovider.bootstrapper.autofac.nuspec -Symbols -Version $packageVersion
+        &"$tools_directory\nuget\NuGet.exe" pack $nuget_directory\mvcsitemapprovider.configuration.autofac\mvcsitemapprovider.configuration.autofac.nuspec -Symbols -Version $packageVersion
     }
 
     Move-Item *.nupkg $base_directory\release
