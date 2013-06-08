@@ -136,7 +136,7 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
 	# MVC 2
-	Copy-Item $nuget_directory\mvcsitemapprovider.mvc2.nuspec $build_directory\mvcsitemapprovider.mvc2\mvcsitemapprovider.nuspec
+	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc2.nutrans $build_directory\mvcsitemapprovider.mvc2\mvcsitemapprovider.nuspec
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc2 -Recurse
 	
     exec { 
@@ -144,7 +144,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
     }
 
 	# MVC 3
-	Copy-Item $nuget_directory\mvcsitemapprovider.mvc3.nuspec $build_directory\mvcsitemapprovider.mvc3\mvcsitemapprovider.nuspec
+	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc3.nutrans $build_directory\mvcsitemapprovider.mvc3\mvcsitemapprovider.nuspec
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc3 -Recurse
 	
     exec { 
@@ -152,7 +152,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
     }
 
 	# MVC 4
-	Copy-Item $nuget_directory\mvcsitemapprovider.mvc4.nuspec $build_directory\mvcsitemapprovider.mvc4\mvcsitemapprovider.nuspec
+	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc4.nutrans $build_directory\mvcsitemapprovider.mvc4\mvcsitemapprovider.nuspec
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc4 -Recurse
 	
     exec { 
@@ -191,4 +191,11 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 
 task Finalize -depends NuGet -description "This tasks finalizes the build" {  
 
+}
+
+function Transform-Nuspec ($source, $transform, $destination) {
+    $transform_xml = "$tools_directory\TransformXml.proj"
+    Write-Host "Creating nuspec for $destination" -ForegroundColor Green
+    Exec { msbuild $transform_xml /p:Source=$source /p:Transform=$transform /p:Destination=$destination /v:minimal /nologo }
+    $nuspec
 }

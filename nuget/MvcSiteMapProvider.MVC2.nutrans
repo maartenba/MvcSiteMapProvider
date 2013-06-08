@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- Nuget specification file for MVC2 -->
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id xdt:Transform="Insert">MvcSiteMapProvider.MVC2</id>
+	<title xdt:Transform="Insert">MvcSiteMapProvider for MVC 2</title>
+    <dependencies>
+			<group targetFramework="net35" xdt:Locator="Match(targetFramework)>
+				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
+			</group>
+			<group targetFramework="net40" xdt:Locator="Match(targetFramework)>
+				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
+			</group>
+			<group targetFramework="net45" xdt:Locator="Match(targetFramework)>
+				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
+			</group>
+		</dependencies>
+  </metadata>
+</package>
