@@ -53,7 +53,6 @@ task Finalize -depends NuGet -description "This tasks finalizes the build" {
 
 }
 
-
 function Transform-Nuspec ($source, $transform, $destination) {
     $transform_xml = "$tools_directory\TransformXml.proj"
     Write-Host "Creating nuspec for $destination" -ForegroundColor Green
@@ -123,14 +122,13 @@ function Create-MvcSiteMapProvider-Web-Package {
 	
     Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
     Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
-	mkdir $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates
+	Ensure-Directory-Exists $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates\test.temp
     Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates -Recurse
 	
     exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
     }
 }
-
 
 function Create-Configuration-DIContainer-Packages ([string[]] $di_containers) {
 	#create the build for each DI container
@@ -142,12 +140,17 @@ function Create-Configuration-DIContainer-Packages ([string[]] $di_containers) {
 	}
 }
 
-
 function Create-Configuration-DIContainer-Package ([string] $di_container, [string[]] $net_versions, [string] $mvc_version) {
 	#create the build for each version of the framework
 	foreach ($net_version in $net_versions) {
 		Create-Configuration-Build $di_container $net_version $mvc_version
 	}
+
+	#copy readme file
+	Copy-Item $source_directory\codeasconfiguration\mvcsitemapprovider_configuration_readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\MvcSiteMapProvider_Configuration_ReadMe.txt
+
+	#copy web.config file
+	Copy-Item $nuget_directory\mvcsitemapprovider.configuration\web.config.transform $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\web.config.transform
 
 	#package the build
 	exec { 
@@ -160,13 +163,31 @@ function Create-Configuration-Build ([string] $di_container, [string] $net_versi
 
 	Write-Host "Creating configuration build for $di_container, $net_version, MVC$mvc_version" -ForegroundColor Blue
 
+	#create nuspec file
+	Create-Configuration-Nuspec-File $di_container $mvc_version
+	
+	#create output directores
+	$output_directory = "$build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version"
+	Ensure-Directory-Exists "$output_directory\App_Start\test.temp"
+	Ensure-Directory-Exists "$output_directory\DI\test.temp"
+
+	#copy configuration files
+	Copy-Item $source_directory\codeasconfiguration\shared\App_Start\* $output_directory\App_Start -Recurse
+	Copy-Item $source_directory\codeasconfiguration\shared\DI\* $output_directory\DI -Recurse	
+	Copy-Item $source_directory\codeasconfiguration\$di_container\App_Start\* $output_directory\App_Start -Recurse
+	Copy-Item $source_directory\codeasconfiguration\$di_container\DI\* $output_directory\DI -Recurse
+
+	#pre-process the compiler symbols in the configuration files
+	Preprocess-Code-Files $output_directory $net_version $mvc_version
+}
+
+function Create-Configuration-Nuspec-File ([string] $di_container, [string] $mvc_version) {
 	$nuspec_shared = "$nuget_directory\mvcsitemapprovider.configuration\mvcsitemapprovider.configuration.shared.nuspec"
 	$output_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container.nuspec"
 	Ensure-Directory-Exists $output_file
 	Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.configuration\mvcsitemapprovider.configuration.$di_container.nutrans" "$output_file.template"
 	
 	#replace the tokens
-	
 	(cat "$output_file.template") `
 		-replace '#di_container_name#', "$di_container" `
 		-replace '#mvc_version#', "$mvc_version" `
@@ -174,20 +195,4 @@ function Create-Configuration-Build ([string] $di_container, [string] $net_versi
 
 	#delete the template file
 	Remove-Item "$output_file.template" -Force -ErrorAction SilentlyContinue
-	
-	#create output directores
-	Ensure-Directory-Exists "$build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\App_Start\test.tmp"
-	Ensure-Directory-Exists "$build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\DI\test.tmp"
-
-	#copy configuration files
-	Copy-Item $source_directory\codeasconfiguration\shared\App_Start\* $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\App_Start -Recurse
-	Copy-Item $source_directory\codeasconfiguration\shared\DI\* $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\DI -Recurse	
-	Copy-Item $source_directory\codeasconfiguration\$di_container\App_Start\* $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\App_Start -Recurse
-	Copy-Item $source_directory\codeasconfiguration\$di_container\DI\* $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\DI -Recurse
-
-	#pre-process the compiler symbols in the configuration files
-	Preprocess-Code-Files $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version $net_version $mvc_version
-
-	#copy readme file
-	Copy-Item $source_directory\codeasconfiguration\mvcsitemapprovider_configuration_readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.configuration.$di_container\content\$net_version\MvcSiteMapProvider_Configuration_ReadMe.txt
 }
