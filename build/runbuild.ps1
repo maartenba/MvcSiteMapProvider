@@ -203,12 +203,23 @@ function Create-Configuration-Nuspec-File ([string] $di_container, [string] $mvc
 	Ensure-Directory-Exists $output_file
 	Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.configuration\mvcsitemapprovider.configuration.$di_container.nutrans" "$output_file.template"
 	
+	$prerelease = Get-Prerelease-Text
+
 	#replace the tokens
 	(cat "$output_file.template") `
 		-replace '#di_container_name#', "$di_container" `
 		-replace '#mvc_version#', "$mvc_version" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_file 
 
 	#delete the template file
 	Remove-Item "$output_file.template" -Force -ErrorAction SilentlyContinue
+}
+
+function Get-Prerelease-Text {
+	$prerelease = ""
+	if ($packageVersion.Contains("-")) {
+		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
+	}
+	return $prerelease
 }
