@@ -106,6 +106,22 @@ function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	Transform-Nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.mvc$mvc_version.nutrans $output_nuspec_file
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
+	#determine if we are prerelease
+	$prerelease_switch = ""
+	if ($packageVersion.Contains("-")) {
+		$prerelease_switch = "-Prerelease"
+	}
+
+	#replace the tokens in init.ps1
+	$init_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version\tools\init.ps1"
+	Copy-Item $init_file "$init_file.template"
+	(cat "$init_file.template") `
+		-replace '#prerelease_switch#', "$prerelease_switch" `
+		> $init_file 
+
+	#delete the template file
+	Remove-Item "$init_file.template" -Force -ErrorAction SilentlyContinue
+
     exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
     }
