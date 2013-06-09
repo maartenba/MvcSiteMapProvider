@@ -103,8 +103,8 @@ function Build-MvcSiteMapProvider-Version ([string] $net_version, [string] $mvc_
 function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	$output_nuspec_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec"
 	Ensure-Directory-Exists $output_nuspec_file
-	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc$mvc_version.nutrans $output_nuspec_file
-	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse
+	Transform-Nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.mvc$mvc_version.nutrans $output_nuspec_file
+	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
     exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
