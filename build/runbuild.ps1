@@ -28,155 +28,22 @@ task Init -description "This tasks makes sure the build environment is correctly
 task Compile -depends Clean, Init -description "This task compiles the solution" {
 
 	Write-Host "Compiling..." -ForegroundColor Green
-
 	# MVC 2
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc2\lib\net35\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:DefineConstants=`" MVC2`;NET35`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc2\lib\net35\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-	
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc2\lib\net40\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:TargetFrameworkVersion=v4.0 `
-			/property:DefineConstants=`" MVC2`;NET40`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc2\lib\net40\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc2\lib\net45\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:TargetFrameworkVersion=v4.0 `
-			/property:DefineConstants=`" MVC2`;NET45`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc2\lib\net45\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-
+	Build-MvcSiteMapProvider-Versions ("net35", "net40", "net45") "2"
 	# MVC 3
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc3\lib\net35\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:DefineConstants=`" MVC3`;NET35`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc3\lib\net35\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-	
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc3\lib\net40\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:TargetFrameworkVersion=v4.0 `
-			/property:DefineConstants=`" MVC3`;NET40`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc3\lib\net40\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc3\lib\net45\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:TargetFrameworkVersion=v4.0 `
-			/property:DefineConstants=`" MVC3`;NET45`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc3\lib\net45\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-
+	Build-MvcSiteMapProvider-Versions ("net35", "net40", "net45") "3"
 	# MVC 4
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc4\lib\net40\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:TargetFrameworkVersion=v4.0 `
-			/property:DefineConstants=`" MVC4`;NET40`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc4\lib\net40\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-
-	exec { 
-		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
-			/property:outdir=$build_directory\mvcsitemapprovider.mvc4\lib\net45\ `
-			/verbosity:quiet `
-			/property:Configuration=$configuration `
-			"/t:Clean;Rebuild" `
-			/property:WarningLevel=3 `
-			/property:TargetFrameworkVersion=v4.0 `
-			/property:DefineConstants=`" MVC4`;NET45`" `
-			/property:EnableNuGetPackageRestore=true
-	}
-	dir $build_directory\mvcsitemapprovider.mvc4\lib\net45\ | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
-
-	    
+	Build-MvcSiteMapProvider-Versions ("net40", "net45") "4"
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
 	# MVC 2
-	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc2.nutrans $build_directory\mvcsitemapprovider.mvc2\mvcsitemapprovider.nuspec
-	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc2 -Recurse
-	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc2\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
-    }
-
+	Create-MvcSiteMapProvider-Package "2"
 	# MVC 3
-	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc3.nutrans $build_directory\mvcsitemapprovider.mvc3\mvcsitemapprovider.nuspec
-	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc3 -Recurse
-	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc3\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
-    }
-
+	Create-MvcSiteMapProvider-Package "3"
 	# MVC 4
-	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc4.nutrans $build_directory\mvcsitemapprovider.mvc4\mvcsitemapprovider.nuspec
-	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc4 -Recurse
-	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc4\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
-    }
-		
-    Generate-Nuspec-File `
-		-id "MvcSiteMapProvider.Web" `
-		-file "$build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec" `
-		-version $packageVersion `
-		-dependencies @("MvcSiteMapProvider `" version=`"4.0", "WebActivatorEx `" version=`"2.0")
-	
-    Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
-    Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
-	mkdir $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates
-    Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates -Recurse
-	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
-    }
-
+	Create-MvcSiteMapProvider-Package "4"
+	Create-MvcSiteMapProvider-Web-Package
 	Create-Configuration-DIContainer-Packages ("Autofac", "Ninject", "StructureMap", "Unity", "Windsor")
 
     Move-Item *.nupkg $base_directory\release
@@ -210,6 +77,60 @@ function Preprocess-Code-Files ($path, $net_version, $mvc_version) {
 	}
 }
 
+function Build-MvcSiteMapProvider-Versions ([string[]] $net_versions, [string] $mvc_version) {
+	#create the build for each version of the framework
+	foreach ($net_version in $net_versions) {
+		Build-MvcSiteMapProvider-Version $net_version $mvc_version
+	}
+}
+
+function Build-MvcSiteMapProvider-Version ([string] $net_version, [string] $mvc_version) {
+	$net_version_upper = $net_version.toUpper()
+	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
+	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version\lib\$net_version\"
+	exec { 
+		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
+			/property:outdir=$outdir `
+			/verbosity:quiet `
+			/property:Configuration=$configuration `
+			"/t:Clean;Rebuild" `
+			/property:WarningLevel=3 `
+			/property:DefineConstants=`" MVC$mvc_version`;$net_version_upper`" `
+			/property:EnableNuGetPackageRestore=true
+	}
+	dir $outdir | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
+}
+
+function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
+	$output_nuspec_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec"
+	Ensure-Directory-Exists $output_nuspec_file
+	Transform-Nuspec $nuget_directory\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider.mvc$mvc_version.nutrans $output_nuspec_file
+	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse
+	
+    exec { 
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
+    }
+}
+
+function Create-MvcSiteMapProvider-Web-Package {
+    Generate-Nuspec-File `
+		-id "MvcSiteMapProvider.Web" `
+		-file "$build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec" `
+		-version $packageVersion `
+		-dependencies @("WebActivatorEx `" version=`"2.0")
+
+		#-dependencies @("MvcSiteMapProvider `" version=`"4.0", "WebActivatorEx `" version=`"2.0")
+	
+    Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
+    Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
+	mkdir $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates
+    Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates -Recurse
+	
+    exec { 
+        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
+    }
+}
+
 
 function Create-Configuration-DIContainer-Packages ([string[]] $di_containers) {
 	#create the build for each DI container
@@ -223,8 +144,6 @@ function Create-Configuration-DIContainer-Packages ([string[]] $di_containers) {
 
 
 function Create-Configuration-DIContainer-Package ([string] $di_container, [string[]] $net_versions, [string] $mvc_version) {
-	Write-Host $di_container -ForegroundColor Yellow
-
 	#create the build for each version of the framework
 	foreach ($net_version in $net_versions) {
 		Create-Configuration-Build $di_container $net_version $mvc_version
