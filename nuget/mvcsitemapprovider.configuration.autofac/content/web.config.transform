@@ -1,5 +1,0 @@
-<configuration>
-  <appSettings>
-    <add key="MvcSiteMapProvider_UseExternalDIContainer" value="true"/>
-  </appSettings>
-</configuration>
