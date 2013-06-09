@@ -15,8 +15,6 @@ namespace DI.Ninject
         }
         private readonly IKernel container;
 
-        #region IDependencyInjectionContainer Members
-
         public object GetInstance(Type type)
         {
             return container.Get(type);
@@ -31,7 +29,5 @@ namespace DI.Ninject
         {
             container.Release(instance);
         }
-
-        #endregion
     }
 }

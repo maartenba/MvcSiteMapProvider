@@ -16,8 +16,6 @@ namespace DI.Windsor
         }
         private readonly IWindsorContainer container;
 
-        #region IDependencyInjectionContainer Members
-
         public object GetInstance(Type type)
         {
             return container.Resolve(type);
@@ -32,7 +30,5 @@ namespace DI.Windsor
         {
             container.Release(instance);
         }
-
-        #endregion
     }
 }

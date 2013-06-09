@@ -17,8 +17,6 @@ namespace DI.StructureMap
 
         private readonly IContainer container;
 
-        #region IDependencyInjectionContainer Members
-
         public object GetInstance(Type type)
         {
             if (type == null)
@@ -57,7 +55,5 @@ namespace DI.StructureMap
         {
             // Do nothing
         }
-
-        #endregion
     }
 }

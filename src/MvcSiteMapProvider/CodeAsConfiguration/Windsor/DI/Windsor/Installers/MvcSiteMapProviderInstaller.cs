@@ -23,13 +23,9 @@ namespace DI.Windsor.Installers
     public class MvcSiteMapProviderInstaller
         : IWindsorInstaller
     {
-        #region IWindsorInstaller Members
-
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }

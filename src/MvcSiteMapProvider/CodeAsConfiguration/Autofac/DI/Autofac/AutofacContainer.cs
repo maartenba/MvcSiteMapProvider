@@ -17,8 +17,6 @@ namespace DI.Autofac
         }
         private readonly IContainer container;
 
-        #region IDependencyInjectionContainer Members
-
         public object GetInstance(Type type)
         {
             if (type == null)
@@ -41,6 +39,5 @@ namespace DI.Autofac
             // Do nothing
         }
 
-        #endregion
     }
 }

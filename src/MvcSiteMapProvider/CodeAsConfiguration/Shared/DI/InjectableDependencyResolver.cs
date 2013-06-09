@@ -17,8 +17,6 @@ namespace DI
             this.container = container;
         }
 
-        #region IDependencyResolver Members
-
         public object GetService(Type serviceType)
         {
             return container.GetInstance(serviceType);
@@ -28,7 +26,5 @@ namespace DI
         {
             return container.GetAllInstances(serviceType);
         }
-
-        #endregion
     }
 }

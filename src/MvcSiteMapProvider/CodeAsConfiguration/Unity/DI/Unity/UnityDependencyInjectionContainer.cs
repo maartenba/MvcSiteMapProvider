@@ -20,8 +20,6 @@ namespace DI.Unity
 
         private readonly IUnityContainer container;
 
-        #region IDependencyInjectionContainer Members
-
         public object GetInstance(Type type)
         {
             return this.container.Resolve(type);
@@ -36,7 +34,5 @@ namespace DI.Unity
         {
             // Do nothing
         }
-
-        #endregion
     }
 }

@@ -13,13 +13,16 @@ public class DIConfigBootstrapper
 #if NET35
         MvcSiteMapProvider.DI.Composer.Compose();
 
-        // TODO: Add DIBootstrapper.Start() to Global.asax file under Application_Start().
+        // TODO: Add DIConfigBootstrapper.Start() to Global.asax file under Application_Start().
 #endif
         var container = DIConfig.Register();
 
-
 #if DependencyResolver
-
+        // Reconfigure MVC to use Service Location
+        var dependencyResolver = new InjectableDependencyResolver(container);
+        DependencyResolver.SetResolver(dependencyResolver);
+#else
+#if !MVC2
         // ************************************************************************************** //
         //  Dependency Resolver
         //
@@ -28,28 +31,24 @@ public class DIConfigBootstrapper
         //
         // ************************************************************************************** //
 
-        // Reconfigure MVC to use Service Location
+        // TODO: To use Dependency resolver, uncomment the following lines and 
+        // comment the controller factory lines below
+        //// Reconfigure MVC to use Service Location
+        //var dependencyResolver = new InjectableDependencyResolver(container);
+        //DependencyResolver.SetResolver(dependencyResolver);
 
-        // You will need to use DependencyResolver if there are hard references
-        // to IDependencyResolver in your code somewhere (don't do that - it limits your options
-        // and tightly couples your code to MVC!).
-        var dependencyResolver = new InjectableDependencyResolver(container);
-        DependencyResolver.SetResolver(dependencyResolver);
-
-#else
         // ************************************************************************************** //
         //  Controller Factory
-        //
-        //  You MUST use this option if you are using MVC 2.
         //
         //  It is recommended to use Controller Factory unless you are getting errors due to a conflict.
         //
         // ************************************************************************************** //
-
+#endif
         // Reconfigure MVC to use DI
         var controllerFactory = new InjectableControllerFactory(container);
         ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 #endif
+
         MvcSiteMapProviderConfig.Register(container);
     }
 }

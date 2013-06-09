@@ -81,3 +81,13 @@ param(
 	Write-Host "Generating nuspec file: $file"
 	out-file -filePath $file -encoding UTF8 -inputObject $contents
 }
+
+function Ensure-Directory-Exists($file)
+{
+	$dir = [System.IO.Path]::GetDirectoryName($file)
+	if ([System.IO.Directory]::Exists($dir) -eq $false)
+	{
+		Write-Host "Creating directory $dir"
+		[System.IO.Directory]::CreateDirectory($dir)
+	}
+}
