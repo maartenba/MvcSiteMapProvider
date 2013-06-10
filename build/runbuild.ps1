@@ -72,8 +72,22 @@ function Preprocess-Code-Files ([string] $path, [string] $net_version, [string] 
 	$net_version_upper = $net_version.toUpper()
 	Get-Childitem -path "$path\*" -recurse -include *.cs | % {
 		$file = $_
+		Begin-Preserve-Symbols "$file"
 		Preprocess-Code-File "$file" $net_version $mvc_version
+		End-Preserve-Symbols "$file"
 	}
+}
+
+function Begin-Preserve-Symbols ([string] $source) {
+	(Get-Content $source) | % {
+		$_-replace "((?:#if\s+\w+|#else|#endif)\s*?//\s*?[Pp]reserve|#region|#endregion)", '//$1'
+	} | Set-Content $source -Force
+}
+
+function End-Preserve-Symbols ([string] $source) {
+	(Get-Content $source) | % {
+		$_-replace "//(?:(#if\s+\w+|#else|#endif)\s*?//\s*?[Pp]reserve)|//(#region|#endregion)", '$1$2'
+	} | Set-Content $source -Force
 }
 
 function Build-MvcSiteMapProvider-Versions ([string[]] $net_versions, [string] $mvc_version) {
@@ -130,8 +144,6 @@ function Create-MvcSiteMapProvider-Web-Package {
 		-file "$build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec" `
 		-version $packageVersion `
 		-dependencies @("WebActivatorEx `" version=`"2.0")
-
-		#-dependencies @("MvcSiteMapProvider `" version=`"4.0", "WebActivatorEx `" version=`"2.0")
 	
     Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
     Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
