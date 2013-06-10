@@ -53,14 +53,14 @@ task Finalize -depends NuGet -description "This tasks finalizes the build" {
 
 }
 
-function Transform-Nuspec ($source, $transform, $destination) {
+function Transform-Nuspec ([string] $source, [string] $transform, [string] $destination) {
     $transform_xml = "$tools_directory\TransformXml.proj"
     Write-Host "Creating nuspec for $destination" -ForegroundColor Green
     Exec { msbuild $transform_xml /p:Source=$source /p:Transform=$transform /p:Destination=$destination /v:minimal /nologo }
     $nuspec
 }
 
-function Preprocess-Code-File ($source, $net_version, $mvc_version) {
+function Preprocess-Code-File ([string] $source, [string] $net_version, [string] $mvc_version) {
 	$net_version_upper = $net_version.toUpper()
     Write-Host "Preprocessing code for $source, $net_version_upper, MVC$mvc_version" -ForegroundColor Green
 	Copy-Item $source "$source.temp"
@@ -68,7 +68,7 @@ function Preprocess-Code-File ($source, $net_version, $mvc_version) {
 	Remove-Item "$source.temp" -Force -ErrorAction SilentlyContinue
 }
 
-function Preprocess-Code-Files ($path, $net_version, $mvc_version) {
+function Preprocess-Code-Files ([string] $path, [string] $net_version, [string] $mvc_version) {
 	$net_version_upper = $net_version.toUpper()
 	Get-Childitem -path "$path\*" -recurse -include *.cs | % {
 		$file = $_
@@ -107,10 +107,7 @@ function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
 	#determine if we are prerelease
-	$prerelease_switch = ""
-	if ($packageVersion.Contains("-")) {
-		$prerelease_switch = "-Prerelease"
-	}
+	$prerelease_switch = Get-Prerelease-Switch
 
 	#replace the tokens in init.ps1
 	$init_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version\tools\init.ps1"
@@ -222,4 +219,12 @@ function Get-Prerelease-Text {
 		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
 	}
 	return $prerelease
+}
+
+function Get-Prerelease-Switch {
+	$prerelease_switch = ""
+	if ($packageVersion.Contains("-")) {
+		$prerelease_switch = "-Prerelease"
+	}
+	return $prerelease_switch
 }
