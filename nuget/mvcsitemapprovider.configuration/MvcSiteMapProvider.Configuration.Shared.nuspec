@@ -10,7 +10,7 @@
 		<description><![CDATA[#di_container_name# dependency injection code as configuration for MvcSiteMapProvider.]]></description>
 		<summary><![CDATA[This package provides a starting point that automatically wires up a new dependency injection configuration for #di_container_name# using a composition root pattern and injection through either IControllerFactory or IDependencyResolver. You may customize this configuration to allow for replacement of virtually any part of MvcSiteMapProvider by implementing one of its interfaces and injecting an instance of your implementation.]]></summary>
 		<language>en-US</language>
-		<tags>mvc sitemap menu breadcrumb navigation autofac</tags>
+		<tags>mvc sitemap mvcsitemap menu breadcrumb navigation #di_container_name#</tags>
 		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
 		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
 		<dependencies>
