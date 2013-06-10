@@ -34,7 +34,7 @@ IF "%PackageVersion%" == "" (
     set PackageVersion=%version%
 )
 set configuration=Release
-IF "%config%" == "" (
+IF NOT "%config%" == "" (
 	set configuration=%config%
 )
 
