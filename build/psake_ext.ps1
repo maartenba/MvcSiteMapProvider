@@ -44,6 +44,7 @@ param(
 <package xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <metadata xmlns=""http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"">
     <id>$id</id>
+	<title>MvcSiteMapProvider.Web</title>
     <version>$version</version>
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

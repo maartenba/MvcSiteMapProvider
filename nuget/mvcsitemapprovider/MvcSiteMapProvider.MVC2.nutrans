@@ -3,7 +3,7 @@
 <package inherits="MvcSiteMapProvider.Shared.nuspec" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 		<id xdt:Transform="Insert">MvcSiteMapProvider.MVC2</id>
-		<title xdt:Transform="Insert">MvcSiteMapProvider for MVC 2</title>
+		<title xdt:Transform="Insert">MvcSiteMapProvider MVC2</title>
 		<dependencies>
 			<group targetFramework="net35" xdt:Locator="Match(targetFramework)">
 				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
