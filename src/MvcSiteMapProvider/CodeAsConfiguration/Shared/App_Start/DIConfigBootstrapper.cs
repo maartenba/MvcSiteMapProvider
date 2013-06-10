@@ -29,14 +29,14 @@ public class DIConfigBootstrapper
         // Reconfigure MVC to use Service Location
         var dependencyResolver = new InjectableDependencyResolver(container);
         DependencyResolver.SetResolver(dependencyResolver);
-
+#else //preserve
         // ************************************************************************************** //
         //  Controller Factory
         //
         //  It is recommended to use Controller Factory unless you are getting errors due to a conflict.
         //
         // ************************************************************************************** //
-#else //preserve
+
         // Reconfigure MVC to use DI
         var controllerFactory = new InjectableControllerFactory(container);
         ControllerBuilder.Current.SetControllerFactory(controllerFactory);
