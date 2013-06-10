@@ -3,6 +3,7 @@ function Generate-Assembly-Info
 param(
 	[string]$copyright, 
 	[string]$version,
+	[string]$packageVersion,
 	[string]$company,
 	[string]$file = $(throw "file is a required parameter.")
 )
@@ -16,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompanyAttribute(""$company"")]
 [assembly: AssemblyCopyrightAttribute(""$copyright"")]
 [assembly: AssemblyVersionAttribute(""$version"")]
-[assembly: AssemblyInformationalVersionAttribute(""$version"")]
+[assembly: AssemblyInformationalVersionAttribute(""$packageVersion"")]
 [assembly: AssemblyFileVersionAttribute(""$version"")]
 [assembly: AssemblyDelaySignAttribute(false)]
 "

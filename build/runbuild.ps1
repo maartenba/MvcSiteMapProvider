@@ -22,6 +22,7 @@ task Init -description "This tasks makes sure the build environment is correctly
 		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
 		-company "MvcSiteMapProvider" `
 		-version $version `
+		-packageVersion $packageVersion `
 		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
 }
 
@@ -50,7 +51,13 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 }
 
 task Finalize -depends NuGet -description "This tasks finalizes the build" {  
-
+	#Change the assembly info file to be the same way it was before
+	Generate-Assembly-Info `
+		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
+		-company "MvcSiteMapProvider" `
+		-version $version `
+		-packageVersion $version `
+		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
 }
 
 function Transform-Nuspec ([string] $source, [string] $transform, [string] $destination) {
