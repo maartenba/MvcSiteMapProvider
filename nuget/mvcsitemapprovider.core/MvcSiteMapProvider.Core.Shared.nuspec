@@ -2,13 +2,15 @@
 <!-- MvcSiteMapProvider shared Nuget specification file; all packages share this -->
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
+	<id>MvcSiteMapProvider.MVC#mvc_version#.Core</id>
+	<title>MvcSiteMapProvider MVC#mvc_version# Core</title>
     <version>$version$</version>
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</description>
+    <description>This package contains only the core library for MvcSiteMapProvider. Use this package if you need to reference the library from a non-MVC project such as a class library.</description>
     <summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
     <language>en-US</language>
-    <tags>mvc sitemap menu breadcrumb navigation</tags>
+    <tags>mvc sitemap mvcsitemap menu breadcrumb navigation</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
     <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
 	<dependencies>

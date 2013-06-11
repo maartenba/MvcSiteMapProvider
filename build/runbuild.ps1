@@ -29,21 +29,22 @@ task Init -description "This tasks makes sure the build environment is correctly
 task Compile -depends Clean, Init -description "This task compiles the solution" {
 
 	Write-Host "Compiling..." -ForegroundColor Green
-	# MVC 2
-	Build-MvcSiteMapProvider-Versions ("net35", "net40", "net45") "2"
-	# MVC 3
-	Build-MvcSiteMapProvider-Versions ("net35", "net40", "net45") "3"
-	# MVC 4
-	Build-MvcSiteMapProvider-Versions ("net40", "net45") "4"
+
+	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "2"
+	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "3"
+	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "4"
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
-	# MVC 2
-	Create-MvcSiteMapProvider-Package "2"
-	# MVC 3
-	Create-MvcSiteMapProvider-Package "3"
-	# MVC 4
-	Create-MvcSiteMapProvider-Package "4"
+
+	#Create-MvcSiteMapProvider-Package -mvc_version "2"
+	#Create-MvcSiteMapProvider-Package -mvc_version "3"
+	#Create-MvcSiteMapProvider-Package -mvc_version "4"
+
+	Create-MvcSiteMapProvider-Core-Package -mvc_version "2"
+	Create-MvcSiteMapProvider-Core-Package -mvc_version "3"
+	Create-MvcSiteMapProvider-Core-Package -mvc_version "4"
+
 	Create-MvcSiteMapProvider-Web-Package
 	Create-Configuration-DIContainer-Packages ("Autofac", "Ninject", "StructureMap", "Unity", "Windsor")
 
@@ -97,17 +98,17 @@ function End-Preserve-Symbols ([string] $source) {
 	} | Set-Content $source -Force
 }
 
-function Build-MvcSiteMapProvider-Versions ([string[]] $net_versions, [string] $mvc_version) {
+function Build-MvcSiteMapProvider-Core-Versions ([string[]] $net_versions, [string] $mvc_version) {
 	#create the build for each version of the framework
 	foreach ($net_version in $net_versions) {
-		Build-MvcSiteMapProvider-Version $net_version $mvc_version
+		Build-MvcSiteMapProvider-Core-Version $net_version $mvc_version
 	}
 }
 
-function Build-MvcSiteMapProvider-Version ([string] $net_version, [string] $mvc_version) {
+function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] $mvc_version) {
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
-	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version\lib\$net_version\"
+	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
 			/property:outdir=$outdir `
@@ -127,21 +128,25 @@ function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	Transform-Nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.mvc$mvc_version.nutrans $output_nuspec_file
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
-	#determine if we are prerelease
-	$prerelease_switch = Get-Prerelease-Switch
-
-	#replace the tokens in init.ps1
-	$init_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version\tools\init.ps1"
-	Copy-Item $init_file "$init_file.template"
-	(cat "$init_file.template") `
-		-replace '#prerelease_switch#', "$prerelease_switch" `
-		> $init_file 
-
-	#delete the template file
-	Remove-Item "$init_file.template" -Force -ErrorAction SilentlyContinue
-
     exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
+    }
+}
+
+function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
+	$output_nuspec_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\mvcsitemapprovider.core.nuspec"
+	Ensure-Directory-Exists $output_nuspec_file
+	Transform-Nuspec $nuget_directory\mvcsitemapprovider.core\mvcsitemapprovider.core.shared.nuspec $nuget_directory\mvcsitemapprovider.core\mvcsitemapprovider.mvc$mvc_version.core.nutrans "$output_nuspec_file.template"
+	
+	#replace the tokens
+	(cat "$output_nuspec_file.template") `
+		-replace '#mvc_version#', "$mvc_version" `
+		> $output_nuspec_file 
+	
+	Copy-Item $nuget_directory\mvcsitemapprovider.core\* $build_directory\mvcsitemapprovider.mvc$mvc_version.core -Recurse -Exclude @("*.nuspec", "*.nutrans")
+	
+    exec { 
+        &"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
     }
 }
 
@@ -238,12 +243,4 @@ function Get-Prerelease-Text {
 		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
 	}
 	return $prerelease
-}
-
-function Get-Prerelease-Switch {
-	$prerelease_switch = ""
-	if ($packageVersion.Contains("-")) {
-		$prerelease_switch = "-Prerelease"
-	}
-	return $prerelease_switch
 }
