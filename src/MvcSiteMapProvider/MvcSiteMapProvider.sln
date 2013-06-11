@@ -23,8 +23,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAsConfiguration", "CodeAsConfiguration", "{FAADDBE0-A4D5-4EEE-A924-FE2582D734A9}"
 	ProjectSection(SolutionItems) = preProject
 		CodeAsConfiguration\IMPORTANT_NOTE.txt = CodeAsConfiguration\IMPORTANT_NOTE.txt
-		CodeAsConfiguration\ManualInstallInstructions.txt = CodeAsConfiguration\ManualInstallInstructions.txt
-		CodeAsConfiguration\MvcSiteMapProvider_Configuration_ReadMe.txt = CodeAsConfiguration\MvcSiteMapProvider_Configuration_ReadMe.txt
+		CodeAsConfiguration\Manual_Installation_Instructions.txt = CodeAsConfiguration\Manual_Installation_Instructions.txt
+		CodeAsConfiguration\MvcSiteMapProvider_DI_ReadMe.txt = CodeAsConfiguration\MvcSiteMapProvider_DI_ReadMe.txt
 		..\..\nuget\mvcsitemapprovider.configuration\web.config.transform = ..\..\nuget\mvcsitemapprovider.configuration\web.config.transform
 	EndProjectSection
 EndProject

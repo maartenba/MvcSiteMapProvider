@@ -11,7 +11,7 @@ to worry about what MVC does internally when using IControllerFactory.
 
 However, due to the fact that instances of both of these interfaces can't 
 be configured at the same time, we are providing both options in our 
-CodeAsConfiguration setup. 
+code as configuration setup. 
 
 Also, note that it is quite common to use DependencyResolver.Current as a 
 service locator to resolve dependencies within classes. We recommend you 
@@ -20,15 +20,19 @@ that have done this (or you insist this is the right way to do DI), you have
 the option of configuring your dependency injection container for use with 
 IDependencyResolver.
 
+IMPORTANT: MVC doesn't allow the use of Controller Factory and Dependency
+Resolver simultaneously. You must either configure one or the other. If you 
+have code that depends on IDependencyResolver, you must configure all of your
+DI configuration with IDependencyResolver including MvcSiteMapProvider.
+
 CONFIGURING DEPENDENCY RESOLVER
 
-To configure your application to use IDependencyResolver, add the 
-following lines to DIConfigBootstrapper.cs:
+If you need to use IDependencyResolver, add "DependencyResolver" 
+(without the quotes) as a conditional compilation constant
+to your MVC project. This can be done by going to the Build tab under 
+project Properties, and adding the value to the end of the list. 
+These symbols should be separated by a semicolon (;). 
+If you are getting runtime errors, you should try this setting.
 
-    var dependencyResolver = new InjectableDependencyResolver(container);
-    DependencyResolver.SetResolver(dependencyResolver);
-
-Then comment out the following lines:
-
-    //var controllerFactory = new InjectableControllerFactory(container);
-    //ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+Alternatively, you can edit the App_Start/DIConfigBootstrapper.cs file 
+to achieve the same result.
