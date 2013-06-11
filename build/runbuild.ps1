@@ -83,6 +83,8 @@ function Preprocess-Code-Files ([string] $path, [string] $net_version, [string] 
 		Begin-Preserve-Symbols "$file"
 		Preprocess-Code-File "$file" $net_version $mvc_version
 		End-Preserve-Symbols "$file"
+		Tokenize-Namespaces "$file"
+		Rename-Item "$file" "$file.pp" #must be done last
 	}
 }
 
@@ -95,6 +97,12 @@ function Begin-Preserve-Symbols ([string] $source) {
 function End-Preserve-Symbols ([string] $source) {
 	(Get-Content $source) | % {
 		$_-replace "//(?:(#if\s+\w+|#else|#endif)\s*?//\s*?[Pp]reserve)|//(#region|#endregion)", '$1$2'
+	} | Set-Content $source -Force
+}
+
+function Tokenize-Namespaces ([string] $source) {
+	(Get-Content $source) | % {
+		$_-replace "(namespace|using)\s+(DI)", '$1 $rootnamespace$.$2'
 	} | Set-Content $source -Force
 }
 
