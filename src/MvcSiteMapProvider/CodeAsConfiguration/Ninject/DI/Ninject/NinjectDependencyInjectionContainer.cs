@@ -4,10 +4,10 @@ using Ninject;
 
 namespace DI.Ninject
 {
-    public class NinjectContainer
+    public class NinjectDependencyInjectionContainer
         : IDependencyInjectionContainer
     {
-        public NinjectContainer(IKernel container)
+        public NinjectDependencyInjectionContainer(IKernel container)
         {
             if (container == null)
                 throw new ArgumentNullException("container");

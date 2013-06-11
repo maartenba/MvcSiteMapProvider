@@ -17,7 +17,7 @@ public class DIConfig
         var container = builder.Build();
 
         // Return our DI container wrapper instance
-        return new AutofacContainer(container);
+        return new AutofacDependencyInjectionContainer(container);
     }
 }
 

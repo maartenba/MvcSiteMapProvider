@@ -5,10 +5,10 @@ using StructureMap;
 
 namespace DI.StructureMap
 {
-    public class StructureMapContainer
+    public class StructureMapDependencyInjectionContainer
         : IDependencyInjectionContainer
     {
-        public StructureMapContainer(IContainer container)
+        public StructureMapDependencyInjectionContainer(IContainer container)
         {
             if (container == null)
                 throw new ArgumentNullException("container");

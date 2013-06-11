@@ -79,7 +79,7 @@
     <Compile Include="App_Start\DIConfig.cs" />
     <Compile Include="DI\Ninject\Modules\MvcModule.cs" />
     <Compile Include="DI\Ninject\Modules\MvcSiteMapProviderModule.cs" />
-    <Compile Include="DI\Ninject\NinjectContainer.cs" />
+    <Compile Include="DI\Ninject\NinjectDependencyInjectionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

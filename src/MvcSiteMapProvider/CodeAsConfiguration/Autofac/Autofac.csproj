@@ -81,7 +81,7 @@
     <Compile Include="..\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
-    <Compile Include="DI\Autofac\AutofacContainer.cs" />
+    <Compile Include="DI\Autofac\AutofacDependencyInjectionContainer.cs" />
     <Compile Include="App_Start\DIConfig.cs" />
     <Compile Include="DI\Autofac\Modules\MvcModule.cs" />
     <Compile Include="DI\Autofac\Modules\MvcSiteMapProviderModule.cs" />

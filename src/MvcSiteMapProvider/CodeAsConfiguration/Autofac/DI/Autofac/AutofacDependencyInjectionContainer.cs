@@ -6,10 +6,10 @@ using Autofac.Core;
 
 namespace DI.Autofac
 {
-    public class AutofacContainer
+    public class AutofacDependencyInjectionContainer
         : IDependencyInjectionContainer
     {
-        public AutofacContainer(IContainer container)
+        public AutofacDependencyInjectionContainer(IContainer container)
         {
             if (container == null)
                 throw new ArgumentNullException("container");

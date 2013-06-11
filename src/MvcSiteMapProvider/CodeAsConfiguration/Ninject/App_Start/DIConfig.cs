@@ -16,7 +16,7 @@ internal class DIConfig
         container.Load(new MvcSiteMapProviderModule());
 
         // Return our DI container wrapper instance
-        return new NinjectContainer(container);
+        return new NinjectDependencyInjectionContainer(container);
     }
 }
 
