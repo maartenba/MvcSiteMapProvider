@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!-- MvcSiteMapProvider shared Nuget specification file; all packages share this -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+	<id>MvcSiteMapProvider.MVC#mvc_version#</id>
+	<title>MvcSiteMapProvider MVC#mvc_version#</title>
+    <version>$version$</version>
+    <authors>Maarten Balliauw</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<description>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</description>
+    <summary>This is the main package that contains the full installation of MvcSiteMapProvider. Install this package into your MVC projects.</summary>
+    <language>en-US</language>
+    <tags>mvc sitemap mvcsitemap menu breadcrumb navigation</tags>
+    <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
+    <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
+	<dependencies>
+		<group targetFramework="net35">
+			<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="4.0.0#prerelease#" />
+			<dependency id="MvcSiteMapProvider.Web" version="4.0.0#prerelease#" />
+		</group>
+		<group targetFramework="net40">
+			<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="4.0.0#prerelease#" />
+			<dependency id="MvcSiteMapProvider.Web" version="4.0.0#prerelease#" />
+		</group>
+		<group targetFramework="net45">
+			<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="4.0.0#prerelease#" />
+			<dependency id="MvcSiteMapProvider.Web" version="4.0.0#prerelease#" />
+		</group>
+	</dependencies>
+  </metadata>
+</package>

@@ -37,9 +37,9 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
 
-	#Create-MvcSiteMapProvider-Package -mvc_version "2"
-	#Create-MvcSiteMapProvider-Package -mvc_version "3"
-	#Create-MvcSiteMapProvider-Package -mvc_version "4"
+	Create-MvcSiteMapProvider-Package -mvc_version "2"
+	Create-MvcSiteMapProvider-Package -mvc_version "3"
+	Create-MvcSiteMapProvider-Package -mvc_version "4"
 
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "2"
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "3"
@@ -125,11 +125,23 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	$output_nuspec_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec"
 	Ensure-Directory-Exists $output_nuspec_file
-	Transform-Nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.shared.nuspec $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.mvc$mvc_version.nutrans $output_nuspec_file
+	Copy-Item $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.shared.nuspec "$output_nuspec_file.template"
+
+	$prerelease = Get-Prerelease-Text
+
+	#replace the tokens
+	(cat "$output_nuspec_file.template") `
+		-replace '#mvc_version#', "$mvc_version" `
+		-replace '#prerelease#', "$prerelease" `
+		> $output_nuspec_file 
+	
+	#delete the template file
+	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
+
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
     exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version\mvcsitemapprovider.nuspec -Symbols -Version $packageVersion
+        &"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
     }
 }
 
@@ -138,11 +150,17 @@ function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
 	Ensure-Directory-Exists $output_nuspec_file
 	Transform-Nuspec $nuget_directory\mvcsitemapprovider.core\mvcsitemapprovider.core.shared.nuspec $nuget_directory\mvcsitemapprovider.core\mvcsitemapprovider.mvc$mvc_version.core.nutrans "$output_nuspec_file.template"
 	
+	$prerelease = Get-Prerelease-Text
+
 	#replace the tokens
 	(cat "$output_nuspec_file.template") `
 		-replace '#mvc_version#', "$mvc_version" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_nuspec_file 
 	
+	#delete the template file
+	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
+
 	Copy-Item $nuget_directory\mvcsitemapprovider.core\* $build_directory\mvcsitemapprovider.mvc$mvc_version.core -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
     exec { 
