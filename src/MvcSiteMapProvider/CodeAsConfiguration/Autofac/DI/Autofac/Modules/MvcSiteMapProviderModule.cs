@@ -30,36 +30,11 @@ namespace DI.Autofac.Modules
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
-            builder.RegisterAssemblyTypes(currentAssembly)
+            builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
                    .AsSelf()
                    .AsImplementedInterfaces();
 
-            builder.RegisterAssemblyTypes(typeof (SiteMaps).Assembly)
-                   .AsSelf()
-                   .AsImplementedInterfaces();
-            
-            builder.RegisterAssemblyTypes(currentAssembly)
-                .Where(t =>                 
-                       typeof(IMvcContextFactory).IsAssignableFrom(t)
-                    || typeof(ISiteMapCacheKeyToBuilderSetMapper).IsAssignableFrom(t)
-                    || typeof(IDynamicNodeProvider).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeVisibilityProvider).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeUrlResolver).IsAssignableFrom(t)
-                    || typeof(IDynamicNodeProviderStrategy).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeUrlResolverStrategy).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeVisibilityProviderStrategy).IsAssignableFrom(t)
-                    || typeof(IFilterProvider).IsAssignableFrom(t)
-                    || typeof(IControllerDescriptorFactory).IsAssignableFrom(t)
-                    || typeof(IObjectCopier).IsAssignableFrom(t)
-                    || typeof(INodeKeyGenerator).IsAssignableFrom(t)
-                    || typeof(IExplicitResourceKeyParser).IsAssignableFrom(t)
-                    || typeof(IStringLocalizer).IsAssignableFrom(t)
-                    || typeof(IDynamicNodeBuilder).IsAssignableFrom(t))
-                .AsImplementedInterfaces()
-                .AsSelf()
-                .SingleInstance();
-
-            builder.RegisterAssemblyTypes(typeof(SiteMaps).Assembly)
+            builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
                 .Where(t =>                 
                        typeof(IMvcContextFactory).IsAssignableFrom(t)
                     || typeof(ISiteMapCacheKeyToBuilderSetMapper).IsAssignableFrom(t)
@@ -90,6 +65,10 @@ namespace DI.Autofac.Modules
             builder.RegisterType<ControllerBuilderAdaptor>()
                    .As<IControllerBuilder>();
 
+            builder.RegisterType<ControllerTypeResolverFactory>()
+                .As<IControllerTypeResolverFactory>()
+                .WithParameter("areaNamespacesToIgnore", new string[0]);
+
 #if !MVC2
             // Configure default filter provider with one that provides filters
             // from the global filter collection.
@@ -109,15 +88,13 @@ namespace DI.Autofac.Modules
                                     ))
                     .As<IAclModule>();
 
-#if NET35
+#if !NET35
             builder.RegisterType<AspNetSiteMapCache>()
                    .As<ISiteMapCache>();
 
-            builder.Register(ctx => new AspNetFileCacheDependency(absoluteFileName))
-                   .As<ICacheDependency>();
-
-            builder.Register(ctx => new CacheDetails(absoluteCacheExpiration, TimeSpan.MinValue, ctx.Resolve<ICacheDependency>()))
-                   .As<ICacheDetails>();
+            builder.RegisterType<AspNetFileCacheDependency>()
+                .Named<ICacheDependency>("cacheDependency")
+                .WithParameter("fileName", absoluteFileName);
 #else
             builder.RegisterInstance(System.Runtime.Caching.MemoryCache.Default)
                    .As<System.Runtime.Caching.ObjectCache>();
@@ -125,28 +102,42 @@ namespace DI.Autofac.Modules
             builder.RegisterType<RuntimeSiteMapCache>()
                    .As<ISiteMapCache>();
 
-            builder.Register(ctx => new RuntimeFileCacheDependency(absoluteFileName))
-                   .As<ICacheDependency>();
-
-            builder.Register(ctx => new CacheDetails(absoluteCacheExpiration, TimeSpan.MinValue, ctx.Resolve<ICacheDependency>()))
-                   .As<ICacheDetails>();
+            builder.RegisterType<RuntimeFileCacheDependency>()
+                .Named<ICacheDependency>("cacheDependency")
+                .WithParameter("fileName", absoluteFileName);
 #endif
+            builder.RegisterType<CacheDetails>()
+                .Named<ICacheDetails>("cacheDetails")
+                .WithParameter("absoluteCacheExpiration", absoluteCacheExpiration)
+                .WithParameter("slidingCacheExpiration", TimeSpan.MinValue)
+                .WithParameter(
+                    (p, c) => p.Name == "cacheDependency",
+                    (p, c) => c.ResolveNamed<ICacheDependency>("cacheDependency"));
+
             // Configure the visitors
             builder.RegisterType<UrlResolvingSiteMapNodeVisitor>()
                    .As<ISiteMapNodeVisitor>();
 
-            // Register the sitemap builder
+            // Prepare for our builders
             builder.Register(ctx => new FileXmlSource(absoluteFileName))
-                   .As<IXmlSource>();
+                   .Named<IXmlSource>("xmlSource");
 
-            builder.Register(ctx => new SiteMapXmlReservedAttributeNameProvider(new string[0]))
-                   .As<ISiteMapXmlReservedAttributeNameProvider>();
+            builder.RegisterType<SiteMapXmlReservedAttributeNameProvider>()
+                .As<ISiteMapXmlReservedAttributeNameProvider>()
+                .WithParameter("attributesToIgnore", new string[0]);
 
+            // Register the sitemap builders
             builder.RegisterType<XmlSiteMapBuilder>()
-                   .AsSelf();
+                .AsSelf()
+                .WithParameter(
+                    (p, c) => p.Name == "xmlSource",
+                    (p, c) => c.ResolveNamed<IXmlSource>("xmlSource"));
 
-            builder.Register(ctx => new ReflectionSiteMapBuilder(includeAssembliesForScan, new string[0], ctx.Resolve<ISiteMapXmlReservedAttributeNameProvider>(), ctx.Resolve<INodeKeyGenerator>(), ctx.Resolve<IDynamicNodeBuilder>(), ctx.Resolve<ISiteMapNodeFactory>(), ctx.Resolve<ISiteMapCacheKeyGenerator>()))
-                   .AsSelf();
+            builder.RegisterType<ReflectionSiteMapBuilder>()
+                .AsSelf()
+                .WithParameter("includeAssemblies", includeAssembliesForScan)
+                .WithParameter("excludeAssemblies", new string[0]);
+
 
             builder.RegisterType<VisitingSiteMapBuilder>()
                    .AsSelf();
@@ -156,12 +147,24 @@ namespace DI.Autofac.Modules
                                         ctx.Resolve<ReflectionSiteMapBuilder>(),
                                         ctx.Resolve<VisitingSiteMapBuilder>()
                                     ))
-                   .As<ISiteMapBuilder>();
+                   .Named<ISiteMapBuilder>("siteMapBuilder");
 
             // Configure the builder sets
-            builder.Register(ctx => new SiteMapBuilderSetStrategy(
-                new ISiteMapBuilderSet[] { new SiteMapBuilderSet("default", ctx.Resolve<ISiteMapBuilder>(), ctx.Resolve<ICacheDetails>()) }))
-                   .As<ISiteMapBuilderSetStrategy>();
+            builder.RegisterType<SiteMapBuilderSet>()
+                   .Named<ISiteMapBuilderSet>("builderSet")
+                   .WithParameter("instanceName", "default")
+                   .WithParameter(
+                        (p, c) => p.Name == "siteMapBuilder",
+                        (p, c) => c.ResolveNamed<ISiteMapBuilder>("siteMapBuilder"))
+                   .WithParameter(
+                        (p, c) => p.Name == "cacheDetails",
+                        (p, c) => c.ResolveNamed<ICacheDetails>("cacheDetails"));
+
+            builder.RegisterType<SiteMapBuilderSetStrategy>()
+                .As<ISiteMapBuilderSetStrategy>()
+                .WithParameter(
+                    (p, c) => p.Name == "siteMapBuilderSets",
+                    (p, c) => c.ResolveNamed<IEnumerable<ISiteMapBuilderSet>>("builderSet"));
         }
     }
 }

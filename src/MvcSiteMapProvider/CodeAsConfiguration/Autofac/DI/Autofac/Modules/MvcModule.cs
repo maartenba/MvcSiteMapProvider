@@ -14,13 +14,13 @@ namespace DI.Autofac.Modules
             builder.RegisterType<XmlSiteMapController>()
                 .AsImplementedInterfaces()
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .InstancePerDependency();
 
             builder.RegisterAssemblyTypes(currentAssembly)
                 .Where(t => typeof(IController).IsAssignableFrom(t))
                 .AsImplementedInterfaces()
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .InstancePerDependency();
         }
     }
 }
