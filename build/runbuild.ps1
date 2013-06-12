@@ -279,8 +279,8 @@ function Create-DIContainer-Modules-Package ([string] $di_container, [string[]] 
 	#copy readme file to root so it will open automatically
 	Copy-Item $source_directory\codeasconfiguration\$di_container\di\$di_container\readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\readme.txt
 
-	#copy web.config file
-	Copy-Item $nuget_directory\mvcsitemapprovider.di.modules\web.config.transform $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\content\web.config.transform
+	# copy the tools directory
+	Copy-Item $nuget_directory\mvcsitemapprovider.di.modules\tools $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\tools -Recurse
 
 	#package the build
 	exec { 
