@@ -10,7 +10,7 @@
 		<description>Dependency injection modules for #di_container_name# that can be used to integrate MvcSiteMapProvider into an existing dependency injection setup. This requires manual configuration to integrate with MVC, but is the least invasive option that won't bypass any existing DI logic.</description>
 		<summary>Dependency injection modules for #di_container_name# that can be used to integrate MvcSiteMapProvider into an existing dependency injection setup. This requires manual configuration to integrate with MVC, but is the least invasive option that won't bypass any existing DI logic.</summary>
 		<language>en-US</language>
-		<tags>mvc sitemap mvcsitemap menu breadcrumb navigation #di_container_name# DI IoC dependency injection</tags>
+		<tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation #di_container_name# DI IoC dependency injection mvcsitemapprovider</tags>
 		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
 		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
 		<dependencies>

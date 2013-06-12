@@ -10,7 +10,7 @@
 	<summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
     <description>This is the main package that contains the full installation of MvcSiteMapProvider using its internal DI container. Install this package into your client MVC projects.</description>
     <language>en-US</language>
-    <tags>mvc sitemap mvcsitemap menu breadcrumb navigation</tags>
+    <tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation mvcsitemapprovider</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
     <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
 	<dependencies>
