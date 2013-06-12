@@ -4,13 +4,13 @@
 	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 		<dependencies>
 			<group targetFramework="net35" xdt:Locator="Match(targetFramework)">
-				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
+				<!--<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />-->
 			</group>
 			<group targetFramework="net40" xdt:Locator="Match(targetFramework)">
-				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
+				<!--<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />-->
 			</group>
 			<group targetFramework="net45" xdt:Locator="Match(targetFramework)">
-				<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />
+				<!--<dependency id="Microsoft.AspNet.Mvc" version="[2.0,3.0)" xdt:Transform="Insert" />-->
 			</group>
 		</dependencies>
 	</metadata>
