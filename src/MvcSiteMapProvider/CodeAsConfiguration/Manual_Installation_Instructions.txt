@@ -7,13 +7,22 @@ your MVC application in the exact same directories.
 2. Copy the contents of the Shared project into the exact same directories 
 in your MVC application. Do not copy the DIConfig.cs file from this project.
 
-3. Add any missing dependencies to your MVC application using the 
+3. Open up the MvcSiteMap[xxx] module. The name will vary depending on 
+the dependency injection container. Locate this line near the top of
+the file:
+
+string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
+
+Change the name from "$AssemblyName$" to the assembly name of your MVC
+project, which is usually the project name. Be sure to remove the $ characters.
+
+4. Add any missing dependencies to your MVC application using the 
 dependency injection project for your desired container here as a guide.
 
-4. Add (or change) this key to the appSettings section of your web.config file:
+5. Add (or change) this key to the appSettings section of your web.config file:
 <add key="MvcSiteMapProvider_UseExternalDIContainer" value="true" />
 
-5. If you need to use IDependencyResolver, add "DependencyResolver" 
+6. If you need to use IDependencyResolver, add "DependencyResolver" 
 (without the quotes) as a conditional compilation constant
 to your MVC project. This can be done by going to the Build tab under 
 project Properties, and adding the value to the end of the list. 

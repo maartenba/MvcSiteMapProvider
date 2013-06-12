@@ -28,6 +28,7 @@ namespace DI.Autofac.Modules
             var currentAssembly = typeof(MvcModule).Assembly;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             builder.RegisterAssemblyTypes(currentAssembly)
                    .AsSelf()
@@ -89,10 +90,6 @@ namespace DI.Autofac.Modules
             builder.RegisterType<ControllerBuilderAdaptor>()
                    .As<IControllerBuilder>();
 
-            // Register routes
-            builder.RegisterInstance(RouteTable.Routes)
-                   .AsSelf();
-
 #if !MVC2
             // Configure default filter provider with one that provides filters
             // from the global filter collection.
@@ -148,7 +145,7 @@ namespace DI.Autofac.Modules
             builder.RegisterType<XmlSiteMapBuilder>()
                    .AsSelf();
 
-            builder.Register(ctx => new ReflectionSiteMapBuilder(new string[0], new string[0], ctx.Resolve<ISiteMapXmlReservedAttributeNameProvider>(), ctx.Resolve<INodeKeyGenerator>(), ctx.Resolve<IDynamicNodeBuilder>(), ctx.Resolve<ISiteMapNodeFactory>(), ctx.Resolve<ISiteMapCacheKeyGenerator>()))
+            builder.Register(ctx => new ReflectionSiteMapBuilder(includeAssembliesForScan, new string[0], ctx.Resolve<ISiteMapXmlReservedAttributeNameProvider>(), ctx.Resolve<INodeKeyGenerator>(), ctx.Resolve<IDynamicNodeBuilder>(), ctx.Resolve<ISiteMapNodeFactory>(), ctx.Resolve<ISiteMapCacheKeyGenerator>()))
                    .AsSelf();
 
             builder.RegisterType<VisitingSiteMapBuilder>()

@@ -27,6 +27,7 @@ namespace DI.StructureMap.Registries
         {
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             this.Scan(scan =>
             {
@@ -67,10 +68,6 @@ namespace DI.StructureMap.Registries
 
             this.For<IBuildManager>()
                 .Use<BuildManagerAdaptor>();
-
-            //// Pass in the global route collection
-            //this.For<System.Web.Routing.RouteCollection>()
-            //    .Use(x => RouteTable.Routes);
 
 #if !MVC2
             // Configure default filter provider with one that provides filters
@@ -141,7 +138,7 @@ namespace DI.StructureMap.Registries
                         .Ctor<ISiteMapXmlReservedAttributeNameProvider>().Is(reservedAttributeNameProvider)
                         .Ctor<IXmlSource>().Is(xmlSource);
                     y.Type<ReflectionSiteMapBuilder>()
-                        .Ctor<IEnumerable<string>>("includeAssemblies").Is(new string[0])
+                        .Ctor<IEnumerable<string>>("includeAssemblies").Is(includeAssembliesForScan)
                         .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
                     y.Type<VisitingSiteMapBuilder>();
                 });

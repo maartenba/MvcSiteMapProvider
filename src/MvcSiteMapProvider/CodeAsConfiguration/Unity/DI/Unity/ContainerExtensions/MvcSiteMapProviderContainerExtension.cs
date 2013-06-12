@@ -30,6 +30,7 @@ namespace DI.Unity.ContainerExtensions
         {
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
             // Auto-regiester all of our interfaces with matching names
             var assemblies = new List<Assembly>();
@@ -102,7 +103,7 @@ namespace DI.Unity.ContainerExtensions
 
             // IMPORTANT: Must give arrays of object a name in Unity in order for it to resolve them.
             this.Container.RegisterType<ISiteMapBuilder, XmlSiteMapBuilder>("xmlSiteMapBuilder", new InjectionConstructor(new ResolvedParameter<IXmlSource>("file1XmlSource"), new ResolvedParameter<ISiteMapXmlReservedAttributeNameProvider>("nameProvider"), typeof(INodeKeyGenerator), typeof(IDynamicNodeBuilder), typeof(ISiteMapNodeFactory), typeof(ISiteMapXmlNameProvider)));
-            this.Container.RegisterType<ISiteMapBuilder, ReflectionSiteMapBuilder>("reflectionSiteMapBuilder", new InjectionConstructor(new List<string>(), new List<string>(), new ResolvedParameter<ISiteMapXmlReservedAttributeNameProvider>("nameProvider"), typeof(INodeKeyGenerator), typeof(IDynamicNodeBuilder), typeof(ISiteMapNodeFactory), typeof(ISiteMapCacheKeyGenerator)));
+            this.Container.RegisterType<ISiteMapBuilder, ReflectionSiteMapBuilder>("reflectionSiteMapBuilder", new InjectionConstructor(includeAssembliesForScan, new List<string>(), new ResolvedParameter<ISiteMapXmlReservedAttributeNameProvider>("nameProvider"), typeof(INodeKeyGenerator), typeof(IDynamicNodeBuilder), typeof(ISiteMapNodeFactory), typeof(ISiteMapCacheKeyGenerator)));
             this.Container.RegisterType<ISiteMapBuilder, VisitingSiteMapBuilder>("visitingSiteMapBuilder");
             this.Container.RegisterType<ISiteMapBuilder, CompositeSiteMapBuilder>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapBuilder>(
                 new ResolvedParameter<ISiteMapBuilder>("xmlSiteMapBuilder"),

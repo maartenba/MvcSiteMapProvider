@@ -158,8 +158,8 @@ configured in the compilation constants -->
         <Compile Include="..\CodeAsConfiguration\StructureMap\App_Start\DIConfig.cs">
           <Link>App_Start\DIConfig.cs</Link>
         </Compile>
-        <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\StructureMapContainer.cs">
-          <Link>DI\StructureMap\StructureMapContainer.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\StructureMapDependencyInjectionContainer.cs">
+          <Link>DI\StructureMap\StructureMapDependencyInjectionContainer.cs</Link>
         </Compile>
       </ItemGroup>
     </When>
@@ -178,8 +178,8 @@ configured in the compilation constants -->
         <Compile Include="..\CodeAsConfiguration\Autofac\App_Start\DIConfig.cs">
           <Link>App_Start\DIConfig.cs</Link>
         </Compile>
-        <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\AutofacContainer.cs">
-          <Link>DI\Autofac\AutofacContainer.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\AutofacDependencyInjectionContainer.cs">
+          <Link>DI\Autofac\AutofacDependencyInjectionContainer.cs</Link>
         </Compile>
       </ItemGroup>
     </When>
@@ -188,8 +188,8 @@ configured in the compilation constants -->
         <Compile Include="..\CodeAsConfiguration\Ninject\App_Start\DIConfig.cs">
           <Link>App_Start\DIConfig.cs</Link>
         </Compile>
-        <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\NinjectContainer.cs">
-          <Link>DI\Ninject\NinjectContainer.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\NinjectDependencyInjectionContainer.cs">
+          <Link>DI\Ninject\NinjectDependencyInjectionContainer.cs</Link>
         </Compile>
       </ItemGroup>
     </When>
