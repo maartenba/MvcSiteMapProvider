@@ -36,3 +36,22 @@ If you are getting runtime errors, you should try this setting.
 
 Alternatively, you can edit the App_Start/DIConfigBootstrapper.cs file 
 to achieve the same result.
+
+CONFIGURING OTHER OPTIONS
+
+This package automatically sets a value in the appSettings section of 
+web.config as follows:
+
+<add key="MvcSiteMapProvider_UseExternalDIContainer" value="true" />
+
+When this setting is set to true, ALL other appSettings keys prefixed 
+by "MvcSiteMapProvider" are ignored. The reason for this is that we 
+assume that all configuration will be done by the DI container rather 
+than in web.config. If you still want to put settings in web.config 
+you are free to do so, but you will need to add the functionality 
+to your DI modules to do so.
+
+This gives you complete control over the configuration of MvcSiteMapProvider
+in the way that you see fit (with the exception of 1 appSettings value) and
+you are free to add configuration settings that make the most sense for your
+application instead of having a lot of clutter that doesn't apply to you.
