@@ -1,4 +1,4 @@
-<configuration>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<appSettings>
 		<add key="MvcSiteMapProvider_UseExternalDIContainer" xdt:Locator="Match(key)" xdt:Transform="Remove"/>
 		<add key="MvcSiteMapProvider_UseExternalDIContainer" value="true" xdt:Transform="Insert"/>
