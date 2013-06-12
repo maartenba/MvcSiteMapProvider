@@ -216,6 +216,10 @@ function Create-DIContainer-Package ([string] $di_container, [string[]] $net_ver
 	#copy readme file
 	Copy-Item $source_directory\codeasconfiguration\mvcsitemapprovider_di_readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\content\MvcSiteMapProvider_DI_ReadMe.txt
 
+	#copy readme file to root also so it will open automatically
+	Copy-Item $source_directory\codeasconfiguration\mvcsitemapprovider_di_readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\readme.txt
+
+
 	#package the build
 	exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\mvcsitemapprovider.mvc$mvc_version.di.$di_container.nuspec -Symbols -Version $packageVersion
@@ -271,7 +275,7 @@ function Create-DIContainer-Modules-Package ([string] $di_container, [string[]] 
 	}
 
 	#copy readme file to root so it will open automatically
-	Copy-Item $source_directory\codeasconfiguration\$di_container\di\$di_container\readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\ReadMe.txt
+	Copy-Item $source_directory\codeasconfiguration\$di_container\di\$di_container\readme.txt $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\readme.txt
 
 	#copy web.config file
 	Copy-Item $nuget_directory\mvcsitemapprovider.di.modules\web.config.transform $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\content\web.config.transform

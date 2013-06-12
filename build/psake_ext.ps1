@@ -49,7 +49,7 @@ param(
     <version>$version</version>
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</description>
+    <description>This project contains extra configuration that is required by MvcSiteMapProvider during installation into a Web project as well as a starting point for XML configuration of the provider.</description>
     <summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
     <language>en-US</language>
     <tags>mvc sitemap menu breadcrumb navigation</tags>

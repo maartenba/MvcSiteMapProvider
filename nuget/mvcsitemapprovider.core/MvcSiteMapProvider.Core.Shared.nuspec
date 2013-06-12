@@ -7,8 +7,8 @@
     <version>$version$</version>
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</description>
-	<summary>This package contains only the core library for MvcSiteMapProvider. Use this package if you need to reference the library from a non-MVC project such as a class library.</summary>
+    <summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
+	<description>This package contains only the core library for MvcSiteMapProvider. Use this package if you need to reference the library from a non-MVC project such as a class library.</description>
     <language>en-US</language>
     <tags>mvc sitemap mvcsitemap menu breadcrumb navigation</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
