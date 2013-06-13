@@ -258,6 +258,11 @@ function Create-DIContainer-Build ([string] $di_container, [string] $net_version
 	Copy-Item $source_directory\codeasconfiguration\$di_container\App_Start\* $output_directory\App_Start -Recurse
 	Copy-Item "$source_directory\codeasconfiguration\$di_container\DI\$di_container\$($di_container)DependencyInjectionContainer.cs" "$output_directory\DI\$di_container\$($di_container)DependencyInjectionContainer.cs"
 
+	if ($mvc_version -eq "2") {
+		#remove dependency resolver file if this is MVC 2 - not supported
+		Remove-Item $output_directory\DI\InjectableDependencyResolver.cs -Force -ErrorAction SilentlyContinue
+	}
+
 	#pre-process the compiler symbols in the configuration files
 	Preprocess-Code-Files $output_directory $net_version $mvc_version
 }
