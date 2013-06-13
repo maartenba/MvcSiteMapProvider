@@ -10,8 +10,8 @@ function CountSolutionFilesByExtension($extension) {
 
 function InferPreferredViewEngine() {
 	# Assume you want Razor except if you already have some ASPX views and no Razor ones
-	if ((CountSolutionFilesByExtension("aspx")) -eq 0) { return "razor" }
-	if (((CountSolutionFilesByExtension("cshtml")) -gt 0) -or ((CountSolutionFilesByExtension("vbhtml")) -gt 0)) { return "razor" }
+	if ((CountSolutionFilesByExtension "aspx") -eq 0) { return "razor" }
+	if (((CountSolutionFilesByExtension "cshtml") -gt 0) -or ((CountSolutionFilesByExtension "vbhtml") -gt 0)) { return "razor" }
 	return "aspx"
 }
 
@@ -28,7 +28,6 @@ function Install-MVC4-Config-Sections() {
 	$xml.Load($localPath.Value)
 
 	# select the node
-	#$node = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_UseExternalDIContainer']")
 	$ws = $xml.SelectSingleNode("configuration/system.webServer")
 	if ($ws -eq $null) {
 		$ws = $xml.CreateElement("system.webServer")
