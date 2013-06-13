@@ -7,7 +7,7 @@ using System;
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// Change frequency for the node
+    /// Change frequency for the node 
     /// </summary>
     [Serializable]
     public enum ChangeFrequency
