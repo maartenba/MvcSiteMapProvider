@@ -2,7 +2,7 @@
 <package inherits="MvcSiteMapProvider.Configuration.Shared.nuspec" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
 	<metadata>
 		<dependencies>
-			<group targetFramework="net20" xdt:Locator="Match(targetFramework)">
+			<group targetFramework="net35" xdt:Locator="Match(targetFramework)">
 				<dependency id="structuremap" version="2.6" xdt:Transform="Insert" />
 			</group>
 			<group targetFramework="net40" xdt:Locator="Match(targetFramework)">
