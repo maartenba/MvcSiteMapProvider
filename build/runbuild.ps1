@@ -31,7 +31,7 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 	Write-Host "Compiling..." -ForegroundColor Green
 
 	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "2"
-	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "3"
+	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "3"
 	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "4"
 }
 
@@ -119,6 +119,17 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
 	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
+
+	if ($net_version -eq "net35") {
+		$targetFramework = "v3.5"
+	}
+	if ($net_version -eq "net40") {
+		$targetFramework = "v4.0"
+	}
+	if ($net_version -eq "net45") {
+		$targetFramework = "v4.5"
+	}
+
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
 			/property:outdir=$outdir `
@@ -127,8 +138,10 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 			"/t:Clean;Rebuild" `
 			/property:WarningLevel=3 `
 			/property:DefineConstants=`" MVC$mvc_version`;$net_version_upper`" `
+			/property:TargetFrameworkVersion=$targetFramework `
 			/property:EnableNuGetPackageRestore=true
 	}
+	
 	dir $outdir | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
 }
 
@@ -199,11 +212,11 @@ function Create-DIContainer-Packages ([string[]] $di_containers) {
 	foreach ($di_container in $di_containers) {
 		Write-Host $di_container -ForegroundColor Yellow
 		Create-DIContainer-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
-		Create-DIContainer-Package $di_container ("net35", "net40", "net45") -mvc_version "3"
+		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "3"
 		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
 
 		Create-DIContainer-Modules-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
-		Create-DIContainer-Modules-Package $di_container ("net35", "net40", "net45") -mvc_version "3"
+		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "3"
 		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "4"
 	}
 }
