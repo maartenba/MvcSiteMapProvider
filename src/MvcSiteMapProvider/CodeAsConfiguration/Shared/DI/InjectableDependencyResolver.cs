@@ -1,3 +1,4 @@
+#if !MVC2
 using System;
 using System.Collections.Generic;
 using System.Web.Routing;
@@ -28,3 +29,4 @@ namespace DI
         }
     }
 }
+#endif
