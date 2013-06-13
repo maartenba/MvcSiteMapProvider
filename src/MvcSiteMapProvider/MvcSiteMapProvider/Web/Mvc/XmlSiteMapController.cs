@@ -32,10 +32,9 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </summary>
         /// <param name="page">The page.</param>
         /// <returns>XmlSiteMapResult instance</returns>
-        public ActionResult Index(int? page)
+        public ActionResult Index(int page = 0)
         {
-            int p = page == null ? 1 : (int)page;
-            return xmlSiteMapResultFactory.Create(p);
+            return xmlSiteMapResultFactory.Create(page);
         }
 
         /// <summary>
