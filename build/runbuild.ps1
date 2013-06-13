@@ -118,7 +118,8 @@ function Build-MvcSiteMapProvider-Core-Versions ([string[]] $net_versions, [stri
 function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] $mvc_version) {
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
-	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
+	$framework_version = Get-Framework-Version $net_version
+	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$framework_version\"
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
 			/property:outdir=$outdir `
@@ -212,7 +213,8 @@ function Create-DIContainer-Packages ([string[]] $di_containers) {
 function Create-DIContainer-Package ([string] $di_container, [string[]] $net_versions, [string] $mvc_version) {
 	#create the build for each version of the framework
 	foreach ($net_version in $net_versions) {
-		Create-DIContainer-Build $di_container $net_version $mvc_version
+		$framework_version = Get-Framework-Version $net_version
+		Create-DIContainer-Build $di_container $net_version $framework_version $mvc_version
 	}
 
 	#copy readme file
@@ -228,7 +230,7 @@ function Create-DIContainer-Package ([string] $di_container, [string[]] $net_ver
     }
 }
 
-function Create-DIContainer-Build ([string] $di_container, [string] $net_version, [string] $mvc_version) {
+function Create-DIContainer-Build ([string] $di_container, [string] $net_version, [string] $framework_version, [string] $mvc_version) {
 
 	Write-Host "Creating DI build for $di_container, $net_version, MVC$mvc_version" -ForegroundColor Blue
 
@@ -236,7 +238,7 @@ function Create-DIContainer-Build ([string] $di_container, [string] $net_version
 	Create-DIContainer-Nuspec-File $di_container $mvc_version
 	
 	#create output directores
-	$output_directory = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\content\$net_version"
+	$output_directory = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\content\$framework_version"
 	Ensure-Directory-Exists "$output_directory\App_Start\test.temp"
 	Ensure-Directory-Exists "$output_directory\DI\$di_container\test.temp"
 
@@ -254,7 +256,6 @@ function Create-DIContainer-Nuspec-File ([string] $di_container, [string] $mvc_v
 	$nuspec_shared = "$nuget_directory\mvcsitemapprovider.di\mvcsitemapprovider.di.shared.nuspec"
 	$output_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\mvcsitemapprovider.mvc$mvc_version.di.$di_container.nuspec"
 	Ensure-Directory-Exists $output_file
-	#Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.configuration\mvcsitemapprovider.configuration.$di_container.nutrans" "$output_file.template"
 	Copy-Item $nuspec_shared "$output_file.template"
 
 	$prerelease = Get-Prerelease-Text
@@ -273,7 +274,8 @@ function Create-DIContainer-Nuspec-File ([string] $di_container, [string] $mvc_v
 function Create-DIContainer-Modules-Package ([string] $di_container, [string[]] $net_versions, [string] $mvc_version) {
 	#create the build for each version of the framework
 	foreach ($net_version in $net_versions) {
-		Create-DIContainer-Modules-Build $di_container $net_version $mvc_version
+		$framework_version = Get-Framework-Version $net_version
+		Create-DIContainer-Modules-Build $di_container $net_version $framework_version $mvc_version
 	}
 
 	#copy readme file to root so it will open automatically
@@ -288,7 +290,7 @@ function Create-DIContainer-Modules-Package ([string] $di_container, [string[]] 
     }
 }
 
-function Create-DIContainer-Modules-Build ([string] $di_container, [string] $net_version, [string] $mvc_version) {
+function Create-DIContainer-Modules-Build ([string] $di_container, [string] $net_version, [string] $framework_version, [string] $mvc_version) {
 
 	Write-Host "Creating DI Modules build for $di_container, $net_version, MVC$mvc_version" -ForegroundColor Blue
 
@@ -296,7 +298,7 @@ function Create-DIContainer-Modules-Build ([string] $di_container, [string] $net
 	Create-DIContainer-Modules-Nuspec-File $di_container $mvc_version
 	
 	#create output directores
-	$output_directory = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\content\$net_version"
+	$output_directory = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\content\$framework_version"
 	Ensure-Directory-Exists "$output_directory\DI\test.temp"
 
 	#copy configuration files	
@@ -333,4 +335,12 @@ function Get-Prerelease-Text {
 		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
 	}
 	return $prerelease
+}
+
+function Get-Framework-Version ([string] $mvc_version) {
+	$framework_version = $mvc_version
+	if ($mvc_version -eq "net35") {
+		$framework_version = "net20"
+	}
+	return $framework_version
 }

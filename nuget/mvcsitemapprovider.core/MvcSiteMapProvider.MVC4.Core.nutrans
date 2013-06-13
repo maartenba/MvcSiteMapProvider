@@ -3,7 +3,7 @@
 <package inherits="MvcSiteMapProvider.Shared.nuspec" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
   <metadata>
 	<dependencies>
-		<group targetFramework="net35" xdt:Locator="Match(targetFramework)">
+		<group targetFramework="net20" xdt:Locator="Match(targetFramework)">
 			<dependency id="Microsoft.AspNet.Razor" version="[2.0,3.0)" xdt:Transform="Insert" />
 			<dependency id="Microsoft.AspNet.WebPages" version="[2.0,3.0)" xdt:Transform="Insert" />
 			<dependency id="Microsoft.AspNet.Mvc" version="[4.0,5.0)" xdt:Transform="Insert" />
