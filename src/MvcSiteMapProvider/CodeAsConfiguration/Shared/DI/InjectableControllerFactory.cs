@@ -18,6 +18,9 @@ namespace DI
 
         protected override IController GetControllerInstance(RequestContext requestContext, Type controllerType)
         {
+            if (requestContext.HttpContext.Request.Url.ToString().EndsWith("favicon.ico"))
+                return null;
+
             return controllerType == null ?
                 base.GetControllerInstance(requestContext, controllerType) :
                 container.GetInstance(controllerType) as IController;
