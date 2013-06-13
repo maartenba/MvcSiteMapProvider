@@ -8,10 +8,8 @@ namespace MvcSiteMapProvider.Web.Mvc
     /// <summary>
     /// XmlSiteMapController class
     /// </summary>
-#if MVC2
-#else
-#if MVC3
-#else
+#if !MVC2
+#if !MVC3
     [AllowAnonymous]
 #endif
 #endif
@@ -34,9 +32,10 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </summary>
         /// <param name="page">The page.</param>
         /// <returns>XmlSiteMapResult instance</returns>
-        public ActionResult Index(int page)
+        public ActionResult Index(int? page)
         {
-            return xmlSiteMapResultFactory.Create(page);
+            int p = page == null ? 1 : (int)page;
+            return xmlSiteMapResultFactory.Create(p);
         }
 
         /// <summary>
