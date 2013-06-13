@@ -179,16 +179,15 @@ function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
 }
 
 function Create-MvcSiteMapProvider-Web-Package {
-    Generate-Nuspec-File `
-		-id "MvcSiteMapProvider.Web" `
-		-file "$build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec" `
-		-version $packageVersion `
-		-dependencies @("WebActivatorEx `" version=`"2.0")
-	
-    Copy-Item $nuget_directory\mvcsitemapprovider.web\* $build_directory\mvcsitemapprovider.web -Recurse
+
+    Copy-Item $nuget_directory\mvcsitemapprovider.web\ $build_directory\mvcsitemapprovider.web -Recurse
+
+	Ensure-Directory-Exists $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
     Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
-	Ensure-Directory-Exists $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates\test.temp
-    Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates -Recurse
+
+	$display_templates_output = "$build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates"
+	Ensure-Directory-Exists $display_templates_output\test.temp
+    Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $display_templates_output -Recurse
 	
     exec { 
         &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
@@ -254,7 +253,6 @@ function Create-DIContainer-Nuspec-File ([string] $di_container, [string] $mvc_v
 	$nuspec_shared = "$nuget_directory\mvcsitemapprovider.di\mvcsitemapprovider.di.shared.nuspec"
 	$output_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\mvcsitemapprovider.mvc$mvc_version.di.$di_container.nuspec"
 	Ensure-Directory-Exists $output_file
-	#Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.configuration\mvcsitemapprovider.configuration.$di_container.nutrans" "$output_file.template"
 	Copy-Item $nuspec_shared "$output_file.template"
 
 	$prerelease = Get-Prerelease-Text

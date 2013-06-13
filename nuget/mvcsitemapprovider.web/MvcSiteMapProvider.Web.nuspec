@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!-- MvcSiteMapProvider.Web shared Nuget specification file; all packages share this -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>MvcSiteMapProvider.Web</id>
+		<title>MvcSiteMapProvider Web</title>
+		<version>$version$</version>
+		<authors>Maarten Balliauw</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>This project contains extra configuration that is required by MvcSiteMapProvider during installation into a Web project as well as a starting point for XML configuration of the provider.</description>
+		<summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
+		<language>en-US</language>
+		<tags>mvc sitemap menu breadcrumb navigation mvcsitemapprovider</tags>
+		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
+		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
+		<dependencies>
+			<group targetFramework="sl3">
+				<!-- Dummy dependency because Nuget won't pack without at least one -->
+				<!-- We don't really support silverlight 3 -->
+				<dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
+			</group>
+		</dependencies>
+	</metadata>
+</package>
