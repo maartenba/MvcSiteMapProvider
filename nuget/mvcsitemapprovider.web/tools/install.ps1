@@ -2,10 +2,18 @@ param($rootPath, $toolsPath, $package, $project)
 
 function CountSolutionFilesByExtension($extension) {
 	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
-	$files = [System.IO.Directory]::EnumerateFiles("$path", "*." + $extension, [System.IO.SearchOption]::AllDirectories)
-	$count = ($files | Measure-Object).Count
-	Write-Host "Project has $count $extension extensions"
+	$totalfiles = [System.IO.Directory]::EnumerateFiles("$path", "*." + $extension, [System.IO.SearchOption]::AllDirectories)
+	[int]$totalcount = ($totalfiles | Measure-Object).Count
 	
+	[int]$count = $totalcount
+	# Don't count the DisplayTemplates directory - need to subtract them.
+	if (($extension -eq "cshtml") -or ($extension -eq "vbhtml")) {
+		$razorfiles = [System.IO.Directory]::EnumerateFiles("$path\Views\Shared\DisplayTemplates", "*." + $extension)
+		[int]$razorcount = ($razorfiles | Measure-Object).Count
+		[int]$count = $totalcount - $razorcount
+	}
+	
+	Write-Host "Project has $count $extension extensions"
 	return $count
 }
 
