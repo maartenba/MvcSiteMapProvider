@@ -2,7 +2,7 @@ param($rootPath, $toolsPath, $package, $project)
 
 function CountSolutionFilesByExtension($extension) {
 	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
-	$files = [System.IO.Directory]::EnumerateFiles($_, "*." + $extension, [System.IO.SearchOption]::AllDirectories)
+	$files = [System.IO.Directory]::EnumerateFiles("$path", "*." + $extension, [System.IO.SearchOption]::AllDirectories)
 	
 	Write-Output "Project has ($files | Measure-Object).Count $extension extensions"
 	
