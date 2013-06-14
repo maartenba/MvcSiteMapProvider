@@ -1,18 +1,22 @@
 param($rootPath, $toolsPath, $package, $project)
 
-### Copied from MvcScaffolding
 function CountSolutionFilesByExtension($extension) {
-	$files = (Get-Project).DTE.Solution `
-		| ?{ $_.FileName } `
-		| %{ [System.IO.Path]::GetDirectoryName($_.FileName) } `
-		| %{ [System.IO.Directory]::EnumerateFiles($_, "*." + $extension, [System.IO.SearchOption]::AllDirectories) }
-	($files | Measure-Object).Count
+	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
+	$files = [System.IO.Directory]::EnumerateFiles($_, "*." + $extension, [System.IO.SearchOption]::AllDirectories)
+	
+	Write-Output "Project has ($files | Measure-Object).Count $extension extensions"
+	
+	return ($files | Measure-Object).Count
 }
 
+### Copied from MvcScaffolding
 function InferPreferredViewEngine() {
 	# Assume you want Razor except if you already have some ASPX views and no Razor ones
-	if ((CountSolutionFilesByExtension aspx) -eq 0) { return "razor" }
-	if (((CountSolutionFilesByExtension cshtml) -gt 0) -or ((CountSolutionFilesByExtension vbhtml) -gt 0)) { return "razor" }
+	Write-Output "Checking for .aspx extensions"
+	if ((CountSolutionFilesByExtension "aspx") -eq 0) { return "razor" }
+	Write-Output "Checking for razor extensions"
+	if (((CountSolutionFilesByExtension "cshtml") -gt 0) -or ((CountSolutionFilesByExtension vbhtml) -gt 0)) { return "razor" }
+	Write-Output "No razor found, using aspx"
 	return "aspx"
 }
 
@@ -86,7 +90,7 @@ if ([string](InferPreferredViewEngine) -eq 'aspx') {
 
 if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 {
-	Write-Output("Detected MVC 4")
+	Write-Output "Detected MVC 4"
 	
 	Install-MVC4-Config-Sections
 }
