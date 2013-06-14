@@ -5,7 +5,7 @@ using DI;
 #if !NET35
     [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(DIConfigBootstrapper), "Start")]
 #else
-    // TODO: Add DIConfigBootstrapper.Start() to Global.asax file under Application_Start().
+    // TODO: Add DIConfigBootstrapper.Start(); to Global.asax file under Application_Start().
 #endif
 
 public class DIConfigBootstrapper
