@@ -90,7 +90,7 @@ namespace DI.Autofac.Modules
                                     ))
                     .As<IAclModule>();
 
-#if !NET35
+#if NET35
             builder.RegisterType<AspNetSiteMapCache>()
                    .As<ISiteMapCache>();
 

@@ -98,7 +98,7 @@ if ([string](InferPreferredViewEngine) -eq 'aspx') {
 
 if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 {
-	Write-Output "Detected MVC 4"
+	Write-Host "Detected MVC 4"
 	
 	Install-MVC4-Config-Sections
 }
