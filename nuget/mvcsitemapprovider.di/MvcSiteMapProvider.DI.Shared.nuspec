@@ -19,12 +19,10 @@
 			</group>
 			<group targetFramework="net40">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.0.0#prerelease#" />
-				<dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
 				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 			<group targetFramework="net45">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.0.0#prerelease#" />
-				<dependency id="Microsoft.Web.Infrastructure" version="1.0.0.0" />
 				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 		</dependencies>
