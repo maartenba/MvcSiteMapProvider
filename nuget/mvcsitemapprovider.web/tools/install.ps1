@@ -3,20 +3,20 @@ param($rootPath, $toolsPath, $package, $project)
 function CountSolutionFilesByExtension($extension) {
 	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
 	$files = [System.IO.Directory]::EnumerateFiles("$path", "*." + $extension, [System.IO.SearchOption]::AllDirectories)
+	$count = ($files | Measure-Object).Count
+	Write-Host "Project has $count $extension extensions"
 	
-	Write-Output "Project has ($files | Measure-Object).Count $extension extensions"
-	
-	return ($files | Measure-Object).Count
+	return $count
 }
 
 ### Copied from MvcScaffolding
 function InferPreferredViewEngine() {
 	# Assume you want Razor except if you already have some ASPX views and no Razor ones
-	Write-Output "Checking for .aspx extensions"
+	Write-Host "Checking for .aspx extensions"
 	if ((CountSolutionFilesByExtension "aspx") -eq 0) { return "razor" }
-	Write-Output "Checking for razor extensions"
+	Write-Host "Checking for razor extensions"
 	if (((CountSolutionFilesByExtension "cshtml") -gt 0) -or ((CountSolutionFilesByExtension vbhtml) -gt 0)) { return "razor" }
-	Write-Output "No razor found, using aspx"
+	Write-Host "No razor found, using aspx"
 	return "aspx"
 }
 
