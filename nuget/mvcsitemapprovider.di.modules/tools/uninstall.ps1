@@ -15,8 +15,10 @@ $xml.Load($localPath.Value)
 # select the node
 $node = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_UseExternalDIContainer']")
 
-# change the value
-$node.SetAttribute("value", "false")
+if ($node -ne $null) {
+	# change the value
+	$node.SetAttribute("value", "false")
 
-# save the Web.config file
-$xml.Save($localPath.Value)
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
