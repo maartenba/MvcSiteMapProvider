@@ -3,7 +3,7 @@
 	<metadata>
 		<dependencies>
 			<group targetFramework="net35" xdt:Locator="Match(targetFramework)">
-				<dependency id="structuremap" version="2.6" xdt:Transform="Insert" />
+				<dependency id="structuremap" version="[2.6,2.6.3]" xdt:Transform="Insert" />
 			</group>
 			<group targetFramework="net40" xdt:Locator="Match(targetFramework)">
 				<dependency id="structuremap" version="2.6" xdt:Transform="Insert" />
