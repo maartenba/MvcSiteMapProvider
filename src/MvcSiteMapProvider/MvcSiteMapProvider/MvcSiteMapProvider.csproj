@@ -24,7 +24,6 @@
     <DefineConstants Condition="  '$(DefineConstants)' == '' ">MVC4;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DefineConstants>MVC3;NET35</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
