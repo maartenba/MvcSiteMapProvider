@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Hosting;
 using System.Web.Routing;
@@ -30,9 +31,27 @@ namespace DI.Autofac.Modules
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
+            // Register single implemenations of interfaces
             builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
-                   .AsSelf()
-                   .AsImplementedInterfaces();
+                .Where(type =>
+                {
+                    var implementations = type.GetInterfaces();
+
+                    if (implementations.Length > 0)
+                    {
+                        var iface = implementations[0];
+
+                        var implementaters =
+                            (from t in currentAssembly.GetTypes().Concat(typeof(SiteMaps).Assembly.GetTypes())
+                                where t.GetInterfaces().Contains(iface)
+                                select t);
+
+                        return implementaters.Count() == 1;  
+                    }
+                    return false;
+
+                })
+                .As(t => t.GetInterfaces()[0]);
 
             builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
                 .Where(t =>                 

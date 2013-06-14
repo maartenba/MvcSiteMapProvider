@@ -24,7 +24,14 @@ namespace DI.Autofac
                 return null;
             }
 
-            return this.container.Resolve(type);
+            if (type.IsAbstract || type.IsInterface)
+            {
+                return this.container.ResolveOptional(type);
+            }
+            else
+            {
+                return this.container.Resolve(type);
+            }
         }
 
         public IEnumerable<object> GetAllInstances(Type type)
