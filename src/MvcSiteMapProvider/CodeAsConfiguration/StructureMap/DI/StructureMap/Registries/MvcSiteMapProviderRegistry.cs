@@ -49,9 +49,6 @@ namespace DI.StructureMap.Registries
                 scan.AddAllTypesOf<IDynamicNodeProviderStrategy>();
                 scan.AddAllTypesOf<ISiteMapNodeUrlResolverStrategy>();
                 scan.AddAllTypesOf<ISiteMapNodeVisibilityProviderStrategy>();
-#if !MVC2
-                scan.AddAllTypesOf<IFilterProvider>();
-#endif
                 scan.AddAllTypesOf<IControllerDescriptorFactory>();
                 scan.AddAllTypesOf<IObjectCopier>();
                 scan.AddAllTypesOf<INodeKeyGenerator>();

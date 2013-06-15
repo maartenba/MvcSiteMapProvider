@@ -63,9 +63,6 @@ namespace DI.Autofac.Modules
                     || typeof(IDynamicNodeProviderStrategy).IsAssignableFrom(t)
                     || typeof(ISiteMapNodeUrlResolverStrategy).IsAssignableFrom(t)
                     || typeof(ISiteMapNodeVisibilityProviderStrategy).IsAssignableFrom(t)
-#if !MVC2
-                    || typeof(IFilterProvider).IsAssignableFrom(t)
-#endif
                     || typeof(IControllerDescriptorFactory).IsAssignableFrom(t)
                     || typeof(IObjectCopier).IsAssignableFrom(t)
                     || typeof(INodeKeyGenerator).IsAssignableFrom(t)
