@@ -74,7 +74,7 @@ namespace MvcSiteMapProvider.DI
             return new SiteMapNodePluginProvider(
                 new DynamicNodeProviderStrategy(this.dynamicNodeProviders),
                 new SiteMapNodeUrlResolverStrategy(this.siteMapNodeUrlResolvers),
-                new SiteMapNodeVisibilityProviderStrategy(this.siteMapNodeVisibilityProviders));
+                new SiteMapNodeVisibilityProviderStrategy(this.siteMapNodeVisibilityProviders, settings.DefaultSiteMapNodeVisibiltyProvider));
         }
 
         private IDynamicNodeProvider[] ResolveDynamicNodeProviders()

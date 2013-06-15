@@ -58,6 +58,10 @@ namespace DI.StructureMap.Registries
                 scan.Convention<SingletonConvention>();
             });
 
+            // Visibility Providers
+            this.For<ISiteMapNodeVisibilityProviderStrategy>().Use<SiteMapNodeVisibilityProviderStrategy>()
+                .Ctor<string>("defaultProviderName").Is(string.Empty);
+
             // Pass in the global controllerBuilder reference
             this.For<ControllerBuilder>()
                 .Use(x => ControllerBuilder.Current);

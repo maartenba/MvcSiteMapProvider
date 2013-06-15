@@ -46,6 +46,7 @@ namespace DI.Ninject.Modules
                 .Excluding<XmlRolesAclModule>()
                 .Excluding<CompositeAclModule>()
                 .Excluding<SiteMapNodeUrlResolver>()
+                .Excluding<SiteMapNodeVisibilityProviderStrategy>()
                 .BindDefaultInterface()
                 .Configure(binding => binding.InSingletonScope())
                 );
@@ -56,6 +57,8 @@ namespace DI.Ninject.Modules
             this.BindAllTypesOf(typeof(ISiteMapNodeUrlResolver), allAssemblies);
             // Visibility Providers
             this.BindAllTypesOf(typeof(ISiteMapNodeVisibilityProvider), allAssemblies);
+            this.Kernel.Bind<ISiteMapNodeVisibilityProviderStrategy>().To<SiteMapNodeVisibilityProviderStrategy>()
+                .WithConstructorArgument("defaultProviderName", string.Empty);
             // Dynamic Node Providers
             this.BindAllTypesOf(typeof(IDynamicNodeProvider), allAssemblies);
                 

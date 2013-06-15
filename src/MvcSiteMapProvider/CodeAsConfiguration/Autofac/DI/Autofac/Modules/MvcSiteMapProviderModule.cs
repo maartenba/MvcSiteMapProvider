@@ -73,6 +73,11 @@ namespace DI.Autofac.Modules
                 .AsSelf()
                 .SingleInstance();
 
+            // Visibility Providers
+            builder.RegisterType<SiteMapNodeVisibilityProviderStrategy>()
+                .As<ISiteMapNodeVisibilityProviderStrategy>()
+                .WithParameter("defaultProviderName", string.Empty);
+
             // Pass in the global controllerBuilder reference
             builder.RegisterInstance(ControllerBuilder.Current)
                    .As<ControllerBuilder>();

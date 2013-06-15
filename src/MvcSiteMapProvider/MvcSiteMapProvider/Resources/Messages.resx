@@ -145,7 +145,7 @@
     <value>Multiple root nodes defined. Are you missing a ParentKey definition on the '{0}' controller, '{1}'?</value>
   </data>
   <data name="NamedUrlResolverNotFound" xml:space="preserve">
-    <value>The URL resolver instance named '{0}' was not found. Check your DI configuration to ensure a URL resolver instance with this name exists.</value>
+    <value>The URL resolver instance named '{0}' was not found. Check your DI configuration to ensure a URL resolver instance with this name exists and is configured correctly.</value>
   </data>
   <data name="PhysicalPathNotAllowed" xml:space="preserve">
     <value>'{0}' is a physical path, but a virtual path was expected.</value>
@@ -212,5 +212,8 @@
   </data>
   <data name="ObjectPropertyNotFound" xml:space="preserve">
     <value>Property '{0}' was not found in Type '{1}'.</value>
+  </data>
+  <data name="NamedSiteMapNodeVisibilityProviderNotFound" xml:space="preserve">
+    <value>The visibility provider instance named '{0}' was not found. Check your DI configuration to ensure a visibility provider instance with this name exists and is configured correctly.</value>
   </data>
 </root>

@@ -45,13 +45,20 @@ namespace DI.Unity.ContainerExtensions
             // TODO: Find a better way to inject an array constructor
 
             // Url Resolvers
-            this.Container.RegisterType<ISiteMapNodeUrlResolverStrategy, SiteMapNodeUrlResolverStrategy>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapNodeUrlResolver>(this.Container.ResolveAll<ISiteMapNodeUrlResolver>().ToArray())));
+            this.Container.RegisterType<ISiteMapNodeUrlResolverStrategy, SiteMapNodeUrlResolverStrategy>(new InjectionConstructor(
+                new ResolvedArrayParameter<ISiteMapNodeUrlResolver>(this.Container.ResolveAll<ISiteMapNodeUrlResolver>().ToArray())
+                ));
 
             // Visibility Providers
-            this.Container.RegisterType<ISiteMapNodeVisibilityProviderStrategy, SiteMapNodeVisibilityProviderStrategy>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapNodeVisibilityProvider>(this.Container.ResolveAll<ISiteMapNodeVisibilityProvider>().ToArray())));
+            this.Container.RegisterType<ISiteMapNodeVisibilityProviderStrategy, SiteMapNodeVisibilityProviderStrategy>(new InjectionConstructor(
+                new ResolvedArrayParameter<ISiteMapNodeVisibilityProvider>(this.Container.ResolveAll<ISiteMapNodeVisibilityProvider>().ToArray()),
+                new InjectionParameter<string>(string.Empty)
+                ));
 
             // Dynamic Node Providers
-            this.Container.RegisterType<IDynamicNodeProviderStrategy, DynamicNodeProviderStrategy>(new InjectionConstructor(new ResolvedArrayParameter<IDynamicNodeProvider>(this.Container.ResolveAll<IDynamicNodeProvider>().ToArray())));
+            this.Container.RegisterType<IDynamicNodeProviderStrategy, DynamicNodeProviderStrategy>(new InjectionConstructor(
+                new ResolvedArrayParameter<IDynamicNodeProvider>(this.Container.ResolveAll<IDynamicNodeProvider>().ToArray())
+                ));
 
 
             // Pass in the global controllerBuilder reference
