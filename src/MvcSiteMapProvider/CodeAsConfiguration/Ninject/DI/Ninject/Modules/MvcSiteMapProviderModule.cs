@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Hosting;
-using System.Runtime.Caching;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Compilation;
@@ -87,7 +86,7 @@ namespace DI.Ninject.Modules
             this.Kernel.Bind<ICacheDependency>().To<AspNetFileCacheDependency>().Named("cacheDependency1")
                 .WithConstructorArgument("fileName", absoluteFileName);
 #else
-            this.Kernel.Bind<ObjectCache>().ToConstant<ObjectCache>(MemoryCache.Default);
+            this.Kernel.Bind<System.Runtime.Caching.ObjectCache>().ToConstant<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
             this.Kernel.Bind<ISiteMapCache>().To<RuntimeSiteMapCache>();
             this.Kernel.Bind<ICacheDependency>().To<RuntimeFileCacheDependency>().Named("cacheDependency1")
                 .WithConstructorArgument("fileName", absoluteFileName);
