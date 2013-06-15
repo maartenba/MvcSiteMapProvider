@@ -4,12 +4,15 @@
 		<dependencies>
 			<group targetFramework="net35" xdt:Locator="Match(targetFramework)">
 				<dependency id="Ninject" version="3.0" xdt:Transform="Insert" />
+				<dependency id="ninject.extensions.conventions" version="3.0" xdt:Transform="Insert" />
 			</group>
 			<group targetFramework="net40" xdt:Locator="Match(targetFramework)">
 				<dependency id="Ninject" version="3.0" xdt:Transform="Insert" />
+				<dependency id="ninject.extensions.conventions" version="3.0" xdt:Transform="Insert" />
 			</group>
 			<group targetFramework="net45" xdt:Locator="Match(targetFramework)">
 				<dependency id="Ninject" version="3.0" xdt:Transform="Insert" />
+				<dependency id="ninject.extensions.conventions" version="3.0" xdt:Transform="Insert" />
 			</group>
 		</dependencies>
 	</metadata>
