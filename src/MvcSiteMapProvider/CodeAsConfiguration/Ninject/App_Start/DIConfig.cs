@@ -12,7 +12,6 @@ internal class DIConfig
         var container = new StandardKernel();
 
         // Setup configuration of DI
-        container.Load(new MvcModule());
         container.Load(new MvcSiteMapProviderModule());
 
         // Return our DI container wrapper instance

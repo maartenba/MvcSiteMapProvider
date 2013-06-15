@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>MVC4;NET40;StructureMap;</DefineConstants>
+    <DefineConstants>MVC4;NET40;Ninject;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -215,8 +215,8 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\Modules\MvcSiteMapProviderModule.cs">
       <Link>DI\Autofac\Modules\MvcSiteMapProviderModule.cs</Link>
     </Compile>
-    <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\Modules\MvcModule.cs">
-      <Link>DI\Ninject\Modules\MvcModule.cs</Link>
+    <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\ExtensionMethods.cs">
+      <Link>DI\Ninject\ExtensionMethods.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\Modules\MvcSiteMapProviderModule.cs">
       <Link>DI\Ninject\Modules\MvcSiteMapProviderModule.cs</Link>

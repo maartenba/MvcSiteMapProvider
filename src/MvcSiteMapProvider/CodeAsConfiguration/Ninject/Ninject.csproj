@@ -81,7 +81,7 @@
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
     <Compile Include="App_Start\DIConfig.cs" />
-    <Compile Include="DI\Ninject\Modules\MvcModule.cs" />
+    <Compile Include="DI\Ninject\ExtensionMethods.cs" />
     <Compile Include="DI\Ninject\Modules\MvcSiteMapProviderModule.cs" />
     <Compile Include="DI\Ninject\NinjectDependencyInjectionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

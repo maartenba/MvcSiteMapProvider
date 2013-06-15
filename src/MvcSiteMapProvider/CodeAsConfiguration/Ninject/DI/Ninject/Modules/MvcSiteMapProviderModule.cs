@@ -27,26 +27,39 @@ namespace DI.Ninject.Modules
     public class MvcSiteMapProviderModule
         : NinjectModule
     {
-
-        // NOTE: This code is preliminary and still is not functional!!
-
         public override void Load()
         {
             var currentAssembly = typeof(MvcSiteMapProviderModule).Assembly;
+            var allAssemblies = new Assembly[] { currentAssembly, typeof(SiteMaps).Assembly };
+
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
-            this.Kernel.Bind(scanner => scanner.From(new Assembly[] { currentAssembly, typeof(SiteMaps).Assembly })
-                   .Select(IsServiceType)
+            this.Kernel.Bind(scanner => scanner.From(allAssemblies)
+                .Select(IsServiceType)
 #if !MVC2
-                   .Excluding<FilterProvider>()
+                .Excluding<FilterProvider>()
 #endif
-                   .BindDefaultInterface()
-                   .Configure(binding => binding.InSingletonScope())
-                   );
+                .Excluding<SiteMapXmlReservedAttributeNameProvider>()
+                .Excluding<SiteMapBuilderSetStrategy>()
+                .Excluding<AuthorizeAttributeAclModule>()
+                .Excluding<XmlRolesAclModule>()
+                .Excluding<CompositeAclModule>()
+                .Excluding<SiteMapNodeUrlResolver>()
+                .BindDefaultInterface()
+                .Configure(binding => binding.InSingletonScope())
+                );
 
+            // Register strategy classes
 
+            // Url Resolvers
+            this.BindAllTypesOf(typeof(ISiteMapNodeUrlResolver), allAssemblies);
+            // Visibility Providers
+            this.BindAllTypesOf(typeof(ISiteMapNodeVisibilityProvider), allAssemblies);
+            // Dynamic Node Providers
+            this.BindAllTypesOf(typeof(IDynamicNodeProvider), allAssemblies);
+                
             this.Kernel.Bind<ControllerBuilder>().ToConstant(ControllerBuilder.Current);
             this.Kernel.Bind<IControllerBuilder>().To<ControllerBuilderAdaptor>();
             this.Kernel.Bind<IBuildManager>().To<BuildManagerAdaptor>();
@@ -58,13 +71,13 @@ namespace DI.Ninject.Modules
 #endif
 
             // Configure Security
-            this.Kernel.Bind<IAclModule>().To<AuthorizeAttributeAclModule>().Named("authorizeAttribute");
-            this.Kernel.Bind<IAclModule>().To<XmlRolesAclModule>().Named("xmlRoles");
+            this.Kernel.Bind<AuthorizeAttributeAclModule>().ToSelf();
+            this.Kernel.Bind<XmlRolesAclModule>().ToSelf();
             this.Kernel.Bind<IAclModule>().To<CompositeAclModule>()
                 .WithConstructorArgument("aclModules", 
                     new IAclModule[] { 
-                        this.Kernel.Get<IAclModule>("authorizeAttribute"), 
-                        this.Kernel.Get<IAclModule>("xmlRoles") 
+                        this.Kernel.Get<AuthorizeAttributeAclModule>(), 
+                        this.Kernel.Get<XmlRolesAclModule>() 
                     });
 
 
@@ -137,5 +150,17 @@ namespace DI.Ninject.Modules
         {
             return type.IsClass && type.GetInterfaces().Any(intface => intface.Name == "I" + type.Name);
         }
+
+        private void BindAllTypesOf(Type type, Assembly[] assemblies)
+        {
+            List<Type> implementations = new List<Type>();
+
+            foreach (var assembly in assemblies)
+                implementations.AddRange(assembly.GetImplementationsOfInterface(type));
+
+            foreach (var implementation in implementations)
+                this.Kernel.Bind(type).To(implementation);
+        }
+
     }
 }
