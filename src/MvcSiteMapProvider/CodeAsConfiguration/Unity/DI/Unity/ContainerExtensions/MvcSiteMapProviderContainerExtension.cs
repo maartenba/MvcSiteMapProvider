@@ -40,7 +40,7 @@ namespace DI.Unity.ContainerExtensions
             assemblies.Add(Assembly.GetAssembly(typeof(System.Web.Mvc.IControllerFactory)));
             assemblies.Add(Assembly.GetAssembly(typeof(SiteMaps)));
 
-            this.AutoRegister(this.Container, assemblies);
+            this.AutoRegister(this.Container, assemblies, typeof(CompositeSiteMapNodeVisibilityProvider));
 
             // TODO: Find a better way to inject an array constructor
 
@@ -88,12 +88,12 @@ namespace DI.Unity.ContainerExtensions
                 new ResolvedParameter<IAclModule>("xmlRoles"))));
 
 #if NET35
-            this.Container.RegisterType<ISiteMapCache, AspNetSiteMapCache>();
+            this.Container.RegisterType<ICacheProvider<ISiteMap>, AspNetCacheProvider<ISiteMap>>();
             this.Container.RegisterType<ICacheDependency, AspNetFileCacheDependency>(
                 "cacheDependency", new InjectionConstructor(absoluteFileName));
 #else
             this.Container.RegisterInstance<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
-            this.Container.RegisterType<ISiteMapCache, RuntimeSiteMapCache>();
+            this.Container.RegisterType<ICacheProvider<ISiteMap>, RuntimeCacheProvider<ISiteMap>>();
             this.Container.RegisterType<ICacheDependency, RuntimeFileCacheDependency>(
                 "cacheDependency", new InjectionConstructor(absoluteFileName));
 #endif
@@ -129,7 +129,7 @@ namespace DI.Unity.ContainerExtensions
         }
 
 
-        private void AutoRegister(IUnityContainer container, IEnumerable<Assembly> assemblies)
+        private void AutoRegister(IUnityContainer container, IEnumerable<Assembly> assemblies, params Type[] excludeTypes)
         {
             List<Type> interfaces = new List<Type>();
 
@@ -138,17 +138,31 @@ namespace DI.Unity.ContainerExtensions
 
             foreach (var interfaceType in interfaces)
             {
-                var currentInterfaceType = interfaceType;
-
                 List<Type> implementations = new List<Type>();
 
                 foreach (var assembly in assemblies)
                     implementations.AddRange(assembly.GetImplementationsOfInterface(interfaceType));
 
                 if (implementations.Count > 1)
-                    implementations.ToList().ForEach(i => container.RegisterType(currentInterfaceType, i, i.Name));
+                {
+                    foreach (var implementation in implementations)
+                    {
+                        if (!container.IsRegistered(implementation) && !excludeTypes.Contains(implementation))
+                        {
+                            container.RegisterType(interfaceType, implementation, implementation.Name);
+                        }
+                    }
+                }
                 else
-                    implementations.ToList().ForEach(i => container.RegisterType(currentInterfaceType, i));
+                {
+                    foreach (var implementation in implementations)
+                    {
+                        if (!container.IsRegistered(implementation) && !excludeTypes.Contains(implementation))
+                        {
+                            container.RegisterType(interfaceType, implementation);
+                        }
+                    }
+                }
             }
         }
     }

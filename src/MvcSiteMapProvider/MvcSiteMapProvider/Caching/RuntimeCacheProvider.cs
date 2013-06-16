@@ -1,104 +1,38 @@
 ﻿#if !NET35
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Runtime.Caching;
 
 namespace MvcSiteMapProvider.Caching
 {
-    /// <summary>
-    /// This class wraps <see cref="T:System.Runtime.Caching.ObjectCache"/> to allow type-safe
-    /// interaction when managing cached object instances.
-    /// </summary>
-    public class RuntimeMicroCache<T>
-        : IMicroCache<T>
+    public class RuntimeCacheProvider<T>
+        : ICacheProvider<T>
     {
-        public RuntimeMicroCache(
+        public RuntimeCacheProvider(
             ObjectCache cache
             )
         {
             if (cache == null)
                 throw new ArgumentNullException("cache");
-
             this.cache = cache;
         }
-
         private readonly ObjectCache cache;
-        private ReaderWriterLockSlim synclock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        public event EventHandler<MicroCacheItemRemovedEventArgs<T>> ItemRemoved;
 
-        #region IMicroCache<T> Members
+        #region ICacheProvider<T> Members
+
+        public event EventHandler<MicroCacheItemRemovedEventArgs<T>> ItemRemoved;
 
         public bool Contains(string key)
         {
-            synclock.EnterReadLock();
-            try
-            {
-                return cache.Contains(key);
-            }
-            finally
-            {
-                synclock.ExitReadLock();
-            }
+            return cache.Contains(key);
         }
 
-        public T GetOrAdd(string key, Func<T> loadFunction, Func<ICacheDetails> getCacheDetailsFunction)
-        {
-            LazyLock lazy;
-            bool success;
-
-            synclock.EnterReadLock();
-            try
-            {
-                success = this.TryGetValue(key, out lazy);
-            }
-            finally
-            {
-                synclock.ExitReadLock();
-            }
-
-            if (!success)
-            {
-                synclock.EnterWriteLock();
-                try
-                {
-                    if (!this.TryGetValue(key, out lazy))
-                    {
-                        lazy = new LazyLock();
-                        var cacheDetails = getCacheDetailsFunction();
-                        this.Add(key, lazy, cacheDetails);
-                    }
-                }
-                finally
-                {
-                    synclock.ExitWriteLock();
-                }
-            }
-
-            return lazy.Get(loadFunction);
-        }
-
-        public void Remove(string key)
-        {
-            synclock.EnterWriteLock();
-            try
-            {
-                cache.Remove(key);
-            }
-            finally
-            {
-                synclock.ExitWriteLock();
-            }
-        }
-
-        #endregion
-
-        private LazyLock Get(string key)
+        public LazyLock Get(string key)
         {
             return (LazyLock)cache.Get(key);
         }
 
-        private bool TryGetValue(string key, out LazyLock value)
+        public bool TryGetValue(string key, out LazyLock value)
         {
             value = this.Get(key);
             if (value != null)
@@ -108,7 +42,7 @@ namespace MvcSiteMapProvider.Caching
             return false;
         }
 
-        private void Add(string key, LazyLock item, ICacheDetails cacheDetails)
+        public void Add(string key, LazyLock item, ICacheDetails cacheDetails)
         {
             var policy = new CacheItemPolicy();
 
@@ -142,6 +76,13 @@ namespace MvcSiteMapProvider.Caching
 
             cache.Add(key, item, policy);
         }
+
+        public void Remove(string key)
+        {
+            cache.Remove(key);
+        }
+
+        #endregion
 
         private bool IsTimespanSet(TimeSpan timeSpan)
         {

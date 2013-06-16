@@ -56,9 +56,10 @@ namespace DI.Autofac.Modules
             builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
                 .Where(t =>                 
                        typeof(IMvcContextFactory).IsAssignableFrom(t)
+                    || typeof(ISiteMapCache).IsAssignableFrom(t)
                     || typeof(ISiteMapCacheKeyToBuilderSetMapper).IsAssignableFrom(t)
                     || typeof(IDynamicNodeProvider).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeVisibilityProvider).IsAssignableFrom(t)
+                    || (typeof(ISiteMapNodeVisibilityProvider).IsAssignableFrom(t) && !t.Equals(typeof(CompositeSiteMapNodeVisibilityProvider)))
                     || typeof(ISiteMapNodeUrlResolver).IsAssignableFrom(t)
                     || typeof(IDynamicNodeProviderStrategy).IsAssignableFrom(t)
                     || typeof(ISiteMapNodeUrlResolverStrategy).IsAssignableFrom(t)
@@ -112,8 +113,8 @@ namespace DI.Autofac.Modules
                     .As<IAclModule>();
 
 #if NET35
-            builder.RegisterType<AspNetSiteMapCache>()
-                   .As<ISiteMapCache>();
+            builder.RegisterType<RuntimeCacheProvider<ISiteMap>>()
+                   .As<ICacheProvider<ISiteMap>>();
 
             builder.RegisterType<AspNetFileCacheDependency>()
                 .Named<ICacheDependency>("cacheDependency")
@@ -122,8 +123,8 @@ namespace DI.Autofac.Modules
             builder.RegisterInstance(System.Runtime.Caching.MemoryCache.Default)
                    .As<System.Runtime.Caching.ObjectCache>();
 
-            builder.RegisterType<RuntimeSiteMapCache>()
-                   .As<ISiteMapCache>();
+            builder.RegisterType<RuntimeCacheProvider<ISiteMap>>()
+                   .As<ICacheProvider<ISiteMap>>();
 
             builder.RegisterType<RuntimeFileCacheDependency>()
                 .Named<ICacheDependency>("cacheDependency")
