@@ -88,12 +88,12 @@ namespace DI.Unity.ContainerExtensions
                 new ResolvedParameter<IAclModule>("xmlRoles"))));
 
 #if NET35
-            this.Container.RegisterType<ISiteMapCache, AspNetSiteMapCache>();
+            this.Container.RegisterType<ICacheProvider<ISiteMap>, AspNetCacheProvider<ISiteMap>>();
             this.Container.RegisterType<ICacheDependency, AspNetFileCacheDependency>(
                 "cacheDependency", new InjectionConstructor(absoluteFileName));
 #else
             this.Container.RegisterInstance<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
-            this.Container.RegisterType<ISiteMapCache, RuntimeSiteMapCache>();
+            this.Container.RegisterType<ICacheProvider<ISiteMap>, RuntimeCacheProvider<ISiteMap>>();
             this.Container.RegisterType<ICacheDependency, RuntimeFileCacheDependency>(
                 "cacheDependency", new InjectionConstructor(absoluteFileName));
 #endif

@@ -85,12 +85,13 @@ namespace DI.Ninject.Modules
 
             // Setup cache
 #if NET35
-            this.Kernel.Bind<ISiteMapCache>().To<AspNetSiteMapCache>();
+            this.Kernel.Bind<ICacheProvider<ISiteMap>>().To<AspNetCacheProvider<ISiteMap>>();
             this.Kernel.Bind<ICacheDependency>().To<AspNetFileCacheDependency>().Named("cacheDependency1")
                 .WithConstructorArgument("fileName", absoluteFileName);
 #else
-            this.Kernel.Bind<System.Runtime.Caching.ObjectCache>().ToConstant<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
-            this.Kernel.Bind<ISiteMapCache>().To<RuntimeSiteMapCache>();
+            this.Kernel.Bind<System.Runtime.Caching.ObjectCache>()
+                .ToConstant<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
+            this.Kernel.Bind<ICacheProvider<ISiteMap>>().To<RuntimeCacheProvider<ISiteMap>>();
             this.Kernel.Bind<ICacheDependency>().To<RuntimeFileCacheDependency>().Named("cacheDependency1")
                 .WithConstructorArgument("fileName", absoluteFileName);
 #endif

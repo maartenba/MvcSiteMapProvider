@@ -9,7 +9,7 @@ namespace MvcSiteMapProvider.Caching
     /// Caching strategy inspired by this post:
     /// http://www.superstarcoders.com/blogs/posts/micro-caching-in-asp-net.aspx
     /// </remarks>
-    sealed class LazyLock
+    public sealed class LazyLock
     {
         private volatile bool got;
         private object value;

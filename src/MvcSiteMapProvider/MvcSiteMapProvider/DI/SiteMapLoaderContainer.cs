@@ -23,9 +23,9 @@ namespace MvcSiteMapProvider.DI
             this.absoluteFileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
             this.mvcContextFactory = new MvcContextFactory();
 #if NET35
-            this.siteMapCache = new AspNetSiteMapCache(this.mvcContextFactory);
+            this.siteMapCache = new SiteMapCache(new AspNetCacheProvider<ISiteMap>(this.mvcContextFactory));
 #else
-            this.siteMapCache = new RuntimeSiteMapCache(System.Runtime.Caching.MemoryCache.Default);
+            this.siteMapCache = new SiteMapCache(new RuntimeCacheProvider<ISiteMap>(System.Runtime.Caching.MemoryCache.Default));
 #endif
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = new UrlPath(this.mvcContextFactory);
