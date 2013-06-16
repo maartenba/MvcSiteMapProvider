@@ -101,20 +101,24 @@
     <Compile Include="Builder\AspNetDefaultSiteMapProvider.cs" />
     <Compile Include="Builder\IAspNetSiteMapProvider.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
+
     <Compile Include="Caching\AspNetCompositeCacheDependency.cs" />
     <Compile Include="Caching\AspNetFileCacheDependency.cs" />
     <Compile Include="Caching\AspNetMicroCache.cs" />
     <Compile Include="Caching\CacheDetails.cs" />
     <Compile Include="Caching\ICacheDetails.cs" />
     <Compile Include="Caching\ICacheDependency.cs" />
+
     <Compile Include="Caching\IMicroCache.cs" />
     <Compile Include="Caching\ISiteMapCache.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\ISiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="Caching\AspNetSiteMapCache.cs" />
     <Compile Include="Caching\LazyLock.cs" />
+
     <Compile Include="Caching\MicroCacheItemRemovedEventArgs.cs" />
     <Compile Include="Caching\NullCacheDependency.cs" />
+
     <Compile Include="Caching\RuntimeCompositeCacheDependency.cs" />
     <Compile Include="Caching\RuntimeFileCacheDependency.cs" />
     <Compile Include="Caching\RuntimeMicroCache.cs" />
@@ -130,6 +134,7 @@
     <Compile Include="Collections\RequestCacheableDictionary.cs" />
     <Compile Include="Collections\RequestCacheableList.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
+    <Compile Include="CompositeSiteMapNodeVisibilityProvider.cs" />
     <Compile Include="DI\Composer.cs" />
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />

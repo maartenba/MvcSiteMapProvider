@@ -54,13 +54,13 @@ namespace DI.Ninject.Modules
             // Register strategy classes
 
             // Url Resolvers
-            this.BindAllTypesOf(typeof(ISiteMapNodeUrlResolver), allAssemblies);
+            this.BindAllImplementationsOf(typeof(ISiteMapNodeUrlResolver), allAssemblies);
             // Visibility Providers
-            this.BindAllTypesOf(typeof(ISiteMapNodeVisibilityProvider), allAssemblies);
+            this.BindAllImplementationsOf(typeof(ISiteMapNodeVisibilityProvider), allAssemblies, typeof(CompositeSiteMapNodeVisibilityProvider));
             this.Kernel.Bind<ISiteMapNodeVisibilityProviderStrategy>().To<SiteMapNodeVisibilityProviderStrategy>()
                 .WithConstructorArgument("defaultProviderName", string.Empty);
             // Dynamic Node Providers
-            this.BindAllTypesOf(typeof(IDynamicNodeProvider), allAssemblies);
+            this.BindAllImplementationsOf(typeof(IDynamicNodeProvider), allAssemblies);
                 
             this.Kernel.Bind<ControllerBuilder>().ToConstant(ControllerBuilder.Current);
             this.Kernel.Bind<IControllerBuilder>().To<ControllerBuilderAdaptor>();
@@ -153,7 +153,7 @@ namespace DI.Ninject.Modules
             return type.IsClass && type.GetInterfaces().Any(intface => intface.Name == "I" + type.Name);
         }
 
-        private void BindAllTypesOf(Type type, Assembly[] assemblies)
+        private void BindAllImplementationsOf(Type type, Assembly[] assemblies, params Type[] excludingTypes)
         {
             List<Type> implementations = new List<Type>();
 
@@ -161,7 +161,12 @@ namespace DI.Ninject.Modules
                 implementations.AddRange(assembly.GetImplementationsOfInterface(type));
 
             foreach (var implementation in implementations)
-                this.Kernel.Bind(type).To(implementation);
+            {
+                if (!excludingTypes.Contains(implementation))
+                {
+                    this.Kernel.Bind(type).To(implementation);
+                }
+            }
         }
 
     }

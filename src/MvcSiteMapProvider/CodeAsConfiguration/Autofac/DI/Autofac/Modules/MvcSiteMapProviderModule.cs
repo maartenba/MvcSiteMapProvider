@@ -58,7 +58,7 @@ namespace DI.Autofac.Modules
                        typeof(IMvcContextFactory).IsAssignableFrom(t)
                     || typeof(ISiteMapCacheKeyToBuilderSetMapper).IsAssignableFrom(t)
                     || typeof(IDynamicNodeProvider).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeVisibilityProvider).IsAssignableFrom(t)
+                    || (typeof(ISiteMapNodeVisibilityProvider).IsAssignableFrom(t) && !t.Equals(typeof(CompositeSiteMapNodeVisibilityProvider)))
                     || typeof(ISiteMapNodeUrlResolver).IsAssignableFrom(t)
                     || typeof(IDynamicNodeProviderStrategy).IsAssignableFrom(t)
                     || typeof(ISiteMapNodeUrlResolverStrategy).IsAssignableFrom(t)
