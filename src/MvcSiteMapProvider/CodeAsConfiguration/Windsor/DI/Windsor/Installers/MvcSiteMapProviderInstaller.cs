@@ -43,7 +43,8 @@ namespace DI.Windsor.Installers
                 typeof(SiteMapNodeVisibilityProviderStrategy),
                 typeof(SiteMapXmlReservedAttributeNameProvider),
                 typeof(SiteMapBuilderSetStrategy),
-                typeof(ControllerTypeResolverFactory)
+                typeof(ControllerTypeResolverFactory),
+                typeof(SiteMapNodeUrlResolver)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -64,7 +65,7 @@ namespace DI.Windsor.Installers
                 (interfaceType, implementationType) => container.Register(Component.For(interfaceType).ImplementedBy(implementationType).LifestyleSingleton()),
                 multipleImplementationTypes,
                 allAssemblies,
-                excludeTypes,
+                new Type[0],
                 "^Composite");
 
             // Registration of internal controllers
