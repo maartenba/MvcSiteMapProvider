@@ -52,6 +52,7 @@ namespace DI.StructureMap.Registries
                 excludeTypes,
                 string.Empty);
 
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => this.For(interfaceType).Singleton().Use(implementationType),
                 multipleImplementationTypes,

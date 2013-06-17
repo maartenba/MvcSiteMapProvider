@@ -8,7 +8,6 @@ simply add the following code to your composition root.
 
 	// Setup configuration of DI
 	container.Configure(r => r.AddRegistry<MvcSiteMapProviderRegistry>());
-	container.Configure(r => r.AddRegistry<MvcRegistry>());
 
 For more help consult the StructureMap documantation at
 http://docs.structuremap.net/RegistryDSL.htm

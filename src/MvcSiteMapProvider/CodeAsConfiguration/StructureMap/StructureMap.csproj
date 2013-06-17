@@ -84,7 +84,6 @@
     <Compile Include="DI\StructureMap\Conventions\TransientConvention.cs" />
     <Compile Include="App_Start\DIConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DI\StructureMap\Registries\MvcRegistry.cs" />
     <Compile Include="DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs" />
     <Compile Include="DI\StructureMap\StructureMapDependencyInjectionContainer.cs" />
   </ItemGroup>

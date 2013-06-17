@@ -53,12 +53,21 @@ namespace DI.Autofac.Modules
                 excludeTypes,
                 string.Empty);
 
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
                 multipleImplementationTypes,
                 allAssemblies,
                 excludeTypes,
                 "^Composite");
+
+            // Registration of internal controllers
+            CommonConventions.RegisterAllImplementationsOfInterface(
+                (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).AsSelf().InstancePerDependency(),
+                new Type[] { typeof(IController) },
+                new Assembly[] { siteMapProviderAssembly },
+                new Type[0],
+                string.Empty);
 
             // Visibility Providers
             builder.RegisterType<SiteMapNodeVisibilityProviderStrategy>()

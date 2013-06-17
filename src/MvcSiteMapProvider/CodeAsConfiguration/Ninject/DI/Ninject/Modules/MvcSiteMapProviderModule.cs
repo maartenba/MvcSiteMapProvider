@@ -53,6 +53,7 @@ namespace DI.Ninject.Modules
                 excludeTypes,
                 string.Empty);
 
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => this.Kernel.Bind(interfaceType).To(implementationType).InSingletonScope(),
                 multipleImplementationTypes,

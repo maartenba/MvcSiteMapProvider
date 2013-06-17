@@ -59,12 +59,21 @@ namespace DI.Windsor.Installers
                 excludeTypes,
                 string.Empty);
 
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => container.Register(Component.For(interfaceType).ImplementedBy(implementationType).LifestyleSingleton()),
                 multipleImplementationTypes,
                 allAssemblies,
                 excludeTypes,
                 "^Composite");
+
+            // Registration of internal controllers
+            CommonConventions.RegisterAllImplementationsOfInterface(
+                (interfaceType, implementationType) => container.Register(Component.For(implementationType).ImplementedBy(implementationType).LifestyleTransient()),
+                new Type[] { typeof(IController) },
+                new Assembly[] { siteMapProviderAssembly },
+                new Type[0],
+                string.Empty);
 
             // Visibility Providers
             container.Register(Component.For<ISiteMapNodeVisibilityProviderStrategy>().ImplementedBy<SiteMapNodeVisibilityProviderStrategy>()

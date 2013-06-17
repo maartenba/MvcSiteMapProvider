@@ -239,9 +239,6 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\Conventions\TransientConvention.cs">
       <Link>DI\StructureMap\Conventions\TransientConvention.cs</Link>
     </Compile>
-    <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\Registries\MvcRegistry.cs">
-      <Link>DI\StructureMap\Registries\MvcRegistry.cs</Link>
-    </Compile>
     <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs">
       <Link>DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs</Link>
     </Compile>

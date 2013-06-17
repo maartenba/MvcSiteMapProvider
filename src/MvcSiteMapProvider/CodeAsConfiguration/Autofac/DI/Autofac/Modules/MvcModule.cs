@@ -11,11 +11,6 @@ namespace DI.Autofac.Modules
         {
             var currentAssembly = typeof(MvcModule).Assembly;
 
-            builder.RegisterType<XmlSiteMapController>()
-                .AsImplementedInterfaces()
-                .AsSelf()
-                .InstancePerDependency();
-
             builder.RegisterAssemblyTypes(currentAssembly)
                 .Where(t => typeof(IController).IsAssignableFrom(t))
                 .AsImplementedInterfaces()

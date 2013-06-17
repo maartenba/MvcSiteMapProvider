@@ -14,7 +14,6 @@ internal class DIConfig
 
         // Setup configuration of DI
         container.Configure(r => r.AddRegistry<MvcSiteMapProviderRegistry>());
-        container.Configure(r => r.AddRegistry<MvcRegistry>());
 
         // Return our DI container wrapper instance
         return new StructureMapDependencyInjectionContainer(container);

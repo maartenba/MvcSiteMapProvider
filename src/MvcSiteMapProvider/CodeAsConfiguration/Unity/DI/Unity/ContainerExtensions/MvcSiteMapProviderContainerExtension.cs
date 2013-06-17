@@ -56,6 +56,7 @@ namespace DI.Unity.ContainerExtensions
                 excludeTypes,
                 string.Empty);
 
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => this.Container.RegisterType(interfaceType, implementationType, implementationType.Name, new ContainerControlledLifetimeManager()),
                 multipleImplementationTypes,
@@ -147,7 +148,6 @@ namespace DI.Unity.ContainerExtensions
                     new ResolvedParameter<ICacheDetails>("cacheDetails")));
 
             this.Container.RegisterType<ISiteMapBuilderSetStrategy, SiteMapBuilderSetStrategy>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapBuilderSet>(new ResolvedParameter<ISiteMapBuilderSet>("builderSet1"))));
-           
         }
     }
 }

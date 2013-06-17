@@ -22,10 +22,6 @@ namespace DI.Windsor.Installers
             container.Register(Classes.FromThisAssembly()
                 .BasedOn<IController>()
                 .LifestyleTransient());
-
-            container.Register(Classes.FromAssembly(typeof(XmlSiteMapController).Assembly)
-                .BasedOn<IController>()
-                .LifestyleTransient());
         }
 
         #endregion
