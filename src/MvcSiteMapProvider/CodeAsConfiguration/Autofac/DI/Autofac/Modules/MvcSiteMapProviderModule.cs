@@ -112,11 +112,11 @@ namespace DI.Autofac.Modules
                         });
 
 #if NET35
-            builder.RegisterType<RuntimeCacheProvider<ISiteMap>>()
+            builder.RegisterType<AspNetCacheProvider<ISiteMap>>()
                    .As<ICacheProvider<ISiteMap>>();
 
             builder.RegisterType<AspNetFileCacheDependency>()
-                .Named<ICacheDependency>("cacheDependency")
+                .Named<ICacheDependency>("cacheDependency1")
                 .WithParameter("fileName", absoluteFileName);
 #else
             builder.RegisterInstance(System.Runtime.Caching.MemoryCache.Default)
