@@ -98,14 +98,18 @@ namespace DI.Autofac.Modules
 
             // Configure Security
             builder.RegisterType<AuthorizeAttributeAclModule>()
-                   .AsSelf();
+                .Named<IAclModule>("authorizeAttributeAclModule");
             builder.RegisterType<XmlRolesAclModule>()
-                   .AsSelf();
-            builder.Register(ctx => new CompositeAclModule(
-                                        ctx.Resolve<AuthorizeAttributeAclModule>(),
-                                        ctx.Resolve<XmlRolesAclModule>()
-                                    ))
-                    .As<IAclModule>();
+                .Named<IAclModule>("xmlRolesAclModule");
+            builder.RegisterType<CompositeAclModule>()
+                .As<IAclModule>()
+                .WithParameter(
+                    (p, c) => p.Name == "aclModules",
+                    (p, c) => new[]
+                        {
+                            c.ResolveNamed<IAclModule>("authorizeAttributeAclModule"),
+                            c.ResolveNamed<IAclModule>("xmlRolesAclModule")
+                        });
 
 #if NET35
             builder.RegisterType<RuntimeCacheProvider<ISiteMap>>()
@@ -122,68 +126,72 @@ namespace DI.Autofac.Modules
                    .As<ICacheProvider<ISiteMap>>();
 
             builder.RegisterType<RuntimeFileCacheDependency>()
-                .Named<ICacheDependency>("cacheDependency")
+                .Named<ICacheDependency>("cacheDependency1")
                 .WithParameter("fileName", absoluteFileName);
 #endif
             builder.RegisterType<CacheDetails>()
-                .Named<ICacheDetails>("cacheDetails")
+                .Named<ICacheDetails>("cacheDetails1")
                 .WithParameter("absoluteCacheExpiration", absoluteCacheExpiration)
                 .WithParameter("slidingCacheExpiration", TimeSpan.MinValue)
                 .WithParameter(
                     (p, c) => p.Name == "cacheDependency",
-                    (p, c) => c.ResolveNamed<ICacheDependency>("cacheDependency"));
+                    (p, c) => c.ResolveNamed<ICacheDependency>("cacheDependency1"));
 
             // Configure the visitors
             builder.RegisterType<UrlResolvingSiteMapNodeVisitor>()
                    .As<ISiteMapNodeVisitor>();
 
             // Prepare for our builders
-            builder.Register(ctx => new FileXmlSource(absoluteFileName))
-                   .Named<IXmlSource>("xmlSource");
-
+            builder.RegisterType<FileXmlSource>()
+                .Named<IXmlSource>("xmlSource1")
+                .WithParameter("fileName", absoluteFileName);
+                
             builder.RegisterType<SiteMapXmlReservedAttributeNameProvider>()
                 .As<ISiteMapXmlReservedAttributeNameProvider>()
                 .WithParameter("attributesToIgnore", new string[0]);
 
             // Register the sitemap builders
             builder.RegisterType<XmlSiteMapBuilder>()
-                .AsSelf()
+                .Named<ISiteMapBuilder>("xmlSiteMapBuilder1")
                 .WithParameter(
                     (p, c) => p.Name == "xmlSource",
-                    (p, c) => c.ResolveNamed<IXmlSource>("xmlSource"));
+                    (p, c) => c.ResolveNamed<IXmlSource>("xmlSource1"));
 
             builder.RegisterType<ReflectionSiteMapBuilder>()
-                .AsSelf()
+                .Named<ISiteMapBuilder>("reflectionSiteMapBuilder1")
                 .WithParameter("includeAssemblies", includeAssembliesForScan)
                 .WithParameter("excludeAssemblies", new string[0]);
 
-
             builder.RegisterType<VisitingSiteMapBuilder>()
-                   .AsSelf();
+                .Named<ISiteMapBuilder>("visitingSiteMapBuilder1");
 
-            builder.Register(ctx => new CompositeSiteMapBuilder(
-                                        ctx.Resolve<XmlSiteMapBuilder>(),
-                                        ctx.Resolve<ReflectionSiteMapBuilder>(),
-                                        ctx.Resolve<VisitingSiteMapBuilder>()
-                                    ))
-                   .Named<ISiteMapBuilder>("siteMapBuilder");
+            builder.RegisterType<CompositeSiteMapBuilder>()
+                .Named<ISiteMapBuilder>("siteMapBuilder1")
+                .WithParameter(
+                    (p, c) => p.Name == "siteMapBuilders",
+                    (p, c) => new[]
+                        {
+                            c.ResolveNamed<ISiteMapBuilder>("xmlSiteMapBuilder1"),
+                            c.ResolveNamed<ISiteMapBuilder>("reflectionSiteMapBuilder1"),
+                            c.ResolveNamed<ISiteMapBuilder>("visitingSiteMapBuilder1")
+                        });
 
             // Configure the builder sets
             builder.RegisterType<SiteMapBuilderSet>()
-                   .Named<ISiteMapBuilderSet>("builderSet")
+                   .Named<ISiteMapBuilderSet>("builderSet1")
                    .WithParameter("instanceName", "default")
                    .WithParameter(
                         (p, c) => p.Name == "siteMapBuilder",
-                        (p, c) => c.ResolveNamed<ISiteMapBuilder>("siteMapBuilder"))
+                        (p, c) => c.ResolveNamed<ISiteMapBuilder>("siteMapBuilder1"))
                    .WithParameter(
                         (p, c) => p.Name == "cacheDetails",
-                        (p, c) => c.ResolveNamed<ICacheDetails>("cacheDetails"));
+                        (p, c) => c.ResolveNamed<ICacheDetails>("cacheDetails1"));
 
             builder.RegisterType<SiteMapBuilderSetStrategy>()
                 .As<ISiteMapBuilderSetStrategy>()
                 .WithParameter(
                     (p, c) => p.Name == "siteMapBuilderSets",
-                    (p, c) => c.ResolveNamed<IEnumerable<ISiteMapBuilderSet>>("builderSet"));
+                    (p, c) => c.ResolveNamed<IEnumerable<ISiteMapBuilderSet>>("builderSet1"));
         }
     }
 }
