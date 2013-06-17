@@ -36,7 +36,8 @@ namespace DI.StructureMap.Registries
             var excludeTypes = new Type[] { 
                 typeof(SiteMapNodeVisibilityProviderStrategy),
                 typeof(SiteMapXmlReservedAttributeNameProvider),
-                typeof(SiteMapBuilderSetStrategy)
+                typeof(SiteMapBuilderSetStrategy),
+                typeof(ControllerTypeResolverFactory)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -73,6 +74,9 @@ namespace DI.StructureMap.Registries
 
             this.For<IBuildManager>()
                 .Use<BuildManagerAdaptor>();
+
+            this.For<IControllerTypeResolverFactory>().Use<ControllerTypeResolverFactory>()
+                .Ctor<string[]>("areaNamespacesToIgnore").Is(new string[0]);
 
 #if !MVC2
             // Configure default filter provider with one that provides filters
