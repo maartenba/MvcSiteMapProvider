@@ -15,15 +15,8 @@ namespace MvcMusicStore.Controllers
     public class AccountController : Controller
     {
         public AccountController()
-            : this(null)
         {
-        }
-
-        // This constructor is not used by the MVC framework but is instead provided for ease
-        // of unit testing this type. See the comments in AccountModels.cs for more information.
-        public AccountController(IFormsAuthenticationService formsService)
-        {
-            FormsService = formsService ?? new FormsAuthenticationService();
+            FormsService = new FormsAuthenticationService();
         }
 
         public IFormsAuthenticationService FormsService
