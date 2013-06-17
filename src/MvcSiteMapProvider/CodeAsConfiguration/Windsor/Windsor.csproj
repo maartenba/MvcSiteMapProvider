@@ -86,7 +86,7 @@
     <Compile Include="..\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
-    <Compile Include="App_Start\DIConfig.cs" />
+    <Compile Include="App_Start\CompositionRoot.cs" />
     <Compile Include="DI\Windsor\Installers\MvcInstaller.cs" />
     <Compile Include="DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs" />
     <Compile Include="DI\Windsor\WindsorDependencyInjectionContainer.cs" />

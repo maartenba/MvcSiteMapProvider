@@ -4,9 +4,9 @@ using DI;
 using DI.Windsor;
 using DI.Windsor.Installers;
 
-internal class DIConfig
+internal class CompositionRoot
 {
-    public static IDependencyInjectionContainer Register()
+    public static IDependencyInjectionContainer Compose()
     {
         // Create the DI container
         var container = new WindsorContainer();

@@ -4,9 +4,9 @@ using DI;
 using DI.Ninject;
 using DI.Ninject.Modules;
 
-internal class DIConfig
+internal class CompositionRoot
 {
-    public static IDependencyInjectionContainer Register()
+    public static IDependencyInjectionContainer Compose()
     {
         // Create the DI container
         var container = new StandardKernel();

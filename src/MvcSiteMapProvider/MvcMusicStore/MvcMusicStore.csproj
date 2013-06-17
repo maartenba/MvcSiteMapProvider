@@ -155,8 +155,8 @@ configured in the compilation constants -->
     <!-- Choose between our DI containers -->
     <When Condition=" $(DefineConstants.Contains('StructureMap')) ">
       <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\StructureMap\App_Start\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\StructureMap\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
         </Compile>
         <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\StructureMapDependencyInjectionContainer.cs">
           <Link>DI\StructureMap\StructureMapDependencyInjectionContainer.cs</Link>
@@ -165,8 +165,8 @@ configured in the compilation constants -->
     </When>
     <When Condition=" $(DefineConstants.Contains('Unity')) ">
       <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Unity\App_Start\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Unity\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
         </Compile>
         <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\UnityDependencyInjectionContainer.cs">
           <Link>DI\Unity\UnityDependencyInjectionContainer.cs</Link>
@@ -175,8 +175,8 @@ configured in the compilation constants -->
     </When>
     <When Condition=" $(DefineConstants.Contains('Autofac')) ">
       <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Autofac\App_Start\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Autofac\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
         </Compile>
         <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\AutofacDependencyInjectionContainer.cs">
           <Link>DI\Autofac\AutofacDependencyInjectionContainer.cs</Link>
@@ -185,8 +185,8 @@ configured in the compilation constants -->
     </When>
     <When Condition=" $(DefineConstants.Contains('Ninject')) ">
       <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Ninject\App_Start\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Ninject\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
         </Compile>
         <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\NinjectDependencyInjectionContainer.cs">
           <Link>DI\Ninject\NinjectDependencyInjectionContainer.cs</Link>
@@ -195,8 +195,8 @@ configured in the compilation constants -->
     </When>
     <When Condition=" $(DefineConstants.Contains('Windsor')) ">
       <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Windsor\App_Start\DIConfig.cs">
-          <Link>App_Start\DIConfig.cs</Link>
+        <Compile Include="..\CodeAsConfiguration\Windsor\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
         </Compile>
         <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\WindsorDependencyInjectionContainer.cs">
           <Link>DI\Windsor\WindsorDependencyInjectionContainer.cs</Link>
@@ -215,8 +215,8 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\Modules\MvcSiteMapProviderModule.cs">
       <Link>DI\Ninject\Modules\MvcSiteMapProviderModule.cs</Link>
     </Compile>
-    <Compile Include="..\CodeAsConfiguration\Shared\App_Start\DIConfigBootstrapper.cs">
-      <Link>App_Start\DIConfigBootstrapper.cs</Link>
+    <Compile Include="..\CodeAsConfiguration\Shared\App_Start\DIConfig.cs">
+      <Link>App_Start\DIConfig.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Shared\App_Start\MvcSiteMapProviderConfig.cs">
       <Link>App_Start\MvcSiteMapProviderConfig.cs</Link>

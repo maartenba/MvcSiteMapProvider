@@ -8,9 +8,9 @@ using DI.Unity;
 using DI.Unity.ContainerExtensions;
 
 
-internal class DIConfig
+internal class CompositionRoot
 {
-    public static IDependencyInjectionContainer Register()
+    public static IDependencyInjectionContainer Compose()
     {
         var container = new UnityContainer();
         container.AddNewExtension<MvcSiteMapProviderContainerExtension>();

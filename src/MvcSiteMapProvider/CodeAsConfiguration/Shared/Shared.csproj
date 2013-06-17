@@ -73,8 +73,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DIConfig.cs" />
-    <Compile Include="App_Start\DIConfigBootstrapper.cs" />
+    <Compile Include="CompositionRoot.cs" />
+    <Compile Include="App_Start\DIConfig.cs" />
     <Compile Include="DI\CommonConventions.cs" />
     <Compile Include="DI\IDependencyInjectionContainer.cs" />
     <Compile Include="DI\InjectableControllerFactory.cs" />

@@ -34,7 +34,7 @@ project Properties, and adding the value to the end of the list.
 These symbols should be separated by a semicolon (;). 
 If you are getting runtime errors, you should try this setting.
 
-Alternatively, you can edit the App_Start/DIConfigBootstrapper.cs file 
+Alternatively, you can edit the App_Start/DIConfig.cs file 
 to achieve the same result.
 
 CONFIGURING OTHER OPTIONS

@@ -5,7 +5,7 @@ into your project.
 your MVC application in the exact same directories.
 
 2. Copy the contents of the Shared project into the exact same directories 
-in your MVC application. Do not copy the DIConfig.cs file from this project.
+in your MVC application. Do not copy the CompositionRoot.cs file from this project.
 
 3. Open up the MvcSiteMap[xxx] module. The name will vary depending on 
 the dependency injection container. Locate this line near the top of
@@ -29,5 +29,5 @@ project Properties, and adding the value to the end of the list.
 These symbols should be separated by a semicolon (;). 
 If you are getting runtime errors, you should try this setting.
 
-Alternatively, you can edit the App_Start/DIConfigBootstrapper.cs file 
+Alternatively, you can edit the App_Start/DIConfig.cs file 
 to achieve the same result.

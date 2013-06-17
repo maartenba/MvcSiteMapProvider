@@ -4,9 +4,9 @@ using DI.Autofac.Modules;
 using Autofac;
 using Autofac.Core;
 
-public class DIConfig
+public class CompositionRoot
 {
-    public static IDependencyInjectionContainer Register()
+    public static IDependencyInjectionContainer Compose()
     {
         // Create a container builder
         var builder = new ContainerBuilder();

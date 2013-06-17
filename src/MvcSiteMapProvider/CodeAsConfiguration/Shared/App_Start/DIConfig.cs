@@ -3,19 +3,19 @@ using System.Web.Mvc;
 using DI;
 
 #if !NET35
-    [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(DIConfigBootstrapper), "Start")]
+[assembly: WebActivatorEx.PostApplicationStartMethod(typeof(DIConfig), "Register")]
 #else
-    // TODO: Add DIConfigBootstrapper.Start(); to Global.asax file under Application_Start().
+    // TODO: Add DIConfig.Register(); to Global.asax file under Application_Start().
 #endif
 
-public class DIConfigBootstrapper
+public class DIConfig
 {
-    public static void Start()
+    public static void Register()
     {
 #if NET35
         MvcSiteMapProvider.DI.Composer.Compose();
 #endif
-        var container = DIConfig.Register();
+        var container = CompositionRoot.Compose();
 #if !MVC2
 #if DependencyResolver //preserve
         // ************************************************************************************** //
