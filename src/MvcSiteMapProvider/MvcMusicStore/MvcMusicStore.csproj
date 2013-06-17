@@ -248,6 +248,9 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs">
       <Link>DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs</Link>
     </Compile>
+    <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\Installers\MvcInstaller.cs">
+      <Link>DI\Windsor\Installers\MvcInstaller.cs</Link>
+    </Compile>
     <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs">
       <Link>DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs</Link>
     </Compile>

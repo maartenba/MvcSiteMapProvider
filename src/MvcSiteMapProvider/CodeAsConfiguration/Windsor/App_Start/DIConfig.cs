@@ -13,6 +13,7 @@ internal class DIConfig
 
         // Setup configuration of DI
         container.Install(new MvcSiteMapProviderInstaller());
+        container.Install(new MvcInstaller());
 
         // Return our DI container wrapper instance
         return new WindsorDependencyInjectionContainer(container);

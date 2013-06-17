@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers">
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -86,6 +87,7 @@
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
     <Compile Include="App_Start\DIConfig.cs" />
+    <Compile Include="DI\Windsor\Installers\MvcInstaller.cs" />
     <Compile Include="DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs" />
     <Compile Include="DI\Windsor\WindsorDependencyInjectionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
