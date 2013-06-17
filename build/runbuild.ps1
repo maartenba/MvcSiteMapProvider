@@ -257,6 +257,9 @@ function Create-DIContainer-Build ([string] $di_container, [string] $net_version
 	Copy-Item $source_directory\codeasconfiguration\$di_container\App_Start\* $output_directory\App_Start -Recurse
 	Copy-Item "$source_directory\codeasconfiguration\$di_container\DI\$di_container\$($di_container)DependencyInjectionContainer.cs" "$output_directory\DI\$di_container\$($di_container)DependencyInjectionContainer.cs"
 
+	#remove common conventions (auto registration) - this is in the modules package already
+	Remove-Item $output_directory\DI\CommonConventions.cs -Force -ErrorAction SilentlyContinue
+
 	if ($mvc_version -eq "2") {
 		#remove dependency resolver file if this is MVC 2 - not supported
 		Remove-Item $output_directory\DI\InjectableDependencyResolver.cs -Force -ErrorAction SilentlyContinue
@@ -318,6 +321,9 @@ function Create-DIContainer-Modules-Build ([string] $di_container, [string] $net
 	$source = "$source_directory\codeasconfiguration\$di_container\DI"
 	$dest = "$output_directory\DI"
 	Get-ChildItem $source -Recurse -Exclude @("*Container.cs") | Copy-Item -Destination {Join-Path $dest $_.FullName.Substring($source.length)}
+
+	#copy common conventions (auto registration)
+	Copy-Item $source_directory\codeasconfiguration\shared\DI\CommonConventions.cs $output_directory\DI\CommonConventions.cs
 
 	#pre-process the compiler symbols in the configuration files
 	Preprocess-Code-Files $output_directory $net_version $mvc_version
