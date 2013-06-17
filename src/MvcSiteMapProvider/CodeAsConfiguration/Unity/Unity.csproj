@@ -83,13 +83,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\DI\CommonConventions.cs">
+      <Link>DI\CommonConventions.cs</Link>
+    </Compile>
     <Compile Include="..\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
     <Compile Include="App_Start\DIConfig.cs" />
     <Compile Include="DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs" />
     <Compile Include="DI\Unity\UnityDependencyInjectionContainer.cs" />
-    <Compile Include="DI\Unity\ExtensionMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

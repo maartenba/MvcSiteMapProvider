@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="DIConfig.cs" />
     <Compile Include="App_Start\DIConfigBootstrapper.cs" />
+    <Compile Include="DI\CommonConventions.cs" />
     <Compile Include="DI\IDependencyInjectionContainer.cs" />
     <Compile Include="DI\InjectableControllerFactory.cs" />
     <Compile Include="DI\InjectableDependencyResolver.cs" />

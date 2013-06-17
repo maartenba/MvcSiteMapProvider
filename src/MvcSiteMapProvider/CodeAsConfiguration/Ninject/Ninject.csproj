@@ -36,11 +36,9 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,11 +75,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\DI\CommonConventions.cs">
+      <Link>DI\CommonConventions.cs</Link>
+    </Compile>
     <Compile Include="..\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
     <Compile Include="App_Start\DIConfig.cs" />
-    <Compile Include="DI\Ninject\ExtensionMethods.cs" />
     <Compile Include="DI\Ninject\Modules\MvcSiteMapProviderModule.cs" />
     <Compile Include="DI\Ninject\NinjectDependencyInjectionContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,7 +18,6 @@ using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Globalization;
 using Ninject;
 using Ninject.Modules;
-using Ninject.Extensions.Conventions;
 
 
 namespace DI.Ninject.Modules
@@ -28,40 +27,42 @@ namespace DI.Ninject.Modules
     {
         public override void Load()
         {
-            var currentAssembly = typeof(MvcSiteMapProviderModule).Assembly;
-            var allAssemblies = new Assembly[] { currentAssembly, typeof(SiteMaps).Assembly };
-
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
-            this.Kernel.Bind(scanner => scanner.From(allAssemblies)
-                .Select(IsServiceType)
-#if !MVC2
-                .Excluding<FilterProvider>()
-#endif
-                .Excluding<SiteMapXmlReservedAttributeNameProvider>()
-                .Excluding<SiteMapBuilderSetStrategy>()
-                .Excluding<AuthorizeAttributeAclModule>()
-                .Excluding<XmlRolesAclModule>()
-                .Excluding<CompositeAclModule>()
-                .Excluding<SiteMapNodeUrlResolver>()
-                .Excluding<SiteMapNodeVisibilityProviderStrategy>()
-                .BindDefaultInterface()
-                .Configure(binding => binding.InSingletonScope())
-                );
+            var currentAssembly = this.GetType().Assembly;
+            var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
+            var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
+            var excludeTypes = new Type[] { 
+                typeof(SiteMapNodeVisibilityProviderStrategy),
+                typeof(SiteMapXmlReservedAttributeNameProvider),
+                typeof(SiteMapBuilderSetStrategy)
+            };
+            var multipleImplementationTypes = new Type[]  { 
+                typeof(ISiteMapNodeUrlResolver), 
+                typeof(ISiteMapNodeVisibilityProvider), 
+                typeof(IDynamicNodeProvider) 
+            };
 
-            // Register strategy classes
+            // Single implementations of interface with matching name (minus the "I").
+            CommonConventions.RegisterDefaultConventions(
+                (interfaceType, implementationType) => this.Kernel.Bind(interfaceType).To(implementationType).InSingletonScope(),
+                new Assembly[] { siteMapProviderAssembly },
+                allAssemblies,
+                excludeTypes,
+                string.Empty);
 
-            // Url Resolvers
-            this.BindAllImplementationsOf(typeof(ISiteMapNodeUrlResolver), allAssemblies);
-            // Visibility Providers
-            this.BindAllImplementationsOf(typeof(ISiteMapNodeVisibilityProvider), allAssemblies, typeof(CompositeSiteMapNodeVisibilityProvider));
+            CommonConventions.RegisterAllImplementationsOfInterface(
+                (interfaceType, implementationType) => this.Kernel.Bind(interfaceType).To(implementationType).InSingletonScope(),
+                multipleImplementationTypes,
+                allAssemblies,
+                excludeTypes,
+                "^Composite");
+
             this.Kernel.Bind<ISiteMapNodeVisibilityProviderStrategy>().To<SiteMapNodeVisibilityProviderStrategy>()
                 .WithConstructorArgument("defaultProviderName", string.Empty);
-            // Dynamic Node Providers
-            this.BindAllImplementationsOf(typeof(IDynamicNodeProvider), allAssemblies);
-                
+
             this.Kernel.Bind<ControllerBuilder>().ToConstant(ControllerBuilder.Current);
             this.Kernel.Bind<IControllerBuilder>().To<ControllerBuilderAdaptor>();
             this.Kernel.Bind<IBuildManager>().To<BuildManagerAdaptor>();
@@ -148,27 +149,5 @@ namespace DI.Ninject.Modules
                         this.Kernel.Get<ISiteMapBuilderSet>("siteMapBuilderSet1")
                     });
         }
-
-        private bool IsServiceType(Type type)
-        {
-            return type.IsClass && type.GetInterfaces().Any(intface => intface.Name == "I" + type.Name);
-        }
-
-        private void BindAllImplementationsOf(Type type, Assembly[] assemblies, params Type[] excludingTypes)
-        {
-            List<Type> implementations = new List<Type>();
-
-            foreach (var assembly in assemblies)
-                implementations.AddRange(assembly.GetImplementationsOfInterface(type));
-
-            foreach (var implementation in implementations)
-            {
-                if (!excludingTypes.Contains(implementation))
-                {
-                    this.Kernel.Bind(type).To(implementation);
-                }
-            }
-        }
-
     }
 }

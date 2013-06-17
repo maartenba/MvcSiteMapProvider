@@ -74,6 +74,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Shared\DI\CommonConventions.cs">
+      <Link>DI\CommonConventions.cs</Link>
+    </Compile>
     <Compile Include="..\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>

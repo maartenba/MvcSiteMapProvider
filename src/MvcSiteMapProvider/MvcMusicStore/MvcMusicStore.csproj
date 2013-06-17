@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>MVC4;NET40;Ninject;</DefineConstants>
+    <DefineConstants>MVC4;NET40;Ninject</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -82,9 +82,6 @@
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -215,9 +212,6 @@ configured in the compilation constants -->
     <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\Modules\MvcSiteMapProviderModule.cs">
       <Link>DI\Autofac\Modules\MvcSiteMapProviderModule.cs</Link>
     </Compile>
-    <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\ExtensionMethods.cs">
-      <Link>DI\Ninject\ExtensionMethods.cs</Link>
-    </Compile>
     <Compile Include="..\CodeAsConfiguration\Ninject\DI\Ninject\Modules\MvcSiteMapProviderModule.cs">
       <Link>DI\Ninject\Modules\MvcSiteMapProviderModule.cs</Link>
     </Compile>
@@ -226,6 +220,9 @@ configured in the compilation constants -->
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Shared\App_Start\MvcSiteMapProviderConfig.cs">
       <Link>App_Start\MvcSiteMapProviderConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\CodeAsConfiguration\Shared\DI\CommonConventions.cs">
+      <Link>DI\CommonConventions.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
@@ -250,9 +247,6 @@ configured in the compilation constants -->
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs">
       <Link>DI\Unity\ContainerExtensions\MvcSiteMapProviderContainerExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\ExtensionMethods.cs">
-      <Link>DI\Unity\ExtensionMethods.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs">
       <Link>DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs</Link>

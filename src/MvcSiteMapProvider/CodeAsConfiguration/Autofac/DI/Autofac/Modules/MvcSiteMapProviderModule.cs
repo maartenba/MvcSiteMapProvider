@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Hosting;
 using System.Web.Routing;
+using System.Reflection;
 using Autofac;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Loader;
@@ -22,57 +23,42 @@ using MvcSiteMapProvider.Globalization;
 namespace DI.Autofac.Modules
 {
     public class MvcSiteMapProviderModule
-        : Module
+        : global::Autofac.Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            var currentAssembly = typeof(MvcModule).Assembly;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
-            // Register single implemenations of interfaces
-            builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
-                .Where(type =>
-                {
-                    var implementations = type.GetInterfaces();
+            var currentAssembly = this.GetType().Assembly;
+            var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
+            var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
+            var excludeTypes = new Type[] { 
+                typeof(SiteMapNodeVisibilityProviderStrategy),
+                typeof(SiteMapXmlReservedAttributeNameProvider),
+                typeof(SiteMapBuilderSetStrategy)
+            };
+            var multipleImplementationTypes = new Type[]  { 
+                typeof(ISiteMapNodeUrlResolver), 
+                typeof(ISiteMapNodeVisibilityProvider), 
+                typeof(IDynamicNodeProvider) 
+            };
 
-                    if (implementations.Length > 0)
-                    {
-                        var iface = implementations[0];
+            // Single implementations of interface with matching name (minus the "I").
+            CommonConventions.RegisterDefaultConventions(
+                (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
+                new Assembly[] { siteMapProviderAssembly },
+                allAssemblies,
+                excludeTypes,
+                string.Empty);
 
-                        var implementaters =
-                            (from t in currentAssembly.GetTypes().Concat(typeof(SiteMaps).Assembly.GetTypes())
-                                where t.GetInterfaces().Contains(iface)
-                                select t);
-
-                        return implementaters.Count() == 1;  
-                    }
-                    return false;
-
-                })
-                .As(t => t.GetInterfaces()[0]);
-
-            builder.RegisterAssemblyTypes(currentAssembly, typeof(SiteMaps).Assembly)
-                .Where(t =>                 
-                       typeof(IMvcContextFactory).IsAssignableFrom(t)
-                    || typeof(ISiteMapCache).IsAssignableFrom(t)
-                    || typeof(ISiteMapCacheKeyToBuilderSetMapper).IsAssignableFrom(t)
-                    || typeof(IDynamicNodeProvider).IsAssignableFrom(t)
-                    || (typeof(ISiteMapNodeVisibilityProvider).IsAssignableFrom(t) && !t.Equals(typeof(CompositeSiteMapNodeVisibilityProvider)))
-                    || typeof(ISiteMapNodeUrlResolver).IsAssignableFrom(t)
-                    || typeof(IDynamicNodeProviderStrategy).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeUrlResolverStrategy).IsAssignableFrom(t)
-                    || typeof(ISiteMapNodeVisibilityProviderStrategy).IsAssignableFrom(t)
-                    || typeof(IControllerDescriptorFactory).IsAssignableFrom(t)
-                    || typeof(IObjectCopier).IsAssignableFrom(t)
-                    || typeof(INodeKeyGenerator).IsAssignableFrom(t)
-                    || typeof(IExplicitResourceKeyParser).IsAssignableFrom(t)
-                    || typeof(IStringLocalizer).IsAssignableFrom(t)
-                    || typeof(IDynamicNodeBuilder).IsAssignableFrom(t))
-                .AsImplementedInterfaces()
-                .AsSelf()
-                .SingleInstance();
+            CommonConventions.RegisterAllImplementationsOfInterface(
+                (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
+                multipleImplementationTypes,
+                allAssemblies,
+                excludeTypes,
+                "^Composite");
 
             // Visibility Providers
             builder.RegisterType<SiteMapNodeVisibilityProviderStrategy>()

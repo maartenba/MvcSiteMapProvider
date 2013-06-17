@@ -32,15 +32,36 @@ namespace DI.Unity.ContainerExtensions
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
-            // Auto-regiester all of our interfaces with matching names
-            var assemblies = new List<Assembly>();
+            var currentAssembly = this.GetType().Assembly;
+            var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
+            var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
+            var excludeTypes = new Type[] { 
+                typeof(SiteMapNodeVisibilityProviderStrategy),
+                typeof(SiteMapXmlReservedAttributeNameProvider),
+                typeof(SiteMapBuilderSetStrategy),
+                typeof(SiteMapNodeUrlResolverStrategy),
+                typeof(DynamicNodeProviderStrategy)
+            };
+            var multipleImplementationTypes = new Type[]  { 
+                typeof(ISiteMapNodeUrlResolver), 
+                typeof(ISiteMapNodeVisibilityProvider), 
+                typeof(IDynamicNodeProvider) 
+            };
 
-            assemblies.Add(Assembly.GetCallingAssembly());
-            assemblies.Add(Assembly.GetExecutingAssembly());
-            assemblies.Add(Assembly.GetAssembly(typeof(System.Web.Mvc.IControllerFactory)));
-            assemblies.Add(Assembly.GetAssembly(typeof(SiteMaps)));
+            // Single implementations of interface with matching name (minus the "I").
+            CommonConventions.RegisterDefaultConventions(
+                (interfaceType, implementationType) => this.Container.RegisterType(interfaceType, implementationType, new ContainerControlledLifetimeManager()),
+                new Assembly[] { siteMapProviderAssembly },
+                allAssemblies,
+                excludeTypes,
+                string.Empty);
 
-            this.AutoRegister(this.Container, assemblies, typeof(CompositeSiteMapNodeVisibilityProvider));
+            CommonConventions.RegisterAllImplementationsOfInterface(
+                (interfaceType, implementationType) => this.Container.RegisterType(interfaceType, implementationType, implementationType.Name, new ContainerControlledLifetimeManager()),
+                multipleImplementationTypes,
+                allAssemblies,
+                excludeTypes,
+                "^Composite");
 
             // TODO: Find a better way to inject an array constructor
 
@@ -126,44 +147,7 @@ namespace DI.Unity.ContainerExtensions
                     new ResolvedParameter<ICacheDetails>("cacheDetails")));
 
             this.Container.RegisterType<ISiteMapBuilderSetStrategy, SiteMapBuilderSetStrategy>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapBuilderSet>(new ResolvedParameter<ISiteMapBuilderSet>("builderSet1"))));
-        }
-
-
-        private void AutoRegister(IUnityContainer container, IEnumerable<Assembly> assemblies, params Type[] excludeTypes)
-        {
-            List<Type> interfaces = new List<Type>();
-
-            foreach (var assembly in assemblies)
-                interfaces.AddRange(assembly.GetInterfaces());
-
-            foreach (var interfaceType in interfaces)
-            {
-                List<Type> implementations = new List<Type>();
-
-                foreach (var assembly in assemblies)
-                    implementations.AddRange(assembly.GetImplementationsOfInterface(interfaceType));
-
-                if (implementations.Count > 1)
-                {
-                    foreach (var implementation in implementations)
-                    {
-                        if (!container.IsRegistered(implementation) && !excludeTypes.Contains(implementation))
-                        {
-                            container.RegisterType(interfaceType, implementation, implementation.Name);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var implementation in implementations)
-                    {
-                        if (!container.IsRegistered(implementation) && !excludeTypes.Contains(implementation))
-                        {
-                            container.RegisterType(interfaceType, implementation);
-                        }
-                    }
-                }
-            }
+           
         }
     }
 }

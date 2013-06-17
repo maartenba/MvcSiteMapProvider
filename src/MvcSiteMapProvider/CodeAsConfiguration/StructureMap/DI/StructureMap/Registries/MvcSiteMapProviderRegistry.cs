@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Hosting;
+using System.Reflection;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Compilation;
@@ -29,34 +30,34 @@ namespace DI.StructureMap.Registries
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
 
-            this.Scan(scan =>
-            {
-                scan.TheCallingAssembly();
-                scan.AssemblyContainingType<SiteMaps>();
-                scan.WithDefaultConventions();
-            });
+            var currentAssembly = this.GetType().Assembly;
+            var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
+            var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
+            var excludeTypes = new Type[] { 
+                typeof(SiteMapNodeVisibilityProviderStrategy),
+                typeof(SiteMapXmlReservedAttributeNameProvider),
+                typeof(SiteMapBuilderSetStrategy)
+            };
+            var multipleImplementationTypes = new Type[]  { 
+                typeof(ISiteMapNodeUrlResolver), 
+                typeof(ISiteMapNodeVisibilityProvider), 
+                typeof(IDynamicNodeProvider) 
+            };
 
-            this.Scan(scan =>
-            {
-                scan.TheCallingAssembly();
-                scan.AssemblyContainingType<SiteMaps>();
-                scan.WithDefaultConventions();
-                scan.AddAllTypesOf<IMvcContextFactory>();
-                scan.AddAllTypesOf<ISiteMapCacheKeyToBuilderSetMapper>();
-                scan.AddAllTypesOf<IDynamicNodeProvider>();
-                scan.AddAllTypesOf<ISiteMapNodeVisibilityProvider>();
-                scan.AddAllTypesOf<ISiteMapNodeUrlResolver>();
-                scan.AddAllTypesOf<IDynamicNodeProviderStrategy>();
-                scan.AddAllTypesOf<ISiteMapNodeUrlResolverStrategy>();
-                scan.AddAllTypesOf<ISiteMapNodeVisibilityProviderStrategy>();
-                scan.AddAllTypesOf<IControllerDescriptorFactory>();
-                scan.AddAllTypesOf<IObjectCopier>();
-                scan.AddAllTypesOf<INodeKeyGenerator>();
-                scan.AddAllTypesOf<IExplicitResourceKeyParser>();
-                scan.AddAllTypesOf<IStringLocalizer>();
-                scan.AddAllTypesOf<IDynamicNodeBuilder>();
-                scan.Convention<SingletonConvention>();
-            });
+            // Single implementations of interface with matching name (minus the "I").
+            CommonConventions.RegisterDefaultConventions(
+                (interfaceType, implementationType) => this.For(interfaceType).Singleton().Use(implementationType),
+                new Assembly[] { siteMapProviderAssembly },
+                allAssemblies,
+                excludeTypes,
+                string.Empty);
+
+            CommonConventions.RegisterAllImplementationsOfInterface(
+                (interfaceType, implementationType) => this.For(interfaceType).Singleton().Use(implementationType),
+                multipleImplementationTypes,
+                allAssemblies,
+                excludeTypes,
+                "^Composite");
 
             // Visibility Providers
             this.For<ISiteMapNodeVisibilityProviderStrategy>().Use<SiteMapNodeVisibilityProviderStrategy>()
