@@ -20,6 +20,11 @@ namespace DI.Ninject
             return container.Get(type);
         }
 
+        public object TryGetInstance(Type type)
+        {
+            return container.TryGet(type);
+        }
+
         public IEnumerable<object> GetAllInstances(Type type)
         {
             return container.GetAll(type);

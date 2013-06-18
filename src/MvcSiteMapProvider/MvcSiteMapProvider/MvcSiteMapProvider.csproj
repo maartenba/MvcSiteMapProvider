@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>MVC4;NET40</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -142,6 +143,9 @@
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
     <Compile Include="Security\IAuthorizeAttributeBuilder.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
+    <Compile Include="Web\Mvc\Filters\Filter.cs" />
+    <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
+    <Compile Include="Web\Mvc\Filters\IGlobalFilterProvider.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\SiteMapXmlReservedAttributeNameProvider.cs" />
@@ -192,7 +196,6 @@
     <Compile Include="Web\Mvc\ControllerDescriptorFactory.cs" />
     <Compile Include="Web\Mvc\IControllerDescriptorFactory.cs" />
     <Compile Include="Web\Mvc\ControllerTypeResolverFactory.cs" />
-    <Compile Include="Web\Mvc\Filters\FilterProvider.cs" />
     <Compile Include="Web\Mvc\IActionMethodParameterResolverFactory.cs" />
     <Compile Include="Web\Mvc\IControllerBuilder.cs" />
     <Compile Include="Web\Mvc\IControllerTypeResolverFactory.cs" />

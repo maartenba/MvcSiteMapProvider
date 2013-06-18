@@ -27,7 +27,7 @@ public class DIConfig
         // ************************************************************************************** //
 
         // Reconfigure MVC to use Service Location
-        var dependencyResolver = new InjectableDependencyResolver(container);
+        var dependencyResolver = new InjectableDependencyResolver(container, DependencyResolver.Current);
         DependencyResolver.SetResolver(dependencyResolver);
 #else //preserve
         // ************************************************************************************** //

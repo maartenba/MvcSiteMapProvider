@@ -68,12 +68,6 @@ namespace DI.Ninject.Modules
             this.Kernel.Bind<IControllerBuilder>().To<ControllerBuilderAdaptor>();
             this.Kernel.Bind<IBuildManager>().To<BuildManagerAdaptor>();
 
-#if !MVC2
-            // Configure default filter provider with one that provides filters
-            // from the global filter collection.
-            this.Kernel.Bind<IFilterProvider>().To<FilterProvider>().InSingletonScope();
-#endif
-
             // Configure Security
             this.Kernel.Bind<AuthorizeAttributeAclModule>().ToSelf();
             this.Kernel.Bind<XmlRolesAclModule>().ToSelf();

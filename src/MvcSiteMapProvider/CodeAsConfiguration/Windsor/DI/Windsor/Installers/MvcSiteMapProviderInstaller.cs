@@ -87,12 +87,6 @@ namespace DI.Windsor.Installers
             container.Register(Component.For<IControllerTypeResolverFactory>().ImplementedBy<ControllerTypeResolverFactory>()
                 .DependsOn(Dependency.OnValue("areaNamespacesToIgnore", new string[0])));
 
-#if !MVC2
-            // Configure default filter provider with one that provides filters
-            // from the global filter collection.
-            container.Register(Component.For<System.Web.Mvc.IFilterProvider>().ImplementedBy<FilterProvider>().LifestyleSingleton());
-#endif
-
             // Configure Security
 
             // First registration wins - we must do the outer one first

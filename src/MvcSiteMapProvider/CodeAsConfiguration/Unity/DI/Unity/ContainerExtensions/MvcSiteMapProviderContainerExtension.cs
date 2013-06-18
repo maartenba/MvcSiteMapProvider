@@ -94,12 +94,6 @@ namespace DI.Unity.ContainerExtensions
                 new ResolvedParameter<IControllerBuilder>(),
                 new ResolvedParameter<IBuildManager>()));
 
-#if !MVC2
-            // Configure default filter provider with one that provides filters
-            // from the global filter collection.
-            this.Container.RegisterType<System.Web.Mvc.IFilterProvider, MvcSiteMapProvider.Web.Mvc.Filters.FilterProvider>(
-                new PerResolveLifetimeManager());
-#endif
             // Configure Security
 
             // IMPORTANT: Must give arrays of object a name in Unity in order for it to resolve them.

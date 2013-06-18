@@ -88,14 +88,6 @@ namespace DI.Autofac.Modules
                 .As<IControllerTypeResolverFactory>()
                 .WithParameter("areaNamespacesToIgnore", new string[0]);
 
-#if !MVC2
-            // Configure default filter provider with one that provides filters
-            // from the global filter collection.
-            builder.RegisterType<FilterProvider>()
-                   .As<IFilterProvider>()
-                   .SingleInstance();
-#endif
-
             // Configure Security
             builder.RegisterType<AuthorizeAttributeAclModule>()
                 .Named<IAclModule>("authorizeAttributeAclModule");

@@ -63,10 +63,8 @@ namespace MvcSiteMapProvider.DI
                     new ObjectCopier(),
                     new ControllerDescriptorFactory(),
                     new ControllerBuilderAdaptor(ControllerBuilder.Current),
-                    new AuthorizeAttributeBuilder()
-#if !MVC2
-                    , new FilterProvider()
-#endif
+                    new AuthorizeAttributeBuilder(), 
+                    new GlobalFilterProvider()
 ),
                 new XmlRolesAclModule(
                     this.mvcContextFactory

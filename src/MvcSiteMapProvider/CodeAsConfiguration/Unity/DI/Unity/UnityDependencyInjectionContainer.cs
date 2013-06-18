@@ -25,6 +25,15 @@ namespace DI.Unity
             return this.container.Resolve(type);
         }
 
+        public object TryGetInstance(Type type)
+        {
+            if (container.IsRegistered(type))
+            {
+                return this.container.Resolve(type);
+            }
+            return null;
+        }
+
         public IEnumerable<object> GetAllInstances(Type type)
         {
             return this.container.ResolveAll(type);

@@ -24,14 +24,17 @@ namespace DI.Autofac
                 return null;
             }
 
-            if (type.IsAbstract || type.IsInterface)
+            return this.container.Resolve(type);
+        }
+
+        public object TryGetInstance(Type type)
+        {
+            if (type == null)
             {
-                return this.container.ResolveOptional(type);
+                return null;
             }
-            else
-            {
-                return this.container.Resolve(type);
-            }
+
+            return this.container.ResolveOptional(type);
         }
 
         public IEnumerable<object> GetAllInstances(Type type)

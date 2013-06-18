@@ -37,6 +37,26 @@ namespace DI.StructureMap
             }
         }
 
+        public object TryGetInstance(Type type)
+        {
+            if (type == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return type.IsAbstract || type.IsInterface
+                       ? this.container.TryGetInstance(type)
+                       : this.container.GetInstance(type);
+            }
+            catch (StructureMapException ex)
+            {
+                string message = ex.Message + "\n" + container.WhatDoIHave();
+                throw new Exception(message);
+            }
+        }
+
         public IEnumerable<object> GetAllInstances(Type type)
         {
             try

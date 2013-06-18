@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Reflection;
 
 namespace MvcSiteMapProvider.Security
@@ -16,46 +17,13 @@ namespace MvcSiteMapProvider.Security
     public class AuthorizeAttributeAclModule
         : IAclModule
     {
-#if MVC2
-        public AuthorizeAttributeAclModule(
-            IMvcContextFactory mvcContextFactory,
-            IObjectCopier objectCopier,
-            IControllerDescriptorFactory controllerDescriptorFactory,
-            IControllerBuilder controllerBuilder,
-            IAuthorizeAttributeBuilder authorizeAttributeBuilder
-        )
-        {
-            if (mvcContextFactory == null)
-                throw new ArgumentNullException("mvcContextFactory");
-            if (objectCopier == null)
-                throw new ArgumentNullException("objectCopier");
-            if (controllerDescriptorFactory == null)
-                throw new ArgumentNullException("controllerDescriptorFactory");
-            if (controllerBuilder == null)
-                throw new ArgumentNullException("controllerBuilder");
-            if (authorizeAttributeBuilder == null)
-                throw new ArgumentNullException("authorizeAttributeBuilder");
-
-            this.mvcContextFactory = mvcContextFactory;
-            this.objectCopier = objectCopier;
-            this.controllerDescriptorFactory = controllerDescriptorFactory;
-            this.controllerBuilder = controllerBuilder;
-            this.authorizeAttributeBuilder = authorizeAttributeBuilder;
-        }
-
-        protected readonly IMvcContextFactory mvcContextFactory;
-        protected readonly IObjectCopier objectCopier;
-        protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
-        protected readonly IControllerBuilder controllerBuilder;
-        protected readonly IAuthorizeAttributeBuilder authorizeAttributeBuilder;
-#else
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
             IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
             IControllerBuilder controllerBuilder,
             IAuthorizeAttributeBuilder authorizeAttributeBuilder,
-            IFilterProvider filterProvider
+            IGlobalFilterProvider filterProvider
             )
         {
             if (mvcContextFactory == null)
@@ -84,9 +52,8 @@ namespace MvcSiteMapProvider.Security
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly IControllerBuilder controllerBuilder;
         protected readonly IAuthorizeAttributeBuilder authorizeAttributeBuilder;
-        protected readonly IFilterProvider filterProvider;
+        protected readonly IGlobalFilterProvider filterProvider;
         
-#endif
         private static readonly Type defaultAuthorizeAttributeType = typeof(AuthorizeAttribute);
 
         #region IAclModule Members

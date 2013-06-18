@@ -78,14 +78,6 @@ namespace DI.StructureMap.Registries
             this.For<IControllerTypeResolverFactory>().Use<ControllerTypeResolverFactory>()
                 .Ctor<string[]>("areaNamespacesToIgnore").Is(new string[0]);
 
-#if !MVC2
-            // Configure default filter provider with one that provides filters
-            // from the global filter collection.
-            this.For<System.Web.Mvc.IFilterProvider>()
-                .Singleton()
-                .Use<FilterProvider>();
-#endif
-
             // Configure Security
             this.For<IAclModule>().Use<CompositeAclModule>()
                 .EnumerableOf<IAclModule>().Contains(x =>

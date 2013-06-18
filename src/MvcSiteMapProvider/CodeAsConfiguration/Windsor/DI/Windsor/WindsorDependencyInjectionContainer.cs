@@ -21,6 +21,18 @@ namespace DI.Windsor
             return container.Resolve(type);
         }
 
+        public object TryGetInstance(Type type)
+        {
+            try
+            {
+                return container.Resolve(type);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public IEnumerable<object> GetAllInstances(Type type)
         {
             return (IEnumerable<object>)container.ResolveAll(type);
