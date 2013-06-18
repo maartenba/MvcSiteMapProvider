@@ -1,10 +1,10 @@
 <configuration>
-	<system.web>
+	<system.web.webPages.razor>
 		<pages>
 			<namespaces>
 				<add namespace="MvcSiteMapProvider.Web.Html" />
 				<add namespace="MvcSiteMapProvider.Web.Html.Models" />
 			</namespaces>
 		</pages>
-	</system.web>
+	</system.web.webPages.razor>
 </configuration>
