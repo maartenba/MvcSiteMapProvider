@@ -27,11 +27,18 @@ namespace DI.Unity
 
         public object TryGetInstance(Type type)
         {
-            if (container.IsRegistered(type))
+            if (typeof(IController).IsAssignableFrom(type))
             {
                 return this.container.Resolve(type);
             }
-            return null;
+            try
+            {
+                return this.container.Resolve(type);
+            }
+            catch (ResolutionFailedException)
+            {
+                return null;
+            }
         }
 
         public IEnumerable<object> GetAllInstances(Type type)
