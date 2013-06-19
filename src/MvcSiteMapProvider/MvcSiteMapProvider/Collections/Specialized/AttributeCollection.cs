@@ -76,7 +76,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 var value = base[key];
                 if (value.GetType().Equals(typeof(string)))
                 {
-                    return localizationService.GetResourceString(key, base[key].ToString(), base.siteMap);
+                    return localizationService.GetResourceString(key, value.ToString(), base.siteMap);
                 }
                 else
                 {
