@@ -412,7 +412,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Handle title and description
             var title = attribute.Title;
-            var description = attribute.Description;
+            var description = String.IsNullOrEmpty(attribute.Description) ? title : attribute.Description;
 
             // Handle implicit resources
             var implicitResourceKey = attribute.ResourceKey;

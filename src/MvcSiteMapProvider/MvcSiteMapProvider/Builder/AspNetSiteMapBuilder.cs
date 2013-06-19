@@ -106,7 +106,7 @@ namespace MvcSiteMapProvider.Builder
             ISiteMapNode siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
 
             siteMapNode.Title = node.Title;
-            siteMapNode.Description = node.Description;
+            siteMapNode.Description = String.IsNullOrEmpty(node.Description) ? siteMapNode.Title : node.Description;
             if (this.reflectAttributes)
             {
                 AcquireAttributesFrom(node, siteMapNode.Attributes);
