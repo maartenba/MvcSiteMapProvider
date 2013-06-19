@@ -99,13 +99,5 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 }
             }
         }
-
-        protected virtual void ThrowIfReadOnly()
-        {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
-        }
     }
 }
