@@ -58,7 +58,7 @@ namespace MvcSiteMapProvider.DI
         private ISiteMapNodeChildStateFactory ResolveSiteMapNodeChildStateFactory()
         {
             return new SiteMapNodeChildStateFactory(
-                new AttributeCollectionFactory(this.requestCache),
+                new AttributeDictionaryFactory(this.requestCache),
                 new RouteValueCollectionFactory(this.requestCache));
         }
 

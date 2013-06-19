@@ -51,7 +51,7 @@ namespace MvcSiteMapProvider
             this.urlPath = urlPath;
 
             // Initialize child collections
-            this.attributes = siteMapNodeChildStateFactory.CreateAttributeCollection(siteMap, localizationService);
+            this.attributes = siteMapNodeChildStateFactory.CreateAttributeDictionary(siteMap, localizationService);
             this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueCollection(siteMap);
             this.preservedRouteParameters = siteMapNodeChildStateFactory.CreatePreservedRouteParameterCollection(siteMap);
             this.roles = siteMapNodeChildStateFactory.CreateRoleCollection(siteMap);
@@ -65,7 +65,7 @@ namespace MvcSiteMapProvider
         protected readonly IUrlPath urlPath;
 
         // Child collections and dictionaries
-        protected readonly IAttributeCollection attributes;
+        protected readonly IAttributeDictionary attributes;
         protected readonly IRouteValueCollection routeValues;
         protected readonly IPreservedRouteParameterCollection preservedRouteParameters;
         protected readonly IRoleCollection roles;
@@ -174,7 +174,7 @@ namespace MvcSiteMapProvider
         /// </summary>
         /// <value>The attributes.</value>
         /// <remarks>The attributes can be localized using a resource provider.</remarks>
-        public override IAttributeCollection Attributes { get { return this.attributes; } }
+        public override IAttributeDictionary Attributes { get { return this.attributes; } }
 
         /// <summary>
         /// Gets the roles.

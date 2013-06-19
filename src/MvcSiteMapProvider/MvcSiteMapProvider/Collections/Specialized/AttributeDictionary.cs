@@ -11,10 +11,10 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// A specialized dictionary that contains the business logic for handling the attributes collection including
     /// localization of custom attributes.
     /// </summary>
-    public class AttributeCollection
-        : RequestCacheableDictionary<string, object>, IAttributeCollection
+    public class AttributeDictionary
+        : RequestCacheableDictionary<string, object>, IAttributeDictionary
     {
-        public AttributeCollection(
+        public AttributeDictionary(
             ISiteMap siteMap,
             ILocalizationService localizationService,
             IRequestCache requestCache

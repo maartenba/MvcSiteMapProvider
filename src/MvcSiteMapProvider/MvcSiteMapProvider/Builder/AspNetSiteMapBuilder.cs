@@ -189,8 +189,8 @@ namespace MvcSiteMapProvider.Builder
             // Unfortunately, the ASP.NET implementation uses a protected member variable to store
             // the attributes, so there is no way to loop through them without reflection or some
             // fancy dynamic subclass implementation.
-            var attributeCollection = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
-            foreach (string key in attributeCollection.Keys)
+            var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
+            foreach (string key in attributeDictionary.Keys)
             {
                 var attributeName = key;
                 var attributeValue = node[key];
@@ -212,8 +212,8 @@ namespace MvcSiteMapProvider.Builder
             // Unfortunately, the ASP.NET implementation uses a protected member variable to store
             // the attributes, so there is no way to loop through them without reflection or some
             // fancy dynamic subclass implementation.
-            var attributeCollection = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
-            foreach (string key in attributeCollection.Keys)
+            var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
+            foreach (string key in attributeDictionary.Keys)
             {
                 var attributeName = key;
                 var attributeValue = node[key];

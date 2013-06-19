@@ -12,27 +12,27 @@ namespace MvcSiteMapProvider
         : ISiteMapNodeChildStateFactory
     {
         public SiteMapNodeChildStateFactory(
-            IAttributeCollectionFactory attributeCollectionFactory,
+            IAttributeDictionaryFactory attributeDictionaryFactory,
             IRouteValueCollectionFactory routeValueCollectionFactory
             )
         {
-            if (attributeCollectionFactory == null)
-                throw new ArgumentNullException("attributeCollectionFactory");
+            if (attributeDictionaryFactory == null)
+                throw new ArgumentNullException("attributeDictionaryFactory");
             if (routeValueCollectionFactory == null)
                 throw new ArgumentNullException("routeValueCollectionFactory");
 
-            this.attributeCollectionFactory = attributeCollectionFactory;
+            this.attributeDictionaryFactory = attributeDictionaryFactory;
             this.routeValueCollectionFactory = routeValueCollectionFactory;
         }
 
-        protected readonly IAttributeCollectionFactory attributeCollectionFactory;
+        protected readonly IAttributeDictionaryFactory attributeDictionaryFactory;
         protected readonly IRouteValueCollectionFactory routeValueCollectionFactory;
 
         #region ISiteMapNodeChildStateFactory Members
 
-        public virtual IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService)
+        public virtual IAttributeDictionary CreateAttributeDictionary(ISiteMap siteMap, ILocalizationService localizationService)
         {
-            return attributeCollectionFactory.Create(siteMap, localizationService);
+            return attributeDictionaryFactory.Create(siteMap, localizationService);
         }
 
         public virtual IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap)

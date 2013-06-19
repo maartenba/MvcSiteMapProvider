@@ -49,7 +49,7 @@ namespace MvcSiteMapProvider
         public abstract string Description { get; set; }
         public abstract string TargetFrame { get; set; }
         public abstract string ImageUrl { get; set; }
-        public abstract IAttributeCollection Attributes { get; }
+        public abstract IAttributeDictionary Attributes { get; }
         public abstract IRoleCollection Roles { get; }
         public abstract DateTime LastModifiedDate { get; set; }
         public abstract ChangeFrequency ChangeFrequency { get; set; }

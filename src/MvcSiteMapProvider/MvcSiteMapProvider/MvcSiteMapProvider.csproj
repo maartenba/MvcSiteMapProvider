@@ -222,7 +222,7 @@
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Caching\IRequestCache.cs" />
     <Compile Include="Caching\RequestCache.cs" />
-    <Compile Include="Collections\Specialized\AttributeCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\AttributeDictionaryFactory.cs" />
     <Compile Include="Builder\SiteMapBuilderSetStrategy.cs" />
     <Compile Include="Builder\CompositeSiteMapBuilder.cs" />
     <Compile Include="Builder\DynamicNodeBuilder.cs" />
@@ -253,7 +253,7 @@
     <Compile Include="Builder\ReflectionSiteMapBuilder.cs" />
     <Compile Include="Builder\SiteMapBuilderSet.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolver.cs" />
-    <Compile Include="Collections\Specialized\IAttributeCollection.cs" />
+    <Compile Include="Collections\Specialized\IAttributeDictionary.cs" />
     <Compile Include="ISiteMapNodeChildStateFactory.cs" />
     <Compile Include="Collections\Specialized\ISiteMapNodeCollectionFactory.cs" />
     <Compile Include="LockableSiteMap.cs" />
@@ -273,7 +273,7 @@
     <Compile Include="Collections\Specialized\IRouteValueCollectionFactory.cs" />
     <Compile Include="ISiteMapFactory.cs" />
     <Compile Include="ISiteMapNode.cs" />
-    <Compile Include="Collections\Specialized\IAttributeCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\IAttributeDictionaryFactory.cs" />
     <Compile Include="ISiteMapNodeFactory.cs" />
     <Compile Include="Web\UrlResolver\ISiteMapNodeUrlResolverStrategy.cs" />
     <Compile Include="ISiteMapNodeVisibilityProviderStrategy.cs" />
@@ -283,7 +283,7 @@
     <Compile Include="Collections\Specialized\RouteValueCollectionFactory.cs" />
     <Compile Include="SiteMapFactory.cs" />
     <Compile Include="SiteMapNode.cs" />
-    <Compile Include="Collections\Specialized\AttributeCollection.cs" />
+    <Compile Include="Collections\Specialized\AttributeDictionary.cs" />
     <Compile Include="Collections\Specialized\SiteMapNodeCollectionFactory.cs" />
     <Compile Include="SiteMapNodeFactory.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolverStrategy.cs" />

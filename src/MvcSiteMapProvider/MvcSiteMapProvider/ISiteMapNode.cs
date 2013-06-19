@@ -34,7 +34,7 @@ namespace MvcSiteMapProvider
         string Description { get; set; }
         string TargetFrame { get; set; }
         string ImageUrl { get; set; }
-        IAttributeCollection Attributes { get; }
+        IAttributeDictionary Attributes { get; }
         IRoleCollection Roles { get; }
 
         DateTime LastModifiedDate { get; set; }

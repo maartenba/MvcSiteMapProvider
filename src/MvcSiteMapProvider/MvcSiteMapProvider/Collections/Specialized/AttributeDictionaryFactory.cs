@@ -5,13 +5,13 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
-    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.AttributeCollection"/>
+    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Collections.Specialized.AttributeDictionary"/>
     /// at runtime.
     /// </summary>
-    public class AttributeCollectionFactory
-        : IAttributeCollectionFactory
+    public class AttributeDictionaryFactory
+        : IAttributeDictionaryFactory
     {
-        public AttributeCollectionFactory(
+        public AttributeDictionaryFactory(
             IRequestCache requestCache
             )
         {
@@ -23,11 +23,11 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected readonly IRequestCache requestCache;
 
-        #region IAttributeCollectionFactory Members
+        #region IAttributeDictionaryFactory Members
 
-        public virtual IAttributeCollection Create(ISiteMap siteMap, ILocalizationService localizationService)
+        public virtual IAttributeDictionary Create(ISiteMap siteMap, ILocalizationService localizationService)
         {
-            return new AttributeCollection(siteMap, localizationService, requestCache);
+            return new AttributeDictionary(siteMap, localizationService, requestCache);
         }
 
         #endregion

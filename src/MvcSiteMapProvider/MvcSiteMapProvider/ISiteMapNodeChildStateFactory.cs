@@ -10,7 +10,7 @@ namespace MvcSiteMapProvider
     /// </summary>
     public interface ISiteMapNodeChildStateFactory
     {
-        IAttributeCollection CreateAttributeCollection(ISiteMap siteMap, ILocalizationService localizationService);
+        IAttributeDictionary CreateAttributeDictionary(ISiteMap siteMap, ILocalizationService localizationService);
         IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap);
         IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap);
         IRoleCollection CreateRoleCollection(ISiteMap siteMap);
