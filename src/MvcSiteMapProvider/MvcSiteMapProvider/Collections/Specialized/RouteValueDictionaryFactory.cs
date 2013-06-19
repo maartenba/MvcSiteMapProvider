@@ -4,13 +4,14 @@ using MvcSiteMapProvider.Caching;
 namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>
-    /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.RouteValueCollection"/>
+    /// An abstract factory that can be used to create new instances of 
+    /// <see cref="T:MvcSiteMapProvider.Collections.Specialized.RouteValueDictionary"/>
     /// at runtime.
     /// </summary>
-    public class RouteValueCollectionFactory
-        : IRouteValueCollectionFactory
+    public class RouteValueDictionaryFactory
+        : IRouteValueDictionaryFactory
     {
-        public RouteValueCollectionFactory(
+        public RouteValueDictionaryFactory(
             IRequestCache requestCache
             )
         {
@@ -22,11 +23,11 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected readonly IRequestCache requestCache;
 
-        #region IRouteValueCollectionFactory Members
+        #region IRouteValueDictionaryFactory Members
 
-        public virtual IRouteValueCollection Create(ISiteMap siteMap)
+        public virtual IRouteValueDictionary Create(ISiteMap siteMap)
         {
-            return new RouteValueCollection(siteMap, this.requestCache);
+            return new RouteValueDictionary(siteMap, this.requestCache);
         }
 
         #endregion

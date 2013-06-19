@@ -233,7 +233,7 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueCollection routeValues)
+        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueDictionary routeValues)
         {
             foreach (XAttribute attribute in node.Attributes())
             {

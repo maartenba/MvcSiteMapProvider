@@ -52,7 +52,7 @@ namespace MvcSiteMapProvider
 
             // Initialize child collections
             this.attributes = siteMapNodeChildStateFactory.CreateAttributeDictionary(siteMap, localizationService);
-            this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueCollection(siteMap);
+            this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueDictionary(siteMap);
             this.preservedRouteParameters = siteMapNodeChildStateFactory.CreatePreservedRouteParameterCollection(siteMap);
             this.roles = siteMapNodeChildStateFactory.CreateRoleCollection(siteMap);
             this.metaRobotsValues = siteMapNodeChildStateFactory.CreateMetaRobotsValueCollection(siteMap);
@@ -66,7 +66,7 @@ namespace MvcSiteMapProvider
 
         // Child collections and dictionaries
         protected readonly IAttributeDictionary attributes;
-        protected readonly IRouteValueCollection routeValues;
+        protected readonly IRouteValueDictionary routeValues;
         protected readonly IPreservedRouteParameterCollection preservedRouteParameters;
         protected readonly IRoleCollection roles;
         protected readonly IMetaRobotsValueCollection metaRobotsValues;
@@ -528,7 +528,7 @@ namespace MvcSiteMapProvider
         /// Gets the route values.
         /// </summary>
         /// <value>The route values.</value>
-        public override IRouteValueCollection RouteValues 
+        public override IRouteValueDictionary RouteValues 
         { 
             get 
             {

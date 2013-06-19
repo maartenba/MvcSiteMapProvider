@@ -207,7 +207,7 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(System.Web.SiteMapNode node, IRouteValueCollection routeValues)
+        protected virtual void AcquireRouteValuesFrom(System.Web.SiteMapNode node, IRouteValueDictionary routeValues)
         {
             // Unfortunately, the ASP.NET implementation uses a protected member variable to store
             // the attributes, so there is no way to loop through them without reflection or some

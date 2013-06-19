@@ -74,7 +74,7 @@ namespace MvcSiteMapProvider
         public abstract string GetMetaRobotsContentString();
         public abstract bool HasNoIndexAndNoFollow { get; }
         public abstract string Route { get; set; }
-        public abstract IRouteValueCollection RouteValues { get; }
+        public abstract IRouteValueDictionary RouteValues { get; }
         public abstract IPreservedRouteParameterCollection PreservedRouteParameters { get; }
         public abstract RouteData GetRouteData(HttpContextBase httpContext);
         public abstract bool MatchesRoute(IDictionary<string, object> routeValues);

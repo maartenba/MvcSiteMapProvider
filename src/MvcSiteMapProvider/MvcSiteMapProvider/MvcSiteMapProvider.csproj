@@ -269,8 +269,8 @@
     <Compile Include="Collections\Specialized\ISiteMapNodeCollection.cs" />
     <Compile Include="IDynamicNodeProviderStrategy.cs" />
     <Compile Include="IMvcSiteMapNodeAttribute.cs" />
-    <Compile Include="Collections\Specialized\IRouteValueCollection.cs" />
-    <Compile Include="Collections\Specialized\IRouteValueCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\IRouteValueDictionary.cs" />
+    <Compile Include="Collections\Specialized\IRouteValueDictionaryFactory.cs" />
     <Compile Include="ISiteMapFactory.cs" />
     <Compile Include="ISiteMapNode.cs" />
     <Compile Include="Collections\Specialized\IAttributeDictionaryFactory.cs" />
@@ -279,8 +279,8 @@
     <Compile Include="ISiteMapNodeVisibilityProviderStrategy.cs" />
     <Compile Include="MvcSiteMapNodeAttribute.cs" />
     <Compile Include="Collections\ObservableDictionary.cs" />
-    <Compile Include="Collections\Specialized\RouteValueCollection.cs" />
-    <Compile Include="Collections\Specialized\RouteValueCollectionFactory.cs" />
+    <Compile Include="Collections\Specialized\RouteValueDictionary.cs" />
+    <Compile Include="Collections\Specialized\RouteValueDictionaryFactory.cs" />
     <Compile Include="SiteMapFactory.cs" />
     <Compile Include="SiteMapNode.cs" />
     <Compile Include="Collections\Specialized\AttributeDictionary.cs" />

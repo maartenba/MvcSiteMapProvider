@@ -496,7 +496,7 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(IMvcSiteMapNodeAttribute attribute, IRouteValueCollection routeValues)
+        protected virtual void AcquireRouteValuesFrom(IMvcSiteMapNodeAttribute attribute, IRouteValueDictionary routeValues)
         {
             foreach (var att in attribute.Attributes)
             {

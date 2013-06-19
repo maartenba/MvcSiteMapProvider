@@ -66,7 +66,7 @@ namespace MvcSiteMapProvider
         bool HasNoIndexAndNoFollow { get; }
 
         string Route { get; set; }
-        IRouteValueCollection RouteValues { get; }
+        IRouteValueDictionary RouteValues { get; }
         IPreservedRouteParameterCollection PreservedRouteParameters { get; }
         RouteData GetRouteData(HttpContextBase httpContext);
         bool MatchesRoute(IDictionary<string, object> routeValues);

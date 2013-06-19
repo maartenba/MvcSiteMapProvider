@@ -13,20 +13,20 @@ namespace MvcSiteMapProvider
     {
         public SiteMapNodeChildStateFactory(
             IAttributeDictionaryFactory attributeDictionaryFactory,
-            IRouteValueCollectionFactory routeValueCollectionFactory
+            IRouteValueDictionaryFactory routeValueDictionaryFactory
             )
         {
             if (attributeDictionaryFactory == null)
                 throw new ArgumentNullException("attributeDictionaryFactory");
-            if (routeValueCollectionFactory == null)
-                throw new ArgumentNullException("routeValueCollectionFactory");
+            if (routeValueDictionaryFactory == null)
+                throw new ArgumentNullException("routeValueDictionaryFactory");
 
             this.attributeDictionaryFactory = attributeDictionaryFactory;
-            this.routeValueCollectionFactory = routeValueCollectionFactory;
+            this.routeValueDictionaryFactory = routeValueDictionaryFactory;
         }
 
         protected readonly IAttributeDictionaryFactory attributeDictionaryFactory;
-        protected readonly IRouteValueCollectionFactory routeValueCollectionFactory;
+        protected readonly IRouteValueDictionaryFactory routeValueDictionaryFactory;
 
         #region ISiteMapNodeChildStateFactory Members
 
@@ -35,9 +35,9 @@ namespace MvcSiteMapProvider
             return attributeDictionaryFactory.Create(siteMap, localizationService);
         }
 
-        public virtual IRouteValueCollection CreateRouteValueCollection(ISiteMap siteMap)
+        public virtual IRouteValueDictionary CreateRouteValueDictionary(ISiteMap siteMap)
         {
-            return routeValueCollectionFactory.Create(siteMap);
+            return routeValueDictionaryFactory.Create(siteMap);
         }
 
         public virtual IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap)

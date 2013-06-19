@@ -10,10 +10,10 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// Specialized dictionary for providing business logic that manages
     /// the behavior of the route values.
     /// </summary>
-    public class RouteValueCollection
-        : RequestCacheableDictionary<string, object>, IRouteValueCollection
+    public class RouteValueDictionary
+        : RequestCacheableDictionary<string, object>, IRouteValueDictionary
     {
-        public RouteValueCollection(
+        public RouteValueDictionary(
             ISiteMap siteMap,
             IRequestCache requestCache
             ) : base(siteMap, requestCache)
