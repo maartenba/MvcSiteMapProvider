@@ -325,7 +325,6 @@ configured in the compilation constants -->
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Views\Shared\DisplayTemplates\SiteMapNodeModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SiteMapHelperModel.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
@@ -375,6 +374,7 @@ configured in the compilation constants -->
     <Content Include="App_GlobalResources\SiteMapLocalizations.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>SiteMapLocalizations.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
