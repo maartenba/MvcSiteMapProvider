@@ -214,7 +214,7 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, string> attributes)
+        protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, object> attributes)
         {
             foreach (XAttribute attribute in node.Attributes())
             {

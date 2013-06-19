@@ -26,7 +26,11 @@ namespace MvcSiteMapProvider
         public override bool IsVisible(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
         {
             // Is a visibility attribute specified?
-            string visibility = node.Attributes["visibility"];
+            string visibility = string.Empty;
+            if (node.Attributes.ContainsKey("visibility"))
+            {
+                visibility = node.Attributes["visibility"].GetType().Equals(typeof(string)) ? node.Attributes["visibility"].ToString() : string.Empty;
+            }
             if (string.IsNullOrEmpty(visibility))
             {
                 return true;

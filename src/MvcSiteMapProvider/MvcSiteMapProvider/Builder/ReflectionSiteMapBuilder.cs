@@ -477,7 +477,7 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="attribute">The attribute.</param>
         /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(IMvcSiteMapNodeAttribute attribute, IDictionary<string, string> attributes)
+        protected virtual void AcquireAttributesFrom(IMvcSiteMapNodeAttribute attribute, IDictionary<string, object> attributes)
         {
             foreach (var att in attribute.Attributes)
             {

@@ -12,7 +12,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// localization of custom attributes.
     /// </summary>
     public class AttributeCollection
-        : RequestCacheableDictionary<string, string>, IAttributeCollection
+        : RequestCacheableDictionary<string, object>, IAttributeCollection
     {
         public AttributeCollection(
             ISiteMap siteMap,
@@ -29,22 +29,17 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected readonly ILocalizationService localizationService;
 
-        public override void Add(string key, string value)
+        public override void Add(string key, object value)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
-            value = localizationService.ExtractExplicitResourceKey(key, value);
+            ThrowIfReadOnly();
+            if (value.GetType().Equals(typeof(string)))
+                value = localizationService.ExtractExplicitResourceKey(key, value.ToString());
             base.Add(key, value);
         }
 
         public override void Clear()
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            ThrowIfReadOnly();
             foreach (var key in this.Keys)
             {
                 localizationService.RemoveResourceKey(key);
@@ -52,41 +47,41 @@ namespace MvcSiteMapProvider.Collections.Specialized
             base.Clear();
         }
         
-        protected override void Insert(string key, string value, bool add)
+        protected override void Insert(string key, object value, bool add)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
-            value = localizationService.ExtractExplicitResourceKey(key, value);
+            ThrowIfReadOnly();
+            if (value.GetType().Equals(typeof(string)))
+                value = localizationService.ExtractExplicitResourceKey(key, value.ToString());
             base.Insert(key, value, add);
         }
 
-        public override bool Remove(KeyValuePair<string, string> item)
+        public override bool Remove(KeyValuePair<string, object> item)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            ThrowIfReadOnly();
             localizationService.RemoveResourceKey(item.Key);
             return base.Remove(item);
         }
 
         public override bool Remove(string key)
         {
-            if (this.IsReadOnly)
-            {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
-            }
+            ThrowIfReadOnly();
             localizationService.RemoveResourceKey(key);
             return base.Remove(key);
         }
 
-        public override string this[string key]
+        public override object this[string key]
         {
             get
             {
-                return localizationService.GetResourceString(key, base[key], base.siteMap);
+                var value = base[key];
+                if (value.GetType().Equals(typeof(string)))
+                {
+                    return localizationService.GetResourceString(key, base[key].ToString(), base.siteMap);
+                }
+                else
+                {
+                    return value;
+                }
             }
             set
             {
@@ -94,7 +89,22 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 {
                     throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, key));
                 }
-                base[key] = localizationService.ExtractExplicitResourceKey(key, value);
+                if (value.GetType().Equals(typeof(string)))
+                {
+                    base[key] = localizationService.ExtractExplicitResourceKey(key, value.ToString());
+                }
+                else
+                {
+                    base[key] = value;
+                }
+            }
+        }
+
+        protected virtual void ThrowIfReadOnly()
+        {
+            if (this.IsReadOnly)
+            {
+                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
             }
         }
     }

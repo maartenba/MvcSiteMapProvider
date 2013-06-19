@@ -22,7 +22,7 @@ namespace MvcMusicStore
             var node = SiteMaps.Current.CurrentNode;
             if (node != null && node.Attributes.ContainsKey("bling"))
             {
-                return node.Attributes["bling"];
+                return node.Attributes["bling"].GetType().Equals(typeof(string)) ? node.Attributes["bling"].ToString() : string.Empty;
             }
             return string.Empty;
         }
