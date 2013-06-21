@@ -1,16 +1,13 @@
 # MvcSiteMapProvider
-An ASP.NET MVC SiteMapProvider implementation for the ASP.NET MVC framework.
+An ASP.NET MVC SiteMapProvider implementation for the ASP.MvcSiteMapProvider is a tool that provides flexible menus, breadcrumb trails, and SEO features for the ASP.NET MVC framework, similar to the ASP.NET SiteMapProvider model.NET MVC framework.
 
 ## Note to contributors
 We are working on v4 of MvcSiteMapProvider and will be discontinuing development on the current version. If you want to provide contributions, please work on the v4 branch. Pull requests on the master branch will not be accepted for now.
 
-## Like this project?
-[<img src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif">](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C8GLSG8E33NA4) via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C8GLSG8E33NA4).
-
 ## What can it be used for?
-MvcSiteMapProvider is, as the name implies, an ASP.NET MVC SiteMapProvider implementation for the ASP.NET MVC framework. Targeted at ASP.NET MVC 2, it provides sitemap XML functionality and interoperability with the classic ASP.NET sitemap controls, like the SiteMapPath control for rendering breadcrumbs and the Menu control.
+MvcSiteMapProvider is a tool targeted at ASP.NET MVC that provides menus, site maps, site map path functionality, and more. It provides the ability to configure a hierarchical navigation structure using a pluggable architecture that can be XML, database, or code driven. We have moved beyond a mere ASP.NET SiteMapProvider implementation to provide support for multi-tenant applications, flexible caching, dependency injection, and several interface-based extensibility points where virtually any part of the provider can be replaced with a custom implementation.
 
-Based on areas, controller and action method names rather than hardcoded URL references, sitemap nodes are completely dynamic based on the routing engine used in an application. The dynamic character of ASP.NET MVC is followed in the MvcSiteMapProvider: there are numerous extensibility points that allow you to extend the basic functionality offered.
+Based on areas, controller and action method names rather than hardcoded URL references, sitemap nodes are completely dynamic based on the routing engine used in an application. Search Engine Optimization support is also provided in the form of dynamic sitemaps XML, canonical URL tags, and meta robots tags to ensure you send the search engines consistent - rather than conflicting - information about your URLs.
 
 ## Documentation
 See the [documentation](https://github.com/maartenba/MvcSiteMapProvider/wiki)
