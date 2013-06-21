@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- MvcSiteMapProvider.Web shared Nuget specification file; all packages share this -->
+<!-- MvcSiteMapProvider.Web Nuget specification file -->
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>MvcSiteMapProvider.Web</id>
@@ -7,8 +7,8 @@
 		<version>$version$</version>
 		<authors>Maarten Balliauw</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>This project contains extra configuration that is required by MvcSiteMapProvider during installation into a Web project as well as a starting point for XML configuration of the provider.</description>
-		<summary>MvcSiteMapProvider is a SiteMapProvider implementation for the ASP.NET MVC framework. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
+		<description>This project contains extra configuration that is required by MvcSiteMapProvider during installation into a Web project as well as a starting point for XML configuration of the provider. This package is a dependency that is automatically installed with many of the MvcSiteMapProvider packages and you will generally not need to install this package by itself.</description>
+		<summary>MvcSiteMapProvider is a tool that provides flexible menus, breadcrumb trails, and SEO features for the ASP.NET MVC framework, similar to the ASP.NET SiteMapProvider model. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
 		<language>en-US</language>
 		<tags>mvc sitemap menu breadcrumb navigation mvcsitemapprovider</tags>
 		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
