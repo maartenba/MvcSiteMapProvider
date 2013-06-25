@@ -505,6 +505,12 @@ namespace MvcSiteMapProvider
         /// </exception>
         public virtual bool IsAccessibleToUser(ISiteMapNode node)
         {
+            // If the sitemap is still being constructed, always
+            // make all nodes accessible regardless of security trimming.
+            if (!IsReadOnly)
+            {
+                return true;
+            }
             if (!SecurityTrimmingEnabled)
             {
                 return true;
@@ -526,16 +532,10 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
         /// </summary>
-        /// <remarks>Once security trimming is enabled, it cannot be disabled again.</remarks>
-        public bool SecurityTrimmingEnabled
+        public virtual bool SecurityTrimmingEnabled
         {
             get { return this.securityTrimmingEnabled; }
-            set 
-            {
-                if (value == false && this.securityTrimmingEnabled == true)
-                    throw new System.Security.SecurityException(Resources.Messages.SecurityTrimmingCannotBeDisabled);
-                this.securityTrimmingEnabled = value; 
-            }
+            set { this.securityTrimmingEnabled = value; }
         }
 
         /// <summary>

@@ -159,9 +159,6 @@
   <data name="ResourceNotFoundWithClassAndKey" xml:space="preserve">
     <value>The resource object with classname '{0}' and key '{1}' was not found.</value>
   </data>
-  <data name="SecurityTrimmingCannotBeDisabled" xml:space="preserve">
-    <value>Security trimming cannot be disabled again after it is enabled.</value>
-  </data>
   <data name="SiteMapNodeReadOnly" xml:space="preserve">
     <value>SiteMapNode is readonly, property '{0}' cannot be modified.</value>
   </data>

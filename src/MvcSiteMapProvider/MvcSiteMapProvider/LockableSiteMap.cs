@@ -76,6 +76,15 @@ namespace MvcSiteMapProvider
             }
         }
 
+        public sealed override bool SecurityTrimmingEnabled
+        {
+            get { return base.SecurityTrimmingEnabled; }
+            set
+            {
+                this.ThrowIfReadOnly();
+                base.SecurityTrimmingEnabled = value;
+            }
+        }
 
         protected virtual void ThrowIfReadOnly()
         {

@@ -259,15 +259,6 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Security trimming cannot be disabled again after it is enabled..
-        /// </summary>
-        internal static string SecurityTrimmingCannotBeDisabled {
-            get {
-                return ResourceManager.GetString("SecurityTrimmingCannotBeDisabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the &apos;MvcSiteMapProvider_UseExternalDIContainer&apos; in the AppSettings section of the web.config file to &apos;true&apos; if you are using an external dependency injection container..
         /// </summary>
         internal static string SiteMapLoaderAlreadySet {
