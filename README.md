@@ -4,6 +4,14 @@ An ASP.NET MVC SiteMapProvider implementation for the ASP.NET MVC framework.
 ## Note to contributors
 We are working on v4 of MvcSiteMapProvider and will be discontinuing development on the current version. If you want to provide contributions, please work on the v4 branch. Pull requests on the master branch will not be accepted for now.
 
+## Version 4.0 Beta Testers Needed
+
+MvcSiteMapProvider version 4.0 is now in Beta and is available on the [NuGet gallery] (https://nuget.org/packages?q=mvcsitemapprovider&prerelease=true&sortOrder=relevance). But to get it out of Beta, we need your help.
+
+While the architecture is quite different than version 3, we plan to support nearly all of the existing features and extensibility points. To ensure that we haven't broken any existing features during the massive amount of refactoring, we need some real-world applications (or at least copies of them) to be upgraded and put to the test.
+
+More Info: https://github.com/maartenba/MvcSiteMapProvider/issues/176
+
 ## Like this project?
 [<img src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif">](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C8GLSG8E33NA4) via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C8GLSG8E33NA4).
 
