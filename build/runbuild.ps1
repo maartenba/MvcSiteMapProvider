@@ -47,7 +47,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 
 	Create-MvcSiteMapProvider-Web-Package
 	
-	Create-DIContainer-Packages ("Autofac", "Ninject", "StructureMap", "Unity", "Windsor")
+	Create-DIContainer-Packages ("Autofac", "Ninject", "SimpleInjector", "StructureMap", "Unity", "Windsor")
 
     Move-Item *.nupkg $base_directory\release
 }
