@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>MVC4;NET40;Ninject</DefineConstants>
+    <DefineConstants>MVC4;NET40;SimpleInjector</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -82,6 +82,9 @@
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleInjector">
+      <HintPath>..\packages\SimpleInjector.2.2.3\lib\net40-client\SimpleInjector.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -193,6 +196,16 @@ configured in the compilation constants -->
         </Compile>
       </ItemGroup>
     </When>
+    <When Condition=" $(DefineConstants.Contains('SimpleInjector')) ">
+      <ItemGroup>
+        <Compile Include="..\CodeAsConfiguration\SimpleInjector\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
+        </Compile>
+        <Compile Include="..\CodeAsConfiguration\SimpleInjector\DI\SimpleInjector\SimpleInjectorDependencyInjectionContainer.cs">
+          <Link>DI\SimpleInjector\SimpleInjectorDependencyInjectionContainer.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
     <When Condition=" $(DefineConstants.Contains('Windsor')) ">
       <ItemGroup>
         <Compile Include="..\CodeAsConfiguration\Windsor\App_Start\CompositionRoot.cs">
@@ -232,6 +245,9 @@ configured in the compilation constants -->
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Shared\DI\InjectableDependencyResolver.cs">
       <Link>DI\InjectableDependencyResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\CodeAsConfiguration\SimpleInjector\DI\SimpleInjector\MvcSiteMapProviderContainerInitializer.cs">
+      <Link>DI\SimpleInjector\MvcSiteMapProviderContainerInitializer.cs</Link>
     </Compile>
     <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\Conventions\SingletonConvention.cs">
       <Link>DI\StructureMap\Conventions\SingletonConvention.cs</Link>
