@@ -30,26 +30,9 @@ namespace DI.SimpleInjector
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" }; 
 
-#if false // not used
             // Extension to allow resolution of arrays by GetAllInstances (natively based on IEnumerable).
             // source from: https://simpleinjector.codeplex.com/wikipage?title=CollectionRegistrationExtensions
-            container.ResolveUnregisteredType += (sender, e) =>
-            {
-                var serviceType = e.UnregisteredServiceType;
-
-                if (serviceType.IsArray)
-                {
-                    RegisterArrayResolver(e, container,
-                        serviceType.GetElementType());
-                }
-                else if (serviceType.IsGenericType &&
-                    serviceType.GetGenericTypeDefinition() == typeof(IList<>))
-                {
-                    RegisterArrayResolver(e, container,
-                        serviceType.GetGenericArguments()[0]);
-                }
-            };
-#endif
+            AllowToResolveArraysAndLists(container);
 
             var currentAssembly = typeof(MvcSiteMapProviderContainerInitializer).Assembly;
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
@@ -76,7 +59,6 @@ namespace DI.SimpleInjector
                     typeof(AttributeDictionary),
 
                     // Added 2013-06-30 by NightOwl888 to avoid default singleton registration:
-                    typeof(IDynamicNodeProviderStrategy),
                     typeof(ISiteMapNodeUrlResolverStrategy)
                 };
             var multipleImplementationTypes = new Type[]
@@ -209,7 +191,27 @@ namespace DI.SimpleInjector
                 container.GetInstance<ICacheDetails>());
         }
 
-#if false // not used
+        private static void AllowToResolveArraysAndLists(Container container)
+        {
+            container.ResolveUnregisteredType += (sender, e) =>
+            {
+                var serviceType = e.UnregisteredServiceType;
+
+                if (serviceType.IsArray)
+                {
+                    RegisterArrayResolver(e, container,
+                        serviceType.GetElementType());
+                }
+                else if (serviceType.IsGenericType &&
+                    serviceType.GetGenericTypeDefinition() == typeof(IList<>))
+                {
+                    RegisterArrayResolver(e, container,
+                        serviceType.GetGenericArguments()[0]);
+                }
+            };
+        }
+
+
         private static void RegisterArrayResolver(UnregisteredTypeEventArgs e, Container container, Type elementType)
         {
             var producer = container.GetRegistration(typeof(IEnumerable<>)
@@ -220,6 +222,5 @@ namespace DI.SimpleInjector
             var arrayExpression = Expression.Call(arrayMethod, enumerableExpression);
             e.Register(arrayExpression);
         }
-#endif
     }
 }
