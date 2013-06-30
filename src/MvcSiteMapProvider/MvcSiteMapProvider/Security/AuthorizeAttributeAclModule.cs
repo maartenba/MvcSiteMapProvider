@@ -122,7 +122,7 @@ namespace MvcSiteMapProvider.Security
 
             // Create controller context
             bool factoryBuiltController = false;
-            var controllerContext = this.CreateControllerContext(routes, controllerType, controllerFactory, out factoryBuiltController);
+            var controllerContext = this.CreateControllerContext(node, routes, controllerType, controllerFactory, out factoryBuiltController);
             try
             {
                 return this.VerifyControllerAttributes(node, controllerType, controllerContext);
@@ -297,9 +297,9 @@ namespace MvcSiteMapProvider.Security
             return false;
         }
 
-        protected virtual ControllerContext CreateControllerContext(RouteData routes, Type controllerType, IControllerFactory controllerFactory, out bool factoryBuiltController)
+        protected virtual ControllerContext CreateControllerContext(ISiteMapNode node, RouteData routes, Type controllerType, IControllerFactory controllerFactory, out bool factoryBuiltController)
         {
-            var requestContext = this.mvcContextFactory.CreateRequestContext(routes);
+            var requestContext = this.mvcContextFactory.CreateRequestContext(node, routes);
             ControllerBase controller = null;
             string controllerName = requestContext.RouteData.GetRequiredString("controller");
 
