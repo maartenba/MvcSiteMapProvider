@@ -13,22 +13,16 @@ function Remove-AppSettings() {
 	# load Web.config as XML
 	$xml.Load($localPath.Value)
 
-	# add or update MvcSiteMapProvider_UseExternalDIContainer
+	# remove MvcSiteMapProvider_UseExternalDIContainer
 	$ext_di = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_UseExternalDIContainer']")
 	if ($ext_di -ne $null) {
 		$ext_di.ParentNode.RemoveChild($ext_di)
 	}
 	
-	# add or update MvcSiteMapProvider_ScanAssembliesForSiteMapNodes
+	# remove MvcSiteMapProvider_ScanAssembliesForSiteMapNodes
 	$scan = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_ScanAssembliesForSiteMapNodes']")
 	if ($scan -ne $null) {
 		$scan.ParentNode.RemoveChild($scan)
-	}
-	
-	# add or update MvcSiteMapProvider_IncludeAssembliesForScan
-	$asm = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_IncludeAssembliesForScan']")
-	if ($asm -ne $null) {
-		$asm.ParentNode.RemoveChild($asm)
 	}
 	
 	$appSettings = $xml.SelectSingleNode("configuration/appSettings")

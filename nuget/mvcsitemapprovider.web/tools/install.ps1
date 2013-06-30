@@ -83,24 +83,6 @@ function Add-Or-Update-AppSettings() {
 		$appSettings.AppendChild($scan)
 	}
 	
-	# add or update MvcSiteMapProvider_IncludeAssembliesForScan
-	$asm = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_IncludeAssembliesForScan']")
-	if ($asm -ne $null) {
-		$asm.SetAttribute("value", "$AssemblyName$")
-	} else {
-		$asm = $xml.CreateElement("add")
-		
-		$key = $xml.CreateAttribute("key")
-		$key.Value = "MvcSiteMapProvider_IncludeAssembliesForScan"
-		$asm.Attributes.Append($key)
-		
-		$value = $xml.CreateAttribute("value")
-		$value.Value = "$AssemblyName$"
-		$asm.Attributes.Append($value)
-		
-		$appSettings.AppendChild($asm)
-	}
-	
 	# save the Web.config file
 	$xml.Save($localPath.Value)
 }
