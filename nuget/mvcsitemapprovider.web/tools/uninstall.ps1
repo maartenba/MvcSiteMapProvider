@@ -99,7 +99,7 @@ function Update-SiteMap-Element() {
 
 	$siteMap = $xml.SelectSingleNode("configuration/system.web/siteMap")
 	if ($siteMap -ne $null) {
-		if ($siteMap.Attributes["enabled"] -ne $null) {
+		if ($xml.SelectSingleNode("configuration/system.web/siteMap[@enabled]") -ne $null) {
 			$siteMap.SetAttribute("enabled", "true")
 		} else {
 			$enabled = $xml.CreateAttribute("enabled")
