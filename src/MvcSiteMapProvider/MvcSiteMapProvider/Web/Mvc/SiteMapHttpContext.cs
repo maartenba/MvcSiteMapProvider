@@ -1,26 +1,29 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
-    /// MvcHttpContext wrapper.
+    /// HttpContext wrapper.
     /// </summary>
-    public class MvcHttpContext : HttpContextWrapper
+    public class SiteMapHttpContext : HttpContextWrapper
     {
         private readonly HttpContext httpContext;
 
+        private readonly ISiteMapNode node_;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="MvcHttpContext"/> class.
+        /// Initializes a new instance of the <see cref="SiteMapHttpContext"/> class.
         /// </summary>
         /// <param name="httpContext">The object that this wrapper class provides access to.</param>
+        /// <param name="node">The site map node to fake node access context for or <c>null</c>.</param>
         /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="httpContext"/> is null.
+        ///     <paramref name="httpContext"/> is null.
         /// </exception>
-        public MvcHttpContext(HttpContext httpContext)
+        public SiteMapHttpContext(HttpContext httpContext, ISiteMapNode node)
             : base(httpContext)
         {
             this.httpContext = httpContext;
+            this.node_ = node;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </returns>
         public override HttpRequestBase Request
         {
-            get { return new MvcHttpRequest(this.httpContext.Request); }
+            get { return new SiteMapHttpRequest(this.httpContext.Request, node_); }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     public interface IMvcContextFactory
     {
         HttpContextBase CreateHttpContext();
-        RequestContext CreateRequestContext(RouteData routeData);
+        RequestContext CreateRequestContext(ISiteMapNode node, RouteData routeData);
         RequestContext CreateRequestContext();
         ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller);
         IRequestCache GetRequestCache();

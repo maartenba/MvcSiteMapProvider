@@ -317,8 +317,8 @@
     <Compile Include="Xml\XElementExtensions.cs" />
     <Compile Include="Builder\XmlSiteMapBuilder.cs" />
     <Compile Include="DynamicNode.cs" />
-    <Compile Include="Web\Mvc\MvcHttpContext.cs" />
-    <Compile Include="Web\Mvc\MvcHttpRequest.cs" />
+    <Compile Include="Web\Mvc\SiteMapHttpContext.cs" />
+    <Compile Include="Web\Mvc\SiteMapHttpRequest.cs" />
     <Compile Include="IDynamicNodeProvider.cs" />
     <Compile Include="ISiteMap.cs" />
     <Compile Include="Web\UrlResolver\ISiteMapNodeUrlResolver.cs" />

@@ -18,12 +18,17 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual HttpContextBase CreateHttpContext()
         {
-            return new MvcHttpContext(HttpContext.Current);
+            return CreateHttpContext(null);
         }
 
-        public virtual RequestContext CreateRequestContext(RouteData routeData)
+        protected virtual HttpContextBase CreateHttpContext(ISiteMapNode node)
         {
-            var httpContext = this.CreateHttpContext();
+            return new SiteMapHttpContext(HttpContext.Current, node);
+        }
+
+        public virtual RequestContext CreateRequestContext(ISiteMapNode node, RouteData routeData)
+        {
+            var httpContext = this.CreateHttpContext(node);
             return new RequestContext(httpContext, routeData);
 
             //if (httpContext.Handler is MvcHandler)
