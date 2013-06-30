@@ -82,55 +82,21 @@ namespace DI.SimpleInjector
                     typeof (IDynamicNodeProvider)
                 };
 
-            Dictionary<Type, List<Type>> implementations = new Dictionary<Type, List<Type>>();
+            // Single implementations of interface with matching name (minus the "I").
+            CommonConventions.RegisterDefaultConventions(
+                (interfaceType, implementationType) => container.RegisterSingle(interfaceType, implementationType),
+                new Assembly[] { siteMapProviderAssembly },
+                allAssemblies,
+                excludeTypes,
+                "Strategy$");
 
-
-            HashSet<Type> autoRegistered = new HashSet<Type>();
-            foreach (var type in allAssemblies
-                .SelectMany(t => t.GetExportedTypes())
-                .Where(t => !t.IsInterface && !t.IsAbstract && !t.IsGenericType && !excludeTypes.Contains(t)))
-            {
-                var typeName = type.Name;
-                var typeInterface = type.GetInterfaces().FirstOrDefault(t => t.Assembly == siteMapProviderAssembly && !t.IsGenericType);
-                if (typeInterface != null
-                    && type.GetConstructors(BindingFlags.Public | BindingFlags.Instance)
-                    .Any(t => t.GetParameters().Select(p => p.ParameterType).All(p => (p.IsInterface || p.IsClass) && !p.IsArray && p != typeof(string)))) // ignores ctors with value/string parameters or arrays (for composite services)
-                {
-                    List<Type> impl;
-                    if (!implementations.TryGetValue(typeInterface, out impl))
-                    {
-                        impl = new List<Type>();
-                        implementations.Add(typeInterface, impl);
-                    }
-                    impl.Add(type);
-                }
-            }
-
-
-            foreach (var implementation in implementations)
-            {
-                var typeInterface = implementation.Key;
-                var typeImpl = implementation.Value.First();
-                if (autoRegistered.Contains(typeInterface))
-                    continue;
-                if (implementation.Value.Count == 1 
-                    && typeInterface.Name == "I" + typeImpl.Name 
-                    && !multipleImplementationTypes.Contains(typeInterface))
-                {
-                    // Single implementations of interface with matching name (minus the "I").
-                    System.Diagnostics.Debug.WriteLine("Auto registration of {1} : {0}", typeInterface.Name, typeImpl.Name);
-                    container.RegisterSingle(typeInterface, typeImpl);
-                    autoRegistered.Add(typeInterface);
-                }
-                else if (multipleImplementationTypes.Contains(typeInterface))
-                {
-                    // Multiple implementations of strategy/composite based extension points
-                    System.Diagnostics.Debug.WriteLine("Auto multiple registration of {1} : {0}", typeInterface.Name, string.Join(", ", implementation.Value.Select(t => t.Name)));
-                    foreach (var t in implementation.Value)
-                        container.RegisterSingle(t, t);
-                    container.RegisterAll(typeInterface, implementation.Value);
-                }
-            }
+            // Multiple implementations of strategy based extension points
+            CommonConventions.RegisterAllImplementationsOfInterfaceSingle(
+                (interfaceType, implementationTypes) => container.RegisterAll(interfaceType, implementationTypes),
+                multipleImplementationTypes,
+                allAssemblies,
+                new Type[0],
+                "^Composite");
 
             container.Register<XmlSiteMapController>();
 

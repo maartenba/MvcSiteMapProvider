@@ -14,9 +14,9 @@ internal class CompositionRoot
         // Setup configuration of DI
         MvcSiteMapProviderContainerInitializer.SetUp(container);
 
-#if DEBUG
+#if DEBUG // preserve
         container.Verify();
-#endif
+#endif // preserve
 
         // Return our DI container wrapper instance
         return new SimpleInjectorDependencyInjectionContainer(container);
