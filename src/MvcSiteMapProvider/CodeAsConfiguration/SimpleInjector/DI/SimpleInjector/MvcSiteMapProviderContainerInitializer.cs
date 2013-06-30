@@ -73,7 +73,11 @@ namespace DI.SimpleInjector
                     typeof(SiteMapPluginProvider), 
                     typeof(ControllerTypeResolver),
                     typeof(RouteValueDictionary), 
-                    typeof(AttributeDictionary)
+                    typeof(AttributeDictionary),
+
+                    // Added 2013-06-30 by NightOwl888 to avoid default singleton registration:
+                    typeof(IDynamicNodeProviderStrategy),
+                    typeof(ISiteMapNodeUrlResolverStrategy)
                 };
             var multipleImplementationTypes = new Type[]
                 {
@@ -88,7 +92,7 @@ namespace DI.SimpleInjector
                 new Assembly[] { siteMapProviderAssembly },
                 allAssemblies,
                 excludeTypes,
-                "Strategy$");
+                string.Empty);
 
             // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterfaceSingle(
