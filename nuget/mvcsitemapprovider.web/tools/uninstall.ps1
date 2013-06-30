@@ -1,0 +1,175 @@
+# uninstall.ps1
+param($installPath, $toolsPath, $package, $project)
+
+function Remove-AppSettings() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+
+	# add or update MvcSiteMapProvider_UseExternalDIContainer
+	$ext_di = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_UseExternalDIContainer']")
+	if ($ext_di -ne $null) {
+		$ext_di.ParentNode.RemoveChild($ext_di)
+	}
+	
+	# add or update MvcSiteMapProvider_ScanAssembliesForSiteMapNodes
+	$scan = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_ScanAssembliesForSiteMapNodes']")
+	if ($scan -ne $null) {
+		$scan.ParentNode.RemoveChild($scan)
+	}
+	
+	# add or update MvcSiteMapProvider_IncludeAssembliesForScan
+	$asm = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_IncludeAssembliesForScan']")
+	if ($asm -ne $null) {
+		$asm.ParentNode.RemoveChild($asm)
+	}
+	
+	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
+	if ($appSettings -eq $null) {
+		if (($xml.SelectNodes("configuration/appSettings/*").Count -eq 0) -and ($appSettings.Attributes.Count -eq 0)) {
+			$appSettings.ParentNode.RemoveChild($appSettings)
+		}
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+function Remove-Pages-Namespaces() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+
+	# remove MvcSiteMapProvider.Web.Html if it exists
+	$html = $xml.SelectSingleNode("configuration/system.web/add[@namespace='MvcSiteMapProvider.Web.Html']")
+	if ($html -ne $null) {
+		$html.ParentNode.RemoveChild($html)
+	}
+	
+	# remove MvcSiteMapProvider.Web.Html.Models if it exists
+	$html_models = $xml.SelectSingleNode("configuration/system.web/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
+	if ($html_models -ne $null) {
+		$html_models.ParentNode.RemoveChild($html_models)
+	}
+	
+	$namespaces = $xml.SelectSingleNode("configuration/system.web/pages/namespaces")
+	if ($namespaces -ne $null) {
+		if (($xml.SelectNodes("configuration/system.web/pages/namespaces/*").Count -eq 0) -and ($namespaces.Attributes.Count -eq 0)) {
+			$namespaces.ParentNode.RemoveChild($namespaces)
+		}
+	}
+	
+	$pages = $xml.SelectSingleNode("configuration/system.web/pages")
+	if ($pages -ne $null) {
+		if (($xml.SelectNodes("configuration/system.web/pages/*").Count -eq 0) -and ($pages.Attributes.Count -eq 0)) {
+			$pages.ParentNode.RemoveChild($pages)
+		}
+	}
+	
+	$system_web = $xml.SelectSingleNode("configuration/system.web")
+	if ($system_web -ne $null) {
+		if (($xml.SelectNodes("configuration/system.web/*").Count -eq 0) -and ($system_web.Attributes.Count -eq 0)) {
+			$system_web.ParentNode.RemoveChild($system_web)
+		}
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+function Update-SiteMap-Element() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+
+	$siteMap = $xml.SelectSingleNode("configuration/system.web/siteMap")
+	if ($siteMap -ne $null) {
+		if ($siteMap.Attributes['enabled'] -ne $null) {
+			$siteMap.Attributes['enabled'].Value = "true"
+		} else {
+			$enabled = $xml.CreateAttribute("enabled")
+			$enabled.Value = "true"
+			$siteMap.Attributes.Append($enabled)
+		}
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+function Remove-MVC4-Config-Sections() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+	
+	$add = $xml.SelectSingleNode("configuration/system.webServer/modules/add[@name='UrlRoutingModule-4.0']")
+	if ($add -ne $null) {
+		$add.ParentNode.RemoveChild($add)
+	}
+	
+	$remove = $xml.SelectSingleNode("configuration/system.webServer/modules/remove[@name='UrlRoutingModule-4.0']")
+	if ($remove -ne $null) {
+		$remove.ParentNode.RemoveChild($remove)
+	}
+	
+	$modules = $xml.SelectSingleNode("configuration/system.webServer/modules")
+	if ($modules -eq $null) {
+		if (($xml.SelectNodes("configuration/system.webServer/modules/*").Count -eq 0) -and ($modules.Attributes.Count -eq 0)) {
+			$modules.ParentNode.RemoveChild($modules)
+		}
+	}
+	
+	$ws = $xml.SelectSingleNode("configuration/system.webServer")
+	if ($ws -eq $null) {
+		if (($xml.SelectNodes("configuration/system.webServer/*").Count -eq 0) -and ($ws.Attributes.Count -eq 0)) {
+			$ws.ParentNode.RemoveChild($ws)
+		}
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+# If MVC 4, remove web.config section to fix 404 not found on sitemap.xml (#124)
+if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
+{
+	Write-Host "Detected MVC 4"
+	Remove-MVC4-Config-Sections
+}
+
+# Undo the changes made to the config file
+Remove-AppSettings
+Remove-Pages-Namespaces
+Update-SiteMap-Element
+
+
+
+
