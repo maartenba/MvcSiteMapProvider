@@ -1,0 +1,36 @@
+﻿@model MvcSiteMapProvider.PostDemo.Models.HomeIndexModel
+
+@{
+    ViewBag.Title = "POST demo :: Index";
+}
+
+<h2>POST demo :: Index</h2>
+
+@if (Model.Verb == HttpVerbs.Get)
+{
+    <text>
+        Current verb is GET. Link to About page in the navigation menu should
+        be displayed. Post empty Name to see the buggy behavior.
+    </text>
+}
+else
+{
+    <text>
+        Current verb is @(Model.Verb). Link to About page disappears in broken
+        MvcSiteMapProvider versions because POST requests to the page are only
+        available to privileged users.
+    </text>
+}
+
+@using(Html.BeginForm())
+{
+    <div>
+        @Html.ValidationSummary()
+    </div>
+    <div>
+        @Html.EditorForModel()
+    </div>
+    <div>
+        <input type="submit" value="Submit"/>
+    </div>
+}
