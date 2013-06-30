@@ -118,7 +118,7 @@ function Add-Pages-Namespaces() {
 	}
 	
 	# add MvcSiteMapProvider.Web.Html if it doesn't already exist
-	$html = $xml.SelectSingleNode("configuration/system.web/add[@namespace='MvcSiteMapProvider.Web.Html']")
+	$html = $xml.SelectSingleNode("configuration/system.web/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html']")
 	if ($html -eq $null) {
 		$html = $xml.CreateElement("add")
 		
@@ -130,7 +130,7 @@ function Add-Pages-Namespaces() {
 	}
 	
 	# add MvcSiteMapProvider.Web.Html.Models if it doesn't already exist
-	$html_models = $xml.SelectSingleNode("configuration/system.web/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
+	$html_models = $xml.SelectSingleNode("configuration/system.web/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
 	if ($html_models -eq $null) {
 		$html_models = $xml.CreateElement("add")
 		

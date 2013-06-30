@@ -27,7 +27,7 @@ function Remove-AppSettings() {
 	
 	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
 	if ($appSettings -eq $null) {
-		if (($xml.SelectNodes("configuration/appSettings/*").Count -eq 0) -and ($appSettings.Attributes.Count -eq 0)) {
+		if (($appSettings.HasChildNodes -eq $false) -and ($appSettings.Attributes.Count -eq 0)) {
 			$appSettings.ParentNode.RemoveChild($appSettings)
 		}
 	}
@@ -49,34 +49,34 @@ function Remove-Pages-Namespaces() {
 	$xml.Load($localPath.Value)
 
 	# remove MvcSiteMapProvider.Web.Html if it exists
-	$html = $xml.SelectSingleNode("configuration/system.web/add[@namespace='MvcSiteMapProvider.Web.Html']")
+	$html = $xml.SelectSingleNode("configuration/system.web/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html']")
 	if ($html -ne $null) {
 		$html.ParentNode.RemoveChild($html)
 	}
 	
 	# remove MvcSiteMapProvider.Web.Html.Models if it exists
-	$html_models = $xml.SelectSingleNode("configuration/system.web/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
+	$html_models = $xml.SelectSingleNode("configuration/system.web/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
 	if ($html_models -ne $null) {
 		$html_models.ParentNode.RemoveChild($html_models)
 	}
 	
 	$namespaces = $xml.SelectSingleNode("configuration/system.web/pages/namespaces")
 	if ($namespaces -ne $null) {
-		if (($xml.SelectNodes("configuration/system.web/pages/namespaces/*").Count -eq 0) -and ($namespaces.Attributes.Count -eq 0)) {
+		if (($namespaces.HasChildNodes -eq $false) -and ($namespaces.Attributes.Count -eq 0)) {
 			$namespaces.ParentNode.RemoveChild($namespaces)
 		}
 	}
 	
 	$pages = $xml.SelectSingleNode("configuration/system.web/pages")
 	if ($pages -ne $null) {
-		if (($xml.SelectNodes("configuration/system.web/pages/*").Count -eq 0) -and ($pages.Attributes.Count -eq 0)) {
+		if (($pages.HasChildNodes -eq $false) -and ($pages.Attributes.Count -eq 0)) {
 			$pages.ParentNode.RemoveChild($pages)
 		}
 	}
 	
 	$system_web = $xml.SelectSingleNode("configuration/system.web")
 	if ($system_web -ne $null) {
-		if (($xml.SelectNodes("configuration/system.web/*").Count -eq 0) -and ($system_web.Attributes.Count -eq 0)) {
+		if (($system_web.HasChildNodes -eq $false) -and ($system_web.Attributes.Count -eq 0)) {
 			$system_web.ParentNode.RemoveChild($system_web)
 		}
 	}
@@ -135,15 +135,15 @@ function Remove-MVC4-Config-Sections() {
 	}
 	
 	$modules = $xml.SelectSingleNode("configuration/system.webServer/modules")
-	if ($modules -eq $null) {
-		if (($xml.SelectNodes("configuration/system.webServer/modules/*").Count -eq 0) -and ($modules.Attributes.Count -eq 0)) {
+	if ($modules -ne $null) {
+		if (($modules.HasChildNodes -eq $false) -and ($modules.Attributes.Count -eq 0)) {
 			$modules.ParentNode.RemoveChild($modules)
 		}
 	}
 	
 	$ws = $xml.SelectSingleNode("configuration/system.webServer")
-	if ($ws -eq $null) {
-		if (($xml.SelectNodes("configuration/system.webServer/*").Count -eq 0) -and ($ws.Attributes.Count -eq 0)) {
+	if ($ws -ne $null) {
+		if (($ws.HasChildNodes -eq $false) -and ($ws.Attributes.Count -eq 0)) {
 			$ws.ParentNode.RemoveChild($ws)
 		}
 	}
