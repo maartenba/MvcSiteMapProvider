@@ -9,7 +9,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class SiteMapHttpRequest 
         : HttpRequestWrapper
     {
-        private readonly ISiteMapNode node_;
+        private readonly ISiteMapNode node;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapHttpRequest"/> class.
@@ -22,7 +22,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         public SiteMapHttpRequest(HttpRequest httpRequest, ISiteMapNode node)
             : base(httpRequest)
         {
-            node_ = node;
+            this.node = node;
         }
 
         /// <summary>
@@ -63,11 +63,11 @@ namespace MvcSiteMapProvider.Web.Mvc
             get
             {
                 const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
-                var replaceMethod = node_ != null &&
-                                    !String.IsNullOrWhiteSpace(node_.HttpMethod) &&
-                                    !String.Equals(node_.HttpMethod, "*", comparison);
+                bool replaceMethod = this.node != null &&
+                                    !String.IsNullOrWhiteSpace(this.node.HttpMethod) &&
+                                    !String.Equals(this.node.HttpMethod, "*", comparison);
                 return replaceMethod
-                    ? node_.HttpMethod.Split(',')[0]
+                    ? this.node.HttpMethod.Split(',')[0]
                     : base.HttpMethod;
             }
         }

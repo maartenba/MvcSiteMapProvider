@@ -8,8 +8,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     public class SiteMapHttpContext : HttpContextWrapper
     {
         private readonly HttpContext httpContext;
-
-        private readonly ISiteMapNode node_;
+        private readonly ISiteMapNode node;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapHttpContext"/> class.
@@ -23,7 +22,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             : base(httpContext)
         {
             this.httpContext = httpContext;
-            this.node_ = node;
+            this.node = node;
         }
 
         /// <summary>
@@ -35,7 +34,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// </returns>
         public override HttpRequestBase Request
         {
-            get { return new SiteMapHttpRequest(this.httpContext.Request, node_); }
+            get { return new SiteMapHttpRequest(this.httpContext.Request, this.node); }
         }
     }
 }
