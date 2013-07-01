@@ -64,7 +64,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             {
                 const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
                 bool replaceMethod = this.node != null &&
-                                    !String.IsNullOrWhiteSpace(this.node.HttpMethod) &&
+                                    !String.IsNullOrEmpty(this.node.HttpMethod) &&
                                     !String.Equals(this.node.HttpMethod, "*", comparison);
                 return replaceMethod
                     ? this.node.HttpMethod.Split(',')[0]
