@@ -1,3 +1,4 @@
+# install.ps1
 param($rootPath, $toolsPath, $package, $project)
 
 function CountSolutionFilesByExtension($extension) {
@@ -28,10 +29,7 @@ function InferPreferredViewEngine() {
 	return "aspx"
 }
 
-# Infer which view engine you're using based on the files in your project
-### End copied
-
-function Install-MVC4-Config-Sections() {
+function Add-Or-Update-AppSettings() {
 	$xml = New-Object xml
 
 	# find the Web.config file
@@ -43,6 +41,149 @@ function Install-MVC4-Config-Sections() {
 	# load Web.config as XML
 	$xml.Load($localPath.Value)
 
+	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
+	if ($appSettings -eq $null) {
+		$appSettings = $xml.CreateElement("appSettings")
+		$xml.AppendChild($appSettings)
+	}
+	
+	# add or update MvcSiteMapProvider_UseExternalDIContainer
+	$ext_di = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_UseExternalDIContainer']")
+	if ($ext_di -ne $null) {
+		$ext_di.SetAttribute("value", "false")
+	} else {
+		$ext_di = $xml.CreateElement("add")
+		
+		$key = $xml.CreateAttribute("key")
+		$key.Value = "MvcSiteMapProvider_UseExternalDIContainer"
+		$ext_di.Attributes.Append($key)
+		
+		$value = $xml.CreateAttribute("value")
+		$value.Value = "false"
+		$ext_di.Attributes.Append($value)
+		
+		$appSettings.AppendChild($ext_di)
+	}
+	
+	# add or update MvcSiteMapProvider_ScanAssembliesForSiteMapNodes
+	$scan = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_ScanAssembliesForSiteMapNodes']")
+	if ($scan -ne $null) {
+		$scan.SetAttribute("value", "true")
+	} else {
+		$scan = $xml.CreateElement("add")
+		
+		$key = $xml.CreateAttribute("key")
+		$key.Value = "MvcSiteMapProvider_ScanAssembliesForSiteMapNodes"
+		$scan.Attributes.Append($key)
+		
+		$value = $xml.CreateAttribute("value")
+		$value.Value = "true"
+		$scan.Attributes.Append($value)
+		
+		$appSettings.AppendChild($scan)
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+function Add-Pages-Namespaces() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+
+	$system_web = $xml.SelectSingleNode("configuration/system.web")
+	if ($system_web -eq $null) {
+		$system_web = $xml.CreateElement("system.web")
+		$xml.AppendChild($system_web)
+	}
+	
+	$pages = $xml.SelectSingleNode("configuration/system.web/pages")
+	if ($pages -eq $null) {
+		$pages = $xml.CreateElement("pages")
+		$system_web.AppendChild($pages)
+	}
+	
+	$namespaces = $xml.SelectSingleNode("configuration/system.web/pages/namespaces")
+	if ($namespaces -eq $null) {
+		$namespaces = $xml.CreateElement("namespaces")
+		$pages.AppendChild($namespaces)
+	}
+	
+	# add MvcSiteMapProvider.Web.Html if it doesn't already exist
+	$html = $xml.SelectSingleNode("configuration/system.web/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html']")
+	if ($html -eq $null) {
+		$html = $xml.CreateElement("add")
+		
+		$namespace_html = $xml.CreateAttribute("namespace")
+		$namespace_html.Value = "MvcSiteMapProvider.Web.Html"
+		$html.Attributes.Append($namespace_html)
+		
+		$namespaces.AppendChild($html)
+	}
+	
+	# add MvcSiteMapProvider.Web.Html.Models if it doesn't already exist
+	$html_models = $xml.SelectSingleNode("configuration/system.web/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
+	if ($html_models -eq $null) {
+		$html_models = $xml.CreateElement("add")
+		
+		$namespace_models = $xml.CreateAttribute("namespace")
+		$namespace_models.Value = "MvcSiteMapProvider.Web.Html.Models"
+		$html_models.Attributes.Append($namespace_models)
+		
+		$namespaces.AppendChild($html_models)
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+function Update-SiteMap-Element() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+
+	$siteMap = $xml.SelectSingleNode("configuration/system.web/siteMap")
+	if ($siteMap -ne $null) {
+		if ($xml.SelectSingleNode("configuration/system.web/siteMap[@enabled]") -ne $null) {
+			$siteMap.SetAttribute("enabled", "false")
+		} else {
+			$enabled = $xml.CreateAttribute("enabled")
+			$enabled.Value = "false"
+			$siteMap.Attributes.Append($enabled)
+		}
+	}
+	
+	# save the Web.config file
+	$xml.Save($localPath.Value)
+}
+
+function Add-MVC4-Config-Sections() {
+	$xml = New-Object xml
+
+	# find the Web.config file
+	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
+
+	# find its path on the file system
+	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+
+	# load Web.config as XML
+	$xml.Load($localPath.Value)
+	
 	# select the node
 	$ws = $xml.SelectSingleNode("configuration/system.webServer")
 	if ($ws -eq $null) {
@@ -86,8 +227,7 @@ function Install-MVC4-Config-Sections() {
 	$xml.Save($localPath.Value)
 }
 
-
-
+# Infer which view engine you're using based on the files in your project
 if ([string](InferPreferredViewEngine) -eq 'aspx') { 
 	(Get-Project).ProjectItems | ?{ $_.Name -eq "Views" } | %{ $_.ProjectItems | ?{ $_.Name -eq "Shared" } } | %{ $_.ProjectItems | ?{ $_.Name -eq "DisplayTemplates" } } | %{ $_.ProjectItems | ?{ $_.Name -eq "MenuHelperModel.cshtml" -or  $_.Name -eq "SiteMapHelperModel.cshtml" -or  $_.Name -eq "SiteMapNodeModel.cshtml" -or  $_.Name -eq "SiteMapNodeModelList.cshtml" -or  $_.Name -eq "SiteMapPathHelperModel.cshtml" -or  $_.Name -eq "SiteMapTitleHelperModel.cshtml" -or  $_.Name -eq "CanonicalHelperModel.cshtml" -or  $_.Name -eq "MetaRobotsHelperModel.cshtml" } } | %{ $_.Delete() }
 } else {
@@ -95,10 +235,13 @@ if ([string](InferPreferredViewEngine) -eq 'aspx') {
 }
 
 # If MVC 4, install web.config section to fix 404 not found on sitemap.xml (#124)
-
 if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 {
 	Write-Host "Detected MVC 4"
-	
-	Install-MVC4-Config-Sections
+	Add-MVC4-Config-Sections
 }
+
+# Fixup the web.config file
+Add-Or-Update-AppSettings
+Add-Pages-Namespaces
+Update-SiteMap-Element

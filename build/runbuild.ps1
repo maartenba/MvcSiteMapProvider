@@ -47,7 +47,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 
 	Create-MvcSiteMapProvider-Web-Package
 	
-	Create-DIContainer-Packages ("Autofac", "Ninject", "StructureMap", "Unity", "Windsor")
+	Create-DIContainer-Packages ("Autofac", "Ninject", "SimpleInjector", "StructureMap", "Unity", "Windsor")
 
     Move-Item *.nupkg $base_directory\release
 }
@@ -210,12 +210,17 @@ function Create-DIContainer-Packages ([string[]] $di_containers) {
 	#create the build for each DI container
 	foreach ($di_container in $di_containers) {
 		Write-Host $di_container -ForegroundColor Yellow
-		Create-DIContainer-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
-		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "3"
-		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
 
-		Create-DIContainer-Modules-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
+		#exception: SimpleInjector version 2 doesn't support .NET 3.5
+		if ($di_container -ne "SimpleInjector") {
+			Create-DIContainer-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
+			Create-DIContainer-Modules-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
+		}
+
+		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "3"
 		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "3"
+
+		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
 		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "4"
 	}
 }

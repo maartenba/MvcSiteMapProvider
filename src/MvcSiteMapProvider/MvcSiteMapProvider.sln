@@ -25,7 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CodeAsConfiguration", "Code
 		CodeAsConfiguration\IMPORTANT_NOTE.txt = CodeAsConfiguration\IMPORTANT_NOTE.txt
 		CodeAsConfiguration\Manual_Installation_Instructions.txt = CodeAsConfiguration\Manual_Installation_Instructions.txt
 		CodeAsConfiguration\MvcSiteMapProvider_DI_ReadMe.txt = CodeAsConfiguration\MvcSiteMapProvider_DI_ReadMe.txt
-		..\..\nuget\mvcsitemapprovider.configuration\web.config.transform = ..\..\nuget\mvcsitemapprovider.configuration\web.config.transform
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "CodeAsConfiguration\Shared\Shared.csproj", "{7C763B28-50B2-4201-9BD0-659FC155E5F3}"
@@ -47,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{DBD0D341
 		..\..\build\psake_ext.ps1 = ..\..\build\psake_ext.ps1
 		..\..\build\runbuild.ps1 = ..\..\build\runbuild.ps1
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleInjector", "CodeAsConfiguration\SimpleInjector\SimpleInjector.csproj", "{029EA3F0-37FA-4A67-AD8E-075226FBC950}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +90,10 @@ Global
 		{B559B084-8AFF-457B-9054-373ECC7F979D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B559B084-8AFF-457B-9054-373ECC7F979D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B559B084-8AFF-457B-9054-373ECC7F979D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{029EA3F0-37FA-4A67-AD8E-075226FBC950}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{029EA3F0-37FA-4A67-AD8E-075226FBC950}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{029EA3F0-37FA-4A67-AD8E-075226FBC950}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{029EA3F0-37FA-4A67-AD8E-075226FBC950}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +108,7 @@ Global
 		{6C951158-E5DF-45FF-996D-5E72116C73AC} = {FAADDBE0-A4D5-4EEE-A924-FE2582D734A9}
 		{4EC1AAED-4179-4ADC-96BC-18CCCF429B65} = {FAADDBE0-A4D5-4EEE-A924-FE2582D734A9}
 		{B559B084-8AFF-457B-9054-373ECC7F979D} = {FAADDBE0-A4D5-4EEE-A924-FE2582D734A9}
+		{029EA3F0-37FA-4A67-AD8E-075226FBC950} = {FAADDBE0-A4D5-4EEE-A924-FE2582D734A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
