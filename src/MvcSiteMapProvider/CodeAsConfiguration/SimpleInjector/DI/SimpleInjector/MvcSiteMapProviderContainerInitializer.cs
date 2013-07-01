@@ -56,10 +56,7 @@ namespace DI.SimpleInjector
                     typeof(SiteMapPluginProvider), 
                     typeof(ControllerTypeResolver),
                     typeof(RouteValueDictionary), 
-                    typeof(AttributeDictionary),
-
-                    // Added 2013-06-30 by NightOwl888 to avoid default singleton registration:
-                    typeof(ISiteMapNodeUrlResolverStrategy)
+                    typeof(AttributeDictionary)
                 };
             var multipleImplementationTypes = new Type[]
                 {
@@ -109,7 +106,6 @@ namespace DI.SimpleInjector
                                                                                                      <IBuildManager>()));
 
             // Configure Security
-
             container.RegisterSingle<AuthorizeAttributeAclModule>(() => new AuthorizeAttributeAclModule(
                                                                       container.GetInstance<IMvcContextFactory>(),
                                                                       container.GetInstance<IObjectCopier>(),
@@ -122,8 +118,6 @@ namespace DI.SimpleInjector
             container.RegisterSingle<IAclModule>(() => new CompositeAclModule(container.GetAllInstances<IAclModule>().ToArray()));
 
             // Setup cache
-
-
 #if NET35
             container.RegisterSingle<ICacheProvider<ISiteMap>, AspNetCacheProvider<ISiteMap>>();
             container.RegisterSingle<ICacheDependency>(() => new AspNetFileCacheDependency(absoluteFileName));
@@ -143,11 +137,6 @@ namespace DI.SimpleInjector
                 () => new SiteMapXmlReservedAttributeNameProvider(new string[0]));
 
             container.RegisterSingle<IXmlSource>(() => new FileXmlSource(absoluteFileName));
-
-
-
-            container.RegisterSingle<IDynamicNodeProviderStrategy>(() => new DynamicNodeProviderStrategy(container.GetAllInstances<IDynamicNodeProvider>().ToArray()));  // IDynamicNodeProvider est typiquement implémenté par l'application finale.
-            container.RegisterSingle<ISiteMapNodeUrlResolverStrategy>(() => new SiteMapNodeUrlResolverStrategy(container.GetAllInstances<ISiteMapNodeUrlResolver>().ToArray()));
 
 
             container.RegisterSingle<XmlSiteMapBuilder>(() =>
@@ -175,9 +164,7 @@ namespace DI.SimpleInjector
             container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container));
             container.RegisterSingle<ISiteMapBuilderSetStrategy>(() => new SiteMapBuilderSetStrategy(container.GetAllInstances<ISiteMapBuilderSet>().ToArray()));
 
-
             container.RegisterSingle<VisitingSiteMapBuilder>();
-
         }
 
         private static IEnumerable<ISiteMapBuilderSet> ResolveISiteMapBuilderSets(Container container)
@@ -210,7 +197,6 @@ namespace DI.SimpleInjector
                 }
             };
         }
-
 
         private static void RegisterArrayResolver(UnregisteredTypeEventArgs e, Container container, Type elementType)
         {
