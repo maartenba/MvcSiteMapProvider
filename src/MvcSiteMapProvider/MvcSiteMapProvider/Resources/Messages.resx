@@ -213,4 +213,7 @@
   <data name="NamedSiteMapNodeVisibilityProviderNotFound" xml:space="preserve">
     <value>The visibility provider instance named '{0}' was not found. Check your DI configuration to ensure a visibility provider instance with this name exists and is configured correctly.</value>
   </data>
+  <data name="ReflectionSiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
+    <value>There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.</value>
+  </data>
 </root>

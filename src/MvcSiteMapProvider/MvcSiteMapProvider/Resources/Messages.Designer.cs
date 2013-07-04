@@ -250,6 +250,15 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application..
+        /// </summary>
+        internal static string ReflectionSiteMapBuilderRootKeyAmbiguous {
+            get {
+                return ResourceManager.GetString("ReflectionSiteMapBuilderRootKeyAmbiguous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The resource object with classname &apos;{0}&apos; and key &apos;{1}&apos; was not found..
         /// </summary>
         internal static string ResourceNotFoundWithClassAndKey {

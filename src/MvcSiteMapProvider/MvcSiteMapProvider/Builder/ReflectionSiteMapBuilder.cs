@@ -188,11 +188,18 @@ namespace MvcSiteMapProvider.Builder
         {
             // A dictionary of nodes to process later (node, parentKey)
             var nodesToProcessLater = new Dictionary<ISiteMapNode, string>();
+            var emptyParentKeyCount = definitions.Where(t => string.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)).Count();
+
+            // Throw a sensible exception if the configuration has more than 1 empty parent key (#179).
+            if (emptyParentKeyCount > 1)
+            {
+                throw new MvcSiteMapException(Resources.Messages.ReflectionSiteMapBuilderRootKeyAmbiguous);
+            }
 
             // Find root node
             if (parentNode == null)
             {
-                if (definitions.Where(t => string.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)).Count() == 1)
+                if (emptyParentKeyCount == 1)
                 {
                     ISiteMapNode attributedRootNode = null;
 
