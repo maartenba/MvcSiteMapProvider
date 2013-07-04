@@ -64,12 +64,9 @@ namespace MvcSiteMapProvider.Builder
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
             var provider = siteMapProvider.GetProvider();
-            siteMap.EnableLocalization = provider.EnableLocalization;
+
             rootNode = GetRootNode(siteMap, provider);
             ProcessNodes(siteMap, rootNode, provider.RootNode);
-
-            // NOTE: Setting security trimming as the last step improves performance.
-            siteMap.SecurityTrimmingEnabled = provider.SecurityTrimmingEnabled;
 
             return rootNode;
         }

@@ -29,6 +29,8 @@ namespace DI.Windsor.Installers
 
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            bool securityTrimmingEnabled = false;
+            bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
@@ -141,6 +143,8 @@ namespace DI.Windsor.Installers
             // Configure the builder sets
             container.Register(Component.For<ISiteMapBuilderSet>().ImplementedBy<SiteMapBuilderSet>().Named("siteMapBuilderSet1")
                 .DependsOn(Dependency.OnValue("instanceName", "default"))
+                .DependsOn(Dependency.OnValue("securityTrimmingEnabled", securityTrimmingEnabled))
+                .DependsOn(Dependency.OnValue("enableLocalization", enableLocalization))
                 .DependsOn(ServiceOverride.ForKey<ISiteMapBuilder>().Eq("builder1"))
                 .DependsOn(ServiceOverride.ForKey<ICacheDetails>().Eq("cacheDetails1"))
                 );

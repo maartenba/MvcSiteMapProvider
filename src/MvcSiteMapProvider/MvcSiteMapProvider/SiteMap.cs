@@ -25,7 +25,8 @@ namespace MvcSiteMapProvider
             ISiteMapPluginProvider pluginProvider,
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            ISiteMapSettings siteMapSettings
             )
         {
             if (pluginProvider == null)
@@ -36,12 +37,15 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapChildStateFactory");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (siteMapSettings == null)
+                throw new ArgumentNullException("siteMapSettings");
 
             this.pluginProvider = pluginProvider;
             this.mvcContextFactory = mvcContextFactory;
             this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
-
+            this.siteMapSettings = siteMapSettings;
+            
             // Initialize dictionaries
             this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
             this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
@@ -54,6 +58,7 @@ namespace MvcSiteMapProvider
         protected readonly IMvcContextFactory mvcContextFactory;
         protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
+        private readonly ISiteMapSettings siteMapSettings;
 
         // Child collections
         protected readonly IDictionary<ISiteMapNode, ISiteMapNodeCollection> childNodeCollectionTable;
@@ -62,10 +67,8 @@ namespace MvcSiteMapProvider
         protected readonly IDictionary<string, ISiteMapNode> urlTable;
 
         // Object state
-        private bool securityTrimmingEnabled;
         protected readonly object synclock = new object();
         protected ISiteMapNode root;
-
 
         #region ISiteMap Members
 
@@ -256,14 +259,17 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// Gets or sets a Boolean value indicating whether localized values of <see cref="T:MvcSiteMapProvider.SiteMapNode">SiteMapNode</see> 
+        /// Gets a Boolean value indicating whether localized values of <see cref="T:MvcSiteMapProvider.SiteMapNode">SiteMapNode</see> 
         /// attributes are returned.
         /// </summary>
         /// <remarks>
         /// The EnableLocalization property is used for the get accessor of the Title and Description properties, as well as additional 
         /// Attributes properties of a SiteMapNode object.
         /// </remarks>
-        public virtual bool EnableLocalization { get; set; }
+        public virtual bool EnableLocalization 
+        {
+            get { return this.siteMapSettings.EnableLocalization; } 
+        }
 
         public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
         {
@@ -532,10 +538,9 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
         /// </summary>
-        public virtual bool SecurityTrimmingEnabled
+        public bool SecurityTrimmingEnabled
         {
-            get { return this.securityTrimmingEnabled; }
-            set { this.securityTrimmingEnabled = value; }
+            get { return this.siteMapSettings.SecurityTrimmingEnabled; }
         }
 
         /// <summary>

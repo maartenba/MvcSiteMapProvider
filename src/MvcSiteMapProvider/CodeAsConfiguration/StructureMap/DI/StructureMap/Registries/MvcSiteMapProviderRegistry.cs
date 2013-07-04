@@ -26,6 +26,8 @@ namespace DI.StructureMap.Registries
     {
         public MvcSiteMapProviderRegistry()
         {
+            bool securityTrimmingEnabled = false;
+            bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
@@ -149,6 +151,8 @@ namespace DI.StructureMap.Registries
                 {
                     x.Type<SiteMapBuilderSet>()
                         .Ctor<string>("instanceName").Is("default")
+                        .Ctor<bool>("securityTrimmingEnabled").Is(securityTrimmingEnabled)
+                        .Ctor<bool>("enableLocalization").Is(enableLocalization)
                         .Ctor<ISiteMapBuilder>().Is(builder)
                         .Ctor<ICacheDetails>().Is(cacheDetails);
                 });

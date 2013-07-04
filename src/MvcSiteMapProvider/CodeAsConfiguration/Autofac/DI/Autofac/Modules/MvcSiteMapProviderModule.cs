@@ -27,6 +27,8 @@ namespace DI.Autofac.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
+            bool securityTrimmingEnabled = false;
+            bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
@@ -172,6 +174,8 @@ namespace DI.Autofac.Modules
             builder.RegisterType<SiteMapBuilderSet>()
                    .Named<ISiteMapBuilderSet>("builderSet1")
                    .WithParameter("instanceName", "default")
+                   .WithParameter("securityTrimmingEnabled", securityTrimmingEnabled)
+                   .WithParameter("enableLocalization", enableLocalization)
                    .WithParameter(
                         (p, c) => p.Name == "siteMapBuilder",
                         (p, c) => c.ResolveNamed<ISiteMapBuilder>("siteMapBuilder1"))

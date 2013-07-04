@@ -25,6 +25,8 @@ namespace MvcSiteMapProvider.DI
             this.ExcludeNamespacesForResolver = GetConfigurationValueOrFallback("MvcSiteMapProvider_ExcludeNamespacesForResolver", "")
                 .Split(new char[] { '|', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             this.DefaultSiteMapNodeVisibiltyProvider = GetConfigurationValueOrFallback("MvcSiteMapProvider_DefaultSiteMapNodeVisibiltyProvider", String.Empty);
+            this.EnableLocalization = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableLocalization", "true"));
+            this.SecurityTrimmingEnabled = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_SecurityTrimmingEnabled", "false"));
         }
 
         public bool UseExternalDIContainer { get; private set; }
@@ -36,6 +38,8 @@ namespace MvcSiteMapProvider.DI
         public int CacheDuration { get; private set; }
         public IEnumerable<string> ExcludeNamespacesForResolver { get; private set; }
         public string DefaultSiteMapNodeVisibiltyProvider { get; private set; }
+        public bool EnableLocalization { get; private set; }
+        public bool SecurityTrimmingEnabled { get; private set; }
 
 
         private string GetConfigurationValueOrFallback(string name, string defaultValue)

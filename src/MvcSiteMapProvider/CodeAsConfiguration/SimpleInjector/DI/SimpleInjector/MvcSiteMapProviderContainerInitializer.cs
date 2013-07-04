@@ -26,6 +26,8 @@ namespace DI.SimpleInjector
     {
         public static void SetUp(Container container)
         {
+            bool securityTrimmingEnabled = false;
+            bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" }; 
@@ -161,16 +163,18 @@ namespace DI.SimpleInjector
                                                              container.GetInstance<ISiteMapCacheKeyGenerator>()
                                                              ));
 
-            container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container));
+            container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container, securityTrimmingEnabled, enableLocalization));
             container.RegisterSingle<ISiteMapBuilderSetStrategy>(() => new SiteMapBuilderSetStrategy(container.GetAllInstances<ISiteMapBuilderSet>().ToArray()));
 
             container.RegisterSingle<VisitingSiteMapBuilder>();
         }
 
-        private static IEnumerable<ISiteMapBuilderSet> ResolveISiteMapBuilderSets(Container container)
+        private static IEnumerable<ISiteMapBuilderSet> ResolveISiteMapBuilderSets(Container container, bool securityTrimmingEnabled, bool enableLocalization)
         {
             yield return new SiteMapBuilderSet(
                 "default",
+                securityTrimmingEnabled,
+                enableLocalization,
                 new CompositeSiteMapBuilder(
                     container.GetInstance<XmlSiteMapBuilder>(),
                     container.GetInstance<ReflectionSiteMapBuilder>(),

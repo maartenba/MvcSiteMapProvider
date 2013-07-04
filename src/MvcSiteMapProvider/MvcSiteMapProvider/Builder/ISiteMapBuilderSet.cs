@@ -10,6 +10,7 @@ namespace MvcSiteMapProvider.Builder
     /// <see cref="T:MvcSiteMapProvider.Caching.ISiteMapCacheKeyToBuilderSetMapper"/>.
     /// </summary>
     public interface ISiteMapBuilderSet
+        : ISiteMapSettings
     {
         ISiteMapBuilder Builder { get; }
         ICacheDetails CacheDetails { get; }

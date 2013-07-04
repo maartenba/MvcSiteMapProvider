@@ -11,6 +11,8 @@ namespace MvcSiteMapProvider.Builder
     {
         public SiteMapBuilderSet(
             string instanceName,
+            bool securityTrimmingEnabled,
+            bool enableLocalization,
             ISiteMapBuilder siteMapBuilder,
             ICacheDetails cacheDetails
             )
@@ -23,11 +25,15 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("cacheDetails");
 
             this.instanceName = instanceName;
+            this.securityTrimmingEnabled = securityTrimmingEnabled;
+            this.enableLocalization = enableLocalization;
             this.siteMapBuilder = siteMapBuilder;
             this.cacheDetails = cacheDetails;
         }
 
         protected readonly string instanceName;
+        protected readonly bool securityTrimmingEnabled;
+        protected readonly bool enableLocalization;
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly ICacheDetails cacheDetails;
 
@@ -42,6 +48,16 @@ namespace MvcSiteMapProvider.Builder
         public virtual ICacheDetails CacheDetails
         {
             get { return this.cacheDetails; }
+        }
+
+        public virtual bool SecurityTrimmingEnabled
+        {
+            get { return this.securityTrimmingEnabled; }
+        }
+
+        public virtual bool EnableLocalization
+        {
+            get { return this.enableLocalization; }
         }
 
         public virtual bool AppliesTo(string builderSetName)

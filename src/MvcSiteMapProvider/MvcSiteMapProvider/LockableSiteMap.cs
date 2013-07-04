@@ -15,9 +15,10 @@ namespace MvcSiteMapProvider
             ISiteMapPluginProvider pluginProvider,
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            ISiteMapSettings siteMapSettings
             )
-            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath)
+            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath, siteMapSettings)
         {
         }
 
@@ -55,17 +56,6 @@ namespace MvcSiteMapProvider
             this.IsReadOnly = true;
         }
 
-
-        public override bool EnableLocalization
-        {
-            get { return base.EnableLocalization; }
-            set
-            {
-                this.ThrowIfReadOnly();
-                base.EnableLocalization = value;
-            }
-        }
-
         public override string ResourceKey
         {
             get { return base.ResourceKey; }
@@ -73,16 +63,6 @@ namespace MvcSiteMapProvider
             {
                 this.ThrowIfReadOnly();
                 base.ResourceKey = value;
-            }
-        }
-
-        public sealed override bool SecurityTrimmingEnabled
-        {
-            get { return base.SecurityTrimmingEnabled; }
-            set
-            {
-                this.ThrowIfReadOnly();
-                base.SecurityTrimmingEnabled = value;
             }
         }
 

@@ -71,7 +71,6 @@ namespace MvcSiteMapProvider.Builder
         protected virtual ISiteMapNode LoadSiteMapFromXml(ISiteMap siteMap, XDocument xml)
         {
             xmlNameProvider.FixXmlNamespaces(xml);
-            SetEnableLocalization(siteMap, xml);
 
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
             var rootElement = GetRootElement(xml);
@@ -80,25 +79,8 @@ namespace MvcSiteMapProvider.Builder
             // Process our XML, passing in the main root sitemap node and xml element.
             ProcessXmlNodes(siteMap, root, rootElement);
 
-            // NOTE: Setting security trimming as the last step improves performance.
-            SetSecurityTrimmingEnabled(siteMap, xml);
-
             // Done!
             return root;
-        }
-
-        protected virtual void SetEnableLocalization(ISiteMap siteMap, XDocument xml)
-        {
-            // Enable Localization?
-            siteMap.EnableLocalization = 
-                bool.Parse(xml.Element(xmlNameProvider.RootName).GetAttributeValueOrFallback("enableLocalization", "false"));
-        }
-
-        protected virtual void SetSecurityTrimmingEnabled(ISiteMap siteMap, XDocument xml)
-        {
-            // Enable Security Trimming?
-            siteMap.SecurityTrimmingEnabled = 
-                bool.Parse(xml.Element(xmlNameProvider.RootName).GetAttributeValueOrFallback("securityTrimmingEnabled", "false"));
         }
 
         protected virtual XElement GetRootElement(XDocument xml)

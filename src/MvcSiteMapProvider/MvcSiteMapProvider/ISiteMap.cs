@@ -21,7 +21,7 @@ namespace MvcSiteMapProvider
         void BuildSiteMap();
 
         ISiteMapNode CurrentNode { get; }
-        bool EnableLocalization { get; set; }
+        bool EnableLocalization { get; }
         ISiteMapNode FindSiteMapNode(string rawUrl);
         ISiteMapNode FindSiteMapNodeFromCurrentContext();
         ISiteMapNode FindSiteMapNode(ControllerContext context);
@@ -36,7 +36,7 @@ namespace MvcSiteMapProvider
         void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel);
         bool IsAccessibleToUser(ISiteMapNode node);
         string ResourceKey { get; set; }
-        bool SecurityTrimmingEnabled { get; set; }
+        bool SecurityTrimmingEnabled { get; }
         Type ResolveControllerType(string areaName, string controllerName);
         IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);
     }

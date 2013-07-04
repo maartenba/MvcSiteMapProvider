@@ -28,6 +28,8 @@ namespace DI.Unity.ContainerExtensions
     {
         protected override void Initialize()
         {
+            bool securityTrimmingEnabled = false;
+            bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
@@ -138,6 +140,8 @@ namespace DI.Unity.ContainerExtensions
             this.Container.RegisterType<ISiteMapBuilderSet, SiteMapBuilderSet>("builderSet1",
                 new InjectionConstructor(
                     "default",
+                    securityTrimmingEnabled,
+                    enableLocalization,
                     new ResolvedParameter<ISiteMapBuilder>(),
                     new ResolvedParameter<ICacheDetails>("cacheDetails")));
 

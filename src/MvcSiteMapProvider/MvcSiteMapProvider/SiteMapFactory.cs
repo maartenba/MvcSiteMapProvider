@@ -57,7 +57,7 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapFactory Members
 
-        public virtual ISiteMap Create(ISiteMapBuilder siteMapBuilder)
+        public virtual ISiteMap Create(ISiteMapBuilder siteMapBuilder, ISiteMapSettings siteMapSettings)
         {
             var routes = mvcContextFactory.GetRoutes();
             var requestCache = mvcContextFactory.GetRequestCache();
@@ -75,6 +75,7 @@ namespace MvcSiteMapProvider
                 mvcContextFactory,
                 siteMapChildStateFactory,
                 urlPath,
+                siteMapSettings,
                 requestCache);
         }
 

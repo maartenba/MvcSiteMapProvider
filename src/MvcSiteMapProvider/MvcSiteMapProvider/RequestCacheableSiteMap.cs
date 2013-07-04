@@ -21,9 +21,10 @@ namespace MvcSiteMapProvider
             IMvcContextFactory mvcContextFactory,
             ISiteMapChildStateFactory siteMapChildStateFactory,
             IUrlPath urlPath,
+            ISiteMapSettings siteMapSettings,
             IRequestCache requestCache
             )
-            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath)
+            : base(pluginProvider, mvcContextFactory, siteMapChildStateFactory, urlPath, siteMapSettings)
         {
             if (requestCache == null)
                 throw new ArgumentNullException("requestCache");

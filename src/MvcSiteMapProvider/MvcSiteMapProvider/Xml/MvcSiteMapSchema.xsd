@@ -236,8 +236,7 @@
   </xs:attributeGroup>
 
   <xs:attributeGroup name="siteMapAttributes">
-    <xs:attribute name="enableLocalization" type="small_boolean_Type" default="false" use="optional" />
-		<xs:attribute name="securityTrimmingEnabled" type="small_boolean_Type" default="false" use="optional" />
+		<!-- Put sitemap attributes here -->
   </xs:attributeGroup>
 
   <xs:simpleType name="small_boolean_Type">

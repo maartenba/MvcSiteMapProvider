@@ -70,7 +70,9 @@ namespace MvcSiteMapProvider.DI
             return new SiteMapBuilderSetStrategy(
                 new ISiteMapBuilderSet[] {
                     new SiteMapBuilderSet(
-                        "default",
+                        "default", 
+                        settings.SecurityTrimmingEnabled, 
+                        settings.EnableLocalization,
                         this.ResolveSiteMapBuilder(settings),
                         this.ResolveCacheDetails(settings)
                         )

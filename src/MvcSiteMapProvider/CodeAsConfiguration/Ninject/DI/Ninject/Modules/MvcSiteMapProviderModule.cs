@@ -27,6 +27,8 @@ namespace DI.Ninject.Modules
     {
         public override void Load()
         {
+            bool securityTrimmingEnabled = false;
+            bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
@@ -135,6 +137,8 @@ namespace DI.Ninject.Modules
             // Configure the builder sets
             this.Kernel.Bind<ISiteMapBuilderSet>().To<SiteMapBuilderSet>().Named("siteMapBuilderSet1")
                 .WithConstructorArgument("instanceName", "default")
+                .WithConstructorArgument("securityTrimmingEnabled", securityTrimmingEnabled)
+                .WithConstructorArgument("enableLocalization", enableLocalization)
                 .WithConstructorArgument("siteMapBuilder", this.Kernel.Get<ISiteMapBuilder>("compositeSiteMapBuilder"))
                 .WithConstructorArgument("cacheDetails", this.Kernel.Get<ICacheDetails>("cacheDetails1"));
 

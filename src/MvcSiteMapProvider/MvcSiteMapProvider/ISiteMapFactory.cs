@@ -8,6 +8,6 @@ namespace MvcSiteMapProvider
     /// </summary>
     public interface ISiteMapFactory
     {
-        ISiteMap Create(ISiteMapBuilder siteMapBuilder);
+        ISiteMap Create(ISiteMapBuilder siteMapBuilder, ISiteMapSettings siteMapSettings);
     }
 }
