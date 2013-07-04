@@ -34,7 +34,7 @@ namespace MvcSiteMapProvider.DI
 
         public object GetService(Type serviceType)
         {
-            if (serviceType != null && serviceType.Equals(typeof(XmlSiteMapController)))
+            if (typeof(XmlSiteMapController).Equals(serviceType))
             {
                 var xmlSiteMapResultFactoryContainer = new XmlSiteMapResultFactoryContainer(this.settings);
                 return new XmlSiteMapController(xmlSiteMapResultFactoryContainer.ResolveXmlSiteMapResultFactory());
@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider.DI
 
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            if (serviceType != null && serviceType.Equals(typeof(XmlSiteMapController)))
+            if (typeof(XmlSiteMapController).Equals(serviceType))
             {
                 var xmlSiteMapResultFactoryContainer = new XmlSiteMapResultFactoryContainer(this.settings);
                 return new List<object>() { new XmlSiteMapController(xmlSiteMapResultFactoryContainer.ResolveXmlSiteMapResultFactory()) };
