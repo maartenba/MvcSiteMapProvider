@@ -8,12 +8,17 @@ using DI;
     // TODO: Add DIConfig.Register(); to Global.asax file under Application_Start().
 #endif
 
+
 public class DIConfig
 {
     public static void Register()
     {
 #if NET35
         MvcSiteMapProvider.DI.Composer.Compose();
+#endif
+#if Demo
+        if (new MvcSiteMapProvider.DI.ConfigurationSettings().UseExternalDIContainer)
+        {
 #endif
         var container = CompositionRoot.Compose();
 #if !MVC2
@@ -47,6 +52,14 @@ public class DIConfig
         ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 #endif
         MvcSiteMapProviderConfig.Register(container);
+#if Demo
+        }
+        else
+        {
+            // Register the Sitemaps routes for search engines
+            MvcSiteMapProvider.Web.Mvc.XmlSiteMapController.RegisterRoutes(System.Web.Routing.RouteTable.Routes);
+        }
+#endif
     }
 }
 
