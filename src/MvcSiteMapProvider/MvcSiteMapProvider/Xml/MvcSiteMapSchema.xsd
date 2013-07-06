@@ -119,7 +119,7 @@
     <xs:attribute name="dynamicNodeProvider" type="xs:string" use="optional" >
       <xs:annotation>
         <xs:documentation>
-          A class name implementing MvcSiteMapProvider.Extensibility.IDynamicNodeProvider and providing dynamic nodes for the site map.
+          A class name implementing MvcSiteMapProvider.IDynamicNodeProvider and providing dynamic nodes for the site map.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
@@ -199,11 +199,18 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+
+		<xs:attribute name="httpMethod" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>
+					The HTTP method that will be used to check node accessibility. This value is used to select correct controller action if a controller has multiple action accepting different HTTP verbs. Set to * to use HTTP method of current request.
+				</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
   </xs:attributeGroup>
 
   <xs:attributeGroup name="fileNodeAttributes">
     <xs:attribute name="siteMapFile" type="xs:string" use="optional" />
-    <xs:attribute name="securityTrimmingEnabled" type="small_boolean_Type" default="false" />
   </xs:attributeGroup>
 
   <xs:attributeGroup name="providerNodeAttributes">
@@ -214,22 +221,22 @@
     <xs:attribute name="lastModifiedDate" type="xs:dateTime" use="optional">
       <xs:annotation>
         <xs:documentation>
-          Last modified date for the node.
-        </xs:documentation>
+					Last modified date for the node. Will be output to sitemaps XML for search engines.
+				</xs:documentation>
       </xs:annotation>
     </xs:attribute>
 
     <xs:attribute name="changeFrequency" type="changefrequency_type" use="optional" default="Undefined" >
       <xs:annotation>
         <xs:documentation>
-          Change frequency for the node.
-        </xs:documentation>
+					Change frequency for the node. Will be output to sitemaps XML for search engines.
+				</xs:documentation>
       </xs:annotation>
     </xs:attribute>
     <xs:attribute name="updatePriority" type="updatepriority_type" default="Undefined" use="optional">
       <xs:annotation>
         <xs:documentation>
-          Update priority for the node.
+          Update priority for the node. Will be output to sitemaps XML for search engines.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
