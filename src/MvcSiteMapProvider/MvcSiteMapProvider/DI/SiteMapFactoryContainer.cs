@@ -83,7 +83,7 @@ namespace MvcSiteMapProvider.DI
         private IControllerTypeResolverFactory ResolveControllerTypeResolverFactory()
         {
             return new ControllerTypeResolverFactory(
-                settings.ExcludeNamespacesForResolver,
+                settings.ControllerTypeResolverAreaNamespacesToIgnore,
                 new ControllerBuilderAdaptor(ControllerBuilder.Current),
                 new BuildManagerAdaptor()
                 );

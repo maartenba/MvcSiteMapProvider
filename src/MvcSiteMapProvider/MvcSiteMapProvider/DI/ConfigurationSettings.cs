@@ -22,7 +22,7 @@ namespace MvcSiteMapProvider.DI
             this.AttributesToIgnore = GetConfigurationValueOrFallback("MvcSiteMapProvider_AttributesToIgnore", "")
                 .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             this.CacheDuration = int.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_CacheDuration", "5"));
-            this.ExcludeNamespacesForResolver = GetConfigurationValueOrFallback("MvcSiteMapProvider_ExcludeNamespacesForResolver", "")
+            this.ControllerTypeResolverAreaNamespacesToIgnore = GetConfigurationValueOrFallback("MvcSiteMapProvider_ControllerTypeResolverAreaNamespacesToIgnore", "")
                 .Split(new char[] { '|', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             this.DefaultSiteMapNodeVisibiltyProvider = GetConfigurationValueOrFallback("MvcSiteMapProvider_DefaultSiteMapNodeVisibiltyProvider", String.Empty);
             this.EnableLocalization = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableLocalization", "true"));
@@ -36,7 +36,7 @@ namespace MvcSiteMapProvider.DI
         public IEnumerable<string> IncludeAssembliesForScan { get; private set; }
         public IEnumerable<string> AttributesToIgnore { get; private set; }
         public int CacheDuration { get; private set; }
-        public IEnumerable<string> ExcludeNamespacesForResolver { get; private set; }
+        public IEnumerable<string> ControllerTypeResolverAreaNamespacesToIgnore { get; private set; }
         public string DefaultSiteMapNodeVisibiltyProvider { get; private set; }
         public bool EnableLocalization { get; private set; }
         public bool SecurityTrimmingEnabled { get; private set; }
