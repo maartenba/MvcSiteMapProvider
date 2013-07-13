@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AmbiguousControllerFoundMultipleControllers" xml:space="preserve">
-    <value>Ambiguous controller. Found multiple controller types for {0}Controller. Consider narrowing the places to search by adding you controller namespaces to ControllerBuilder.Current.DefaultNamespaces.</value>
+    <value>Ambiguous controller. Found multiple controller types for '{0}Controller'.  The types that matched are: {1}Consider narrowing the places to search by adding your controller namespaces to ControllerBuilder.Current.DefaultNamespaces or exluding namespaces by adding them to the areaNamespacesToIgnore parameter of ControllerTypeResolverFactory.</value>
   </data>
   <data name="CannotEnumerateThreadSafeDictionary" xml:space="preserve">
     <value>Cannot enumerate a threadsafe dictionary. Instead, enumerate the keys or values collection.</value>

@@ -310,7 +310,12 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
             else if (matchingTypes.Count > 1)
             {
-                throw new AmbiguousControllerException(string.Format(Resources.Messages.AmbiguousControllerFoundMultipleControllers, controller));
+                string typeNames = Environment.NewLine + Environment.NewLine;
+                foreach (var matchingType in matchingTypes)
+                    typeNames += matchingType.FullName + Environment.NewLine;
+                typeNames += Environment.NewLine;
+
+                throw new AmbiguousControllerException(string.Format(Resources.Messages.AmbiguousControllerFoundMultipleControllers, controller, typeNames));
             }
             return null;
         }

@@ -61,7 +61,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ambiguous controller. Found multiple controller types for {0}Controller. Consider narrowing the places to search by adding you controller namespaces to ControllerBuilder.Current.DefaultNamespaces..
+        ///   Looks up a localized string similar to Ambiguous controller. Found multiple controller types for &apos;{0}Controller&apos;.  The types that matched are: {1}Consider narrowing the places to search by adding your controller namespaces to ControllerBuilder.Current.DefaultNamespaces or exluding namespaces by adding them to the areaNamespacesToIgnore parameter of ControllerTypeResolverFactory..
         /// </summary>
         internal static string AmbiguousControllerFoundMultipleControllers {
             get {
