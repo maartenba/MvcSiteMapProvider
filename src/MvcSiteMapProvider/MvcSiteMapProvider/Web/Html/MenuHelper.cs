@@ -969,7 +969,7 @@ namespace MvcSiteMapProvider.Web.Html
             if (node.IsAccessibleToUser())
             {
                 // Add node?
-                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent);
+                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent, startingNodeInChildLevel, model.Nodes);
                 // Check visibility
                 if (node.IsVisible(sourceMetadata))
                 {
@@ -979,11 +979,14 @@ namespace MvcSiteMapProvider.Web.Html
                     }
                 }
 
+                //// Add child nodes
+                //if (startingNodeInChildLevel)
+                //{
+                //    model.Nodes.AddRange(nodeToAdd.Descendants);
+                //}
+
                 // Add child nodes
-                if (startingNodeInChildLevel)
-                {
-                    model.Nodes.AddRange(nodeToAdd.Descendants);
-                }
+                model.Nodes.AddRange(nodeToAdd.Descendants);
             }
 
             return model;
