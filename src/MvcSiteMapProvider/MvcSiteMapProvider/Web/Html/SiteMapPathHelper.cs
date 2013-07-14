@@ -189,12 +189,19 @@ namespace MvcSiteMapProvider.Web.Html
             // Build model
             var model = new SiteMapPathHelperModel();
             var node = startingNode;
-            // Check visibility and ACL
-            if (node != null && node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
+            while (node != null)
             {
-                // Add node
-                model.Nodes.AddRange((new SiteMapNodeModel(node, sourceMetadata)).Ancestors);
+                // Check visibility and ACL
+                if (node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
+                {
+                    // Add node
+                    var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, sourceMetadata);
+                    model.Nodes.Add(nodeToAdd);
+                }
+                node = node.ParentNode;
             }
+            model.Nodes.Reverse();
+
             return model;
         }
 

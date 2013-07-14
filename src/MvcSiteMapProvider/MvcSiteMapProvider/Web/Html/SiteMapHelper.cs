@@ -328,13 +328,25 @@ namespace MvcSiteMapProvider.Web.Html
             if (node != null && node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
             {
                 // Add node
-                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata);
+                var nodeToAdd = SiteMapNodeModelMapper.MapToSiteMapNodeModel(node, sourceMetadata);
                 model.Nodes.Add(nodeToAdd);
 
                 // Add child nodes
-                if (startingNodeInChildLevel)
-                {
-                    model.Nodes.AddRange(nodeToAdd.Descendants);
+                if (node.HasChildNodes) {
+                    foreach (ISiteMapNode childNode in node.ChildNodes)
+                    {
+                        foreach (var childNodeToAdd in BuildModel(helper, sourceMetadata, childNode, false).Nodes)
+                        {
+                            if (!startingNodeInChildLevel)
+                            {
+                                nodeToAdd.Children.Add(childNodeToAdd);
+                            }
+                            else
+                            {
+                                model.Nodes.Add(childNodeToAdd);
+                            }
+                        }
+                    }
                 }
             }
 
