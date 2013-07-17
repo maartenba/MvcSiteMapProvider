@@ -973,16 +973,19 @@ namespace MvcSiteMapProvider.Web.Html
                 // Check visibility
                 if (node.IsVisible(sourceMetadata))
                 {
-                    if (showStartingNode || !startingNodeInChildLevel)
+                    if (showStartingNode)
                     {
                         model.Nodes.Add(nodeToAdd);
                     }
-                }
-
-                // Add child nodes
-                if (startingNodeInChildLevel)
-                {
-                    model.Nodes.AddRange(nodeToAdd.Descendants);
+                    // Add child nodes
+                    if (startingNodeInChildLevel)
+                    {
+                        model.Nodes.AddRange(nodeToAdd.Children);
+                    }
+                    else
+                    {
+                        model.Nodes.AddRange(nodeToAdd.Descendants);
+                    }
                 }
             }
 
