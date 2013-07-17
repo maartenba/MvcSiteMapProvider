@@ -102,7 +102,7 @@ namespace MvcSiteMapProvider.Web.Html
             // Map to model
             return new MetaRobotsHelperModel
             {
-                CurrentNode = SiteMapNodeModelMapper.MapToSiteMapNodeModel(startingNode, sourceMetadata)
+                CurrentNode = new SiteMapNodeModel(startingNode, sourceMetadata)
             };
         }
 
