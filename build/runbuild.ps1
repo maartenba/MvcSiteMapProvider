@@ -36,6 +36,9 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
+	
+	#link the legacy package to the highest MVC version
+	Create-MvcSiteMapProvider-Legacy-Package -mvc_version "4"
 
 	Create-MvcSiteMapProvider-Package -mvc_version "2"
 	Create-MvcSiteMapProvider-Package -mvc_version "3"
@@ -142,6 +145,29 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 	}
 	
 	dir $outdir | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
+}
+
+function Create-MvcSiteMapProvider-Legacy-Package ([string] $mvc_version) {
+	$output_nuspec_file = "$build_directory\mvcsitemapprovider\mvcsitemapprovider.nuspec"
+	Ensure-Directory-Exists $output_nuspec_file
+	Copy-Item $nuget_directory\mvcsitemapprovider.legacy\mvcsitemapprovider.nuspec "$output_nuspec_file.template"
+
+	$prerelease = Get-Prerelease-Text
+
+	#replace the tokens
+	(cat "$output_nuspec_file.template") `
+		-replace '#mvc_version#', "$mvc_version" `
+		-replace '#prerelease#', "$prerelease" `
+		> $output_nuspec_file 
+	
+	#delete the template file
+	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
+
+	Copy-Item $nuget_directory\mvcsitemapprovider.legacy\* $build_directory\mvcsitemapprovider -Recurse -Exclude @("*.nuspec", "*.nutrans")
+	
+    exec { 
+        &"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
+    }
 }
 
 function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {

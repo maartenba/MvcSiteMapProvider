@@ -40,7 +40,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>MvcSiteMapProvider.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Shared\MvcSiteMapProvider.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants Condition=" !$(DefineConstants.Contains(';NET')) ">$(DefineConstants);$(TargetFrameworkVersion.Replace("v", "NET").Replace(".", ""))</DefineConstants>
@@ -306,6 +306,7 @@
     <Compile Include="Web\Html\Models\SiteMapTitleHelperModel.cs" />
     <Compile Include="Web\Html\MvcSiteMapHtmlHelper.cs" />
     <Compile Include="Web\Html\SiteMapHelper.cs" />
+    <Compile Include="Web\Html\SiteMapNodeModelMapper.cs" />
     <Compile Include="Web\Html\SiteMapPathHelper.cs" />
     <Compile Include="Web\Html\SiteMapTitleHelper.cs" />
     <Compile Include="Web\IUrlPath.cs" />
@@ -337,7 +338,9 @@
     <EmbeddedResource Include="Xml\MvcSiteMapSchema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="MvcSiteMapProvider.snk" />
+    <None Include="..\Shared\MvcSiteMapProvider.snk">
+      <Link>MvcSiteMapProvider.snk</Link>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
