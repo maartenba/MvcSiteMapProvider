@@ -3,9 +3,17 @@
             xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"
             xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
 
-  <mvcSiteMapNode title="Home" controller="Home" action="Index">
-    <mvcSiteMapNode title="About" controller="Home" action="About"/>
+	<mvcSiteMapNode title="Home" controller="Home" action="Index">
+		<mvcSiteMapNode title="About" controller="Home" action="About"/>
 		<mvcSiteMapNode title="Contact" controller="Home" action="Contact"/>
-  </mvcSiteMapNode>
-
+		<mvcSiteMapNode title="A" controller="Home" action="A">
+			<mvcSiteMapNode title="A1" controller="Home" action="A1"/>
+			<mvcSiteMapNode title="A2" controller="Home" action="A2"/>
+			<mvcSiteMapNode title="A3" controller="Home" action="A3"/>
+		</mvcSiteMapNode>
+		<mvcSiteMapNode title="B" controller="Home" action="B">
+			<mvcSiteMapNode title="B1" controller="Home" action="B1"/>
+			<mvcSiteMapNode title="B2" controller="Home" action="B2"/>
+		</mvcSiteMapNode>
+	</mvcSiteMapNode>
 </mvcSiteMap>

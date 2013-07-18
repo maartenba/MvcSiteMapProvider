@@ -969,11 +969,11 @@ namespace MvcSiteMapProvider.Web.Html
             if (node.IsAccessibleToUser())
             {
                 // Add node?
-                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent);
+                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent, startingNodeInChildLevel);
                 // Check visibility
                 if (node.IsVisible(sourceMetadata))
                 {
-                    if (showStartingNode)
+                    if (showStartingNode || !startingNodeInChildLevel)
                     {
                         model.Nodes.Add(nodeToAdd);
                     }
@@ -981,10 +981,6 @@ namespace MvcSiteMapProvider.Web.Html
                     if (startingNodeInChildLevel)
                     {
                         model.Nodes.AddRange(nodeToAdd.Children);
-                    }
-                    else
-                    {
-                        model.Nodes.AddRange(nodeToAdd.Descendants);
                     }
                 }
             }
