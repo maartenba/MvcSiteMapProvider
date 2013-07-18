@@ -193,11 +193,18 @@ namespace MvcSiteMapProvider.Web.Html.Models
                         foreach (SiteMapNode child in node.ChildNodes)
                         {
                             if (child.IsAccessibleToUser() && child.IsVisible(SourceMetadata))
-                                children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, startingNodeInChildLevel));
+                                children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false));
                         }
                     }
                 }
-                return children;
+                if (startingNodeInChildLevel)
+                {
+                    var children_res = children;
+                    children = new SiteMapNodeModelList();
+                    maxDepth = 0;
+                    return children_res;
+                }
+                else return children;
             }
         }
 
