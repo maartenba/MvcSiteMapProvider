@@ -6,14 +6,19 @@
 	<mvcSiteMapNode title="Home" controller="Home" action="Index">
 		<mvcSiteMapNode title="About" controller="Home" action="About"/>
 		<mvcSiteMapNode title="Contact" controller="Home" action="Contact"/>
-		<mvcSiteMapNode title="A" controller="Home" action="A">
-			<mvcSiteMapNode title="A1" controller="Home" action="A1"/>
-			<mvcSiteMapNode title="A2" controller="Home" action="A2"/>
-			<mvcSiteMapNode title="A3" controller="Home" action="A3"/>
-		</mvcSiteMapNode>
-		<mvcSiteMapNode title="B" controller="Home" action="B">
-			<mvcSiteMapNode title="B1" controller="Home" action="B1"/>
-			<mvcSiteMapNode title="B2" controller="Home" action="B2"/>
+		<mvcSiteMapNode title="Test" controller="Test" action="Index">
+			<mvcSiteMapNode title="A" controller="Home" action="A">
+				<mvcSiteMapNode title="A1" controller="Home" action="A1"/>
+				<mvcSiteMapNode title="A2" controller="Home" action="A2"/>
+				<mvcSiteMapNode title="A3" controller="Home" action="A3">
+					<mvcSiteMapNode title="A3.1" controller="Home" action="A31"/>
+					<mvcSiteMapNode title="A3.2" controller="Home" action="A32"/>
+				</mvcSiteMapNode>
+			</mvcSiteMapNode>
+			<mvcSiteMapNode title="B" controller="Home" action="B">
+				<mvcSiteMapNode title="B1" controller="Home" action="B1"/>
+				<mvcSiteMapNode title="B2" controller="Home" action="B2"/>
+			</mvcSiteMapNode>
 		</mvcSiteMapNode>
 	</mvcSiteMapNode>
 </mvcSiteMap>

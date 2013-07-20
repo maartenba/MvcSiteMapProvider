@@ -1,0 +1,76 @@
+﻿@model MvcMenuTest.Models.TestCaseCollection
+@{
+    Model.Method01 = Html.MvcSiteMap().Menu;
+    Model.Method02 = Html.MvcSiteMap().Menu;
+    Model.Method03 = Html.MvcSiteMap().Menu;
+    Model.ExecuteMethod();
+}
+<style type="text/css">
+    .test-field label {
+        display: inline;
+        font-weight: normal;
+    }
+
+    .test-field b.p {
+        color: green;
+    }
+
+    .test-field b.f {
+        color: red;
+    }
+
+    .test-field .clear {
+        clear:both;
+    }
+    .test-field .detail {
+        display: none;
+    }
+
+    .test-field .input, .test-field .output {
+        float: left;
+        width: 45%;
+    }
+</style>
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('.test-field').find('.show-detail').click(function () {
+                $(this).next().next().slideToggle();
+            })
+        })
+    </script>
+}
+<div class="test-field">
+    @{
+        int i = 0;
+        foreach (var testcase in Model)
+        {
+            i++;
+            if (testcase.IsPassed)
+            {
+                <label>Case @i: <i>@testcase.Case</i> --></label><b class="p">Passed</b> <a class="show-detail" href="#">Detail>></a><br />
+                <div class="detail">
+                    @Html.Raw(testcase.Input)
+                </div>
+            }
+            else
+            {
+                <label>Case @i: <i>@testcase.Case</i> --></label><b class="f">Failed</b> <a class="show-detail" href="#">Detail>></a><br />
+                <div class="detail">
+                    <div class="input">
+                        <h4>Result</h4>
+                        @Html.Raw(testcase.Input)
+                    </div>
+                    <div class="output">
+                        <h4>Expected Result</h4>
+                        @Html.Raw(testcase.Output)
+                    </div>
+                </div>
+                <div class="clear"></div>
+            }
+        }
+    }
+</div>
+
+
