@@ -100,7 +100,9 @@ namespace MvcSiteMapProvider
 
         protected virtual string GetCacheKey(string memberName)
         {
-            return "__MVCSITEMAP_" + memberName + "_" + this.instanceId.ToString();
+            // NOTE: We must include IsReadOnly in the request cache key because we may have a different 
+            // result when the sitemap is being constructed than when it is being read by the presentation layer.
+            return "__MVCSITEMAP_" + memberName + "_" + this.IsReadOnly.ToString() + "_" + this.instanceId.ToString();
         }
 
         protected virtual string GetDictionaryKey(IDictionary<string, object> dictionary)
