@@ -2,7 +2,7 @@
 MvcSiteMapProvider is a tool that provides flexible menus, breadcrumb trails, and SEO features for the ASP.NET MVC framework, similar to the ASP.NET SiteMapProvider model.
 
 ## Upgrading from v3 to v4
-If you are upgrading from v3 to v4 see the [upgrade guide)[https://github.com/maartenba/MvcSiteMapProvider/wiki/Upgrading-from-v3-to-v4].
+If you are upgrading from v3 to v4 see the [upgrade guide](https://github.com/maartenba/MvcSiteMapProvider/wiki/Upgrading-from-v3-to-v4).
 
 ## What can it be used for?
 MvcSiteMapProvider is a tool targeted at ASP.NET MVC that provides menus, site maps, site map path functionality, and more. It provides the ability to configure a hierarchical navigation structure using a pluggable architecture that can be XML, database, or code driven. We have moved beyond a mere ASP.NET SiteMapProvider implementation to provide support for multi-tenant applications, flexible caching, dependency injection, and several interface-based extensibility points where virtually any part of the provider can be replaced with a custom implementation.
