@@ -52,10 +52,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                         {
                             continue;
                         }
-                        else if (pair.Key == "area")
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
