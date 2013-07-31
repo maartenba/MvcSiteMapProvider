@@ -31,32 +31,57 @@ namespace MvcSiteMapProvider.Collections.Specialized
             {
                 foreach (var pair in routeValues)
                 {
-                    if (this.ContainsKey(pair.Key) && this[pair.Key] != null && !string.IsNullOrEmpty(this[pair.Key].ToString()))
+                    if (!this.MatchesRouteValue(actionParameters, pair.Key, pair.Value))
                     {
-                        if (this[pair.Key].ToString().ToLowerInvariant() == pair.Value.ToString().ToLowerInvariant())
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            // Is the current pair.Key a parameter on the action method?
-                            if (!actionParameters.Contains(pair.Key, StringComparer.InvariantCultureIgnoreCase))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (pair.Value == null || string.IsNullOrEmpty(pair.Value.ToString()) || pair.Value == UrlParameter.Optional)
-                        {
-                            continue;
-                        }
                         return false;
                     }
                 }
             }
             return true;
+        }
+
+        protected virtual bool MatchesRouteValue(IEnumerable<string> actionParameters, string key, object value)
+        {
+            if (this.ValueExists(key))
+            {
+                if (this.MatchesValue(key, value) || this.MatchesActionMethodParameter(actionParameters, key, this[key]))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (this.IsEmptyValue(value))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        protected virtual bool MatchesActionMethodParameter(IEnumerable<string> actionParameters, string key, object configuredValue)
+        {
+            return actionParameters.Contains(key, StringComparer.InvariantCultureIgnoreCase) &&
+                configuredValue.ToString().Equals("*", StringComparison.InvariantCulture);
+        }
+
+        protected virtual bool MatchesValue(string key, object value)
+        {
+            return this[key].ToString().Equals(value.ToString(), StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        protected virtual bool IsEmptyValue(object value)
+        {
+            return value == null ||
+                string.IsNullOrEmpty(value.ToString()) || 
+                value == UrlParameter.Optional;
+        }
+
+        protected virtual bool ValueExists(string key)
+        {
+            return this.ContainsKey(key) && 
+                this[key] != null && 
+                !string.IsNullOrEmpty(this[key].ToString());
         }
     }
 }
