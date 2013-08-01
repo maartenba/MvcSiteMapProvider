@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         {
             if (this.ValueExists(key))
             {
-                if (this.MatchesValue(key, value) || this.MatchesActionMethodParameter(actionParameters, key, this[key]))
+                if (this.MatchesValue(key, value) || this.MatchesActionMethodParameter(actionParameters, key))
                 {
                     return true;
                 }
@@ -59,10 +59,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
             return false;
         }
 
-        protected virtual bool MatchesActionMethodParameter(IEnumerable<string> actionParameters, string key, object configuredValue)
+        protected virtual bool MatchesActionMethodParameter(IEnumerable<string> actionParameters, string key)
         {
-            return actionParameters.Contains(key, StringComparer.InvariantCultureIgnoreCase) &&
-                configuredValue.ToString().Equals("*", StringComparison.InvariantCulture);
+            return actionParameters.Contains(key, StringComparer.InvariantCultureIgnoreCase);
         }
 
         protected virtual bool MatchesValue(string key, object value)
