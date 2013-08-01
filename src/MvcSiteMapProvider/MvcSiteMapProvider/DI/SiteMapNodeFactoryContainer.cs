@@ -108,8 +108,12 @@ namespace MvcSiteMapProvider.DI
             var instantiator = new PluginInstantiator<ISiteMapNodeVisibilityProvider>();
             var xmlSource = new FileXmlSource(this.absoluteFileName);
             var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "visibilityProvider");
+
             // Fixes #196, default instance not created.
-            typeNames.Add(defaultVisibilityProviderName);
+            if (!String.IsNullOrEmpty(defaultVisibilityProviderName) && !typeNames.Contains(defaultVisibilityProviderName))
+            {
+                typeNames.Add(defaultVisibilityProviderName);
+            }
             var providers = instantiator.GetInstances(typeNames);
             return providers.ToArray();
         }
