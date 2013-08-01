@@ -318,7 +318,7 @@ namespace MvcSiteMapProvider
         public virtual ISiteMapNode FindSiteMapNodeFromKey(string key)
         {
             ISiteMapNode node = this.FindSiteMapNode(key);
-            if (node == null)
+            if (node == null && this.keyTable.ContainsKey(key))
             {
                 node = this.keyTable[key];
             }

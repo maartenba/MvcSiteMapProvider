@@ -231,6 +231,13 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
+            // Fixes #192 root node not added to sitemap
+            if (siteMap.FindSiteMapNodeFromKey(parentNode.Key) == null)
+            {
+                // Add the root node to the sitemap
+                siteMap.AddNode(parentNode);
+            }
+
             // Create nodes
             foreach (var assemblyNode in definitions.Where(t => !String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)))
             {

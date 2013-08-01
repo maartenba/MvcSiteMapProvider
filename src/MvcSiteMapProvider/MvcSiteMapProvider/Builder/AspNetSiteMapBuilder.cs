@@ -66,6 +66,13 @@ namespace MvcSiteMapProvider.Builder
             var provider = siteMapProvider.GetProvider();
 
             rootNode = GetRootNode(siteMap, provider);
+            // Fixes #192 root node not added to sitemap
+            if (siteMap.FindSiteMapNodeFromKey(rootNode.Key) == null)
+            {
+                // Add the root node to the sitemap
+                siteMap.AddNode(rootNode);
+            }
+
             ProcessNodes(siteMap, rootNode, provider.RootNode);
 
             return rootNode;
