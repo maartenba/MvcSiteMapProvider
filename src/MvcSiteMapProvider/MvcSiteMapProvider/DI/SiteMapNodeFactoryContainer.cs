@@ -30,7 +30,7 @@ namespace MvcSiteMapProvider.DI
             this.urlPath = urlPath;
             this.dynamicNodeProviders = this.ResolveDynamicNodeProviders();
             this.siteMapNodeUrlResolvers = this.ResolveSiteMapNodeUrlResolvers();
-            this.siteMapNodeVisibilityProviders = this.ResolveSiteMapNodeVisibilityProviders();
+            this.siteMapNodeVisibilityProviders = this.ResolveSiteMapNodeVisibilityProviders(settings.DefaultSiteMapNodeVisibiltyProvider);
         }
 
         private readonly string absoluteFileName;
@@ -103,11 +103,13 @@ namespace MvcSiteMapProvider.DI
             return providers.ToArray();
         }
 
-        private ISiteMapNodeVisibilityProvider[] ResolveSiteMapNodeVisibilityProviders()
+        private ISiteMapNodeVisibilityProvider[] ResolveSiteMapNodeVisibilityProviders(string defaultVisibilityProviderName)
         {
             var instantiator = new PluginInstantiator<ISiteMapNodeVisibilityProvider>();
             var xmlSource = new FileXmlSource(this.absoluteFileName);
             var typeNames = xmlAggergator.GetAttributeValues(xmlSource, "visibilityProvider");
+            // Fixes #196, default instance not created.
+            typeNames.Add(defaultVisibilityProviderName);
             var providers = instantiator.GetInstances(typeNames);
             return providers.ToArray();
         }
