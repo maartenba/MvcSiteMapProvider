@@ -143,6 +143,7 @@
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
     <Compile Include="Security\IAuthorizeAttributeBuilder.cs" />
+    <Compile Include="TrimEmptyGroupingNodesVisibilityProvider.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Web\Mvc\Filters\Filter.cs" />
     <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
