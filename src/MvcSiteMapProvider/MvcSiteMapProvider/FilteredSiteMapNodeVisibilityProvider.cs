@@ -6,8 +6,6 @@ namespace MvcSiteMapProvider
     /// <summary>
     /// Filtered SiteMapNode Visibility Provider.
     /// 
-    /// The Web.config setting should specify attributesToIgnore=&quot;visibility&quot; in order to use this class!
-    /// 
     /// Rules are parsed left-to-right, first match wins. Asterisk can be used to match any control. Exclamation mark can be used to negate a match.
     /// </summary>
     public class FilteredSiteMapNodeVisibilityProvider
