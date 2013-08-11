@@ -45,6 +45,7 @@ Other places around the web have some documentation that is helpful for getting 
 
 - [MvcSiteMapProvider 4.0 - A Test Drive] (http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
 - [MvcSiteMapProvider 4.0 - SEO Features Tutorial] (http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
+- [MvcSiteMapProvider 4.0 - Cache Configuration] (http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
 - [Converting from C# to Vb MvcSiteMapProvider] (http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
 - [NightOwl888's MvcSiteMapProvider Demos] (https://github.com/NightOwl888?tab=repositories) - Filter for "MvcSiteMapProvider" to see the most relevant.
 
