@@ -34,3 +34,38 @@ MvcSiteMapProvider used the psake build engine to build the project. Psake is a 
 
 ## Acknowledgements
 The downloads page features an example application. The example code is all based on the excellent [ASP.NET MVC Music Store sample application](http://www.asp.net/mvc/videos/mvc-2/music-store/mvc-music-store-part-1-intro,-tools,-and-project-structure) by [Jon Galloway](http://weblogs.asp.net/jgalloway/).
+
+## Unofficial Documentation and Resources
+
+Other places around the web have some documentation that is helpful for getting started and finding answers that are not found here.
+
+### Tutorials
+
+#### Version 4.x
+
+- [MvcSiteMapProvider 4.0 - A Test Drive] (http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
+- [MvcSiteMapProvider 4.0 - SEO Features Tutorial] (http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
+- [Converting from C# to Vb MvcSiteMapProvider] (http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
+
+#### Version 3.x
+
+- [MvcSiteMapProvider Tutorial and Examples] (http://edspencer.me.uk/2011/02/10/mvc-sitemap-provider-tutorial/)
+- [MvcSiteMapProvider Tutorial 2 - Breadcrumbs] (http://edspencer.me.uk/2011/09/20/mvc-sitemap-provider-tutorial-2-breadcrumbs/)
+- [Getting Started with MvcSiteMapProvider] (http://blog.danstuken.com/2011/04/29/getting-started-with-mvcsitemapprovider/)
+- [Inside the MvcSiteMapProvider - Part 1] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-1.html)
+- [Inside the MvcSiteMapProvider - Part 2: Dynamic node providers] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-2.html)
+- [Inside the MvcSiteMapProvider - Part 3: The ISiteMapVisibilityProvider] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-3.html)
+- [Inside the MvcSiteMapProvider - Part 4: The IAclModule] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-4.html)
+- [Inside the MvcSiteMapProvider - Part 5: The ISiteMapNodeUrlResolver] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-5.html)
+
+### Forums and Q & A Sites
+
+- [StackOverflow MvcSiteMapProvider] (http://stackoverflow.com/questions/tagged/mvcsitemapprovider)
+- [StackOverflow MvcSiteMap] (http://stackoverflow.com/questions/tagged/mvcsitemap)
+- [CodePlex Discussion Forum (no longer maintained)] (http://mvcsitemap.codeplex.com/discussions/topics/general?size=2147483647)
+- [Telerik Forum] (http://www.telerik.com/search.aspx?insection=False&start=0&client=telerik_developer_tools&q=MvcSiteMapProvider&sid=1)
+
+### Other Blog Posts
+
+- http://blog.maartenballiauw.be/search.aspx?q=mvcsitemapprovider
+- http://www.shiningtreasures.com/category/MvcSiteMapProvider
