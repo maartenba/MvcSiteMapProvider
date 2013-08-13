@@ -8,6 +8,10 @@ Right click MvcMusicStore > Unload Project, right click again, Reload Project.
 In each of the following groups, no more than 1 constant should be entered at a time.
 However, you can combine constants from multiple groups at the same time.
 
+DEMO:
+
+Demo - Required to ensure our MvcSiteMapProvider_UseExternalDIContainer = false setting will work in the demo. Omit if this is not a demo.
+
 DOT NET VERSION:
 
 NET35
@@ -24,8 +28,10 @@ DEPENDENCY INJECTION CONTAINER:
 
 Autofac
 Ninject
+SimpleInjector
 StructureMap
 Unity
+Windsor
 
 DEPENDENCY INJECTION METHOD:
 
@@ -37,4 +43,4 @@ EXAMPLE USAGE:
 
 The following will compile under MVC4, .NET 4.0, StructureMap, and ControllerFactory
 
-MVC4;NET40;StructureMap
+Demo;MVC4;NET40;StructureMap
