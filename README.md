@@ -46,6 +46,7 @@ Other places around the web have some documentation that is helpful for getting 
 - [MvcSiteMapProvider 4.0 - A Test Drive] (http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
 - [MvcSiteMapProvider 4.0 - SEO Features Tutorial] (http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
 - [MvcSiteMapProvider 4.0 - Cache Configuration] (http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
+- [MvcSiteMapProvider 4.0 - Extending the Cache] (http://www.shiningtreasures.com/post/2013/08/13/mvcsitemapprovider-4-extending-the-cache)
 - [Converting from C# to Vb MvcSiteMapProvider] (http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
 - [NightOwl888's MvcSiteMapProvider Demos] (https://github.com/NightOwl888?tab=repositories) - Filter for "MvcSiteMapProvider" to see the most relevant.
 
@@ -59,6 +60,9 @@ Other places around the web have some documentation that is helpful for getting 
 - [Inside the MvcSiteMapProvider - Part 3: The ISiteMapVisibilityProvider] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-3.html)
 - [Inside the MvcSiteMapProvider - Part 4: The IAclModule] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-4.html)
 - [Inside the MvcSiteMapProvider - Part 5: The ISiteMapNodeUrlResolver] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-5.html)
+- [Styling MvcSiteMapProvider with CSS] (http://tutsblog.net/styling-mvc-sitemap-provider-with-css/)
+- [Using MvcSiteMapProvider with Twitter Bootstrap] (http://codingit.wordpress.com/2013/05/03/using-mvcsitemapprovider-with-twitter-bootstrap/)
+- [ASP.NET MVC Menu using Site Map Provider & Bootstrap Navbar] (http://joeylicc.wordpress.com/2013/06/04/asp-net-mvc-menu-using-site-map-provider-bootstrap-navbar/)
 
 ### Forums and Q & A Sites
 
