@@ -16,11 +16,21 @@ See the [documentation](https://github.com/maartenba/MvcSiteMapProvider/wiki)
 
 Stable releases:
 
-    Install-Package MvcSiteMapProvider
-	
+    Install-Package MvcSiteMapProvider.MVC4
+                   - or -
+    Install-Package MvcSiteMapProvider.MVC3
+                   - or -
+    Install-Package MvcSiteMapProvider.MVC2
+                   - or -
+Use one of our [dependency injection packages] (http://www.nuget.org/packages?q=mvcsitemapprovider.mvc*.di&prerelease=&sortOrder=package-download-count).
+
 Prefer continuous integration builds?
 
-    Install-Package MvcSiteMapProvider -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
+    Install-Package MvcSiteMapProvider.MVC4 -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
+                   - or -
+    Install-Package MvcSiteMapProvider.MVC3 -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
+                   - or -
+    Install-Package MvcSiteMapProvider.MVC2 -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
 
 ## License
 [MS-PL License](https://github.com/maartenba/MvcSiteMapProvider/blob/master/LICENSE.md)
@@ -47,6 +57,7 @@ Other places around the web have some documentation that is helpful for getting 
 - [MvcSiteMapProvider 4.0 - SEO Features Tutorial] (http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
 - [MvcSiteMapProvider 4.0 - Cache Configuration] (http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
 - [MvcSiteMapProvider 4.0 - Extending the Cache] (http://www.shiningtreasures.com/post/2013/08/13/mvcsitemapprovider-4-extending-the-cache)
+- [MvcSiteMapProvider 4.0 - Unit Testing with the SiteMaps Static Methods] (http://www.shiningtreasures.com/post/2013/08/14/mvcsitemapprovider-4-unit-testing-with-the-sitemaps-static-methods)
 - [Converting from C# to Vb MvcSiteMapProvider] (http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
 - [NightOwl888's MvcSiteMapProvider Demos] (https://github.com/NightOwl888?tab=repositories) - Filter for "MvcSiteMapProvider" to see the most relevant.
 
