@@ -687,7 +687,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, false);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
