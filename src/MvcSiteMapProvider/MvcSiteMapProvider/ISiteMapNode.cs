@@ -18,6 +18,8 @@ namespace MvcSiteMapProvider
 
         ISiteMapNode ParentNode { get; }
         ISiteMapNodeCollection ChildNodes { get; }
+        ISiteMapNodeCollection Descendants { get; }
+        ISiteMapNodeCollection Ancestors { get; }
         bool IsDescendantOf(ISiteMapNode node);
         ISiteMapNode NextSibling { get; }
         ISiteMapNode PreviousSibling { get; }

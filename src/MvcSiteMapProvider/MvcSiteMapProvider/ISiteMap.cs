@@ -27,6 +27,8 @@ namespace MvcSiteMapProvider
         ISiteMapNode FindSiteMapNode(ControllerContext context);
         ISiteMapNode FindSiteMapNodeFromKey(string key);
         ISiteMapNodeCollection GetChildNodes(ISiteMapNode node);
+        ISiteMapNodeCollection GetDescendants(ISiteMapNode node);
+        ISiteMapNodeCollection GetAncestors(ISiteMapNode node);
         ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel);
         ISiteMapNode GetCurrentNodeAndHintNeighborhoodNodes(int upLevel, int downLevel);
         ISiteMapNode GetParentNode(ISiteMapNode node);

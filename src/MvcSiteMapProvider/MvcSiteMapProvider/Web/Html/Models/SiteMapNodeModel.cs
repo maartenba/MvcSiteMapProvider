@@ -15,7 +15,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <param name="node">The node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
         public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
-            : this(node, sourceMetadata, Int32.MaxValue, true, false)
+            : this(node, sourceMetadata, Int32.MaxValue, true, false, true)
         {
         }
 
@@ -27,7 +27,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
-        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent, bool startingNodeInChildLevel)
+        public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata, int maxDepth, bool drillDownToCurrent, bool startingNodeInChildLevel, bool visibilityAffectsDescendants)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -56,6 +56,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             IsInCurrentPath = node.IsInCurrentPath();
             IsRootNode = (node == node.SiteMap.RootNode);
             IsClickable = node.Clickable;
+            VisibilityAffectsDescendants = visibilityAffectsDescendants;
             RouteValues = node.RouteValues;
             Attributes = node.Attributes;
         }
@@ -159,7 +160,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// 	<c>true</c> if this instance is clickable; otherwise, <c>false</c>.
         /// </value>
         public bool IsClickable { get; protected set; }
-
+        public bool VisibilityAffectsDescendants { get; protected set; }
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>
@@ -190,10 +191,34 @@ namespace MvcSiteMapProvider.Web.Html.Models
                     children = new SiteMapNodeModelList();
                     if (ReachedMaximalNodelevel(maxDepth, node, drillDownToCurrent) && node.HasChildNodes)
                     {
-                        foreach (SiteMapNode child in node.ChildNodes)
+                        if (VisibilityAffectsDescendants)
                         {
-                            if (child.IsAccessibleToUser() && child.IsVisible(SourceMetadata) && maxDepth > 0)
-                                children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false));
+                            foreach (var child in node.ChildNodes)
+                            {
+                                if (child.IsAccessibleToUser() && child.IsVisible(SourceMetadata) && maxDepth > 0)
+                                {
+                                    children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            NVDList = new List<SiteMapNodeModel>();
+                            foreach (var child in node.ChildNodes)
+                            {
+                                if (child.IsAccessibleToUser())
+                                {
+                                    if (child.IsVisible(SourceMetadata) && maxDepth > 0)
+                                    {
+                                        children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
+                                    }
+                                    else if (maxDepth > 0)
+                                    {
+                                        FindNearestVisibleDescendants(child, maxDepth - 1);
+                                        children.AddRange(NVDList);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -208,6 +233,25 @@ namespace MvcSiteMapProvider.Web.Html.Models
             }
         }
 
+        private List<SiteMapNodeModel> NVDList;
+        private void FindNearestVisibleDescendants(ISiteMapNode node, int maxDepth)
+        {
+            foreach (var child in node.ChildNodes)
+            {
+                if (child.IsAccessibleToUser())
+                {
+                    if (child.IsVisible(SourceMetadata))
+                    {
+                        NVDList.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
+                    }
+                    else if (maxDepth > 0)
+                    {
+                        FindNearestVisibleDescendants(child, maxDepth - 1);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Gets the parent
         /// </summary>
@@ -217,7 +261,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             {
                 return node.ParentNode == null
                     ? null
-                    : new SiteMapNodeModel(node.ParentNode, SourceMetadata, maxDepth == Int32.MaxValue ? Int32.MaxValue : maxDepth + 1, drillDownToCurrent, startingNodeInChildLevel);
+                    : new SiteMapNodeModel(node.ParentNode, SourceMetadata, maxDepth == Int32.MaxValue ? Int32.MaxValue : maxDepth + 1, drillDownToCurrent, startingNodeInChildLevel, VisibilityAffectsDescendants);
             }
         }
 
@@ -301,9 +345,9 @@ namespace MvcSiteMapProvider.Web.Html.Models
         {
             if (node.Parent != null)
             {
+                ancestors.Add(node.Parent);
                 GetAncestors(node.Parent);
             }
-            ancestors.Add(node);
         }
     }
 }
