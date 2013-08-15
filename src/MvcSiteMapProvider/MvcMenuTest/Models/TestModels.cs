@@ -26,7 +26,7 @@ namespace MvcMenuTest.Models
                 Case = "@Html.MvcSiteMap().Menu(true, false, true)",
                 MethodForTest = TestCase.Method.M1,
                 Param = new object[] { true, false, true },
-                Output = RenderOutput(
+                ExpectedOutput = RenderOutput(
                 new Node(null, "Root",
                     new Node("/Test", "Test",
                         new Node("/Home/A", "A",
@@ -49,7 +49,7 @@ namespace MvcMenuTest.Models
                 Case = "@Html.MvcSiteMap().Menu(false, true, false)",
                 MethodForTest = TestCase.Method.M1,
                 Param = new object[] { false, true, false },
-                Output = RenderOutput(
+                ExpectedOutput = RenderOutput(
                 new Node(null, "Root",
                     new Node("/Home/About", "About"),
                     new Node("/Home/Contact", "Contact"),
@@ -74,7 +74,7 @@ namespace MvcMenuTest.Models
                 Case = "@Html.MvcSiteMap().Menu(0, true, false, 2)",
                 MethodForTest = TestCase.Method.M2,
                 Param = new object[] { 0, true, false, 2 },
-                Output = RenderOutput(
+                ExpectedOutput = RenderOutput(
                 new Node(null, "Root",
                     new Node("/Home/About", "About"),
                     new Node("/Home/Contact", "Contact"),
@@ -89,7 +89,7 @@ namespace MvcMenuTest.Models
                 Case = "@Html.MvcSiteMap().Menu(0, false, true, 1)",
                 MethodForTest = TestCase.Method.M2,
                 Param = new object[] { 0, false, true, 1 },
-                Output = RenderOutput(
+                ExpectedOutput = RenderOutput(
                 new Node(null, "Root",
                     new Node("/", "Home",
                         new Node("/Home/About", "About"),
@@ -103,7 +103,7 @@ namespace MvcMenuTest.Models
                 Case = "@Html.MvcSiteMap().Menu(0, false, true, 2, true, true)",
                 MethodForTest = TestCase.Method.M3,
                 Param = new object[] { 0, false, true, 2, true, true },
-                Output = RenderOutput(
+                ExpectedOutput = RenderOutput(
                 new Node(null, "Root",
                     new Node("/", "Home",
                         new Node("/Home/About", "About"),
@@ -123,13 +123,13 @@ namespace MvcMenuTest.Models
                 switch (item.MethodForTest)
                 {
                     case TestCase.Method.M1:
-                        item.Input = Method01.Invoke((bool)item.Param[0], (bool)item.Param[1], (bool)item.Param[2]).ToHtmlString();
+                        item.Output = Method01.Invoke((bool)item.Param[0], (bool)item.Param[1], (bool)item.Param[2]).ToHtmlString();
                         break;
                     case TestCase.Method.M2:
-                        item.Input = Method02.Invoke((int)item.Param[0], (bool)item.Param[1], (bool)item.Param[2], (int)item.Param[3]).ToHtmlString();
+                        item.Output = Method02.Invoke((int)item.Param[0], (bool)item.Param[1], (bool)item.Param[2], (int)item.Param[3]).ToHtmlString();
                         break;
                     case TestCase.Method.M3:
-                        item.Input = Method03.Invoke((int)item.Param[0], (bool)item.Param[1], (bool)item.Param[2], (int)item.Param[3], (bool)item.Param[4], (bool)item.Param[5]).ToHtmlString();
+                        item.Output = Method03.Invoke((int)item.Param[0], (bool)item.Param[1], (bool)item.Param[2], (int)item.Param[3], (bool)item.Param[4], (bool)item.Param[5]).ToHtmlString();
                         break;
                 }
             }
@@ -191,23 +191,23 @@ namespace MvcMenuTest.Models
         public Method MethodForTest { get; set; }
         public string Case { get; set; }
         public object[] Param { get; set; }
-        private string _input;
-        public string Input
+        private string _output;
+        public string Output
         {
             get
             {
-                return _input;
+                return _output;
             }
             set
             {
-                _input = value.Replace("\r\n", String.Empty);
-                _input = Regex.Replace(_input, @"[ ]+(?=<)", String.Empty);
+                _output = value.Replace("\r\n", String.Empty);
+                _output = Regex.Replace(_output, @"[ ]+(?=<)", String.Empty);
             }
         }
-        public string Output { get; set; }
+        public string ExpectedOutput { get; set; }
         public bool IsPassed
         {
-            get { return Input == Output; }
+            get { return Output == ExpectedOutput; }
         }
     }
 }

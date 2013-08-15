@@ -36,6 +36,14 @@ namespace MvcSiteMapProvider
         {
             get { return this.SiteMap.GetChildNodes(this); }
         }
+        public override ISiteMapNodeCollection Descendants
+        {
+            get { return this.SiteMap.GetDescendants(this); }
+        }
+        public override ISiteMapNodeCollection Ancestors
+        {
+            get { return this.SiteMap.GetAncestors(this); }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the current site map node is a child or a direct descendant of the specified node.
@@ -175,7 +183,6 @@ namespace MvcSiteMapProvider
             }
             return level;
         }
-
         #endregion
     }
 }

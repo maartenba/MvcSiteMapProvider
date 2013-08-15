@@ -18,7 +18,7 @@ namespace MvcSiteMapProvider
     /// This class was created by extracting the public intefaces of SiteMapProvider, 
     /// StaticSiteMapProvider, and MvcSiteMapProvider.DefaultSiteMapProvider.
     /// </remarks>
-    public class SiteMap 
+    public class SiteMap
         : ISiteMap
     {
         public SiteMap(
@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider
             this.siteMapChildStateFactory = siteMapChildStateFactory;
             this.urlPath = urlPath;
             this.siteMapSettings = siteMapSettings;
-            
+
             // Initialize dictionaries
             this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
             this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
@@ -251,7 +251,7 @@ namespace MvcSiteMapProvider
         /// null, if the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> is not found or cannot be returned for the current user.</returns>
         public virtual ISiteMapNode CurrentNode
         {
-            get 
+            get
             {
                 var currentNode = this.FindSiteMapNodeFromCurrentContext();
                 return this.ReturnNodeIfAccessible(currentNode);
@@ -266,9 +266,9 @@ namespace MvcSiteMapProvider
         /// The EnableLocalization property is used for the get accessor of the Title and Description properties, as well as additional 
         /// Attributes properties of a SiteMapNode object.
         /// </remarks>
-        public virtual bool EnableLocalization 
+        public virtual bool EnableLocalization
         {
-            get { return this.siteMapSettings.EnableLocalization; } 
+            get { return this.siteMapSettings.EnableLocalization; }
         }
 
         public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
@@ -365,6 +365,42 @@ namespace MvcSiteMapProvider
                 }
             }
             return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(secureCollection);
+        }
+        private ISiteMapNodeCollection _descendants;
+        private ISiteMapNodeCollection _ancestors;
+        private void FindAllDescendants(ISiteMapNode node)
+        {
+            foreach (var child in node.ChildNodes)
+            {
+                _descendants.Add(child);
+                FindAllDescendants(child);
+            }
+        }
+        private void FindAllAncestors(ISiteMapNode node)
+        {
+            if (node.ParentNode != null)
+            {
+                _ancestors.Add(node.ParentNode);
+                FindAllAncestors(node.ParentNode);
+            }
+        }
+        public virtual ISiteMapNodeCollection GetDescendants(ISiteMapNode node)
+        {
+            if (_descendants == null)
+            {
+                _descendants = siteMapChildStateFactory.CreateSiteMapNodeCollection();
+                FindAllDescendants(node);
+            }
+            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(_descendants);
+        }
+        public virtual ISiteMapNodeCollection GetAncestors(ISiteMapNode node)
+        {
+            if (_ancestors == null)
+            {
+                _ancestors = siteMapChildStateFactory.CreateSiteMapNodeCollection();
+                FindAllAncestors(node);
+            }
+            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(_ancestors);
         }
 
         public virtual ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel)

@@ -936,7 +936,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            var model = BuildModel(helper, GetSourceMetadata(sourceMetadata), startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent);
+            var model = BuildModel(helper, GetSourceMetadata(sourceMetadata), startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, false);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -953,7 +953,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
         /// <returns>The model.</returns>
-        private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent)
+        private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, bool visibilityAffectsDescendants)
         {
             // Build model
             var model = new MenuHelperModel();
@@ -969,7 +969,7 @@ namespace MvcSiteMapProvider.Web.Html
             if (node.IsAccessibleToUser())
             {
                 // Add node?
-                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent, startingNodeInChildLevel);
+                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent, startingNodeInChildLevel, visibilityAffectsDescendants);
                 // Check visibility
                 if (node.IsVisible(sourceMetadata))
                 {
@@ -982,6 +982,10 @@ namespace MvcSiteMapProvider.Web.Html
                     {
                         model.Nodes.AddRange(nodeToAdd.Children);
                     }
+                }
+                else if (!visibilityAffectsDescendants)
+                {
+                    model.Nodes.AddRange(nodeToAdd.Children);
                 }
             }
 
@@ -1000,7 +1004,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>The model.</returns>
         private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
-            return BuildModel(helper, sourceMetadata, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false);
+            return BuildModel(helper, sourceMetadata, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false, true);
         }
 
         /// <summary>
