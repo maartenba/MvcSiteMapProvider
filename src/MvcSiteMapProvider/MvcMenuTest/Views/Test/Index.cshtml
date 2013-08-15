@@ -51,7 +51,7 @@
             {
                 <label>Case @i: <i>@testcase.Case</i> --></label><b class="p">Passed</b> <a class="show-detail" href="#">Detail>></a><br />
                 <div class="detail">
-                    @Html.Raw(testcase.Input)
+                    @Html.Raw(testcase.Output)
                 </div>
             }
             else
@@ -60,11 +60,11 @@
                 <div class="detail">
                     <div class="input">
                         <h4>Result</h4>
-                        @Html.Raw(testcase.Input)
+                        @Html.Raw(testcase.Output)
                     </div>
                     <div class="output">
                         <h4>Expected Result</h4>
-                        @Html.Raw(testcase.Output)
+                        @Html.Raw(testcase.ExpectedOutput)
                     </div>
                 </div>
                 <div class="clear"></div>

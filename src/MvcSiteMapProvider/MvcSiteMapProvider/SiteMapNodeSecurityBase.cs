@@ -35,6 +35,8 @@ namespace MvcSiteMapProvider
         public abstract bool IsReadOnly { get; }
         public abstract ISiteMapNode ParentNode { get; }
         public abstract ISiteMapNodeCollection ChildNodes { get; }
+        public abstract ISiteMapNodeCollection Descendants { get; }
+        public abstract ISiteMapNodeCollection Ancestors { get; }
         public abstract bool IsDescendantOf(ISiteMapNode node);
         public abstract ISiteMapNode NextSibling { get; }
         public abstract ISiteMapNode PreviousSibling { get; }
