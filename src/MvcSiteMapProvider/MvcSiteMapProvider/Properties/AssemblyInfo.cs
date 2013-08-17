@@ -6,3 +6,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitleAttribute("MvcSiteMapProvider")]
 [assembly: AssemblyDescriptionAttribute("An ASP.NET SiteMapProvider implementation for the ASP.NET MVC framework.")]
 [assembly: AssemblyProductAttribute("MvcSiteMapProvider")]
+
+// Allow visibility of internals for Unit testing
+[assembly: InternalsVisibleTo("MvcSiteMapProvider.Tests,PublicKey=0024000004800000940000000602000000240000525341310004000001000100efaedb2766fd34ea7a5835e014ced460f45d1409f91f6412581ffcd9a365cb6487e803bc7c18b3c3bda36577f51d6ae67998d9c3b0255723b9d288684b53928a108bcf533f6aeb8e6f6ee19c909f048e614f43f71164ad791290230fa6327923bc8ad83c39092f16d91a20eb900392cdcde03c9d91941fcd0d08f310ef9645be")]
