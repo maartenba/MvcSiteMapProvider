@@ -96,10 +96,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Collections\Specialized\RouteValueDictionaryTest.cs" />
     <Compile Include="Unit\Loader\SiteMapLoaderTest.cs" />
-    <Compile Include="Unit\Web\Html\FakeContext.cs" />
     <Compile Include="Unit\Web\Html\FakeSiteMap.cs" />
     <Compile Include="Unit\Web\Html\FakeSiteMapNode.cs" />
+    <Compile Include="Unit\Web\Html\HtmlHelperTestCases.cs" />
     <Compile Include="Unit\Web\Html\MenuHelperTest.cs" />
+    <Compile Include="Unit\Web\Html\SiteMapHelperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shared\MvcSiteMapProvider.snk">

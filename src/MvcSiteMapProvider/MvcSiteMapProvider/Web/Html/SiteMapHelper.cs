@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
@@ -304,7 +305,49 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, SourceMetadataDictionary sourceMetadata)
         {
-            var model = BuildModel(helper, GetSourceMetadata(sourceMetadata), startingNode, rootInChildLevel);
+            return SiteMap(helper, templateName, startingNode, rootInChildLevel, true, sourceMetadata);
+        }
+
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, bool visibilityAffectsDescendants)
+        {
+            return SiteMap(helper, templateName, startingNode, rootInChildLevel, visibilityAffectsDescendants, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, bool visibilityAffectsDescendants, object sourceMetadata)
+        {
+            return SiteMap(helper, templateName, startingNode, rootInChildLevel, visibilityAffectsDescendants, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Build a sitemap tree, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNode">The starting node.</param>
+        /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
+        {
+            var model = BuildModel(helper, GetSourceMetadata(sourceMetadata), startingNode, rootInChildLevel, visibilityAffectsDescendants);
             return helper
                 .CreateHtmlHelperForModel(model)
                 .DisplayFor(m => model, templateName);
@@ -318,23 +361,39 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNode">The starting node.</param>
         /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <returns>The model.</returns>
-        private static SiteMapHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel)
+        internal static SiteMapHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool visibilityAffectsDescendants)
         {
             // Build model
             var model = new SiteMapHelperModel();
             var node = startingNode;
 
-            // Check visibility and ACL
-            if (node != null && node.IsVisible(sourceMetadata) && node.IsAccessibleToUser())
+            // Check if a starting node has been given
+            if (node == null)
             {
-                // Add node
-                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata);
-                model.Nodes.Add(nodeToAdd);
+                return model;
+            }
 
-                // Add child nodes
-                if (startingNodeInChildLevel)
+            // Check ACL
+            if (node.IsAccessibleToUser())
+            {
+                // Add node?
+                var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, Int32.MaxValue, false, startingNodeInChildLevel, visibilityAffectsDescendants);
+
+                // Check visibility
+                if (node.IsVisible(sourceMetadata))
                 {
-                    model.Nodes.AddRange(nodeToAdd.Descendants);
+                    model.Nodes.Add(nodeToAdd);
+
+                    // Add child nodes
+                    if (visibilityAffectsDescendants && startingNodeInChildLevel)
+                    {
+                        model.Nodes.AddRange(nodeToAdd.Children);
+                    }
+                }
+                // Add child nodes
+                if (!visibilityAffectsDescendants && startingNodeInChildLevel)
+                {
+                    model.Nodes.AddRange(nodeToAdd.Children);
                 }
             }
 

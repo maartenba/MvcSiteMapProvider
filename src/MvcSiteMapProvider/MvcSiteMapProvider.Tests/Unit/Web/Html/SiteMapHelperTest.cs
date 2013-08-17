@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ using MvcSiteMapProvider.Web.Html;
 namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 {
     [TestFixture]
-    public class MenuHelperTest
+    public class SiteMapHelperTest
     {
         #region SetUp / TearDown
 
@@ -21,7 +21,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 
         [SetUp]
         public void Init()
-        { 
+        {
             iView = new Mock<IViewDataContainer>();
             viewContext = new Mock<ViewContext>();
         }
@@ -40,7 +40,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         [Test]
         public void BuildModel_Case1_Default_ShouldReturnAllNodesAtRootLevel()
         {
-            // @Html.MvcSiteMap().Menu()
+            // @Html.MvcSiteMap().SiteMap()
 
             // Arrange
             var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase1();
@@ -49,14 +49,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
 
             // Act
-            var result = MenuHelper.BuildModel(
-                helper: helperExtension, 
-                sourceMetadata: new SourceMetadataDictionary(), 
+            var result = SiteMapHelper.BuildModel(
+                helper: helperExtension,
+                sourceMetadata: new SourceMetadataDictionary(),
                 startingNode: startingNode, 
                 startingNodeInChildLevel: true, 
-                showStartingNode: true, 
-                maxDepth: Int32.MaxValue, 
-                drillDownToCurrent: false, 
                 visibilityAffectsDescendants: true);
 
             // Assert
@@ -75,7 +72,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         [Test]
         public void BuildModel_Case1_StartingNodeNotInChildLevel_ShouldReturnHierarchicalNodes()
         {
-            // @Html.MvcSiteMap().Menu(true, false, true)
+            // @Html.MvcSiteMap().SiteMap(false)
 
             // Arrange
             var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase1();
@@ -84,14 +81,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
 
             // Act
-            var result = MenuHelper.BuildModel(
+            var result = SiteMapHelper.BuildModel(
                 helper: helperExtension,
                 sourceMetadata: new SourceMetadataDictionary(),
                 startingNode: startingNode,
                 startingNodeInChildLevel: false,
-                showStartingNode: true,
-                maxDepth: Int32.MaxValue,
-                drillDownToCurrent: false,
                 visibilityAffectsDescendants: true);
 
             // Assert
@@ -108,40 +102,9 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         }
 
         [Test]
-        public void BuildModel_Case1_DontShowStartingNode_ShouldReturnAllNodesAtRootLevelWithoutStartingNode()
-        {
-            // @Html.MvcSiteMap().Menu(false)
-
-            // Arrange
-            var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase1();
-            var startingNode = siteMap.RootNode;
-            HtmlHelper helper = new HtmlHelper(this.viewContext.Object, this.iView.Object);
-            MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
-
-            // Act
-            var result = MenuHelper.BuildModel(
-                helper: helperExtension,
-                sourceMetadata: new SourceMetadataDictionary(),
-                startingNode: startingNode,
-                startingNodeInChildLevel: true,
-                showStartingNode: false,
-                maxDepth: Int32.MaxValue,
-                drillDownToCurrent: false,
-                visibilityAffectsDescendants: true);
-
-            // Assert
-            Assert.AreEqual("About", result.Nodes[0].Title);
-            Assert.AreEqual("Contact", result.Nodes[1].Title);
-
-            // Check counts
-            Assert.AreEqual(0, result.Nodes[0].Children.Count);
-            Assert.AreEqual(0, result.Nodes[1].Children.Count);
-        }
-
-        [Test]
         public void BuildModel_Case2_StartingNodeNotInChildLevel_ShouldReturnHierarchicalNodes()
         {
-            // @Html.MvcSiteMap().Menu(true, false, true)
+            // @Html.MvcSiteMap().Menu(false)
 
             // Arrange
             var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase2();
@@ -150,14 +113,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
 
             // Act
-            var result = MenuHelper.BuildModel(
+            var result = SiteMapHelper.BuildModel(
                 helper: helperExtension,
                 sourceMetadata: new SourceMetadataDictionary(),
                 startingNode: startingNode,
                 startingNodeInChildLevel: false,
-                showStartingNode: true,
-                maxDepth: Int32.MaxValue,
-                drillDownToCurrent: false,
                 visibilityAffectsDescendants: true);
 
             // Assert
@@ -180,7 +140,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         [Test]
         public void BuildModel_Case2_StartingNodeNotInChildLevel_VisibilyDoesntAffectDescendants_ShouldReturnHierarchialNodes()
         {
-            // @Html.MvcSiteMap().Menu(true, false, true, false)
+            // @Html.MvcSiteMap().SiteMap(null, MvcSiteMapProvider.SiteMaps.Current.RootNode, false, false)
 
             // Arrange
             var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase2();
@@ -189,14 +149,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
 
             // Act
-            var result = MenuHelper.BuildModel(
+            var result = SiteMapHelper.BuildModel(
                 helper: helperExtension,
                 sourceMetadata: new SourceMetadataDictionary(),
                 startingNode: startingNode,
                 startingNodeInChildLevel: false,
-                showStartingNode: true,
-                maxDepth: Int32.MaxValue,
-                drillDownToCurrent: false,
                 visibilityAffectsDescendants: false);
 
             // Assert
@@ -232,87 +189,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             Assert.AreEqual(0, result.Nodes[0].Children[1].Children[2].Children[0].Children.Count); // Sony SD Card Reader
         }
 
-        [Test]
-        public void BuildModel_Case2_StartingNodeNotInChildLevel_MaxDepth1_ShouldReturnHierarchialNodesTo1Levels()
-        {
-            // @Html.MvcSiteMap().Menu(0, false, true, 2)
 
-            // Arrange
-            var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase2();
-            var startingNode = siteMap.RootNode;
-            HtmlHelper helper = new HtmlHelper(this.viewContext.Object, this.iView.Object);
-            MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
-
-            // Act
-            var result = MenuHelper.BuildModel(
-                helper: helperExtension,
-                sourceMetadata: new SourceMetadataDictionary(),
-                startingNode: startingNode,
-                startingNodeInChildLevel: false,
-                showStartingNode: true,
-                maxDepth: 1,
-                drillDownToCurrent: false,
-                visibilityAffectsDescendants: true);
-
-            // Assert
-            Assert.AreEqual("Home", result.Nodes[0].Title);
-            Assert.AreEqual("About", result.Nodes[0].Children[0].Title);
-
-            // "Contact" is inaccessible - should be skipped. So should its child node "ContactSomebody".
-            Assert.AreEqual("Categories", result.Nodes[0].Children[1].Title);
-
-            // Check counts
-            Assert.AreEqual(1, result.Nodes.Count);
-            Assert.AreEqual(2, result.Nodes[0].Children.Count); // Home
-            Assert.AreEqual(0, result.Nodes[0].Children[0].Children.Count); // About
-            Assert.AreEqual(0, result.Nodes[0].Children[1].Children.Count); // Categories
-
-        }
-
-        [Test]
-        public void BuildModel_Case2_StartingNodeNotInChildLevel_MaxDepth2_ShouldReturnHierarchialNodesTo2Levels()
-        {
-            // @Html.MvcSiteMap().Menu(0, false, true, 3)
-
-            // Arrange
-            var siteMap = HtmlHelperTestCases.CreateFakeSiteMapCase2();
-            var startingNode = siteMap.RootNode;
-            HtmlHelper helper = new HtmlHelper(this.viewContext.Object, this.iView.Object);
-            MvcSiteMapHtmlHelper helperExtension = new MvcSiteMapHtmlHelper(helper, siteMap, false);
-
-            // Act
-            var result = MenuHelper.BuildModel(
-                helper: helperExtension,
-                sourceMetadata: new SourceMetadataDictionary(),
-                startingNode: startingNode,
-                startingNodeInChildLevel: false,
-                showStartingNode: true,
-                maxDepth: 2,
-                drillDownToCurrent: false,
-                visibilityAffectsDescendants: true);
-
-            // Assert
-            Assert.AreEqual("Home", result.Nodes[0].Title);
-            Assert.AreEqual("About", result.Nodes[0].Children[0].Title);
-            Assert.AreEqual("About Me", result.Nodes[0].Children[0].Children[0].Title);
-            Assert.AreEqual("About You", result.Nodes[0].Children[0].Children[1].Title);
-
-            // "Contact" is inaccessible - should be skipped. So should its child node "ContactSomebody".
-            Assert.AreEqual("Categories", result.Nodes[0].Children[1].Title);
-
-            Assert.AreEqual("Cameras", result.Nodes[0].Children[1].Children[0].Title);
-
-            // "Memory Cards" is not visible.
-
-            // Check counts
-            Assert.AreEqual(1, result.Nodes.Count);
-            Assert.AreEqual(2, result.Nodes[0].Children.Count); // Home
-            Assert.AreEqual(2, result.Nodes[0].Children[0].Children.Count); // About
-            Assert.AreEqual(0, result.Nodes[0].Children[0].Children[0].Children.Count); // About Me
-            Assert.AreEqual(0, result.Nodes[0].Children[0].Children[1].Children.Count); // About You
-            Assert.AreEqual(1, result.Nodes[0].Children[1].Children.Count); // Categories
-            Assert.AreEqual(0, result.Nodes[0].Children[1].Children[0].Children.Count); // Cameras
-        }
 
         #endregion
     }

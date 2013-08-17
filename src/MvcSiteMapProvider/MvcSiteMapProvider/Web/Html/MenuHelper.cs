@@ -13,16 +13,6 @@ namespace MvcSiteMapProvider.Web.Html
     /// </summary>
     public static class MenuHelper
     {
-        //// Default Values
-        //private const string DefaultTemplateName = null;
-        //private const bool DefaultStartingNodeInChildLevel = true;
-        //private const bool DefaultShowStartingNode = true;
-        //private const int DefaultMaxDepth = Int32.MaxValue;
-        //private const bool DefaultDrillDownToCurrent = false;
-        //private const bool DefaultVisibilityAffectsDescendants = true;
-        //private const bool DefaultDrillDownToContent = false;
-
-
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -173,9 +163,6 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, sourceMetadata);
         }
 
-
-        /////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -217,12 +204,6 @@ namespace MvcSiteMapProvider.Web.Html
             ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap) : helper.SiteMap.RootNode;
             return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, visibilityAffectsDescendants, sourceMetadata);
         }
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
@@ -271,6 +252,55 @@ namespace MvcSiteMapProvider.Web.Html
                 return MvcHtmlString.Empty;
             }
             return Menu(helper, startingNode, true, false, maxDepth, drillDownToContent, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescendants)
+        {
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescendants, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescendants, object sourceMetadata)
+        {
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescendants, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
+        {
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            if (startingNode == null)
+            {
+                return MvcHtmlString.Empty;
+            }
+            return Menu(helper, null, startingNode, true, false, maxDepth, drillDownToContent, visibilityAffectsDescendants, sourceMetadata);
         }
 
         /// <summary>
@@ -405,6 +435,61 @@ namespace MvcSiteMapProvider.Web.Html
                 return MvcHtmlString.Empty;
             }
             return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescenants)
+        {
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescenants, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescenants, object sourceMetadata)
+        {
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescenants, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescenants, SourceMetadataDictionary sourceMetadata)
+        {
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            if (startingNode == null)
+            {
+                return MvcHtmlString.Empty;
+            }
+            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, visibilityAffectsDescenants, sourceMetadata);
         }
 
         /// <summary>
@@ -709,6 +794,51 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">The helper.</param>
         /// <param name="templateName">Name of the template.</param>
+        /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants)
+        {
+            return Menu(helper, templateName, startFromCurrentNode, startingNodeInChildLevel, showStartingNode, visibilityAffectsDescendants, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, object sourceMetadata)
+        {
+            return Menu(helper, templateName, startFromCurrentNode, startingNodeInChildLevel, showStartingNode, visibilityAffectsDescendants, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
+        {
+            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap) : helper.SiteMap.RootNode;
+            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, visibilityAffectsDescendants, sourceMetadata);
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
@@ -855,6 +985,63 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants)
+        {
+            return Menu(helper, templateName, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToCurrent, visibilityAffectsDescendants, new SourceMetadataDictionary());
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, object sourceMetadata)
+        {
+            return Menu(helper, templateName, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToCurrent, visibilityAffectsDescendants, new SourceMetadataDictionary(sourceMetadata));
+        }
+
+        /// <summary>
+        /// Build a menu, based on the MvcSiteMap
+        /// </summary>
+        /// <param name="helper">The helper.</param>
+        /// <param name="templateName">Name of the template.</param>
+        /// <param name="startingNodeLevel">The starting node level.</param>
+        /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
+        /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="maxDepth">The max depth.</param>
+        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <param name="sourceMetadata">User-defined meta data.</param>
+        /// <returns>Html markup</returns>
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
+        {
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            if (startingNode == null)
+            {
+                return MvcHtmlString.Empty;
+            }
+            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, visibilityAffectsDescendants, sourceMetadata);
+        }
 
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
@@ -1000,11 +1187,6 @@ namespace MvcSiteMapProvider.Web.Html
             return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, true, sourceMetadata);
         }
 
-
-
-        /////////////////////////////////////////////////////////////////////////////////////////
-
-
         /// <summary>
         /// Build a menu, based on the MvcSiteMap
         /// </summary>
@@ -1061,17 +1243,6 @@ namespace MvcSiteMapProvider.Web.Html
                 .DisplayFor(m => model, templateName);
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Builds the model.
         /// </summary>
@@ -1100,56 +1271,6 @@ namespace MvcSiteMapProvider.Web.Html
             {
                 // Add node?
                 var nodeToAdd = new SiteMapNodeModel(node, sourceMetadata, maxDepth, drillDownToCurrent, startingNodeInChildLevel, visibilityAffectsDescendants);
-                //// Check visibility
-                //if (node.IsVisible(sourceMetadata))
-                //{
-                //    if (showStartingNode || !startingNodeInChildLevel)
-                //    {
-                //        model.Nodes.Add(nodeToAdd);
-                //    }
-                //    // Add child nodes
-                //    if (startingNodeInChildLevel)
-                //    {
-                //        model.Nodes.AddRange(nodeToAdd.Children);
-                //    }
-                //}
-                //else if (!visibilityAffectsDescendants)
-                //{
-                //    model.Nodes.AddRange(nodeToAdd.Children);
-                //}
-
-                //if (visibilityAffectsDescendants)
-                //{
-                //    // Check visibility
-                //    if (node.IsVisible(sourceMetadata))
-                //    {
-                //        if (showStartingNode || !startingNodeInChildLevel)
-                //        {
-                //            model.Nodes.Add(nodeToAdd);
-                //        }
-                //        // Add child nodes
-                //        if (startingNodeInChildLevel)
-                //        {
-                //            model.Nodes.AddRange(nodeToAdd.Children);
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    // Check visibility
-                //    if (node.IsVisible(sourceMetadata))
-                //    {
-                //        if (showStartingNode || !startingNodeInChildLevel)
-                //        {
-                //            model.Nodes.Add(nodeToAdd);
-                //        }
-                //    }
-                //    // Add child nodes
-                //    if (startingNodeInChildLevel)
-                //    {
-                //        model.Nodes.AddRange(nodeToAdd.Children);
-                //    }
-                //}
 
                 // Check visibility
                 if (node.IsVisible(sourceMetadata))
@@ -1169,49 +1290,6 @@ namespace MvcSiteMapProvider.Web.Html
                 {
                     model.Nodes.AddRange(nodeToAdd.Children);
                 }
-
-
-                //////// Check visibility
-                //////if (node.IsVisible(sourceMetadata))
-                //////{
-                //////    if (showStartingNode || !startingNodeInChildLevel)
-                //////    {
-                //////        model.Nodes.Add(nodeToAdd);
-                //////    }
-                //////    // Add child nodes
-                //////    if (visibilityAffectsDescendants)
-                //////    {
-                //////        if (startingNodeInChildLevel)
-                //////        {
-                //////            model.Nodes.AddRange(nodeToAdd.Children);
-                //////        }
-                //////        else
-                //////        {
-                //////            foreach (var child in node.ChildNodes)
-                //////            {
-                //////                if (child.IsAccessibleToUser() && child.IsVisible(sourceMetadata) && maxDepth > 0)
-                //////                {
-                //////                    var childToAdd = new SiteMapNodeModel(child, sourceMetadata, maxDepth - 1, drillDownToCurrent, false, visibilityAffectsDescendants);
-                //////                    nodeToAdd.Children.Add(childToAdd);
-                //////                }
-                //////            }
-                //////        }
-                        
-                //////    }
-                //////}
-                //////// Add child nodes
-                //////if (!visibilityAffectsDescendants)
-                //////{
-                //////    if (startingNodeInChildLevel)
-                //////    {
-                //////        model.Nodes.AddRange(nodeToAdd.Children);
-                //////    }
-                //////    else
-                //////    {
-
-                //////    }
-                //////}
-
             }
 
             return model;
