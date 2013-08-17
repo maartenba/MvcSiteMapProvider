@@ -28,15 +28,27 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="htmlHelper">The HTML helper.</param>
         /// <param name="provider">The sitemap.</param>
         public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap)
+            : this(htmlHelper, siteMap, true)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
+        /// </summary>
+        /// <param name="htmlHelper">The HTML helper.</param>
+        /// <param name="provider">The sitemap.</param>
+        internal MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap, bool useViewEngine)
         {
             if (htmlHelper == null)
                 throw new ArgumentNullException("htmlHelper");
             if (siteMap == null)
                 throw new ArgumentNullException("siteMap");
 
-            MvcSiteMapProviderViewEngine.Register();
             HtmlHelper = htmlHelper;
             SiteMap = siteMap;
+
+            if (useViewEngine) 
+                MvcSiteMapProviderViewEngine.Register();
         }
 
         /// <summary>
