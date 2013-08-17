@@ -160,7 +160,16 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// 	<c>true</c> if this instance is clickable; otherwise, <c>false</c>.
         /// </value>
         public bool IsClickable { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the visibility property of the current node
+        /// will affect the descendant nodes.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if visibility should affect descendants; otherwise, <c>false</c>.
+        /// </value>
         public bool VisibilityAffectsDescendants { get; protected set; }
+
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>
@@ -203,7 +212,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                         }
                         else
                         {
-                            NVDList = new List<SiteMapNodeModel>();
+                            nearestVisibleDescendantsList = new List<SiteMapNodeModel>();
                             foreach (var child in node.ChildNodes)
                             {
                                 if (child.IsAccessibleToUser())
@@ -215,7 +224,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                                     else if (maxDepth > 0)
                                     {
                                         FindNearestVisibleDescendants(child, maxDepth - 1);
-                                        children.AddRange(NVDList);
+                                        children.AddRange(nearestVisibleDescendantsList);
                                     }
                                 }
                             }
@@ -233,7 +242,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             }
         }
 
-        private List<SiteMapNodeModel> NVDList;
+        private List<SiteMapNodeModel> nearestVisibleDescendantsList;
         private void FindNearestVisibleDescendants(ISiteMapNode node, int maxDepth)
         {
             foreach (var child in node.ChildNodes)
@@ -242,7 +251,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                 {
                     if (child.IsVisible(SourceMetadata))
                     {
-                        NVDList.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
+                        nearestVisibleDescendantsList.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
                     }
                     else if (maxDepth > 0)
                     {

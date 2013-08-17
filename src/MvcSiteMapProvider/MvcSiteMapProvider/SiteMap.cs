@@ -366,41 +366,37 @@ namespace MvcSiteMapProvider
             }
             return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(secureCollection);
         }
-        private ISiteMapNodeCollection _descendants;
-        private ISiteMapNodeCollection _ancestors;
-        private void FindAllDescendants(ISiteMapNode node)
+
+        public virtual ISiteMapNodeCollection GetDescendants(ISiteMapNode node)
+        {
+            var descendants = siteMapChildStateFactory.CreateSiteMapNodeCollection();
+            GetDescendantsInternal(node, descendants);
+            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(descendants);
+        }
+
+        public virtual ISiteMapNodeCollection GetAncestors(ISiteMapNode node)
+        {
+            var ancestors = siteMapChildStateFactory.CreateSiteMapNodeCollection();
+            GetAncestorsInternal(node, ancestors);
+            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(ancestors);
+        }
+
+        protected virtual void GetDescendantsInternal(ISiteMapNode node, ISiteMapNodeCollection descendants)
         {
             foreach (var child in node.ChildNodes)
             {
-                _descendants.Add(child);
-                FindAllDescendants(child);
+                descendants.Add(child);
+                GetDescendantsInternal(child, descendants);
             }
         }
-        private void FindAllAncestors(ISiteMapNode node)
+
+        protected virtual void GetAncestorsInternal(ISiteMapNode node, ISiteMapNodeCollection ancestors)
         {
             if (node.ParentNode != null)
             {
-                _ancestors.Add(node.ParentNode);
-                FindAllAncestors(node.ParentNode);
+                ancestors.Add(node.ParentNode);
+                GetAncestorsInternal(node.ParentNode, ancestors);
             }
-        }
-        public virtual ISiteMapNodeCollection GetDescendants(ISiteMapNode node)
-        {
-            if (_descendants == null)
-            {
-                _descendants = siteMapChildStateFactory.CreateSiteMapNodeCollection();
-                FindAllDescendants(node);
-            }
-            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(_descendants);
-        }
-        public virtual ISiteMapNodeCollection GetAncestors(ISiteMapNode node)
-        {
-            if (_ancestors == null)
-            {
-                _ancestors = siteMapChildStateFactory.CreateSiteMapNodeCollection();
-                FindAllAncestors(node);
-            }
-            return siteMapChildStateFactory.CreateReadOnlySiteMapNodeCollection(_ancestors);
         }
 
         public virtual ISiteMapNode GetCurrentNodeAndHintAncestorNodes(int upLevel)

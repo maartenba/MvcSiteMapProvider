@@ -20,10 +20,7 @@ namespace MvcSiteMapProvider
         /// </value>
         public override ISiteMapNode ParentNode
         {
-            get
-            {
-                return this.SiteMap.GetParentNode(this);
-            }
+            get { return this.SiteMap.GetParentNode(this); }
         }
 
         /// <summary>
@@ -36,10 +33,24 @@ namespace MvcSiteMapProvider
         {
             get { return this.SiteMap.GetChildNodes(this); }
         }
+
+        /// <summary>
+        /// Gets the descendant nodes.
+        /// </summary>
+        /// <value>
+        /// The descendant nodes.
+        /// </value>
         public override ISiteMapNodeCollection Descendants
         {
             get { return this.SiteMap.GetDescendants(this); }
         }
+
+        /// <summary>
+        /// Gets the ancestor nodes.
+        /// </summary>
+        /// <value>
+        /// The ancestor nodes.
+        /// </value>
         public override ISiteMapNodeCollection Ancestors
         {
             get { return this.SiteMap.GetAncestors(this); }
@@ -52,9 +63,9 @@ namespace MvcSiteMapProvider
         /// <returns>true if the current node is a child or descendant of the specified node; otherwise, false.</returns>
         public override bool IsDescendantOf(ISiteMapNode node)
         {
-            for (var node2 = this.ParentNode; node2 != null; node2 = node2.ParentNode)
+            for (var parent = this.ParentNode; parent != null; parent = parent.ParentNode)
             {
-                if (node2.Equals(node))
+                if (parent.Equals(node))
                 {
                     return true;
                 }
