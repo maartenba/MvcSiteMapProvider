@@ -54,11 +54,6 @@ public class DIConfig
         MvcSiteMapProviderConfig.Register(container);
 #if Demo
         }
-        else
-        {
-            // Register the Sitemaps routes for search engines
-            MvcSiteMapProvider.Web.Mvc.XmlSiteMapController.RegisterRoutes(System.Web.Routing.RouteTable.Routes);
-        }
 #endif
     }
 }

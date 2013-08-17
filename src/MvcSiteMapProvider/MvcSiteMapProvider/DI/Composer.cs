@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Hosting;
+using System.Web.Routing;
 using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Web.Mvc;
 #if !MVC2
 using System.Web.WebPages.Razor;
 #endif
@@ -60,6 +62,12 @@ namespace MvcSiteMapProvider.DI
                 // Set the static loader instance
                 var siteMapLoaderContainer = new SiteMapLoaderContainer(settings);
                 SiteMaps.Loader = siteMapLoaderContainer.ResolveSiteMapLoader();
+
+                if (settings.EnableSitemapsXml)
+                {
+                    // Register the route for SiteMaps XML
+                    XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
+                }
             }
         }
     }
