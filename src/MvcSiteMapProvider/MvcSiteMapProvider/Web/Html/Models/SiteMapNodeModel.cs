@@ -42,6 +42,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             this.drillDownToCurrent = drillDownToCurrent;
             this.SourceMetadata = sourceMetadata;
 
+            Key = node.Key;
             Area = node.Area;
             Controller = node.Controller;
             Action = node.Action;
@@ -68,6 +69,12 @@ namespace MvcSiteMapProvider.Web.Html.Models
         protected SiteMapNodeModelList descendants;
         protected SiteMapNodeModelList ancestors;
         protected SiteMapNodeModelList children;
+
+        /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>The key.</value>
+        public string Key { get; protected set; }
 
         /// <summary>
         /// Gets or sets the area.
