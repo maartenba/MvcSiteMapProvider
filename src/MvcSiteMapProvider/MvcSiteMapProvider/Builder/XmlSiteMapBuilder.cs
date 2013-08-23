@@ -179,11 +179,11 @@ namespace MvcSiteMapProvider.Builder
             // Inherit area and controller from parent
             if (parentNode != null)
             {
-                if (string.IsNullOrEmpty(area))
+                if (string.IsNullOrEmpty(area) && !siteMapNode.RouteValues.ContainsKey("area"))
                 {
                     siteMapNode.Area = parentNode.Area;
                 }
-                if (string.IsNullOrEmpty(controller))
+                if (string.IsNullOrEmpty(controller) && !siteMapNode.RouteValues.ContainsKey("controller"))
                 {
                     siteMapNode.Controller = parentNode.Controller;
                 }
