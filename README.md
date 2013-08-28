@@ -42,7 +42,12 @@ MvcSiteMapProvider used the psake build engine to build the project. Psake is a 
 
     Set-ExecutionPolicy unrestricted
 
+## Contributions
+
+Please read our [Contributing to MvcSiteMapProvider](https://github.com/maartenba/MvcSiteMapProvider/wiki/Contributing-to-MvcSiteMapProvider) guide.
+
 ## Acknowledgements
+
 The downloads page features an example application. The example code is all based on the excellent [ASP.NET MVC Music Store sample application](http://www.asp.net/mvc/videos/mvc-2/music-store/mvc-music-store-part-1-intro,-tools,-and-project-structure) by [Jon Galloway](http://weblogs.asp.net/jgalloway/).
 
 ## Unofficial Documentation and Resources
