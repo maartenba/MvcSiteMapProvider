@@ -101,12 +101,12 @@ namespace DI.Windsor.Installers
 
             // Setup cache
 #if NET35
-            container.Register(Component.For<ICacheProvider<ISiteMap>>().ImplementedBy<AspNetCacheProvider<ISiteMap>>());
+            container.Register(Component.For(typeof(ICacheProvider<>)).ImplementedBy(typeof(AspNetCacheProvider<>)));
             container.Register(Component.For<ICacheDependency>().ImplementedBy<AspNetFileCacheDependency>().Named("cacheDependency1")
                 .DependsOn(Dependency.OnValue("fileName", absoluteFileName)));
 #else
             container.Register(Component.For<System.Runtime.Caching.ObjectCache>().Instance(System.Runtime.Caching.MemoryCache.Default));
-            container.Register(Component.For<ICacheProvider<ISiteMap>>().ImplementedBy<RuntimeCacheProvider<ISiteMap>>());
+            container.Register(Component.For(typeof(ICacheProvider<>)).ImplementedBy(typeof(RuntimeCacheProvider<>)));
             container.Register(Component.For<ICacheDependency>().ImplementedBy<RuntimeFileCacheDependency>().Named("cacheDependency1")
                 .DependsOn(Dependency.OnValue("fileName", absoluteFileName)));
 #endif

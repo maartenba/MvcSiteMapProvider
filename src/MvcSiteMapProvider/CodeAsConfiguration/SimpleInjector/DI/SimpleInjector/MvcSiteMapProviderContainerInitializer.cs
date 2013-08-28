@@ -19,6 +19,7 @@ using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Xml;
 using SimpleInjector;
+using SimpleInjector.Extensions;
 
 namespace DI.SimpleInjector
 {
@@ -121,11 +122,11 @@ namespace DI.SimpleInjector
 
             // Setup cache
 #if NET35
-            container.RegisterSingle<ICacheProvider<ISiteMap>, AspNetCacheProvider<ISiteMap>>();
+            container.RegisterSingleOpenGeneric(typeof(ICacheProvider<>), typeof(AspNetCacheProvider<>));
             container.RegisterSingle<ICacheDependency>(() => new AspNetFileCacheDependency(absoluteFileName));
 #else
             container.RegisterSingle<System.Runtime.Caching.ObjectCache>(() => System.Runtime.Caching.MemoryCache.Default);
-            container.RegisterSingle<ICacheProvider<ISiteMap>, RuntimeCacheProvider<ISiteMap>>();
+            container.RegisterSingleOpenGeneric(typeof(ICacheProvider<>), typeof(RuntimeCacheProvider<>));
             container.RegisterSingle<ICacheDependency>(() => new RuntimeFileCacheDependency(absoluteFileName));
 #endif
             container.RegisterSingle<ICacheDetails>(() => new CacheDetails(absoluteCacheExpiration, TimeSpan.MinValue, container.GetInstance<ICacheDependency>()));

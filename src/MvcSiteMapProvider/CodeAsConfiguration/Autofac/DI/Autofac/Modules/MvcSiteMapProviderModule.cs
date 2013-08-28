@@ -106,8 +106,8 @@ namespace DI.Autofac.Modules
                         });
 
 #if NET35
-            builder.RegisterType<AspNetCacheProvider<ISiteMap>>()
-                   .As<ICacheProvider<ISiteMap>>();
+            builder.RegisterGeneric(typeof(AspNetCacheProvider<>))
+                .As(typeof(ICacheProvider<>));
 
             builder.RegisterType<AspNetFileCacheDependency>()
                 .Named<ICacheDependency>("cacheDependency1")
@@ -116,8 +116,8 @@ namespace DI.Autofac.Modules
             builder.RegisterInstance(System.Runtime.Caching.MemoryCache.Default)
                    .As<System.Runtime.Caching.ObjectCache>();
 
-            builder.RegisterType<RuntimeCacheProvider<ISiteMap>>()
-                   .As<ICacheProvider<ISiteMap>>();
+            builder.RegisterGeneric(typeof(RuntimeCacheProvider<>))
+                .As(typeof(ICacheProvider<>));
 
             builder.RegisterType<RuntimeFileCacheDependency>()
                 .Named<ICacheDependency>("cacheDependency1")

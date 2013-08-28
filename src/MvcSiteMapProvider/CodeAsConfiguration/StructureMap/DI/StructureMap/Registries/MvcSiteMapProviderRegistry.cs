@@ -92,7 +92,7 @@ namespace DI.StructureMap.Registries
             SmartInstance<CacheDetails> cacheDetails;
 
 #if NET35
-        this.For<ICacheProvider<ISiteMap>>().Use<AspNetCacheProvider<ISiteMap>>();
+        this.For(typeof(ICacheProvider<>)).Use(typeof(AspNetCacheProvider<>));
 
         var cacheDependency =
             this.For<ICacheDependency>().Use<AspNetFileCacheDependency>()
@@ -107,7 +107,7 @@ namespace DI.StructureMap.Registries
             this.For<System.Runtime.Caching.ObjectCache>()
                 .Use(s => System.Runtime.Caching.MemoryCache.Default);
 
-            this.For<ICacheProvider<ISiteMap>>().Use<RuntimeCacheProvider<ISiteMap>>();
+            this.For(typeof(ICacheProvider<>)).Use(typeof(RuntimeCacheProvider<>));
 
             var cacheDependency =
                 this.For<ICacheDependency>().Use<RuntimeFileCacheDependency>()
