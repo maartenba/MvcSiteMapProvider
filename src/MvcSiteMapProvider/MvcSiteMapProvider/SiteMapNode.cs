@@ -532,7 +532,11 @@ namespace MvcSiteMapProvider
         { 
             get 
             {
-                this.PreserveRouteParameters();
+                if (this.IsReadOnly && !this.AreRouteParametersPreserved)
+                {
+                    this.PreserveRouteParameters();
+                    this.AreRouteParametersPreserved = true;
+                }
                 return this.routeValues; 
             } 
         }
@@ -577,6 +581,17 @@ namespace MvcSiteMapProvider
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Flag to ensure the route values are only preserved from the current request a single time.
+        /// </summary>
+        /// <returns><c>true</c> if the route values have been preserved for the current request; otherwise <c>false</c>.</returns>
+        /// <remarks>This property must be overridden and provide an implementation that is stored in the request cache.</remarks>
+        protected virtual bool AreRouteParametersPreserved 
+        {
+            get { return false; }
+            set { } 
         }
 
 

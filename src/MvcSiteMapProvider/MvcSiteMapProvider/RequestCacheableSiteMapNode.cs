@@ -132,6 +132,25 @@ namespace MvcSiteMapProvider
             set { this.SetCachedOrMemberValue<string>(x => base.Route = x, "Route", value); }
         }
 
+        protected override bool AreRouteParametersPreserved
+        {
+            get 
+            {
+                var key = this.GetCacheKey("AreRouteParametersPreserved");
+                var result = this.requestCache.GetValue<bool?>(key);
+                if (result == null)
+                {
+                    result = false;
+                }
+                return (bool)result;
+            }
+            set 
+            {
+                var key = this.GetCacheKey("AreRouteParametersPreserved");
+                this.requestCache.SetValue<bool>(key, value);
+            }
+        }
+
         #endregion
 
         #region Protected Members
