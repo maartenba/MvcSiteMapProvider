@@ -109,14 +109,6 @@ namespace DI.SimpleInjector
                                                                                                      <IBuildManager>()));
 
             // Configure Security
-            container.RegisterSingle<AuthorizeAttributeAclModule>(() => new AuthorizeAttributeAclModule(
-                                                                      container.GetInstance<IMvcContextFactory>(),
-                                                                      container.GetInstance<IObjectCopier>(),
-                                                                      container.GetInstance<IControllerDescriptorFactory>(),
-                                                                      container.GetInstance<IControllerBuilder>(),
-                                                                      container.GetInstance<IAuthorizeAttributeBuilder>(),
-                                                                      container.GetInstance<IGlobalFilterProvider>()));
-
             container.RegisterAll<IAclModule>(typeof(AuthorizeAttributeAclModule), typeof(XmlRolesAclModule));
             container.RegisterSingle<IAclModule>(() => new CompositeAclModule(container.GetAllInstances<IAclModule>().ToArray()));
 

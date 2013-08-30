@@ -60,10 +60,8 @@ namespace MvcSiteMapProvider.DI
             return new CompositeAclModule(
                 new AuthorizeAttributeAclModule(
                     this.mvcContextFactory,
-                    new ObjectCopier(),
                     new ControllerDescriptorFactory(),
                     new ControllerBuilderAdaptor(ControllerBuilder.Current),
-                    new AuthorizeAttributeBuilder(), 
                     new GlobalFilterProvider()
 ),
                 new XmlRolesAclModule(

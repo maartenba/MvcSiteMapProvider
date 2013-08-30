@@ -7,54 +7,41 @@ using System.Web.Mvc.Async;
 using System.Web.Routing;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Reflection;
 
 namespace MvcSiteMapProvider.Security
 {
     /// <summary>
-    /// AuthorizeAttributeAclModule class
+    /// An ACL module that determines whether the current user has access to a given node based on the MVC AuthorizeAttribute.
     /// </summary>
     public class AuthorizeAttributeAclModule
         : IAclModule
     {
         public AuthorizeAttributeAclModule(
             IMvcContextFactory mvcContextFactory,
-            IObjectCopier objectCopier,
             IControllerDescriptorFactory controllerDescriptorFactory,
             IControllerBuilder controllerBuilder,
-            IAuthorizeAttributeBuilder authorizeAttributeBuilder,
             IGlobalFilterProvider filterProvider
             )
         {
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
-            if (objectCopier == null)
-                throw new ArgumentNullException("objectCopier");
             if (controllerDescriptorFactory == null)
                 throw new ArgumentNullException("controllerDescriptorFactory");
             if (controllerBuilder == null)
                 throw new ArgumentNullException("controllerBuilder");
-            if (authorizeAttributeBuilder == null)
-                throw new ArgumentNullException("authorizeAttributeBuilder");
             if (filterProvider == null)
                 throw new ArgumentNullException("filterProvider");
 
             this.mvcContextFactory = mvcContextFactory;
-            this.objectCopier = objectCopier;
             this.controllerDescriptorFactory = controllerDescriptorFactory;
             this.controllerBuilder = controllerBuilder;
-            this.authorizeAttributeBuilder = authorizeAttributeBuilder;
             this.filterProvider = filterProvider;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
-        protected readonly IObjectCopier objectCopier;
         protected readonly IControllerDescriptorFactory controllerDescriptorFactory;
         protected readonly IControllerBuilder controllerBuilder;
-        protected readonly IAuthorizeAttributeBuilder authorizeAttributeBuilder;
         protected readonly IGlobalFilterProvider filterProvider;
-        
-        private static readonly Type defaultAuthorizeAttributeType = typeof(AuthorizeAttribute);
 
         #region IAclModule Members
 
@@ -171,24 +158,19 @@ namespace MvcSiteMapProvider.Security
             if (actionDescriptor == null)
                 return true;
 
-            // Fixes #130 - Check whether we have an AllowAnonymous Attribute
-            var ignoreAuthorization = this.HasAllowAnonymousAttribute(actionDescriptor);
-            if (ignoreAuthorization)
-                return true;
-
             // Verify security
             var authorizeAttributes = this.GetAuthorizeAttributes(actionDescriptor, controllerContext);
-            return this.VerifyAuthorizeAttributes(authorizeAttributes, controllerContext);
+            return this.VerifyAuthorizeAttributes(authorizeAttributes, controllerContext, actionDescriptor);
         }
 
-        protected virtual bool VerifyAuthorizeAttributes(IEnumerable<AuthorizeAttribute> authorizeAttributes, ControllerContext controllerContext)
+        protected virtual bool VerifyAuthorizeAttributes(IEnumerable<AuthorizeAttribute> authorizeAttributes, ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
             // Verify all attributes
             foreach (var authorizeAttribute in authorizeAttributes)
             {
                 try
                 {
-                    var authorized = this.VerifyAuthorizeAttribute(authorizeAttribute, controllerContext);
+                    var authorized = this.VerifyAuthorizeAttribute(authorizeAttribute, controllerContext, actionDescriptor);
                     if (!authorized)
                         return false;
                 }
@@ -221,53 +203,13 @@ namespace MvcSiteMapProvider.Security
         }
 #endif
 
-#if MVC2
-        protected virtual bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
+        protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
-            return false;
-        }
-#else
-#if MVC3
-        protected virtual bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
-        {
-            return false;
-        }
-#else
-        protected virtual bool HasAllowAnonymousAttribute(ActionDescriptor actionDescriptor)
-        {
-            var allowAnonymousType = typeof(AllowAnonymousAttribute);
-            return (actionDescriptor.IsDefined(allowAnonymousType, true) ||
-                actionDescriptor.ControllerDescriptor.IsDefined(allowAnonymousType, true));
-        }
-#endif
-#endif
-
-        protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext)
-        {
-            // Reasoning for using Reflection and AuthorizeAttribute rather than IAuthorizationFilter
-            // http://weblogs.asp.net/rashid/archive/2009/09/06/asp-net-mvc-and-authorization-and-monkey-patching.aspx
-
-            var currentAuthorizationAttributeType = authorizeAttribute.GetType();
-            var isDefaultAttribute = (currentAuthorizationAttributeType == defaultAuthorizeAttributeType);
-
-            var subclassedAttribute =
-                isDefaultAttribute ?
-                new InternalAuthorizeAttribute() : // No need to use Reflection.Emit when ASP.NET MVC built-in attribute is used
-                authorizeAttribute is IAuthorizeAttribute ?
-                authorizeAttribute as IAuthorizeAttribute :
-                authorizeAttributeBuilder.Build(currentAuthorizationAttributeType).Invoke(new object[0]) as IAuthorizeAttribute;
-
-            subclassedAttribute.Order = authorizeAttribute.Order;
-            subclassedAttribute.Roles = authorizeAttribute.Roles;
-            subclassedAttribute.Users = authorizeAttribute.Users;
-
-            if (!isDefaultAttribute)
-            {
-                // Copy remaining properties
-                objectCopier.Copy(authorizeAttribute, subclassedAttribute, "Order", "Roles", "Users");
-            }
-
-            return subclassedAttribute.IsAuthorized(controllerContext.HttpContext);
+            var authorizationContext = new AuthorizationContext(controllerContext, actionDescriptor);
+            authorizeAttribute.OnAuthorization(authorizationContext);
+            if (authorizationContext.Result != null)
+                return false;
+            return true;
         }
 
         protected virtual ActionDescriptor GetActionDescriptor(string action, ControllerDescriptor controllerDescriptor, ControllerContext controllerContext)

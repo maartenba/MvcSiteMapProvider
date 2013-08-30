@@ -142,12 +142,13 @@
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
-    <Compile Include="Security\IAuthorizeAttributeBuilder.cs" />
     <Compile Include="TrimEmptyGroupingNodesVisibilityProvider.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Web\Mvc\Filters\Filter.cs" />
     <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\IGlobalFilterProvider.cs" />
+    <Compile Include="Web\Mvc\SiteMapHttpResponse.cs" />
+    <Compile Include="Web\Mvc\SiteMapHttpResponseCache.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\SiteMapXmlReservedAttributeNameProvider.cs" />
@@ -174,7 +175,6 @@
     <Compile Include="Loader\SiteMapCreator.cs" />
     <Compile Include="Loader\SiteMapLoader.cs" />
     <Compile Include="Collections\Specialized\PreservedRouteParameterCollection.cs" />
-    <Compile Include="Reflection\IObjectCopier.cs" />
     <Compile Include="Collections\Specialized\IMetaRobotsValueCollection.cs" />
     <Compile Include="Collections\Specialized\MetaRobotsValueCollection.cs" />
     <Compile Include="Collections\Specialized\RoleCollection.cs" />
@@ -242,12 +242,8 @@
     </Compile>
     <Compile Include="Security\AclModuleNotSupportedException.cs" />
     <Compile Include="Security\AuthorizeAttributeAclModule.cs" />
-    <Compile Include="Security\AuthorizeAttributeBuilder.cs" />
     <Compile Include="Security\CompositeAclModule.cs" />
     <Compile Include="Security\IAclModule.cs" />
-    <Compile Include="Security\IAuthorizeAttribute.cs" />
-    <Compile Include="Security\InternalAuthorizeAttribute.cs" />
-    <Compile Include="Reflection\ObjectCopier.cs" />
     <Compile Include="Security\XmlRolesAclModule.cs" />
     <Compile Include="Builder\IMvcSiteMapNodeAttributeDefinition.cs" />
     <Compile Include="Builder\INodeKeyGenerator.cs" />
