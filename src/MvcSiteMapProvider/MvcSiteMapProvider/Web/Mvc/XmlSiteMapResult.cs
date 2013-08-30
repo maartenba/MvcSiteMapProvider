@@ -22,7 +22,8 @@ namespace MvcSiteMapProvider.Web.Mvc
             IEnumerable<string> siteMapCacheKeys,
             string baseUrl,
             string siteMapUrlTemplate,
-            ISiteMapLoader siteMapLoader)
+            ISiteMapLoader siteMapLoader,
+            IUrlPath urlPath)
         {
             if (siteMapLoader == null)
                 throw new ArgumentNullException("siteMapLoader");
@@ -34,9 +35,12 @@ namespace MvcSiteMapProvider.Web.Mvc
             this.BaseUrl = baseUrl;
             this.SiteMapUrlTemplate = siteMapUrlTemplate;
             this.siteMapLoader = siteMapLoader;
+            this.urlPath = urlPath;
         }
 
         private readonly ISiteMapLoader siteMapLoader;
+
+        private readonly IUrlPath urlPath;
 
         /// <summary>
         /// Maximal number of links per sitemap file.
@@ -106,7 +110,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 
             // Generate sitemap sitemapindex
             var sitemapIndex = new XElement(Ns + "sitemapindex");
-            sitemapIndex.Add(GenerateSiteMapIndexElements(Convert.ToInt32(numPages), BaseUrl, SiteMapUrlTemplate).ToArray());
+            sitemapIndex.Add(GenerateSiteMapIndexElements(Convert.ToInt32(numPages), SiteMapUrlTemplate).ToArray());
 
             // Generate sitemap
             var xmlSiteMap = new XDocument(
@@ -210,16 +214,15 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// Generates the sitemap index elements.
         /// </summary>
         /// <param name="numPages">The number of pages.</param>
-        /// <param name="url">The URL.</param>
         /// <param name="siteMapUrlTemplate">The site map URL template.</param>
         /// <returns>The sitemap index elements.</returns>
-        protected virtual IEnumerable<XElement> GenerateSiteMapIndexElements(int numPages, string url, string siteMapUrlTemplate)
+        protected virtual IEnumerable<XElement> GenerateSiteMapIndexElements(int numPages, string siteMapUrlTemplate)
         {
             // Generate elements
             for (int i = 1; i <= numPages; i++)
             {
-                yield return new XElement(Ns + "sitemap",
-                    new XElement(Ns + "loc", url + "/" + siteMapUrlTemplate.Replace("{page}", i.ToString())));
+                var pageUrl = urlPath.MakeRelativeUrlAbsolute("~/" + siteMapUrlTemplate.Replace("{page}", i.ToString()));
+                yield return new XElement(Ns + "sitemap", new XElement(Ns + "loc", pageUrl));
             }
         }
 
