@@ -8,7 +8,7 @@
     <authors>Maarten Balliauw</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<summary>MvcSiteMapProvider is a tool that provides flexible menus, breadcrumb trails, and SEO features for the ASP.NET MVC framework, similar to the ASP.NET SiteMapProvider model. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
-    <description>This package is obsolete. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version). If you have installed this package into your project, please remove it by running the command 'Uninstall-Package MvcSiteMapProvider' (without the quotes) from Package Manager Console. NuGet doesn't support multiple versions of MVC in one package, so it was necessary to create a different NuGet package per MVC version we support.</description>
+    <description>This is the main package that contains the full installation of MvcSiteMapProvider using its internal DI container. Install this package into your client MVC#mvc_version# projects.</description>
     <language>en-US</language>
     <tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation mvcsitemapprovider</tags>
     <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
