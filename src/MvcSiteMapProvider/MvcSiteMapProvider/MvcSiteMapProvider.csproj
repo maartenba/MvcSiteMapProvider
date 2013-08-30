@@ -240,7 +240,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
-    <Compile Include="Security\AclModuleNotSupportedException.cs" />
     <Compile Include="Security\AuthorizeAttributeAclModule.cs" />
     <Compile Include="Security\CompositeAclModule.cs" />
     <Compile Include="Security\IAclModule.cs" />

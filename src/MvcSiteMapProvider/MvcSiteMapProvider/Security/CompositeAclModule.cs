@@ -3,15 +3,12 @@
 namespace MvcSiteMapProvider.Security
 {
     /// <summary>
-    /// CompositeAclModule class
+    /// Used to chain multiple <see cref="T:MvcSiteMapProvider.Security.IAclModule"/> instances in succession. 
+    /// The builders will be processed in the same order as they are specified in the constructor.
     /// </summary>
     public class CompositeAclModule
         : IAclModule
     {
-        /// <summary>
-        /// Used to chain several <see cref="T:MvcSiteMapProvider.Security.IAclModule"/> instances in succession. 
-        /// The builders will be processed in the same order as they are specified in the constructor.
-        /// </summary>
         public CompositeAclModule(
             params IAclModule[] aclModules
             )
@@ -36,26 +33,14 @@ namespace MvcSiteMapProvider.Security
         /// </returns>
         public virtual bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
-            // Use child modules
-            bool result = true;
             foreach (var module in aclModules)
             {
-                try
-                {
-                    result &= module.IsAccessibleToUser(siteMap, node);
-                }
-                catch (AclModuleNotSupportedException)
-                {
-                    result &= true; // Convention throughout the provider: if the IAclModule can not authenticate a user, true is returned.
-                }
-                if (result == false)
-                {
+                var authorized = module.IsAccessibleToUser(siteMap, node);
+                if (authorized == false)
                     return false;
-                }
             }
-
-            // Return
-            return result;
+            // Convention throughout the provider: if the IAclModule can not authenticate a user, true is returned.
+            return true;
         }
 
         #endregion
