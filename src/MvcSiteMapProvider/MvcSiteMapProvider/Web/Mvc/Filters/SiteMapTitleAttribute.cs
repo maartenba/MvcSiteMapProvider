@@ -22,7 +22,7 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
         /// Cache key for the sitemap instance this attribute applies to.
         /// If not supplied, the default SiteMap instance for this request will be used.
         /// </summary>
-        protected readonly string SiteMapCacheKey;
+        public string SiteMapCacheKey { get; set; }
 
         /// <summary>
         /// Gets or sets the target.
@@ -55,17 +55,8 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
 
                 if (target != null)
                 {
-                    ISiteMap siteMap;
-                    if (String.IsNullOrEmpty(this.SiteMapCacheKey))
-                    {
-                        siteMap = SiteMaps.Current;
-                    }
-                    else
-                    {
-                        siteMap = SiteMaps.GetSiteMap(this.SiteMapCacheKey);  
-                    }
-
-                    if (siteMap.CurrentNode != null)
+                    ISiteMap siteMap = SiteMaps.GetSiteMap(this.SiteMapCacheKey); 
+                    if (siteMap != null && siteMap.CurrentNode != null)
                     {
                         if (Target == AttributeTarget.ParentNode && siteMap.CurrentNode.ParentNode != null)
                         {
