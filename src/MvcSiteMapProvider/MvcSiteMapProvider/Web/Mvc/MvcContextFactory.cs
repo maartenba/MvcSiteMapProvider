@@ -78,6 +78,11 @@ namespace MvcSiteMapProvider.Web.Mvc
             return new UrlHelperAdaptor(requestContext);
         }
 
+        public virtual AuthorizationContext CreateAuthorizationContext(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
+        {
+            return new AuthorizationContext(controllerContext, actionDescriptor);
+        }
+
         #endregion
     }
 }

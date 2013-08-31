@@ -205,7 +205,7 @@ namespace MvcSiteMapProvider.Security
 
         protected virtual bool VerifyAuthorizeAttribute(AuthorizeAttribute authorizeAttribute, ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
-            var authorizationContext = new AuthorizationContext(controllerContext, actionDescriptor);
+            var authorizationContext = this.mvcContextFactory.CreateAuthorizationContext(controllerContext, actionDescriptor);
             authorizeAttribute.OnAuthorization(authorizationContext);
             if (authorizationContext.Result != null)
                 return false;

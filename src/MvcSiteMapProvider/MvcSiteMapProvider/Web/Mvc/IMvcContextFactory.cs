@@ -19,5 +19,6 @@ namespace MvcSiteMapProvider.Web.Mvc
         RouteCollection GetRoutes();
         IUrlHelper CreateUrlHelper(RequestContext requestContext);
         IUrlHelper CreateUrlHelper();
+        AuthorizationContext CreateAuthorizationContext(ControllerContext controllerContext, ActionDescriptor actionDescriptor);
     }
 }
