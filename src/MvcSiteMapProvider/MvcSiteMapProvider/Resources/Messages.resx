@@ -216,4 +216,11 @@
   <data name="ReflectionSiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
     <value>There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.</value>
   </data>
+  <data name="SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter" xml:space="preserve">
+    <value>The node with key '{0}' has '{1}' configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
+
+PreservedRouteParameters always copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove '{1}' from PreservedRouteParameters or as a configured RouteValue.
+
+Alternatively, if you are configuring the node in XML and intend to use '{1}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{1}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
+  </data>
 </root>

@@ -102,6 +102,12 @@ namespace MvcSiteMapProvider
         /// </exception>
         public virtual void AddNode(ISiteMapNode node, ISiteMapNode parentNode)
         {
+            if (node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
+            ThrowIfSiteMapNodeRoutingConfigInvalid(node);
+
             // Avoid issue with url table not clearing correctly.
             if (this.FindSiteMapNode(node.Url) != null)
             {
@@ -761,6 +767,18 @@ namespace MvcSiteMapProvider
                 return node;
             }
             return null;
+        }
+
+        protected virtual void ThrowIfSiteMapNodeRoutingConfigInvalid(ISiteMapNode node)
+        {
+            if (node.PreservedRouteParameters.Count > 0)
+            {
+                foreach (var key in node.PreservedRouteParameters)
+                {
+                    if (node.RouteValues.ContainsKey(key))
+                        throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter, node.Key, key));
+                }
+            }
         }
 
         #endregion
