@@ -106,6 +106,7 @@
     <Compile Include="Caching\AspNetCompositeCacheDependency.cs" />
     <Compile Include="Caching\AspNetFileCacheDependency.cs" />
     <Compile Include="Caching\CacheDetails.cs" />
+    <Compile Include="Caching\ICache.cs" />
     <Compile Include="Caching\ICacheDetails.cs" />
     <Compile Include="Caching\ICacheDependency.cs" />
     <Compile Include="Caching\ICacheProvider.cs" />
@@ -129,8 +130,8 @@
     <Compile Include="Collections\IThreadSafeDictionary.cs" />
     <Compile Include="Collections\LockableDictionary.cs" />
     <Compile Include="Collections\LockableList.cs" />
-    <Compile Include="Collections\RequestCacheableDictionary.cs" />
-    <Compile Include="Collections\RequestCacheableList.cs" />
+    <Compile Include="Collections\CacheableDictionary.cs" />
+    <Compile Include="Collections\CacheableList.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
     <Compile Include="CompositeSiteMapNodeVisibilityProvider.cs" />
     <Compile Include="DI\Composer.cs" />

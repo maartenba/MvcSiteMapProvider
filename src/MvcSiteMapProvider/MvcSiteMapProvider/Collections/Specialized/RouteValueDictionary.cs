@@ -11,12 +11,12 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// the behavior of the route values.
     /// </summary>
     public class RouteValueDictionary
-        : RequestCacheableDictionary<string, object>, IRouteValueDictionary
+        : CacheableDictionary<string, object>, IRouteValueDictionary
     {
         public RouteValueDictionary(
             ISiteMap siteMap,
-            IRequestCache requestCache
-            ) : base(siteMap, requestCache)
+            ICache cache
+            ) : base(siteMap, cache)
         {
         }
 

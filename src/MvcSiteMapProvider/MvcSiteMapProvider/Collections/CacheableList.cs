@@ -1,5 +1,5 @@
 ﻿
-// This class has infinite recursion problems. This was avoided in the RequestCacheableDictionary class because its base
+// This class has infinite recursion problems. This was avoided in the CacheableDictionary class because its base
 // class stores the dictionary in a wrapped instance that has protected access. Unfortunately, with List<T> that isn't the case.
 // So for this to work, its base class needs to wrap a List<T> and override all members of List<T> or it needs to inherit
 // from a base class that does same and exposes the internal list at least at the protected level.
@@ -18,22 +18,22 @@
 //    /// mode will automatically switch to a writeable request-cached copy of the original list
 //    /// during any write operation.
 //    /// </summary>
-//    public class RequestCacheableList<T>
+//    public class CacheableList<T>
 //        : LockableList<T>
 //    {
-//        public RequestCacheableList(
+//        public CacheableList(
 //            ISiteMap siteMap,
-//            IRequestCache requestCache
+//            ICache cache
 //            )
 //            : base(siteMap)
 //        {
-//            if (requestCache == null)
-//                throw new ArgumentNullException("requestCache");
+//            if (cache == null)
+//                throw new ArgumentNullException("cache");
 
-//            this.requestCache = requestCache;
+//            this.cache = cache;
 //        }
 
-//        protected readonly IRequestCache requestCache;
+//        protected readonly ICache cache;
 //        protected readonly Guid instanceId = Guid.NewGuid();
 
 //        #region Write Operations
@@ -308,7 +308,7 @@
 //        /// <summary>
 //        /// Override this property and set it to false to disable all caching operations.
 //        /// </summary>
-//        protected virtual bool RequestCachingEnabled
+//        protected virtual bool CachingEnabled
 //        {
 //            get { return true; }
 //        }
@@ -316,7 +316,7 @@
 
 //        protected virtual string GetCacheKey()
 //        {
-//            return "__REQUEST_CACHEABLE_LIST_" + this.instanceId.ToString();
+//            return "__CACHEABLE_LIST_" + this.instanceId.ToString();
 //        }
 
 
@@ -328,10 +328,10 @@
 //            get
 //            {
 //                LockableList<T> result = null;
-//                if (this.RequestCachingEnabled)
+//                if (this.CachingEnabled)
 //                {
 //                    var key = this.GetCacheKey();
-//                    result = this.requestCache.GetValue<LockableList<T>>(key);
+//                    result = this.cache.GetValue<LockableList<T>>(key);
 //                    if (result == null)
 //                    {
 //                        // Request is not cached, return base list
@@ -355,10 +355,10 @@
 //            get
 //            {
 //                LockableList<T> result = null;
-//                if (this.IsReadOnly && this.RequestCachingEnabled)
+//                if (this.IsReadOnly && this.CachingEnabled)
 //                {
 //                    var key = this.GetCacheKey();
-//                    result = this.requestCache.GetValue<LockableList<T>>(key);
+//                    result = this.cache.GetValue<LockableList<T>>(key);
 //                    if (result == null)
 //                    {
 //                        // This is the first write operation request in read-only mode, 
@@ -366,7 +366,7 @@
 //                        // with a copy of the current values.
 //                        result = new LockableList<T>(this.siteMap);
 //                        base.CopyTo(result);
-//                        this.requestCache.SetValue<LockableList<T>>(key, result);
+//                        this.cache.SetValue<LockableList<T>>(key, result);
 //                    }
 //                }
 //                else

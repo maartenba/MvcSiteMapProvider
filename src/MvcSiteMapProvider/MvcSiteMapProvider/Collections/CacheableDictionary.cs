@@ -10,22 +10,22 @@ namespace MvcSiteMapProvider.Collections
     /// mode will automatically switch to a writeable request-cached copy of the original dictionary
     /// during any write operation.
     /// </summary>
-    public class RequestCacheableDictionary<TKey, TValue>
+    public class CacheableDictionary<TKey, TValue>
         : LockableDictionary<TKey, TValue>
     {
-        public RequestCacheableDictionary(
+        public CacheableDictionary(
             ISiteMap siteMap,
-            IRequestCache requestCache
+            ICache cache
             )
             : base(siteMap)
         {
-            if (requestCache == null)
-                throw new ArgumentNullException("requestCache");
+            if (cache == null)
+                throw new ArgumentNullException("cache");
 
-            this.requestCache = requestCache;
+            this.cache = cache;
         }
 
-        protected readonly IRequestCache requestCache;
+        protected readonly ICache cache;
         protected readonly Guid instanceId = Guid.NewGuid();
 
         #region Write Operations
@@ -157,7 +157,7 @@ namespace MvcSiteMapProvider.Collections
         /// <summary>
         /// Override this property and set it to false to disable all caching operations.
         /// </summary>
-        protected virtual bool RequestCachingEnabled
+        protected virtual bool CachingEnabled
         {
             get { return true; }
         }
@@ -165,7 +165,7 @@ namespace MvcSiteMapProvider.Collections
 
         protected virtual string GetCacheKey()
         {
-            return "__REQUEST_CACHEABLE_DICTIONARY_" + this.instanceId.ToString();
+            return "__CACHEABLE_DICTIONARY_" + this.instanceId.ToString();
         }
 
 
@@ -177,10 +177,10 @@ namespace MvcSiteMapProvider.Collections
             get
             {
                 IDictionary<TKey, TValue> result = null;
-                if (this.RequestCachingEnabled)
+                if (this.CachingEnabled)
                 {
                     var key = this.GetCacheKey();
-                    result = this.requestCache.GetValue<IDictionary<TKey, TValue>>(key);
+                    result = this.cache.GetValue<IDictionary<TKey, TValue>>(key);
                     if (result == null)
                     {
                         // Request is not cached, return base dictionary
@@ -203,10 +203,10 @@ namespace MvcSiteMapProvider.Collections
             get
             {
                 IDictionary<TKey, TValue> result = null;
-                if (this.IsReadOnly && this.RequestCachingEnabled)
+                if (this.IsReadOnly && this.CachingEnabled)
                 {
                     var key = this.GetCacheKey();
-                    result = this.requestCache.GetValue<IDictionary<TKey, TValue>>(key);
+                    result = this.cache.GetValue<IDictionary<TKey, TValue>>(key);
                     if (result == null)
                     {
                         // This is the first write operation request in read-only mode, 
@@ -214,7 +214,7 @@ namespace MvcSiteMapProvider.Collections
                         // with a copy of the current values.
                         result = new Dictionary<TKey, TValue>();
                         base.CopyTo(result);
-                        this.requestCache.SetValue<IDictionary<TKey, TValue>>(key, result);
+                        this.cache.SetValue<IDictionary<TKey, TValue>>(key, result);
                     }
                 }
                 else

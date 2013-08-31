@@ -6,8 +6,7 @@ namespace MvcSiteMapProvider.Caching
     /// Contract for a class to provide type-safe access to a request-level cache.
     /// </summary>
     public interface IRequestCache
+        : ICache
     {
-        T GetValue<T>(string key);
-        void SetValue<T>(string key, T value);
     }
 }

@@ -12,14 +12,14 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// localization of custom attributes.
     /// </summary>
     public class AttributeDictionary
-        : RequestCacheableDictionary<string, object>, IAttributeDictionary
+        : CacheableDictionary<string, object>, IAttributeDictionary
     {
         public AttributeDictionary(
             ISiteMap siteMap,
             ILocalizationService localizationService,
-            IRequestCache requestCache
+            ICache cache
             )
-            : base(siteMap, requestCache)
+            : base(siteMap, cache)
         {
             if (localizationService == null)
                 throw new ArgumentNullException("localizationService");
