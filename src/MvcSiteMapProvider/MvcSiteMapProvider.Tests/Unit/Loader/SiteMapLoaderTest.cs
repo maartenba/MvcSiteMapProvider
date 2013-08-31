@@ -2,6 +2,7 @@
 using NUnit;
 using NUnit.Framework;
 using Moq;
+using Moq.Matchers;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Builder;
@@ -42,17 +43,68 @@ namespace MvcSiteMapProvider.Tests.Unit
         #endregion
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void GetSiteMap_EmptySiteMapCacheKey_ShouldThrowArgumentNullException()
+        public void GetSiteMap_NoParameterOverload_ShouldCallGenerateKeyAndPassResultToGetOrAdd()
+        {
+            // arrange
+            var target = NewSiteMapLoader();
+            siteMapCacheKeyGenerator
+                .Setup(x => x.GenerateKey())
+                .Returns("theKey");
+
+            // act
+            var result = target.GetSiteMap();
+
+            // assert
+            siteMapCacheKeyGenerator
+                .Verify(x => x.GenerateKey(),
+                Times.Once());
+            siteMapCache
+                .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
+                Times.Once());
+        }
+
+        [Test]
+        public void GetSiteMap_EmptySiteMapCacheKey_ShouldCallGenerateKeyAndPassResultToGetOrAdd()
         {
             // arrange
             var siteMapCacheKey = "";
             var target = NewSiteMapLoader();
+            siteMapCacheKeyGenerator
+                .Setup(x => x.GenerateKey())
+                .Returns("theKey");
 
             // act
             var result = target.GetSiteMap(siteMapCacheKey);
 
             // assert
+            siteMapCacheKeyGenerator
+                .Verify(x => x.GenerateKey(), 
+                Times.Once());
+            siteMapCache
+                .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
+                Times.Once());
+        }
+
+        [Test]
+        public void GetSiteMap_NullSiteMapCacheKey_ShouldCallGenerateKeyAndPassResultToGetOrAdd()
+        {
+            // arrange
+            string siteMapCacheKey = null;
+            var target = NewSiteMapLoader();
+            siteMapCacheKeyGenerator
+                .Setup(x => x.GenerateKey())
+                .Returns("theKey");
+
+            // act
+            var result = target.GetSiteMap(siteMapCacheKey);
+
+            // assert
+            siteMapCacheKeyGenerator
+                .Verify(x => x.GenerateKey(),
+                Times.Once());
+            siteMapCache
+                .Verify(x => x.GetOrAdd("theKey", It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()),
+                Times.Once());
         }
 
         [Test]
@@ -61,9 +113,6 @@ namespace MvcSiteMapProvider.Tests.Unit
             // arrange
             var siteMapCacheKey = "theKey";
             var target = NewSiteMapLoader();
-            siteMapCache
-                .Setup(x => x.GetOrAdd(siteMapCacheKey, It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()))
-                .Returns((string key, Func<ISiteMap> loadFunction, Func<ICacheDetails> getCacheDetailsFunction) => new Mock<ISiteMap>().Object);
 
             // act
             var result = target.GetSiteMap(siteMapCacheKey);
@@ -71,6 +120,90 @@ namespace MvcSiteMapProvider.Tests.Unit
             // assert
             siteMapCache
                 .Verify(x => x.GetOrAdd(siteMapCacheKey, It.IsAny<Func<ISiteMap>>(), It.IsAny<Func<ICacheDetails>>()), 
+                Times.Once());
+        }
+
+
+
+
+        [Test]
+        public void ReleaseSiteMap_NoParameterOverload_ShouldCallGenerateKeyAndPassResultToRemove()
+        {
+            // arrange
+            var target = NewSiteMapLoader();
+            siteMapCacheKeyGenerator
+                .Setup(x => x.GenerateKey())
+                .Returns("theKey");
+
+            // act
+            target.ReleaseSiteMap();
+
+            // assert
+            siteMapCacheKeyGenerator
+                .Verify(x => x.GenerateKey(),
+                Times.Once());
+            siteMapCache
+                .Verify(x => x.Remove("theKey"),
+                Times.Once());
+        }
+
+        [Test]
+        public void ReleaseSiteMap_EmptySiteMapCacheKey_ShouldCallGenerateKeyAndPassResultToRemove()
+        {
+            // arrange
+            var siteMapCacheKey = "";
+            var target = NewSiteMapLoader();
+            siteMapCacheKeyGenerator
+                .Setup(x => x.GenerateKey())
+                .Returns("theKey");
+
+            // act
+            target.ReleaseSiteMap(siteMapCacheKey);
+
+            // assert
+            siteMapCacheKeyGenerator
+                .Verify(x => x.GenerateKey(),
+                Times.Once());
+            siteMapCache
+                .Verify(x => x.Remove("theKey"),
+                Times.Once());
+        }
+
+        [Test]
+        public void ReleaseSiteMap_NullSiteMapCacheKey_ShouldCallGenerateKeyAndPassResultToRemove()
+        {
+            // arrange
+            string siteMapCacheKey = null;
+            var target = NewSiteMapLoader();
+            siteMapCacheKeyGenerator
+                .Setup(x => x.GenerateKey())
+                .Returns("theKey");
+
+            // act
+            target.ReleaseSiteMap(siteMapCacheKey);
+
+            // assert
+            siteMapCacheKeyGenerator
+                .Verify(x => x.GenerateKey(),
+                Times.Once());
+            siteMapCache
+                .Verify(x => x.Remove("theKey"),
+                Times.Once());
+        }
+
+        [Test]
+        public void ReleaseSiteMap_WithSiteMapCacheKey_ShouldCallGetOrAddWithSiteMapCacheKey()
+        {
+            // arrange
+            var siteMapCacheKey = "theKey";
+            var target = NewSiteMapLoader();
+
+            // act
+            target.ReleaseSiteMap(siteMapCacheKey);
+
+            // assert
+            siteMapCache
+                .Verify(x => x.Remove(siteMapCacheKey),
                 Times.Once());
         }
     }

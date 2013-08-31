@@ -42,15 +42,14 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual ISiteMap GetSiteMap()
         {
-            var key = siteMapCacheKeyGenerator.GenerateKey();
-            return GetSiteMap(key);
+            return GetSiteMap(null);
         }
 
         public virtual ISiteMap GetSiteMap(string siteMapCacheKey)
         {
             if (String.IsNullOrEmpty(siteMapCacheKey))
             {
-                throw new ArgumentNullException("siteMapCacheKey");
+                siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
             }
             return siteMapCache.GetOrAdd(
                 siteMapCacheKey,
@@ -60,15 +59,14 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual void ReleaseSiteMap()
         {
-            var key = siteMapCacheKeyGenerator.GenerateKey();
-            ReleaseSiteMap(key);
+            ReleaseSiteMap(null);
         }
 
         public virtual void ReleaseSiteMap(string siteMapCacheKey)
         {
             if (String.IsNullOrEmpty(siteMapCacheKey))
             {
-                throw new ArgumentNullException("siteMapCacheKey");
+                siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
             }
             siteMapCache.Remove(siteMapCacheKey);
         }
