@@ -31,7 +31,6 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         public override void Add(string key, object value)
         {
-            ThrowIfReadOnly();
             if (value.GetType().Equals(typeof(string)))
                 value = localizationService.ExtractExplicitResourceKey(key, value.ToString());
             base.Add(key, value);
@@ -39,17 +38,18 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         public override void Clear()
         {
-            ThrowIfReadOnly();
-            foreach (var key in this.Keys)
-            {
-                localizationService.RemoveResourceKey(key);
-            }
             base.Clear();
+            if (!this.IsReadOnly)
+            {
+                foreach (var key in this.Keys)
+                {
+                    localizationService.RemoveResourceKey(key);
+                }
+            }
         }
         
         protected override void Insert(string key, object value, bool add)
         {
-            ThrowIfReadOnly();
             if (value.GetType().Equals(typeof(string)))
                 value = localizationService.ExtractExplicitResourceKey(key, value.ToString());
             base.Insert(key, value, add);
@@ -57,16 +57,18 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         public override bool Remove(KeyValuePair<string, object> item)
         {
-            ThrowIfReadOnly();
-            localizationService.RemoveResourceKey(item.Key);
-            return base.Remove(item);
+            var removed = base.Remove(item);
+            if (removed && !this.IsReadOnly)
+                localizationService.RemoveResourceKey(item.Key);
+            return removed;
         }
 
         public override bool Remove(string key)
         {
-            ThrowIfReadOnly();
-            localizationService.RemoveResourceKey(key);
-            return base.Remove(key);
+            var removed = base.Remove(key);
+            if (removed && !this.IsReadOnly)
+                localizationService.RemoveResourceKey(key);
+            return removed;
         }
 
         public override object this[string key]
@@ -85,10 +87,6 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
             set
             {
-                if (this.IsReadOnly)
-                {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, key));
-                }
                 if (value.GetType().Equals(typeof(string)))
                 {
                     base[key] = localizationService.ExtractExplicitResourceKey(key, value.ToString());
