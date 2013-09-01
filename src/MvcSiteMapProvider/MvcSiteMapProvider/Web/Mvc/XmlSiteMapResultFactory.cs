@@ -40,8 +40,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultSiteMapCacheKeys,
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public ActionResult Create(int page)
@@ -52,8 +51,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultSiteMapCacheKeys,
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public virtual ActionResult Create(IEnumerable<string> siteMapCacheKeys)
@@ -64,8 +62,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 siteMapCacheKeys,
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys)
@@ -76,8 +73,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 siteMapCacheKeys,
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public virtual ActionResult Create(IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate)
@@ -88,8 +84,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 siteMapCacheKeys,
                 baseUrl,
                 siteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate)
@@ -100,8 +95,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 siteMapCacheKeys,
                 baseUrl,
                 siteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public virtual ActionResult Create(ISiteMapNode rootNode)
@@ -112,8 +106,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultSiteMapCacheKeys,
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public ActionResult Create(int page, ISiteMapNode rootNode)
@@ -124,8 +117,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultSiteMapCacheKeys,
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public virtual ActionResult Create(ISiteMapNode rootNode, string baseUrl, string siteMapUrlTemplate)
@@ -136,8 +128,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultSiteMapCacheKeys,
                 baseUrl,
                 siteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         public ActionResult Create(int page, ISiteMapNode rootNode, string baseUrl, string siteMapUrlTemplate)
@@ -148,8 +139,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultSiteMapCacheKeys,
                 baseUrl,
                 siteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
+                this.siteMapLoader);
         }
 
         #endregion
@@ -171,7 +161,11 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         protected virtual string DefaultBaseUrl
         {
-            get { return urlPath.ResolveServerUrl("~/", false); }
+            get 
+            { 
+                var url = urlPath.MakeRelativeUrlAbsolute("~/");
+                return url.Remove(url.Length - 1);
+            }
         }
 
         protected virtual IEnumerable<string> DefaultSiteMapCacheKeys
