@@ -183,12 +183,12 @@ namespace MvcSiteMapProvider.Web.Mvc
                         throw new UnknownSiteMapException(Resources.Messages.UnknownSiteMap);
                     }
 
-                    flattenedHierarchy.AddRange(FlattenHierarchy(siteMap.RootNode, BaseUrl));
+                    flattenedHierarchy.AddRange(FlattenHierarchy(siteMap.RootNode, context));
                 }
             }
             else
             {
-                flattenedHierarchy.AddRange(FlattenHierarchy(this.RootNode, BaseUrl));
+                flattenedHierarchy.AddRange(FlattenHierarchy(this.RootNode, context));
             }
             var flattenedHierarchyCount = flattenedHierarchy.LongCount();
 
@@ -234,11 +234,11 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <returns>The URL elements.</returns>
         protected virtual IEnumerable<XElement> GenerateUrlElements(ControllerContext context, IEnumerable<ISiteMapNode> siteMapNodes, string url)
         {
-            bool skip;
+            //bool skip;
             // Iterate all nodes
             foreach (var siteMapNode in siteMapNodes)
             {
-                skip = false;
+                //skip = false;
 
                 // Generate element
                 var siteMapNodeUrl = siteMapNode.Url;
@@ -247,22 +247,22 @@ namespace MvcSiteMapProvider.Web.Mvc
                 {
                     nodeUrl = siteMapNodeUrl;
                 }
-                if (siteMapNode.HasExternalUrl(context.HttpContext) ||
-                    !String.IsNullOrEmpty(siteMapNode.CanonicalUrl) ||
-                    siteMapNode.HasNoIndexAndNoFollow)
-                {
-                    // Skip nodes where domain doesn't match the current one 
-                    // or where canonical url exists, or that
-                    // have both a noindex and nofollow robots meta tag.
-                    skip = true;
-                }
+                //if (siteMapNode.HasExternalUrl(context.HttpContext) ||
+                //    !String.IsNullOrEmpty(siteMapNode.CanonicalUrl) ||
+                //    siteMapNode.HasNoIndexAndNoFollow)
+                //{
+                //    // Skip nodes where domain doesn't match the current one 
+                //    // or where canonical url exists, or that
+                //    // have both a noindex and nofollow robots meta tag.
+                //    skip = true;
+                //}
 
                 var urlElement = new XElement(Ns + "url",
                     new XElement(Ns + "loc", nodeUrl));
 
                 // Generate element properties
-                if (!skip)
-                {
+                //if (!skip)
+                //{
                     if (siteMapNode.LastModifiedDate > DateTime.MinValue)
                     {
                         urlElement.Add(new XElement(Ns + "lastmod", siteMapNode.LastModifiedDate.ToUniversalTime()));
@@ -278,7 +278,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 
                     // Return
                     yield return urlElement;
-                }
+                //}
             }
         }
 
@@ -288,48 +288,86 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <param name="startingNode">The starting node.</param>
         /// <param name="url">The URL.</param>
         /// <returns>A flat list of SiteMapNode.</returns>
-        protected virtual IEnumerable<ISiteMapNode> FlattenHierarchy(ISiteMapNode startingNode, string url)
+        protected virtual IEnumerable<ISiteMapNode> FlattenHierarchy(ISiteMapNode startingNode, ControllerContext context)
         {
-            // Mvc node
-            var mvcNode = startingNode;
+            //// Mvc node
+            //var mvcNode = startingNode;
+
+            //// Render current node?
+            //if (mvcNode == null || mvcNode.Clickable)
+            //{
+            //    yield return startingNode;
+            //}
+            //if (startingNode.HasChildNodes)
+            //{
+            //    // Make sure all child nodes are accessible prior to rendering them...
+            //    var shouldRender = true;
+            //    foreach (ISiteMapNode node in startingNode.ChildNodes)
+            //    {
+            //        // Check visibility
+            //        if (node != null)
+            //        {
+            //            shouldRender = node.IsVisible(SourceMetadata);
+            //        }
+
+            //        // Check ACL
+            //        if (!node.IsAccessibleToUser())
+            //        {
+            //            shouldRender = false;
+            //            break;
+            //        }
+
+            //        // Render child nodes?
+            //        if (shouldRender)
+            //        {
+            //            if (node.IsAccessibleToUser())
+            //            {
+            //                foreach (var childNode in FlattenHierarchy(node, url))
+            //                {
+            //                    yield return childNode;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+
 
             // Render current node?
-            if (mvcNode == null || mvcNode.Clickable)
+            if (startingNode.IsAccessibleToUser())
             {
-                yield return startingNode;
-            }
-            if (startingNode.HasChildNodes)
-            {
-                // Make sure all child nodes are accessible prior to rendering them...
-                var shouldRender = true;
-                foreach (ISiteMapNode node in startingNode.ChildNodes)
+                if (this.ShouldNodeRender(startingNode, context))
                 {
-                    // Check visibility
-                    if (node != null)
+                    yield return startingNode;
+                }
+                if (startingNode.HasChildNodes)
+                {
+                    // Make sure all child nodes are accessible prior to rendering them...
+                    foreach (ISiteMapNode node in startingNode.ChildNodes)
                     {
-                        shouldRender = node.IsVisible(SourceMetadata);
-                    }
 
-                    // Check ACL
-                    if (!node.IsAccessibleToUser())
-                    {
-                        shouldRender = false;
-                        break;
-                    }
 
-                    // Render child nodes?
-                    if (shouldRender)
-                    {
-                        if (node.IsAccessibleToUser())
+                        foreach (var childNode in FlattenHierarchy(node, context))
                         {
-                            foreach (var childNode in FlattenHierarchy(node, url))
+                            // Render child nodes?
+                            if (this.ShouldNodeRender(childNode, context))
                             {
                                 yield return childNode;
                             }
+
                         }
                     }
                 }
             }
+
+        }
+
+        protected virtual bool ShouldNodeRender(ISiteMapNode node, ControllerContext context)
+        {
+            return node.Clickable &&
+                node.IsVisible(SourceMetadata) &&
+                !node.HasExternalUrl(context.HttpContext) &&
+                String.IsNullOrEmpty(node.CanonicalUrl) &&
+                !node.HasNoIndexAndNoFollow;
         }
 
         /// <summary>
