@@ -82,18 +82,17 @@ namespace MvcSiteMapProvider.DI
 
         private ISiteMapBuilder ResolveSiteMapBuilder(ConfigurationSettings settings)
         {
-            var xmlSiteMapBuilder = this.ResolveXmlSiteMapBuilder(settings.SiteMapFileName, settings.AttributesToIgnore);
-            var visitingSiteMapBuilder = this.ResolveVisitingSiteMapBuilder();
-
+            var builders = new List<ISiteMapBuilder>();
+            builders.Add(this.ResolveXmlSiteMapBuilder(settings.SiteMapFileName, settings.AttributesToIgnore));
             if (settings.ScanAssembliesForSiteMapNodes)
             {
-                var reflectionSiteMapBuilder = this.ResolveReflectionSiteMapBuilder(settings.IncludeAssembliesForScan, settings.ExcludeAssembliesForScan, settings.AttributesToIgnore);
-                return new CompositeSiteMapBuilder(xmlSiteMapBuilder, reflectionSiteMapBuilder, visitingSiteMapBuilder);
+                builders.Add(this.ResolveReflectionSiteMapBuilder(settings.IncludeAssembliesForScan, settings.ExcludeAssembliesForScan, settings.AttributesToIgnore));
             }
-            else
+            if (settings.EnableResolvedUrlCaching)
             {
-                return new CompositeSiteMapBuilder(xmlSiteMapBuilder, visitingSiteMapBuilder);
+                builders.Add(this.ResolveVisitingSiteMapBuilder());
             }
+            return new CompositeSiteMapBuilder(builders.ToArray());
         }
 
         private ISiteMapBuilder ResolveXmlSiteMapBuilder(string siteMapFile, IEnumerable<string> attributesToIgnore)
