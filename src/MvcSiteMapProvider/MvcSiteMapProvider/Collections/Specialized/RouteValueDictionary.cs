@@ -22,7 +22,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected override string GetCacheKey()
         {
-            return "__ROUTE_VALUE_COLLECTION_" + this.instanceId.ToString();
+            return "__ROUTE_VALUE_DICTIONARY_" + this.instanceId.ToString();
         }
 
         public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)

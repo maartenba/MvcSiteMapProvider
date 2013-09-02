@@ -29,6 +29,11 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected readonly ILocalizationService localizationService;
 
+        protected override string GetCacheKey()
+        {
+            return "__ATTRIBUTE_DICTIONARY_" + this.instanceId.ToString();
+        }
+
         public override void Add(string key, object value)
         {
             if (value.GetType().Equals(typeof(string)))
