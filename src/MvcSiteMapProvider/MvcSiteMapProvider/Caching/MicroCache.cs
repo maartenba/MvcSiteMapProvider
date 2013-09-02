@@ -1,11 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Text;
 
 namespace MvcSiteMapProvider.Caching
 {
+    /// <summary>
+    /// A lightweight cache that ensures thread safety when loading items by using a callback that 
+    /// gets called exactly 1 time.
+    /// </summary>
+    /// <typeparam name="T">The type of object to cache.</typeparam>
+    /// <remarks>
+    /// Caching strategy inspired by this post:
+    /// http://www.superstarcoders.com/blogs/posts/micro-caching-in-asp-net.aspx
+    /// </remarks>
     public class MicroCache<T>
         : IMicroCache<T>
     {
