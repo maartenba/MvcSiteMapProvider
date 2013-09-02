@@ -25,9 +25,6 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
         #region ISiteMapNodeUrlResolver Members
 
-        private string urlKey = string.Empty;
-        private string url = string.Empty;
-
         /// <summary>
         /// Resolves the URL.
         /// </summary>
@@ -51,15 +48,6 @@ namespace MvcSiteMapProvider.Web.UrlResolver
                 }
             }
 
-            // Cache already generated routes. 
-            // Theoretically it is possible to change RouteValues dynamically. So I decided to 
-            // store last version
-            var key = node.Route ?? string.Empty;
-            foreach (var routeValue in routeValues)
-                key += routeValue.Key + (routeValue.Value ?? string.Empty);
-            if (this.urlKey == key) return this.url;
-
-
             var urlHelper = mvcContextFactory.CreateUrlHelper();
 
             string returnValue;
@@ -81,8 +69,6 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             }
             else
             {
-                this.urlKey = key;
-                this.url = returnValue;
                 return returnValue;
             }
         }
