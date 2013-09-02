@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-	<id>MvcSiteMapProvider</id>
-	<title>MvcSiteMapProvider</title>
-    <version>$version$</version>
-    <authors>Maarten Balliauw</authors>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<summary>MvcSiteMapProvider is a tool that provides flexible menus, breadcrumb trails, and SEO features for the ASP.NET MVC framework, similar to the ASP.NET SiteMapProvider model. The project is hosted on http://github.com/maartenba/MvcSiteMapProvider.</summary>
-    <description>This package is obsolete. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version). If you have installed this package into your project, please remove it by running the command 'Uninstall-Package MvcSiteMapProvider' (without the quotes) from Package Manager Console. NuGet doesn't support multiple versions of MVC in one package, so it was necessary to create a different NuGet package per MVC version we support.</description>
-    <language>en-US</language>
-    <tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation mvcsitemapprovider</tags>
-    <projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
-    <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
-	<dependencies>
-		<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="[$version$]" />
-	</dependencies>
-  </metadata>
+	<metadata>
+		<id>MvcSiteMapProvider</id>
+		<title>MvcSiteMapProvider</title>
+		<version>$version$</version>
+		<authors>Maarten Balliauw, Shad Storhaug</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>This package is obsolete. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version).</summary>
+		<description>This package is obsolete, but development is still active on the MvcSiteMapProvider project. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version). If you have installed this package into your project, please remove it by running the command 'Uninstall-Package MvcSiteMapProvider' (without the quotes) from Package Manager Console. NuGet doesn't support multiple versions of MVC in one package, so it was necessary to create a different NuGet package per MVC version we support.</description>
+		<language>en-US</language>
+		<tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation mvcsitemapprovider</tags>
+		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
+		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
+		<dependencies>
+			<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="[$version$]" />
+		</dependencies>
+	</metadata>
 </package>
