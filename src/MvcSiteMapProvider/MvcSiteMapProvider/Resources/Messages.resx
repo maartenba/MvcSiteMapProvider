@@ -142,7 +142,7 @@
     <value>Multiple nodes with the same URL '{0}' were found. SiteMap requires that sitemap nodes have unique URLs.</value>
   </data>
   <data name="NoParentKeyDefined" xml:space="preserve">
-    <value>Multiple root nodes defined. Are you missing a ParentKey definition on the '{0}' controller, '{1}'?</value>
+    <value>Multiple root nodes defined in sitemap with cache key '{0}'. Are you missing a ParentKey definition on the '{1}' controller, '{2}' method?</value>
   </data>
   <data name="NamedUrlResolverNotFound" xml:space="preserve">
     <value>The URL resolver instance named '{0}' was not found. Check your DI configuration to ensure a URL resolver instance with this name exists and is configured correctly.</value>
@@ -222,5 +222,10 @@
 PreservedRouteParameters always copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove '{1}' from PreservedRouteParameters or as a configured RouteValue.
 
 Alternatively, if you are configuring the node in XML and intend to use '{1}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{1}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderParentNodeNotFound" xml:space="preserve">
+    <value>The parent node with key '{0}' was not found in the sitemap with cache key '{1}' for the MvcSiteMapNodeAttribute defined on '{2}' controller, '{3}' method. The most likely cause is that the key property for the parent node was not set explicitly in your node configuration or it does not match the ParentKey that was set on '{2}' controller, '{3}' method.
+
+This error can also happen if the 'Order' property for MvcSiteMapAttribute definitions has not been specified. Be sure the 'Order' for each parent node is lower than the 'Order' for its child nodes.</value>
   </data>
 </root>

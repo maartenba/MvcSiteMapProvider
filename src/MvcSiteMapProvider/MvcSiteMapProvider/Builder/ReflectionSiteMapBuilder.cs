@@ -267,7 +267,7 @@ namespace MvcSiteMapProvider.Builder
                 {
                     if (string.IsNullOrEmpty(assemblyNode.SiteMapNodeAttribute.ParentKey))
                     {
-                        throw new MvcSiteMapException(string.Format(Resources.Messages.NoParentKeyDefined, nodeToAdd.Controller, nodeToAdd.Action));
+                        throw new MvcSiteMapException(string.Format(Resources.Messages.NoParentKeyDefined, this.siteMapCacheKey, nodeToAdd.Controller, nodeToAdd.Action));
                     }
 
                     var parentForNode = parentNode != null ? siteMap.FindSiteMapNodeFromKey(assemblyNode.SiteMapNodeAttribute.ParentKey) : null;
@@ -300,7 +300,7 @@ namespace MvcSiteMapProvider.Builder
             }
 
             // Process list of nodes that did not have a parent defined.
-            // If this does not succeed at this time, parent will default to root node.
+            // If this does not succeed at this time, an exception will be thrown.
             if (parentNode != null)
             {
                 foreach (var nodeToAdd in nodesToProcessLater)
@@ -308,11 +308,13 @@ namespace MvcSiteMapProvider.Builder
                     var parentForNode = siteMap.FindSiteMapNodeFromKey(nodeToAdd.Value);
                     if (parentForNode == null)
                     {
-                        var temp = nodesToProcessLater.Keys.Where(t => t.Key == nodeToAdd.Value).FirstOrDefault();
-                        if (temp != null)
-                        {
-                            parentNode = temp;
-                        }
+                        throw new MvcSiteMapException(
+                            String.Format(
+                                Resources.Messages.ReflectionSiteMapBuilderParentNodeNotFound, 
+                                nodeToAdd.Value,
+                                this.SiteMapCacheKey,
+                                nodeToAdd.Key.Controller, 
+                                nodeToAdd.Key.Action));
                     }
                     if (parentForNode != null)
                     {

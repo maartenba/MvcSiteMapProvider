@@ -214,7 +214,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple root nodes defined. Are you missing a ParentKey definition on the &apos;{0}&apos; controller, &apos;{1}&apos;?.
+        ///   Looks up a localized string similar to Multiple root nodes defined in sitemap with cache key &apos;{0}&apos;. Are you missing a ParentKey definition on the &apos;{1}&apos; controller, &apos;{2}&apos; method?.
         /// </summary>
         internal static string NoParentKeyDefined {
             get {
@@ -246,6 +246,17 @@ namespace MvcSiteMapProvider.Resources {
         internal static string PhysicalPathNotAllowed {
             get {
                 return ResourceManager.GetString("PhysicalPathNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The parent node with key &apos;{0}&apos; was not found in the sitemap with cache key &apos;{1}&apos; for the MvcSiteMapNodeAttribute defined on &apos;{2}&apos; controller, &apos;{3}&apos; method. The most likely cause is that the key property for the parent node was not set explicitly in your node configuration or it does not match the ParentKey that was set on &apos;{2}&apos; controller, &apos;{3}&apos; method.
+        ///
+        ///This error can also happen if the &apos;Order&apos; property for MvcSiteMapAttribute definitions has not been specified. Be sure the &apos;Order&apos; for each parent node i [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ReflectionSiteMapBuilderParentNodeNotFound {
+            get {
+                return ResourceManager.GetString("ReflectionSiteMapBuilderParentNodeNotFound", resourceCulture);
             }
         }
         
