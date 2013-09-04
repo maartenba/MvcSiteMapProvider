@@ -88,7 +88,7 @@ namespace MvcSiteMapProvider
         /// Gets or sets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
-        public IDictionary<string, string> Attributes { get; set; }
+        public IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
@@ -245,7 +245,7 @@ namespace MvcSiteMapProvider
         public DynamicNode()
         {
             RouteValues = new Dictionary<string, object>();
-            Attributes = new Dictionary<string, string>();
+            Attributes = new Dictionary<string, object>();
             PreservedRouteParameters = new List<string>();
             Roles = new List<string>();
             MetaRobotsValues = new List<string>();

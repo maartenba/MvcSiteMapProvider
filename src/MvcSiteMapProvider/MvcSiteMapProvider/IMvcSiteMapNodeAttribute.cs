@@ -148,7 +148,7 @@ namespace MvcSiteMapProvider
         /// Gets or sets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
-        IDictionary<string, string> Attributes { get; set; }
+        IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the cache key this node is associated with.
