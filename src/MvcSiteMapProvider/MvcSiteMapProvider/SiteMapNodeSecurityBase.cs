@@ -83,6 +83,7 @@ namespace MvcSiteMapProvider
         public abstract string Area { get; set; }
         public abstract string Controller { get; set; }
         public abstract string Action { get; set; }
+        public abstract int Order { get; set; }
         public abstract void CopyTo(ISiteMapNode node);
 
         #endregion

@@ -464,6 +464,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
             siteMapNode.ChangeFrequency = attribute.ChangeFrequency;
             siteMapNode.UpdatePriority = attribute.UpdatePriority;
+            siteMapNode.Order = attribute.Order;
 
             // Handle route details
             siteMapNode.Route = attribute.Route;

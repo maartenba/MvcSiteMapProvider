@@ -87,7 +87,9 @@ namespace MvcSiteMapProvider
         public string VisibilityProvider { get; set; }
 
         /// <summary>
-        /// Used for ordering nodes
+        /// Gets or sets the sort order of this node relative to all other nodes.
+        /// This value is used both for determining which order parent-child relationships are processed 
+        /// as well as for how the node is diplayed in the HTML helper controls.
         /// </summary>
         public int Order { get; set; }
 

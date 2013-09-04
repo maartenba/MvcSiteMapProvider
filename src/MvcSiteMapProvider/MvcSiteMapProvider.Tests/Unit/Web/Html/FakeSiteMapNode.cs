@@ -300,6 +300,8 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         public string Controller { get; set; }
 
         public string Action { get; set; }
+
+        public int Order { get; set; }
        
         public void CopyTo(ISiteMapNode node)
         {

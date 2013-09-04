@@ -154,6 +154,12 @@ namespace MvcSiteMapProvider
         public IList<string> MetaRobotsValues { get; set; }
 
         /// <summary>
+        /// Gets or sets the sort order of the node relative to its sibling nodes (the nodes that have the same parent).
+        /// </summary>
+        /// <value>The sort order.</value>
+        public int? Order { get; set; }
+
+        /// <summary>
         /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
         /// doesn't overwrite any values that are not set in this <see cref="T:MvcSiteMapNodeProvider.DynamicNode"/> instance.
         /// </summary>
@@ -228,6 +234,8 @@ namespace MvcSiteMapProvider
                     }
                 }
             }
+            if (this.Order != null)
+                node.Order = (int)this.Order;
         }
 
 

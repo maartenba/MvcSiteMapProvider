@@ -106,6 +106,11 @@ namespace MvcSiteMapProvider
         public override bool IsReadOnly { get { return this.SiteMap.IsReadOnly; } }
 
         /// <summary>
+        /// Gets or sets the display sort order for the node relative to its sibling nodes.
+        /// </summary>
+        public override int Order { get; set; }
+
+        /// <summary>
         /// A reference to the root SiteMap object for the current graph.
         /// </summary>
         public override ISiteMap SiteMap

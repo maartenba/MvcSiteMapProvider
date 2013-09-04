@@ -77,6 +77,8 @@ namespace MvcSiteMapProvider
         string Controller { get; set; }
         string Action { get; set; }
 
+        int Order { get; set; }
+
         void CopyTo(ISiteMapNode node);
     }
 }

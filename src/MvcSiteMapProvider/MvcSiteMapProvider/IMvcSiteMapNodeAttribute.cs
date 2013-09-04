@@ -151,8 +151,9 @@ namespace MvcSiteMapProvider
         IDictionary<string, string> Attributes { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the cache key this node is associated with
+        /// Gets or sets the name of the cache key this node is associated with.
         /// </summary>
+        /// <value>The SiteMap cache key.</value>
         string SiteMapCacheKey { get; set; }
     }
 }
