@@ -373,6 +373,17 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The root node was not found in the .sitemap XML file. If XML configuration is enabled, exactly one root node must be defined in the file.
+        ///
+        ///Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to &quot;false&quot;. For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapBuilder from the MvcSiteMapProvider DI module..
+        /// </summary>
+        internal static string XmlSiteMapBuilderRootKeyNotDefined {
+            get {
+                return ResourceManager.GetString("XmlSiteMapBuilderRootKeyNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The file at &apos;{0}&apos; contains XML validation errors. See the inner exception for complete details..
         /// </summary>
         internal static string XmlValidationFailed {

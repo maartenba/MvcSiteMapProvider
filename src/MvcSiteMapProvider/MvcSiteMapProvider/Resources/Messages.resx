@@ -228,4 +228,9 @@ Alternatively, if you are configuring the node in XML and intend to use '{1}' as
 
 This error can also happen if the 'Order' property for MvcSiteMapAttribute definitions has not been specified. Be sure the 'Order' for each parent node is lower than the 'Order' for its child nodes.</value>
   </data>
+  <data name="XmlSiteMapBuilderRootKeyNotDefined" xml:space="preserve">
+    <value>The root node was not found in the .sitemap XML file. If XML configuration is enabled, exactly one root node must be defined in the file.
+
+Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapBuilder from the MvcSiteMapProvider DI module.</value>
+  </data>
 </root>

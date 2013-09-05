@@ -74,6 +74,11 @@ namespace MvcSiteMapProvider.Builder
 
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
             var rootElement = GetRootElement(xml);
+            if (rootElement == null)
+            {
+                // No root element - inform the user this isn't allowed.
+                throw new MvcSiteMapException(Resources.Messages.XmlSiteMapBuilderRootKeyNotDefined);
+            }
             var root = GetRootNode(siteMap, xml, rootElement);
 
             // Fixes #192 root node not added to sitemap
