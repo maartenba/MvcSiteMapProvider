@@ -16,14 +16,14 @@ namespace MvcSiteMapProvider.DI
             this.SiteMapFileName = GetConfigurationValueOrFallback("MvcSiteMapProvider_SiteMapFileName", "~/Mvc.sitemap");
             this.ScanAssembliesForSiteMapNodes = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_ScanAssembliesForSiteMapNodes", "false"));
             this.ExcludeAssembliesForScan = GetConfigurationValueOrFallback("MvcSiteMapProvider_ExcludeAssembliesForScan", "")
-                .Split(new char[] {',', ';'}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
             this.IncludeAssembliesForScan = GetConfigurationValueOrFallback("MvcSiteMapProvider_IncludeAssembliesForScan", "")
-                .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
             this.AttributesToIgnore = GetConfigurationValueOrFallback("MvcSiteMapProvider_AttributesToIgnore", "")
-                .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                .Split(new char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
             this.CacheDuration = int.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_CacheDuration", "5"));
             this.ControllerTypeResolverAreaNamespacesToIgnore = GetConfigurationValueOrFallback("MvcSiteMapProvider_ControllerTypeResolverAreaNamespacesToIgnore", "")
-                .Split(new char[] { '|', ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                .Split(new char[] { '|', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
             this.DefaultSiteMapNodeVisibiltyProvider = GetConfigurationValueOrFallback("MvcSiteMapProvider_DefaultSiteMapNodeVisibiltyProvider", String.Empty);
             this.EnableLocalization = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableLocalization", "true"));
             this.SecurityTrimmingEnabled = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_SecurityTrimmingEnabled", "false"));
