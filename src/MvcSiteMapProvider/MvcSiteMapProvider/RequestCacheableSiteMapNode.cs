@@ -51,7 +51,7 @@ namespace MvcSiteMapProvider
 
         public override int Order
         {
-            get { return this.GetCachedOrMemberValue<int>(() => base.Order, "Order", false); }
+            get { return (int)this.GetCachedOrMemberValue<int?>(() => base.Order, "Order", false); }
             set { this.SetCachedOrMemberValue<int>(x => base.Order = x, "Order", value); }
         }
 
