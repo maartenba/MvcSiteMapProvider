@@ -20,13 +20,17 @@ namespace MvcSiteMapProvider.DI
         public SiteMapLoaderContainer(ConfigurationSettings settings)
         {
             // Singleton instances
-            this.absoluteFileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
+            if (settings.EnableSiteMapFile)
+            {
+                this.absoluteFileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
+            }
             this.mvcContextFactory = new MvcContextFactory();
 #if NET35
             this.siteMapCache = new SiteMapCache(new AspNetCacheProvider<ISiteMap>(this.mvcContextFactory));
 #else
             this.siteMapCache = new SiteMapCache(new RuntimeCacheProvider<ISiteMap>(System.Runtime.Caching.MemoryCache.Default));
 #endif
+            this.cacheDependency = this.ResolveCacheDependency(settings);
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = new UrlPath(this.mvcContextFactory);
             this.siteMapCacheKeyGenerator = new SiteMapCacheKeyGenerator(this.mvcContextFactory);
@@ -45,6 +49,7 @@ namespace MvcSiteMapProvider.DI
         private readonly string absoluteFileName;
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly ISiteMapCache siteMapCache;
+        private readonly ICacheDependency cacheDependency;
         private readonly IRequestCache requestCache;
         private readonly IUrlPath urlPath;
         private readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
@@ -83,7 +88,10 @@ namespace MvcSiteMapProvider.DI
         private ISiteMapBuilder ResolveSiteMapBuilder(ConfigurationSettings settings)
         {
             var builders = new List<ISiteMapBuilder>();
-            builders.Add(this.ResolveXmlSiteMapBuilder(settings.SiteMapFileName, settings.AttributesToIgnore));
+            if (settings.EnableSiteMapFile)
+            {
+                builders.Add(this.ResolveXmlSiteMapBuilder(settings.SiteMapFileName, settings.AttributesToIgnore));
+            }
             if (settings.ScanAssembliesForSiteMapNodes)
             {
                 builders.Add(this.ResolveReflectionSiteMapBuilder(settings.IncludeAssembliesForScan, settings.ExcludeAssembliesForScan, settings.AttributesToIgnore));
@@ -126,16 +134,27 @@ namespace MvcSiteMapProvider.DI
 
         private ICacheDetails ResolveCacheDetails(ConfigurationSettings settings)
         {
-            
             return new CacheDetails(
                 TimeSpan.FromMinutes(settings.CacheDuration),
                 TimeSpan.MinValue,
-#if NET35
-                new AspNetFileCacheDependency(absoluteFileName)
-#else
-                new RuntimeFileCacheDependency(absoluteFileName)
-#endif
+                this.cacheDependency
                 );
+        }
+
+        private ICacheDependency ResolveCacheDependency(ConfigurationSettings settings)
+        {
+            if (settings.EnableSiteMapFile)
+            {
+#if NET35
+                return new AspNetFileCacheDependency(absoluteFileName);
+#else
+                return new RuntimeFileCacheDependency(absoluteFileName);
+#endif
+            }
+            else
+            {
+                return new NullCacheDependency();
+            }
         }
     }
 }

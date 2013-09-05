@@ -79,6 +79,8 @@ namespace MvcSiteMapProvider.Builder
             }
         }
 
+        #region ISiteMapBuilder Members
+        
 
         /// <summary>
         /// Provides the base data on which the context-aware provider can generate a full tree.
@@ -122,6 +124,8 @@ namespace MvcSiteMapProvider.Builder
             // Done!
             return rootNode;
         }
+
+        #endregion
 
         /// <summary>
         /// Processes the nodes in assembly.
@@ -228,15 +232,16 @@ namespace MvcSiteMapProvider.Builder
                         attributedRootNode.Attributes.Remove("parentKey");
                     }
                     parentNode = attributedRootNode;
+
+                    // Fixes #192 root node not added to sitemap
+                    if (siteMap.FindSiteMapNodeFromKey(parentNode.Key) == null)
+                    {
+                        // Add the root node to the sitemap
+                        siteMap.AddNode(parentNode);
+                    }
                 }
             }
 
-            // Fixes #192 root node not added to sitemap
-            if (siteMap.FindSiteMapNodeFromKey(parentNode.Key) == null)
-            {
-                // Add the root node to the sitemap
-                siteMap.AddNode(parentNode);
-            }
 
             // Create nodes
             foreach (var assemblyNode in definitions.Where(t => !String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)))

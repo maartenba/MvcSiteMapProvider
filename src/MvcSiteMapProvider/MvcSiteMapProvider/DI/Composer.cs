@@ -35,9 +35,12 @@ namespace MvcSiteMapProvider.DI
             // If the config specifies to use an external DI container, skip the internal container.
             if (!settings.UseExternalDIContainer)
             {
-                // Validate the Xml File.
-                var validator = new SiteMapXmlValidator();
-                validator.ValidateXml(HostingEnvironment.MapPath(settings.SiteMapFileName));
+                if (settings.EnableSiteMapFile)
+                {
+                    // Validate the Xml File.
+                    var validator = new SiteMapXmlValidator();
+                    validator.ValidateXml(HostingEnvironment.MapPath(settings.SiteMapFileName));
+                }
 
 #if !MVC2
                 // If not using a custom DependencyResolver, we prefer to use IControllerFactory

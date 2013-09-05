@@ -355,7 +355,9 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node..
+        ///   Looks up a localized string similar to VisitingSiteMapBuilder requires a root node in order to function.
+        ///
+        ///Make sure your configuration includes a root node by ensuring there is exactly 1 root node in your .sitemap file or ensuring there is exactly 1 node that has no ParentKey configured..
         /// </summary>
         internal static string VisitingSiteMapBuilderRequiresRootNode {
             get {

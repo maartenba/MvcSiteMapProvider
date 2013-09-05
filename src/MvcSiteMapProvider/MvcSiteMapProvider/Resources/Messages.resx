@@ -169,7 +169,9 @@
     <value>The '{0}' has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed.</value>
   </data>
   <data name="VisitingSiteMapBuilderRequiresRootNode" xml:space="preserve">
-    <value>VisitingSiteMapBuilder requires a root node to be passed. Make sure there is a builder configured to run before it that returns a valid root node.</value>
+    <value>VisitingSiteMapBuilder requires a root node in order to function.
+
+Make sure your configuration includes a root node by ensuring there is exactly 1 root node in your .sitemap file or ensuring there is exactly 1 node that has no ParentKey configured.</value>
   </data>
   <data name="MetaRobotsValueFollowAmbiguous" xml:space="preserve">
     <value>The '{0}' value for the robots meta tag has already been added for node. 'follow' and 'nofollow' may not be used at the same time.</value>
