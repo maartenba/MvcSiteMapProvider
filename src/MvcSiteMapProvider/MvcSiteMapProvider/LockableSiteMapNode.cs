@@ -36,6 +36,19 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
+        /// Gets or sets the display sort order for the node relative to its sibling nodes.
+        /// </summary>
+        public override int Order 
+        {
+            get { return base.Order; }
+            set
+            {
+                this.ThrowIfReadOnly("Order");
+                base.Order = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the HTTP method.
         /// </summary>
         /// <value>

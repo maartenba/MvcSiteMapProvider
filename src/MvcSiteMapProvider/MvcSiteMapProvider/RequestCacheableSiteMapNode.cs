@@ -49,6 +49,12 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapNode Members
 
+        public override int Order
+        {
+            get { return this.GetCachedOrMemberValue<int>(() => base.Order, "Order", false); }
+            set { this.SetCachedOrMemberValue<int>(x => base.Order = x, "Order", value); }
+        }
+
         public override string Title
         {
             get { return this.GetCachedOrMemberValue<string>(() => base.Title, "Title", true); }
