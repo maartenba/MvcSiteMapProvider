@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.Mvc.Filters
@@ -7,6 +8,7 @@ namespace MvcSiteMapProvider.Web.Mvc.Filters
     /// Apply this attribute to keep route data when rendering the sitemap (e.g. breadcrumbs).
     /// Note: Do NOT use this in conjunction with dynamic node providers!
     /// </summary>
+    [Obsolete("SiteMapPreserveRouteDataAttribute has been deprecated and will be removed in version 5. Use preservedRouteParameters instead (either in your .sitemap file or on MvcSiteMapNodeAttribute).")]
     public class SiteMapPreserveRouteDataAttribute 
         : ActionFilterAttribute
     {
