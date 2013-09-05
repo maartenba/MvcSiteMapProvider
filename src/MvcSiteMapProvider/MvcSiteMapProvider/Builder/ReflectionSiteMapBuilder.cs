@@ -89,6 +89,18 @@ namespace MvcSiteMapProvider.Builder
         /// <returns></returns>
         public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
+            var assemblies = this.GetConfiguredAssembiles();
+            var definitions = this.GetMvcSiteMapAttributeDefinitions(assemblies);
+            rootNode = this.CreateNodesFromMvcSiteMapNodeAttributeDefinitions(siteMap, rootNode, definitions.OrderBy(x => x.SiteMapNodeAttribute.Order));
+
+            // Done!
+            return rootNode;
+        }
+
+        #endregion
+
+        protected virtual IEnumerable<Assembly> GetConfiguredAssembiles()
+        {
             // List of assemblies
             IEnumerable<Assembly> assemblies;
             if (includeAssemblies.Any())
@@ -111,78 +123,87 @@ namespace MvcSiteMapProvider.Builder
                                 && !excludeAssemblies.Contains(new AssemblyName(a.FullName).Name));
             }
 
-            foreach (Assembly assembly in assemblies)
-            {
-                // http://stackoverflow.com/questions/1423733/how-to-tell-if-a-net-assembly-is-dynamic
-                if (!(assembly.ManifestModule is System.Reflection.Emit.ModuleBuilder)
-                    && assembly.ManifestModule.GetType().Namespace != "System.Reflection.Emit")
-                {
-                    rootNode = ProcessNodesInAssembly(siteMap, assembly, rootNode);
-                }
-            }
-
-            // Done!
-            return rootNode;
+            // http://stackoverflow.com/questions/1423733/how-to-tell-if-a-net-assembly-is-dynamic
+            return assemblies
+                .Where(a =>
+                    !(a.ManifestModule is System.Reflection.Emit.ModuleBuilder)
+                    && a.ManifestModule.GetType().Namespace != "System.Reflection.Emit"
+                );
         }
 
-        #endregion
-
-        /// <summary>
-        /// Processes the nodes in assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        protected virtual ISiteMapNode ProcessNodesInAssembly(ISiteMap siteMap, Assembly assembly, ISiteMapNode parentNode)
+        protected virtual IEnumerable<IMvcSiteMapNodeAttributeDefinition> GetMvcSiteMapAttributeDefinitions(IEnumerable<Assembly> assemblies)
         {
-            // Create a list of all nodes defined in the assembly
-            var assemblyNodes = new List<IMvcSiteMapNodeAttributeDefinition>();
+            var result = new List<IMvcSiteMapNodeAttributeDefinition>();
+            var types = this.GetTypesFromAssemblies(assemblies);
 
-            // Retrieve types
-            Type[] types;
+            foreach (Type type in types)
+            {
+                result.AddRange(this.GetAttributeDefinitionsForControllers(type));
+                result.AddRange(this.GetAttributeDefinitionsForActions(type));
+            }
+            return result;
+        }
+
+        protected virtual IEnumerable<Type> GetTypesFromAssembly(Assembly assembly)
+        {
             try
             {
-                types = assembly.GetTypes();
+                return assembly.GetTypes();
             }
             catch (ReflectionTypeLoadException ex)
             {
-                types = ex.Types;
+                return ex.Types;
             }
+        }
 
-            // Add all types
-            foreach (Type type in types)
+        protected virtual IEnumerable<Type> GetTypesFromAssemblies(IEnumerable<Assembly> assemblies)
+        {
+            var result = new List<Type>();
+            foreach (var assembly in assemblies)
             {
-                var attributes = type.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true) as IMvcSiteMapNodeAttribute[];
+                result.AddRange(this.GetTypesFromAssembly(assembly));
+            }
+            return result;
+        }
+
+        protected virtual IEnumerable<IMvcSiteMapNodeAttributeDefinition> GetAttributeDefinitionsForControllers(Type type)
+        {
+            var result = new List<IMvcSiteMapNodeAttributeDefinition>();
+            var attributes = type.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true) as IMvcSiteMapNodeAttribute[];
+            foreach (var attribute in attributes)
+            {
+                result.Add(new MvcSiteMapNodeAttributeDefinitionForController
+                {
+                    SiteMapNodeAttribute = attribute,
+                    ControllerType = type
+                });
+            }
+            return result;
+        }
+
+        protected virtual IEnumerable<IMvcSiteMapNodeAttributeDefinition> GetAttributeDefinitionsForActions(Type type)
+        {
+            var result = new List<IMvcSiteMapNodeAttributeDefinition>();
+            // Add their methods
+            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).Any());
+
+            foreach (var method in methods)
+            {
+                var attributes = method.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), false) as IMvcSiteMapNodeAttribute[];
                 foreach (var attribute in attributes)
                 {
-                    assemblyNodes.Add(new MvcSiteMapNodeAttributeDefinitionForController
+                    result.Add(new MvcSiteMapNodeAttributeDefinitionForAction
                     {
                         SiteMapNodeAttribute = attribute,
-                        ControllerType = type
+                        ControllerType = type,
+                        ActionMethodInfo = method
                     });
                 }
-                
-
-                // Add their methods
-                var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(x => x.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), true).Any());
-
-                foreach (var method in methods)
-                {
-                    attributes = method.GetCustomAttributes(typeof(IMvcSiteMapNodeAttribute), false) as IMvcSiteMapNodeAttribute[];
-                    foreach (var attribute in attributes)
-                    {
-                        assemblyNodes.Add(new MvcSiteMapNodeAttributeDefinitionForAction
-                        {
-                            SiteMapNodeAttribute = attribute,
-                            ControllerType = type,
-                            ActionMethodInfo = method
-                        });
-                    }
-                }
             }
-
-            // Create nodes from MVC site map node attribute definitions
-            return CreateNodesFromMvcSiteMapNodeAttributeDefinitions(siteMap, parentNode, assemblyNodes.OrderBy(n => n.SiteMapNodeAttribute.Order));
+            return result;
         }
+
 
         /// <summary>
         /// Creates the nodes from MVC site map node attribute definitions.
