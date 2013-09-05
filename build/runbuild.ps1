@@ -4,7 +4,7 @@ properties {
 	$source_directory = "$base_directory\src\MvcSiteMapProvider"
 	$nuget_directory  = "$base_directory\nuget"
 	$tools_directory  = "$base_directory\tools"
-	$version          = "4.0.0"
+	$version          = ""
 	$packageVersion   = "$version-pre"
 	$configuration    = "Release"
 }
@@ -17,13 +17,18 @@ task Clean -description "This task cleans up the build directory" {
 	Remove-Item $build_directory -Force -Recurse -ErrorAction SilentlyContinue
 }
 
-task Init -description "This tasks makes sure the build environment is correctly setup" {  
-	Generate-Assembly-Info `
-		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
-		-company "MvcSiteMapProvider" `
-		-version $version `
-		-packageVersion $packageVersion `
-		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+task Init -description "This tasks makes sure the build environment is correctly setup" {
+	if (![string]::IsNullOrEmpty($version)) {
+		Write-Host "Version is $version, patching AssemblyInfo" -ForegroundColor Yellow
+		Generate-Assembly-Info `
+			-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
+			-company "MvcSiteMapProvider" `
+			-version $version `
+			-packageVersion $packageVersion `
+			-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	} else {
+	    Write-Host "Version not detected, skipping AssemblyInfo patch" -ForegroundColor Yellow
+	}
 }
 
 task Compile -depends Clean, Init -description "This task compiles the solution" {
@@ -57,12 +62,15 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 
 task Finalize -depends NuGet -description "This tasks finalizes the build" {  
 	#Change the assembly info file to be the same way it was before
-	Generate-Assembly-Info `
-		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
-		-company "MvcSiteMapProvider" `
-		-version $version `
-		-packageVersion $version `
-		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	if (![string]::IsNullOrEmpty($version)) {
+		Write-Host "Reverting AssemblyInfo to its original state" -ForegroundColor Yellow
+		Generate-Assembly-Info `
+			-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
+			-company "MvcSiteMapProvider" `
+			-version "4.0.0" `
+			-packageVersion "4.0.0" `
+			-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	}
 }
 
 function Transform-Nuspec ([string] $source, [string] $transform, [string] $destination) {

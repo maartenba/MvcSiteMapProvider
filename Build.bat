@@ -9,10 +9,10 @@ GOTO endcommentblock
 :: Available Options:
 ::
 ::   -Version:<Version>
-::   -v:<Version> - Assembly version number. Default is 4.0.0.
+::   -v:<Version> - Assembly version number. Default is empty string.
 ::
 ::   -PackageVersion:<PackageVersion>
-::   -pv:<PackageVersion> - Nuget package version. Default is version's value.
+::   -pv:<PackageVersion> - Nuget package version. Default is 4.0.0.
 ::
 ::   -Configuration:<Configuration>
 ::   -config:<Configuration> - MSBuild configuration for the build.
@@ -28,10 +28,14 @@ setlocal enabledelayedexpansion enableextensions
 
 REM Default values
 IF "%version%" == "" (
-	set version=4.0.0
+	set version=
 )
 IF "%PackageVersion%" == "" (
-    set PackageVersion=%version%
+	IF "%version%" == "" (
+		set PackageVersion=4.0.0
+	) ELSE (
+		set PackageVersion=%version%
+	)
 )
 set configuration=Release
 IF NOT "%config%" == "" (

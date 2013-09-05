@@ -9,6 +9,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyrightAttribute("Copyright © MvcSiteMapProvider 2009 - 2013")]
 [assembly: AssemblyVersionAttribute("4.0.0")]
 [assembly: AssemblyInformationalVersionAttribute("4.0.0")]
-[assembly: AssemblyFileVersionAttribute("4.0.0")]
 [assembly: AssemblyDelaySignAttribute(false)]
 
