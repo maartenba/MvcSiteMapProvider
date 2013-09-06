@@ -216,7 +216,11 @@ Make sure your configuration includes a root node by ensuring there is exactly 1
     <value>The visibility provider instance named '{0}' was not found. Check your DI configuration to ensure a visibility provider instance with this name exists and is configured correctly.</value>
   </data>
   <data name="ReflectionSiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
-    <value>There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.</value>
+    <value>There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.
+
+SiteMapCacheKey: '{0}'
+Key of root nodes without a ParentKey: 
+{1}</value>
   </data>
   <data name="SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter" xml:space="preserve">
     <value>The node with key '{0}' has '{1}' configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
@@ -225,14 +229,28 @@ PreservedRouteParameters always copies the route value from the current HTTP req
 
 Alternatively, if you are configuring the node in XML and intend to use '{1}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{1}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
   </data>
-  <data name="ReflectionSiteMapBuilderParentNodeNotFound" xml:space="preserve">
-    <value>The parent node with key '{0}' was not found in the sitemap with cache key '{1}' for the MvcSiteMapNodeAttribute defined on '{2}' controller, '{3}' method. The most likely cause is that the key property for the parent node was not set explicitly in your node configuration or it does not match the ParentKey that was set on '{2}' controller, '{3}' method.
+  <data name="ReflectionSiteMapBuilderRootKeyAmbiguousAcrossBuilders" xml:space="preserve">
+    <value>There is an MvcSiteMapNodeAttribute declared without a parent key, but there was also a root node defined using another configuration method. Only 1 root node is allowed per SiteMap.
 
-This error can also happen if the 'Order' property for MvcSiteMapAttribute definitions has not been specified. Be sure the 'Order' for each parent node is lower than the 'Order' for its child nodes.</value>
+SiteMapCacheKey: '{0}'
+Key of root node from other SiteMap builder: '{1}'
+Key of root node defined with MvcSiteMapNodeAttribute: '{2}'</value>
   </data>
   <data name="XmlSiteMapBuilderRootKeyNotDefined" xml:space="preserve">
     <value>The root node was not found in the .sitemap XML file. If XML configuration is enabled, exactly one root node must be defined in the file.
 
 Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapBuilder from the MvcSiteMapProvider DI module.</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderOrphanedNodes" xml:space="preserve">
+    <value>Not all nodes defined by MvcSiteMapNodeAttribute could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+
+SiteMapCacheKey: '{0}'
+
+Orphaned Nodes:
+
+{1}</value>
+  </data>
+  <data name="SiteMapNodeFormatWithParentKey" xml:space="preserve">
+    <value>ParentKey: '{0}' | Controller: '{1}' | Action: '{2}' | URL: '{3}'</value>
   </data>
 </root>

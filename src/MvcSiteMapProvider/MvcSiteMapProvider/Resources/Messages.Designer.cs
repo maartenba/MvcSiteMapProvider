@@ -250,22 +250,43 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The parent node with key &apos;{0}&apos; was not found in the sitemap with cache key &apos;{1}&apos; for the MvcSiteMapNodeAttribute defined on &apos;{2}&apos; controller, &apos;{3}&apos; method. The most likely cause is that the key property for the parent node was not set explicitly in your node configuration or it does not match the ParentKey that was set on &apos;{2}&apos; controller, &apos;{3}&apos; method.
+        ///   Looks up a localized string similar to Not all nodes defined by MvcSiteMapNodeAttribute could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
         ///
-        ///This error can also happen if the &apos;Order&apos; property for MvcSiteMapAttribute definitions has not been specified. Be sure the &apos;Order&apos; for each parent node i [rest of string was truncated]&quot;;.
+        ///SiteMapCacheKey: &apos;{0}&apos;
+        ///
+        ///Orphaned Nodes:
+        ///
+        ///{1}.
         /// </summary>
-        internal static string ReflectionSiteMapBuilderParentNodeNotFound {
+        internal static string ReflectionSiteMapBuilderOrphanedNodes {
             get {
-                return ResourceManager.GetString("ReflectionSiteMapBuilderParentNodeNotFound", resourceCulture);
+                return ResourceManager.GetString("ReflectionSiteMapBuilderOrphanedNodes", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application..
+        ///   Looks up a localized string similar to There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;
+        ///Key of root nodes without a ParentKey: 
+        ///{1}.
         /// </summary>
         internal static string ReflectionSiteMapBuilderRootKeyAmbiguous {
             get {
                 return ResourceManager.GetString("ReflectionSiteMapBuilderRootKeyAmbiguous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is an MvcSiteMapNodeAttribute declared without a parent key, but there was also a root node defined using another configuration method. Only 1 root node is allowed per SiteMap.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;
+        ///Key of root node from other SiteMap builder: &apos;{1}&apos;
+        ///Key of root node defined with MvcSiteMapNodeAttribute: &apos;{2}&apos;.
+        /// </summary>
+        internal static string ReflectionSiteMapBuilderRootKeyAmbiguousAcrossBuilders {
+            get {
+                return ResourceManager.GetString("ReflectionSiteMapBuilderRootKeyAmbiguousAcrossBuilders", resourceCulture);
             }
         }
         
@@ -302,6 +323,15 @@ namespace MvcSiteMapProvider.Resources {
         internal static string SiteMapNodeCanonicalValueAlreadySet {
             get {
                 return ResourceManager.GetString("SiteMapNodeCanonicalValueAlreadySet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ParentKey: &apos;{0}&apos; | Controller: &apos;{1}&apos; | Action: &apos;{2}&apos; | URL: &apos;{3}&apos;.
+        /// </summary>
+        internal static string SiteMapNodeFormatWithParentKey {
+            get {
+                return ResourceManager.GetString("SiteMapNodeFormatWithParentKey", resourceCulture);
             }
         }
         

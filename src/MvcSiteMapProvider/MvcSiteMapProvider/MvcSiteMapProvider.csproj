@@ -139,6 +139,10 @@
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
     <Compile Include="DI\DependencyResolverDecorator.cs" />
     <Compile Include="ISiteMapSettings.cs" />
+    <Compile Include="Reflection\AttributeAssemblyProvider.cs" />
+    <Compile Include="Reflection\IAttributeAssemblyProvider.cs" />
+    <Compile Include="Reflection\IMvcSiteMapNodeAttributeDefinitionProvider.cs" />
+    <Compile Include="Reflection\MvcSiteMapNodeAttributeDefinitionProvider.cs" />
     <Compile Include="Reflection\ObjectExtensions.cs" />
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
