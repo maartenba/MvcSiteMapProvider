@@ -251,6 +251,26 @@ Orphaned Nodes:
 {1}</value>
   </data>
   <data name="SiteMapNodeFormatWithParentKey" xml:space="preserve">
-    <value>ParentKey: '{0}' | Controller: '{1}' | Action: '{2}' | URL: '{3}'</value>
+    <value>ParentKey: '{0}' | Controller: '{1}' | Action: '{2}' | Area: '{3}' | URL: '{4}' | Key: '{5}' | Source: '{6}'</value>
+  </data>
+  <data name="XmlSiteMapBuilderOrphanedNodes" xml:space="preserve">
+    <value>Not all nodes defined by using a .sitemap XML file could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+
+Also note that nodes defined using a DynamicNodeProvider that are defined in a .sitemap XML file cannot use MvcSiteMapNodeAttribute nodes (or dynamic nodes from DynamicNodeProviders defined on MvcSiteMapNodeAttribute) as a parent.
+
+SiteMapCacheKey: '{0}'
+
+Orphaned Nodes:
+
+{1}</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderNodeCouldNotBeCreated" xml:space="preserve">
+    <value>A node defined by MvcSiteMapNodeAttribute could not be created. Please check the properties of the node carefully.
+
+SiteMapCacheKey '{0}'
+
+Node Details: 
+
+{1} </value>
   </data>
 </root>

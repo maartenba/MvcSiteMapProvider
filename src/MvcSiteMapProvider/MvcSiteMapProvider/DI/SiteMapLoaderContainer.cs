@@ -9,6 +9,7 @@ using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Reflection;
 
 namespace MvcSiteMapProvider.DI
 {
@@ -35,11 +36,18 @@ namespace MvcSiteMapProvider.DI
             this.urlPath = new UrlPath(this.mvcContextFactory);
             this.siteMapCacheKeyGenerator = new SiteMapCacheKeyGenerator(this.mvcContextFactory);
             this.siteMapCacheKeyToBuilderSetMapper = new SiteMapCacheKeyToBuilderSetMapper();
-            this.nodeKeyGenerator = new NodeKeyGenerator();
             var siteMapNodeFactoryContainer = new SiteMapNodeFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
+            this.siteMapNodeParentMapFactory = new SiteMapNodeParentMapFactory();
+            this.nodeKeyGenerator = new NodeKeyGenerator();
             this.siteMapNodeFactory = siteMapNodeFactoryContainer.ResolveSiteMapNodeFactory();
+            this.siteMapNodeCreationService = this.ResolveSiteMapNodeCreationService();
+            this.dynamicNodeParentMapBuilder = new DynamicNodeParentMapBuilder(this.siteMapNodeCreationService);
+            this.siteMapHierarchyBuilder = new SiteMapHierarchyBuilder();
+            this.siteMapNodeBuilderService = this.ResolveSiteMapNodeBuilderService();
+            this.siteMapAssemblyService = this.ResolveSiteMapAssemblyService();
+            this.attributeAssemblyProviderFactory = new AttributeAssemblyProviderFactory();
+            this.mvcSiteMapNodeAttributeDefinitionProvider = new MvcSiteMapNodeAttributeDefinitionProvider();
             this.siteMapXmlNameProvider = new SiteMapXmlNameProvider();
-            this.dynamicNodeBuilder = new DynamicNodeBuilder(this.nodeKeyGenerator, this.siteMapNodeFactory);
             this.siteMapBuiderSetStrategy = this.ResolveSiteMapBuilderSetStrategy(settings);
             var siteMapFactoryContainer = new SiteMapFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
             this.siteMapFactory = siteMapFactoryContainer.ResolveSiteMapFactory();
@@ -56,9 +64,16 @@ namespace MvcSiteMapProvider.DI
         private readonly ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper;
         private readonly ISiteMapBuilderSetStrategy siteMapBuiderSetStrategy;
         private readonly INodeKeyGenerator nodeKeyGenerator;
+        private readonly ISiteMapNodeParentMapFactory siteMapNodeParentMapFactory;
         private readonly ISiteMapNodeFactory siteMapNodeFactory;
+        private readonly ISiteMapNodeCreationService siteMapNodeCreationService;
+        private readonly ISiteMapNodeBuilderService siteMapNodeBuilderService;
+        private readonly ISiteMapAssemblyService siteMapAssemblyService;
+        private readonly ISiteMapHierarchyBuilder siteMapHierarchyBuilder;
+        private readonly IAttributeAssemblyProviderFactory attributeAssemblyProviderFactory;
+        private readonly IMvcSiteMapNodeAttributeDefinitionProvider mvcSiteMapNodeAttributeDefinitionProvider;
         private readonly ISiteMapXmlNameProvider siteMapXmlNameProvider;
-        private readonly IDynamicNodeBuilder dynamicNodeBuilder;
+        private readonly IDynamicNodeParentMapBuilder dynamicNodeParentMapBuilder;
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
         
@@ -107,11 +122,9 @@ namespace MvcSiteMapProvider.DI
         {
             return new XmlSiteMapBuilder(
                 new FileXmlSource(this.absoluteFileName),
-                new SiteMapXmlReservedAttributeNameProvider(attributesToIgnore), 
-                this.nodeKeyGenerator, 
-                this.dynamicNodeBuilder, 
-                this.siteMapNodeFactory,
-                this.siteMapXmlNameProvider);
+                new SiteMapXmlReservedAttributeNameProvider(attributesToIgnore),
+                this.siteMapXmlNameProvider,
+                this.siteMapAssemblyService);
         }
 
         private ISiteMapBuilder ResolveReflectionSiteMapBuilder(IEnumerable<string> includeAssemblies, IEnumerable<string> excludeAssemblies, IEnumerable<string> attributesToIgnore)
@@ -120,16 +133,38 @@ namespace MvcSiteMapProvider.DI
                 includeAssemblies,
                 excludeAssemblies,
                 new SiteMapXmlReservedAttributeNameProvider(attributesToIgnore),
-                this.nodeKeyGenerator,
-                this.dynamicNodeBuilder,
-                this.siteMapNodeFactory,
-                this.siteMapCacheKeyGenerator);
+                this.siteMapAssemblyService,
+                this.attributeAssemblyProviderFactory,
+                this.mvcSiteMapNodeAttributeDefinitionProvider);
         }
 
         private ISiteMapBuilder ResolveVisitingSiteMapBuilder()
         {
             return new VisitingSiteMapBuilder(
                 new UrlResolvingSiteMapNodeVisitor());
+        }
+
+        private ISiteMapNodeCreationService ResolveSiteMapNodeCreationService()
+        {
+            return new SiteMapNodeCreationService(
+                this.siteMapNodeFactory, 
+                this.nodeKeyGenerator, 
+                this.siteMapNodeParentMapFactory);
+        }
+        
+        private ISiteMapNodeBuilderService ResolveSiteMapNodeBuilderService()
+        {
+            return new SiteMapNodeBuilderService(
+                this.siteMapNodeCreationService,
+                this.dynamicNodeParentMapBuilder);
+        }
+
+        private ISiteMapAssemblyService ResolveSiteMapAssemblyService()
+        {
+            return new SiteMapAssemblyService(
+                this.siteMapNodeBuilderService,
+                this.siteMapHierarchyBuilder,
+                this.siteMapCacheKeyGenerator);
         }
 
         private ICacheDetails ResolveCacheDetails(ConfigurationSettings settings)

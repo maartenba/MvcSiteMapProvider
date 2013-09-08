@@ -6,9 +6,9 @@ namespace MvcSiteMapProvider.Builder
     /// <summary>
     /// Contract for dynamic node builder.
     /// </summary>
+    [Obsolete("Use IDynamicNodeParentMapBuilder instead. IDynamicNodeBuilder will be removed in version 5.")]
     public interface IDynamicNodeBuilder
     {
-        //bool HasDynamicNodes(ISiteMapNode node);
         IEnumerable<ISiteMapNode> BuildDynamicNodesFor(ISiteMap siteMap, ISiteMapNode node, ISiteMapNode parentNode);
     }
 }

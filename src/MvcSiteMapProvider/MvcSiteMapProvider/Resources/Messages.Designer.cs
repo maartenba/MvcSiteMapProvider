@@ -250,6 +250,21 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A node defined by MvcSiteMapNodeAttribute could not be created. Please check the properties of the node carefully.
+        ///
+        ///SiteMapCacheKey &apos;{0}&apos;
+        ///
+        ///Node Details: 
+        ///
+        ///{1} .
+        /// </summary>
+        internal static string ReflectionSiteMapBuilderNodeCouldNotBeCreated {
+            get {
+                return ResourceManager.GetString("ReflectionSiteMapBuilderNodeCouldNotBeCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not all nodes defined by MvcSiteMapNodeAttribute could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
         ///
         ///SiteMapCacheKey: &apos;{0}&apos;
@@ -327,7 +342,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ParentKey: &apos;{0}&apos; | Controller: &apos;{1}&apos; | Action: &apos;{2}&apos; | URL: &apos;{3}&apos;.
+        ///   Looks up a localized string similar to ParentKey: &apos;{0}&apos; | Controller: &apos;{1}&apos; | Action: &apos;{2}&apos; | Area: &apos;{3}&apos; | URL: &apos;{4}&apos; | Key: &apos;{5}&apos; | Source: &apos;{6}&apos;.
         /// </summary>
         internal static string SiteMapNodeFormatWithParentKey {
             get {
@@ -401,6 +416,23 @@ namespace MvcSiteMapProvider.Resources {
         internal static string XmlFileNotFound {
             get {
                 return ResourceManager.GetString("XmlFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not all nodes defined by using a .sitemap XML file could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+        ///
+        ///Also note that nodes defined using a DynamicNodeProvider that are defined in a .sitemap XML file cannot use MvcSiteMapNodeAttribute nodes (or dynamic nodes from DynamicNodeProviders defined on MvcSiteMapNodeAttribute) as a parent.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;
+        ///
+        ///Orphaned Nodes:
+        ///
+        ///{1}.
+        /// </summary>
+        internal static string XmlSiteMapBuilderOrphanedNodes {
+            get {
+                return ResourceManager.GetString("XmlSiteMapBuilderOrphanedNodes", resourceCulture);
             }
         }
         
