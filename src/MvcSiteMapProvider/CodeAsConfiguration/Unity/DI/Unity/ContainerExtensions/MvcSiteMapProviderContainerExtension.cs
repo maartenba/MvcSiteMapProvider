@@ -123,12 +123,11 @@ namespace DI.Unity.ContainerExtensions
 
             // Register the sitemap builders
             this.Container.RegisterType<IXmlSource, FileXmlSource>("file1XmlSource", new InjectionConstructor(absoluteFileName));
-            this.Container.RegisterType<ISiteMapXmlReservedAttributeNameProvider, SiteMapXmlReservedAttributeNameProvider>("nameProvider", new InjectionConstructor(new List<string>()));
-
+            this.Container.RegisterType<ISiteMapXmlReservedAttributeNameProvider, SiteMapXmlReservedAttributeNameProvider>(new InjectionConstructor(new List<string>()));
 
             // IMPORTANT: Must give arrays of object a name in Unity in order for it to resolve them.
-            this.Container.RegisterType<ISiteMapBuilder, XmlSiteMapBuilder>("xmlSiteMapBuilder", new InjectionConstructor(new ResolvedParameter<IXmlSource>("file1XmlSource"), new ResolvedParameter<ISiteMapXmlReservedAttributeNameProvider>("nameProvider"), typeof(INodeKeyGenerator), typeof(IDynamicNodeBuilder), typeof(ISiteMapNodeFactory), typeof(ISiteMapXmlNameProvider)));
-            this.Container.RegisterType<ISiteMapBuilder, ReflectionSiteMapBuilder>("reflectionSiteMapBuilder", new InjectionConstructor(includeAssembliesForScan, new List<string>(), new ResolvedParameter<ISiteMapXmlReservedAttributeNameProvider>("nameProvider"), typeof(INodeKeyGenerator), typeof(IDynamicNodeBuilder), typeof(ISiteMapNodeFactory), typeof(ISiteMapCacheKeyGenerator)));
+            this.Container.RegisterInstance<ISiteMapBuilder>("xmlSiteMapBuilder", this.Container.Resolve<XmlSiteMapBuilderFactory>().Create(this.Container.Resolve<IXmlSource>("file1XmlSource")), new ContainerControlledLifetimeManager());
+            this.Container.RegisterInstance<ISiteMapBuilder>("reflectionSiteMapBuilder", this.Container.Resolve<ReflectionSiteMapBuilderFactory>().Create(includeAssembliesForScan), new ContainerControlledLifetimeManager());
             this.Container.RegisterType<ISiteMapBuilder, VisitingSiteMapBuilder>("visitingSiteMapBuilder");
             this.Container.RegisterType<ISiteMapBuilder, CompositeSiteMapBuilder>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapBuilder>(
                 new ResolvedParameter<ISiteMapBuilder>("xmlSiteMapBuilder"),
@@ -136,7 +135,6 @@ namespace DI.Unity.ContainerExtensions
                 new ResolvedParameter<ISiteMapBuilder>("visitingSiteMapBuilder"))));
 
             // Configure the builder sets
-
             this.Container.RegisterType<ISiteMapBuilderSet, SiteMapBuilderSet>("builderSet1",
                 new InjectionConstructor(
                     "default",
