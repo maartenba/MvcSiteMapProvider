@@ -133,28 +133,8 @@ namespace DI.SimpleInjector
 
             container.RegisterSingle<IXmlSource>(() => new FileXmlSource(absoluteFileName));
 
-
-            container.RegisterSingle<XmlSiteMapBuilder>(() =>
-                                                  new XmlSiteMapBuilder(
-                                                      container.GetInstance<IXmlSource>(),
-                                                      container.GetInstance<ISiteMapXmlReservedAttributeNameProvider>(),
-                                                      container.GetInstance<INodeKeyGenerator>(),
-                                                      container.GetInstance<IDynamicNodeBuilder>(),
-                                                      container.GetInstance<ISiteMapNodeFactory>(),
-                                                      container.GetInstance<ISiteMapXmlNameProvider>()
-                                                      ));
-
-            container.RegisterSingle<ReflectionSiteMapBuilder>(() =>
-                                                         new ReflectionSiteMapBuilder(
-                                                             includeAssembliesForScan,
-                                                             new string[0],
-                                                             container.GetInstance
-                                                                 <ISiteMapXmlReservedAttributeNameProvider>(),
-                                                             container.GetInstance<INodeKeyGenerator>(),
-                                                             container.GetInstance<IDynamicNodeBuilder>(),
-                                                             container.GetInstance<ISiteMapNodeFactory>(),
-                                                             container.GetInstance<ISiteMapCacheKeyGenerator>()
-                                                             ));
+            container.RegisterSingle<XmlSiteMapBuilder>(() => (XmlSiteMapBuilder)container.GetInstance<XmlSiteMapBuilderFactory>().Create(container.GetInstance<IXmlSource>()));
+            container.RegisterSingle<ReflectionSiteMapBuilder>(() => (ReflectionSiteMapBuilder)container.GetInstance<ReflectionSiteMapBuilderFactory>().Create(includeAssembliesForScan));
 
             container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container, securityTrimmingEnabled, enableLocalization));
             container.RegisterSingle<ISiteMapBuilderSetStrategy>(() => new SiteMapBuilderSetStrategy(container.GetAllInstances<ISiteMapBuilderSet>().ToArray()));
