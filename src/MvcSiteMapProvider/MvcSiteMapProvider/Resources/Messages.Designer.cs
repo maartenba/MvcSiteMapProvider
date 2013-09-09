@@ -332,7 +332,8 @@ namespace MvcSiteMapProvider.Resources {
         /// <summary>
         ///   Looks up a localized string similar to There is more than one node declared without a parent key. The parent key must be set for all but 1 node in the SiteMap. The node with no parent key will be considered the root node. Note that when defining nodes in XML, the XML file must contain the root node.
         ///
-        ///Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to &quot;false&quot;. For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvid [rest of string was truncated]&quot;;.
+        ///You can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to &quot;false&quot;. For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvider DI module.
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SiteMapBuilderRootKeyAmbiguous {
             get {

@@ -15,6 +15,7 @@ namespace MvcSiteMapProvider.Builder
         : ISiteMapNodeProvider
     {
         public XmlSiteMapNodeProvider(
+            bool includeRootNode,
             IXmlSource xmlSource,
             ISiteMapXmlNameProvider xmlNameProvider
             )
@@ -24,9 +25,11 @@ namespace MvcSiteMapProvider.Builder
             if (xmlNameProvider == null)
                 throw new ArgumentNullException("xmlNameProvider");
 
+            this.includeRootNode = includeRootNode;
             this.xmlSource = xmlSource;
             this.xmlNameProvider = xmlNameProvider;
         }
+        protected readonly bool includeRootNode;
         protected readonly IXmlSource xmlSource;
         protected readonly ISiteMapXmlNameProvider xmlNameProvider;
         protected const string SourceName = ".sitemap XML File";
@@ -66,7 +69,10 @@ namespace MvcSiteMapProvider.Builder
             }
             // Add the root node
             var rootNode = GetRootNode(xml, rootElement, helper);
-            result.Add(rootNode);
+            if (includeRootNode)
+            {
+                result.Add(rootNode);
+            }
 
             // Process our XML, passing in the main root sitemap node and xml element.
             result.AddRange(ProcessXmlNodes(rootNode.Node, rootElement, helper));

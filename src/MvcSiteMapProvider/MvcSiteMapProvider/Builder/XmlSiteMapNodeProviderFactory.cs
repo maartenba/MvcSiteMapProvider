@@ -23,9 +23,14 @@ namespace MvcSiteMapProvider.Builder
         }
         protected readonly ISiteMapXmlNameProvider xmlNameProvider;
 
-        public XmlSiteMapNodeProvider Create(IXmlSource xmlSource)
+        public virtual XmlSiteMapNodeProvider Create(IXmlSource xmlSource, bool includeRootNode)
         {
-            return new XmlSiteMapNodeProvider(xmlSource, this.xmlNameProvider);
+            return new XmlSiteMapNodeProvider(includeRootNode, xmlSource, this.xmlNameProvider);
+        }
+
+        public virtual XmlSiteMapNodeProvider Create(IXmlSource xmlSource)
+        {
+            return this.Create(xmlSource, true);
         }
     }
 }

@@ -119,7 +119,7 @@ namespace MvcSiteMapProvider.DI
             var providers = new List<ISiteMapNodeProvider>();
             if (settings.EnableSiteMapFile)
             {
-                providers.Add(this.ResolveXmlSiteMapNodeProvider());
+                providers.Add(this.ResolveXmlSiteMapNodeProvider(settings.IncludeRootNodeFromSiteMapFile));
             }
             if (settings.ScanAssembliesForSiteMapNodes)
             {
@@ -128,9 +128,10 @@ namespace MvcSiteMapProvider.DI
             return new CompositeSiteMapNodeProvider(providers.ToArray());
         }
 
-        private ISiteMapNodeProvider ResolveXmlSiteMapNodeProvider()
+        private ISiteMapNodeProvider ResolveXmlSiteMapNodeProvider(bool includeRootNode)
         {
             return new XmlSiteMapNodeProvider(
+                includeRootNode,
                 new FileXmlSource(this.absoluteFileName),
                 this.siteMapXmlNameProvider);
         }

@@ -276,7 +276,9 @@ Node Details:
   <data name="SiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
     <value>There is more than one node declared without a parent key. The parent key must be set for all but 1 node in the SiteMap. The node with no parent key will be considered the root node. Note that when defining nodes in XML, the XML file must contain the root node.
 
-Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvider DI module.
+You can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvider DI module.
+
+Alternatively, you can set the MvcSiteMapProvider_IncludeRootNodeFromSiteMapFile setting to "false" to exclude the root node from the XML file, but include all of the other nodes. For an external DI configuration, this setting can be found on the constructor of the XmlSiteMapNodeProvider.
 
 SiteMapCacheKey: '{0}'
 
