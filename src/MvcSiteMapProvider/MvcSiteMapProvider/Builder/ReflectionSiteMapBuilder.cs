@@ -14,6 +14,7 @@ namespace MvcSiteMapProvider.Builder
     /// Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a
     /// set of attributes within an assembly.
     /// </summary>
+    [Obsolete("ReflectionSiteMapBuilder has been deprecated and will be removed in version 5. Use ReflectionSiteMapNodeProvider in conjunction with SiteMapBuilder instead.")]
     public class ReflectionSiteMapBuilder
         : ISiteMapBuilder
     {

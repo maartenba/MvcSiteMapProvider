@@ -8,87 +8,71 @@ using MvcSiteMapProvider.Collections.Specialized;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// XmlSiteMapBuilder class. Builds a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> tree based on a 
+    /// XmlSiteMapNodeProvider class. Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/> list based on a 
     /// <see cref="T:MvcSiteMapProvider.Xml.IXmlSource"/> instance.
     /// </summary>
-    [Obsolete("XmlSiteMapBuilder has been deprecated and will be removed in version 5. Use XmlSiteMapNodeProvider in conjunction with SiteMapBuilder instead.")]
-    public class XmlSiteMapBuilder
-        : ISiteMapBuilder
+    public class XmlSiteMapNodeProvider
+        : ISiteMapNodeProvider
     {
-        public XmlSiteMapBuilder(
+        public XmlSiteMapNodeProvider(
             IXmlSource xmlSource,
-            ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider,
-            INodeKeyGenerator nodeKeyGenerator,
-            IDynamicNodeBuilder dynamicNodeBuilder,
-            ISiteMapNodeFactory siteMapNodeFactory,
             ISiteMapXmlNameProvider xmlNameProvider
             )
         {
             if (xmlSource == null)
                 throw new ArgumentNullException("xmlSource");
-            if (reservedAttributeNameProvider == null)
-                throw new ArgumentNullException("reservedAttributeNameProvider");
-            if (nodeKeyGenerator == null)
-                throw new ArgumentNullException("nodeKeyGenerator");
-            if (dynamicNodeBuilder == null)
-                throw new ArgumentNullException("dynamicNodeBuilder");
-            if (siteMapNodeFactory == null)
-                throw new ArgumentNullException("siteMapNodeFactory");
             if (xmlNameProvider == null)
                 throw new ArgumentNullException("xmlNameProvider");
 
             this.xmlSource = xmlSource;
-            this.reservedAttributeNameProvider = reservedAttributeNameProvider;
-            this.nodeKeyGenerator = nodeKeyGenerator;
-            this.dynamicNodeBuilder = dynamicNodeBuilder;
-            this.siteMapNodeFactory = siteMapNodeFactory;
             this.xmlNameProvider = xmlNameProvider;
         }
-
         protected readonly IXmlSource xmlSource;
-        protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
-        protected readonly INodeKeyGenerator nodeKeyGenerator;
-        protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
-        protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly ISiteMapXmlNameProvider xmlNameProvider;
+        protected const string SourceName = ".sitemap XML File";
 
+        #region ISiteMapNodeProvider Members
 
-        #region ISiteMapBuilder Members
-
-        public virtual ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
+        public IEnumerable<ISiteMapNodeParentMap> GetSiteMapNodes(ISiteMapNodeHelper helper)
         {
+            var result = new List<ISiteMapNodeParentMap>();
             var xml = xmlSource.GetXml();
             if (xml != null)
             {
-                rootNode = LoadSiteMapFromXml(siteMap, xml);
+                result.AddRange(LoadSiteMapNodesFromXml(xml, helper));
+            }
+            else
+            {
+                // Throw exception because XML was not defined
+                throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderXmlNotDefined, helper.SiteMapCacheKey));
             }
 
-            // Done!
-            return rootNode;
+            return result;
         }
 
         #endregion
 
-        protected virtual ISiteMapNode LoadSiteMapFromXml(ISiteMap siteMap, XDocument xml)
+        protected virtual IEnumerable<ISiteMapNodeParentMap> LoadSiteMapNodesFromXml(XDocument xml, ISiteMapNodeHelper helper)
         {
+            var result = new List<ISiteMapNodeParentMap>();
             xmlNameProvider.FixXmlNamespaces(xml);
 
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
             var rootElement = GetRootElement(xml);
-            var root = GetRootNode(siteMap, xml, rootElement);
-
-            // Fixes #192 root node not added to sitemap
-            if (siteMap.FindSiteMapNodeFromKey(root.Key) == null)
+            if (rootElement == null)
             {
-                // Add the root node to the sitemap
-                siteMap.AddNode(root);
+                // No root element - inform the user this isn't allowed.
+                throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderRootNodeNotDefined, helper.SiteMapCacheKey));
             }
+            // Add the root node
+            var rootNode = GetRootNode(xml, rootElement, helper);
+            result.Add(rootNode);
 
             // Process our XML, passing in the main root sitemap node and xml element.
-            ProcessXmlNodes(siteMap, root, rootElement);
+            result.AddRange(ProcessXmlNodes(rootNode.Node, rootElement, helper));
 
             // Done!
-            return root;
+            return result;
         }
 
         protected virtual XElement GetRootElement(XDocument xml)
@@ -97,9 +81,58 @@ namespace MvcSiteMapProvider.Builder
             return xml.Element(xmlNameProvider.RootName).Element(xmlNameProvider.NodeName);
         }
 
-        protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, XDocument xml, XElement rootElement)
+        protected virtual ISiteMapNodeParentMap GetRootNode(XDocument xml, XElement rootElement, ISiteMapNodeHelper helper)
         {
-            return GetSiteMapNodeFromXmlElement(siteMap, rootElement, null);
+            return GetSiteMapNodeFromXmlElement(rootElement, null, helper);
+        }
+
+
+        /// <summary>
+        /// Recursively processes our XML document, parsing our siteMapNodes and dynamicNode(s).
+        /// </summary>
+        /// <param name="rootNode">The main root sitemap node.</param>
+        /// <param name="rootElement">The main root XML element.</param>
+        /// <param name="helper">The node helper.</param>
+        protected virtual IList<ISiteMapNodeParentMap> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, ISiteMapNodeHelper helper)
+        {
+            var result = new List<ISiteMapNodeParentMap>();
+
+            // Loop through each element below the current root element.
+            foreach (XElement node in parentElement.Elements())
+            {
+                ISiteMapNodeParentMap child;
+                if (node.Name == xmlNameProvider.NodeName)
+                {
+                    // If this is a normal mvcSiteMapNode then map the xml element
+                    // to an MvcSiteMapNode, and add the node to the current root.
+                    child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
+
+                    if (!child.Node.HasDynamicNodeProvider)
+                    {
+                        result.Add(child);
+                    }
+                    else
+                    {
+                        var dynamicNodes = helper.CreateDynamicNodes(child);
+
+                        foreach (var dynamicNode in dynamicNodes)
+                        {
+                            result.Add(dynamicNode);
+                            // Add non-dynamic childs for every dynamicnode
+                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, helper));
+                        }
+                    }
+                }
+                else
+                {
+                    // If the current node is not one of the known node types throw and exception
+                    throw new Exception(String.Format(Resources.Messages.XmlSiteMapNodeProviderInvalidSiteMapElement, helper.SiteMapCacheKey));
+                }
+
+                // Continue recursively processing the XML file.
+                result.AddRange(ProcessXmlNodes(child.Node, node, helper));
+            }
+            return result;
         }
 
 
@@ -107,17 +140,18 @@ namespace MvcSiteMapProvider.Builder
         /// Maps an XMLElement from the XML file to an MvcSiteMapNode.
         /// </summary>
         /// <param name="node">The element to map.</param>
-        /// <param name="parentNode">The parent SiteMapNode</param>
+        /// <param name="parentNode">The parent ISiteMapNode</param>
+        /// <param name="helper">The node helper.</param>
         /// <returns>An MvcSiteMapNode which represents the XMLElement.</returns>
-        protected virtual ISiteMapNode GetSiteMapNodeFromXmlElement(ISiteMap siteMap, XElement node, ISiteMapNode parentNode)
+        protected virtual ISiteMapNodeParentMap GetSiteMapNodeFromXmlElement(XElement node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
         {
             //// Get area, controller and action from node declaration
             string area = node.GetAttributeValue("area");
             string controller = node.GetAttributeValue("controller");
+            var parentKey = parentNode == null ? "" : parentNode.Key;
 
             // Generate key for node
-            string key = nodeKeyGenerator.GenerateKey(
-                parentNode == null ? "" : parentNode.Key,
+            string key = helper.CreateNodeKey(
                 node.GetAttributeValue("key"),
                 node.GetAttributeValue("url"),
                 node.GetAttributeValue("title"),
@@ -131,7 +165,8 @@ namespace MvcSiteMapProvider.Builder
             var implicitResourceKey = node.GetAttributeValue("resourceKey");
 
             // Create node
-            ISiteMapNode siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
+            var nodeParentMap = helper.CreateNode(key, parentKey, SourceName, implicitResourceKey);
+            var siteMapNode = nodeParentMap.Node;
 
             // Handle title and description
             var title = node.GetAttributeValue("title");
@@ -140,7 +175,7 @@ namespace MvcSiteMapProvider.Builder
             // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
-            AcquireAttributesFrom(node, siteMapNode.Attributes);
+            AcquireAttributesFrom(node, siteMapNode.Attributes, helper);
             AcquireRolesFrom(node, siteMapNode.Roles);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
@@ -156,12 +191,13 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValueOrFallback("changeFrequency", "Undefined"));
             siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValueOrFallback("updatePriority", "Undefined"));
             siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()));
+            siteMapNode.Order = int.Parse(node.GetAttributeValueOrFallback("order", "0"));
 
             // Handle route details
 
             // Assign to node
             siteMapNode.Route = node.GetAttributeValue("route");
-            AcquireRouteValuesFrom(node, siteMapNode.RouteValues);
+            AcquireRouteValuesFrom(node, siteMapNode.RouteValues, helper);
             AcquirePreservedRouteParametersFrom(node, siteMapNode.PreservedRouteParameters);
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
@@ -196,22 +232,24 @@ namespace MvcSiteMapProvider.Builder
                 siteMapNode.RouteValues.Add("area", "");
             }
 
-            return siteMapNode;
+            return nodeParentMap;
         }
 
         /// <summary>
         /// Acquires the attributes from a given XElement.
         /// </summary>
         /// <param name="node">The node.</param>
+        /// <param name="attributes">The attributes dictionary to populate.</param>
+        /// <param name="helper">The node helper.</param>
         /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, object> attributes)
+        protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, object> attributes, ISiteMapNodeHelper helper)
         {
             foreach (XAttribute attribute in node.Attributes())
             {
                 var attributeName = attribute.Name.ToString();
                 var attributeValue = attribute.Value;
 
-                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
+                if (helper.ReservedAttributeNames.IsRegularAttribute(attributeName))
                 {
                     attributes.Add(attributeName, attributeValue);
                 }
@@ -222,15 +260,17 @@ namespace MvcSiteMapProvider.Builder
         /// Acquires the route values from a given XElement.
         /// </summary>
         /// <param name="node">The node.</param>
+        /// <param name="routeValues">The route values dictionary to populate.</param>
+        /// <param name="helper">The node helper.</param>
         /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueDictionary routeValues)
+        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueDictionary routeValues, ISiteMapNodeHelper helper)
         {
             foreach (XAttribute attribute in node.Attributes())
             {
                 var attributeName = attribute.Name.ToString();
                 var attributeValue = attribute.Value;
 
-                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
+                if (helper.ReservedAttributeNames.IsRouteAttribute(attributeName))
                 {
                     routeValues.Add(attributeName, attributeValue);
                 }
@@ -278,51 +318,5 @@ namespace MvcSiteMapProvider.Builder
                 metaRobotsValues.Add(value);
             }
         }
-
-
-        /// <summary>
-        /// Recursively processes our XML document, parsing our siteMapNodes and dynamicNode(s).
-        /// </summary>
-        /// <param name="rootNode">The main root sitemap node.</param>
-        /// <param name="rootElement">The main root XML element.</param>
-        protected virtual void ProcessXmlNodes(ISiteMap siteMap, ISiteMapNode rootNode, XElement rootElement)
-        {
-            // Loop through each element below the current root element.
-            foreach (XElement node in rootElement.Elements())
-            {
-                ISiteMapNode childNode;
-                if (node.Name == xmlNameProvider.NodeName)
-                {
-                    // If this is a normal mvcSiteMapNode then map the xml element
-                    // to an MvcSiteMapNode, and add the node to the current root.
-                    childNode = GetSiteMapNodeFromXmlElement(siteMap, node, rootNode);
-                    ISiteMapNode parentNode = rootNode;
-
-                    if (!childNode.HasDynamicNodeProvider)
-                    {
-                        siteMap.AddNode(childNode, parentNode);
-                    }
-                    else
-                    {
-                        var dynamicNodesCreated = dynamicNodeBuilder.BuildDynamicNodesFor(siteMap, childNode, parentNode);
-
-                        // Add non-dynamic childs for every dynamicnode
-                        foreach (var dynamicNodeCreated in dynamicNodesCreated)
-                        {
-                            ProcessXmlNodes(siteMap, dynamicNodeCreated, node);
-                        }
-                    }
-                }
-                else
-                {
-                    // If the current node is not one of the known node types throw and exception
-                    throw new Exception(Resources.Messages.InvalidSiteMapElement);
-                }
-
-                // Continue recursively processing the XML file.
-                ProcessXmlNodes(siteMap, childNode, node);
-            }
-        }
-
     }
 }

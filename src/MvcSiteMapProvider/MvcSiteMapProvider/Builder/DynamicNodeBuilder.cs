@@ -6,7 +6,7 @@ namespace MvcSiteMapProvider.Builder
     /// <summary>
     /// Creates nodes dynamically based on an implemenation of <see cref="T:MvcSiteMapProvider.IDynamicNodeProvider"/>.
     /// </summary>
-    [Obsolete("Use DynamicNodeParentMapBuilder instead. DynamicNodeBuilder will be removed in version 5.")]
+    [Obsolete("Use DynamicSiteMapNodeBuilder instead. DynamicNodeBuilder will be removed in version 5.")]
     public class DynamicNodeBuilder
         : IDynamicNodeBuilder
     {

@@ -115,7 +115,7 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An invalid element was found in the sitemap..
+        ///   Looks up a localized string similar to An invalid element was found in the .sitemap XML file. Please check your sitemap file against the MvcSiteMapProvider.xsd schema..
         /// </summary>
         internal static string InvalidSiteMapElement {
             get {
@@ -315,6 +315,43 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not all configured nodes could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;
+        ///
+        ///Orphaned Nodes:
+        ///
+        ///{1}.
+        /// </summary>
+        internal static string SiteMapBuilderOrphanedNodes {
+            get {
+                return ResourceManager.GetString("SiteMapBuilderOrphanedNodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is more than one node declared without a parent key. The parent key must be set for all but 1 node in the SiteMap. The node with no parent key will be considered the root node. Note that when defining nodes in XML, the XML file must contain the root node.
+        ///
+        ///Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to &quot;false&quot;. For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvid [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SiteMapBuilderRootKeyAmbiguous {
+            get {
+                return ResourceManager.GetString("SiteMapBuilderRootKeyAmbiguous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No node is defined as the root node of the SiteMap. Exactly one node must have a parent key set to an empty string. That node will be assumed to be the root node.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;.
+        /// </summary>
+        internal static string SiteMapBuilderRootNodeNotDefined {
+            get {
+                return ResourceManager.GetString("SiteMapBuilderRootNodeNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the &apos;MvcSiteMapProvider_UseExternalDIContainer&apos; in the AppSettings section of the web.config file to &apos;true&apos; if you are using an external dependency injection container..
         /// </summary>
         internal static string SiteMapLoaderAlreadySet {
@@ -444,6 +481,41 @@ namespace MvcSiteMapProvider.Resources {
         internal static string XmlSiteMapBuilderRootKeyNotDefined {
             get {
                 return ResourceManager.GetString("XmlSiteMapBuilderRootKeyNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An invalid element was found in the .sitemap XML file. Please check your sitemap file against the MvcSiteMapProvider.xsd schema.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;.
+        /// </summary>
+        internal static string XmlSiteMapNodeProviderInvalidSiteMapElement {
+            get {
+                return ResourceManager.GetString("XmlSiteMapNodeProviderInvalidSiteMapElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The root node was not found in the .sitemap XML file. If XML configuration is enabled, exactly one root node must be defined in the file. This will be the root node for the entire SiteMap.
+        ///
+        ///Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to &quot;false&quot;. For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvider DI module.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;.
+        /// </summary>
+        internal static string XmlSiteMapNodeProviderRootNodeNotDefined {
+            get {
+                return ResourceManager.GetString("XmlSiteMapNodeProviderRootNodeNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was no XML provided by the IXmlSource (the return value was null). If you are using a custom IXmlSource, please be sure the output matches the XmlSiteMapProvider.xsd schema.
+        ///
+        ///SiteMapCacheKey: &apos;{0}&apos;.
+        /// </summary>
+        internal static string XmlSiteMapNodeProviderXmlNotDefined {
+            get {
+                return ResourceManager.GetString("XmlSiteMapNodeProviderXmlNotDefined", resourceCulture);
             }
         }
         

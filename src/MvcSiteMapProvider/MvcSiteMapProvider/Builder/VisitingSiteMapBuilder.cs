@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider.Builder
     /// Provides a means of optimizing <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> instances before they 
     /// are placed in the cahce.
     /// </summary>
+    [Obsolete("VisitingSiteMapBuilder has been deprecated and will be removed in version 5. This functionality was merged into the SiteMapBuilder class, as it only makes sense to run this after the sitemap is completely built.")]
     public class VisitingSiteMapBuilder
         : ISiteMapBuilder
     {

@@ -8,18 +8,18 @@ namespace MvcSiteMapProvider.Builder
     /// <summary>
     /// Creates nodes with a map to their parent node dynamically based on an implemenation of <see cref="T:MvcSiteMapProvider.IDynamicNodeProvider"/>.
     /// </summary>
-    public class DynamicNodeParentMapBuilder
-        : IDynamicNodeParentMapBuilder
+    public class DynamicSiteMapNodeBuilder
+        : IDynamicSiteMapNodeBuilder
     {
-        public DynamicNodeParentMapBuilder(
-            ISiteMapNodeCreationService siteMapNodeCreationService
+        public DynamicSiteMapNodeBuilder(
+            ISiteMapNodeCreator siteMapNodeCreator
             )
         {
-            if (siteMapNodeCreationService == null)
-                throw new ArgumentNullException("siteMapNodeCreationService");
-            this.siteMapNodeCreationService = siteMapNodeCreationService;
+            if (siteMapNodeCreator == null)
+                throw new ArgumentNullException("siteMapNodeCreator");
+            this.siteMapNodeCreator = siteMapNodeCreator;
         }
-        protected readonly ISiteMapNodeCreationService siteMapNodeCreationService;
+        protected readonly ISiteMapNodeCreator siteMapNodeCreator;
 
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="siteMap">The site map.</param>
         /// <param name="node">The node.</param>
         /// <param name="parentKey">The key of the parent node.</param>
-        public virtual IEnumerable<ISiteMapNodeParentMap> BuildDynamicNodeParentMaps(ISiteMap siteMap, ISiteMapNode node, string parentKey)
+        public virtual IEnumerable<ISiteMapNodeParentMap> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey)
         {
             var result = new List<ISiteMapNodeParentMap>();
 
@@ -41,13 +41,12 @@ namespace MvcSiteMapProvider.Builder
             foreach (var dynamicNode in node.GetDynamicNodeCollection())
             {
                 // If the dynamic node has a parent key set, use that as the parent. Otherwise use the parentNode.
-                var dynamicNodeParentKey = !String.IsNullOrEmpty(dynamicNode.ParentKey) ? dynamicNode.ParentKey : parentKey;
+                var parentKey = !String.IsNullOrEmpty(dynamicNode.ParentKey) ? dynamicNode.ParentKey : defaultParentKey;
                 var key = dynamicNode.Key;
 
                 if (string.IsNullOrEmpty(key))
                 {
-                    key = this.siteMapNodeCreationService.GenerateSiteMapNodeKey(
-                        dynamicNodeParentKey,
+                    key = this.siteMapNodeCreator.GenerateSiteMapNodeKey(
                         Guid.NewGuid().ToString(),
                         node.Url,
                         node.Title,
@@ -59,7 +58,8 @@ namespace MvcSiteMapProvider.Builder
                 }
 
                 // Create a new node
-                var newNode = this.siteMapNodeCreationService.CreateSiteMapNode(siteMap, key, node.ResourceKey);
+                var nodeParentMap = this.siteMapNodeCreator.CreateDynamicSiteMapNode(key, parentKey, node.DynamicNodeProvider, node.ResourceKey);
+                var newNode = nodeParentMap.Node;
 
                 // Copy the values from the original node to the new one
                 node.CopyTo(newNode);
@@ -70,7 +70,7 @@ namespace MvcSiteMapProvider.Builder
                 // Copy any values that were set in the dynamic node and overwrite the new node.
                 dynamicNode.SafeCopyTo(newNode);
 
-                result.Add(this.siteMapNodeCreationService.CreateSiteMapNodeParentMap(dynamicNodeParentKey, newNode, node.DynamicNodeProvider));
+                result.Add(nodeParentMap);
             }
             return result;
         }

@@ -6,8 +6,8 @@ namespace MvcSiteMapProvider.Builder
     /// <summary>
     /// Contract for dynamic node parent map builder.
     /// </summary>
-    public interface IDynamicNodeParentMapBuilder
+    public interface IDynamicSiteMapNodeBuilder
     {
-        IEnumerable<ISiteMapNodeParentMap> BuildDynamicNodeParentMaps(ISiteMap siteMap, ISiteMapNode node, string parentKey);
+        IEnumerable<ISiteMapNodeParentMap> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey);
     }
 }
