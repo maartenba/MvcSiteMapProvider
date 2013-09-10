@@ -18,12 +18,14 @@ task Clean -description "This task cleans up the build directory" {
 }
 
 task Init -description "This tasks makes sure the build environment is correctly setup" {  
-	Generate-Assembly-Info `
-		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
-		-company "MvcSiteMapProvider" `
-		-version $version `
-		-packageVersion $packageVersion `
-		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	if ($env:BuildRunner -eq $null -or $env:BuildRunner -ne "MyGet") {
+		Generate-Assembly-Info `
+			-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
+			-company "MvcSiteMapProvider" `
+			-version $version `
+			-packageVersion $packageVersion `
+			-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	}
 }
 
 task Compile -depends Clean, Init -description "This task compiles the solution" {
@@ -56,13 +58,15 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 }
 
 task Finalize -depends NuGet -description "This tasks finalizes the build" {  
-	#Change the assembly info file to be the same way it was before
-	Generate-Assembly-Info `
-		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
-		-company "MvcSiteMapProvider" `
-		-version $version `
-		-packageVersion $version `
-		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	if ($env:BuildRunner -eq $null -or $env:BuildRunner -ne "MyGet") {
+		#Change the assembly info file to be the same way it was before
+		Generate-Assembly-Info `
+			-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
+			-company "MvcSiteMapProvider" `
+			-version $version `
+			-packageVersion $version `
+			-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+	}
 }
 
 function Transform-Nuspec ([string] $source, [string] $transform, [string] $destination) {
