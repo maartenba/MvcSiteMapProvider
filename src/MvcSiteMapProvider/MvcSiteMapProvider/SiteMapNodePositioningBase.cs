@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
@@ -194,6 +195,12 @@ namespace MvcSiteMapProvider
             }
             return level;
         }
+
+        /// <summary>
+        /// Gets or sets the display sort order for the node relative to its sibling nodes.
+        /// </summary>
+        public override int Order { get; set; }
+
         #endregion
     }
 }

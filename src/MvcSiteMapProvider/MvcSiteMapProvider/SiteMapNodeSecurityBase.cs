@@ -45,6 +45,7 @@ namespace MvcSiteMapProvider
         public abstract bool HasChildNodes { get; }
         public abstract int GetNodeLevel();
         public abstract ISiteMap SiteMap { get; }
+        public abstract int Order { get; set; }
         public abstract string HttpMethod { get; set; }
         public abstract string ResourceKey { get; }
         public abstract string Title { get; set; }
@@ -83,7 +84,6 @@ namespace MvcSiteMapProvider
         public abstract string Area { get; set; }
         public abstract string Controller { get; set; }
         public abstract string Action { get; set; }
-        public abstract int Order { get; set; }
         public abstract void CopyTo(ISiteMapNode node);
 
         #endregion

@@ -28,6 +28,7 @@ namespace MvcSiteMapProvider
         bool HasChildNodes { get; }
         int GetNodeLevel();
         ISiteMap SiteMap { get; }
+        int Order { get; set; }
 
         bool IsAccessibleToUser();
         string HttpMethod { get; set; }
@@ -76,8 +77,6 @@ namespace MvcSiteMapProvider
         string Area { get; set; }
         string Controller { get; set; }
         string Action { get; set; }
-
-        int Order { get; set; }
 
         void CopyTo(ISiteMapNode node);
     }

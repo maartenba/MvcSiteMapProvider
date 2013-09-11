@@ -154,6 +154,8 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             get { return this.siteMap; }
         }
 
+        public int Order { get; set; }
+
         public bool IsAccessibleToUser()
         {
             if (this.siteMap.SecurityTrimmingEnabled)
@@ -301,8 +303,6 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 
         public string Action { get; set; }
 
-        public int Order { get; set; }
-       
         public void CopyTo(ISiteMapNode node)
         {
             throw new NotImplementedException();
