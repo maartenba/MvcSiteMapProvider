@@ -121,8 +121,8 @@
     <Compile Include="Builder\SiteMapNodeHelper.cs" />
     <Compile Include="Builder\SiteMapNodeCreator.cs" />
     <Compile Include="Builder\SiteMapNodeHelperFactory.cs" />
-    <Compile Include="Builder\SiteMapNodeParentMapFactory.cs" />
-    <Compile Include="Builder\SiteMapNodeParentMap.cs" />
+    <Compile Include="Builder\SiteMapNodeToParentRelationFactory.cs" />
+    <Compile Include="Builder\SiteMapNodeToParentRelation.cs" />
     <Compile Include="Builder\VisitingSiteMapBuilder.cs" />
     <Compile Include="Builder\XmlSiteMapNodeProvider.cs" />
     <Compile Include="Builder\XmlSiteMapNodeProviderFactory.cs" />
