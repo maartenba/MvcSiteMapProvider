@@ -39,7 +39,7 @@ namespace MvcSiteMapProvider.Builder
         {
             StandardNodes = 1,
             DynamicNodes = 2,
-            Both = 3
+            All = 3
         }
 
         #region ISiteMapNodeProvider Members
@@ -83,7 +83,7 @@ namespace MvcSiteMapProvider.Builder
             }
 
             // Process our XML, passing in the main root sitemap node and xml element.
-            result.AddRange(ProcessXmlNodes(rootNode.Node, rootElement, 0, NodesToProcess.Both, helper));
+            result.AddRange(ProcessXmlNodes(rootNode.Node, rootElement, NodesToProcess.All, helper));
 
             // Done!
             return result;
@@ -106,10 +106,9 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="parentNode">The parent node to process.</param>
         /// <param name="parentElement">The correspoding parent XML element.</param>
-        /// <param name="dynamicNodeIndex">The index of the current dynamic node. We only process descendant dynamic nodes on iteration 0.</param>
         /// <param name="processFlags">Flags to indicate which nodes to process.</param>
         /// <param name="helper">The node helper.</param>
-        protected virtual IList<ISiteMapNodeParentMap> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, int dynamicNodeIndex, NodesToProcess processFlags, ISiteMapNodeHelper helper)
+        protected virtual IList<ISiteMapNodeParentMap> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, NodesToProcess processFlags, ISiteMapNodeHelper helper)
         {
             var result = new List<ISiteMapNodeParentMap>();
             bool processStandardNodes = (processFlags & NodesToProcess.StandardNodes) == NodesToProcess.StandardNodes;
@@ -124,32 +123,28 @@ namespace MvcSiteMapProvider.Builder
                     // to an MvcSiteMapNode, and add the node to the current root.
                     var child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
 
-                    if (!child.Node.HasDynamicNodeProvider && processStandardNodes)
+                    if (processStandardNodes && !child.Node.HasDynamicNodeProvider)
                     {
                         result.Add(child);
 
                         // Continue recursively processing the XML file.
-                        result.AddRange(ProcessXmlNodes(child.Node, node, dynamicNodeIndex, processFlags, helper));
+                        result.AddRange(ProcessXmlNodes(child.Node, node, processFlags, helper));
                     }
-                    else if (dynamicNodeIndex == 0 && processDynamicNodes)
+                    else if (processDynamicNodes && child.Node.HasDynamicNodeProvider)
                     {
-                        // NOTE: We only process the dynamic node provider the first time it is detected to 
-                        // prevent the recursion from calling CreateDynamicNodes multiple times.
-                        var dynamicNodes = helper.CreateDynamicNodes(child).ToArray();
+                        // We pass in the parent node key as the default parent because the dynamic node (child) is never added to the sitemap.
+                        var dynamicNodes = helper.CreateDynamicNodes(child, parentNode.Key);
 
                         foreach (var dynamicNode in dynamicNodes)
                         {
                             result.Add(dynamicNode);
-                            // Add non-dynamic childs for every dynamicnode
-                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, dynamicNodeIndex, NodesToProcess.StandardNodes, helper));
+                            // Add non-dynamic childs for every dynamic node
+                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
                         }
 
-                        // Wait until the first dynamic node is entirely processed before doing the next nested one.
-                        for (int i = 0; i < dynamicNodes.Count(); i++)
-                        {
-                            // Process next dynamic node provider result.
-                            result.AddRange(ProcessXmlNodes(dynamicNodes[i].Node, node, i, NodesToProcess.DynamicNodes, helper));
-                        }
+                        // Process the next nested dynamic node provider. We pass in the parent node as the default 
+                        // parent because the dynamic node definition node (child) is never added to the sitemap.
+                        result.AddRange(ProcessXmlNodes(parentNode, node, NodesToProcess.DynamicNodes, helper));
                     }
                 }
                 else
