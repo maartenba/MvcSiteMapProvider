@@ -71,7 +71,7 @@ namespace MvcSiteMapProvider.Builder
             {
                 // We have orphaned nodes - throw an exception.
                 var names = String.Join(Environment.NewLine + Environment.NewLine, orphans.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)));
-                throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapBuilderOrphanedNodes, siteMapCacheKey, names));
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMapCacheKey, names));
             }
 
             // Run our visitors
