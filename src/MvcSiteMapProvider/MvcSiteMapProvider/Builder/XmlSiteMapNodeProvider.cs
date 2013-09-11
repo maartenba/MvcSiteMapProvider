@@ -16,6 +16,7 @@ namespace MvcSiteMapProvider.Builder
     {
         public XmlSiteMapNodeProvider(
             bool includeRootNode,
+            bool useNestedDynamicNodeRecursion,
             IXmlSource xmlSource,
             ISiteMapXmlNameProvider xmlNameProvider
             )
@@ -26,10 +27,12 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("xmlNameProvider");
 
             this.includeRootNode = includeRootNode;
+            this.useNestedDynamicNodeRecursion = useNestedDynamicNodeRecursion;
             this.xmlSource = xmlSource;
             this.xmlNameProvider = xmlNameProvider;
         }
         protected readonly bool includeRootNode;
+        protected readonly bool useNestedDynamicNodeRecursion;
         protected readonly IXmlSource xmlSource;
         protected readonly ISiteMapXmlNameProvider xmlNameProvider;
         protected const string SourceName = ".sitemap XML File";
@@ -140,13 +143,32 @@ namespace MvcSiteMapProvider.Builder
                     {
                         result.Add(dynamicNode);
 
-                        // Recursively add non-dynamic childs for every dynamic node
-                        result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
+                        if (!this.useNestedDynamicNodeRecursion)
+                        {
+                            // Recursively add non-dynamic childs for every dynamic node
+                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
+                        }
+                        else
+                        {
+                            // Recursively process both dynamic nodes and static nodes.
+                            // This is to allow V3 recursion behavior for those who depended on it - it is not a feature.
+                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.All, helper));
+                        }
                     }
 
-                    // Process the next nested dynamic node provider. We pass in the parent node as the default 
-                    // parent because the dynamic node definition node (child) is never added to the sitemap.
-                    result.AddRange(ProcessXmlNodes(parentNode, node, NodesToProcess.DynamicNodes, helper));
+                    if (!this.useNestedDynamicNodeRecursion)
+                    {
+                        // Process the next nested dynamic node provider. We pass in the parent node as the default 
+                        // parent because the dynamic node definition node (child) is never added to the sitemap.
+                        result.AddRange(ProcessXmlNodes(parentNode, node, NodesToProcess.DynamicNodes, helper));
+                    }
+                    else
+                    {
+                        // Continue recursively processing the XML file.
+                        // Can't figure out why this is here, but this is the way it worked in V3 and if
+                        // anyone depends on the broken recursive behavior, they probably also depend on this.
+                        result.AddRange(ProcessXmlNodes(child.Node, node, processFlags, helper));
+                    }
                 }
             }
             return result;
@@ -162,7 +184,7 @@ namespace MvcSiteMapProvider.Builder
         /// <returns>An MvcSiteMapNode which represents the XMLElement.</returns>
         protected virtual ISiteMapNodeToParentRelation GetSiteMapNodeFromXmlElement(XElement node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
         {
-            //// Get area, controller and action from node declaration
+            // Get area, controller and action from node declaration
             string area = node.GetAttributeValue("area");
             string controller = node.GetAttributeValue("controller");
             var parentKey = parentNode == null ? "" : parentNode.Key;

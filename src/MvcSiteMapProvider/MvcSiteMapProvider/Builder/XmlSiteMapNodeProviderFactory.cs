@@ -23,14 +23,19 @@ namespace MvcSiteMapProvider.Builder
         }
         protected readonly ISiteMapXmlNameProvider xmlNameProvider;
 
+        public virtual XmlSiteMapNodeProvider Create(IXmlSource xmlSource, bool includeRootNode, bool useNestedDynamicNodeRecursion)
+        {
+            return new XmlSiteMapNodeProvider(includeRootNode, useNestedDynamicNodeRecursion, xmlSource, this.xmlNameProvider);
+        }
+
         public virtual XmlSiteMapNodeProvider Create(IXmlSource xmlSource, bool includeRootNode)
         {
-            return new XmlSiteMapNodeProvider(includeRootNode, xmlSource, this.xmlNameProvider);
+            return this.Create(xmlSource, includeRootNode, false);
         }
 
         public virtual XmlSiteMapNodeProvider Create(IXmlSource xmlSource)
         {
-            return this.Create(xmlSource, true);
+            return this.Create(xmlSource, true, false);
         }
     }
 }

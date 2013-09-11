@@ -15,6 +15,7 @@ namespace MvcSiteMapProvider.DI
             this.UseExternalDIContainer = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_UseExternalDIContainer", "false"));
             this.EnableSiteMapFile = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSiteMapFile", "true"));
             this.IncludeRootNodeFromSiteMapFile = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_IncludeRootNodeFromSiteMapFile", "true"));
+            this.EnableSiteMapFileNestedDynamicNodeRecursion = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSiteMapFileNestedDynamicNodeRecursion", "false"));
             this.SiteMapFileName = GetConfigurationValueOrFallback("MvcSiteMapProvider_SiteMapFileName", "~/Mvc.sitemap");
             this.ScanAssembliesForSiteMapNodes = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_ScanAssembliesForSiteMapNodes", "false"));
             this.ExcludeAssembliesForScan = GetConfigurationValueOrFallback("MvcSiteMapProvider_ExcludeAssembliesForScan", "")
@@ -36,6 +37,7 @@ namespace MvcSiteMapProvider.DI
         public bool UseExternalDIContainer { get; private set; }
         public bool EnableSiteMapFile { get; private set; }
         public bool IncludeRootNodeFromSiteMapFile { get; private set; }
+        public bool EnableSiteMapFileNestedDynamicNodeRecursion { get; private set; }
         public string SiteMapFileName { get; private set; }
         public bool ScanAssembliesForSiteMapNodes { get; private set; }
         public IEnumerable<string> ExcludeAssembliesForScan { get; private set; }
