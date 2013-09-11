@@ -119,27 +119,32 @@ namespace DI.Windsor.Installers
             // Configure the visitors
             container.Register(Component.For<ISiteMapNodeVisitor>().ImplementedBy<UrlResolvingSiteMapNodeVisitor>());
 
-            // Register the sitemap builder
+            // Prepare for the sitemap node providers
             container.Register(Component.For<IXmlSource>().ImplementedBy<FileXmlSource>().Named("xmlSource1")
                 .DependsOn(Dependency.OnValue("fileName", absoluteFileName)));
             container.Register(Component.For<ISiteMapXmlReservedAttributeNameProvider>().ImplementedBy<SiteMapXmlReservedAttributeNameProvider>()
                 .DependsOn(Dependency.OnValue("attributesToIgnore", new string[0])));
 
-            container.Register(Component.For<ISiteMapBuilder>().ImplementedBy<CompositeSiteMapBuilder>().Named("builder1")
-                .DependsOn(Dependency.OnComponentCollection<ISiteMapBuilder[]>("xmlSiteMapBuilder1", "reflectionSiteMapBuilder1", "visitingSiteMapBuilder1")));
+            // Register the sitemap node providers
+            container.Register(Component.For<ISiteMapNodeProvider>().ImplementedBy<CompositeSiteMapNodeProvider>().Named("siteMapNodeProvider1")
+                .DependsOn(Dependency.OnComponentCollection<ISiteMapNodeProvider[]>("xmlSiteMapNodeProvider1", "reflectionSiteMapNodeProvider1")));
 
-            container.Register(Component.For<ISiteMapBuilder>().ImplementedBy<XmlSiteMapBuilder>().Named("xmlSiteMapBuilder1")
-                .DependsOn(Dependency.OnValue<ISiteMapXmlReservedAttributeNameProvider>(container.Resolve<ISiteMapXmlReservedAttributeNameProvider>()))
+            container.Register(Component.For<ISiteMapNodeProvider>().ImplementedBy<XmlSiteMapNodeProvider>().Named("xmlSiteMapNodeProvider1")
+                .DependsOn(Dependency.OnValue("includeRootNode", true))
+                .DependsOn(Dependency.OnValue("useNestedDynamicNodeRecursion", false))
                 .DependsOn(ServiceOverride.ForKey<IXmlSource>().Eq("xmlSource1"))
                 );
 
-            container.Register(Component.For<ISiteMapBuilder>().ImplementedBy<ReflectionSiteMapBuilder>().Named("reflectionSiteMapBuilder1")
+            container.Register(Component.For<ISiteMapNodeProvider>().ImplementedBy<ReflectionSiteMapNodeProvider>().Named("reflectionSiteMapNodeProvider1")
                 .DependsOn(Dependency.OnValue("includeAssemblies", includeAssembliesForScan))
                 .DependsOn(Dependency.OnValue("excludeAssemblies", new string[0]))
                 );
 
-            container.Register(Component.For<ISiteMapBuilder>().ImplementedBy<VisitingSiteMapBuilder>().Named("visitingSiteMapBuilder1"));
-                
+            // Register the sitemap builders
+            container.Register(Component.For<ISiteMapBuilder>().ImplementedBy<SiteMapBuilder>().Named("builder1")
+                .DependsOn(ServiceOverride.ForKey<ISiteMapNodeProvider>().Eq("siteMapNodeProvider1"))
+                );
+
             // Configure the builder sets
             container.Register(Component.For<ISiteMapBuilderSet>().ImplementedBy<SiteMapBuilderSet>().Named("siteMapBuilderSet1")
                 .DependsOn(Dependency.OnValue("instanceName", "default"))

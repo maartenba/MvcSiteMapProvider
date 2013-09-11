@@ -124,26 +124,29 @@ namespace DI.StructureMap.Registries
                 .Use<UrlResolvingSiteMapNodeVisitor>();
 
 
-            // Register the sitemap builder
+            // Prepare for our node providers
             var xmlSource = this.For<IXmlSource>().Use<FileXmlSource>()
                            .Ctor<string>("fileName").Is(absoluteFileName);
 
-            var reservedAttributeNameProvider = this.For<ISiteMapXmlReservedAttributeNameProvider>()
-                .Use<SiteMapXmlReservedAttributeNameProvider>()
+            this.For<ISiteMapXmlReservedAttributeNameProvider>().Use<SiteMapXmlReservedAttributeNameProvider>()
                 .Ctor<IEnumerable<string>>("attributesToIgnore").Is(new string[0]);
-                
-            var builder = this.For<ISiteMapBuilder>().Use<CompositeSiteMapBuilder>()
-                .EnumerableOf<ISiteMapBuilder>().Contains(y =>
+
+            // Register the sitemap node providers
+            var siteMapNodeProvider = this.For<ISiteMapNodeProvider>().Use<CompositeSiteMapNodeProvider>()
+                .EnumerableOf<ISiteMapNodeProvider>().Contains(x =>
                 {
-                    y.Type<XmlSiteMapBuilder>()
-                        .Ctor<ISiteMapXmlReservedAttributeNameProvider>().Is(reservedAttributeNameProvider)
+                    x.Type<XmlSiteMapNodeProvider>()
+                        .Ctor<bool>("includeRootNode").Is(true)
+                        .Ctor<bool>("useNestedDynamicNodeRecursion").Is(false)
                         .Ctor<IXmlSource>().Is(xmlSource);
-                    y.Type<ReflectionSiteMapBuilder>()
+                    x.Type<ReflectionSiteMapNodeProvider>()
                         .Ctor<IEnumerable<string>>("includeAssemblies").Is(includeAssembliesForScan)
                         .Ctor<IEnumerable<string>>("excludeAssemblies").Is(new string[0]);
-                    y.Type<VisitingSiteMapBuilder>();
                 });
 
+            // Register the sitemap builders
+            var builder = this.For<ISiteMapBuilder>().Use<SiteMapBuilder>()
+                .Ctor<ISiteMapNodeProvider>().Is(siteMapNodeProvider);
 
             // Configure the builder sets
             this.For<ISiteMapBuilderSetStrategy>().Use<SiteMapBuilderSetStrategy>()

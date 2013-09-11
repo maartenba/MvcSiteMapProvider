@@ -127,39 +127,25 @@ namespace DI.SimpleInjector
             container.RegisterSingle<ISiteMapNodeVisitor, UrlResolvingSiteMapNodeVisitor>();
 
 
-            // Register the sitemap builder
+            // Prepare for the sitemap node providers
             container.RegisterSingle<ISiteMapXmlReservedAttributeNameProvider>(
                 () => new SiteMapXmlReservedAttributeNameProvider(new string[0]));
 
             container.RegisterSingle<IXmlSource>(() => new FileXmlSource(absoluteFileName));
 
 
-            container.RegisterSingle<XmlSiteMapBuilder>(() =>
-                                                  new XmlSiteMapBuilder(
-                                                      container.GetInstance<IXmlSource>(),
-                                                      container.GetInstance<ISiteMapXmlReservedAttributeNameProvider>(),
-                                                      container.GetInstance<INodeKeyGenerator>(),
-                                                      container.GetInstance<IDynamicNodeBuilder>(),
-                                                      container.GetInstance<ISiteMapNodeFactory>(),
-                                                      container.GetInstance<ISiteMapXmlNameProvider>()
-                                                      ));
+            // Register the sitemap node providers
+            container.RegisterSingle<XmlSiteMapNodeProvider>(() => container.GetInstance<XmlSiteMapNodeProviderFactory>()
+                .Create(container.GetInstance<IXmlSource>()));
+            container.RegisterSingle<ReflectionSiteMapNodeProvider>(() => container.GetInstance<ReflectionSiteMapNodeProviderFactory>()
+                .Create(includeAssembliesForScan));
 
-            container.RegisterSingle<ReflectionSiteMapBuilder>(() =>
-                                                         new ReflectionSiteMapBuilder(
-                                                             includeAssembliesForScan,
-                                                             new string[0],
-                                                             container.GetInstance
-                                                                 <ISiteMapXmlReservedAttributeNameProvider>(),
-                                                             container.GetInstance<INodeKeyGenerator>(),
-                                                             container.GetInstance<IDynamicNodeBuilder>(),
-                                                             container.GetInstance<ISiteMapNodeFactory>(),
-                                                             container.GetInstance<ISiteMapCacheKeyGenerator>()
-                                                             ));
+            // Register the sitemap builders
+            container.RegisterSingle<ISiteMapBuilder>(() => container.GetInstance<SiteMapBuilderFactory>()
+                .Create(new CompositeSiteMapNodeProvider(container.GetInstance<XmlSiteMapNodeProvider>(), container.GetInstance<ReflectionSiteMapNodeProvider>())));
 
             container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container, securityTrimmingEnabled, enableLocalization));
             container.RegisterSingle<ISiteMapBuilderSetStrategy>(() => new SiteMapBuilderSetStrategy(container.GetAllInstances<ISiteMapBuilderSet>().ToArray()));
-
-            container.RegisterSingle<VisitingSiteMapBuilder>();
         }
 
         private static IEnumerable<ISiteMapBuilderSet> ResolveISiteMapBuilderSets(Container container, bool securityTrimmingEnabled, bool enableLocalization)
@@ -168,10 +154,7 @@ namespace DI.SimpleInjector
                 "default",
                 securityTrimmingEnabled,
                 enableLocalization,
-                new CompositeSiteMapBuilder(
-                    container.GetInstance<XmlSiteMapBuilder>(),
-                    container.GetInstance<ReflectionSiteMapBuilder>(),
-                    container.GetInstance<VisitingSiteMapBuilder>()),
+                container.GetInstance<ISiteMapBuilder>(),
                 container.GetInstance<ICacheDetails>());
         }
 

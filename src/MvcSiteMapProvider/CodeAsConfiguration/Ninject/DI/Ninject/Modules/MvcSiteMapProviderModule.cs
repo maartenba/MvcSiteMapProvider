@@ -102,44 +102,39 @@ namespace DI.Ninject.Modules
             // Configure the visitors
             this.Kernel.Bind<ISiteMapNodeVisitor>().To<UrlResolvingSiteMapNodeVisitor>();
 
-            // Register the sitemap builder
-            this.Kernel.Bind<IXmlSource>().To<FileXmlSource>().Named("xmlBuilderXmlSource")
+            // Prepare for our node providers
+            this.Kernel.Bind<IXmlSource>().To<FileXmlSource>().Named("XmlSource1")
                 .WithConstructorArgument("fileName", absoluteFileName);
             this.Kernel.Bind<ISiteMapXmlReservedAttributeNameProvider>().To<SiteMapXmlReservedAttributeNameProvider>().Named("xmlBuilderReservedAttributeNameProvider")
                 .WithConstructorArgument("attributesToIgnore", new string[0]);
 
-            // Xml Builder
-            this.Kernel.Bind<ISiteMapBuilder>().To<XmlSiteMapBuilder>().Named("xmlSiteMapBuilder")
-                .WithConstructorArgument("reservedAttributeNameProvider", this.Kernel.Get<ISiteMapXmlReservedAttributeNameProvider>("xmlBuilderReservedAttributeNameProvider"))
-                .WithConstructorArgument("xmlSource", this.Kernel.Get<IXmlSource>("xmlBuilderXmlSource"));
+            // Register the sitemap node providers
+            this.Kernel.Bind<ISiteMapNodeProvider>().To<XmlSiteMapNodeProvider>().Named("xmlSiteMapNodeProvider1")
+                .WithConstructorArgument("includeRootNode", true)
+                .WithConstructorArgument("useNestedDynamicNodeRecursion", false)
+                .WithConstructorArgument("xmlSource", this.Kernel.Get<IXmlSource>("XmlSource1"));
 
-            
-
-            // Reflection Builder
-            this.Kernel.Bind<ISiteMapBuilder>().To<ReflectionSiteMapBuilder>().Named("reflectionSiteMapBuilder")
+            this.Kernel.Bind<ISiteMapNodeProvider>().To<ReflectionSiteMapNodeProvider>().Named("reflectionSiteMapNodeProvider1")
                 .WithConstructorArgument("includeAssemblies", includeAssembliesForScan)
                 .WithConstructorArgument("excludeAssemblies", new string[0]);
 
-            // Visiting Builder
-            this.Kernel.Bind<ISiteMapBuilder>().To<VisitingSiteMapBuilder>().Named("visitingSiteMapBuilder");
-
-
-            // Composite builder
-            this.Kernel.Bind<ISiteMapBuilder>().To<CompositeSiteMapBuilder>().Named("compositeSiteMapBuilder")
-                .WithConstructorArgument("siteMapBuilders", 
-                    new ISiteMapBuilder[] { 
-                        this.Kernel.Get<ISiteMapBuilder>("xmlSiteMapBuilder"),
-                        this.Kernel.Get<ISiteMapBuilder>("reflectionSiteMapBuilder"),
-                        this.Kernel.Get<ISiteMapBuilder>("visitingSiteMapBuilder")
+            this.Kernel.Bind<ISiteMapNodeProvider>().To<CompositeSiteMapNodeProvider>().Named("siteMapNodeProvider1")
+                .WithConstructorArgument("siteMapNodeProviders",
+                    new ISiteMapNodeProvider[] {
+                        this.Kernel.Get<ISiteMapNodeProvider>("xmlSiteMapNodeProvider1"),
+                        this.Kernel.Get<ISiteMapNodeProvider>("reflectionSiteMapNodeProvider1")
                     });
 
+            // Register the sitemap builders
+            this.Kernel.Bind<ISiteMapBuilder>().To<SiteMapBuilder>().Named("siteMapBuilder1")
+                .WithConstructorArgument("siteMapNodeProvider", this.Kernel.Get<ISiteMapNodeProvider>("siteMapNodeProvider1"));
 
             // Configure the builder sets
             this.Kernel.Bind<ISiteMapBuilderSet>().To<SiteMapBuilderSet>().Named("siteMapBuilderSet1")
                 .WithConstructorArgument("instanceName", "default")
                 .WithConstructorArgument("securityTrimmingEnabled", securityTrimmingEnabled)
                 .WithConstructorArgument("enableLocalization", enableLocalization)
-                .WithConstructorArgument("siteMapBuilder", this.Kernel.Get<ISiteMapBuilder>("compositeSiteMapBuilder"))
+                .WithConstructorArgument("siteMapBuilder", this.Kernel.Get<ISiteMapBuilder>("siteMapBuilder1"))
                 .WithConstructorArgument("cacheDetails", this.Kernel.Get<ICacheDetails>("cacheDetails1"));
 
             this.Kernel.Bind<ISiteMapBuilderSetStrategy>().To<SiteMapBuilderSetStrategy>()

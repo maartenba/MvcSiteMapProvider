@@ -135,7 +135,7 @@ namespace DI.Autofac.Modules
             builder.RegisterType<UrlResolvingSiteMapNodeVisitor>()
                    .As<ISiteMapNodeVisitor>();
 
-            // Prepare for our builders
+            // Prepare for our node providers
             builder.RegisterType<FileXmlSource>()
                 .Named<IXmlSource>("xmlSource1")
                 .WithParameter("fileName", absoluteFileName);
@@ -144,31 +144,37 @@ namespace DI.Autofac.Modules
                 .As<ISiteMapXmlReservedAttributeNameProvider>()
                 .WithParameter("attributesToIgnore", new string[0]);
 
-            // Register the sitemap builders
-            builder.RegisterType<XmlSiteMapBuilder>()
-                .Named<ISiteMapBuilder>("xmlSiteMapBuilder1")
+
+            // Register the sitemap node providers
+            builder.RegisterType<XmlSiteMapNodeProvider>()
+                .Named<ISiteMapNodeProvider>("xmlSiteMapNodeProvider1")
+                .WithParameter("includeRootNode", true)
+                .WithParameter("useNestedDynamicNodeRecursion", false)
                 .WithParameter(
                     (p, c) => p.Name == "xmlSource",
                     (p, c) => c.ResolveNamed<IXmlSource>("xmlSource1"));
 
-            builder.RegisterType<ReflectionSiteMapBuilder>()
-                .Named<ISiteMapBuilder>("reflectionSiteMapBuilder1")
+            builder.RegisterType<ReflectionSiteMapNodeProvider>()
+                .Named<ISiteMapNodeProvider>("reflectionSiteMapNodeProvider1")
                 .WithParameter("includeAssemblies", includeAssembliesForScan)
                 .WithParameter("excludeAssemblies", new string[0]);
 
-            builder.RegisterType<VisitingSiteMapBuilder>()
-                .Named<ISiteMapBuilder>("visitingSiteMapBuilder1");
-
-            builder.RegisterType<CompositeSiteMapBuilder>()
-                .Named<ISiteMapBuilder>("siteMapBuilder1")
+            builder.RegisterType<CompositeSiteMapNodeProvider>()
+                .Named<ISiteMapNodeProvider>("siteMapNodeProvider1")
                 .WithParameter(
-                    (p, c) => p.Name == "siteMapBuilders",
+                    (p, c) => p.Name == "siteMapNodeProviders",
                     (p, c) => new[]
                         {
-                            c.ResolveNamed<ISiteMapBuilder>("xmlSiteMapBuilder1"),
-                            c.ResolveNamed<ISiteMapBuilder>("reflectionSiteMapBuilder1"),
-                            c.ResolveNamed<ISiteMapBuilder>("visitingSiteMapBuilder1")
+                            c.ResolveNamed<ISiteMapNodeProvider>("xmlSiteMapNodeProvider1"),
+                            c.ResolveNamed<ISiteMapNodeProvider>("reflectionSiteMapNodeProvider1")
                         });
+
+            // Register the sitemap builders
+            builder.RegisterType<SiteMapBuilder>()
+                .Named<ISiteMapBuilder>("siteMapBuilder1")
+                .WithParameter(
+                    (p, c) => p.Name == "siteMapNodeProvider",
+                    (p, c) => c.ResolveNamed<ISiteMapNodeProvider>("siteMapNodeProvider1"));
 
             // Configure the builder sets
             builder.RegisterType<SiteMapBuilderSet>()
