@@ -115,6 +115,7 @@
     <Compile Include="Builder\ReflectionSiteMapNodeProvider.cs" />
     <Compile Include="Builder\ReflectionSiteMapNodeProviderFactory.cs" />
     <Compile Include="Builder\SiteMapBuilder.cs" />
+    <Compile Include="Builder\SiteMapBuilderFactory.cs" />
     <Compile Include="Builder\SiteMapHierarchyBuilder.cs" />
     <Compile Include="Builder\ISiteMapNodeCreatorFactory.cs" />
     <Compile Include="Builder\SiteMapNodeCreatorFactory.cs" />
