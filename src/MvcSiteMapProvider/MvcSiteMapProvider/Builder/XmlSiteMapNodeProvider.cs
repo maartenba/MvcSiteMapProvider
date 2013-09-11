@@ -39,7 +39,7 @@ namespace MvcSiteMapProvider.Builder
         {
             StandardNodes = 1,
             DynamicNodes = 2,
-            All = 3
+            All = StandardNodes | DynamicNodes
         }
 
         #region ISiteMapNodeProvider Members
@@ -114,13 +114,10 @@ namespace MvcSiteMapProvider.Builder
             bool processStandardNodes = (processFlags & NodesToProcess.StandardNodes) == NodesToProcess.StandardNodes;
             bool processDynamicNodes = (processFlags & NodesToProcess.DynamicNodes) == NodesToProcess.DynamicNodes;
 
-            // Loop through each element below the current root element.
             foreach (XElement node in parentElement.Elements())
             {
                 if (node.Name == xmlNameProvider.NodeName)
                 {
-                    // If this is a normal mvcSiteMapNode then map the xml element
-                    // to an MvcSiteMapNode, and add the node to the current root.
                     var child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
 
                     if (processStandardNodes && !child.Node.HasDynamicNodeProvider)
@@ -138,7 +135,8 @@ namespace MvcSiteMapProvider.Builder
                         foreach (var dynamicNode in dynamicNodes)
                         {
                             result.Add(dynamicNode);
-                            // Add non-dynamic childs for every dynamic node
+
+                            // Recursively add non-dynamic childs for every dynamic node
                             result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
                         }
 
