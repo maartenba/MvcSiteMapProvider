@@ -47,6 +47,7 @@ namespace MvcSiteMapProvider.Builder
                 if (string.IsNullOrEmpty(key))
                 {
                     key = this.siteMapNodeCreator.GenerateSiteMapNodeKey(
+                        parentKey,
                         Guid.NewGuid().ToString(),
                         node.Url,
                         node.Title,

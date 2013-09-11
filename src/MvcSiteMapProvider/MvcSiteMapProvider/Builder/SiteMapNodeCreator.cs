@@ -50,9 +50,9 @@ namespace MvcSiteMapProvider.Builder
             return this.siteMapNodeParentMapFactory.Create(parentKey, node, sourceName);
         }
 
-        public virtual string GenerateSiteMapNodeKey(string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable)
+        public virtual string GenerateSiteMapNodeKey(string parentKey, string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable)
         {
-            return this.nodeKeyGenerator.GenerateKey(null, key, url, title, area, controller, action, httpMethod, clickable);
+            return this.nodeKeyGenerator.GenerateKey(parentKey, key, url, title, area, controller, action, httpMethod, clickable);
         }
 
         #endregion

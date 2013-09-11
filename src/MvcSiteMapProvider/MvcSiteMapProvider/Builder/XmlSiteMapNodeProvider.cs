@@ -116,39 +116,37 @@ namespace MvcSiteMapProvider.Builder
 
             foreach (XElement node in parentElement.Elements())
             {
-                if (node.Name == xmlNameProvider.NodeName)
-                {
-                    var child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
-
-                    if (processStandardNodes && !child.Node.HasDynamicNodeProvider)
-                    {
-                        result.Add(child);
-
-                        // Continue recursively processing the XML file.
-                        result.AddRange(ProcessXmlNodes(child.Node, node, processFlags, helper));
-                    }
-                    else if (processDynamicNodes && child.Node.HasDynamicNodeProvider)
-                    {
-                        // We pass in the parent node key as the default parent because the dynamic node (child) is never added to the sitemap.
-                        var dynamicNodes = helper.CreateDynamicNodes(child, parentNode.Key);
-
-                        foreach (var dynamicNode in dynamicNodes)
-                        {
-                            result.Add(dynamicNode);
-
-                            // Recursively add non-dynamic childs for every dynamic node
-                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
-                        }
-
-                        // Process the next nested dynamic node provider. We pass in the parent node as the default 
-                        // parent because the dynamic node definition node (child) is never added to the sitemap.
-                        result.AddRange(ProcessXmlNodes(parentNode, node, NodesToProcess.DynamicNodes, helper));
-                    }
-                }
-                else
+                if (node.Name != xmlNameProvider.NodeName)
                 {
                     // If the current node is not one of the known node types throw and exception
                     throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderInvalidSiteMapElement, helper.SiteMapCacheKey));
+                }
+
+                var child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
+
+                if (processStandardNodes && !child.Node.HasDynamicNodeProvider)
+                {
+                    result.Add(child);
+
+                    // Continue recursively processing the XML file.
+                    result.AddRange(ProcessXmlNodes(child.Node, node, processFlags, helper));
+                }
+                else if (processDynamicNodes && child.Node.HasDynamicNodeProvider)
+                {
+                    // We pass in the parent node key as the default parent because the dynamic node (child) is never added to the sitemap.
+                    var dynamicNodes = helper.CreateDynamicNodes(child, parentNode.Key);
+
+                    foreach (var dynamicNode in dynamicNodes)
+                    {
+                        result.Add(dynamicNode);
+
+                        // Recursively add non-dynamic childs for every dynamic node
+                        result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
+                    }
+
+                    // Process the next nested dynamic node provider. We pass in the parent node as the default 
+                    // parent because the dynamic node definition node (child) is never added to the sitemap.
+                    result.AddRange(ProcessXmlNodes(parentNode, node, NodesToProcess.DynamicNodes, helper));
                 }
             }
             return result;
@@ -171,6 +169,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Generate key for node
             string key = helper.CreateNodeKey(
+                parentKey,
                 node.GetAttributeValue("key"),
                 node.GetAttributeValue("url"),
                 node.GetAttributeValue("title"),

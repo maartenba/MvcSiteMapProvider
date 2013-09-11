@@ -33,8 +33,9 @@ namespace MvcSiteMapProvider.Builder
 
 
         /// <summary>
-        /// Generates a key based on the properties that are passed. The combination of values should be unique.
+        /// Generates a key based on the properties that are passed. The combination of values should be unique within the sitemap.
         /// </summary>
+        /// <param name="parentKey">The key of the intended parent node.</param>
         /// <param name="key">The key (if any) of the current node.</param>
         /// <param name="url">The URL of the current node.</param>
         /// <param name="title">The title of the current node.</param>
@@ -44,6 +45,6 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="httpMethod">The HTTP method of the current node.</param>
         /// <param name="clickable">Whether or not the node should be clickable on the UI.</param>
         /// <returns>A key that applies to the current node.</returns>
-        string GenerateSiteMapNodeKey(string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable);
+        string GenerateSiteMapNodeKey(string parentKey, string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable);
     }
 }

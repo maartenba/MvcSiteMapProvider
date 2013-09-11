@@ -227,6 +227,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Generate key for node
             string key = helper.CreateNodeKey(
+                attribute.ParentKey,
                 attribute.Key,
                 attribute.Url,
                 title,

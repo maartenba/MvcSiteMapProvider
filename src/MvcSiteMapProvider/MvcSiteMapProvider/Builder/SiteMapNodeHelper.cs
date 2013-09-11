@@ -44,10 +44,10 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapNodeHelper Members
 
-        public virtual string CreateNodeKey(string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable)
+        public virtual string CreateNodeKey(string parentKey, string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable)
         {
             var siteMapNodeCreator = this.siteMapNodeCreatorFactory.Create(this.siteMap);
-            return siteMapNodeCreator.GenerateSiteMapNodeKey(key, url, title, area, controller, action, httpMethod, clickable);
+            return siteMapNodeCreator.GenerateSiteMapNodeKey(parentKey, key, url, title, area, controller, action, httpMethod, clickable);
         }
 
         public ISiteMapNodeParentMap CreateNode(string key, string parentKey, string sourceName)
