@@ -18,6 +18,14 @@ task Clean -description "This task cleans up the build directory" {
 }
 
 task Init -description "This tasks makes sure the build environment is correctly setup" {  
+	if ($env:BuildRunner -ne $null -and $env:BuildRunner -eq "MyGet") {		
+		$version = $packageVersion
+		if ($version.Contains("-") -eq $true) {
+			$version = $version.SubString(0, $version.IndexOf("-"))
+		}
+		echo "Updated version to: $version"
+	}
+	
 	Generate-Assembly-Info `
 		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
 		-company "MvcSiteMapProvider" `
