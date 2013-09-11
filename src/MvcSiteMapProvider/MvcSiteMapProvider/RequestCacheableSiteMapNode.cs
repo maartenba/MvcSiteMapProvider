@@ -109,11 +109,6 @@ namespace MvcSiteMapProvider
             return (bool)result;
         }
 
-        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
-        {
-            return this.GetCachedOrMemberValue<IEnumerable<DynamicNode>>(() => base.GetDynamicNodeCollection(), "GetDynamicNodeCollection", true);
-        }
-
         public override string Url
         {
             get { return this.GetCachedOrMemberValue<string>(() => base.Url, "Url", true); }

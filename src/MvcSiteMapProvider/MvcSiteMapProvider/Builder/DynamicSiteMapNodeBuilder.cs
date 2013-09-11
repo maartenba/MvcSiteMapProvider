@@ -64,9 +64,6 @@ namespace MvcSiteMapProvider.Builder
                 // Copy the values from the original node to the new one
                 node.CopyTo(newNode);
 
-                // Remove the Dynamic Node Provider
-                newNode.DynamicNodeProvider = String.Empty;
-
                 // Copy any values that were set in the dynamic node and overwrite the new node.
                 dynamicNode.SafeCopyTo(newNode);
 

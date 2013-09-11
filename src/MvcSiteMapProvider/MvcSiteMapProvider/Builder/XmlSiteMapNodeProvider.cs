@@ -34,6 +34,14 @@ namespace MvcSiteMapProvider.Builder
         protected readonly ISiteMapXmlNameProvider xmlNameProvider;
         protected const string SourceName = ".sitemap XML File";
 
+        [Flags]
+        protected enum NodesToProcess
+        {
+            StandardNodes = 1,
+            DynamicNodes = 2,
+            Both = 3
+        }
+
         #region ISiteMapNodeProvider Members
 
         public IEnumerable<ISiteMapNodeParentMap> GetSiteMapNodes(ISiteMapNodeHelper helper)
@@ -75,7 +83,7 @@ namespace MvcSiteMapProvider.Builder
             }
 
             // Process our XML, passing in the main root sitemap node and xml element.
-            result.AddRange(ProcessXmlNodes(rootNode.Node, rootElement, helper));
+            result.AddRange(ProcessXmlNodes(rootNode.Node, rootElement, 0, NodesToProcess.Both, helper));
 
             // Done!
             return result;
@@ -96,47 +104,59 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Recursively processes our XML document, parsing our siteMapNodes and dynamicNode(s).
         /// </summary>
-        /// <param name="rootNode">The main root sitemap node.</param>
-        /// <param name="rootElement">The main root XML element.</param>
+        /// <param name="parentNode">The parent node to process.</param>
+        /// <param name="parentElement">The correspoding parent XML element.</param>
+        /// <param name="dynamicNodeIndex">The index of the current dynamic node. We only process descendant dynamic nodes on iteration 0.</param>
+        /// <param name="processFlags">Flags to indicate which nodes to process.</param>
         /// <param name="helper">The node helper.</param>
-        protected virtual IList<ISiteMapNodeParentMap> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, ISiteMapNodeHelper helper)
+        protected virtual IList<ISiteMapNodeParentMap> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, int dynamicNodeIndex, NodesToProcess processFlags, ISiteMapNodeHelper helper)
         {
             var result = new List<ISiteMapNodeParentMap>();
+            bool processStandardNodes = (processFlags & NodesToProcess.StandardNodes) == NodesToProcess.StandardNodes;
+            bool processDynamicNodes = (processFlags & NodesToProcess.DynamicNodes) == NodesToProcess.DynamicNodes;
 
             // Loop through each element below the current root element.
             foreach (XElement node in parentElement.Elements())
             {
-                ISiteMapNodeParentMap child;
                 if (node.Name == xmlNameProvider.NodeName)
                 {
                     // If this is a normal mvcSiteMapNode then map the xml element
                     // to an MvcSiteMapNode, and add the node to the current root.
-                    child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
+                    var child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);
 
-                    if (!child.Node.HasDynamicNodeProvider)
+                    if (!child.Node.HasDynamicNodeProvider && processStandardNodes)
                     {
                         result.Add(child);
+
+                        // Continue recursively processing the XML file.
+                        result.AddRange(ProcessXmlNodes(child.Node, node, dynamicNodeIndex, processFlags, helper));
                     }
-                    else
+                    else if (dynamicNodeIndex == 0 && processDynamicNodes)
                     {
-                        var dynamicNodes = helper.CreateDynamicNodes(child);
+                        // NOTE: We only process the dynamic node provider the first time it is detected to 
+                        // prevent the recursion from calling CreateDynamicNodes multiple times.
+                        var dynamicNodes = helper.CreateDynamicNodes(child).ToArray();
 
                         foreach (var dynamicNode in dynamicNodes)
                         {
                             result.Add(dynamicNode);
                             // Add non-dynamic childs for every dynamicnode
-                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, helper));
+                            result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, dynamicNodeIndex, NodesToProcess.StandardNodes, helper));
+                        }
+
+                        // Wait until the first dynamic node is entirely processed before doing the next nested one.
+                        for (int i = 0; i < dynamicNodes.Count(); i++)
+                        {
+                            // Process next dynamic node provider result.
+                            result.AddRange(ProcessXmlNodes(dynamicNodes[i].Node, node, i, NodesToProcess.DynamicNodes, helper));
                         }
                     }
                 }
                 else
                 {
                     // If the current node is not one of the known node types throw and exception
-                    throw new Exception(String.Format(Resources.Messages.XmlSiteMapNodeProviderInvalidSiteMapElement, helper.SiteMapCacheKey));
+                    throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderInvalidSiteMapElement, helper.SiteMapCacheKey));
                 }
-
-                // Continue recursively processing the XML file.
-                result.AddRange(ProcessXmlNodes(child.Node, node, helper));
             }
             return result;
         }
