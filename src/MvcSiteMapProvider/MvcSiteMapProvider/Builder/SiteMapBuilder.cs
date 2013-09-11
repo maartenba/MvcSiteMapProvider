@@ -52,7 +52,7 @@ namespace MvcSiteMapProvider.Builder
 
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
-            var sourceNodes = new List<ISiteMapNodeParentMap>();
+            var sourceNodes = new List<ISiteMapNodeToParentRelation>();
             var siteMapCacheKey = this.siteMapCacheKeyGenerator.GenerateKey();
 
             LoadSourceNodes(siteMap, siteMapCacheKey, sourceNodes);
@@ -83,13 +83,13 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual void LoadSourceNodes(ISiteMap siteMap, string siteMapCacheKey, List<ISiteMapNodeParentMap> sourceNodes)
+        protected virtual void LoadSourceNodes(ISiteMap siteMap, string siteMapCacheKey, List<ISiteMapNodeToParentRelation> sourceNodes)
         {
             var siteMapNodeHelper = this.siteMapNodeHelperFactory.Create(siteMap, siteMapCacheKey);
             sourceNodes.AddRange(this.siteMapNodeProvider.GetSiteMapNodes(siteMapNodeHelper));
         }
 
-        protected virtual ISiteMapNode GetRootNode(string siteMapCacheKey, IList<ISiteMapNodeParentMap> sourceNodes)
+        protected virtual ISiteMapNode GetRootNode(string siteMapCacheKey, IList<ISiteMapNodeToParentRelation> sourceNodes)
         {
             var rootNodes = sourceNodes.Where(x => String.IsNullOrEmpty(x.ParentKey) || x.ParentKey.Trim() == String.Empty);
 

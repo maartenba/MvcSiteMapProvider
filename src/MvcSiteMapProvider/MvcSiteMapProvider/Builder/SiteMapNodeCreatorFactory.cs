@@ -11,22 +11,22 @@ namespace MvcSiteMapProvider.Builder
         public SiteMapNodeCreatorFactory(
             ISiteMapNodeFactory siteMapNodeFactory,
             INodeKeyGenerator nodeKeyGenerator,
-            ISiteMapNodeParentMapFactory siteMapNodeParentMapFactory)
+            ISiteMapNodeToParentRelationFactory siteMapNodeToParentRelationFactory)
         {
             if (siteMapNodeFactory == null)
                 throw new ArgumentNullException("siteMapNodeFactory");
             if (nodeKeyGenerator == null)
                 throw new ArgumentNullException("nodeKeyGenerator");
-            if (siteMapNodeParentMapFactory == null)
-                throw new ArgumentNullException("siteMapNodeParentMapFactory");
+            if (siteMapNodeToParentRelationFactory == null)
+                throw new ArgumentNullException("siteMapNodeToParentRelationFactory");
 
             this.siteMapNodeFactory = siteMapNodeFactory;
             this.nodeKeyGenerator = nodeKeyGenerator;
-            this.siteMapNodeParentMapFactory = siteMapNodeParentMapFactory;
+            this.siteMapNodeToParentRelationFactory = siteMapNodeToParentRelationFactory;
         }
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly INodeKeyGenerator nodeKeyGenerator;
-        protected readonly ISiteMapNodeParentMapFactory siteMapNodeParentMapFactory;
+        protected readonly ISiteMapNodeToParentRelationFactory siteMapNodeToParentRelationFactory;
 
         #region ISiteMapNodeCreatorFactory Members
 
@@ -36,7 +36,7 @@ namespace MvcSiteMapProvider.Builder
                 siteMap, 
                 this.siteMapNodeFactory, 
                 this.nodeKeyGenerator, 
-                this.siteMapNodeParentMapFactory);
+                this.siteMapNodeToParentRelationFactory);
         }
 
         #endregion

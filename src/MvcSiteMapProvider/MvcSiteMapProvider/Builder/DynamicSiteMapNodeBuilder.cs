@@ -28,9 +28,9 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="siteMap">The site map.</param>
         /// <param name="node">The node.</param>
         /// <param name="parentKey">The key of the parent node.</param>
-        public virtual IEnumerable<ISiteMapNodeParentMap> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey)
+        public virtual IEnumerable<ISiteMapNodeToParentRelation> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
 
             if (!node.HasDynamicNodeProvider)
             {

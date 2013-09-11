@@ -11,7 +11,7 @@ namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// ReflectionSiteMapNodeProvider class. 
-    /// Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/> list based on a
+    /// Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> list based on a
     /// set of attributes within an assembly.
     /// </summary>
     public class ReflectionSiteMapNodeProvider
@@ -46,9 +46,9 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapNodeProvider Members
 
-        public IEnumerable<ISiteMapNodeParentMap> GetSiteMapNodes(ISiteMapNodeHelper helper)
+        public IEnumerable<ISiteMapNodeToParentRelation> GetSiteMapNodes(ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
 
             var definitions = this.GetMvcSiteMapNodeAttributeDefinitions();
             result.AddRange(this.LoadSiteMapNodesNodesFromMvcSiteMapNodeAttributeDefinitions(definitions, helper));
@@ -59,10 +59,10 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual IEnumerable<ISiteMapNodeParentMap> LoadSiteMapNodesNodesFromMvcSiteMapNodeAttributeDefinitions(
+        protected virtual IEnumerable<ISiteMapNodeToParentRelation> LoadSiteMapNodesNodesFromMvcSiteMapNodeAttributeDefinitions(
             IEnumerable<IMvcSiteMapNodeAttributeDefinition> definitions, ISiteMapNodeHelper helper)
         {
-            var sourceNodes = new List<ISiteMapNodeParentMap>();
+            var sourceNodes = new List<ISiteMapNodeToParentRelation>();
 
             sourceNodes.AddRange(this.CreateNodesFromAttributeDefinitions(definitions, helper));
             sourceNodes.AddRange(this.CreateDynamicNodes(sourceNodes, helper));
@@ -78,10 +78,10 @@ namespace MvcSiteMapProvider.Builder
             return definitions;
         }
 
-        protected virtual IList<ISiteMapNodeParentMap> CreateNodesFromAttributeDefinitions(
+        protected virtual IList<ISiteMapNodeToParentRelation> CreateNodesFromAttributeDefinitions(
             IEnumerable<IMvcSiteMapNodeAttributeDefinition> definitions, ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             foreach (var definition in definitions)
             {
                 var node = this.CreateNodeFromAttributeDefinition(definition, helper);
@@ -95,9 +95,9 @@ namespace MvcSiteMapProvider.Builder
             return result;
         }
 
-        protected virtual ISiteMapNodeParentMap CreateNodeFromAttributeDefinition(IMvcSiteMapNodeAttributeDefinition definition, ISiteMapNodeHelper helper)
+        protected virtual ISiteMapNodeToParentRelation CreateNodeFromAttributeDefinition(IMvcSiteMapNodeAttributeDefinition definition, ISiteMapNodeHelper helper)
         {
-            ISiteMapNodeParentMap result = null;
+            ISiteMapNodeToParentRelation result = null;
 
             // Create node
             var actionNode = definition as MvcSiteMapNodeAttributeDefinitionForAction;
@@ -120,9 +120,9 @@ namespace MvcSiteMapProvider.Builder
             return result;
         }
 
-        protected virtual IList<ISiteMapNodeParentMap> CreateDynamicNodes(IList<ISiteMapNodeParentMap> sourceNodes, ISiteMapNodeHelper helper)
+        protected virtual IList<ISiteMapNodeToParentRelation> CreateDynamicNodes(IList<ISiteMapNodeToParentRelation> sourceNodes, ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             foreach (var sourceNode in sourceNodes.Where(x => x.Node.HasDynamicNodeProvider).ToArray())
             {
                 result.AddRange(helper.CreateDynamicNodes(sourceNode));
@@ -141,7 +141,7 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="methodInfo">The method info.</param>
         /// <param name="helper">The node helper.</param>
         /// <returns></returns>
-        protected virtual ISiteMapNodeParentMap GetSiteMapNodeFromMvcSiteMapNodeAttribute(
+        protected virtual ISiteMapNodeToParentRelation GetSiteMapNodeFromMvcSiteMapNodeAttribute(
             IMvcSiteMapNodeAttribute attribute, Type type, MethodInfo methodInfo, ISiteMapNodeHelper helper)
         {
             if (attribute == null)

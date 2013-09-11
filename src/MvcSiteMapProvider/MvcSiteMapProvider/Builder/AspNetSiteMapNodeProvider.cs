@@ -11,7 +11,7 @@ using MvcSiteMapProvider.Collections.Specialized;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// AspNetSiteMapNodeProvider class. Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/> list based on a 
+    /// AspNetSiteMapNodeProvider class. Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> list based on a 
     /// <see cref="T:System.Web.SiteMapProvider"/> instance.
     /// </summary>
     /// <remarks>
@@ -58,9 +58,9 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapNodeProvider Members
 
-        public IEnumerable<ISiteMapNodeParentMap> GetSiteMapNodes(ISiteMapNodeHelper helper)
+        public IEnumerable<ISiteMapNodeToParentRelation> GetSiteMapNodes(ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             var provider = siteMapProvider.GetProvider();
 
             var rootNode = GetRootNode(provider, helper);
@@ -76,15 +76,15 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual ISiteMapNodeParentMap GetRootNode(SiteMapProvider provider, ISiteMapNodeHelper helper)
+        protected virtual ISiteMapNodeToParentRelation GetRootNode(SiteMapProvider provider, ISiteMapNodeHelper helper)
         {
             var root = provider.RootNode;
             return helper.CreateNode(root.Key, null, SourceName, root.ResourceKey);
         }
 
-        protected virtual IEnumerable<ISiteMapNodeParentMap> ProcessNodes(ISiteMapNodeParentMap parentNode, System.Web.SiteMapNode providerParentNode, ISiteMapNodeHelper helper)
+        protected virtual IEnumerable<ISiteMapNodeToParentRelation> ProcessNodes(ISiteMapNodeToParentRelation parentNode, System.Web.SiteMapNode providerParentNode, ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
 
             foreach (System.Web.SiteMapNode childNode in providerParentNode.ChildNodes)
             {
@@ -98,7 +98,7 @@ namespace MvcSiteMapProvider.Builder
             return result;
         }
 
-        protected virtual ISiteMapNodeParentMap GetSiteMapNodeFromProviderNode(System.Web.SiteMapNode node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
+        protected virtual ISiteMapNodeToParentRelation GetSiteMapNodeFromProviderNode(System.Web.SiteMapNode node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
         {
             // Use the same keys as the underlying provider.
             string key = node.Key;

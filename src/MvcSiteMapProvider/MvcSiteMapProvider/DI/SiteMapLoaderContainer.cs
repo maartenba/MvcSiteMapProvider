@@ -37,7 +37,7 @@ namespace MvcSiteMapProvider.DI
             this.siteMapCacheKeyGenerator = new SiteMapCacheKeyGenerator(this.mvcContextFactory);
             this.siteMapCacheKeyToBuilderSetMapper = new SiteMapCacheKeyToBuilderSetMapper();
             var siteMapNodeFactoryContainer = new SiteMapNodeFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
-            this.siteMapNodeParentMapFactory = new SiteMapNodeParentMapFactory();
+            this.siteMapNodeToParentRelationFactory = new SiteMapNodeToParentRelationFactory();
             this.nodeKeyGenerator = new NodeKeyGenerator();
             this.siteMapNodeFactory = siteMapNodeFactoryContainer.ResolveSiteMapNodeFactory();
             this.siteMapNodeCreatorFactory = this.ResolveSiteMapNodeCreatorFactory();
@@ -66,7 +66,7 @@ namespace MvcSiteMapProvider.DI
         private readonly ISiteMapCacheKeyToBuilderSetMapper siteMapCacheKeyToBuilderSetMapper;
         private readonly ISiteMapBuilderSetStrategy siteMapBuiderSetStrategy;
         private readonly INodeKeyGenerator nodeKeyGenerator;
-        private readonly ISiteMapNodeParentMapFactory siteMapNodeParentMapFactory;
+        private readonly ISiteMapNodeToParentRelationFactory siteMapNodeToParentRelationFactory;
         private readonly ISiteMapNodeFactory siteMapNodeFactory;
         private readonly ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory;
         private readonly ISiteMapNodeHelperFactory siteMapNodeHelperFactory;
@@ -162,7 +162,7 @@ namespace MvcSiteMapProvider.DI
             return new SiteMapNodeCreatorFactory(
                 this.siteMapNodeFactory, 
                 this.nodeKeyGenerator, 
-                this.siteMapNodeParentMapFactory);
+                this.siteMapNodeToParentRelationFactory);
         }
         
         private ISiteMapNodeHelperFactory ResolveSiteMapNodeHelperFactory()

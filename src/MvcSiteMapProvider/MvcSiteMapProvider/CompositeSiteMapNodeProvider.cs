@@ -22,9 +22,9 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapNodeProvider Members
 
-        public IEnumerable<ISiteMapNodeParentMap> GetSiteMapNodes(ISiteMapNodeHelper helper)
+        public IEnumerable<ISiteMapNodeToParentRelation> GetSiteMapNodes(ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             foreach (var provider in this.siteMapNodeProviders)
             {
                 result.AddRange(provider.GetSiteMapNodes(helper));

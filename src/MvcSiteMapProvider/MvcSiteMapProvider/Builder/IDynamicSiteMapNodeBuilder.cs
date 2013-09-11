@@ -8,6 +8,6 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface IDynamicSiteMapNodeBuilder
     {
-        IEnumerable<ISiteMapNodeParentMap> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey);
+        IEnumerable<ISiteMapNodeToParentRelation> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey);
     }
 }

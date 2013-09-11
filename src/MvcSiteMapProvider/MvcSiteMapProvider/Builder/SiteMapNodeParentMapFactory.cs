@@ -3,17 +3,17 @@
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// Abstract factory that provides instances of SiteMapNodeParentMap for mapping 
+    /// Abstract factory that provides instances of SiteMapNodeToParentRelation for mapping 
     /// node instances to their parent nodes before they are added to the SiteMap.
     /// </summary>
-    public class SiteMapNodeParentMapFactory
-        : ISiteMapNodeParentMapFactory
+    public class SiteMapNodeToParentRelationFactory
+        : ISiteMapNodeToParentRelationFactory
     {
-        #region ISiteMapNodeParentMapFactory Members
+        #region ISiteMapNodeToParentRelationFactory Members
 
-        public virtual ISiteMapNodeParentMap Create(string parentKey, ISiteMapNode node, string sourceName)
+        public virtual ISiteMapNodeToParentRelation Create(string parentKey, ISiteMapNode node, string sourceName)
         {
-            return new SiteMapNodeParentMap(parentKey, node, sourceName);
+            return new SiteMapNodeToParentRelation(parentKey, node, sourceName);
         }
 
         #endregion

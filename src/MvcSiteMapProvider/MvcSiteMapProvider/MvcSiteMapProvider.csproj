@@ -110,8 +110,8 @@
     <Compile Include="Builder\ISiteMapNodeHelper.cs" />
     <Compile Include="Builder\ISiteMapNodeCreator.cs" />
     <Compile Include="Builder\ISiteMapNodeHelperFactory.cs" />
-    <Compile Include="Builder\ISiteMapNodeParentMap.cs" />
-    <Compile Include="Builder\ISiteMapNodeParentMapFactory.cs" />
+    <Compile Include="Builder\ISiteMapNodeToParentRelation.cs" />
+    <Compile Include="Builder\ISiteMapNodeToParentRelationFactory.cs" />
     <Compile Include="Builder\ReflectionSiteMapNodeProvider.cs" />
     <Compile Include="Builder\ReflectionSiteMapNodeProviderFactory.cs" />
     <Compile Include="Builder\SiteMapBuilder.cs" />

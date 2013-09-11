@@ -26,42 +26,42 @@ namespace MvcSiteMapProvider.Builder
         string CreateNodeKey(string parentKey, string key, string url, string title, string area, string controller, string action, string httpMethod, bool clickable);
 
         /// <summary>
-        /// Creates an instance of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/>.
+        /// Creates an instance of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/>.
         /// </summary>
         /// <param name="key">The key for the node. This cannot be changed.</param>
         /// <param name="parentKey">The key of the intended parent node.</param>
         /// <param name="node">The node to map to the parentKey.</param>
         /// <param name="sourceName">A string description of the provider. This value is shown in exception messages related to the node configuration.</param>
-        /// <returns>An <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/> instance.</returns>
-        ISiteMapNodeParentMap CreateNode(string key, string parentKey, string sourceName);
+        /// <returns>An <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> instance.</returns>
+        ISiteMapNodeToParentRelation CreateNode(string key, string parentKey, string sourceName);
 
         /// <summary>
-        /// Creates an instance of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/>.
+        /// Creates an instance of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/>.
         /// </summary>
         /// <param name="key">The key for the node. This cannot be changed.</param>
         /// <param name="parentKey">The key of the intended parent node.</param>
         /// <param name="node">The node to map to the parentKey.</param>
         /// <param name="sourceName">A string description of the provider. This value is shown in exception messages related to the node configuration.</param>
         /// <param name="implicitResourceKey">The implicit resource key for localization of the node's properties.</param>
-        /// <returns>An <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/> instance.</returns>
-        ISiteMapNodeParentMap CreateNode(string key, string parentKey, string sourceName, string implicitResourceKey);
+        /// <returns>An <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> instance.</returns>
+        ISiteMapNodeToParentRelation CreateNode(string key, string parentKey, string sourceName, string implicitResourceKey);
 
         /// <summary>
-        /// Processes the dynamic nodes and builds them into a list of <see cref="T:MvcSiteMapNodeProvider.Builder.ISiteMapNodeParentMap"/> instances
+        /// Processes the dynamic nodes and builds them into a list of <see cref="T:MvcSiteMapNodeProvider.Builder.ISiteMapNodeToParentRelation"/> instances
         /// and maps their parent node.
         /// </summary>
         /// <param name="node">The node that includes a configured <see cref="T:MvcSiteMapProvider.IDynamicNodeProvider"/>.</param>
-        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerable`MvcSiteMapNodeProvider.Builder.ISiteMapNodeParentMap`"/> instance.</returns>
-        IEnumerable<ISiteMapNodeParentMap> CreateDynamicNodes(ISiteMapNodeParentMap node);
+        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerable`MvcSiteMapNodeProvider.Builder.ISiteMapNodeToParentRelation`"/> instance.</returns>
+        IEnumerable<ISiteMapNodeToParentRelation> CreateDynamicNodes(ISiteMapNodeToParentRelation node);
 
         /// <summary>
-        /// Processes the dynamic nodes and builds them into a list of <see cref="T:MvcSiteMapNodeProvider.Builder.ISiteMapNodeParentMap"/> instances
+        /// Processes the dynamic nodes and builds them into a list of <see cref="T:MvcSiteMapNodeProvider.Builder.ISiteMapNodeToParentRelation"/> instances
         /// and maps their parent node.
         /// </summary>
         /// <param name="node">The node that includes a configured <see cref="T:MvcSiteMapProvider.IDynamicNodeProvider"/>.</param>
         /// <param name="defaultParentKey">The default parent key to use if the dynamic node doesn't specify one.</param>
-        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerable`MvcSiteMapNodeProvider.Builder.ISiteMapNodeParentMap`"/> instance.</returns>
-        IEnumerable<ISiteMapNodeParentMap> CreateDynamicNodes(ISiteMapNodeParentMap node, string defaultParentKey);
+        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerable`MvcSiteMapNodeProvider.Builder.ISiteMapNodeToParentRelation`"/> instance.</returns>
+        IEnumerable<ISiteMapNodeToParentRelation> CreateDynamicNodes(ISiteMapNodeToParentRelation node, string defaultParentKey);
 
         /// <summary>
         /// A service that can be used to check whether an attribute name is reserved and whether it should be

@@ -8,6 +8,6 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface ISiteMapHierarchyBuilder
     {
-        IEnumerable<ISiteMapNodeParentMap> BuildHierarchy(ISiteMap siteMap, IEnumerable<ISiteMapNodeParentMap> nodes);
+        IEnumerable<ISiteMapNodeToParentRelation> BuildHierarchy(ISiteMap siteMap, IEnumerable<ISiteMapNodeToParentRelation> nodes);
     }
 }

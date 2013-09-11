@@ -9,10 +9,10 @@ namespace MvcSiteMapProvider.Builder
     /// Class for tracking the relationship between node instances to their parent nodes 
     /// before they are added to the SiteMap.
     /// </summary>
-    public class SiteMapNodeParentMap
-        : ISiteMapNodeParentMap
+    public class SiteMapNodeToParentRelation
+        : ISiteMapNodeToParentRelation
     {
-        public SiteMapNodeParentMap(
+        public SiteMapNodeToParentRelation(
             string parentKey,
             ISiteMapNode node,
             string sourceName
@@ -29,7 +29,7 @@ namespace MvcSiteMapProvider.Builder
         protected readonly ISiteMapNode node;
         protected readonly string sourceName;
 
-        #region ISiteMapNodeParentMap Members
+        #region ISiteMapNodeToParentRelation Members
 
         public virtual string ParentKey
         {

@@ -50,23 +50,23 @@ namespace MvcSiteMapProvider.Builder
             return siteMapNodeCreator.GenerateSiteMapNodeKey(parentKey, key, url, title, area, controller, action, httpMethod, clickable);
         }
 
-        public ISiteMapNodeParentMap CreateNode(string key, string parentKey, string sourceName)
+        public ISiteMapNodeToParentRelation CreateNode(string key, string parentKey, string sourceName)
         {
             return this.CreateNode(key, parentKey, sourceName, null);
         }
 
-        public ISiteMapNodeParentMap CreateNode(string key, string parentKey, string sourceName, string implicitResourceKey)
+        public ISiteMapNodeToParentRelation CreateNode(string key, string parentKey, string sourceName, string implicitResourceKey)
         {
             var siteMapNodeCreator = this.siteMapNodeCreatorFactory.Create(this.siteMap);
             return siteMapNodeCreator.CreateSiteMapNode(key, parentKey, sourceName, implicitResourceKey);
         }
 
-        public IEnumerable<ISiteMapNodeParentMap> CreateDynamicNodes(ISiteMapNodeParentMap node)
+        public IEnumerable<ISiteMapNodeToParentRelation> CreateDynamicNodes(ISiteMapNodeToParentRelation node)
         {
             return this.CreateDynamicNodes(node, node.ParentKey);
         }
 
-        public IEnumerable<ISiteMapNodeParentMap> CreateDynamicNodes(ISiteMapNodeParentMap node, string defaultParentKey)
+        public IEnumerable<ISiteMapNodeToParentRelation> CreateDynamicNodes(ISiteMapNodeToParentRelation node, string defaultParentKey)
         {
             var dynamicSiteMapNodeBuilder = this.dynamicSiteMapNodeBuilderFactory.Create(this.siteMap);
             return dynamicSiteMapNodeBuilder.BuildDynamicNodes(node.Node, defaultParentKey);

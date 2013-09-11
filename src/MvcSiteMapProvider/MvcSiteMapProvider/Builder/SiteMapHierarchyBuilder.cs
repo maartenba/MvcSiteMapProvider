@@ -6,7 +6,7 @@ using System.Text;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// A service that changes a list of ISiteMapNodeParentMap instances into a hierarchy
+    /// A service that changes a list of ISiteMapNodeToParentRelation instances into a hierarchy
     /// by mapping each node to its parent node and adds the hierarchy to the SiteMap.
     /// </summary>
     public class SiteMapHierarchyBuilder
@@ -14,9 +14,9 @@ namespace MvcSiteMapProvider.Builder
     {
         #region ISiteMapHierarchyBuilder Members
 
-        public IEnumerable<ISiteMapNodeParentMap> BuildHierarchy(ISiteMap siteMap, IEnumerable<ISiteMapNodeParentMap> nodes)
+        public IEnumerable<ISiteMapNodeToParentRelation> BuildHierarchy(ISiteMap siteMap, IEnumerable<ISiteMapNodeToParentRelation> nodes)
         {
-            var sourceNodes = new List<ISiteMapNodeParentMap>(nodes);
+            var sourceNodes = new List<ISiteMapNodeToParentRelation>(nodes);
             var nodesAddedThisIteration = 0;
             do
             {
@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual void AddDescendantNodes(ISiteMap siteMap, ISiteMapNode currentNode, IList<ISiteMapNodeParentMap> sourceNodes, IList<string> nodesAlreadyAdded)
+        protected virtual void AddDescendantNodes(ISiteMap siteMap, ISiteMapNode currentNode, IList<ISiteMapNodeToParentRelation> sourceNodes, IList<string> nodesAlreadyAdded)
         {
             if (sourceNodes.Count == 0) return;
             var children = sourceNodes.Where(x => x.ParentKey == currentNode.Key).OrderBy(x => x.Node.Order).ToArray();
@@ -59,7 +59,7 @@ namespace MvcSiteMapProvider.Builder
             }
         }
 
-        protected virtual void AddAndTrackNode(ISiteMap siteMap, ISiteMapNodeParentMap nodeParentMap, ISiteMapNode parentNode, IList<ISiteMapNodeParentMap> sourceNodes, IList<string> nodesAlreadyAdded)
+        protected virtual void AddAndTrackNode(ISiteMap siteMap, ISiteMapNodeToParentRelation nodeParentMap, ISiteMapNode parentNode, IList<ISiteMapNodeToParentRelation> sourceNodes, IList<string> nodesAlreadyAdded)
         {
             siteMap.AddNode(nodeParentMap.Node, parentNode);
             nodesAlreadyAdded.Add(nodeParentMap.Node.Key);

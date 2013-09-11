@@ -8,7 +8,7 @@ using MvcSiteMapProvider.Collections.Specialized;
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// XmlSiteMapNodeProvider class. Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeParentMap"/> list based on a 
+    /// XmlSiteMapNodeProvider class. Builds a <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> list based on a 
     /// <see cref="T:MvcSiteMapProvider.Xml.IXmlSource"/> instance.
     /// </summary>
     public class XmlSiteMapNodeProvider
@@ -44,9 +44,9 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapNodeProvider Members
 
-        public IEnumerable<ISiteMapNodeParentMap> GetSiteMapNodes(ISiteMapNodeHelper helper)
+        public IEnumerable<ISiteMapNodeToParentRelation> GetSiteMapNodes(ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             var xml = xmlSource.GetXml();
             if (xml != null)
             {
@@ -63,9 +63,9 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual IEnumerable<ISiteMapNodeParentMap> LoadSiteMapNodesFromXml(XDocument xml, ISiteMapNodeHelper helper)
+        protected virtual IEnumerable<ISiteMapNodeToParentRelation> LoadSiteMapNodesFromXml(XDocument xml, ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             xmlNameProvider.FixXmlNamespaces(xml);
 
             // Get the root mvcSiteMapNode element, and map this to an MvcSiteMapNode
@@ -95,7 +95,7 @@ namespace MvcSiteMapProvider.Builder
             return xml.Element(xmlNameProvider.RootName).Element(xmlNameProvider.NodeName);
         }
 
-        protected virtual ISiteMapNodeParentMap GetRootNode(XDocument xml, XElement rootElement, ISiteMapNodeHelper helper)
+        protected virtual ISiteMapNodeToParentRelation GetRootNode(XDocument xml, XElement rootElement, ISiteMapNodeHelper helper)
         {
             return GetSiteMapNodeFromXmlElement(rootElement, null, helper);
         }
@@ -108,9 +108,9 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="parentElement">The correspoding parent XML element.</param>
         /// <param name="processFlags">Flags to indicate which nodes to process.</param>
         /// <param name="helper">The node helper.</param>
-        protected virtual IList<ISiteMapNodeParentMap> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, NodesToProcess processFlags, ISiteMapNodeHelper helper)
+        protected virtual IList<ISiteMapNodeToParentRelation> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, NodesToProcess processFlags, ISiteMapNodeHelper helper)
         {
-            var result = new List<ISiteMapNodeParentMap>();
+            var result = new List<ISiteMapNodeToParentRelation>();
             bool processStandardNodes = (processFlags & NodesToProcess.StandardNodes) == NodesToProcess.StandardNodes;
             bool processDynamicNodes = (processFlags & NodesToProcess.DynamicNodes) == NodesToProcess.DynamicNodes;
 
@@ -160,7 +160,7 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="parentNode">The parent ISiteMapNode</param>
         /// <param name="helper">The node helper.</param>
         /// <returns>An MvcSiteMapNode which represents the XMLElement.</returns>
-        protected virtual ISiteMapNodeParentMap GetSiteMapNodeFromXmlElement(XElement node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
+        protected virtual ISiteMapNodeToParentRelation GetSiteMapNodeFromXmlElement(XElement node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
         {
             //// Get area, controller and action from node declaration
             string area = node.GetAttributeValue("area");
