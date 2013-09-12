@@ -70,7 +70,7 @@ namespace MvcSiteMapProvider.Builder
             if (orphans.Count() > 0)
             {
                 // We have orphaned nodes - throw an exception.
-                var names = String.Join(Environment.NewLine + Environment.NewLine, orphans.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)));
+                var names = String.Join(Environment.NewLine + Environment.NewLine, orphans.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
                 throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMapCacheKey, names));
             }
 
@@ -96,7 +96,7 @@ namespace MvcSiteMapProvider.Builder
             // Check if we have more than one root node defined or no root defined
             if (rootNodes.Count() > 1)
             {
-                var names = String.Join(Environment.NewLine + Environment.NewLine, rootNodes.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)));
+                var names = String.Join(Environment.NewLine + Environment.NewLine, rootNodes.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
                 throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootKeyAmbiguous, siteMapCacheKey, names));
             }
             else if (rootNodes.Count() == 0)
