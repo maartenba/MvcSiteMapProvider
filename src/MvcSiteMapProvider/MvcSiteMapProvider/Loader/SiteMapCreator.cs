@@ -43,6 +43,7 @@ namespace MvcSiteMapProvider.Loader
 
             var builderSet = this.GetBuilderSet(siteMapCacheKey);
             var siteMap = siteMapFactory.Create(builderSet.Builder, builderSet);
+            siteMap.ResourceKey = siteMapCacheKey;
             siteMap.BuildSiteMap();
 
             return siteMap;
