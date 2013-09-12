@@ -69,8 +69,14 @@ namespace MvcSiteMapProvider.Builder
 
             if (orphans.Count() > 0)
             {
-                // We have orphaned nodes - throw an exception.
-                var names = String.Join(Environment.NewLine + Environment.NewLine, orphans.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
+                // We have orphaned nodes - filter to remove the matching descendants of the mismatched keys.
+                var mismatched = from parent in orphans
+                                 where !(from child in orphans
+                                         select child.Node.Key)
+                                         .Contains(parent.ParentKey)
+                                 select parent;
+
+                var names = String.Join(Environment.NewLine + Environment.NewLine, mismatched.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
                 throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMapCacheKey, names));
             }
 
