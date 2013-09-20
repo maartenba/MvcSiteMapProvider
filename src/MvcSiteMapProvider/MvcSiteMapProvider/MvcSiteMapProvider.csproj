@@ -256,7 +256,6 @@
     <Compile Include="Web\Mvc\UrlHelperAdaptor.cs" />
     <Compile Include="Web\Mvc\XmlSiteMapResultFactory.cs" />
     <Compile Include="Web\UrlResolver\SiteMapNodeUrlResolverBase.cs" />
-    <Compile Include="Web\UrlResolver\UrlResolverException.cs" />
     <Compile Include="Reflection\TypeExtensions.cs" />
     <Compile Include="Caching\IRequestCache.cs" />
     <Compile Include="Caching\RequestCache.cs" />
