@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Xml;
@@ -384,23 +385,18 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-            // Determine area (will only work if controller is defined as Assembly.<Area>.Controllers.HomeController)
             string area = "";
             if (!string.IsNullOrEmpty(attribute.AreaName))
             {
                 area = attribute.AreaName;
             }
+            // Determine area (will only work if controller is defined as [<Anything>.]Areas.<Area>.Controllers.<AnyController>)
             if (string.IsNullOrEmpty(area))
             {
-                var parts = type.Namespace.Split('.');
-                area = parts[parts.Length - 2];
-
-                var assemblyParts = type.Assembly.FullName.Split(',');
-
-                if (type.Namespace == assemblyParts[0] + ".Controllers" || type.Namespace.StartsWith(area))
+                var m = Regex.Match(type.Namespace, @"(?:[^\.]+\.|\s+|^)Areas\.(?<areaName>[^\.]+)\.Controllers");
+                if (m.Success)
                 {
-                    // Is in default areaName...
-                    area = "";
+                    area = m.Groups["areaName"].Value;
                 }
             }
 
