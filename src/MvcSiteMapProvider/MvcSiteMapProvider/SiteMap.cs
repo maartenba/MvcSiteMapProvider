@@ -106,7 +106,7 @@ namespace MvcSiteMapProvider
             {
                 throw new ArgumentNullException("node");
             }
-            ThrowIfSiteMapNodeRoutingConfigInvalid(node);
+            AssertSiteMapNodeConfigurationIsValid(node);
 
             // Avoid issue with url table not clearing correctly.
             if (this.FindSiteMapNode(node.Url) != null)
@@ -769,15 +769,52 @@ namespace MvcSiteMapProvider
             return null;
         }
 
-        protected virtual void ThrowIfSiteMapNodeRoutingConfigInvalid(ISiteMapNode node)
+        protected virtual void AssertSiteMapNodeConfigurationIsValid(ISiteMapNode node)
+        {
+            ThrowIfTitleNotSet(node);
+            ThrowIfActionAndUrlNotSet(node);
+            ThrowIfHttpMethodInvalid(node);
+            ThrowIfRouteValueIsPreservedRouteParameter(node);
+        }
+
+        protected virtual void ThrowIfRouteValueIsPreservedRouteParameter(ISiteMapNode node)
         {
             if (node.PreservedRouteParameters.Count > 0)
             {
                 foreach (var key in node.PreservedRouteParameters)
                 {
                     if (node.RouteValues.ContainsKey(key))
-                        throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter, node.Key, key));
+                        throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter, node.Key, node.Title, key));
                 }
+            }
+        }
+
+        protected virtual void ThrowIfActionAndUrlNotSet(ISiteMapNode node)
+        {
+            if (node.Clickable && String.IsNullOrEmpty(node.Action) && String.IsNullOrEmpty(node.UnresolvedUrl))
+            {
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeActionAndURLNotSet, node.Key, node.Title));
+            }
+        }
+
+        protected virtual void ThrowIfTitleNotSet(ISiteMapNode node)
+        {
+            if (String.IsNullOrEmpty(node.Title))
+            {
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeTitleNotSet, node.Key));
+            }
+        }
+
+        protected virtual void ThrowIfHttpMethodInvalid(ISiteMapNode node)
+        {
+            HttpVerbs verbs;
+            if (String.IsNullOrEmpty(node.HttpMethod) || 
+                (!Enum.TryParse<HttpVerbs>(node.HttpMethod, true, out verbs) && 
+                !node.HttpMethod.Equals("*") && 
+                !node.HttpMethod.Equals("Request", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                var allowedVerbs = String.Join(Environment.NewLine, Enum.GetNames(typeof(HttpVerbs))) + Environment.NewLine + "Request" + Environment.NewLine + "*";
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeHttpMethodInvalid, node.Key, node.Title, node.HttpMethod, allowedVerbs));
             }
         }
 

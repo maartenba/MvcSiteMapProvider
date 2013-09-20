@@ -371,6 +371,19 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; has both an empty &apos;action&apos; and empty &apos;url&apos;, which is not allowed.
+        ///
+        ///The node must have enough information to resolve the URL. This is normally achieved by setting &apos;controller&apos;, &apos;action&apos;, and (optionally) &apos;area&apos; and/or custom parameters on the node. It can also be accomplished by setting the &apos;url&apos; property to the relative or absolute URL.
+        ///
+        ///Note that when configuring in XML, &apos;controller&apos; and &apos;area&apos; are automatically inherited from the parent node if they are not set  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SiteMapNodeActionAndURLNotSet {
+            get {
+                return ResourceManager.GetString("SiteMapNodeActionAndURLNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed..
         /// </summary>
         internal static string SiteMapNodeCanonicalValueAlreadySet {
@@ -389,6 +402,19 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; has the value &apos;{2}&apos; for HttpMethod, which is not allowed.
+        ///
+        ///The available values for HttpMethod are:
+        ///
+        ///{3}.
+        /// </summary>
+        internal static string SiteMapNodeHttpMethodInvalid {
+            get {
+                return ResourceManager.GetString("SiteMapNodeHttpMethodInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SiteMapNode is readonly, property &apos;{0}&apos; cannot be modified..
         /// </summary>
         internal static string SiteMapNodeReadOnly {
@@ -398,15 +424,37 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; has &apos;{1}&apos; configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; has &apos;{2}&apos; configured in both RouteValues and InheritedRouteParameters, which is not allowed. 
         ///
-        ///PreservedRouteParameters always copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove &apos;{1}&apos; from PreservedRouteParameters or as a configured RouteValue.
+        ///InheritedRouteParameters copies the route value from the parent node which would overwrite your configured RouteValue in every case. Either remove &apos;{2}&apos; from InheritedRouteParameters or as a configured RouteValue.
         ///
-        ///Alternatively, if you are configuring the node in XML and intend to use &apos;{1}&apos; as a custom attribute, use the &apos;MvcSiteMapProvider_AttributesToIgnore&apos; configura [rest of string was truncated]&quot;;.
+        ///Alternatively, if you are configuring the node in XML and intend to use &apos;{2}&apos; as a custom attribute, use the &apos;MvcSiteMapProvider_AttributesToIgnore&apos; configura [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter {
+            get {
+                return ResourceManager.GetString("SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; has &apos;{2}&apos; configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
+        ///
+        ///PreservedRouteParameters copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove &apos;{2}&apos; from PreservedRouteParameters or as a configured RouteValue.
+        ///
+        ///Alternatively, if you are configuring the node in XML and intend to use &apos;{2}&apos; as a custom attribute, use the &apos;MvcSiteMapProvider_AttributesToIgnore&apos;  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter {
             get {
                 return ResourceManager.GetString("SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; does not have a &apos;title&apos; set. Title is a required field for every node..
+        /// </summary>
+        internal static string SiteMapNodeTitleNotSet {
+            get {
+                return ResourceManager.GetString("SiteMapNodeTitleNotSet", resourceCulture);
             }
         }
         

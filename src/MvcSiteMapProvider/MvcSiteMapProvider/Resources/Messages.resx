@@ -223,11 +223,11 @@ Key of root nodes without a ParentKey:
 {1}</value>
   </data>
   <data name="SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter" xml:space="preserve">
-    <value>The node with key '{0}' has '{1}' configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
+    <value>The node with key '{0}' and title '{1}' has '{2}' configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
 
-PreservedRouteParameters always copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove '{1}' from PreservedRouteParameters or as a configured RouteValue.
+PreservedRouteParameters copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove '{2}' from PreservedRouteParameters or as a configured RouteValue.
 
-Alternatively, if you are configuring the node in XML and intend to use '{1}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{1}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
+Alternatively, if you are configuring the node in XML and intend to use '{2}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{2}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
   </data>
   <data name="ReflectionSiteMapBuilderRootKeyAmbiguousAcrossBuilders" xml:space="preserve">
     <value>There is an MvcSiteMapNodeAttribute declared without a parent key, but there was also a root node defined using another configuration method. Only 1 root node is allowed per SiteMap.
@@ -316,5 +316,29 @@ SiteMapCacheKey: '{0}'</value>
     <value>There was no XML provided by the IXmlSource (the return value was null). If you are using a custom IXmlSource, please be sure the output matches the XmlSiteMapProvider.xsd schema.
 
 SiteMapCacheKey: '{0}'</value>
+  </data>
+  <data name="SiteMapNodeActionAndURLNotSet" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has both an empty 'action' and empty 'url', which is not allowed.
+
+The node must have enough information to resolve the URL. This is normally achieved by setting 'controller', 'action', and (optionally) 'area' and/or custom parameters on the node. It can also be accomplished by setting the 'url' property to the relative or absolute URL.
+
+Note that when configuring in XML, 'controller' and 'area' are automatically inherited from the parent node if they are not set explicitly.</value>
+  </data>
+  <data name="SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has '{2}' configured in both RouteValues and InheritedRouteParameters, which is not allowed. 
+
+InheritedRouteParameters copies the route value from the parent node which would overwrite your configured RouteValue in every case. Either remove '{2}' from InheritedRouteParameters or as a configured RouteValue.
+
+Alternatively, if you are configuring the node in XML and intend to use '{2}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{2}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
+  </data>
+  <data name="SiteMapNodeTitleNotSet" xml:space="preserve">
+    <value>The node with key '{0}' does not have a 'title' set. Title is a required field for every node.</value>
+  </data>
+  <data name="SiteMapNodeHttpMethodInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has the value '{2}' for HttpMethod, which is not allowed.
+
+The available values for HttpMethod are:
+
+{3}</value>
   </data>
 </root>

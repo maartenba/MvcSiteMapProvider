@@ -28,7 +28,7 @@
 
 		<!--<mvcSiteMapNode key="Microsoft" title="Microsoft" url="http://www.microsoft.com/" cacheResolvedUrl="false"/>-->
 
-    <mvcSiteMapNode title="$resources:SiteMapLocalizations,AdministrationTitle" area="Admin" controller="Home" visibility="SiteMapPathHelper,!*" visibilityProvider="MvcSiteMapProvider.FilteredSiteMapNodeVisibilityProvider, MvcSiteMapProvider">
+    <mvcSiteMapNode title="$resources:SiteMapLocalizations,AdministrationTitle" area="Admin" controller="Home" action="Index" visibility="SiteMapPathHelper,!*" visibilityProvider="MvcSiteMapProvider.FilteredSiteMapNodeVisibilityProvider, MvcSiteMapProvider">
       <mvcSiteMapNode title="$resources:SiteMapLocalizations,StoreManagerTitle" area="Admin" controller="StoreManager" action="Index">
         <mvcSiteMapNode title="$resources:SiteMapLocalizations,CreateAlbumTitle" action="Create"/>
         <mvcSiteMapNode title="$resources:SiteMapLocalizations,EditAlbumTitle" action="Edit"/>
