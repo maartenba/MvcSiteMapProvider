@@ -160,6 +160,14 @@ namespace MvcSiteMapProvider
         public int? Order { get; set; }
 
         /// <summary>
+        /// Gets or sets the HTTP method (such as GET, POST, or HEAD).
+        /// </summary>
+        /// <value>
+        /// The HTTP method.
+        /// </value>
+        public string HttpMethod { get; set; }
+
+        /// <summary>
         /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
         /// doesn't overwrite any values that are not set in this <see cref="T:MvcSiteMapNodeProvider.DynamicNode"/> instance.
         /// </summary>
@@ -236,6 +244,8 @@ namespace MvcSiteMapProvider
             }
             if (this.Order != null)
                 node.Order = (int)this.Order;
+            if (!string.IsNullOrEmpty(this.HttpMethod))
+                node.HttpMethod = this.HttpMethod;
         }
 
 

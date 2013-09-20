@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Routing;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web;
@@ -75,6 +76,7 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMap siteMap;
         protected readonly string key;
         protected readonly bool isDynamic;
+        protected string httpMethod = HttpVerbs.Get.ToString().ToUpperInvariant();
         protected string title = String.Empty;
         protected string description = String.Empty;
         protected string imageUrl = String.Empty;
@@ -114,12 +116,17 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// Gets or sets the HTTP method.
+        /// Gets or sets the HTTP method (such as GET, POST, or HEAD) to use to determine
+        /// node accessibility.
         /// </summary>
         /// <value>
         /// The HTTP method.
         /// </value>
-        public override string HttpMethod { get; set; }
+        public override string HttpMethod 
+        {
+            get { return this.httpMethod; }
+            set { this.httpMethod = value; }
+        }
 
         /// <summary>
         /// Gets the implicit resource key (optional).

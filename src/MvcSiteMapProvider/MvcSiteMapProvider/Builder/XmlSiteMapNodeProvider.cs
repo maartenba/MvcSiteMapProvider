@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using System.Xml.Linq;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
@@ -188,17 +189,21 @@ namespace MvcSiteMapProvider.Builder
             string area = node.GetAttributeValue("area");
             string controller = node.GetAttributeValue("controller");
             var parentKey = parentNode == null ? "" : parentNode.Key;
+            var httpMethod = node.GetAttributeValueOrFallback("httpMethod", HttpVerbs.Get.ToString()).ToUpperInvariant();
+            // Handle title and description
+            var title = node.GetAttributeValue("title");
+            var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
 
             // Generate key for node
             string key = helper.CreateNodeKey(
                 parentKey,
                 node.GetAttributeValue("key"),
                 node.GetAttributeValue("url"),
-                node.GetAttributeValue("title"),
+                title,
                 area,
                 controller,
                 node.GetAttributeValue("action"),
-                node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant(),
+                httpMethod,
                 !(node.GetAttributeValue("clickable") == "false"));
 
             // Handle implicit resources
@@ -207,10 +212,6 @@ namespace MvcSiteMapProvider.Builder
             // Create node
             var nodeParentMap = helper.CreateNode(key, parentKey, SourceName, implicitResourceKey);
             var siteMapNode = nodeParentMap.Node;
-
-            // Handle title and description
-            var title = node.GetAttributeValue("title");
-            var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
 
             // Assign defaults
             siteMapNode.Title = title;
@@ -222,7 +223,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.DynamicNodeProvider = node.GetAttributeValue("dynamicNodeProvider");
             siteMapNode.ImageUrl = node.GetAttributeValue("imageUrl");
             siteMapNode.TargetFrame = node.GetAttributeValue("targetFrame");
-            siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
+            siteMapNode.HttpMethod = httpMethod;
             siteMapNode.Url = node.GetAttributeValue("url");
             siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
             siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");

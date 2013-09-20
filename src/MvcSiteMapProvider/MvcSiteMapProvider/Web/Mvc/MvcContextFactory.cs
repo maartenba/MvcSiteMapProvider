@@ -30,13 +30,6 @@ namespace MvcSiteMapProvider.Web.Mvc
         {
             var httpContext = this.CreateHttpContext(node);
             return new RequestContext(httpContext, routeData);
-
-            //if (httpContext.Handler is MvcHandler)
-            //    return ((MvcHandler)httpContext.Handler).RequestContext;
-            //else if (httpContext.Handler is Page) // Fixes #15 for interop with ASP.NET Webforms
-            //    return new RequestContext(httpContext, ((Page)HttpContext.Current.Handler).RouteData);
-            //else
-            //    return new RequestContext(httpContext, routeData);
         }
 
         public virtual RequestContext CreateRequestContext()

@@ -155,5 +155,14 @@ namespace MvcSiteMapProvider
         /// </summary>
         /// <value>The SiteMap cache key.</value>
         string SiteMapCacheKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTP method (such as GET, POST, or HEAD) to use to determine
+        /// node accessibility.
+        /// </summary>
+        /// <value>
+        /// The HTTP method.
+        /// </value>
+        string HttpMethod { get; set; }
     }
 }

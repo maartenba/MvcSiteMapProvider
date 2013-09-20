@@ -200,7 +200,7 @@ namespace MvcSiteMapProvider.Builder
             // Determine controller and (index) action
             string controller = type.Name.Substring(0, type.Name.IndexOf("Controller"));
             string action = (methodInfo != null ? methodInfo.Name : null) ?? "Index";
-            string httpMethod = "*";
+            
             if (methodInfo != null)
             {
                 // handle ActionNameAttribute
@@ -209,14 +209,9 @@ namespace MvcSiteMapProvider.Builder
                 {
                     action = actionNameAttribute.Name;
                 }
-
-                // handle AcceptVerbsAttribute
-                var acceptVerbsAttribute = methodInfo.GetCustomAttributes(typeof(AcceptVerbsAttribute), true).FirstOrDefault() as AcceptVerbsAttribute;
-                if (acceptVerbsAttribute != null)
-                {
-                    httpMethod = string.Join(",", acceptVerbsAttribute.Verbs.ToArray());
-                }
             }
+
+            string httpMethod = String.IsNullOrEmpty(attribute.HttpMethod) ? HttpVerbs.Get.ToString().ToUpperInvariant() : attribute.HttpMethod.ToUpperInvariant();
 
             // Handle title and description
             var title = attribute.Title;

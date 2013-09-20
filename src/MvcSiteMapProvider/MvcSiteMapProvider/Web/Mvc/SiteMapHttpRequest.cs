@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
@@ -62,13 +63,16 @@ namespace MvcSiteMapProvider.Web.Mvc
         {
             get
             {
-                const StringComparison comparison = StringComparison.OrdinalIgnoreCase;
-                bool replaceMethod = this.node != null &&
-                                    !String.IsNullOrEmpty(this.node.HttpMethod) &&
-                                    !String.Equals(this.node.HttpMethod, "*", comparison);
-                return replaceMethod
-                    ? this.node.HttpMethod.Split(',')[0]
-                    : base.HttpMethod;
+                bool useRequest = this.node == null || 
+                    String.Equals(this.node.HttpMethod, "*") || 
+                    String.Equals(this.node.HttpMethod, "request", StringComparison.InvariantCultureIgnoreCase);
+                if (!useRequest)
+                {
+                    return String.IsNullOrEmpty(this.node.HttpMethod)
+                        ? HttpVerbs.Get.ToString().ToUpperInvariant()
+                        : this.node.HttpMethod.ToUpperInvariant();
+                }
+                return base.HttpMethod;
             }
         }
     }
