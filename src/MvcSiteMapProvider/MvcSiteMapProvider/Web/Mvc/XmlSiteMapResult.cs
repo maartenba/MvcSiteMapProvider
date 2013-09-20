@@ -22,10 +22,13 @@ namespace MvcSiteMapProvider.Web.Mvc
             IEnumerable<string> siteMapCacheKeys,
             string baseUrl,
             string siteMapUrlTemplate,
-            ISiteMapLoader siteMapLoader)
+            ISiteMapLoader siteMapLoader,
+            IUrlPath urlPath)
         {
             if (siteMapLoader == null)
                 throw new ArgumentNullException("siteMapLoader");
+            if (urlPath == null)
+                throw new ArgumentNullException("urlPath");
 
             this.Ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
             this.Page = page;
@@ -34,9 +37,11 @@ namespace MvcSiteMapProvider.Web.Mvc
             this.BaseUrl = baseUrl;
             this.SiteMapUrlTemplate = siteMapUrlTemplate;
             this.siteMapLoader = siteMapLoader;
+            this.urlPath = urlPath;
         }
 
         protected readonly ISiteMapLoader siteMapLoader;
+        protected readonly IUrlPath urlPath;
         protected readonly List<string> duplicateUrlCheck = new List<string>();
 
         /// <summary>
@@ -223,7 +228,8 @@ namespace MvcSiteMapProvider.Web.Mvc
             // Generate elements
             for (int i = 1; i <= numPages; i++)
             {
-                var pageUrl = baseUrl + "/" + siteMapUrlTemplate.Replace("{page}", i.ToString());
+                var combinedPath = urlPath.Combine(urlPath.AppDomainAppVirtualPath, siteMapUrlTemplate.Replace("{page}", i.ToString()));
+                var pageUrl = baseUrl + urlPath.MakeVirtualPathAppAbsolute(combinedPath);
                 yield return new XElement(Ns + "sitemap", new XElement(Ns + "loc", pageUrl));
             }
         }
