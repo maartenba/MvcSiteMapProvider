@@ -327,11 +327,11 @@ namespace MvcSiteMapProvider
                     return this.ResolvedUrl;
                 }
                 // Only resolve the url if an absolute url is not already set
-                if (String.IsNullOrEmpty(this.UnresolvedUrl) || !this.HasAbsoluteUrl())
+                if (this.HasAbsoluteUrl())
                 {
-                    return GetResolvedUrl();
+                    return this.UnresolvedUrl;
                 }
-                return this.UnresolvedUrl;
+                return GetResolvedUrl();
             }
             set
             {

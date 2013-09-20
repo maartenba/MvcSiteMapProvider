@@ -122,7 +122,7 @@ namespace MvcSiteMapProvider.DI
                 typeNames.Add(defaultName);
             }
 
-            var providers = instantiator.GetInstances(typeNames, new object[] { this.mvcContextFactory });
+            var providers = instantiator.GetInstances(typeNames, new object[] { this.mvcContextFactory, this.urlPath });
             return providers.ToArray();
         }
 

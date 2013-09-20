@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MvcSiteMapProvider;
+using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.UrlResolver;
 
@@ -14,8 +15,8 @@ namespace MvcMusicStore.Code
     public class UpperCaseSiteMapNodeUrlResolver
         : SiteMapNodeUrlResolver
     {
-        public UpperCaseSiteMapNodeUrlResolver(IMvcContextFactory mvcContextFactory) 
-            : base(mvcContextFactory)
+        public UpperCaseSiteMapNodeUrlResolver(IMvcContextFactory mvcContextFactory, IUrlPath urlPath) 
+            : base(mvcContextFactory, urlPath)
         {
         }
 

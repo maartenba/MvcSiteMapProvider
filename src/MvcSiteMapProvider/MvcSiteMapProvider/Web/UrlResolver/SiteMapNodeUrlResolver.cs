@@ -13,15 +13,21 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         : SiteMapNodeUrlResolverBase
     {
         public SiteMapNodeUrlResolver(
-            IMvcContextFactory mvcContextFactory
+            IMvcContextFactory mvcContextFactory,
+            IUrlPath urlPath
             )
         {
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
+            if (urlPath == null)
+                throw new ArgumentNullException("urlPath");
+
             this.mvcContextFactory = mvcContextFactory;
+            this.urlPath = urlPath;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
+        protected readonly IUrlPath urlPath;
 
         #region ISiteMapNodeUrlResolver Members
 
@@ -38,41 +44,46 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         {
             if (!String.IsNullOrEmpty(node.UnresolvedUrl))
             {
-                if (node.UnresolvedUrl.StartsWith("~"))
-                {
-                    return VirtualPathUtility.ToAbsolute(node.UnresolvedUrl);
-                }
-                else
-                {
-                    return node.UnresolvedUrl;
-                }
+                return this.ResolveVirtualPath(node);
             }
-
-            var urlHelper = mvcContextFactory.CreateUrlHelper();
-
-            string returnValue;
-            var routeValueDictionary = new RouteValueDictionary(routeValues);
-            if (!string.IsNullOrEmpty(node.Route))
-            {
-                routeValueDictionary.Remove("route");
-                returnValue = urlHelper.RouteUrl(node.Route, routeValueDictionary);
-            }
-            else
-            {
-                returnValue = urlHelper.Action(action, controller, routeValueDictionary);
-            }
-
-            if (string.IsNullOrEmpty(returnValue))
-            {
-                // fixes #115 - UrlResolver should not throw exception.
-                return VirtualPathUtility.ToAbsolute("~/") + Guid.NewGuid().ToString();
-            }
-            else
-            {
-                return returnValue;
-            }
+            return this.ResolveRouteUrl(node, area, controller, action, routeValues);
         }
 
         #endregion
+
+        protected virtual string ResolveVirtualPath(ISiteMapNode node)
+        {
+            var url = node.UnresolvedUrl;
+            if (!urlPath.IsAbsoluteUrl(url))
+            {
+                return urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
+            }
+            return url;
+        }
+
+        protected virtual string ResolveRouteUrl(ISiteMapNode node, string area, string controller, string action, IDictionary<string, object> routeValues)
+        {
+            string result = String.Empty;
+            var urlHelper = mvcContextFactory.CreateUrlHelper();
+            var routeValueDictionary = new RouteValueDictionary(routeValues);
+
+            if (!string.IsNullOrEmpty(node.Route))
+            {
+                routeValueDictionary.Remove("route");
+                result = urlHelper.RouteUrl(node.Route, routeValueDictionary);
+            }
+            else
+            {
+                result = urlHelper.Action(action, controller, routeValueDictionary);
+            }
+
+            if (string.IsNullOrEmpty(result))
+            {
+                // fixes #115 - UrlResolver should not throw exception.
+                return urlPath.MakeVirtualPathAppAbsolute("~") + Guid.NewGuid().ToString();
+            }
+
+            return result;
+        }
     }
 }
