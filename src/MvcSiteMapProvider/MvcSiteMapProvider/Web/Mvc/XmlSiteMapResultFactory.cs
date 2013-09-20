@@ -28,10 +28,109 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected readonly ISiteMapLoader siteMapLoader;
         protected readonly IUrlPath urlPath;
 
-        
-
         #region IXmlSiteMapResultFactory Members
 
+        public virtual ActionResult Create(int page)
+        {
+            return new XmlSiteMapResult(
+                page,
+                this.DefaultRootNode,
+                this.DefaultSiteMapCacheKeys,
+                this.DefaultBaseUrl,
+                this.DefaultSiteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+        public virtual ActionResult Create(int page, string siteMapUrlTemplate)
+        {
+            return new XmlSiteMapResult(
+                page,
+                this.DefaultRootNode,
+                this.DefaultSiteMapCacheKeys,
+                this.DefaultBaseUrl,
+                siteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+        
+        public virtual ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys)
+        {
+            return new XmlSiteMapResult(
+                page,
+                this.DefaultRootNode,
+                siteMapCacheKeys,
+                this.DefaultBaseUrl,
+                this.DefaultSiteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+        public virtual ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys, string siteMapUrlTemplate)
+        {
+            return new XmlSiteMapResult(
+                page,
+                this.DefaultRootNode,
+                siteMapCacheKeys,
+                this.DefaultBaseUrl,
+                siteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+        public virtual ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate)
+        {
+            return new XmlSiteMapResult(
+                page,
+                this.DefaultRootNode,
+                siteMapCacheKeys,
+                baseUrl,
+                siteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+        public virtual ActionResult Create(int page, ISiteMapNode rootNode)
+        {
+            return new XmlSiteMapResult(
+                page,
+                rootNode,
+                this.DefaultSiteMapCacheKeys,
+                this.DefaultBaseUrl,
+                this.DefaultSiteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+        public virtual ActionResult Create(int page, ISiteMapNode rootNode, string siteMapUrlTemplate)
+        {
+            return new XmlSiteMapResult(
+                page,
+                rootNode,
+                this.DefaultSiteMapCacheKeys,
+                this.DefaultBaseUrl,
+                siteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+        public virtual ActionResult Create(int page, ISiteMapNode rootNode, string baseUrl, string siteMapUrlTemplate)
+        {
+            return new XmlSiteMapResult(
+                page,
+                rootNode,
+                this.DefaultSiteMapCacheKeys,
+                baseUrl,
+                siteMapUrlTemplate,
+                this.siteMapLoader,
+                this.urlPath);
+        }
+
+
+
+
+
+        [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create()
         {
             return new XmlSiteMapResult(
@@ -44,18 +143,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.urlPath);
         }
 
-        public ActionResult Create(int page)
-        {
-            return new XmlSiteMapResult(
-                page,
-                this.DefaultRootNode,
-                this.DefaultSiteMapCacheKeys,
-                this.DefaultBaseUrl,
-                this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
-        }
-
+        [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, IEnumerable<string> siteMapCacheKeys) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create(IEnumerable<string> siteMapCacheKeys)
         {
             return new XmlSiteMapResult(
@@ -68,18 +156,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.urlPath);
         }
 
-        public ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys)
-        {
-            return new XmlSiteMapResult(
-                page,
-                this.DefaultRootNode,
-                siteMapCacheKeys,
-                this.DefaultBaseUrl,
-                this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
-        }
-
+        [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create(IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate)
         {
             return new XmlSiteMapResult(
@@ -92,18 +169,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.urlPath);
         }
 
-        public ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate)
-        {
-            return new XmlSiteMapResult(
-                page,
-                this.DefaultRootNode,
-                siteMapCacheKeys,
-                baseUrl,
-                siteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
-        }
-
+        [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, ISiteMapNode rootNode) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create(ISiteMapNode rootNode)
         {
             return new XmlSiteMapResult(
@@ -116,34 +182,11 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.urlPath);
         }
 
-        public ActionResult Create(int page, ISiteMapNode rootNode)
-        {
-            return new XmlSiteMapResult(
-                page,
-                rootNode,
-                this.DefaultSiteMapCacheKeys,
-                this.DefaultBaseUrl,
-                this.DefaultSiteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
-        }
-
+        [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, IEnumerable<string> siteMapCacheKeys) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create(ISiteMapNode rootNode, string baseUrl, string siteMapUrlTemplate)
         {
             return new XmlSiteMapResult(
                 this.DefaultPage,
-                rootNode,
-                this.DefaultSiteMapCacheKeys,
-                baseUrl,
-                siteMapUrlTemplate,
-                this.siteMapLoader,
-                this.urlPath);
-        }
-
-        public ActionResult Create(int page, ISiteMapNode rootNode, string baseUrl, string siteMapUrlTemplate)
-        {
-            return new XmlSiteMapResult(
-                page,
                 rootNode,
                 this.DefaultSiteMapCacheKeys,
                 baseUrl,
