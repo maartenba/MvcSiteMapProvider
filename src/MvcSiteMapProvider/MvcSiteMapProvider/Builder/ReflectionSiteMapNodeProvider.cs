@@ -179,12 +179,16 @@ namespace MvcSiteMapProvider.Builder
             }
 
             string area = "";
-            if (!string.IsNullOrEmpty(attribute.AreaName))
+            if (!String.IsNullOrEmpty(attribute.AreaName))
             {
                 area = attribute.AreaName;
             }
+            if (String.IsNullOrEmpty(area) && !String.IsNullOrEmpty(attribute.Area))
+            {
+                area = attribute.Area;
+            }
             // Determine area (will only work if controller is defined as [<Anything>.]Areas.<Area>.Controllers.<AnyController>)
-            if (string.IsNullOrEmpty(area))
+            if (String.IsNullOrEmpty(area))
             {
                 var m = Regex.Match(type.Namespace, @"(?:[^\.]+\.|\s+|^)Areas\.(?<areaName>[^\.]+)\.Controllers");
                 if (m.Success)

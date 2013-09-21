@@ -22,6 +22,13 @@ namespace MvcSiteMapProvider
         /// Gets or sets the name of the area.
         /// </summary>
         /// <value>The name of the area.</value>
+        string Area { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the area.
+        /// </summary>
+        /// <value>The name of the area.</value>
+        [Obsolete("AreaName is deprecated and will be removed in version 5. Use Area instead.")]
         string AreaName { get; set; }
 
         /// <summary>

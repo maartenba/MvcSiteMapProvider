@@ -390,6 +390,10 @@ namespace MvcSiteMapProvider.Builder
             {
                 area = attribute.AreaName;
             }
+            if (String.IsNullOrEmpty(area) && !String.IsNullOrEmpty(attribute.Area))
+            {
+                area = attribute.Area;
+            }
             // Determine area (will only work if controller is defined as [<Anything>.]Areas.<Area>.Controllers.<AnyController>)
             if (string.IsNullOrEmpty(area))
             {
