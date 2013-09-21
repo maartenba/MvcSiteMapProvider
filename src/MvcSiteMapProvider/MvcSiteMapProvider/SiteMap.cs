@@ -809,7 +809,7 @@ namespace MvcSiteMapProvider
         {
             HttpVerbs verbs;
             if (String.IsNullOrEmpty(node.HttpMethod) || 
-                (!Enum.TryParse<HttpVerbs>(node.HttpMethod, true, out verbs) && 
+                (!EnumHelper.TryParse<HttpVerbs>(node.HttpMethod, true, out verbs) && 
                 !node.HttpMethod.Equals("*") && 
                 !node.HttpMethod.Equals("Request", StringComparison.InvariantCultureIgnoreCase)))
             {
