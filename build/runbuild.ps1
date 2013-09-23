@@ -392,5 +392,5 @@ function Get-Prerelease-Text {
 	if ($packageVersion.Contains("-")) {
 		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
 	}
-	return $prerelease
+	return ".0$prerelease"
 }
