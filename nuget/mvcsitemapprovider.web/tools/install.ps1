@@ -83,8 +83,11 @@ function Add-Or-Update-AppSettings() {
 		$appSettings.AppendChild($scan)
 	}
 	
-	# save the Web.config file
-	$xml.Save($localPath.Value)
+	# save the Web.config file with formatting
+	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
+	$writer.Formatting = [System.Xml.Formatting]::Indented
+	$xml.Save($writer)
+	$writer.Close()
 }
 
 function Add-Pages-Namespaces() {
@@ -141,8 +144,74 @@ function Add-Pages-Namespaces() {
 		$namespaces.AppendChild($html_models)
 	}
 	
-	# save the Web.config file
-	$xml.Save($localPath.Value)
+	# save the Web.config file with formatting
+	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
+	$writer.Formatting = [System.Xml.Formatting]::Indented
+	$xml.Save($writer)
+	$writer.Close()
+}
+
+function Add-Razor-Pages-Namespaces() {
+	$xml = New-Object xml
+
+	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
+	$web_config_file = "$path\Views\Web.config"
+
+	# load Web.config as XML
+	$xml.Load($web_config_file)
+
+	$system_web_webpages_razor = $xml.SelectSingleNode("configuration/system.web.webPages.razor")
+	if ($system_web_webpages_razor -eq $null) {
+		$system_web_webpages_razor = $xml.CreateElement("system.web.webPages.razor")
+		$xml.AppendChild($system_web_webpages_razor)
+	}
+	
+	$pages = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages")
+	if ($pages -eq $null) {
+		$pages = $xml.CreateElement("pages")
+		
+		$page_base_type = $xml.CreateAttribute("pageBaseType")
+		$page_base_type.Value = "System.Web.Mvc.WebViewPage"
+		$pages.Attributes.Append($page_base_type)
+		
+		$system_web_webpages_razor.AppendChild($pages)
+	}
+	
+	$namespaces = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages/namespaces")
+	if ($namespaces -eq $null) {
+		$namespaces = $xml.CreateElement("namespaces")
+		$pages.AppendChild($namespaces)
+	}
+	
+	# add MvcSiteMapProvider.Web.Html if it doesn't already exist
+	$html = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html']")
+	if ($html -eq $null) {
+		$html = $xml.CreateElement("add")
+		
+		$namespace_html = $xml.CreateAttribute("namespace")
+		$namespace_html.Value = "MvcSiteMapProvider.Web.Html"
+		$html.Attributes.Append($namespace_html)
+		
+		$namespaces.AppendChild($html)
+	}
+	
+	# add MvcSiteMapProvider.Web.Html.Models if it doesn't already exist
+	$html_models = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
+	if ($html_models -eq $null) {
+		$html_models = $xml.CreateElement("add")
+		
+		$namespace_models = $xml.CreateAttribute("namespace")
+		$namespace_models.Value = "MvcSiteMapProvider.Web.Html.Models"
+		$html_models.Attributes.Append($namespace_models)
+		
+		$namespaces.AppendChild($html_models)
+	}
+	
+	# save the Views/Web.config file with formatting
+	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($web_config_file, $null)
+	$writer.Formatting = [System.Xml.Formatting]::Indented
+	$xml.Save($writer)
+	$writer.Close()
 }
 
 function Update-SiteMap-Element() {
@@ -168,8 +237,11 @@ function Update-SiteMap-Element() {
 		}
 	}
 	
-	# save the Web.config file
-	$xml.Save($localPath.Value)
+	# save the Web.config file with formatting
+	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
+	$writer.Formatting = [System.Xml.Formatting]::Indented
+	$xml.Save($writer)
+	$writer.Close()
 }
 
 function Add-MVC4-Config-Sections() {
@@ -223,8 +295,11 @@ function Add-MVC4-Config-Sections() {
 		$modules.AppendChild($add)
 	}
 	
-	# save the Web.config file
-	$xml.Save($localPath.Value)
+	# save the Web.config file with formatting
+	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
+	$writer.Formatting = [System.Xml.Formatting]::Indented
+	$xml.Save($writer)
+	$writer.Close()
 }
 
 # Infer which view engine you're using based on the files in your project
@@ -241,7 +316,8 @@ if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 	Add-MVC4-Config-Sections
 }
 
-# Fixup the web.config file
+# Fixup the web.config files
 Add-Or-Update-AppSettings
 Add-Pages-Namespaces
+Add-Razor-Pages-Namespaces
 Update-SiteMap-Element
