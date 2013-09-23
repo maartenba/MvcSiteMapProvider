@@ -228,7 +228,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             // Generate elements
             for (int i = 1; i <= numPages; i++)
             {
-                var combinedPath = urlPath.Combine(urlPath.AppDomainAppVirtualPath, siteMapUrlTemplate.Replace("{page}", i.ToString()));
+                var combinedPath = urlPath.Combine(urlPath.AppDomainAppVirtualPath, "~/" + siteMapUrlTemplate.Replace("{page}", i.ToString()));
                 var pageUrl = baseUrl + urlPath.MakeVirtualPathAppAbsolute(combinedPath);
                 yield return new XElement(Ns + "sitemap", new XElement(Ns + "loc", pageUrl));
             }
