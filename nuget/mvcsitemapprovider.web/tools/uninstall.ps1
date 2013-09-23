@@ -85,6 +85,52 @@ function Remove-Pages-Namespaces() {
 	$xml.Save($localPath.Value)
 }
 
+function Remove-Razor-Pages-Namespaces() {
+	$xml = New-Object xml
+
+	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
+	$web_config_file = "$path\Views\Web.config"
+
+	# load Web.config as XML
+	$xml.Load($web_config_file)
+	
+	# remove MvcSiteMapProvider.Web.Html if it exists
+	$html = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html']")
+	if ($html -ne $null) {
+		$html.ParentNode.RemoveChild($html)
+	}
+	
+	# remove MvcSiteMapProvider.Web.Html.Models if it exists
+	$html_models = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages/namespaces/add[@namespace='MvcSiteMapProvider.Web.Html.Models']")
+	if ($html_models -ne $null) {
+		$html_models.ParentNode.RemoveChild($html_models)
+	}
+	
+	$namespaces = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages/namespaces")
+	if ($namespaces -ne $null) {
+		if (($namespaces.HasChildNodes -eq $false) -and ($namespaces.Attributes.Count -eq 0)) {
+			$namespaces.ParentNode.RemoveChild($namespaces)
+		}
+	}
+	
+	$pages = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages")
+	if ($pages -ne $null) {
+		if (($pages.HasChildNodes -eq $false) -and ($pages.Attributes.Count -eq 0)) {
+			$pages.ParentNode.RemoveChild($pages)
+		}
+	}
+
+	$system_web_webpages_razor = $xml.SelectSingleNode("configuration/system.web.webPages.razor")
+	if ($system_web_webpages_razor -ne $null) {
+		if (($system_web_webpages_razor.HasChildNodes -eq $false) -and ($system_web_webpages_razor.Attributes.Count -eq 0)) {
+			$system_web_webpages_razor.ParentNode.RemoveChild($system_web_webpages_razor)
+		}
+	}
+	
+	# save the Web.config file
+	$xml.Save($web_config_file)
+}
+
 function Update-SiteMap-Element() {
 	$xml = New-Object xml
 
@@ -162,6 +208,7 @@ if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 # Undo the changes made to the config file
 Remove-AppSettings
 Remove-Pages-Namespaces
+Remove-Razor-Pages-Namespaces
 Update-SiteMap-Element
 
 
