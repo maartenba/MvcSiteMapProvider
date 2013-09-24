@@ -1,12 +1,12 @@
 properties {
-    $base_directory   = resolve-path "..\."
-    $build_directory  = "$base_directory\release"
-    $source_directory = "$base_directory\src\MvcSiteMapProvider"
-    $nuget_directory  = "$base_directory\nuget"
-    $tools_directory  = "$base_directory\tools"
-    $version          = "4.0.0"
-    $packageVersion   = "$version-pre"
-    $configuration    = "Release"
+	$base_directory   = resolve-path "..\."
+	$build_directory  = "$base_directory\release"
+	$source_directory = "$base_directory\src\MvcSiteMapProvider"
+	$nuget_directory  = "$base_directory\nuget"
+	$tools_directory  = "$base_directory\tools"
+	$version          = "4.0.0"
+	$packageVersion   = "$version-pre"
+	$configuration    = "Release"
 }
 
 include .\psake_ext.ps1
@@ -14,11 +14,19 @@ include .\psake_ext.ps1
 task default -depends Finalize
 
 task Clean -description "This task cleans up the build directory" {
-    Remove-Item $build_directory -Force -Recurse -ErrorAction SilentlyContinue
+	Remove-Item $build_directory -Force -Recurse -ErrorAction SilentlyContinue
 }
 
 task Init -description "This tasks makes sure the build environment is correctly setup" {  
-    Generate-Assembly-Info `
+	if ($env:BuildRunner -ne $null -and $env:BuildRunner -eq "MyGet") {		
+		$version = $packageVersion
+		if ($version.Contains("-") -eq $true) {
+			$version = $version.SubString(0, $version.IndexOf("-"))
+		}
+		echo "Updated version to: $version"
+	}
+	
+	Generate-Assembly-Info `
 		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
 		-company "MvcSiteMapProvider" `
 		-version $version `
@@ -52,7 +60,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 	
 	Create-DIContainer-Packages ("Autofac", "Ninject", "SimpleInjector", "StructureMap", "Unity", "Windsor")
 
-    Move-Item *.nupkg $base_directory\release
+	Move-Item *.nupkg $base_directory\release
 }
 
 task Finalize -depends NuGet -description "This tasks finalizes the build" {  
@@ -66,17 +74,17 @@ task Finalize -depends NuGet -description "This tasks finalizes the build" {
 }
 
 function Transform-Nuspec ([string] $source, [string] $transform, [string] $destination) {
-    $transform_xml = "$tools_directory\TransformXml.proj"
-    Write-Host "Creating nuspec for $destination" -ForegroundColor Green
-    Exec { msbuild $transform_xml /p:Source=$source /p:Transform=$transform /p:Destination=$destination /v:minimal /nologo }
-    $nuspec
+	$transform_xml = "$tools_directory\TransformXml.proj"
+	Write-Host "Creating nuspec for $destination" -ForegroundColor Green
+	Exec { msbuild $transform_xml /p:Source=$source /p:Transform=$transform /p:Destination=$destination /v:minimal /nologo }
+	$nuspec
 }
 
 function Preprocess-Code-File ([string] $source, [string] $net_version, [string] $mvc_version) {
 	$net_version_upper = $net_version.toUpper()
-    Write-Host "Preprocessing code for $source, $net_version_upper, MVC$mvc_version" -ForegroundColor Green
+	Write-Host "Preprocessing code for $source, $net_version_upper, MVC$mvc_version" -ForegroundColor Green
 	Copy-Item $source "$source.temp"
-    Exec { &"$tools_directory\mcpp-2.7.2\mcpp" -C -P "-D$net_version_upper" "-DMVC$mvc_version" "$source.temp" $source }
+	Exec { &"$tools_directory\mcpp-2.7.2\mcpp" -C -P "-D$net_version_upper" "-DMVC$mvc_version" "$source.temp" $source }
 	Remove-Item "$source.temp" -Force -ErrorAction SilentlyContinue
 }
 
@@ -121,6 +129,7 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
 	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
+	$srcdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\src\"
 
 	if ($net_version -eq "net35") {
 		$targetFramework = "v3.5"
@@ -165,9 +174,9 @@ function Create-MvcSiteMapProvider-Legacy-Package ([string] $mvc_version) {
 
 	Copy-Item $nuget_directory\mvcsitemapprovider.legacy\* $build_directory\mvcsitemapprovider -Recurse -Exclude @("*.nuspec", "*.nutrans")
 	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
-    }
+	exec { 
+		&"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
+	}
 }
 
 function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
@@ -187,10 +196,10 @@ function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
 
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
-	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
-    }
+
+	exec { 
+		&"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
+	}
 }
 
 function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
@@ -210,26 +219,29 @@ function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
 	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
 
 	Copy-Item $nuget_directory\mvcsitemapprovider.core\* $build_directory\mvcsitemapprovider.mvc$mvc_version.core -Recurse -Exclude @("*.nuspec", "*.nutrans")
-	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
-    }
+		
+	#copy sources for symbols package
+	Copy-Item -Recurse -Filter *.cs -Force "$source_directory\MvcSiteMapProvider" "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\src"
+
+	exec { 
+		&"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
+	}
 }
 
 function Create-MvcSiteMapProvider-Web-Package {
 
-    Copy-Item $nuget_directory\mvcsitemapprovider.web\ $build_directory\mvcsitemapprovider.web -Recurse
+	Copy-Item $nuget_directory\mvcsitemapprovider.web\ $build_directory\mvcsitemapprovider.web -Recurse
 
 	Ensure-Directory-Exists $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
-    Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
+	Copy-Item $source_directory\MvcSiteMapProvider\Xml\MvcSiteMapSchema.xsd $build_directory\mvcsitemapprovider.web\content\MvcSiteMapSchema.xsd
 
 	$display_templates_output = "$build_directory\mvcsitemapprovider.web\content\Views\Shared\DisplayTemplates"
 	Ensure-Directory-Exists $display_templates_output\test.temp
-    Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $display_templates_output -Recurse
+	Copy-Item $source_directory\MvcSiteMapProvider\Web\Html\DisplayTemplates\* $display_templates_output -Recurse
 	
-    exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
-    }
+	exec { 
+		&"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.web\mvcsitemapprovider.web.nuspec -Symbols -Version $packageVersion
+	}
 }
 
 function Create-DIContainer-Packages ([string[]] $di_containers) {
@@ -266,8 +278,8 @@ function Create-DIContainer-Package ([string] $di_container, [string[]] $net_ver
 
 	#package the build
 	exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\mvcsitemapprovider.mvc$mvc_version.di.$di_container.nuspec -Symbols -Version $packageVersion
-    }
+		&"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container\mvcsitemapprovider.mvc$mvc_version.di.$di_container.nuspec -Symbols -Version $packageVersion
+	}
 }
 
 function Create-DIContainer-Build ([string] $di_container, [string] $net_version, [string] $mvc_version) {
@@ -333,8 +345,8 @@ function Create-DIContainer-Modules-Package ([string] $di_container, [string[]] 
 
 	#package the build
 	exec { 
-        &"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nuspec -Symbols -Version $packageVersion
-    }
+		&"$tools_directory\nuget\NuGet.exe" pack $build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nuspec -Symbols -Version $packageVersion
+	}
 }
 
 function Create-DIContainer-Modules-Build ([string] $di_container, [string] $net_version, [string] $mvc_version) {
