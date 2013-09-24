@@ -129,6 +129,7 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
 	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
+	$srcdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\src\"
 
 	if ($net_version -eq "net35") {
 		$targetFramework = "v3.5"
@@ -195,7 +196,7 @@ function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
 
 	Copy-Item $nuget_directory\mvcsitemapprovider\* $build_directory\mvcsitemapprovider.mvc$mvc_version -Recurse -Exclude @("*.nuspec", "*.nutrans")
-	
+
 	exec { 
 		&"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
 	}
@@ -218,7 +219,10 @@ function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
 	Remove-Item "$output_nuspec_file.template" -Force -ErrorAction SilentlyContinue
 
 	Copy-Item $nuget_directory\mvcsitemapprovider.core\* $build_directory\mvcsitemapprovider.mvc$mvc_version.core -Recurse -Exclude @("*.nuspec", "*.nutrans")
-	
+		
+	#copy sources for symbols package
+	Copy-Item -Recurse -Filter *.cs -Force "$source_directory\MvcSiteMapProvider" "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\src"
+
 	exec { 
 		&"$tools_directory\nuget\NuGet.exe" pack $output_nuspec_file -Symbols -Version $packageVersion
 	}
