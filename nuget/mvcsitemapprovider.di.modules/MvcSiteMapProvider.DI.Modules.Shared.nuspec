@@ -15,13 +15,13 @@
 		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
 		<dependencies>
 			<group targetFramework="net35">
-				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="[$version$]" />
+				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="$version$" />
 			</group>
 			<group targetFramework="net40">
-				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="[$version$]" />
+				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="$version$" />
 			</group>
 			<group targetFramework="net45">
-				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="[$version$]" />
+				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="$version$" />
 			</group>
 		</dependencies>
 		<frameworkAssemblies>
