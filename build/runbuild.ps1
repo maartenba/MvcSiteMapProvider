@@ -391,9 +391,9 @@ function Create-DIContainer-Modules-Nuspec-File ([string] $di_container, [string
 }
 
 function Get-Prerelease-Text {
-	$prerelease = ""
 	if ($packageVersion.Contains("-")) {
 		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
+		return ".0$prerelease"
 	}
-	return ".0$prerelease"
+	return ""
 }
