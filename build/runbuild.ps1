@@ -129,7 +129,6 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
 	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
-	$srcdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\src\"
 
 	if ($net_version -eq "net35") {
 		$targetFramework = "v3.5"
