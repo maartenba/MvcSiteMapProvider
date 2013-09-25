@@ -16,15 +16,15 @@
 		<dependencies>
 			<group targetFramework="net35">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
-				<dependency id="MvcSiteMapProvider.Web" version="4#prerelease#" />
+				<dependency id="MvcSiteMapProvider.Web" version="#no_update#" />
 			</group>
 			<group targetFramework="net40">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
-				<dependency id="MvcSiteMapProvider.Web" version="4#prerelease#" />
+				<dependency id="MvcSiteMapProvider.Web" version="#no_update#" />
 			</group>
 			<group targetFramework="net45">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
-				<dependency id="MvcSiteMapProvider.Web" version="4#prerelease#" />
+				<dependency id="MvcSiteMapProvider.Web" version="#no_update#" />
 			</group>
 		</dependencies>
 	</metadata>
