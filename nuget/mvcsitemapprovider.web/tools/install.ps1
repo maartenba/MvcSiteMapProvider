@@ -32,14 +32,8 @@ function InferPreferredViewEngine() {
 function Add-Or-Update-AppSettings() {
 	$xml = New-Object xml
 
-	# find the Web.config file
-	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
-
-	# find its path on the file system
-	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
-
-	# load Web.config as XML
-	$xml.Load($localPath.Value)
+	$web_config_path = Get-Web-Config-Path
+	$xml.Load($web_config_path)
 
 	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
 	if ($appSettings -eq $null) {
@@ -83,24 +77,14 @@ function Add-Or-Update-AppSettings() {
 		$appSettings.AppendChild($scan)
 	}
 	
-	# save the Web.config file with formatting
-	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
-	$writer.Formatting = [System.Xml.Formatting]::Indented
-	$xml.Save($writer)
-	$writer.Close()
+	Save-Document-With-Formatting $xml $web_config_path
 }
 
 function Add-Pages-Namespaces() {
 	$xml = New-Object xml
-
-	# find the Web.config file
-	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
-
-	# find its path on the file system
-	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
-
-	# load Web.config as XML
-	$xml.Load($localPath.Value)
+	
+	$web_config_path = Get-Web-Config-Path
+	$xml.Load($web_config_path)
 
 	$system_web = $xml.SelectSingleNode("configuration/system.web")
 	if ($system_web -eq $null) {
@@ -144,21 +128,17 @@ function Add-Pages-Namespaces() {
 		$namespaces.AppendChild($html_models)
 	}
 	
-	# save the Web.config file with formatting
-	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
-	$writer.Formatting = [System.Xml.Formatting]::Indented
-	$xml.Save($writer)
-	$writer.Close()
+	Save-Document-With-Formatting $xml $web_config_path
 }
 
 function Add-Razor-Pages-Namespaces() {
 	$xml = New-Object xml
 
 	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
-	$web_config_file = "$path\Views\Web.config"
+	$web_config_path = "$path\Views\Web.config"
 
 	# load Web.config as XML
-	$xml.Load($web_config_file)
+	$xml.Load($web_config_path)
 
 	$system_web_webpages_razor = $xml.SelectSingleNode("configuration/system.web.webPages.razor")
 	if ($system_web_webpages_razor -eq $null) {
@@ -207,24 +187,14 @@ function Add-Razor-Pages-Namespaces() {
 		$namespaces.AppendChild($html_models)
 	}
 	
-	# save the Views/Web.config file with formatting
-	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($web_config_file, $null)
-	$writer.Formatting = [System.Xml.Formatting]::Indented
-	$xml.Save($writer)
-	$writer.Close()
+	Save-Document-With-Formatting $xml $web_config_path
 }
 
 function Update-SiteMap-Element() {
 	$xml = New-Object xml
 
-	# find the Web.config file
-	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
-
-	# find its path on the file system
-	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
-
-	# load Web.config as XML
-	$xml.Load($localPath.Value)
+	$web_config_path = Get-Web-Config-Path
+	$xml.Load($web_config_path)
 
 	$siteMap = $xml.SelectSingleNode("configuration/system.web/siteMap")
 	if ($siteMap -ne $null) {
@@ -237,24 +207,14 @@ function Update-SiteMap-Element() {
 		}
 	}
 	
-	# save the Web.config file with formatting
-	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
-	$writer.Formatting = [System.Xml.Formatting]::Indented
-	$xml.Save($writer)
-	$writer.Close()
+	Save-Document-With-Formatting $xml $web_config_path
 }
 
 function Add-MVC4-Config-Sections() {
 	$xml = New-Object xml
-
-	# find the Web.config file
-	$config = $project.ProjectItems | where {$_.Name -eq "Web.config"}
-
-	# find its path on the file system
-	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
-
-	# load Web.config as XML
-	$xml.Load($localPath.Value)
+	
+	$web_config_path = Get-Web-Config-Path
+	$xml.Load($web_config_path)
 	
 	# select the node
 	$ws = $xml.SelectSingleNode("configuration/system.webServer")
@@ -295,11 +255,43 @@ function Add-MVC4-Config-Sections() {
 		$modules.AppendChild($add)
 	}
 	
-	# save the Web.config file with formatting
-	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($localPath.Value, $null)
+	Save-Document-With-Formatting $xml $web_config_path
+}
+
+#Gets the encoding from an open xml document as a System.Text.Encoding type
+function Get-Document-Encoding([xml] $xml) {
+	[string] $encodingStr = ""
+	if ($xml.FirstChild.NodeType -eq [System.Xml.XmlNodeType]::XmlDeclaration) {
+		[System.Xml.XmlDeclaration] $declaration = $xml.FirstChild
+		$encodingStr = $declaration.Encoding
+	}
+	if ([string]::IsNullOrEmpty($encodingStr) -eq $false) {
+		$encoding = $null
+		Try {
+			$encoding = [System.Text.Encoding]::GetEncoding($encodingStr)
+		}
+		Catch [System.Exception] {
+			$encoding = $null
+		}
+		return $encoding
+	} else {
+		return $null
+	}
+}
+
+function Save-Document-With-Formatting([xml] $xml, [string] $path) {
+	# save the xml file with formatting and original encoding
+	$encoding = Get-Document-Encoding $xml
+	$writer = New-Object System.Xml.XmlTextWriter -ArgumentList @($path, $encoding)
 	$writer.Formatting = [System.Xml.Formatting]::Indented
 	$xml.Save($writer)
 	$writer.Close()
+}
+
+function Get-Web-Config-Path() {
+	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
+	$web_config_path = "$path\Web.config"
+	return $web_config_path
 }
 
 # Infer which view engine you're using based on the files in your project
