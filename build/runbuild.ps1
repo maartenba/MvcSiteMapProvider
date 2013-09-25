@@ -160,12 +160,12 @@ function Create-MvcSiteMapProvider-Legacy-Package ([string] $mvc_version) {
 	Ensure-Directory-Exists $output_nuspec_file
 	Copy-Item $nuget_directory\mvcsitemapprovider.legacy\mvcsitemapprovider.nuspec "$output_nuspec_file.template"
 
-	$no_update = Get-No-Update-Version
+	$prerelease = Get-Prerelease-Text
 
 	#replace the tokens
 	(cat "$output_nuspec_file.template") `
 		-replace '#mvc_version#', "$mvc_version" `
-		-replace '#no_update#', "$no_update" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_nuspec_file 
 	
 	#delete the template file
@@ -183,12 +183,12 @@ function Create-MvcSiteMapProvider-Package ([string] $mvc_version) {
 	Ensure-Directory-Exists $output_nuspec_file
 	Copy-Item $nuget_directory\mvcsitemapprovider\mvcsitemapprovider.shared.nuspec "$output_nuspec_file.template"
 
-	$no_update = Get-No-Update-Version
+	$prerelease = Get-Prerelease-Text
 
 	#replace the tokens
 	(cat "$output_nuspec_file.template") `
 		-replace '#mvc_version#', "$mvc_version" `
-		-replace '#no_update#', "$no_update" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_nuspec_file 
 	
 	#delete the template file
@@ -206,12 +206,12 @@ function Create-MvcSiteMapProvider-Core-Package ([string] $mvc_version) {
 	Ensure-Directory-Exists $output_nuspec_file
 	Transform-Nuspec $nuget_directory\mvcsitemapprovider.core\mvcsitemapprovider.core.shared.nuspec $nuget_directory\mvcsitemapprovider.core\mvcsitemapprovider.mvc$mvc_version.core.nutrans "$output_nuspec_file.template"
 	
-	$no_update = Get-No-Update-Version
+	$prerelease = Get-Prerelease-Text
 
 	#replace the tokens
 	(cat "$output_nuspec_file.template") `
 		-replace '#mvc_version#', "$mvc_version" `
-		-replace '#no_update#', "$no_update" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_nuspec_file 
 	
 	#delete the template file
@@ -317,13 +317,13 @@ function Create-DIContainer-Nuspec-File ([string] $di_container, [string] $mvc_v
 	Ensure-Directory-Exists $output_file
 	Copy-Item $nuspec_shared "$output_file.template"
 
-	$no_update = Get-No-Update-Version
+	$prerelease = Get-Prerelease-Text
 
 	#replace the tokens
 	(cat "$output_file.template") `
 		-replace '#di_container_name#', "$di_container" `
 		-replace '#mvc_version#', "$mvc_version" `
-		-replace '#no_update#', "$no_update" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_file 
 
 	#delete the template file
@@ -377,23 +377,23 @@ function Create-DIContainer-Modules-Nuspec-File ([string] $di_container, [string
 	Ensure-Directory-Exists $output_file
 	Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.di.$di_container.modules.nutrans" "$output_file.template"
 	
-	$no_update = Get-No-Update-Version
+	$prerelease = Get-Prerelease-Text
 
 	#replace the tokens
 	(cat "$output_file.template") `
 		-replace '#di_container_name#', "$di_container" `
 		-replace '#mvc_version#', "$mvc_version" `
-		-replace '#no_update#', "$no_update" `
+		-replace '#prerelease#', "$prerelease" `
 		> $output_file 
 
 	#delete the template file
 	Remove-Item "$output_file.template" -Force -ErrorAction SilentlyContinue
 }
 
-function Get-No-Update-Version {
+function Get-Prerelease-Text {
 	if ($packageVersion.Contains("-")) {
 		$prerelease = $packageVersion.SubString($packageVersion.IndexOf("-")) -replace "\d+", ""
-		return "4.0.0$prerelease"
+		return ".0.0$prerelease"
 	}
-	return "[4,5)"
+	return ""
 }
