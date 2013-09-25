@@ -9,110 +9,110 @@ namespace MvcSiteMapProvider
     /// </summary>
     public class DynamicNode
     {
-        private ChangeFrequency changeFrequency = ChangeFrequency.Undefined;
-        private UpdatePriority updatePriority = UpdatePriority.Undefined;
+        protected ChangeFrequency changeFrequency = ChangeFrequency.Undefined;
+        protected UpdatePriority updatePriority = UpdatePriority.Undefined;
 
         /// <summary>
         /// Gets or sets the route.
         /// </summary>
         /// <value>The route.</value>
-        public string Route { get; set; }
+        public virtual string Route { get; set; }
 
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
         /// <value>The key.</value>
-        public string Key { get; set; }
+        public virtual string Key { get; set; }
 
         /// <summary>
         /// Gets or sets the parent key (optional).
         /// </summary>
         /// <value>The parent key.</value>
-        public string ParentKey { get; set; }
+        public virtual string ParentKey { get; set; }
 
         /// <summary>
         /// Gets or sets the Url (optional).
         /// </summary>
         /// <value>The area.</value>
-        public string Url { get; set; }
+        public virtual string Url { get; set; }
 
         /// <summary>
         /// Gets or sets the area (optional).
         /// </summary>
         /// <value>The area.</value>
-        public string Area { get; set; }
+        public virtual string Area { get; set; }
 
         /// <summary>
         /// Gets or sets the controller (optional).
         /// </summary>
         /// <value>The controller.</value>
-        public string Controller { get; set; }
+        public virtual string Controller { get; set; }
 
         /// <summary>
         /// Gets or sets the action (optional).
         /// </summary>
         /// <value>The action.</value>
-        public string Action { get; set; }
+        public virtual string Action { get; set; }
 
         /// <summary>
         /// Gets or sets the title (optional).
         /// </summary>
         /// <value>The title.</value>
-        public string Title { get; set; }
+        public virtual string Title { get; set; }
 
         /// <summary>
         /// Gets or sets the description (optional).
         /// </summary>
         /// <value>The description.</value>
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the target frame (optional).
         /// </summary>
         /// <value>The target frame.</value>
-        public string TargetFrame { get; set; }
+        public virtual string TargetFrame { get; set; }
 
         /// <summary>
         /// Gets or sets the image URL (optional).
         /// </summary>
         /// <value>The image URL.</value>
-        public string ImageUrl { get; set; }
+        public virtual string ImageUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the route values.
         /// </summary>
         /// <value>The route values.</value>
-        public IDictionary<string, object> RouteValues { get; set; }
+        public virtual IDictionary<string, object> RouteValues { get; set; }
 
         /// <summary>
         /// Gets or sets the attributes (optional).
         /// </summary>
         /// <value>The attributes.</value>
-        public IDictionary<string, object> Attributes { get; set; }
+        public virtual IDictionary<string, object> Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>The attributes.</value>
-        public IList<string> PreservedRouteParameters { get; set; }
+        public virtual IList<string> PreservedRouteParameters { get; set; }
 
         /// <summary>
         /// Gets or sets the roles.
         /// </summary>
         /// <value>The roles.</value>
-        public IList<string> Roles { get; set; }
+        public virtual IList<string> Roles { get; set; }
 
         /// <summary>
         /// Gets or sets the last modified date.
         /// </summary>
         /// <value>The last modified date.</value>
-        public DateTime? LastModifiedDate { get; set; }
+        public virtual DateTime? LastModifiedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the change frequency.
         /// </summary>
         /// <value>The change frequency.</value>
-        public ChangeFrequency ChangeFrequency 
+        public virtual ChangeFrequency ChangeFrequency 
         { 
             get { return changeFrequency; } 
             set { changeFrequency = value; } 
@@ -122,7 +122,7 @@ namespace MvcSiteMapProvider
         /// Gets or sets the update priority.
         /// </summary>
         /// <value>The update priority.</value>
-        public UpdatePriority UpdatePriority 
+        public virtual UpdatePriority UpdatePriority 
         {
             get { return updatePriority; }
             set { updatePriority = value; }
@@ -132,32 +132,32 @@ namespace MvcSiteMapProvider
         /// A value indicating to cache the resolved URL. If false, the URL will be 
         /// resolved every time it is accessed.
         /// </summary>
-        public bool? CacheResolvedUrl { get; set; }
+        public virtual bool? CacheResolvedUrl { get; set; }
 
 
         /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
-        public string CanonicalUrl { get; set; }
+        public virtual string CanonicalUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
-        public string CanonicalKey { get; set; }
+        public virtual string CanonicalKey { get; set; }
 
         /// <summary>
         /// Gets or sets the robots meta values.
         /// </summary>
         /// <value>The robots meta values.</value>
-        public IList<string> MetaRobotsValues { get; set; }
+        public virtual IList<string> MetaRobotsValues { get; set; }
 
         /// <summary>
         /// Gets or sets the sort order of the node relative to its sibling nodes (the nodes that have the same parent).
         /// </summary>
         /// <value>The sort order.</value>
-        public int? Order { get; set; }
+        public virtual int? Order { get; set; }
 
         /// <summary>
         /// Gets or sets the HTTP method (such as GET, POST, or HEAD).
@@ -165,32 +165,56 @@ namespace MvcSiteMapProvider
         /// <value>
         /// The HTTP method.
         /// </value>
-        public string HttpMethod { get; set; }
+        public virtual string HttpMethod { get; set; }
+
+        /// <summary>
+        /// Gets or sets the visibility provider.
+        /// </summary>
+        /// <value>
+        /// The visibility provider.
+        /// </value>
+        public virtual string VisibilityProvider { get; set; }
+
+        /// <summary>
+        /// Gets or sets the URL resolver.
+        /// </summary>
+        /// <value>
+        /// The URL resolver.
+        /// </value>
+        public virtual string UrlResolver { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the node is clickable or just a grouping node.
+        /// </summary>
+        /// <value>
+        /// Is clickable.
+        /// </value>
+        public virtual bool? Clickable { get; set; }
 
         /// <summary>
         /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
         /// doesn't overwrite any values that are not set in this <see cref="T:MvcSiteMapNodeProvider.DynamicNode"/> instance.
         /// </summary>
         /// <param name="node">The site map node to copy the values into.</param>
-        public void SafeCopyTo(ISiteMapNode node)
+        public virtual void SafeCopyTo(ISiteMapNode node)
         {
-            if (!string.IsNullOrEmpty(this.Route))
+            if (!String.IsNullOrEmpty(this.Route))
                 node.Route = this.Route;
-            if (!string.IsNullOrEmpty(this.Url))
+            if (!String.IsNullOrEmpty(this.Url))
                 node.Url = this.Url;
-            if (!string.IsNullOrEmpty(this.Area))
+            if (!String.IsNullOrEmpty(this.Area))
                 node.Area = this.Area;
-            if (!string.IsNullOrEmpty(this.Controller))
+            if (!String.IsNullOrEmpty(this.Controller))
                 node.Controller = this.Controller;
-            if (!string.IsNullOrEmpty(this.Action))
+            if (!String.IsNullOrEmpty(this.Action))
                 node.Action = this.Action;
-            if (!string.IsNullOrEmpty(this.Title))
+            if (!String.IsNullOrEmpty(this.Title))
                 node.Title = this.Title;
-            if (!string.IsNullOrEmpty(this.Description))
+            if (!String.IsNullOrEmpty(this.Description))
                 node.Description = this.Description;
-            if (!string.IsNullOrEmpty(this.TargetFrame))
+            if (!String.IsNullOrEmpty(this.TargetFrame))
                 node.TargetFrame = this.TargetFrame;
-            if (!string.IsNullOrEmpty(this.ImageUrl))
+            if (!String.IsNullOrEmpty(this.ImageUrl))
                 node.ImageUrl = this.ImageUrl;
             foreach (var kvp in this.RouteValues)
             {
@@ -228,9 +252,9 @@ namespace MvcSiteMapProvider
                 node.UpdatePriority = this.UpdatePriority;
             if (this.CacheResolvedUrl != null)
                 node.CacheResolvedUrl = (bool)this.CacheResolvedUrl;
-            if (!string.IsNullOrEmpty(this.CanonicalKey))
+            if (!String.IsNullOrEmpty(this.CanonicalKey))
                 node.CanonicalKey = this.CanonicalKey;
-            if (!string.IsNullOrEmpty(this.CanonicalUrl))
+            if (!String.IsNullOrEmpty(this.CanonicalUrl))
                 node.CanonicalUrl = this.CanonicalUrl;
             if (this.MetaRobotsValues.Any())
             {
@@ -244,8 +268,14 @@ namespace MvcSiteMapProvider
             }
             if (this.Order != null)
                 node.Order = (int)this.Order;
-            if (!string.IsNullOrEmpty(this.HttpMethod))
+            if (!String.IsNullOrEmpty(this.HttpMethod))
                 node.HttpMethod = this.HttpMethod;
+            if (!String.IsNullOrEmpty(this.VisibilityProvider))
+                node.VisibilityProvider = this.VisibilityProvider;
+            if (!String.IsNullOrEmpty(this.UrlResolver))
+                node.UrlResolver = this.UrlResolver;
+            if (this.Clickable != null)
+                node.Clickable = (bool)this.Clickable;
         }
 
 
