@@ -80,7 +80,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             if (string.IsNullOrEmpty(result))
             {
                 // fixes #115 - UrlResolver should not throw exception.
-                return urlPath.MakeVirtualPathAppAbsolute("~") + Guid.NewGuid().ToString();
+                return urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, "~/")) + Guid.NewGuid().ToString();
             }
 
             return result;
