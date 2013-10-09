@@ -18,6 +18,7 @@ namespace MvcMusicStore.Code
         public UpperCaseSiteMapNodeUrlResolver(IMvcContextFactory mvcContextFactory, IUrlPath urlPath) 
             : base(mvcContextFactory, urlPath)
         {
+       
         }
 
         /// <summary>
