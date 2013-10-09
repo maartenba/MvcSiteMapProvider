@@ -41,7 +41,6 @@ task Compile -depends Clean, Init -description "This task compiles the solution"
 	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "2"
 	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "3"
 	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "4"
-	Build-MvcSiteMapProvider-Core-Versions ("net45") -mvc_version "5"
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
@@ -52,20 +51,10 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 	Create-MvcSiteMapProvider-Package -mvc_version "2"
 	Create-MvcSiteMapProvider-Package -mvc_version "3"
 	Create-MvcSiteMapProvider-Package -mvc_version "4"
-	
-	$oldPackageVersion = $packageVersion
-	$packageVersion = "$packageVersion-alpha" + $packageVersion.Replace(".", "")
-	Create-MvcSiteMapProvider-Package -mvc_version "5"
-	$packageVersion = $oldPackageVersion
-	
+
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "2"
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "3"
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "4"
-	
-	$oldPackageVersion = $packageVersion
-	$packageVersion = "$packageVersion-alpha" + $packageVersion.Replace(".", "")
-	Create-MvcSiteMapProvider-Core-Package -mvc_version "5"
-	$packageVersion = $oldPackageVersion
 
 	Create-MvcSiteMapProvider-Web-Package
 	
@@ -270,12 +259,6 @@ function Create-DIContainer-Packages ([string[]] $di_containers) {
 
 		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
 		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "4"
-		
-		$oldPackageVersion = $packageVersion
-		$packageVersion = "$packageVersion-alpha" + $packageVersion.Replace(".", "")
-		Create-DIContainer-Package $di_container ("net45") -mvc_version "5"
-		Create-DIContainer-Modules-Package $di_container ("net45") -mvc_version "5"
-		$packageVersion = $oldPackageVersion
 	}
 }
 

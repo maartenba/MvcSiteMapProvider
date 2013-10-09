@@ -14,7 +14,7 @@ namespace MvcMusicStore.Code
         : SiteMapNodeVisibilityProviderBase
     {
         #region ISiteMapNodeVisibilityProvider Members
-                                   
+
         /// <summary>
         /// Determines whether the node is visible.
         /// </summary>
