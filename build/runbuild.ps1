@@ -388,6 +388,9 @@ function Create-DIContainer-Modules-Nuspec-File ([string] $di_container, [string
 	$output_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nuspec"
 	Ensure-Directory-Exists $output_file
 	Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.di.$di_container.modules.nutrans" "$output_file.template"
+	if (Test-Path "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nutrans") {
+		Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nutrans" "$output_file.template"
+	}
 	
 	$prerelease = Get-Prerelease-Text
 
