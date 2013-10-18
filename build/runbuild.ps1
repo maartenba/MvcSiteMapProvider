@@ -34,7 +34,13 @@ task Init -description "This tasks makes sure the build environment is correctly
 		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
 }
 
-task Compile -depends Clean, Init -description "This task compiles the solution" {
+task Restore -depends Clean -description "This task runs NuGet package restore" {
+	exec { 
+		&"$tools_directory\nuget\NuGet.exe" restore "$source_directory\MvcSiteMapProvider.sln"
+	}
+}
+
+task Compile -depends Clean, Init, Restore -description "This task compiles the solution" {
 
 	Write-Host "Compiling..." -ForegroundColor Green
 
