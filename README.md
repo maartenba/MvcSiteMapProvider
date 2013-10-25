@@ -40,7 +40,7 @@ After cloning the repository, run build.cmd.
 
 MvcSiteMapProvider used the psake build engine to build the project. Psake is a Powershell based engine and if it is the first time you execute powershell scripts on your system you may need to allow script execution by running the following command as adminstrator:
 
-    Set-ExecutionPolicy unrestricted
+    Set-ExecutionPolicy RemoteSigned
 
 ## Contributions
 
