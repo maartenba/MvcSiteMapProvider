@@ -372,9 +372,10 @@ configured in the compilation constants -->
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Shared\Site.Master" />
+    <None Include="Views\Shared\Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mvc.sitemap">
