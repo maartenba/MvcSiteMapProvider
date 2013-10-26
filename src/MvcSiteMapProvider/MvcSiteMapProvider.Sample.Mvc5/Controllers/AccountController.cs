@@ -32,9 +32,10 @@ namespace MvcSiteMapProvider.Sample.Mvc5.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ClaimsIdentity("MvcSiteMapProvider");
+                var user = new ClaimsIdentity("ApplicationCookie");
                 user.AddClaim(new Claim(ClaimTypes.Name, model.UserName));
                 user.AddClaim(new Claim(ClaimTypes.NameIdentifier, model.UserName));
+                user.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ApplicationCookie"));
 
                 await SignInAsync(user, model.RememberMe);
                 return RedirectToLocal(returnUrl);
@@ -61,9 +62,10 @@ namespace MvcSiteMapProvider.Sample.Mvc5.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ClaimsIdentity("MvcSiteMapProvider");
+                var user = new ClaimsIdentity("ApplicationCookie");
                 user.AddClaim(new Claim(ClaimTypes.Name, model.UserName));
                 user.AddClaim(new Claim(ClaimTypes.NameIdentifier, model.UserName));
+                user.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ApplicationCookie"));
 
                 await SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");

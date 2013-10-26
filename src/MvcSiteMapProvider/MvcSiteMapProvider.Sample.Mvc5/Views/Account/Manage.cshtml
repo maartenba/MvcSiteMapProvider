@@ -19,7 +19,6 @@
         }
 
         <section id="externalLogins">
-            @Html.Action("RemoveAccountList")
             @Html.Partial("_ExternalLoginsListPartial", new { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
         </section>
     </div>

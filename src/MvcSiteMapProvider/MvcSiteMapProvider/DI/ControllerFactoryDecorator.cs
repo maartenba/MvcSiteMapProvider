@@ -61,7 +61,7 @@ namespace MvcSiteMapProvider.DI
             return this.GetControllerInstance(requestContext, controllerType);
         }
 
-#if !MVC2
+#if !MVC2 
         public SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)
         {
             return this.innerControllerFactory.GetControllerSessionBehavior(requestContext, controllerName);
