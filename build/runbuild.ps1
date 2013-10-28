@@ -34,13 +34,20 @@ task Init -description "This tasks makes sure the build environment is correctly
 		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
 }
 
-task Compile -depends Clean, Init -description "This task compiles the solution" {
+task Restore -depends Clean -description "This task runs NuGet package restore" {
+	exec { 
+		&"$tools_directory\nuget\NuGet.exe" restore "$source_directory\MvcSiteMapProvider.sln"
+	}
+}
+
+task Compile -depends Clean, Init, Restore -description "This task compiles the solution" {
 
 	Write-Host "Compiling..." -ForegroundColor Green
 
 	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "2"
 	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "3"
 	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "4"
+	Build-MvcSiteMapProvider-Core-Versions ("net45") -mvc_version "5"
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
@@ -51,10 +58,12 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 	Create-MvcSiteMapProvider-Package -mvc_version "2"
 	Create-MvcSiteMapProvider-Package -mvc_version "3"
 	Create-MvcSiteMapProvider-Package -mvc_version "4"
-
+	Create-MvcSiteMapProvider-Package -mvc_version "5"
+	
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "2"
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "3"
 	Create-MvcSiteMapProvider-Core-Package -mvc_version "4"
+	Create-MvcSiteMapProvider-Core-Package -mvc_version "5"
 
 	Create-MvcSiteMapProvider-Web-Package
 	
@@ -259,6 +268,9 @@ function Create-DIContainer-Packages ([string[]] $di_containers) {
 
 		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
 		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "4"
+		
+		Create-DIContainer-Package $di_container ("net45") -mvc_version "5"
+		Create-DIContainer-Modules-Package $di_container ("net45") -mvc_version "5"
 	}
 }
 
@@ -376,6 +388,9 @@ function Create-DIContainer-Modules-Nuspec-File ([string] $di_container, [string
 	$output_file = "$build_directory\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nuspec"
 	Ensure-Directory-Exists $output_file
 	Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.di.$di_container.modules.nutrans" "$output_file.template"
+	if (Test-Path "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nutrans") {
+		Transform-Nuspec $nuspec_shared "$nuget_directory\mvcsitemapprovider.di.modules\mvcsitemapprovider.mvc$mvc_version.di.$di_container.modules.nutrans" "$output_file.template"
+	}
 	
 	$prerelease = Get-Prerelease-Text
 
