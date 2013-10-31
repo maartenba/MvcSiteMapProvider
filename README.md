@@ -16,6 +16,8 @@ See the [documentation](https://github.com/maartenba/MvcSiteMapProvider/wiki)
 
 Stable releases:
 
+    Install-Package MvcSiteMapProvider.MVC5
+                   - or -
     Install-Package MvcSiteMapProvider.MVC4
                    - or -
     Install-Package MvcSiteMapProvider.MVC3
@@ -26,6 +28,8 @@ Use one of our [dependency injection packages] (http://www.nuget.org/packages?q=
 
 Prefer continuous integration builds?
 
+    Install-Package MvcSiteMapProvider.MVC5 -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
+                   - or -
     Install-Package MvcSiteMapProvider.MVC4 -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
                    - or -
     Install-Package MvcSiteMapProvider.MVC3 -IncludePrerelease -Source http://www.myget.org/F/mvcsitemapprovider
