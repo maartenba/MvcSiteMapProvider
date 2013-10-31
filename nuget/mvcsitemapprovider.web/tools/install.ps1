@@ -301,10 +301,15 @@ if ([string](InferPreferredViewEngine) -eq 'aspx') {
 	(Get-Project).ProjectItems | ?{ $_.Name -eq "Views" } | %{ $_.ProjectItems | ?{ $_.Name -eq "Shared" } } | %{ $_.ProjectItems | ?{ $_.Name -eq "DisplayTemplates" } } | %{ $_.ProjectItems | ?{ $_.Name -eq "MenuHelperModel.ascx" -or  $_.Name -eq "SiteMapHelperModel.ascx" -or  $_.Name -eq "SiteMapNodeModel.ascx" -or  $_.Name -eq "SiteMapNodeModelList.ascx" -or  $_.Name -eq "SiteMapPathHelperModel.ascx" -or  $_.Name -eq "SiteMapTitleHelperModel.ascx" -or  $_.Name -eq "CanonicalHelperModel.ascx" -or  $_.Name -eq "MetaRobotsHelperModel.ascx" } } | %{ $_.Delete() }
 }
 
-# If MVC 4, install web.config section to fix 404 not found on sitemap.xml (#124)
+# If MVC 4 or higher, install web.config section to fix 404 not found on sitemap.xml (#124)
 if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
 {
 	Write-Host "Detected MVC 4"
+	Add-MVC4-Config-Sections
+}
+if ($project.Object.References.Find("System.Web.Mvc").Version -eq "5.0.0.0")
+{
+	Write-Host "Detected MVC 5"
 	Add-MVC4-Config-Sections
 }
 
