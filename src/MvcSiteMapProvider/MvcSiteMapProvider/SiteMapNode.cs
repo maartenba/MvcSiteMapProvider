@@ -340,7 +340,7 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// The raw URL before being evaluated by any URL resovler.
+        /// The raw URL before being evaluated by any URL resolver.
         /// </summary>
         public override string UnresolvedUrl { get { return this.url; } }
 
@@ -411,7 +411,7 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalKey. Only 1 canonical value is allowed.</remarks>
         public override string CanonicalUrl 
         {
             get 
@@ -443,7 +443,7 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
         public override string CanonicalKey 
         {
             get { return this.canonicalKey; }
@@ -634,7 +634,7 @@ namespace MvcSiteMapProvider
             if (this.IsDynamic == false)
             {
                 // We need to ensure 1 instance per sitemap instance for the resolver's internal
-                // cache to work on multi-tenant sites that would potentailly have area, 
+                // cache to work on multi-tenant sites that would potentially have area, 
                 // controller and action name collisions.
                 actionParameters = this.SiteMap.ResolveActionMethodParameters(
                     this.Area, this.Controller, this.Action);
@@ -654,7 +654,7 @@ namespace MvcSiteMapProvider
         /// <value>The area.</value>
         public override string Area
         {
-            get { return RouteValues.ContainsKey("area") && RouteValues["area"] != null ? RouteValues["area"].ToString() : ""; }
+            get { return RouteValues.ContainsKey("area") && RouteValues["area"] != null ? RouteValues["area"].ToString() : string.Empty; }
             set { RouteValues["area"] = value; }
         }
 
@@ -664,7 +664,7 @@ namespace MvcSiteMapProvider
         /// <value>The controller.</value>
         public override string Controller
         {
-            get { return RouteValues.ContainsKey("controller") ? RouteValues["controller"].ToString() : ""; }
+            get { return RouteValues.ContainsKey("controller") && RouteValues["controller"] != null ? RouteValues["controller"].ToString() : string.Empty; }
             set { RouteValues["controller"] = value; }
         }
 
@@ -674,7 +674,7 @@ namespace MvcSiteMapProvider
         /// <value>The action.</value>
         public override string Action
         {
-            get { return RouteValues.ContainsKey("action") ? RouteValues["action"].ToString() : ""; }
+            get { return RouteValues.ContainsKey("action") && RouteValues["action"] != null ? RouteValues["action"].ToString() : string.Empty; }
             set { RouteValues["action"] = value; }
         }
 
