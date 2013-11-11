@@ -59,7 +59,11 @@ namespace DI.SimpleInjector
                     typeof(SiteMapPluginProvider), 
                     typeof(ControllerTypeResolver),
                     typeof(RouteValueDictionary), 
-                    typeof(AttributeDictionary)
+                    typeof(AttributeDictionary),
+
+                    // Added 2013-11-11 by NightOwl888 for SimpleInjector.Verify method:
+                    typeof(SiteMapNodeCreator),
+                    typeof(DynamicSiteMapNodeBuilder)
                 };
             var multipleImplementationTypes = new Type[]
                 {
