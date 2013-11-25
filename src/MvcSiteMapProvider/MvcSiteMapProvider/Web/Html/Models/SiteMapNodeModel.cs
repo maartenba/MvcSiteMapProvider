@@ -147,6 +147,13 @@ namespace MvcSiteMapProvider.Web.Html.Models
         public bool IsCurrentNode { get; protected set; }
 
 
+        /// <summary>
+        /// Returns true if this instance or any of its children is current node.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance or any of its children 
+        ///     is current node; otherwise, <c>false</c>.
+        /// </value>
         public bool IsCurrentNodeOrChild 
         { 
             get 
