@@ -146,6 +146,17 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// </value>
         public bool IsCurrentNode { get; protected set; }
 
+
+        public bool IsCurrentNodeOrChild 
+        { 
+            get 
+            {           
+                if (this.IsCurrentNode) return true;
+
+                return this.Children.Any(n => n.IsCurrentNode);          
+            }        
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance is in current path.
         /// </summary>
