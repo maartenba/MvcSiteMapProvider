@@ -160,8 +160,14 @@ namespace MvcSiteMapProvider.Web.Html.Models
             {           
                 if (this.IsCurrentNode) return true;
 
-                return this.Children.Any(n => n.IsCurrentNode);          
-            }        
+                foreach (var child in this.Children)
+                {
+                    if (child.IsCurrentNodeOrChild)
+                        return true;                    
+                }
+
+                return false;
+            }         
         }
 
         /// <summary>
