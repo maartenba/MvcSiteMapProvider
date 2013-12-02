@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 using System.IO.Compression;
+using System.Globalization;
 using MvcSiteMapProvider.Loader;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -261,7 +262,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 }
                 if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
                 {
-                    urlElement.Add(new XElement(Ns + "priority", string.Format("{0:0.0}", ((double)siteMapNode.UpdatePriority / 100))));
+                    urlElement.Add(new XElement(Ns + "priority", string.Format(CultureInfo.InvariantCulture, "{0:0.0}", ((double)siteMapNode.UpdatePriority / 100))));
                 }
 
                 // Return
