@@ -258,7 +258,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                                         {
                                             sortedDescendants = nearestVisibleDescendantsList;
                                         }
-                                        children.AddRange(nearestVisibleDescendantsList);
+                                        children.AddRange(sortedDescendants);
                                     }
                                 }
                             }
