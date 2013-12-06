@@ -85,5 +85,113 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 
             return siteMap;
         }
+
+        public static ISiteMap CreateFakeSiteMapCase3()
+        {
+            // All nodes are accessible and not dynamic
+            // (+) means visible, (-) means not visible
+
+            // /(+)
+            //  /Root/A(+)
+            //      /Root/AA(-)
+            //          /Root/AAA(+)
+            //              /Root/AAAA(+)
+            //          /Root/AAB(+)
+            //          /Root/AAC(+)
+            //      /Root/AB(-)
+            //          /Root/ABA(-)
+            //              /Root/ABAA(+)
+            //              /Root/ABAB(+)
+            //              /Root/ABAC(-)
+            //          /Root/ABB(+)
+            //          /Root/ABC(+)
+            //      /Root/AC(-)
+            //          /Root/ACA(-)
+            //              /Root/ACAA(+)
+            //              /Root/ACAB(+)
+            //              /Root/ACAC(-)
+            //          /Root/ACB(-)
+            //          /Root/ACC(-)
+            //      /Root/AD(-)
+            //          /Root/ADA(-)
+            //              /Root/ADAA(-)
+            //                  /Root/ADAAA(+)
+            //              /Root/ADAB(-)
+            //              /Root/ADAC(-)
+            //          /Root/ADB(+)
+            //          /Root/ADC(+)
+            //  /Root/B(+)
+            //  /Root/C(+)
+
+
+            bool securityTrimmingEnabled = true;
+            var siteMap = new FakeSiteMap(securityTrimmingEnabled);
+
+            var root = new FakeSiteMapNode(siteMap, "Root", "Root", url: "/", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var a = new FakeSiteMapNode(siteMap, "A", "A", url: "/Root/A", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aa = new FakeSiteMapNode(siteMap, "AA", "AA", url: "/Root/AA", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aaa = new FakeSiteMapNode(siteMap, "AAA", "AAA", url: "/Root/AAA", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aaaa = new FakeSiteMapNode(siteMap, "AAAA", "AAAA", url: "/Root/AAAA", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aab = new FakeSiteMapNode(siteMap, "AAB", "AAB", url: "/Root/AAB", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aac = new FakeSiteMapNode(siteMap, "AAC", "AAC", url: "/Root/AAC", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var ab = new FakeSiteMapNode(siteMap, "AB", "AB", url: "/Root/AB", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aba = new FakeSiteMapNode(siteMap, "ABA", "ABA", url: "/Root/ABA", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var abaa = new FakeSiteMapNode(siteMap, "ABAA", "ABAA", url: "/Root/ABAA", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var abab = new FakeSiteMapNode(siteMap, "ABAB", "ABAB", url: "/Root/ABAB", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var abac = new FakeSiteMapNode(siteMap, "ABAC", "ABAC", url: "/Root/ABAC", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var abb = new FakeSiteMapNode(siteMap, "ABB", "ABB", url: "/Root/ABB", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var abc = new FakeSiteMapNode(siteMap, "ABC", "ABC", url: "/Root/ABC", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var ac = new FakeSiteMapNode(siteMap, "AC", "AC", url: "/Root/AC", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var aca = new FakeSiteMapNode(siteMap, "ACA", "ACA", url: "/Root/ACA", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var acaa = new FakeSiteMapNode(siteMap, "ACAA", "ACAA", url: "/Root/ACAA", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var acab = new FakeSiteMapNode(siteMap, "ACAB", "ACAB", url: "/Root/ACAB", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var acac = new FakeSiteMapNode(siteMap, "ACAC", "ACAC", url: "/Root/ACAC", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var acb = new FakeSiteMapNode(siteMap, "ACB", "ACB", url: "/Root/ACB", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var acc = new FakeSiteMapNode(siteMap, "ACC", "ACC", url: "/Root/ACC", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var ad = new FakeSiteMapNode(siteMap, "AD", "AD", url: "/Root/AD", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var ada = new FakeSiteMapNode(siteMap, "ADA", "ADA", url: "/Root/ADA", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var adaa = new FakeSiteMapNode(siteMap, "ADAA", "ADAA", url: "/Root/ADAA", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var adaaa = new FakeSiteMapNode(siteMap, "ADAAA", "ADAAA", url: "/Root/ADAAA", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var adab = new FakeSiteMapNode(siteMap, "ADAB", "ADAB", url: "/Root/ADAB", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var adac = new FakeSiteMapNode(siteMap, "ADAC", "ADAC", url: "/Root/ADAC", isVisible: false, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var adb = new FakeSiteMapNode(siteMap, "ADB", "ADB", url: "/Root/ADB", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var adc = new FakeSiteMapNode(siteMap, "ADC", "ADC", url: "/Root/ADC", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var b = new FakeSiteMapNode(siteMap, "B", "B", url: "/Root/B", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+            var c = new FakeSiteMapNode(siteMap, "C", "C", url: "/Root/C", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
+
+            siteMap.AddNode(root);
+            siteMap.AddNode(a, root);
+            siteMap.AddNode(aa, a);
+            siteMap.AddNode(aaa, aa);
+            siteMap.AddNode(aaaa, aaa);
+            siteMap.AddNode(aab, aa);
+            siteMap.AddNode(aac, aa);
+            siteMap.AddNode(ab, a);
+            siteMap.AddNode(aba, ab);
+            siteMap.AddNode(abaa, aba);
+            siteMap.AddNode(abab, aba);
+            siteMap.AddNode(abac, aba);
+            siteMap.AddNode(abb, ab);
+            siteMap.AddNode(abc, ab);
+            siteMap.AddNode(ac, a);
+            siteMap.AddNode(aca, ac);
+            siteMap.AddNode(acaa, aca);
+            siteMap.AddNode(acab, aca);
+            siteMap.AddNode(acac, aca);
+            siteMap.AddNode(acb, ac);
+            siteMap.AddNode(acc, ac);
+            siteMap.AddNode(ad, a);
+            siteMap.AddNode(ada, ad);
+            siteMap.AddNode(adaa, ada);
+            siteMap.AddNode(adaaa, adaa);
+            siteMap.AddNode(adab, ada);
+            siteMap.AddNode(adac, ada);
+            siteMap.AddNode(adb, ad);
+            siteMap.AddNode(adc, ad);
+            siteMap.AddNode(b, root);
+            siteMap.AddNode(c, root);
+            
+            return siteMap;
+        }
     }
 }
