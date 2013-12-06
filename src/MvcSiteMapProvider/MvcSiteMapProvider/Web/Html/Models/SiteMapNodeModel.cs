@@ -247,7 +247,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                                     }
                                     else if (maxDepth > 0)
                                     {
-                                        FindNearestVisibleDescendants(child, maxDepth - 1);
+                                        FindNearestVisibleDescendants(child, maxDepth);
 
                                         IEnumerable<SiteMapNodeModel> sortedDescendants;
                                         if (nearestVisibleDescendantsList.Any(x => x.Order != 0))
