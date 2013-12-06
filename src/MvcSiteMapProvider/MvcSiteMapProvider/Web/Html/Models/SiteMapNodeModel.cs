@@ -245,9 +245,9 @@ namespace MvcSiteMapProvider.Web.Html.Models
                                     {
                                         children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
                                     }
-                                    else if (maxDepth > 0)
+                                    else if (maxDepth > 1)//maxDepth should be greater then 1 to be allowed to descent another level
                                     {
-                                        FindNearestVisibleDescendants(child, maxDepth);
+                                        FindNearestVisibleDescendants(child, maxDepth - 1);
 
                                         IEnumerable<SiteMapNodeModel> sortedDescendants;
                                         if (nearestVisibleDescendantsList.Any(x => x.Order != 0))
@@ -259,6 +259,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                                             sortedDescendants = nearestVisibleDescendantsList;
                                         }
                                         children.AddRange(sortedDescendants);
+                                        nearestVisibleDescendantsList = new SiteMapNodeModelList();
                                     }
                                 }
                             }
@@ -287,7 +288,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                     {
                         nearestVisibleDescendantsList.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
                     }
-                    else if (maxDepth > 0)
+                    else if (maxDepth > 1)//maxDepth should be greater then 1 to be allowed to descent another level
                     {
                         FindNearestVisibleDescendants(child, maxDepth - 1);
                     }
