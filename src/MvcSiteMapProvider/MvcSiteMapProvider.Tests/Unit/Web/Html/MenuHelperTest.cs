@@ -357,7 +357,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         {
             // Start at /Root/AA which is not visible
             // Expect a list with all visible direct children of /Root/AA (3 nodes)
-            // First in the list will have 1 childnode
+            // First in the list will have 1 child node
 
             // Html.MvcSiteMap().Menu(null, Html.MvcSiteMap().SiteMap.CurrentNode, true, false, 2, false, false, new SourceMetadataDictionary())
 
@@ -467,7 +467,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         public void BuildModel_Case3_CurrentNodeNotVisible_StartingNodeInChildLevel_NotShowStartingNode_MaxDepth3_visibilityNotAffectsDescendants_ShouldReturn4Nodes()
         {
             // Start at /Root/AB
-            // Expect a list of all visible children and grandchildren of invisible children and greatgrandchildren(don't exist but no error is expected) of /Root/AB (4 nodes)
+            // Expect a list of all visible children and grandchildren of invisible children and great grandchildren (don't exist but no error is expected) of /Root/AB (4 nodes)
 
             // Html.MvcSiteMap().Menu(null, Html.MvcSiteMap().SiteMap.CurrentNode, true, false, 3, false, false, new SourceMetadataDictionary())
 
@@ -507,7 +507,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         public void BuildModel_Case3_CurrentNodeNotVisible_StartingNodeInChildLevel_NotShowStartingNode_MaxDepth2_visibilityNotAffectsDescendants_ShouldReturn2Nodes()
         {
             // Start at /Root/AD
-            // Expect a list of all visible children and  visible grandchildren of invisible children but not any greatgrandchildren of /Root/AD (2 nodes)
+            // Expect a list of all visible children and  visible grandchildren of invisible children but not any great grandchildren of /Root/AD (2 nodes)
 
             // Html.MvcSiteMap().Menu(null, Html.MvcSiteMap().SiteMap.CurrentNode, true, false, 2, false, false, new SourceMetadataDictionary())
 
