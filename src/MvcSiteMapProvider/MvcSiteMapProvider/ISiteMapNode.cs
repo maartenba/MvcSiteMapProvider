@@ -11,6 +11,7 @@ namespace MvcSiteMapProvider
     /// node in the hierarchy.
     /// </summary>
     public interface ISiteMapNode
+        : ISortable
     {
         string Key { get; }
         bool IsDynamic { get; }
@@ -28,7 +29,7 @@ namespace MvcSiteMapProvider
         bool HasChildNodes { get; }
         int GetNodeLevel();
         ISiteMap SiteMap { get; }
-        int Order { get; set; }
+        new int Order { get; set; }
 
         bool IsAccessibleToUser();
         string HttpMethod { get; set; }

@@ -9,6 +9,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
     /// SiteMapNodeModel
     /// </summary>
     public class SiteMapNodeModel
+        : ISortable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SiteMapNodeModel"/> class.
@@ -214,15 +215,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                     children = new SiteMapNodeModelList();
                     if (ReachedMaximalNodelevel(maxDepth, node, drillDownToCurrent) && node.HasChildNodes)
                     {
-                        IEnumerable<ISiteMapNode> sortedNodes;
-                        if (node.ChildNodes.Any(x => x.Order != 0))
-                        {
-                            sortedNodes = node.ChildNodes.OrderBy(x => x.Order);
-                        }
-                        else
-                        {
-                            sortedNodes = node.ChildNodes;
-                        }
+                        var sortedNodes = SortSiteMapNodes(node.ChildNodes);
 
                         if (VisibilityAffectsDescendants)
                         {
@@ -244,20 +237,11 @@ namespace MvcSiteMapProvider.Web.Html.Models
                                     {
                                         children.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
                                     }
-                                    else if (maxDepth > 1)//maxDepth should be greater then 1 to be allowed to descent another level
+                                    else if (maxDepth > 1) //maxDepth should be greater then 1 to be allowed to descent another level
                                     {
-                                        var nearestVisibleDescendants = new SiteMapNodeModelList();
+                                        var nearestVisibleDescendants = new List<SiteMapNodeModel>();
                                         FindNearestVisibleDescendants(child, maxDepth - 1, ref nearestVisibleDescendants);
-
-                                        IEnumerable<SiteMapNodeModel> sortedDescendants;
-                                        if (nearestVisibleDescendants.Any(x => x.Order != 0))
-                                        {
-                                            sortedDescendants = nearestVisibleDescendants.OrderBy(x => x.Order);
-                                        }
-                                        else
-                                        {
-                                            sortedDescendants = nearestVisibleDescendants;
-                                        }
+                                        var sortedDescendants = SortSiteMapNodes(nearestVisibleDescendants);
                                         children.AddRange(sortedDescendants);
                                     }
                                 }
@@ -276,7 +260,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
             }
         }
 
-        private void FindNearestVisibleDescendants(ISiteMapNode node, int maxDepth, ref SiteMapNodeModelList nearestVisibleDescendants)
+        private void FindNearestVisibleDescendants(ISiteMapNode node, int maxDepth, ref List<SiteMapNodeModel> nearestVisibleDescendants)
         {
             foreach (var child in node.ChildNodes)
             {
@@ -286,12 +270,22 @@ namespace MvcSiteMapProvider.Web.Html.Models
                     {
                         nearestVisibleDescendants.Add(new SiteMapNodeModel(child, SourceMetadata, maxDepth - 1, drillDownToCurrent, false, VisibilityAffectsDescendants));
                     }
-                    else if (maxDepth > 1)//maxDepth should be greater then 1 to be allowed to descent another level
+                    else if (maxDepth > 1) //maxDepth should be greater then 1 to be allowed to descent another level
                     {
                         FindNearestVisibleDescendants(child, maxDepth - 1, ref nearestVisibleDescendants);
                     }
                 }
             }
+        }
+
+        private IEnumerable<T> SortSiteMapNodes<T>(IList<T> nodesToSort) where T: ISortable
+        {
+            if (nodesToSort.Any(x => x.Order != 0))
+            {
+                return nodesToSort.OrderBy(x => x.Order);
+            }
+
+            return nodesToSort;
         }
 
         /// <summary>
@@ -371,15 +365,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <returns></returns>
         private void GetDescendants(SiteMapNodeModel node)
         {
-            IEnumerable<SiteMapNodeModel> sortedNodes;
-            if (node.Children.Any(x => x.Order != 0))
-            {
-                sortedNodes = node.Children.OrderBy(x => x.Order);
-            }
-            else
-            {
-                sortedNodes = node.Children;
-            }
+            var sortedNodes = SortSiteMapNodes<SiteMapNodeModel>(node.Children);
             foreach (var child in sortedNodes)
             {
                 descendants.Add(child);

@@ -61,10 +61,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup Condition=" $(DefineConstants.Contains('MVC4')) ">
-		<Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-			<Private>True</Private>
-			<HintPath>..\packages\Microsoft.AspNet.Mvc.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
-		</Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
@@ -188,6 +188,7 @@
     <Compile Include="EnumHelper.cs" />
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
+    <Compile Include="ISortable.cs" />
     <Compile Include="Reflection\AttributeAssemblyProvider.cs" />
     <Compile Include="Reflection\AttributeAssemblyProviderFactory.cs" />
     <Compile Include="Reflection\IAttributeAssemblyProvider.cs" />
