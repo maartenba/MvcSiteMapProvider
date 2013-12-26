@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define FluentDemo
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using MvcMusicStore.Code;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
@@ -143,14 +145,23 @@ namespace DI.SimpleInjector
 
 
             // Register the sitemap node providers
+#if !FluentDemo
             container.RegisterSingle<XmlSiteMapNodeProvider>(() => container.GetInstance<XmlSiteMapNodeProviderFactory>()
                 .Create(container.GetInstance<IXmlSource>()));
+#else
+            container.RegisterSingle<StoreFluentSiteMapProvider>();
+#endif
             container.RegisterSingle<ReflectionSiteMapNodeProvider>(() => container.GetInstance<ReflectionSiteMapNodeProviderFactory>()
                 .Create(includeAssembliesForScan));
 
             // Register the sitemap builders
+#if !FluentDemo
             container.RegisterSingle<ISiteMapBuilder>(() => container.GetInstance<SiteMapBuilderFactory>()
                 .Create(new CompositeSiteMapNodeProvider(container.GetInstance<XmlSiteMapNodeProvider>(), container.GetInstance<ReflectionSiteMapNodeProvider>())));
+#else
+            container.RegisterSingle<ISiteMapBuilder>(() => container.GetInstance<SiteMapBuilderFactory>()
+                .Create(new CompositeSiteMapNodeProvider(container.GetInstance<StoreFluentSiteMapProvider>(), container.GetInstance<ReflectionSiteMapNodeProvider>())));
+#endif
 
             container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container, securityTrimmingEnabled, enableLocalization));
             container.RegisterSingle<ISiteMapBuilderSetStrategy>(() => new SiteMapBuilderSetStrategy(container.GetAllInstances<ISiteMapBuilderSet>().ToArray()));

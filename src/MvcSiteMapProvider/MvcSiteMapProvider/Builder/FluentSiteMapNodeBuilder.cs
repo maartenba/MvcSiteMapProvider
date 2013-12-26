@@ -12,6 +12,7 @@ namespace MvcSiteMapProvider.Builder
         private readonly IFluentFactory _fluentFactory;
         private readonly ISiteMapNodeHelper _siteMapNodeHelper;
         private readonly IList<IFluentSiteMapNodeBuilder> _children = new List<IFluentSiteMapNodeBuilder>();
+        private readonly IDictionary<string, object> _additionalAttributes = new Dictionary<string, object>(); 
         private string _area;
         private string _controller;
         private string _action;
@@ -43,7 +44,7 @@ namespace MvcSiteMapProvider.Builder
 
         public FluentSiteMapNodeBuilder(IFluentFactory fluentFactory, ISiteMapNodeHelper siteMapNodeHelper)
         {
-            if(_siteMapNodeHelper == null)
+            if (siteMapNodeHelper == null)
                 throw new ArgumentNullException("siteMapNodeHelper");
             if (fluentFactory == null)
                 throw new ArgumentNullException("fluentFactory");
@@ -64,6 +65,15 @@ namespace MvcSiteMapProvider.Builder
         }
 
         public IList<IFluentSiteMapNodeBuilder> Children { get { return _children; } }
+
+        public IFluentSiteMapNodeBuilder Attribute(string key, object value)
+        {
+            if (_additionalAttributes.ContainsKey(key))
+                _additionalAttributes[key] = value;
+            else
+                _additionalAttributes.Add(key, value);
+            return this;
+        }
 
         public IFluentSiteMapNodeBuilder Area(string value)
         {
@@ -391,9 +401,6 @@ namespace MvcSiteMapProvider.Builder
             if (_route != null)
                 node.Attributes.Add(new KeyValuePair<string, object>("route", _route));
 
-            if (_lastModifiedDate.HasValue)
-                node.Attributes.Add(new KeyValuePair<string, object>("lastModifiedDate", _lastModifiedDate.Value.ToString()));
-
             if (_preservedRouteParameters != null)
                 node.Attributes.Add(new KeyValuePair<string, object>("preservedRouteParameters", string.Join(",", _preservedRouteParameters)));
 
@@ -402,6 +409,13 @@ namespace MvcSiteMapProvider.Builder
 
             if (_inheritedRouteParameters != null)
                 node.Attributes.Add(new KeyValuePair<string, object>("inheritedRouteParameters", string.Join(",", _inheritedRouteParameters)));
+
+            foreach (var additionalAttribute in _additionalAttributes)
+            {
+                if(node.Attributes.ContainsKey(additionalAttribute.Key))
+                    throw new InvalidOperationException(string.Format("An attempt was made to set attribute {0} manually, but it is already defined internally.", additionalAttribute.Key));
+                node.Attributes.Add(additionalAttribute);
+            }
         }
     }
 }

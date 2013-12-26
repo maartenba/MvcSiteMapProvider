@@ -15,6 +15,8 @@ namespace MvcSiteMapProvider.Builder
 
         IList<IFluentSiteMapNodeBuilder> Children { get; }
 
+        IFluentSiteMapNodeBuilder Attribute(string key, object value);
+
         IFluentSiteMapNodeBuilder Area(string value);
 
         IFluentSiteMapNodeBuilder Controller(string value);
