@@ -63,7 +63,11 @@ namespace DI.SimpleInjector
 
                     // Added 2013-11-11 by NightOwl888 for SimpleInjector.Verify method:
                     typeof(SiteMapNodeCreator),
-                    typeof(DynamicSiteMapNodeBuilder)
+                    typeof(DynamicSiteMapNodeBuilder),
+
+                    // Added 2013-12-26 by theonlylawislove for fluent sitemapnode building
+                    typeof(FluentSiteMapNodeBuilder),
+                    typeof(FluentSiteMapNodeFactory)
                 };
             var multipleImplementationTypes = new Type[]
                 {
