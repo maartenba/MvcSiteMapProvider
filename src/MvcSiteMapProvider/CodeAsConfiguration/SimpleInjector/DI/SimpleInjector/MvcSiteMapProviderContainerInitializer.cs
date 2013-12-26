@@ -1,4 +1,5 @@
-﻿#define FluentDemo
+﻿// uncomment this to demonstrace the fluent api demo using StoreFluentSiteMapProvider
+//#define FluentDemo
 using System;
 using System.Collections.Generic;
 using System.Linq;
