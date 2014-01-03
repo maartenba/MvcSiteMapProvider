@@ -97,6 +97,7 @@ namespace MvcSiteMapProvider.DI
                         "default", 
                         settings.SecurityTrimmingEnabled, 
                         settings.EnableLocalization,
+                        settings.VisibilityAffectsDescendants,
                         this.ResolveSiteMapBuilder(settings),
                         this.ResolveCacheDetails(settings)
                         )

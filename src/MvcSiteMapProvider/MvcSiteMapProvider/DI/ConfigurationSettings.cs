@@ -30,6 +30,7 @@ namespace MvcSiteMapProvider.DI
             this.DefaultSiteMapNodeVisibiltyProvider = GetConfigurationValueOrFallback("MvcSiteMapProvider_DefaultSiteMapNodeVisibiltyProvider", String.Empty);
             this.EnableLocalization = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableLocalization", "true"));
             this.SecurityTrimmingEnabled = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_SecurityTrimmingEnabled", "false"));
+            this.VisibilityAffectsDescendants = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_VisibilityAffectsDescendants", "false"));
             this.EnableSitemapsXml = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSitemapsXml", "true"));
             this.EnableResolvedUrlCaching = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableResolvedUrlCaching", "true"));
         }
@@ -48,6 +49,7 @@ namespace MvcSiteMapProvider.DI
         public string DefaultSiteMapNodeVisibiltyProvider { get; private set; }
         public bool EnableLocalization { get; private set; }
         public bool SecurityTrimmingEnabled { get; private set; }
+        public bool VisibilityAffectsDescendants { get; private set; }
         public bool EnableSitemapsXml { get; private set; }
         public bool EnableResolvedUrlCaching { get; private set; }
 

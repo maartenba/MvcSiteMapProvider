@@ -193,7 +193,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                     {
                         throw new UnknownSiteMapException(Resources.Messages.UnknownSiteMap);
                     }
-                    visibilityAffectsDescendants = false;// siteMap.VisibilityAffectsDescendants;
+                    visibilityAffectsDescendants = siteMap.VisibilityAffectsDescendants;
                     RootNode = siteMap.RootNode;
                     foreach (var item in FlattenHierarchy(this.RootNode, context))
                     {
@@ -203,7 +203,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
             else
             {
-                visibilityAffectsDescendants = false; //siteMapLoader.GetSiteMap().VisibilityAffectsDescendants;
+                visibilityAffectsDescendants = siteMapLoader.GetSiteMap().VisibilityAffectsDescendants;
                 foreach (var item in FlattenHierarchy(this.RootNode, context))
                 {
                     flattenedHierarchy.Add(item);
