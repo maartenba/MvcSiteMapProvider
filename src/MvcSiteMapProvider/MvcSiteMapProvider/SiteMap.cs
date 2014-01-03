@@ -585,6 +585,14 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
+        /// Gets a Boolean value indicating whether the visibility property of the current node
+        /// will affect the descendant nodes.
+        /// </summary>
+        public bool VisibilityAffectsDescendants {
+            get { return this.siteMapSettings.VisibilityAffectsDescendants; }
+        }
+
+        /// <summary>
         /// Resolves the controller type based on the current SiteMap instance.
         /// </summary>
         /// <remarks>There is 1 instance of controller type resolver per site map.</remarks>
