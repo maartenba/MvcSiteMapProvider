@@ -46,6 +46,15 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected readonly List<string> duplicateUrlCheck = new List<string>();
 
         /// <summary>
+        /// Gets or sets a value indicating whether the visibility property of the current node
+        /// will affect the descendant nodes.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if visibility should affect descendants; otherwise, <c>false</c>.
+        /// </value>
+        private bool visibilityAffectsDescendants;
+
+        /// <summary>
         /// Maximal number of links per sitemap file.
         /// </summary>
         /// <remarks>
@@ -147,7 +156,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             var urlSet = new XElement(Ns + "urlset");
             urlSet.Add(GenerateUrlElements(
                 context,
-                flattenedHierarchy.Skip((page - 1)* MaxNumberOfLinksPerFile)
+                flattenedHierarchy.Skip((page - 1) * MaxNumberOfLinksPerFile)
                     .Take(MaxNumberOfLinksPerFile), BaseUrl).ToArray());
 
             // Generate sitemap
@@ -175,7 +184,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             var flattenedHierarchy = new HashSet<ISiteMapNode>();
 
             // Flatten link hierarchy
-            if (SiteMapCacheKeys.Count() > 0)
+            if (SiteMapCacheKeys.Any())
             {
                 foreach (var key in SiteMapCacheKeys)
                 {
@@ -184,8 +193,9 @@ namespace MvcSiteMapProvider.Web.Mvc
                     {
                         throw new UnknownSiteMapException(Resources.Messages.UnknownSiteMap);
                     }
-
-                    foreach (var item in FlattenHierarchy(siteMap.RootNode, context))
+                    visibilityAffectsDescendants = false;// siteMap.VisibilityAffectsDescendants;
+                    RootNode = siteMap.RootNode;
+                    foreach (var item in FlattenHierarchy(this.RootNode, context))
                     {
                         flattenedHierarchy.Add(item);
                     }
@@ -193,6 +203,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
             else
             {
+                visibilityAffectsDescendants = false; //siteMapLoader.GetSiteMap().VisibilityAffectsDescendants;
                 foreach (var item in FlattenHierarchy(this.RootNode, context))
                 {
                     flattenedHierarchy.Add(item);
@@ -285,7 +296,7 @@ namespace MvcSiteMapProvider.Web.Mvc
                 {
                     yield return startingNode;
                 }
-                if (startingNode.HasChildNodes)
+                if (startingNode.HasChildNodes && ChildNodesAreAllowedToBeVisible(startingNode))
                 {
                     // Make sure all child nodes are accessible prior to rendering them...
                     foreach (ISiteMapNode node in startingNode.ChildNodes)
@@ -297,6 +308,22 @@ namespace MvcSiteMapProvider.Web.Mvc
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks the rules to determine if the childnodes can be visible in the sitemap
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns><b>true</b> if the childnodes can be visible; otherwise <b>false</b></returns>
+        protected bool ChildNodesAreAllowedToBeVisible(ISiteMapNode node)
+        {
+            if (!visibilityAffectsDescendants)
+                return true;
+
+            if (node == RootNode)
+                node.IsVisible(SourceMetadata);
+
+            return node.ParentNode.IsVisible(SourceMetadata);
         }
 
         /// <summary>
