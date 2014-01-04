@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcSiteMapProvider.Text;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Collections.Specialized;
@@ -772,6 +773,8 @@ namespace MvcSiteMapProvider
         protected virtual void AssertSiteMapNodeConfigurationIsValid(ISiteMapNode node)
         {
             ThrowIfTitleNotSet(node);
+            ThrowIfControllerNameInvalid(node);
+            ThrowIfAreaNameInvalid(node);
             ThrowIfActionAndUrlNotSet(node);
             ThrowIfHttpMethodInvalid(node);
             ThrowIfRouteValueIsPreservedRouteParameter(node);
@@ -815,6 +818,28 @@ namespace MvcSiteMapProvider
             {
                 var allowedVerbs = String.Join(Environment.NewLine, Enum.GetNames(typeof(HttpVerbs))) + Environment.NewLine + "Request" + Environment.NewLine + "*";
                 throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeHttpMethodInvalid, node.Key, node.Title, node.HttpMethod, allowedVerbs));
+            }
+        }
+
+        protected virtual void ThrowIfControllerNameInvalid(ISiteMapNode node)
+        {
+            if (!String.IsNullOrEmpty(node.Controller))
+            {
+                if (!node.Controller.IsValidIdentifier() || node.Controller.EndsWith("Controller"))
+                {
+                    throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeControllerNameInvalid, node.Key, node.Title, node.Controller));
+                }
+            }
+        }
+
+        protected virtual void ThrowIfAreaNameInvalid(ISiteMapNode node)
+        {
+            if (!String.IsNullOrEmpty(node.Area))
+            {
+                if (!node.Area.IsValidIdentifier())
+                {
+                    throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeAreaNameInvalid, node.Key, node.Title, node.Area));
+                }
             }
         }
 

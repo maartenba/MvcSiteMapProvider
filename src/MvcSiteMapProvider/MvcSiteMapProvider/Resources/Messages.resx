@@ -341,4 +341,18 @@ The available values for HttpMethod are:
 
 {3}</value>
   </data>
+  <data name="SiteMapNodeAreaNameInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' does not have a valid value for Area. The current value is '{2}'. The Area field must be a valid C# identifier or be set to an empty string to indicate a non-area controller.
+
+A C# identifier must start with a Unicode letter, underscore, or ampersand and may be followed by zero or more Unicode letters, digits, or underscores.
+
+Please use the same value that is returned from the AreaName property of your AreaRegistration class.</value>
+  </data>
+  <data name="SiteMapNodeControllerNameInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' does not have a valid value for Controller. The current value is '{2}'. The Controller field must be a valid C# identifier and not end with the suffix 'Controller'. 
+
+A C# identifier must start with a Unicode letter, underscore, or ampersand and may be followed by zero or more Unicode letters, digits, or underscores.
+
+If you are attempting to add an area to the controller field, do note that the 'AreaName/ControllerName' syntax is not supported by MvcSiteMapProvider. To set the area, use the 'Area' property or 'area' attribute.</value>
+  </data>
 </root>
