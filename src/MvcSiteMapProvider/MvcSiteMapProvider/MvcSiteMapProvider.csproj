@@ -199,6 +199,7 @@
     <Compile Include="Reflection\PluginInstantiator.cs" />
     <Compile Include="DI\SiteMapFactoryContainer.cs" />
     <Compile Include="DI\SiteMapNodeFactoryContainer.cs" />
+    <Compile Include="Text\StringExtensions.cs" />
     <Compile Include="TrimEmptyGroupingNodesVisibilityProvider.cs" />
     <Compile Include="Visitor\NullSiteMapNodeVisitor.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
