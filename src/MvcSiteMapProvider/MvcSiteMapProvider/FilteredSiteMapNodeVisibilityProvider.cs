@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 
 namespace MvcSiteMapProvider
@@ -40,17 +41,20 @@ namespace MvcSiteMapProvider
             {
                 return true;
             }
-            string htmlHelper = sourceMetadata["HtmlHelper"].ToString();
+            string name = Convert.ToString(sourceMetadata["name"]);
+            string htmlHelper = Convert.ToString(sourceMetadata["HtmlHelper"]);
             htmlHelper = htmlHelper.Substring(htmlHelper.LastIndexOf(".") + 1);
 
+            var visibilityKeywords = visibility.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+
             // All set. Now parse the visibility variable.
-            foreach (string visibilityKeyword in visibility.Split(new[] { ',', ';' }))
+            foreach (string visibilityKeyword in visibilityKeywords)
             {
-                if (visibilityKeyword == htmlHelper || visibilityKeyword == "*")
+                if (visibilityKeyword == htmlHelper || visibilityKeyword == name || visibilityKeyword == "*")
                 {
                     return true;
                 }
-                else if (visibilityKeyword == "!" + htmlHelper || visibilityKeyword == "!*")
+                else if (visibilityKeyword == "!" + htmlHelper || visibilityKeyword == "!" + name || visibilityKeyword == "!*")
                 {
                     return false;
                 }
