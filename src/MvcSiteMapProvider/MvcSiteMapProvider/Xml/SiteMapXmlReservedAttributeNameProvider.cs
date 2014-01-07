@@ -36,8 +36,9 @@ namespace MvcSiteMapProvider.Xml
         public virtual bool IsRouteAttribute(string attributeName)
         {
             return !this.IsKnownAttribute(attributeName)
-               && !attributesToIgnore.Contains(attributeName)
-               && !attributeName.StartsWith("data-");
+                && attributeName != "visibility"
+                && !attributesToIgnore.Contains(attributeName)
+                && !attributeName.StartsWith("data-");
         }
 
         #endregion
@@ -45,29 +46,28 @@ namespace MvcSiteMapProvider.Xml
         protected virtual bool IsKnownAttribute(string attributeName)
         {
             return attributeName == "title"
-               || attributeName == "description"
-               || attributeName == "resourceKey"
-               || attributeName == "key"
-               || attributeName == "roles"
-               || attributeName == "route"
-               || attributeName == "url"
-               || attributeName == "cacheResolvedUrl"
-               || attributeName == "clickable"
-               || attributeName == "httpMethod"
-               || attributeName == "dynamicNodeProvider"
-               || attributeName == "urlResolver"
-               || attributeName == "visibilityProvider"
-               || attributeName == "visibility"
-               || attributeName == "lastModifiedDate"
-               || attributeName == "changeFrequency"
-               || attributeName == "updatePriority"
-               || attributeName == "targetFrame"
-               || attributeName == "imageUrl"
-               || attributeName == "inheritedRouteParameters"
-               || attributeName == "preservedRouteParameters"
-               || attributeName == "canonicalUrl"
-               || attributeName == "canonicalKey"
-               || attributeName == "metaRobotsValues";
+                || attributeName == "description"
+                || attributeName == "resourceKey"
+                || attributeName == "key"
+                || attributeName == "roles"
+                || attributeName == "route"
+                || attributeName == "url"
+                || attributeName == "cacheResolvedUrl"
+                || attributeName == "clickable"
+                || attributeName == "httpMethod"
+                || attributeName == "dynamicNodeProvider"
+                || attributeName == "urlResolver"
+                || attributeName == "visibilityProvider"
+                || attributeName == "lastModifiedDate"
+                || attributeName == "changeFrequency"
+                || attributeName == "updatePriority"
+                || attributeName == "targetFrame"
+                || attributeName == "imageUrl"
+                || attributeName == "inheritedRouteParameters"
+                || attributeName == "preservedRouteParameters"
+                || attributeName == "canonicalUrl"
+                || attributeName == "canonicalKey"
+                || attributeName == "metaRobotsValues";
         }
     }
 }
