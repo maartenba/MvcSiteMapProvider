@@ -14,6 +14,7 @@ namespace MvcSiteMapProvider
     {
         public SiteMapChildStateFactory(
             IGenericDictionaryFactory genericDictionaryFactory,
+            IGenericDictionaryFactory genericDictionaryFactoryForUrlKey,
             ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory
             )
         {
@@ -23,10 +24,20 @@ namespace MvcSiteMapProvider
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
 
             this.genericDictionaryFactory = genericDictionaryFactory;
+            this.genericDictionaryFactoryForUrlKey = genericDictionaryFactoryForUrlKey ?? genericDictionaryFactoryForUrlKey;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
         }
 
+        public SiteMapChildStateFactory(
+            IGenericDictionaryFactory genericDictionaryFactory,
+            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory
+            )
+            : this(genericDictionaryFactory, genericDictionaryFactory, siteMapNodeCollectionFactory)
+        {
+        }
+
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
+        protected readonly IGenericDictionaryFactory genericDictionaryFactoryForUrlKey;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
 
         #region ISiteMapChildStateFactory Members
@@ -34,6 +45,11 @@ namespace MvcSiteMapProvider
         public IDictionary<TKey, TValue> CreateGenericDictionary<TKey, TValue>()
         {
             return genericDictionaryFactory.Create<TKey, TValue>();
+        }
+
+        public IDictionary<TKey, TValue> CreateGenericDictionaryForUrlKey<TKey, TValue>()
+        {
+            return genericDictionaryFactoryForUrlKey.Create<TKey, TValue>();
         }
 
         public ISiteMapNodeCollection CreateSiteMapNodeCollection()

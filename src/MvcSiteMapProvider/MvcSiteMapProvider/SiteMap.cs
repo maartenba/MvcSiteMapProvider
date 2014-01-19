@@ -51,7 +51,7 @@ namespace MvcSiteMapProvider
             this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
             this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
             this.parentNodeTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNode>();
-            this.urlTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
+            this.urlTable = siteMapChildStateFactory.CreateGenericDictionaryForUrlKey<string, ISiteMapNode>();
         }
 
         // Services

@@ -74,6 +74,7 @@ namespace MvcSiteMapProvider.DI
         {
             return new SiteMapChildStateFactory(
                 new GenericDictionaryFactory(),
+                this.settings.UrlIgnoreCase ? new GenericIgnoreCaseDictionaryFactory() : null,
                 new SiteMapNodeCollectionFactory()
                 );
         }
