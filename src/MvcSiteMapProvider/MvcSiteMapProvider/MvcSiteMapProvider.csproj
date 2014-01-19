@@ -171,6 +171,7 @@
     <Compile Include="Caching\SiteMapCacheKeyGenerator.cs" />
     <Compile Include="Caching\SiteMapCacheKeyToBuilderSetMapper.cs" />
     <Compile Include="ChangeFrequency.cs" />
+    <Compile Include="Collections\GenericIgnoreCaseDictionaryFactory.cs" />
     <Compile Include="Collections\GenericDictionaryFactory.cs" />
     <Compile Include="Collections\IGenericDictionaryFactory.cs" />
     <Compile Include="Collections\IThreadSafeDictionary.cs" />

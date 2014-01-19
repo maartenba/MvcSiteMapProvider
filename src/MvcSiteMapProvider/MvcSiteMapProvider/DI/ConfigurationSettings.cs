@@ -32,6 +32,7 @@ namespace MvcSiteMapProvider.DI
             this.SecurityTrimmingEnabled = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_SecurityTrimmingEnabled", "false"));
             this.EnableSitemapsXml = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSitemapsXml", "true"));
             this.EnableResolvedUrlCaching = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableResolvedUrlCaching", "true"));
+            this.UrlIgnoreCase = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_UrlIgnoreCase", "false"));
         }
 
         public bool UseExternalDIContainer { get; private set; }
@@ -50,6 +51,7 @@ namespace MvcSiteMapProvider.DI
         public bool SecurityTrimmingEnabled { get; private set; }
         public bool EnableSitemapsXml { get; private set; }
         public bool EnableResolvedUrlCaching { get; private set; }
+        public bool UrlIgnoreCase { get; private set; }
 
 
         private string GetConfigurationValueOrFallback(string name, string defaultValue)
