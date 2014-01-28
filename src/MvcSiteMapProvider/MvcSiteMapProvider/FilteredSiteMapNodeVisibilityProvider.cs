@@ -36,15 +36,28 @@ namespace MvcSiteMapProvider
             }
             visibility = visibility.Trim();
 
-            // Check for the source HtmlHelper
-            if (sourceMetadata["HtmlHelper"] == null)
+            string name = string.Empty;
+            string htmlHelper = string.Empty;
+            if (sourceMetadata.ContainsKey("name"))
+            {
+                name = Convert.ToString(sourceMetadata["name"]);
+            }
+            if (sourceMetadata.ContainsKey("HtmlHelper"))
+            {
+                htmlHelper = Convert.ToString(sourceMetadata["HtmlHelper"]);
+            }
+
+            // Check for the source HtmlHelper or given name. If neither are configured,
+            // then always visible.
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(htmlHelper))
             {
                 return true;
             }
-            string name = Convert.ToString(sourceMetadata["name"]);
-            string htmlHelper = Convert.ToString(sourceMetadata["HtmlHelper"]);
+
+            // Chop off the namespace
             htmlHelper = htmlHelper.Substring(htmlHelper.LastIndexOf(".") + 1);
 
+            // Get the keywords
             var visibilityKeywords = visibility.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             // All set. Now parse the visibility variable.
