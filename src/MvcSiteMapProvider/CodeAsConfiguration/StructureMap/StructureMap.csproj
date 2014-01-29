@@ -80,8 +80,6 @@
     <Compile Include="..\Shared\DI\IDependencyInjectionContainer.cs">
       <Link>DI\IDependencyInjectionContainer.cs</Link>
     </Compile>
-    <Compile Include="DI\StructureMap\Conventions\SingletonConvention.cs" />
-    <Compile Include="DI\StructureMap\Conventions\TransientConvention.cs" />
     <Compile Include="App_Start\CompositionRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DI\StructureMap\Registries\MvcSiteMapProviderRegistry.cs" />
