@@ -10,9 +10,11 @@ namespace MvcSiteMapProvider.Web.Script.Serialization
     /// </summary>
     public interface IJavaScriptSerializer
     {
+#if !NET35
         object ConvertToType(object obj, Type targetType);
-        T Deserialize<T>(string input);
         object Deserialize(string input, Type targetType);
+#endif
+        T Deserialize<T>(string input);
         object DeserializeObject(string input);
         void RegisterConverters(IEnumerable<JavaScriptConverter> converters);
         string Serialize(object obj);
