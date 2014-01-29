@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Linq;
@@ -231,7 +232,7 @@ namespace MvcSiteMapProvider.Builder
             this.AcquireMetaRobotsValuesFrom(node, siteMapNode.MetaRobotsValues);
             siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValueOrFallback("changeFrequency", "Undefined"));
             siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValueOrFallback("updatePriority", "Undefined"));
-            siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()));
+            siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()), CultureInfo.InvariantCulture);
             siteMapNode.Order = int.Parse(node.GetAttributeValueOrFallback("order", "0"));
 
             // Handle route details
