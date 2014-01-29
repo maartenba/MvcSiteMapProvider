@@ -62,13 +62,13 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual IUrlHelper CreateUrlHelper(RequestContext requestContext)
         {
-            return new UrlHelperAdaptor(requestContext);
+            return new UrlHelperAdapter(requestContext);
         }
 
         public virtual IUrlHelper CreateUrlHelper()
         {
             var requestContext = this.CreateRequestContext();
-            return new UrlHelperAdaptor(requestContext);
+            return new UrlHelperAdapter(requestContext);
         }
 
         public virtual AuthorizationContext CreateAuthorizationContext(ControllerContext controllerContext, ActionDescriptor actionDescriptor)

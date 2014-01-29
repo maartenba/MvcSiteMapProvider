@@ -5,15 +5,14 @@ using System.Web.Mvc;
 namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
-    /// Adaptor class so test doubles can be injected for <see cref="T:System.Web.Mvc.ControllerBuilder"/>.
+    /// Adapter class so test doubles can be injected for <see cref="T:System.Web.Mvc.ControllerBuilder"/>.
     /// </summary>
-    [Obsolete("Please use the ControllerBuilderAdapter (spelled with an e) instead. This class will be removed in version 5.")]
-    public class ControllerBuilderAdaptor
+    public class ControllerBuilderAdapter
         : IControllerBuilder
     {
-        public ControllerBuilderAdaptor(
+        public ControllerBuilderAdapter(
             ControllerBuilder controllerBuilder
-            ) 
+            )
         {
             if (controllerBuilder == null)
                 throw new ArgumentNullException("controllerBuilder");

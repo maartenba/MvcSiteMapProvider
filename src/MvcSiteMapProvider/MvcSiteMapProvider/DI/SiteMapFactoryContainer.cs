@@ -61,7 +61,7 @@ namespace MvcSiteMapProvider.DI
                 new AuthorizeAttributeAclModule(
                     this.mvcContextFactory,
                     new ControllerDescriptorFactory(),
-                    new ControllerBuilderAdaptor(ControllerBuilder.Current),
+                    new ControllerBuilderAdapter(ControllerBuilder.Current),
                     new GlobalFilterProvider()
 ),
                 new XmlRolesAclModule(
@@ -82,8 +82,8 @@ namespace MvcSiteMapProvider.DI
         {
             return new ControllerTypeResolverFactory(
                 settings.ControllerTypeResolverAreaNamespacesToIgnore,
-                new ControllerBuilderAdaptor(ControllerBuilder.Current),
-                new BuildManagerAdaptor()
+                new ControllerBuilderAdapter(ControllerBuilder.Current),
+                new BuildManagerAdapter()
                 );
         }
     }

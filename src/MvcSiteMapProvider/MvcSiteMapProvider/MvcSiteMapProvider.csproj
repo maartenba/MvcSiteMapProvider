@@ -203,6 +203,8 @@
     <Compile Include="Text\StringExtensions.cs" />
     <Compile Include="TrimEmptyGroupingNodesVisibilityProvider.cs" />
     <Compile Include="Visitor\NullSiteMapNodeVisitor.cs" />
+    <Compile Include="Web\Compilation\BuildManagerAdapter.cs" />
+    <Compile Include="Web\Mvc\ControllerBuilderAdapter.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Web\Mvc\Filters\Filter.cs" />
     <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="Web\Mvc\Filters\SiteMapCacheReleaseAttribute.cs" />
     <Compile Include="Web\Mvc\SiteMapHttpResponse.cs" />
     <Compile Include="Web\Mvc\SiteMapHttpResponseCache.cs" />
+    <Compile Include="Web\Mvc\UrlHelperAdapter.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\SiteMapXmlReservedAttributeNameProvider.cs" />
