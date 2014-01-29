@@ -15,6 +15,10 @@ internal class CompositionRoot
         // Setup configuration of DI
         container.Configure(r => r.AddRegistry<MvcSiteMapProviderRegistry>());
 
+#if DEBUG // preserve
+        container.AssertConfigurationIsValid();
+#endif // preserve
+
         // Return our DI container wrapper instance
         return new StructureMapDependencyInjectionContainer(container);
     }
