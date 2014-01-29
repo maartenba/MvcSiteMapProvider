@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Hosting;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Compilation;
-using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Web.UrlResolver;
-using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Reflection;
-using MvcSiteMapProvider.Visitor;
-using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Globalization;
 using Ninject;
 using Ninject.Modules;
-
+using MvcSiteMapProvider;
+using MvcSiteMapProvider.Builder;
+using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Visitor;
+using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.UrlResolver;
+using MvcSiteMapProvider.Xml;
 
 namespace DI.Ninject.Modules
 {
@@ -31,15 +25,29 @@ namespace DI.Ninject.Modules
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+#if Demo
+            string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
+#else
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
+#endif
 
             var currentAssembly = this.GetType().Assembly;
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
             var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
             var excludeTypes = new Type[] { 
-                typeof(SiteMapNodeVisibilityProviderStrategy),
-                typeof(SiteMapXmlReservedAttributeNameProvider),
-                typeof(SiteMapBuilderSetStrategy)
+                    // Use this array to add types you wish to explicitly exclude from convention-based  
+                    // auto-registration. By default all types that either match I[TypeName] = [TypeName] or 
+                    // I[TypeName] = [TypeName]Adapter will be automatically wired up as long as they don't 
+                    // have the [ExcludeFromAutoRegistrationAttribute].
+                    //
+                    // If you want to override a type that follows the convention and doesn't have the 
+                    // [ExcludeFromAutoRegistrationAttribute], you should add the name of either the type name 
+                    // or the interface that it inherits to this list and add your manual registration code below. 
+                    // This will prevent duplicate registrations of the types from occurring. 
+
+                    // Example:
+                    // typeof(SiteMap),
+                    // typeof(SiteMapNodeVisibilityProviderStrategy)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -47,7 +55,8 @@ namespace DI.Ninject.Modules
                 typeof(IDynamicNodeProvider) 
             };
 
-            // Single implementations of interface with matching name (minus the "I").
+            // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
+            // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
             CommonConventions.RegisterDefaultConventions(
                 (interfaceType, implementationType) => this.Kernel.Bind(interfaceType).To(implementationType).InSingletonScope(),
                 new Assembly[] { siteMapProviderAssembly },
@@ -55,20 +64,21 @@ namespace DI.Ninject.Modules
                 excludeTypes,
                 string.Empty);
 
-            // Multiple implementations of strategy based extension points
+            // Multiple implementations of strategy based extension points (and not decorated with [ExcludeFromAutoRegistrationAttribute]).
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => this.Kernel.Bind(interfaceType).To(implementationType).InSingletonScope(),
                 multipleImplementationTypes,
                 allAssemblies,
                 excludeTypes,
-                "^Composite");
+                string.Empty);
 
             this.Kernel.Bind<ISiteMapNodeVisibilityProviderStrategy>().To<SiteMapNodeVisibilityProviderStrategy>()
                 .WithConstructorArgument("defaultProviderName", string.Empty);
 
             this.Kernel.Bind<ControllerBuilder>().ToConstant(ControllerBuilder.Current);
-            this.Kernel.Bind<IControllerBuilder>().To<ControllerBuilderAdaptor>();
-            this.Kernel.Bind<IBuildManager>().To<BuildManagerAdaptor>();
+
+            this.Kernel.Bind<IControllerTypeResolverFactory>().To<ControllerTypeResolverFactory>()
+                .WithConstructorArgument("areaNamespacesToIgnore", new string[0]);
 
             // Configure Security
             this.Kernel.Bind<AuthorizeAttributeAclModule>().ToSelf();

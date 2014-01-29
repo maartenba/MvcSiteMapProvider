@@ -3,21 +3,16 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Hosting;
 using System.Reflection;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Compilation;
-using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Web.UrlResolver;
-using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Reflection;
-using MvcSiteMapProvider.Visitor;
-using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Globalization;
 using StructureMap.Configuration.DSL;
 using StructureMap.Pipeline;
-using DI.StructureMap.Conventions;
+using MvcSiteMapProvider;
+using MvcSiteMapProvider.Builder;
+using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Visitor;
+using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.UrlResolver;
+using MvcSiteMapProvider.Xml;
 
 namespace DI.StructureMap.Registries
 {
@@ -30,16 +25,29 @@ namespace DI.StructureMap.Registries
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+#if Demo
+            string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
+#else
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
+#endif
 
             var currentAssembly = this.GetType().Assembly;
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
             var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
             var excludeTypes = new Type[] { 
-                typeof(SiteMapNodeVisibilityProviderStrategy),
-                typeof(SiteMapXmlReservedAttributeNameProvider),
-                typeof(SiteMapBuilderSetStrategy),
-                typeof(ControllerTypeResolverFactory)
+                    // Use this array to add types you wish to explicitly exclude from convention-based  
+                    // auto-registration. By default all types that either match I[TypeName] = [TypeName] or 
+                    // I[TypeName] = [TypeName]Adapter will be automatically wired up as long as they don't 
+                    // have the [ExcludeFromAutoRegistrationAttribute].
+                    //
+                    // If you want to override a type that follows the convention and doesn't have the 
+                    // [ExcludeFromAutoRegistrationAttribute], you should add the name of either the type name 
+                    // or the interface that it inherits to this list and add your manual registration code below. 
+                    // This will prevent duplicate registrations of the types from occurring. 
+
+                    // Example:
+                    // typeof(SiteMap),
+                    // typeof(SiteMapNodeVisibilityProviderStrategy)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -47,7 +55,8 @@ namespace DI.StructureMap.Registries
                 typeof(IDynamicNodeProvider) 
             };
 
-            // Single implementations of interface with matching name (minus the "I").
+            // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
+            // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
             CommonConventions.RegisterDefaultConventions(
                 (interfaceType, implementationType) => this.For(interfaceType).Singleton().Use(implementationType),
                 new Assembly[] { siteMapProviderAssembly },
@@ -55,13 +64,13 @@ namespace DI.StructureMap.Registries
                 excludeTypes,
                 string.Empty);
 
-            // Multiple implementations of strategy based extension points
+            // Multiple implementations of strategy based extension points (and not decorated with [ExcludeFromAutoRegistrationAttribute]).
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => this.For(interfaceType).Singleton().Use(implementationType),
                 multipleImplementationTypes,
                 allAssemblies,
                 excludeTypes,
-                "^Composite");
+                string.Empty);
 
             // Visibility Providers
             this.For<ISiteMapNodeVisibilityProviderStrategy>().Use<SiteMapNodeVisibilityProviderStrategy>()
@@ -70,12 +79,6 @@ namespace DI.StructureMap.Registries
             // Pass in the global controllerBuilder reference
             this.For<ControllerBuilder>()
                 .Use(x => ControllerBuilder.Current);
-
-            this.For<IControllerBuilder>()
-                .Use<ControllerBuilderAdaptor>();
-
-            this.For<IBuildManager>()
-                .Use<BuildManagerAdaptor>();
 
             this.For<IControllerTypeResolverFactory>().Use<ControllerTypeResolverFactory>()
                 .Ctor<string[]>("areaNamespacesToIgnore").Is(new string[0]);
