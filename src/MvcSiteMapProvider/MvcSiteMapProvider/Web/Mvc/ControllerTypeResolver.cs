@@ -5,15 +5,17 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcSiteMapProvider.Web.Compilation;
 using MvcSiteMapProvider.Collections;
+using MvcSiteMapProvider.DI;
+using MvcSiteMapProvider.Web.Compilation;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
 	/// <summary>
 	/// ControllerTypeResolver class
 	/// </summary>
-	public class ControllerTypeResolver
+	[ExcludeFromAutoRegistration]
+    public class ControllerTypeResolver
 		: IControllerTypeResolver
 	{
 		public ControllerTypeResolver(

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Visitor;
 
 namespace MvcSiteMapProvider.Builder
@@ -11,6 +12,7 @@ namespace MvcSiteMapProvider.Builder
     /// based on a <see cref="T:MvcSiteMapProvider.ISiteMapNodeProvider"/> and then runs a <see cref="T:MvcSiteMapProvider.Visitor.ISiteMapNodeVisitor"/>
     /// to optimize the nodes.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class SiteMapBuilder
         : ISiteMapBuilder
     {

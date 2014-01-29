@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// A set of services useful for creating SiteMap nodes.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class SiteMapNodeCreator
         : ISiteMapNodeCreator
     {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {
@@ -10,6 +11,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// Specialized dictionary for providing business logic that manages
     /// the behavior of the route values.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class RouteValueDictionary
         : CacheableDictionary<string, object>, IRouteValueDictionary
     {

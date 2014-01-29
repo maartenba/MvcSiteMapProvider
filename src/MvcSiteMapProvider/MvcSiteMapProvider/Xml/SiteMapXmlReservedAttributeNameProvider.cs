@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Xml
 {
@@ -8,6 +9,7 @@ namespace MvcSiteMapProvider.Xml
     /// Provides information whether a given XML attribute name is a reserved name or it is
     /// safe to use the attribute in a SiteMapNode.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class SiteMapXmlReservedAttributeNameProvider
         : ISiteMapXmlReservedAttributeNameProvider
     {

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Collections.Generic;
 using System.Web.Routing;
+using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Web.Compilation;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -10,6 +11,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Web.Mvc.ControllerTypeResolver"/>
     /// at runtime.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class ControllerTypeResolverFactory
         : IControllerTypeResolverFactory
     {

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
-    /// Creates nodes with a map to their parent node dynamically based on an implemenation of <see cref="T:MvcSiteMapProvider.IDynamicNodeProvider"/>.
+    /// Creates nodes with a map to their parent node dynamically based on an implementation of <see cref="T:MvcSiteMapProvider.IDynamicNodeProvider"/>.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class DynamicSiteMapNodeBuilder
         : IDynamicSiteMapNodeBuilder
     {

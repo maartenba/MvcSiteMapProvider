@@ -185,6 +185,7 @@
     <Compile Include="DI\ConfigurationSettings.cs" />
     <Compile Include="DI\ControllerFactoryDecorator.cs" />
     <Compile Include="DI\DependencyResolverDecorator.cs" />
+    <Compile Include="DI\ExcludeFromAutoRegistrationAttribute.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />

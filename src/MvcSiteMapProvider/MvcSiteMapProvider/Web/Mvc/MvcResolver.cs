@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
     /// Facade service that resolves MVC dependencies.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class MvcResolver
         : IMvcResolver
     {

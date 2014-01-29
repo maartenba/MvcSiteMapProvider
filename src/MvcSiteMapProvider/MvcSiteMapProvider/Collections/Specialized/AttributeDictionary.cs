@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Collections.Specialized
@@ -9,6 +10,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// A specialized dictionary that contains the business logic for handling the attributes collection including
     /// localization of custom attributes.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class AttributeDictionary
         : CacheableDictionary<string, object>, IAttributeDictionary
     {

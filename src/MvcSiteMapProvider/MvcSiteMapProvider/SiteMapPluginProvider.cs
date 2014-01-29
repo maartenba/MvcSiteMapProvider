@@ -1,13 +1,15 @@
 ﻿using System;
 using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// Provider for plugins used by <see cref="T:MvcSiteMapProvider.SiteMap"/>.
+    /// Provider for plug-ins used by <see cref="T:MvcSiteMapProvider.SiteMap"/>.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class SiteMapPluginProvider
         : ISiteMapPluginProvider
     {

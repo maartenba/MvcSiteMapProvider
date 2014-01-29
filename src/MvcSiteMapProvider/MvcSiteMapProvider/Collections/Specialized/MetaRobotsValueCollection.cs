@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {
@@ -87,6 +88,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// </list>
     /// Any use of a single value more than one time will be ignored.
     /// </remarks>
+    [ExcludeFromAutoRegistration]
     public class MetaRobotsValueCollection
         : LockableList<string>, IMetaRobotsValueCollection
     {

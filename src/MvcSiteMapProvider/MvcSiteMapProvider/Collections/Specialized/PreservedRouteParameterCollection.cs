@@ -1,4 +1,5 @@
 ﻿using System;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {
@@ -6,6 +7,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     /// Specialized string collection for providing business logic that manages
     /// the behavior of the preserved route parameters.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class PreservedRouteParameterCollection
         : LockableList<string>, IPreservedRouteParameterCollection
     {

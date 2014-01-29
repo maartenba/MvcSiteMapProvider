@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -8,6 +9,7 @@ namespace MvcSiteMapProvider.Builder
     /// Tracks all of the registered instances of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapBuilderSet"/> and 
     /// allows the caller to get a specific named instance of this interface at runtime.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class SiteMapBuilderSetStrategy
         : ISiteMapBuilderSetStrategy
     {

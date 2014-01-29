@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Text;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -16,9 +17,10 @@ namespace MvcSiteMapProvider
     /// between the child <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> nodes.
     /// </summary>
     /// <remarks>
-    /// This class was created by extracting the public intefaces of SiteMapProvider, 
+    /// This class was created by extracting the public interfaces of SiteMapProvider, 
     /// StaticSiteMapProvider, and MvcSiteMapProvider.DefaultSiteMapProvider.
     /// </remarks>
+    [ExcludeFromAutoRegistration]
     public class SiteMap
         : ISiteMap
     {

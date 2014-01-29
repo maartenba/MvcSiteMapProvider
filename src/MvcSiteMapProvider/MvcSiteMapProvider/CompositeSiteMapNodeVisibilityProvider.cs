@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider
 {
@@ -9,6 +10,7 @@ namespace MvcSiteMapProvider
     /// Chains together a group of ISiteMapNodeVisibilityProvider instances so that visibility logic 
     /// for different purposes can be kept in different providers, but still apply to a single node.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class CompositeSiteMapNodeVisibilityProvider
         : ISiteMapNodeVisibilityProvider
     {
