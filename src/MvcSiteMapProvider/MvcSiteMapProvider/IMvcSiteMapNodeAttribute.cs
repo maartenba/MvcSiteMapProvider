@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider
         string Key { get; set; }
 
         /// <summary>
-        /// SiteMap node route (autodetected by default)
+        /// SiteMap node route (auto-detected by default)
         /// </summary>
         string Route { get; set; }
 
@@ -89,10 +89,12 @@ namespace MvcSiteMapProvider
         int Order { get; set; }
 
         /// <summary>
-        /// Gets or sets the last modified date.
+        /// Gets or sets a string representation of the last modified date.
+        /// 
+        /// The value may be any date format supported by the invariant culture.
         /// </summary>
-        /// <value>The last modified date.</value>
-        DateTime LastModifiedDate { get; set; }
+        /// <value>A string representation of the last modified date. May be any date format that is supported by the invariant culture.</value>
+        string LastModifiedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the change frequency.
@@ -124,17 +126,16 @@ namespace MvcSiteMapProvider
         /// </summary>
         bool CacheResolvedUrl { get; set; }
 
-
         /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalKey. Only 1 canonical value is allowed.</remarks>
         string CanonicalUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
         string CanonicalKey { get; set; }
 
         /// <summary>
@@ -153,9 +154,13 @@ namespace MvcSiteMapProvider
 
         /// <summary>
         /// Gets or sets the attributes (optional).
+        /// 
+        /// The value must be a JSON string that represents a dictionary of key-value pairs. Example: @"{ ""key-1"": ""value-1""[, ""key-x"": ""value-x""] }". 
+        /// The value may be a string or primitive type (by leaving off the quotes).
         /// </summary>
-        /// <value>The attributes.</value>
-        IDictionary<string, object> Attributes { get; set; }
+        /// <value>A JSON string that represents a dictionary of key-value pairs. Example: @"{ ""key-1"": ""value-1""[, ""key-x"": ""value-x""] }". 
+        /// The value may be a string or primitive type (by leaving off the quotes).</value>
+        string Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the cache key this node is associated with.

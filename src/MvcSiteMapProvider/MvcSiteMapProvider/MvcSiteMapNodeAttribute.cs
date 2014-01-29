@@ -15,7 +15,6 @@ namespace MvcSiteMapProvider
         public MvcSiteMapNodeAttribute()
         {
             Clickable = true;
-            Attributes = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace MvcSiteMapProvider
         public string Key { get; set; }
 
         /// <summary>
-        /// SiteMap node route (autodetected by default)
+        /// SiteMap node route (auto-detected by default)
         /// </summary>
         public string Route { get; set; }
 
@@ -96,15 +95,17 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Gets or sets the sort order of this node relative to all other nodes.
         /// This value is used both for determining which order parent-child relationships are processed 
-        /// as well as for how the node is diplayed in the HTML helper controls.
+        /// as well as for how the node is displayed in the HTML helper controls.
         /// </summary>
         public int Order { get; set; }
 
         /// <summary>
-        /// Gets or sets the last modified date.
+        /// Gets or sets a string representation of the last modified date.
+        /// 
+        /// The value may be any date format supported by the invariant culture.
         /// </summary>
-        /// <value>The last modified date.</value>
-        public DateTime LastModifiedDate { get; set; }
+        /// <value>A string representation of the last modified date. May be any date format that is supported by the invariant culture.</value>
+        public string LastModifiedDate { get; set; }
 
         /// <summary>
         /// Gets or sets the change frequency.
@@ -136,17 +137,16 @@ namespace MvcSiteMapProvider
         /// </summary>
         public bool CacheResolvedUrl { get; set; }
 
-
         /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalKey. Only 1 canonical value is allowed.</remarks>
         public string CanonicalUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
         public string CanonicalKey { get; set; }
 
         /// <summary>
@@ -165,9 +165,13 @@ namespace MvcSiteMapProvider
 
         /// <summary>
         /// Gets or sets the attributes (optional).
+        /// 
+        /// The value must be a JSON string that represents a dictionary of key-value pairs. Example: @"{ ""key-1"": ""value-1""[, ""key-x"": ""value-x""] }". 
+        /// The value may be a string or primitive type (by leaving off the quotes).
         /// </summary>
-        /// <value>The attributes.</value>
-        public IDictionary<string, object> Attributes { get; set; }
+        /// <value>A JSON string that represents a dictionary of key-value pairs. Example: @"{ ""key-1"": ""value-1""[, ""key-x"": ""value-x""] }". 
+        /// The value may be a string or primitive type (by leaving off the quotes).</value>
+        public string Attributes { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the cache key this node is associated with

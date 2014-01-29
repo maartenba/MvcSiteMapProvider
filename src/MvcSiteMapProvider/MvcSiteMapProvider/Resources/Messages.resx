@@ -355,4 +355,9 @@ A C# identifier must start with a Unicode letter, underscore, or ampersand and m
 
 If you are attempting to add an area to the controller field, do note that the 'AreaName/ControllerName' syntax is not supported by MvcSiteMapProvider. To set the area, use the 'Area' property or 'area' attribute.</value>
   </data>
+  <data name="SiteMapNodeAttributesJsonInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' does not have a valid value for Attributes. The current value is '{2}'. The Attributes field must be a valid JSON string. Example: @"{{ ""key"": ""value"", ""key2"": 56 }}".
+
+{3}</value>
+  </data>
 </root>

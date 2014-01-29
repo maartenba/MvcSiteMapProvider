@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -7,6 +8,7 @@ using System.Web.Mvc;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -51,6 +53,10 @@ namespace MvcSiteMapProvider.Builder
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
+
+            // Instantiated here to preserve backward compatibility. Update your DI code to 
+            // use ReflectionSiteMapNodeProvider if you need to inject this.
+            this.javaScriptSerializer = new JavaScriptSerializerAdapter();
         }
         protected readonly IEnumerable<string> includeAssemblies;
         protected readonly IEnumerable<string> excludeAssemblies;
@@ -59,7 +65,7 @@ namespace MvcSiteMapProvider.Builder
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
-
+        protected readonly IJavaScriptSerializer javaScriptSerializer;
 
         protected string siteMapCacheKey;
         /// <summary>
@@ -67,7 +73,7 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <remarks>
         /// Fixes #158 - this key should not be generated in the constructor because HttpContext cannot be accessed
-        /// that early in the application lifecycle when run in IIS Integrated mode.
+        /// that early in the application life-cycle when run in IIS Integrated mode.
         /// </remarks>
         protected virtual string SiteMapCacheKey
         {
@@ -437,11 +443,12 @@ namespace MvcSiteMapProvider.Builder
                 attribute.Clickable);
 
             var siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
+            var attributeDictionary = this.DeserializeAttributes(attribute.Attributes, key, title);
 
             // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
-            AcquireAttributesFrom(attribute, siteMapNode.Attributes);
+            AcquireAttributesFrom(attributeDictionary, siteMapNode.Attributes);
             AcquireRolesFrom(attribute, siteMapNode.Roles);
             siteMapNode.Clickable = attribute.Clickable;
             siteMapNode.VisibilityProvider = attribute.VisibilityProvider;
@@ -454,14 +461,14 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.CanonicalUrl = attribute.CanonicalUrl;
             siteMapNode.CanonicalKey = attribute.CanonicalKey;
             AcquireMetaRobotsValuesFrom(attribute, siteMapNode.MetaRobotsValues);
-            siteMapNode.LastModifiedDate = attribute.LastModifiedDate;
+            siteMapNode.LastModifiedDate = string.IsNullOrEmpty(attribute.LastModifiedDate) ? DateTime.MinValue : DateTime.Parse(attribute.LastModifiedDate, CultureInfo.InvariantCulture);
             siteMapNode.ChangeFrequency = attribute.ChangeFrequency;
             siteMapNode.UpdatePriority = attribute.UpdatePriority;
             siteMapNode.Order = attribute.Order;
 
             // Handle route details
             siteMapNode.Route = attribute.Route;
-            AcquireRouteValuesFrom(attribute, siteMapNode.RouteValues);
+            AcquireRouteValuesFrom(attributeDictionary, siteMapNode.RouteValues);
             AcquirePreservedRouteParametersFrom(attribute, siteMapNode.PreservedRouteParameters);
             siteMapNode.UrlResolver = attribute.UrlResolver;
 
@@ -483,13 +490,37 @@ namespace MvcSiteMapProvider.Builder
         }
 
         /// <summary>
+        /// Deserializes a JSON string into a IDictionary<string, object>
+        /// </summary>
+        /// <param name="jsonString">The string to deserialize.</param>
+        /// <param name="key">The key of the node.</param>
+        /// <param name="title">The title of the node.</param>
+        /// <returns>An IDictionary<string, object> that contains the parsed attributes.</returns>
+        protected virtual IDictionary<string, object> DeserializeAttributes(string jsonString, string key, string title)
+        {
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                return new Dictionary<string, object>();
+            }
+
+            try
+            {
+                return this.javaScriptSerializer.Deserialize<Dictionary<string, object>>(jsonString);
+            }
+            catch (Exception ex)
+            {
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeAttributesJsonInvalid, key, title, jsonString, ex.Message), ex);
+            }
+        }
+
+        /// <summary>
         /// Acquires the attributes from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
         /// <param name="attribute">The attribute.</param>
         /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(IMvcSiteMapNodeAttribute attribute, IDictionary<string, object> attributes)
+        protected virtual void AcquireAttributesFrom(IDictionary<string, object> attributeDictionary, IDictionary<string, object> attributes)
         {
-            foreach (var att in attribute.Attributes)
+            foreach (var att in attributeDictionary)
             {
                 var attributeName = att.Key.ToString();
                 var attributeValue = att.Value;
@@ -506,9 +537,9 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(IMvcSiteMapNodeAttribute attribute, IRouteValueDictionary routeValues)
+        protected virtual void AcquireRouteValuesFrom(IDictionary<string, object> attributeDictionary, IRouteValueDictionary routeValues)
         {
-            foreach (var att in attribute.Attributes)
+            foreach (var att in attributeDictionary)
             {
                 var attributeName = att.Key.ToString();
                 var attributeValue = att.Value;

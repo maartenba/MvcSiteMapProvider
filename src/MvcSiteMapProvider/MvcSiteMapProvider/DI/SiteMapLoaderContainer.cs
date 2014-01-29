@@ -10,6 +10,7 @@ using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Reflection;
+using MvcSiteMapProvider.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.DI
 {
@@ -49,6 +50,7 @@ namespace MvcSiteMapProvider.DI
             this.siteMapXmlNameProvider = new SiteMapXmlNameProvider();
             this.attributeAssemblyProviderFactory = new AttributeAssemblyProviderFactory();
             this.mvcSiteMapNodeAttributeDefinitionProvider = new MvcSiteMapNodeAttributeDefinitionProvider();
+            this.javaScriptSerializer = new JavaScriptSerializerAdapter();
             this.siteMapNodeProvider = this.ResolveSiteMapNodeProvider(settings);
             this.siteMapBuiderSetStrategy = this.ResolveSiteMapBuilderSetStrategy(settings);
             var siteMapFactoryContainer = new SiteMapFactoryContainer(settings, this.mvcContextFactory, this.urlPath);
@@ -80,6 +82,7 @@ namespace MvcSiteMapProvider.DI
         private readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
+        private readonly IJavaScriptSerializer javaScriptSerializer;
         
         public ISiteMapLoader ResolveSiteMapLoader()
         {
@@ -143,7 +146,8 @@ namespace MvcSiteMapProvider.DI
                 includeAssemblies,
                 excludeAssemblies,
                 this.attributeAssemblyProviderFactory,
-                this.mvcSiteMapNodeAttributeDefinitionProvider);
+                this.mvcSiteMapNodeAttributeDefinitionProvider,
+                this.javaScriptSerializer);
         }
 
         private ISiteMapNodeVisitor ResolveSiteMapNodeVisitor(ConfigurationSettings settings)

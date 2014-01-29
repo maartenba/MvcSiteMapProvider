@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Xml;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -22,7 +25,8 @@ namespace MvcSiteMapProvider.Builder
             IEnumerable<String> includeAssemblies,
             IEnumerable<String> excludeAssemblies,
             IAttributeAssemblyProviderFactory attributeAssemblyProviderFactory,
-            IMvcSiteMapNodeAttributeDefinitionProvider attributeNodeDefinitionProvider
+            IMvcSiteMapNodeAttributeDefinitionProvider attributeNodeDefinitionProvider,
+            IJavaScriptSerializer javaScriptSerializer
             )
         {
             if (includeAssemblies == null)
@@ -33,16 +37,20 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("attributeAssemblyProviderFactory");
             if (attributeNodeDefinitionProvider == null)
                 throw new ArgumentNullException("attributeNodeDefinitionProvider");
+            if (javaScriptSerializer == null)
+                throw new ArgumentNullException("javaScriptSerializer");
 
             this.includeAssemblies = includeAssemblies;
             this.excludeAssemblies = excludeAssemblies;
             this.attributeAssemblyProviderFactory = attributeAssemblyProviderFactory;
             this.attributeNodeDefinitionProvider = attributeNodeDefinitionProvider;
+            this.javaScriptSerializer = javaScriptSerializer;
         }
         protected readonly IEnumerable<string> includeAssemblies;
         protected readonly IEnumerable<string> excludeAssemblies;
         protected readonly IMvcSiteMapNodeAttributeDefinitionProvider attributeNodeDefinitionProvider;
         protected readonly IAttributeAssemblyProviderFactory attributeAssemblyProviderFactory;
+        protected readonly IJavaScriptSerializer javaScriptSerializer;
         protected const string SourceName = "MvcSiteMapNodeAttribute";
 
         #region ISiteMapNodeProvider Members
@@ -232,11 +240,12 @@ namespace MvcSiteMapProvider.Builder
 
             var nodeParentMap = helper.CreateNode(key, attribute.ParentKey, SourceName, implicitResourceKey);
             var node = nodeParentMap.Node;
+            var attributeDictionary = this.DeserializeAttributes(attribute.Attributes, key, title);
 
             // Assign defaults
             node.Title = title;
             node.Description = description;
-            AcquireAttributesFrom(attribute, node.Attributes, helper);
+            AcquireAttributesFrom(attributeDictionary, node.Attributes, helper);
             AcquireRolesFrom(attribute, node.Roles);
             node.Clickable = attribute.Clickable;
             node.VisibilityProvider = attribute.VisibilityProvider;
@@ -249,14 +258,14 @@ namespace MvcSiteMapProvider.Builder
             node.CanonicalUrl = attribute.CanonicalUrl;
             node.CanonicalKey = attribute.CanonicalKey;
             AcquireMetaRobotsValuesFrom(attribute, node.MetaRobotsValues);
-            node.LastModifiedDate = attribute.LastModifiedDate;
+            node.LastModifiedDate = string.IsNullOrEmpty(attribute.LastModifiedDate) ? DateTime.MinValue : DateTime.Parse(attribute.LastModifiedDate, CultureInfo.InvariantCulture);
             node.ChangeFrequency = attribute.ChangeFrequency;
             node.UpdatePriority = attribute.UpdatePriority;
             node.Order = attribute.Order;
 
             // Handle route details
             node.Route = attribute.Route;
-            AcquireRouteValuesFrom(attribute, node.RouteValues, helper);
+            AcquireRouteValuesFrom(attributeDictionary, node.RouteValues, helper);
             AcquirePreservedRouteParametersFrom(attribute, node.PreservedRouteParameters);
             node.UrlResolver = attribute.UrlResolver;
 
@@ -278,15 +287,38 @@ namespace MvcSiteMapProvider.Builder
         }
 
         /// <summary>
+        /// Deserializes a JSON string into a IDictionary<string, object>
+        /// </summary>
+        /// <param name="jsonString">The string to deserialize.</param>
+        /// <param name="key">The key of the node.</param>
+        /// <param name="title">The title of the node.</param>
+        /// <returns>An IDictionary<string, object> that contains the parsed attributes.</returns>
+        protected virtual IDictionary<string, object> DeserializeAttributes(string jsonString, string key, string title)
+        {
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                return new Dictionary<string, object>();
+            }
+
+            try
+            {
+                return this.javaScriptSerializer.Deserialize<Dictionary<string, object>>(jsonString);
+            }
+            catch (Exception ex)
+            {
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeAttributesJsonInvalid, key, title, jsonString, ex.Message), ex);
+            }
+        }
+
+        /// <summary>
         /// Acquires the attributes from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
         /// </summary>
         /// <param name="attribute">The source attribute.</param>
         /// <param name="attributes">The attribute dictionary to populate.</param>
         /// <param name="helper">The node helper.</param>
-        /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(IMvcSiteMapNodeAttribute attribute, IDictionary<string, object> attributes, ISiteMapNodeHelper helper)
+        protected virtual void AcquireAttributesFrom(IDictionary<string, object> attributeDictionary, IDictionary<string, object> attributes, ISiteMapNodeHelper helper)
         {
-            foreach (var att in attribute.Attributes)
+            foreach (var att in attributeDictionary)
             {
                 var attributeName = att.Key.ToString();
                 var attributeValue = att.Value;
@@ -304,10 +336,9 @@ namespace MvcSiteMapProvider.Builder
         /// <param name="attribute">The source attribute.</param>
         /// <param name="routeValues">The route value dictionary to populate.</param>
         /// <param name="helper">The node helper.</param>
-        /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(IMvcSiteMapNodeAttribute attribute, IRouteValueDictionary routeValues, ISiteMapNodeHelper helper)
+        protected virtual void AcquireRouteValuesFrom(IDictionary<string, object> attributeDictionary, IRouteValueDictionary routeValues, ISiteMapNodeHelper helper)
         {
-            foreach (var att in attribute.Attributes)
+            foreach (var att in attributeDictionary)
             {
                 var attributeName = att.Key.ToString();
                 var attributeValue = att.Value;

@@ -15,7 +15,7 @@ namespace MvcMusicStore.Controllers
 
         //
         // GET: /Checkout/AddressAndPayment
-        [MvcSiteMapNodeAttribute(Title = "Address and Payment", ParentKey = "Checkout")]
+        [MvcSiteMapNodeAttribute(Title = "Address and Payment", ParentKey = "Checkout", Attributes = @"{ ""test1"": 3 }")]
         public ActionResult AddressAndPayment()
         {
             return View();

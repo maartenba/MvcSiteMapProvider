@@ -397,6 +397,17 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; does not have a valid value for Attributes. The current value is &apos;{2}&apos;. The Attributes field must be a valid JSON string. Example: @&quot;{{ &quot;&quot;key&quot;&quot;: &quot;&quot;value&quot;&quot;, &quot;&quot;key2&quot;&quot;: 56 }}&quot;.
+        ///
+        ///{3}.
+        /// </summary>
+        internal static string SiteMapNodeAttributesJsonInvalid {
+            get {
+                return ResourceManager.GetString("SiteMapNodeAttributesJsonInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed..
         /// </summary>
         internal static string SiteMapNodeCanonicalValueAlreadySet {
