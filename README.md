@@ -1,3 +1,5 @@
+[![MvcSiteMapProvider Build Status](https://www.myget.org/BuildSource/Badge/mvcsitemapprovider?identifier=7a569f3b-9a67-4cd3-b702-daf7bf061ffb)](https://www.myget.org/gallery/mvcsitemapprovider)
+
 # MvcSiteMapProvider
 MvcSiteMapProvider is a tool that provides flexible menus, breadcrumb trails, and SEO features for the ASP.NET MVC framework, similar to the ASP.NET SiteMapProvider model.
 
