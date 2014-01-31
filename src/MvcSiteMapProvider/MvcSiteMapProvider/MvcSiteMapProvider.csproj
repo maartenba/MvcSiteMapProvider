@@ -127,6 +127,7 @@
     <Compile Include="Builder\IDynamicSiteMapNodeBuilderFactory.cs" />
     <Compile Include="Builder\IAspNetSiteMapProvider.cs" />
     <Compile Include="Builder\IDynamicNodeBuilder.cs" />
+    <Compile Include="Builder\IReservedAttributeNameProvider.cs" />
     <Compile Include="Builder\ISiteMapHierarchyBuilder.cs" />
     <Compile Include="Builder\ISiteMapNodeHelper.cs" />
     <Compile Include="Builder\ISiteMapNodeCreator.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Builder\ISiteMapNodeToParentRelationFactory.cs" />
     <Compile Include="Builder\ReflectionSiteMapNodeProvider.cs" />
     <Compile Include="Builder\ReflectionSiteMapNodeProviderFactory.cs" />
+    <Compile Include="Builder\ReservedAttributeNameProvider.cs" />
     <Compile Include="Builder\SiteMapBuilder.cs" />
     <Compile Include="Builder\SiteMapBuilderFactory.cs" />
     <Compile Include="Builder\SiteMapHierarchyBuilder.cs" />
