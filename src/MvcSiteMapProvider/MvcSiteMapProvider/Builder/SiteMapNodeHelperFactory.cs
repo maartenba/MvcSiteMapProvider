@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider.Builder
         public SiteMapNodeHelperFactory(
             ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory,
             IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory,
-            ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider
+            IReservedAttributeNameProvider reservedAttributeNameProvider
             )
         {
             if (siteMapNodeCreatorFactory == null)
@@ -30,7 +30,7 @@ namespace MvcSiteMapProvider.Builder
         }
         protected readonly ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory;
         protected readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
-        protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
+        protected readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
 
         #region ISiteMapNodeHelperFactory Members
 

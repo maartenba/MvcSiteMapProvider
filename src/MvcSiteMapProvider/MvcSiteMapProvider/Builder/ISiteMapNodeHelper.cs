@@ -67,7 +67,7 @@ namespace MvcSiteMapProvider.Builder
         /// A service that can be used to check whether an attribute name is reserved and whether it should be
         /// added to the RouteValues and/or Attributes dictionaries.
         /// </summary>
-        ISiteMapXmlReservedAttributeNameProvider ReservedAttributeNames { get; }
+        IReservedAttributeNameProvider ReservedAttributeNames { get; }
 
 
         /// <summary>

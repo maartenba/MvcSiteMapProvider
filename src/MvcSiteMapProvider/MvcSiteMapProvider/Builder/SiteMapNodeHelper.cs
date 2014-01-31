@@ -16,7 +16,7 @@ namespace MvcSiteMapProvider.Builder
             ISiteMap siteMap,
             ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory,
             IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory,
-            ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider
+            IReservedAttributeNameProvider reservedAttributeNameProvider
             )
         {
             if (String.IsNullOrEmpty(siteMapCacheKey))
@@ -40,7 +40,7 @@ namespace MvcSiteMapProvider.Builder
         protected readonly ISiteMap siteMap;
         protected readonly ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory;
         protected readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
-        protected readonly ISiteMapXmlReservedAttributeNameProvider reservedAttributeNameProvider;
+        protected readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
 
         #region ISiteMapNodeHelper Members
 
@@ -72,7 +72,7 @@ namespace MvcSiteMapProvider.Builder
             return dynamicSiteMapNodeBuilder.BuildDynamicNodes(node.Node, defaultParentKey);
         }
 
-        public ISiteMapXmlReservedAttributeNameProvider ReservedAttributeNames
+        public IReservedAttributeNameProvider ReservedAttributeNames
         {
             get { return this.reservedAttributeNameProvider; }
         }

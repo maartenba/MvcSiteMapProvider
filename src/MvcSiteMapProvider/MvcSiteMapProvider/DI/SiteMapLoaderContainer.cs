@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider.DI
             this.siteMapNodeCreatorFactory = this.ResolveSiteMapNodeCreatorFactory();
             this.dynamicSiteMapNodeBuilderFactory = new DynamicSiteMapNodeBuilderFactory(this.siteMapNodeCreatorFactory);
             this.siteMapHierarchyBuilder = new SiteMapHierarchyBuilder();
-            this.siteMapXmlReservedAttributeNameProvider = new SiteMapXmlReservedAttributeNameProvider(settings.AttributesToIgnore);
+            this.siteMapXmlReservedAttributeNameProvider = new ReservedAttributeNameProvider(settings.AttributesToIgnore);
             this.siteMapNodeHelperFactory = this.ResolveSiteMapNodeHelperFactory();
             this.siteMapNodeVisitor = this.ResolveSiteMapNodeVisitor(settings);
             this.siteMapXmlNameProvider = new SiteMapXmlNameProvider();
@@ -78,7 +78,7 @@ namespace MvcSiteMapProvider.DI
         private readonly IAttributeAssemblyProviderFactory attributeAssemblyProviderFactory;
         private readonly IMvcSiteMapNodeAttributeDefinitionProvider mvcSiteMapNodeAttributeDefinitionProvider;
         private readonly ISiteMapXmlNameProvider siteMapXmlNameProvider;
-        private readonly ISiteMapXmlReservedAttributeNameProvider siteMapXmlReservedAttributeNameProvider;
+        private readonly IReservedAttributeNameProvider siteMapXmlReservedAttributeNameProvider;
         private readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
         private readonly ISiteMapFactory siteMapFactory;
         private readonly ISiteMapCreator siteMapCreator;
