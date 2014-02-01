@@ -35,10 +35,13 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="separator">An array of Unicode characters that delimit the substrings in this string, an empty array that contains no delimiters, or <b>null</b>.</param>
         public void AddRange(string roles, char[] separator)
         {
-            var localRoles = roles.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var role in localRoles)
+            if (!string.IsNullOrEmpty(roles))
             {
-                this.Add(role);
+                var localRoles = roles.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var role in localRoles)
+                {
+                    this.Add(role.Trim());
+                }
             }
         }
 
@@ -56,6 +59,5 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 }
             }
         }
-
     }
 }

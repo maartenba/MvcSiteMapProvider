@@ -463,7 +463,7 @@ namespace MvcSiteMapProvider.Builder
             // Handle route details
             siteMapNode.Route = attribute.Route;
             siteMapNode.RouteValues.AddRange(attribute.Attributes, false);
-            AcquirePreservedRouteParametersFrom(attribute, siteMapNode.PreservedRouteParameters);
+            siteMapNode.PreservedRouteParameters.AddRange(attribute.PreservedRouteParameters, new[] { ',', ';' });
             siteMapNode.UrlResolver = attribute.UrlResolver;
 
             // Specified area, controller and action properties will override any 
@@ -498,20 +498,5 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
         }
-
-        /// <summary>
-        /// Acquires the preserved route parameters list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
-        /// </summary>
-        /// <param name="attribute">The attribute.</param>
-        /// <param name="preservedRouteParameters">The preserved route parameters IList to populate.</param>
-        protected virtual void AcquirePreservedRouteParametersFrom(IMvcSiteMapNodeAttribute attribute, IList<string> preservedRouteParameters)
-        {
-            var localParameters = (attribute.PreservedRouteParameters ?? "").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var parameter in localParameters)
-            {
-                preservedRouteParameters.Add(parameter);
-            }
-        }
-
     }
 }

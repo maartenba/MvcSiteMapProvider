@@ -146,7 +146,7 @@ namespace MvcSiteMapProvider.Builder
                 var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
                 siteMapNode.RouteValues.AddRange(attributeDictionary);
             }
-            AcquirePreservedRouteParametersFrom(node, siteMapNode.PreservedRouteParameters);
+            siteMapNode.PreservedRouteParameters.AddRange(node.GetAttributeValue("preservedRouteParameters"), new[] { ',', ';' });
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
             // Add inherited route values to sitemap node
@@ -188,20 +188,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return nodeParentMap;
-        }
-
-        /// <summary>
-        /// Acquires the preserved route parameters list from a given <see cref="T:System.Web.SiteMapNode"/>
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="roles">The preserved route parameters IList to populate.</param>
-        protected virtual void AcquirePreservedRouteParametersFrom(System.Web.SiteMapNode node, IList<string> preservedRouteParameters)
-        {
-            var localParameters = node.GetAttributeValue("preservedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var parameter in localParameters)
-            {
-                preservedRouteParameters.Add(parameter.Trim());
-            }
         }
 
         /// <summary>
