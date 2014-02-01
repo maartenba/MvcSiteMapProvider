@@ -16,24 +16,19 @@ namespace MvcSiteMapProvider.Builder
     {
         public ReflectionSiteMapNodeProviderFactory(
             IAttributeAssemblyProviderFactory attributeAssemblyProviderFactory,
-            IMvcSiteMapNodeAttributeDefinitionProvider attributeNodeDefinitionProvider,
-            IJavaScriptSerializer javaScriptSerializer
+            IMvcSiteMapNodeAttributeDefinitionProvider attributeNodeDefinitionProvider
             )
         {
             if (attributeAssemblyProviderFactory == null)
                 throw new ArgumentNullException("attributeAssemblyProviderFactory");
             if (attributeNodeDefinitionProvider == null)
                 throw new ArgumentNullException("attributeNodeDefinitionProvider");
-            if (javaScriptSerializer == null)
-                throw new ArgumentNullException("javaScriptSerializer");
 
             this.attributeAssemblyProviderFactory = attributeAssemblyProviderFactory;
             this.attributeNodeDefinitionProvider = attributeNodeDefinitionProvider;
-            this.javaScriptSerializer = javaScriptSerializer;
         }
         protected readonly IMvcSiteMapNodeAttributeDefinitionProvider attributeNodeDefinitionProvider;
         protected readonly IAttributeAssemblyProviderFactory attributeAssemblyProviderFactory;
-        protected readonly IJavaScriptSerializer javaScriptSerializer;
 
         public ReflectionSiteMapNodeProvider Create(IEnumerable<String> includeAssemblies, IEnumerable<String> excludeAssemblies)
         {
@@ -41,8 +36,7 @@ namespace MvcSiteMapProvider.Builder
                 includeAssemblies, 
                 excludeAssemblies, 
                 this.attributeAssemblyProviderFactory, 
-                this.attributeNodeDefinitionProvider,
-                this.javaScriptSerializer);
+                this.attributeNodeDefinitionProvider);
         }
 
         public ReflectionSiteMapNodeProvider Create(IEnumerable<String> includeAssemblies)
@@ -51,8 +45,7 @@ namespace MvcSiteMapProvider.Builder
                 includeAssemblies, 
                 new string[0], 
                 this.attributeAssemblyProviderFactory, 
-                this.attributeNodeDefinitionProvider,
-                this.javaScriptSerializer);
+                this.attributeNodeDefinitionProvider);
         }
     }
 }

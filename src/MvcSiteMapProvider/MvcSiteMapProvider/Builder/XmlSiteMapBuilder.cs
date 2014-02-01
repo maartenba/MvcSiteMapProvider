@@ -138,8 +138,6 @@ namespace MvcSiteMapProvider.Builder
             // Create node
             ISiteMapNode siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
 
-            
-
             // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
@@ -165,7 +163,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Assign to node
             siteMapNode.Route = node.GetAttributeValue("route");
-            AcquireRouteValuesFrom(node, siteMapNode.RouteValues);
+            siteMapNode.RouteValues.AddRange(node, false);
             AcquirePreservedRouteParametersFrom(node, siteMapNode.PreservedRouteParameters);
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
@@ -201,25 +199,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return siteMapNode;
-        }
-
-        /// <summary>
-        /// Acquires the route values from a given XElement.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueDictionary routeValues)
-        {
-            foreach (XAttribute attribute in node.Attributes())
-            {
-                var attributeName = attribute.Name.ToString();
-                var attributeValue = attribute.Value;
-
-                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
-                {
-                    routeValues.Add(attributeName, attributeValue);
-                }
-            }
         }
 
         /// <summary>

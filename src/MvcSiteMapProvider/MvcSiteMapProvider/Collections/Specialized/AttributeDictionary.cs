@@ -99,7 +99,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>.
+        /// Adds the elements from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>.
         /// </summary>
         /// <param name="items">The <see cref="System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
         public override void AddRange(IDictionary<string, object> items)
@@ -108,7 +108,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>.
+        /// Adds the elements from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>.
         /// </summary>
         /// <param name="items">The <see cref="System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
@@ -121,7 +121,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a JSON string representing the attributes.
+        /// Adds the elements from a JSON string representing the attributes.
         /// </summary>
         /// <param name="jsonString">A JSON string that represents a dictionary of key-value pairs. Example: @"{ ""key-1"": ""value-1""[, ""key-x"": ""value-x""] }". 
         /// The value may be a string or primitive type (by leaving off the quotes).</param>
@@ -131,7 +131,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a JSON string representing the attributes.
+        /// Adds the elements from a JSON string representing the attributes.
         /// </summary>
         /// <param name="jsonString">A JSON string that represents a dictionary of key-value pairs. Example: @"{ ""key-1"": ""value-1""[, ""key-x"": ""value-x""] }". 
         /// The value may be a string or primitive type (by leaving off the quotes).</param>
@@ -146,7 +146,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a given <see cref="System.Xml.Linq.XElement"/>.
+        /// Adds the elements from a given <see cref="System.Xml.Linq.XElement"/>.
         /// </summary>
         /// <param name="xmlNode">The <see cref="System.Xml.Linq.XElement"/> that represents the siteMapNode element in XML.</param>
         public void AddRange(XElement xmlNode)
@@ -155,7 +155,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a given <see cref="System.Xml.Linq.XElement"/>.
+        /// Adds the elements from a given <see cref="System.Xml.Linq.XElement"/>.
         /// </summary>
         /// <param name="xmlNode">The <see cref="System.Xml.Linq.XElement"/> that represents the siteMapNode element in XML.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
@@ -168,7 +168,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a given <see cref="System.Collections.Specialized.NameValueCollection"/>.
+        /// Adds the elements from a given <see cref="System.Collections.Specialized.NameValueCollection"/>.
         /// </summary>
         /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> to retrieve the values from.</param>
         public void AddRange(NameValueCollection nameValueCollection)
@@ -177,7 +177,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Acquires the attributes from a given <see cref="System.Collections.Specialized.NameValueCollection"/>.
+        /// Adds the elements from a given <see cref="System.Collections.Specialized.NameValueCollection"/>.
         /// </summary>
         /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> to retrieve the values from.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>

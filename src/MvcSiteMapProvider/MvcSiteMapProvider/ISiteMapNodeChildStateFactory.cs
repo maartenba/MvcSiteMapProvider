@@ -15,9 +15,9 @@ namespace MvcSiteMapProvider
         [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
         IAttributeDictionary CreateAttributeDictionary(ISiteMap siteMap, ILocalizationService localizationService);
 
-        //IRouteValueDictionary CreateRouteValueDictionary(string siteMapNodeKey, ISiteMap siteMap);
+        IRouteValueDictionary CreateRouteValueDictionary(string siteMapNodeKey, ISiteMap siteMap);
 
-        //[Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
+        [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
         IRouteValueDictionary CreateRouteValueDictionary(ISiteMap siteMap);
 
         IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap);

@@ -45,7 +45,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
         public virtual IAttributeDictionary Create(ISiteMap siteMap, ILocalizationService localizationService)
         {
-            return new AttributeDictionary(string.Empty, siteMap, localizationService, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
+            return new AttributeDictionary("NO_KEY", siteMap, localizationService, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
         }
 
         #endregion

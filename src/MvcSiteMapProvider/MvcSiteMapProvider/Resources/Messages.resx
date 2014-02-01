@@ -355,21 +355,23 @@ A C# identifier must start with a Unicode letter, underscore, or ampersand and m
 
 If you are attempting to add an area to the controller field, do note that the 'AreaName/ControllerName' syntax is not supported by MvcSiteMapProvider. To set the area, use the 'Area' property or 'area' attribute.</value>
   </data>
-  <data name="SiteMapNodeAttributesJsonInvalid" xml:space="preserve">
-    <value>The node with key '{0}' and title '{1}' does not have a valid value for Attributes. The current value is '{2}'. The Attributes field must be a valid JSON string. Example: @"{{ ""key"": ""value"", ""key2"": 56 }}".
-
-{3}</value>
-  </data>
   <data name="AttributesKeyReserved" xml:space="preserve">
     <value>The node with key '{0}' may not add an attribute with the key '{1}' and value '{2}' to the Attributes dictionary because the key is a reserved name. Reserved names are keys that are meant for use as a property of the node rather than a dictionary value or may be values that are specified in the "MvcSiteMapProvider_AttributesToIgnore" web.config value or attributesToIgnore parameter of the ReservedAttributeNameProvider constructor.
 
 For example, rather than adding a "url" key to the Attributes dictionary, you should set the ISiteMapNode.Url property instead.
 
-You may surpress this error message by calling an overload of the Attributes.Add() or Attributes.AddRange() that accepts the 'throwIfReservedKey' argument and passing false for the value. Note that if you do this, attempting to add a key with a reserved name to the Attributes dictionary will silently fail.</value>
+You may suppress this error message by calling an overload of the Attributes.Add() or Attributes.AddRange() that accepts the 'throwIfReservedKey' argument and passing false for the value. Note that if you do this, attempting to add a key with a reserved name to the Attributes dictionary will silently fail.</value>
   </data>
   <data name="JsonToDictionaryDeserializerJsonInvalid" xml:space="preserve">
     <value>The string '{0}' could not be deserialized into a Dictionary&lt;string, object&gt; because it is not a valid JSON representation of a Dictionary&lt;string, object&gt;. Example: @"{{ ""key"": ""value"", ""key2"": 56 }}".
 
 {1}</value>
+  </data>
+  <data name="RouteValuesKeyReserved" xml:space="preserve">
+    <value>The node with key '{0}' may not add a route value with the key '{1}' and value '{2}' to the RouteValues dictionary because the key is a reserved name. Reserved names are keys that are meant for use internally by MvcSiteMapProvider rather than a dictionary value.
+
+Valid keys may be "area", "controller", "action", and custom parameters that are not the same as property names of ISiteMapNode.
+
+You may suppress this error message by calling an overload of the RouteValues.Add() or RouteValues.AddRange() that accepts the 'throwIfReservedKey' argument and passing false for the value. Note that if you do this, attempting to add a key with a reserved name to the RouteValues dictionary will silently fail.</value>
   </data>
 </root>

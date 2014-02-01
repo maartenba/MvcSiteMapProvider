@@ -110,7 +110,7 @@ namespace MvcSiteMapProvider.Builder
         /// Recursively processes our XML document, parsing our siteMapNodes and dynamicNode(s).
         /// </summary>
         /// <param name="parentNode">The parent node to process.</param>
-        /// <param name="parentElement">The correspoding parent XML element.</param>
+        /// <param name="parentElement">The corresponding parent XML element.</param>
         /// <param name="processFlags">Flags to indicate which nodes to process.</param>
         /// <param name="helper">The node helper.</param>
         protected virtual IList<ISiteMapNodeToParentRelation> ProcessXmlNodes(ISiteMapNode parentNode, XElement parentElement, NodesToProcess processFlags, ISiteMapNodeHelper helper)
@@ -147,7 +147,7 @@ namespace MvcSiteMapProvider.Builder
 
                         if (!this.useNestedDynamicNodeRecursion)
                         {
-                            // Recursively add non-dynamic childs for every dynamic node
+                            // Recursively add non-dynamic children for every dynamic node
                             result.AddRange(ProcessXmlNodes(dynamicNode.Node, node, NodesToProcess.StandardNodes, helper));
                         }
                         else
@@ -239,7 +239,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Assign to node
             siteMapNode.Route = node.GetAttributeValue("route");
-            AcquireRouteValuesFrom(node, siteMapNode.RouteValues, helper);
+            siteMapNode.RouteValues.AddRange(node, false);
             AcquirePreservedRouteParametersFrom(node, siteMapNode.PreservedRouteParameters);
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
@@ -278,27 +278,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return nodeParentMap;
-        }
-
-        /// <summary>
-        /// Acquires the route values from a given XElement.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="routeValues">The route values dictionary to populate.</param>
-        /// <param name="helper">The node helper.</param>
-        /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(XElement node, IRouteValueDictionary routeValues, ISiteMapNodeHelper helper)
-        {
-            foreach (XAttribute attribute in node.Attributes())
-            {
-                var attributeName = attribute.Name.ToString();
-                var attributeValue = attribute.Value;
-
-                if (helper.ReservedAttributeNames.IsRouteAttribute(attributeName))
-                {
-                    routeValues.Add(attributeName, attributeValue);
-                }
-            }
         }
 
         /// <summary>

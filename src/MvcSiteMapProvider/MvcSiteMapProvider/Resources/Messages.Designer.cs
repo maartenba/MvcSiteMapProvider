@@ -337,6 +337,19 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; may not add a route value with the key &apos;{1}&apos; and value &apos;{2}&apos; to the RouteValues dictionary because the key is a reserved name. Reserved names are keys that are meant for use internally by MvcSiteMapProvider rather than a dictionary value.
+        ///
+        ///Valid keys may be &quot;area&quot;, &quot;controller&quot;, &quot;action&quot;, and custom parameters that are not the same as property names of ISiteMapNode.
+        ///
+        ///You may suppress this error message by calling an overload of the RouteValues.Add() or RouteValues.AddRange() that [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string RouteValuesKeyReserved {
+            get {
+                return ResourceManager.GetString("RouteValuesKeyReserved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not all configured nodes could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
         ///
         ///SiteMapCacheKey: &apos;{0}&apos;
@@ -415,17 +428,6 @@ namespace MvcSiteMapProvider.Resources {
         internal static string SiteMapNodeAreaNameInvalid {
             get {
                 return ResourceManager.GetString("SiteMapNodeAreaNameInvalid", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; does not have a valid value for Attributes. The current value is &apos;{2}&apos;. The Attributes field must be a valid JSON string. Example: @&quot;{{ &quot;&quot;key&quot;&quot;: &quot;&quot;value&quot;&quot;, &quot;&quot;key2&quot;&quot;: 56 }}&quot;.
-        ///
-        ///{3}.
-        /// </summary>
-        internal static string SiteMapNodeAttributesJsonInvalid {
-            get {
-                return ResourceManager.GetString("SiteMapNodeAttributesJsonInvalid", resourceCulture);
             }
         }
         

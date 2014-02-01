@@ -5,8 +5,10 @@ using System.Text;
 using System.Web.Mvc;
 using NUnit.Framework;
 using Moq;
+using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
 {
@@ -17,12 +19,20 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
 
         private Mock<ISiteMap> mSiteMap = null;
         private Mock<IRequestCache> mRequestCache = null;
+        private Mock<IReservedAttributeNameProvider> mReservedAttributeNameProvider = null;
+        private Mock<IJsonToDictionaryDeserializer> mjsonToDictionaryDeserializer = null;
 
         [SetUp]
         public void Init()
         {
             mSiteMap = new Mock<ISiteMap>();
             mRequestCache = new Mock<IRequestCache>();
+            mReservedAttributeNameProvider = new Mock<IReservedAttributeNameProvider>();
+            mjsonToDictionaryDeserializer = new Mock<IJsonToDictionaryDeserializer>();
+
+            mReservedAttributeNameProvider
+                .Setup(x => x.IsRouteAttribute(It.IsAny<string>()))
+                .Returns(true);
         }
 
         [TearDown]
@@ -30,11 +40,13 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         {
             mSiteMap = null;
             mRequestCache = null;
+            mReservedAttributeNameProvider = null;
+            mjsonToDictionaryDeserializer = null;
         }
 
         private IRouteValueDictionary NewRouteValueDictionaryInstance()
         {
-            return new RouteValueDictionary(mSiteMap.Object, mRequestCache.Object);
+            return new RouteValueDictionary("testNodeKey", mSiteMap.Object, mReservedAttributeNameProvider.Object, mjsonToDictionaryDeserializer.Object, mRequestCache.Object);
         }
 
         #endregion

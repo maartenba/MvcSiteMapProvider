@@ -140,7 +140,11 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.Route = node.GetAttributeValue("route");
             if (this.reflectRouteValues)
             {
-                AcquireRouteValuesFrom(node, siteMapNode.RouteValues, helper);
+                // Unfortunately, the ASP.NET implementation uses a protected member variable to store
+                // the attributes, so there is no way to loop through them without reflection or some
+                // fancy dynamic subclass implementation.
+                var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
+                siteMapNode.RouteValues.AddRange(attributeDictionary);
             }
             AcquirePreservedRouteParametersFrom(node, siteMapNode.PreservedRouteParameters);
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
@@ -184,29 +188,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return nodeParentMap;
-        }
-
-        /// <summary>
-        /// Acquires the route values from a given <see cref="T:System.Web.SiteMapNode"/>.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(System.Web.SiteMapNode node, IRouteValueDictionary routeValues, ISiteMapNodeHelper helper)
-        {
-            // Unfortunately, the ASP.NET implementation uses a protected member variable to store
-            // the attributes, so there is no way to loop through them without reflection or some
-            // fancy dynamic subclass implementation.
-            var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
-            foreach (string key in attributeDictionary.Keys)
-            {
-                var attributeName = key;
-                var attributeValue = node[key];
-
-                if (helper.ReservedAttributeNames.IsRouteAttribute(attributeName))
-                {
-                    routeValues.Add(attributeName, attributeValue);
-                }
-            }
         }
 
         /// <summary>

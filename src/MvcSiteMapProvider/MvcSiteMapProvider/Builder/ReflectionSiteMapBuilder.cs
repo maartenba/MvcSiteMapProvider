@@ -53,10 +53,6 @@ namespace MvcSiteMapProvider.Builder
             this.dynamicNodeBuilder = dynamicNodeBuilder;
             this.siteMapNodeFactory = siteMapNodeFactory;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
-
-            // Instantiated here to preserve backward compatibility. Update your DI code to 
-            // use ReflectionSiteMapNodeProvider if you need to inject this.
-            this.javaScriptSerializer = new JavaScriptSerializerAdapter();
         }
         protected readonly IEnumerable<string> includeAssemblies;
         protected readonly IEnumerable<string> excludeAssemblies;
@@ -65,7 +61,6 @@ namespace MvcSiteMapProvider.Builder
         protected readonly IDynamicNodeBuilder dynamicNodeBuilder;
         protected readonly ISiteMapNodeFactory siteMapNodeFactory;
         protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
-        protected readonly IJavaScriptSerializer javaScriptSerializer;
 
         protected string siteMapCacheKey;
         /// <summary>
@@ -443,7 +438,6 @@ namespace MvcSiteMapProvider.Builder
                 attribute.Clickable);
 
             var siteMapNode = siteMapNodeFactory.Create(siteMap, key, implicitResourceKey);
-            var attributeDictionary = this.DeserializeAttributes(attribute.Attributes, key, title);
 
             // Assign defaults
             siteMapNode.Title = title;
@@ -468,7 +462,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Handle route details
             siteMapNode.Route = attribute.Route;
-            AcquireRouteValuesFrom(attributeDictionary, siteMapNode.RouteValues);
+            siteMapNode.RouteValues.AddRange(attribute.Attributes, false);
             AcquirePreservedRouteParametersFrom(attribute, siteMapNode.PreservedRouteParameters);
             siteMapNode.UrlResolver = attribute.UrlResolver;
 
@@ -487,49 +481,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return siteMapNode;
-        }
-
-        /// <summary>
-        /// Deserializes a JSON string into a IDictionary<string, object>
-        /// </summary>
-        /// <param name="jsonString">The string to deserialize.</param>
-        /// <param name="key">The key of the node.</param>
-        /// <param name="title">The title of the node.</param>
-        /// <returns>An IDictionary<string, object> that contains the parsed attributes.</returns>
-        protected virtual IDictionary<string, object> DeserializeAttributes(string jsonString, string key, string title)
-        {
-            if (string.IsNullOrEmpty(jsonString))
-            {
-                return new Dictionary<string, object>();
-            }
-
-            try
-            {
-                return this.javaScriptSerializer.Deserialize<Dictionary<string, object>>(jsonString);
-            }
-            catch (Exception ex)
-            {
-                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeAttributesJsonInvalid, key, title, jsonString, ex.Message), ex);
-            }
-        }
-
-        /// <summary>
-        /// Acquires the route values from a given XElement.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns></returns>
-        protected virtual void AcquireRouteValuesFrom(IDictionary<string, object> attributeDictionary, IRouteValueDictionary routeValues)
-        {
-            foreach (var att in attributeDictionary)
-            {
-                var attributeName = att.Key.ToString();
-                var attributeValue = att.Value;
-
-                if (reservedAttributeNameProvider.IsRouteAttribute(attributeName))
-                {
-                    routeValues[attributeName] = attributeValue;
-                }
-            }
         }
 
         /// <summary>

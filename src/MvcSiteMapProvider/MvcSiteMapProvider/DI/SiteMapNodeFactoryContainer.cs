@@ -72,7 +72,7 @@ namespace MvcSiteMapProvider.DI
         {
             return new SiteMapNodeChildStateFactory(
                 new AttributeDictionaryFactory(this.requestCache, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer),
-                new RouteValueDictionaryFactory(this.requestCache));
+                new RouteValueDictionaryFactory(this.requestCache, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer));
         }
 
         private ILocalizationServiceFactory ResolveLocalizationServiceFactory()

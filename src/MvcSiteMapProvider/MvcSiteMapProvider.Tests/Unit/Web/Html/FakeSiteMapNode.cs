@@ -382,6 +382,56 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
     {
         #region IRouteValueDictionary Members
 
+        public void Add(string key, object value, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(KeyValuePair<string, object> item, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(IDictionary<string, object> items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(IDictionary<string, object> items, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(string jsonString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(string jsonString, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(XElement xmlNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(XElement xmlNode, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(NameValueCollection nameValueCollection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(NameValueCollection nameValueCollection, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
         {
             throw new NotImplementedException();
