@@ -245,7 +245,7 @@ namespace MvcSiteMapProvider.Builder
             // Assign defaults
             node.Title = title;
             node.Description = description;
-            AcquireAttributesFrom(attributeDictionary, node.Attributes, helper);
+            node.Attributes.AddRange(attribute.Attributes, false);
             AcquireRolesFrom(attribute, node.Roles);
             node.Clickable = attribute.Clickable;
             node.VisibilityProvider = attribute.VisibilityProvider;
@@ -307,26 +307,6 @@ namespace MvcSiteMapProvider.Builder
             catch (Exception ex)
             {
                 throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeAttributesJsonInvalid, key, title, jsonString, ex.Message), ex);
-            }
-        }
-
-        /// <summary>
-        /// Acquires the attributes from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
-        /// </summary>
-        /// <param name="attribute">The source attribute.</param>
-        /// <param name="attributes">The attribute dictionary to populate.</param>
-        /// <param name="helper">The node helper.</param>
-        protected virtual void AcquireAttributesFrom(IDictionary<string, object> attributeDictionary, IDictionary<string, object> attributes, ISiteMapNodeHelper helper)
-        {
-            foreach (var att in attributeDictionary)
-            {
-                var attributeName = att.Key.ToString();
-                var attributeValue = att.Value;
-
-                if (helper.ReservedAttributeNames.IsRegularAttribute(attributeName))
-                {
-                    attributes[attributeName] = attributeValue;
-                }
             }
         }
 

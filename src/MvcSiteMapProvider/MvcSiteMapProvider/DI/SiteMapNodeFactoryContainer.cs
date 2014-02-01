@@ -2,13 +2,15 @@
 using System.Linq;
 using System.Web.Hosting;
 using System.Collections.Generic;
-using MvcSiteMapProvider.Web;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.UrlResolver;
+using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Reflection;
+using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Script.Serialization;
+using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Xml;
 
 namespace MvcSiteMapProvider.DI
@@ -21,13 +23,17 @@ namespace MvcSiteMapProvider.DI
         public SiteMapNodeFactoryContainer(
             ConfigurationSettings settings,
             IMvcContextFactory mvcContextFactory,
-            IUrlPath urlPath)
+            IUrlPath urlPath,
+            IReservedAttributeNameProvider reservedAttributeNameProvider)
         {
             this.absoluteFileName = HostingEnvironment.MapPath(settings.SiteMapFileName);
             this.settings = settings;
             this.mvcContextFactory = mvcContextFactory;
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = urlPath;
+            this.reservedAttributeNameProvider = reservedAttributeNameProvider;
+            this.javaScriptSerializer = new JavaScriptSerializerAdapter();
+            this.jsonToDictionaryDeserializer = new JsonToDictionaryDeserializer(this.javaScriptSerializer, this.mvcContextFactory);
             this.assemblyProvider = new AttributeAssemblyProvider(settings.IncludeAssembliesForScan, settings.ExcludeAssembliesForScan);
             this.mvcSiteMapNodeAttributeProvider = new MvcSiteMapNodeAttributeDefinitionProvider();
             this.dynamicNodeProviders = this.ResolveDynamicNodeProviders();
@@ -40,6 +46,9 @@ namespace MvcSiteMapProvider.DI
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly IRequestCache requestCache;
         private readonly IUrlPath urlPath;
+        private readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
+        private readonly IJavaScriptSerializer javaScriptSerializer;
+        private readonly IJsonToDictionaryDeserializer jsonToDictionaryDeserializer;
         private readonly IDynamicNodeProvider[] dynamicNodeProviders;
         private readonly ISiteMapNodeUrlResolver[] siteMapNodeUrlResolvers;
         private readonly ISiteMapNodeVisibilityProvider[] siteMapNodeVisibilityProviders;
@@ -62,7 +71,7 @@ namespace MvcSiteMapProvider.DI
         private ISiteMapNodeChildStateFactory ResolveSiteMapNodeChildStateFactory()
         {
             return new SiteMapNodeChildStateFactory(
-                new AttributeDictionaryFactory(this.requestCache),
+                new AttributeDictionaryFactory(this.requestCache, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer),
                 new RouteValueDictionaryFactory(this.requestCache));
         }
 

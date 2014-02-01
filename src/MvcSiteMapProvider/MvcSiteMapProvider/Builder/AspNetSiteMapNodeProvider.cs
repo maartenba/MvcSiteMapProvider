@@ -55,7 +55,6 @@ namespace MvcSiteMapProvider.Builder
         protected readonly IAspNetSiteMapProvider siteMapProvider;
         protected const string SourceName = "ASP.NET SiteMap Provider";
 
-
         #region ISiteMapNodeProvider Members
 
         public IEnumerable<ISiteMapNodeToParentRelation> GetSiteMapNodes(ISiteMapNodeHelper helper)
@@ -112,7 +111,11 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.Description = String.IsNullOrEmpty(node.Description) ? siteMapNode.Title : node.Description;
             if (this.reflectAttributes)
             {
-                AcquireAttributesFrom(node, siteMapNode.Attributes, helper);
+                // Unfortunately, the ASP.NET implementation uses a protected member variable to store
+                // the attributes, so there is no way to loop through them without reflection or some
+                // fancy dynamic subclass implementation.
+                var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
+                siteMapNode.Attributes.AddRange(attributeDictionary);
             }
             AcquireRolesFrom(node, siteMapNode.Roles);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
@@ -181,29 +184,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return nodeParentMap;
-        }
-
-        /// <summary>
-        /// Acquires the attributes from a given <see cref="T:System.Web.SiteMapNode"/>.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(System.Web.SiteMapNode node, IDictionary<string, object> attributes, ISiteMapNodeHelper helper)
-        {
-            // Unfortunately, the ASP.NET implementation uses a protected member variable to store
-            // the attributes, so there is no way to loop through them without reflection or some
-            // fancy dynamic subclass implementation.
-            var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
-            foreach (string key in attributeDictionary.Keys)
-            {
-                var attributeName = key;
-                var attributeValue = node[key];
-
-                if (helper.ReservedAttributeNames.IsRegularAttribute(attributeName))
-                {
-                    attributes.Add(attributeName, attributeValue);
-                }
-            }
         }
 
         /// <summary>

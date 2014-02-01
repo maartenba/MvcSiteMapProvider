@@ -180,6 +180,7 @@
     <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Collections\CacheableDictionary.cs" />
     <Compile Include="Collections\CacheableList.cs" />
+    <Compile Include="Collections\Specialized\ReservedKeyException.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
     <Compile Include="CompositeSiteMapNodeProvider.cs" />
     <Compile Include="CompositeSiteMapNodeVisibilityProvider.cs" />
@@ -216,7 +217,9 @@
     <Compile Include="Web\Mvc\SiteMapHttpResponseCache.cs" />
     <Compile Include="Web\Mvc\UrlHelperAdapter.cs" />
     <Compile Include="Web\Script\Serialization\IJavaScriptSerializer.cs" />
+    <Compile Include="Web\Script\Serialization\IJsonToDictionaryDeserializer.cs" />
     <Compile Include="Web\Script\Serialization\JavaScriptSerializerAdapter.cs" />
+    <Compile Include="Web\Script\Serialization\JsonToDictionaryDeserializer.cs" />
     <Compile Include="Web\SiteMapNodeExtensions.cs" />
     <Compile Include="Xml\ISiteMapXmlReservedAttributeNameProvider.cs" />
     <Compile Include="Xml\SiteMapXmlReservedAttributeNameProvider.cs" />

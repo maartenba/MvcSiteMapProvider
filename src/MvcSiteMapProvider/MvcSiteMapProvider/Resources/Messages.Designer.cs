@@ -70,6 +70,17 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; may not add an attribute with the key &apos;{1}&apos; and value &apos;{2}&apos; to the Attributes dictionary because the key is a reserved name. Reserved names are keys that are meant for use as a property of the node rather than a dictionary value or may be values that are specified in the &quot;MvcSiteMapProvider_AttributesToIgnore&quot; web.config value or attributesToIgnore parameter of the ReservedAttributeNameProvider constructor.
+        ///
+        ///For example, rather than adding a &quot;url&quot; key to the Attributes dictionary,  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string AttributesKeyReserved {
+            get {
+                return ResourceManager.GetString("AttributesKeyReserved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot enumerate a threadsafe dictionary. Instead, enumerate the keys or values collection..
         /// </summary>
         internal static string CannotEnumerateThreadSafeDictionary {
@@ -129,6 +140,17 @@ namespace MvcSiteMapProvider.Resources {
         internal static string InvalidVirtualPath {
             get {
                 return ResourceManager.GetString("InvalidVirtualPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The string &apos;{0}&apos; could not be deserialized into a Dictionary&lt;string, object&gt; because it is not a valid JSON representation of a Dictionary&lt;string, object&gt;. Example: @&quot;{{ &quot;&quot;key&quot;&quot;: &quot;&quot;value&quot;&quot;, &quot;&quot;key2&quot;&quot;: 56 }}&quot;.
+        ///
+        ///{1}.
+        /// </summary>
+        internal static string JsonToDictionaryDeserializerJsonInvalid {
+            get {
+                return ResourceManager.GetString("JsonToDictionaryDeserializerJsonInvalid", resourceCulture);
             }
         }
         

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Routing;
+using System.Xml.Linq;
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Tests.Unit.Web.Html
@@ -314,7 +316,58 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
     class FakeAttributeDictionary
         : Dictionary<string, object>, IAttributeDictionary
     {
+
         #region IAttributeDictionary Members
+
+        public void Add(string key, object value, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(KeyValuePair<string, object> item, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(IDictionary<string, object> items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(IDictionary<string, object> items, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(string jsonString)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(string jsonString, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(XElement xmlNode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(XElement xmlNode, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(NameValueCollection nameValueCollection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRange(NameValueCollection nameValueCollection, bool throwIfReservedKey)
+        {
+            throw new NotImplementedException();
+        }
 
         public void CopyTo(IDictionary<string, object> destination)
         {

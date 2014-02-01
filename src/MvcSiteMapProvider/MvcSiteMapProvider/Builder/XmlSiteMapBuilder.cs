@@ -143,7 +143,7 @@ namespace MvcSiteMapProvider.Builder
             // Assign defaults
             siteMapNode.Title = title;
             siteMapNode.Description = description;
-            AcquireAttributesFrom(node, siteMapNode.Attributes);
+            siteMapNode.Attributes.AddRange(node, false);
             AcquireRolesFrom(node, siteMapNode.Roles);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
@@ -201,25 +201,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return siteMapNode;
-        }
-
-        /// <summary>
-        /// Acquires the attributes from a given XElement.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns></returns>
-        protected virtual void AcquireAttributesFrom(XElement node, IDictionary<string, object> attributes)
-        {
-            foreach (XAttribute attribute in node.Attributes())
-            {
-                var attributeName = attribute.Name.ToString();
-                var attributeValue = attribute.Value;
-
-                if (reservedAttributeNameProvider.IsRegularAttribute(attributeName))
-                {
-                    attributes.Add(attributeName, attributeValue);
-                }
-            }
         }
 
         /// <summary>

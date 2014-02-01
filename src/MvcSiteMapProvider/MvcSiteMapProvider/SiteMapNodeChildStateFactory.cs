@@ -30,13 +30,26 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapNodeChildStateFactory Members
 
-        public virtual IAttributeDictionary CreateAttributeDictionary(ISiteMap siteMap, ILocalizationService localizationService)
+        public virtual IAttributeDictionary CreateAttributeDictionary(string siteMapNodeKey, ISiteMap siteMap, ILocalizationService localizationService)
         {
-            return attributeDictionaryFactory.Create(siteMap, localizationService);
+            return attributeDictionaryFactory.Create(siteMapNodeKey, siteMap, localizationService);
         }
 
+        [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
+        public virtual IAttributeDictionary CreateAttributeDictionary(ISiteMap siteMap, ILocalizationService localizationService)
+        {
+            return attributeDictionaryFactory.Create(string.Empty, siteMap, localizationService);
+        }
+
+        //public virtual IRouteValueDictionary CreateRouteValueDictionary(string siteMapNodeKey, ISiteMap siteMap)
+        //{
+        //    return routeValueDictionaryFactory.Create(siteMapNodeKey, siteMap);
+        //}
+
+        //[Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
         public virtual IRouteValueDictionary CreateRouteValueDictionary(ISiteMap siteMap)
         {
+            //return routeValueDictionaryFactory.Create(string.Empty, siteMap);
             return routeValueDictionaryFactory.Create(siteMap);
         }
 
