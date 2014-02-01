@@ -218,7 +218,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.Title = title;
             siteMapNode.Description = description;
             siteMapNode.Attributes.AddRange(node, false);
-            AcquireRolesFrom(node, siteMapNode.Roles);
+            siteMapNode.Roles.AddRange(node.GetAttributeValue("roles"), new[] { ',', ';' });
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
             siteMapNode.DynamicNodeProvider = node.GetAttributeValue("dynamicNodeProvider");
@@ -278,20 +278,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return nodeParentMap;
-        }
-
-        /// <summary>
-        /// Acquires the roles list from a given XElement
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="roles">The roles IList to populate.</param>
-        protected virtual void AcquireRolesFrom(XElement node, IList<string> roles)
-        {
-            var localRoles = node.GetAttributeValue("roles").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var role in localRoles)
-            {
-                roles.Add(role.Trim());
-            }
         }
 
         /// <summary>

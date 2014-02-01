@@ -121,7 +121,7 @@ namespace MvcSiteMapProvider.Builder
                 siteMapNode.Attributes.AddRange(attributeDictionary);
                 siteMapNode.RouteValues.AddRange(attributeDictionary);
             }
-            AcquireRolesFrom(node, siteMapNode.Roles);
+            siteMapNode.Roles.AddRange(node.Roles);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
             siteMapNode.DynamicNodeProvider = node.GetAttributeValue("dynamicNodeProvider");
@@ -192,19 +192,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return siteMapNode;
-        }
-
-        /// <summary>
-        /// Acquires the roles list from a given <see cref="T:System.Web.SiteMapNode"/>
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="roles">The roles IList to populate.</param>
-        protected virtual void AcquireRolesFrom(System.Web.SiteMapNode node, IList<string> roles)
-        {
-            foreach (var role in node.Roles)
-            {
-                roles.Add(role.ToString());
-            }
         }
 
         /// <summary>

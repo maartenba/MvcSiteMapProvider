@@ -443,7 +443,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.Title = title;
             siteMapNode.Description = description;
             siteMapNode.Attributes.AddRange(attribute.Attributes, false);
-            AcquireRolesFrom(attribute, siteMapNode.Roles);
+            siteMapNode.Roles.AddRange(attribute.Roles);
             siteMapNode.Clickable = attribute.Clickable;
             siteMapNode.VisibilityProvider = attribute.VisibilityProvider;
             siteMapNode.DynamicNodeProvider = attribute.DynamicNodeProvider;
@@ -481,22 +481,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return siteMapNode;
-        }
-
-        /// <summary>
-        /// Acquires the roles list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
-        /// </summary>
-        /// <param name="attribute">The attribute.</param>
-        /// <param name="roles">The roles IList to populate.</param>
-        protected virtual void AcquireRolesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> roles)
-        {
-            if (attribute.Roles != null)
-            {
-                foreach (var role in attribute.Roles)
-                {
-                    roles.Add(role);
-                }
-            }
         }
 
         /// <summary>
