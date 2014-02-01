@@ -251,7 +251,7 @@ namespace MvcSiteMapProvider.Builder
             node.CacheResolvedUrl = attribute.CacheResolvedUrl;
             node.CanonicalUrl = attribute.CanonicalUrl;
             node.CanonicalKey = attribute.CanonicalKey;
-            AcquireMetaRobotsValuesFrom(attribute, node.MetaRobotsValues);
+            node.MetaRobotsValues.AddRange(attribute.MetaRobotsValues);
             node.LastModifiedDate = string.IsNullOrEmpty(attribute.LastModifiedDate) ? DateTime.MinValue : DateTime.Parse(attribute.LastModifiedDate, CultureInfo.InvariantCulture);
             node.ChangeFrequency = attribute.ChangeFrequency;
             node.UpdatePriority = attribute.UpdatePriority;
@@ -278,22 +278,6 @@ namespace MvcSiteMapProvider.Builder
             }
 
             return nodeParentMap;
-        }
-
-        /// <summary>
-        /// Acquires the meta robots values list from a given <see cref="T:IMvcSiteMapNodeAttribute"/>
-        /// </summary>
-        /// <param name="attribute">The attribute.</param>
-        /// <param name="metaRobotsValues">The meta robots values IList to populate.</param>
-        protected virtual void AcquireMetaRobotsValuesFrom(IMvcSiteMapNodeAttribute attribute, IList<string> metaRobotsValues)
-        {
-            if (attribute.MetaRobotsValues != null)
-            {
-                foreach (var value in attribute.MetaRobotsValues)
-                {
-                    metaRobotsValues.Add(value);
-                }
-            }
         }
     }
 }

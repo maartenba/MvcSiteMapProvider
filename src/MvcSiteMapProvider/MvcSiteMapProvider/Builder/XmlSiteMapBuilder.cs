@@ -153,7 +153,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
             siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
             siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");
-            this.AcquireMetaRobotsValuesFrom(node, siteMapNode.MetaRobotsValues);
+            siteMapNode.MetaRobotsValues.AddRange(node.GetAttributeValue("metaRobotsValues"), new[] { ' ' });
             siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValueOrFallback("changeFrequency", "Undefined"));
             siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValueOrFallback("updatePriority", "Undefined"));
             siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()));
@@ -200,21 +200,6 @@ namespace MvcSiteMapProvider.Builder
 
             return siteMapNode;
         }
-
-        /// <summary>
-        /// Acquires the robots meta values list from a given XAttribute
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <param name="roles">The robots meta values IList to populate.</param>
-        protected virtual void AcquireMetaRobotsValuesFrom(XElement node, IList<string> metaRobotsValues)
-        {
-            var values = node.GetAttributeValue("metaRobotsValues").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var value in values)
-            {
-                metaRobotsValues.Add(value);
-            }
-        }
-
 
         /// <summary>
         /// Recursively processes our XML document, parsing our siteMapNodes and dynamicNode(s).
