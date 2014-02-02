@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-using MvcSiteMapProvider.Web.Html.Models;
 using MvcSiteMapProvider.Collections.Specialized;
-using System.Collections.Specialized;
+using MvcSiteMapProvider.Web.Html.Models;
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -217,6 +216,5 @@ namespace MvcSiteMapProvider.Web.Html
                 result.Add("HtmlHelper", typeof(SiteMapPathHelper).FullName);
             return result;
         }
-
     }
 }

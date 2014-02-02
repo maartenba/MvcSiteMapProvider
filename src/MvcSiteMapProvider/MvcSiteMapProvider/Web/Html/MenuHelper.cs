@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using MvcSiteMapProvider.Web.Html.Models;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Web.Html.Models;
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -170,6 +170,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants)
         {
@@ -183,6 +184,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, object sourceMetadata)
@@ -197,6 +199,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
@@ -212,11 +215,11 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent)
         {
-            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToContent, new SourceMetadataDictionary());
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToCurrent, new SourceMetadataDictionary());
         }
 
         /// <summary>
@@ -226,12 +229,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, object sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, object sourceMetadata)
         {
-            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToContent, new SourceMetadataDictionary(sourceMetadata));
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToCurrent, new SourceMetadataDictionary(sourceMetadata));
         }
 
         /// <summary>
@@ -241,17 +244,17 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, SourceMetadataDictionary sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
             ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, startingNode, true, false, maxDepth, drillDownToContent, sourceMetadata);
+            return Menu(helper, startingNode, true, false, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
         /// <summary>
@@ -261,11 +264,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescendants)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants)
         {
-            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescendants, new SourceMetadataDictionary());
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToCurrent, visibilityAffectsDescendants, new SourceMetadataDictionary());
         }
 
         /// <summary>
@@ -275,12 +279,13 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescendants, object sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, object sourceMetadata)
         {
-            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescendants, new SourceMetadataDictionary(sourceMetadata));
+            return Menu(helper, startingNodeLevel, maxDepth, allowForwardSearch, drillDownToCurrent, visibilityAffectsDescendants, new SourceMetadataDictionary(sourceMetadata));
         }
 
         /// <summary>
@@ -290,17 +295,18 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeLevel">The starting node level.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
         {
             ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, null, startingNode, true, false, maxDepth, drillDownToContent, visibilityAffectsDescendants, sourceMetadata);
+            return Menu(helper, null, startingNode, true, false, maxDepth, drillDownToCurrent, visibilityAffectsDescendants, sourceMetadata);
         }
 
         /// <summary>
@@ -391,11 +397,11 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent)
         {
-            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToContent, new SourceMetadataDictionary());
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToCurrent, new SourceMetadataDictionary());
         }
 
         /// <summary>
@@ -407,12 +413,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, object sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, object sourceMetadata)
         {
-            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToContent, new SourceMetadataDictionary(sourceMetadata));
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToCurrent, new SourceMetadataDictionary(sourceMetadata));
         }
 
         /// <summary>
@@ -424,17 +430,17 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, SourceMetadataDictionary sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
             ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, sourceMetadata);
+            return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
         /// <summary>
@@ -446,11 +452,11 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescenants)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescenants)
         {
-            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescenants, new SourceMetadataDictionary());
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToCurrent, visibilityAffectsDescenants, new SourceMetadataDictionary());
         }
 
         /// <summary>
@@ -462,12 +468,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescenants, object sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescenants, object sourceMetadata)
         {
-            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToContent, visibilityAffectsDescenants, new SourceMetadataDictionary(sourceMetadata));
+            return Menu(helper, startingNodeLevel, startingNodeInChildLevel, showStartingNode, maxDepth, allowForwardSearch, drillDownToCurrent, visibilityAffectsDescenants, new SourceMetadataDictionary(sourceMetadata));
         }
 
         /// <summary>
@@ -479,17 +485,17 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToContent, bool visibilityAffectsDescenants, SourceMetadataDictionary sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescenants, SourceMetadataDictionary sourceMetadata)
         {
             ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
             }
-            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, visibilityAffectsDescenants, sourceMetadata);
+            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, visibilityAffectsDescenants, sourceMetadata);
         }
 
         /// <summary>
@@ -544,11 +550,11 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToContent)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent)
         {
-            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent);
+            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent);
         }
 
         /// <summary>
@@ -559,12 +565,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToContent, object sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, object sourceMetadata)
         {
-            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, sourceMetadata);
+            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
         /// <summary>
@@ -575,12 +581,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
-        /// <param name="drillDownToContent">if set to <c>true</c> [drill down to content].</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToContent, SourceMetadataDictionary sourceMetadata)
+        public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToContent, sourceMetadata);
+            return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, sourceMetadata);
         }
 
         /// <summary>
@@ -797,6 +803,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants)
         {
@@ -811,6 +818,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, object sourceMetadata)
@@ -826,6 +834,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startFromCurrentNode">Start from current node if set to <c>true</c>.</param>
         /// <param name="startingNodeInChildLevel">Show starting node in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
@@ -996,6 +1005,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants)
         {
@@ -1013,6 +1023,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, object sourceMetadata)
@@ -1031,6 +1042,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
@@ -1184,7 +1196,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, true, sourceMetadata);
+            return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, drillDownToCurrent, helper.SiteMap.VisibilityAffectsDescendants, sourceMetadata);
         }
 
         /// <summary>
@@ -1197,7 +1209,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <param name="visibilityAffectsDescendants"><c>true</c> if the node visibility should affect the visibility of descendant nodes, otherwise <c>false</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><c>true</c> if the visibility provider should affect the visibility of descendant nodes, otherwise <c>false</c>.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, bool visibilityAffectsDescendants)
         {
@@ -1214,7 +1226,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <param name="visibilityAffectsDescendants"><c>true</c> if the node visibility should affect the visibility of descendant nodes, otherwise <c>false</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><c>true</c> if the visibility provider should affect the visibility of descendant nodes, otherwise <c>false</c>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, bool visibilityAffectsDescendants, object sourceMetadata)
@@ -1232,7 +1244,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
         /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
-        /// <param name="visibilityAffectsDescendants"><c>true</c> if the node visibility should affect the visibility of descendant nodes, otherwise <c>false</c>.</param>
+        /// <param name="visibilityAffectsDescendants"><c>true</c> if the visibility provider should affect the visibility of descendant nodes, otherwise <c>false</c>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
@@ -1252,7 +1264,8 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="startingNodeInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <param name="showStartingNode">Show starting node if set to <c>true</c>.</param>
         /// <param name="maxDepth">The max depth.</param>
-        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node</param>
+        /// <param name="drillDownToCurrent">Should the model exceed the maxDepth to reach the current node?</param>
+        /// <param name="visibilityAffectsDescendants"><b>true</b> if the visibility provider should affect the current node as well as all descendant nodes; otherwise <b>false</b>.</param>
         /// <returns>The model.</returns>
         internal static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool drillDownToCurrent, bool visibilityAffectsDescendants)
         {
@@ -1307,13 +1320,13 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>The model.</returns>
         private static MenuHelperModel BuildModel(MvcSiteMapHtmlHelper helper, SourceMetadataDictionary sourceMetadata, ISiteMapNode startingNode, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth)
         {
-            return BuildModel(helper, sourceMetadata, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false, true);
+            return BuildModel(helper, sourceMetadata, startingNode, startingNodeInChildLevel, showStartingNode, maxDepth, false, helper.SiteMap.VisibilityAffectsDescendants);
         }
 
         /// <summary>
         /// This determines the deepest node matching the current HTTP context, so if the current URL describes a location
         /// deeper than the site map designates, it will determine the closest parent to the current URL and return that 
-        /// as the current node. This allows menu relevence when navigating deeper than the sitemap structure designates, such
+        /// as the current node. This allows menu relevance when navigating deeper than the sitemap structure designates, such
         /// as when navigating to MVC actions, which are not shown in the menus
         /// </summary>
         /// <param name="selectedSiteMapProvider">the current MVC Site Map Provider</param>

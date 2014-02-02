@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Web.Mvc;
-using System.Web;
 
 namespace MvcSiteMapProvider.Web.Html
 {

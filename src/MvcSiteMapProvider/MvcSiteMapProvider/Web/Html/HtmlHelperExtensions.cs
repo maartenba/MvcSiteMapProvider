@@ -1,5 +1,5 @@
-﻿using System.Web.Mvc;
-using System.Web;
+﻿using System;
+using System.Web.Mvc;
 using MvcSiteMapProvider;
 
 namespace MvcSiteMapProvider.Web.Html

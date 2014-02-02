@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-using MvcSiteMapProvider.Web.Html.Models;
 using MvcSiteMapProvider.Collections.Specialized;
-using System.Collections.Specialized;
+using MvcSiteMapProvider.Web.Html.Models;
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -305,7 +303,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, bool rootInChildLevel, SourceMetadataDictionary sourceMetadata)
         {
-            return SiteMap(helper, templateName, startingNode, rootInChildLevel, true, sourceMetadata);
+            return SiteMap(helper, templateName, startingNode, rootInChildLevel, helper.SiteMap.VisibilityAffectsDescendants, sourceMetadata);
         }
 
 

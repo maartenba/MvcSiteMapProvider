@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Web.Html.Models
 {
@@ -17,7 +16,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// <param name="node">The node.</param>
         /// <param name="sourceMetadata">The source metadata provided by the HtmlHelper.</param>
         public SiteMapNodeModel(ISiteMapNode node, IDictionary<string, object> sourceMetadata)
-            : this(node, sourceMetadata, Int32.MaxValue, true, false, true)
+            : this(node, sourceMetadata, Int32.MaxValue, true, false, node.SiteMap.VisibilityAffectsDescendants)
         {
         }
 
