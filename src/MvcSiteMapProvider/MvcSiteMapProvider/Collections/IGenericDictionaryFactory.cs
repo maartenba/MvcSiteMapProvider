@@ -10,5 +10,6 @@ namespace MvcSiteMapProvider.Collections
     public interface IGenericDictionaryFactory
     {
         IDictionary<TKey, TValue> Create<TKey, TValue>();
+        IDictionary<TKey, TValue> Create<TKey, TValue>(IEqualityComparer<TKey> comparer);
     }
 }

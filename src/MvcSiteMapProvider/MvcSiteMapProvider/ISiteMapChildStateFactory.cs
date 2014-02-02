@@ -10,7 +10,10 @@ namespace MvcSiteMapProvider
     /// </summary>
     public interface ISiteMapChildStateFactory
     {
-        IDictionary<TKey, TValue> CreateGenericDictionary<TKey, TValue>();
+        IDictionary<ISiteMapNode, ISiteMapNodeCollection> CreateChildNodeCollectionDictionary();
+        IDictionary<string, ISiteMapNode> CreateKeyDictionary();
+        IDictionary<ISiteMapNode, ISiteMapNode> CreateParentNodeDictionary();
+        IDictionary<string, ISiteMapNode> CreateUrlDictionary();
         ISiteMapNodeCollection CreateSiteMapNodeCollection();
         ISiteMapNodeCollection CreateLockableSiteMapNodeCollection(ISiteMap siteMap);
         ISiteMapNodeCollection CreateReadOnlySiteMapNodeCollection(ISiteMapNodeCollection siteMapNodeCollection);

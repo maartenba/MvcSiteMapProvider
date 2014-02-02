@@ -31,27 +31,42 @@ namespace MvcSiteMapProvider
 
         #region ISiteMapChildStateFactory Members
 
-        public IDictionary<TKey, TValue> CreateGenericDictionary<TKey, TValue>()
+        public virtual IDictionary<ISiteMapNode, ISiteMapNodeCollection> CreateChildNodeCollectionDictionary()
         {
-            return genericDictionaryFactory.Create<TKey, TValue>();
+            return genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNodeCollection>();
         }
 
-        public ISiteMapNodeCollection CreateSiteMapNodeCollection()
+        public virtual IDictionary<string, ISiteMapNode> CreateKeyDictionary()
+        {
+            return genericDictionaryFactory.Create<string, ISiteMapNode>();
+        }
+
+        public virtual IDictionary<ISiteMapNode, ISiteMapNode> CreateParentNodeDictionary()
+        {
+            return genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNode>();
+        }
+
+        public virtual IDictionary<string, ISiteMapNode> CreateUrlDictionary()
+        {
+            return genericDictionaryFactory.Create<string, ISiteMapNode>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        public virtual ISiteMapNodeCollection CreateSiteMapNodeCollection()
         {
             return siteMapNodeCollectionFactory.Create();
         }
 
-        public ISiteMapNodeCollection CreateLockableSiteMapNodeCollection(ISiteMap siteMap)
+        public virtual ISiteMapNodeCollection CreateLockableSiteMapNodeCollection(ISiteMap siteMap)
         {
             return siteMapNodeCollectionFactory.CreateLockable(siteMap);
         }
 
-        public ISiteMapNodeCollection CreateReadOnlySiteMapNodeCollection(ISiteMapNodeCollection siteMapNodeCollection)
+        public virtual ISiteMapNodeCollection CreateReadOnlySiteMapNodeCollection(ISiteMapNodeCollection siteMapNodeCollection)
         {
             return siteMapNodeCollectionFactory.CreateReadOnly(siteMapNodeCollection);
         }
 
-        public ISiteMapNodeCollection CreateEmptyReadOnlySiteMapNodeCollection()
+        public virtual ISiteMapNodeCollection CreateEmptyReadOnlySiteMapNodeCollection()
         {
             return siteMapNodeCollectionFactory.CreateEmptyReadOnly();
         }

@@ -15,7 +15,7 @@ namespace MvcSiteMapProvider
     /// between the child <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> nodes.
     /// </summary>
     /// <remarks>
-    /// This class was created by extracting the public intefaces of SiteMapProvider, 
+    /// This class was created by extracting the public interfaces of SiteMapProvider, 
     /// StaticSiteMapProvider, and MvcSiteMapProvider.DefaultSiteMapProvider.
     /// </remarks>
     public class SiteMap
@@ -47,10 +47,10 @@ namespace MvcSiteMapProvider
             this.siteMapSettings = siteMapSettings;
 
             // Initialize dictionaries
-            this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
-            this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
-            this.parentNodeTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNode>();
-            this.urlTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
+            this.childNodeCollectionTable = siteMapChildStateFactory.CreateChildNodeCollectionDictionary();
+            this.keyTable = siteMapChildStateFactory.CreateKeyDictionary();
+            this.parentNodeTable = siteMapChildStateFactory.CreateParentNodeDictionary();
+            this.urlTable = siteMapChildStateFactory.CreateUrlDictionary();
         }
 
         // Services
