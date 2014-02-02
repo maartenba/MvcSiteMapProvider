@@ -250,7 +250,6 @@ namespace MvcSiteMapProvider.Builder
             foreach (var inheritedRouteParameter in node.GetAttributeValue("inheritedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 var item = inheritedRouteParameter.Trim();
-                //if (siteMapNode.RouteValues.ContainsKey(item))
                 if (node.Attribute(item) != null)
                     throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter, key, title, item));
 
