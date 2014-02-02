@@ -43,7 +43,6 @@ namespace MvcSiteMapProvider.Loader
 
             var builderSet = this.GetBuilderSet(siteMapCacheKey);
             var siteMap = siteMapFactory.Create(builderSet.Builder, builderSet);
-            siteMap.ResourceKey = siteMapCacheKey;
             siteMap.BuildSiteMap();
 
             return siteMap;
@@ -60,7 +59,9 @@ namespace MvcSiteMapProvider.Loader
         protected virtual ISiteMapBuilderSet GetBuilderSet(string siteMapCacheKey)
         {
             var builderSetName = siteMapCacheKeyToBuilderSetMapper.GetBuilderSetName(siteMapCacheKey);
-            return siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
+            var builderSet = siteMapBuilderSetStrategy.GetBuilderSet(builderSetName);
+            builderSet.SiteMapCacheKey = siteMapCacheKey;
+            return builderSet;
         }
     }
 }

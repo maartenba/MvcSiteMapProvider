@@ -323,6 +323,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         }
 
         public string ResourceKey { get; set; }
+
+        public string CacheKey
+        {
+            get { throw new NotImplementedException(); }
+        }
         
         public bool SecurityTrimmingEnabled
         {

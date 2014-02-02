@@ -67,7 +67,7 @@ namespace MvcSiteMapProvider.Builder
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly ICacheDetails cacheDetails;
 
-        #region ISiteMapBuilderSet<CacheDependency> Members
+        #region ISiteMapBuilderSet Members
 
         public virtual ISiteMapBuilder Builder
         {
@@ -78,6 +78,8 @@ namespace MvcSiteMapProvider.Builder
         {
             get { return this.cacheDetails; }
         }
+
+        public virtual string SiteMapCacheKey { get; set; }
 
         public virtual bool SecurityTrimmingEnabled
         {

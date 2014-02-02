@@ -37,7 +37,8 @@ namespace MvcSiteMapProvider
         void HintAncestorNodes(ISiteMapNode node, int upLevel);
         void HintNeighborhoodNodes(ISiteMapNode node, int upLevel, int downLevel);
         bool IsAccessibleToUser(ISiteMapNode node);
-        string ResourceKey { get; set; }
+        string CacheKey { get; }
+        string ResourceKey { get; set; } // TODO: Remove setter in version 5.
         bool SecurityTrimmingEnabled { get; }
         bool UseTitleIfDescriptionNotProvided { get; }
         bool VisibilityAffectsDescendants { get; }

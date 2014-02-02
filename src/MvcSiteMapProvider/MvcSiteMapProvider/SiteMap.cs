@@ -574,7 +574,20 @@ namespace MvcSiteMapProvider
         /// <see cref="T:MvcSiteMapProvider.SiteMapNode"/> object, the GetImplicitResourceString method takes precedence over the 
         /// GetExplicitResourceString when the localization is enabled with the EnableLocalization property set to true. 
         /// </remarks>
-        public virtual string ResourceKey { get; set; }
+        public virtual string ResourceKey
+        {
+            get { return this.siteMapSettings.SiteMapCacheKey; }
+            set { /* do nothing */ }
+        }
+
+        /// <summary>
+        /// Gets a string representing the cache key of the current SiteMap object. This key (which can be though of as the name) can be used
+        /// to retrieve the SiteMap object. It is also used to build request-cache keys so values can persist in the same request across SiteMap builds.
+        /// </summary>
+        public virtual string CacheKey
+        {
+            get { return this.siteMapSettings.SiteMapCacheKey; }
+        }
 
         /// <summary>
         /// Gets a Boolean value indicating whether a site map provider filters site map nodes based on a user's role.
@@ -863,6 +876,5 @@ namespace MvcSiteMapProvider
         }
 
         #endregion
-
     }
 }
