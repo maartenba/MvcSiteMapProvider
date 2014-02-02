@@ -18,6 +18,11 @@ namespace MvcSiteMapProvider.Collections
             return new Dictionary<TKey, TValue>();
         }
 
+        public virtual IDictionary<TKey, TValue> Create<TKey, TValue>(IEqualityComparer<TKey> comparer)
+        {
+            return new Dictionary<TKey, TValue>(comparer);
+        }
+
         #endregion
     }
 }

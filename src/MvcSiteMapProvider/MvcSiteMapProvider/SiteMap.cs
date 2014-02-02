@@ -50,10 +50,10 @@ namespace MvcSiteMapProvider
             this.siteMapSettings = siteMapSettings;
 
             // Initialize dictionaries
-            this.childNodeCollectionTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNodeCollection>();
-            this.keyTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
-            this.parentNodeTable = siteMapChildStateFactory.CreateGenericDictionary<ISiteMapNode, ISiteMapNode>();
-            this.urlTable = siteMapChildStateFactory.CreateGenericDictionary<string, ISiteMapNode>();
+            this.childNodeCollectionTable = siteMapChildStateFactory.CreateChildNodeCollectionDictionary();
+            this.keyTable = siteMapChildStateFactory.CreateKeyDictionary();
+            this.parentNodeTable = siteMapChildStateFactory.CreateParentNodeDictionary();
+            this.urlTable = siteMapChildStateFactory.CreateUrlDictionary();
         }
 
         // Services
