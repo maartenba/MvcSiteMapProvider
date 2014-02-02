@@ -74,9 +74,9 @@ namespace MvcSiteMapProvider.Resources {
         ///
         ///For example, rather than adding a &quot;url&quot; key to the Attributes dictionary,  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string AttributesKeyReserved {
+        internal static string AttributeKeyReserved {
             get {
-                return ResourceManager.GetString("AttributesKeyReserved", resourceCulture);
+                return ResourceManager.GetString("AttributeKeyReserved", resourceCulture);
             }
         }
         
@@ -343,9 +343,9 @@ namespace MvcSiteMapProvider.Resources {
         ///
         ///You may suppress this error message by calling an overload of the RouteValues.Add() or RouteValues.AddRange() that [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string RouteValuesKeyReserved {
+        internal static string RouteValueKeyReserved {
             get {
-                return ResourceManager.GetString("RouteValuesKeyReserved", resourceCulture);
+                return ResourceManager.GetString("RouteValueKeyReserved", resourceCulture);
             }
         }
         

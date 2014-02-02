@@ -11,11 +11,11 @@ namespace MvcSiteMapProvider.Collections.Specialized
         : IList<string>
     {
         /// <summary>
-        /// Splits a string with the given separator characters and adds each element to the collection as a new meta robots value. Duplicates will be ignored.
+        /// Splits a string with the given separator characters and adds each element to the collection as a new value. Duplicates will be ignored.
         /// </summary>
-        /// <param name="metaRobotsValues">The meta robots string to split.</param>
+        /// <param name="stringToSplit">The string to split.</param>
         /// <param name="separator">An array of Unicode characters that delimit the substrings in this string, an empty array that contains no delimiters, or <b>null</b>.</param>
-        void AddRange(string metaRobotsValues, char[] separator);
+        void AddRange(string stringToSplit, char[] separator);
 
         /// <summary>
         /// Adds each element of a <see cref="System.Collections.Generic.IEnumerable{string}"/> to the collection as a new meta robots value. Duplicates will be ignored.

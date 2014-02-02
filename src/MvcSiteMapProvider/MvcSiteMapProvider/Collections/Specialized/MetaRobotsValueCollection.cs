@@ -113,13 +113,13 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <summary>
         /// Splits a string with the given separator characters and adds each element to the collection as a new meta robots value. Duplicates will be ignored.
         /// </summary>
-        /// <param name="metaRobotsValues">The meta robots string to split.</param>
+        /// <param name="stringToSplit">The meta robots string to split.</param>
         /// <param name="separator">An array of Unicode characters that delimit the substrings in this string, an empty array that contains no delimiters, or <b>null</b>.</param>
-        public void AddRange(string metaRobotsValues, char[] separator)
+        public void AddRange(string stringToSplit, char[] separator)
         {
-            if (!string.IsNullOrEmpty(metaRobotsValues))
+            if (!string.IsNullOrEmpty(stringToSplit))
             {
-                var parameters = metaRobotsValues.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                var parameters = stringToSplit.Split(separator, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var parameter in parameters)
                 {
                     this.Add(parameter.Trim());

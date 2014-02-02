@@ -85,7 +85,7 @@ namespace MvcSiteMapProvider.Builder
                 siteMap.AddNode(root);
             }
 
-            // Process our XML, passing in the main root sitemap node and xml element.
+            // Process our XML, passing in the main root sitemap node and XML element.
             ProcessXmlNodes(siteMap, root, rootElement);
 
             // Done!
@@ -227,7 +227,7 @@ namespace MvcSiteMapProvider.Builder
                     {
                         var dynamicNodesCreated = dynamicNodeBuilder.BuildDynamicNodesFor(siteMap, childNode, parentNode);
 
-                        // Add non-dynamic childs for every dynamicnode
+                        // Add non-dynamic children for every dynamic node
                         foreach (var dynamicNodeCreated in dynamicNodesCreated)
                         {
                             ProcessXmlNodes(siteMap, dynamicNodeCreated, node);

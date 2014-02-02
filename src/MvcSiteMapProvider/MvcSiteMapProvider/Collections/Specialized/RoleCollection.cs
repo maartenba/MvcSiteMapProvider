@@ -20,42 +20,42 @@ namespace MvcSiteMapProvider.Collections.Specialized
         {
         }
 
-        public override void AddRange(IEnumerable<string> roles)
+        public override void AddRange(IEnumerable<string> collection)
         {
-            if (roles != null)
+            if (collection != null)
             {
-                base.AddRange(roles);
+                base.AddRange(collection);
             }
         }
 
         /// <summary>
-        /// Splits a string with the given separator characters and adds each element to the collection as a new role.
+        /// Splits a string with the given separator characters and adds each element to the collection.
         /// </summary>
-        /// <param name="roles">The roles string to split.</param>
+        /// <param name="stringToSplit">The string to split.</param>
         /// <param name="separator">An array of Unicode characters that delimit the substrings in this string, an empty array that contains no delimiters, or <b>null</b>.</param>
-        public void AddRange(string roles, char[] separator)
+        public void AddRange(string stringToSplit, char[] separator)
         {
-            if (!string.IsNullOrEmpty(roles))
+            if (!string.IsNullOrEmpty(stringToSplit))
             {
-                var localRoles = roles.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var role in localRoles)
+                var values = stringToSplit.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var value in values)
                 {
-                    this.Add(role.Trim());
+                    this.Add(value.Trim());
                 }
             }
         }
 
         /// <summary>
-        /// Adds each element of a <see cref="System.Collections.IList"/> to the collection as a new role.
+        /// Adds each element of a <see cref="System.Collections.IList"/> to the collection.
         /// </summary>
-        /// <param name="roles">The <see cref="System.Collections.IList"/> containing the values to add, or <b>null</b>.</param>
-        public void AddRange(IList roles)
+        /// <param name="collection">The <see cref="System.Collections.IList"/> containing the values to add, or <b>null</b>.</param>
+        public void AddRange(IList collection)
         {
-            if (roles != null)
+            if (collection != null)
             {
-                foreach (var role in roles)
+                foreach (var item in collection)
                 {
-                    this.Add(role.ToString());
+                    this.Add(item.ToString());
                 }
             }
         }

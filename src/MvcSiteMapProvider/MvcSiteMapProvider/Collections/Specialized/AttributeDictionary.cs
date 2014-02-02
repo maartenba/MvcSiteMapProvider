@@ -94,7 +94,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
             else if (throwIfReservedKey)
             {
-                throw new ReservedKeyException(string.Format(Resources.Messages.AttributesKeyReserved, this.siteMapNodeKey, key, value));
+                throw new ReservedKeyException(string.Format(Resources.Messages.AttributeKeyReserved, this.siteMapNodeKey, key, value));
             }
         }
 
@@ -216,7 +216,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
             else if (throwIfReservedKey)
             {
-                throw new ReservedKeyException(string.Format(Resources.Messages.AttributesKeyReserved, this.siteMapNodeKey, key, value));
+                throw new ReservedKeyException(string.Format(Resources.Messages.AttributeKeyReserved, this.siteMapNodeKey, key, value));
             }
         }
 
@@ -265,7 +265,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 }
                 else
                 {
-                    throw new ReservedKeyException(string.Format(Resources.Messages.AttributesKeyReserved, this.siteMapNodeKey, key, value));
+                    throw new ReservedKeyException(string.Format(Resources.Messages.AttributeKeyReserved, this.siteMapNodeKey, key, value));
                 }
             }
         }

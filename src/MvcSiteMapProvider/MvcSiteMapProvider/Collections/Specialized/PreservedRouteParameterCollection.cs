@@ -20,31 +20,31 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Splits a string with the given separator characters and adds each element to the collection as a new preserved route parameters.
+        /// Splits a string with the given separator characters and adds each element to the collection.
         /// </summary>
-        /// <param name="preservedRouteParameters">The preserved route parameters string to split.</param>
+        /// <param name="stringToSplit">The string to split.</param>
         /// <param name="separator">An array of Unicode characters that delimit the substrings in this string, an empty array that contains no delimiters, or <b>null</b>.</param>
-        public void AddRange(string preservedRouteParameters, char[] separator)
+        public void AddRange(string stringToSplit, char[] separator)
         {
-            if (!string.IsNullOrEmpty(preservedRouteParameters))
+            if (!string.IsNullOrEmpty(stringToSplit))
             {
-                var parameters = preservedRouteParameters.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-                foreach (var parameter in parameters)
+                var collection = stringToSplit.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var item in collection)
                 {
-                    this.Add(parameter.Trim());
+                    this.Add(item.Trim());
                 }
             }
         }
 
         /// <summary>
-        /// Adds each element of a <see cref="System.Collections.Generic.IEnumerable{string}"/> to the collection as a new preserved route parameter.
+        /// Adds each element of a <see cref="System.Collections.Generic.IEnumerable{string}"/> to the collection.
         /// </summary>
-        /// <param name="preservedRouteParameters">The <see cref="System.Collections.Generic.IEnumerable{string}"/> containing the values to add, or <b>null</b>.</param>
-        public override void AddRange(IEnumerable<string> preservedRouteParameters)
+        /// <param name="collection">The <see cref="System.Collections.Generic.IEnumerable{string}"/> containing the values to add, or <b>null</b>.</param>
+        public override void AddRange(IEnumerable<string> collection)
         {
-            if (preservedRouteParameters != null)
+            if (collection != null)
             {
-                base.AddRange(preservedRouteParameters);
+                base.AddRange(collection);
             }
         } 
     }
