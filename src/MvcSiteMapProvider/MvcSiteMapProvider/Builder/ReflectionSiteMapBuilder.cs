@@ -472,14 +472,6 @@ namespace MvcSiteMapProvider.Builder
             if (!string.IsNullOrEmpty(controller)) siteMapNode.RouteValues.Add("controller", controller);
             if (!string.IsNullOrEmpty(action)) siteMapNode.RouteValues.Add("action", action);
 
-            // Handle MVC details
-
-            // Add defaults for area
-            if (!siteMapNode.RouteValues.ContainsKey("area"))
-            {
-                siteMapNode.RouteValues.Add("area", "");
-            }
-
             return siteMapNode;
         }
     }

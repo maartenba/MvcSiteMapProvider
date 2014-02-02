@@ -192,12 +192,6 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-            // Add defaults for area
-            if (!siteMapNode.RouteValues.ContainsKey("area"))
-            {
-                siteMapNode.RouteValues.Add("area", "");
-            }
-
             return siteMapNode;
         }
 
