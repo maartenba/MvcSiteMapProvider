@@ -21,6 +21,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     {
         public RouteValueDictionary(
             string siteMapNodeKey,
+            string memberName,
             ISiteMap siteMap,
             IReservedAttributeNameProvider reservedAttributeNameProvider,
             IJsonToDictionaryDeserializer jsonToDictionaryDeserializer,
@@ -29,12 +30,15 @@ namespace MvcSiteMapProvider.Collections.Specialized
         {
             if (string.IsNullOrEmpty(siteMapNodeKey))
                 throw new ArgumentNullException("siteMapNodeKey");
+            if (string.IsNullOrEmpty(memberName))
+                throw new ArgumentNullException("memberName");
             if (reservedAttributeNameProvider == null)
                 throw new ArgumentNullException("reservedAttributeNameProvider");
             if (jsonToDictionaryDeserializer == null)
                 throw new ArgumentNullException("jsonToDictionaryDeserializer");
 
             this.siteMapNodeKey = siteMapNodeKey;
+            this.memberName = memberName;
             this.reservedAttributeNameProvider = reservedAttributeNameProvider;
             this.jsonToDictionaryDeserializer = jsonToDictionaryDeserializer;
 
@@ -43,13 +47,13 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         protected readonly string siteMapNodeKey;
+        protected readonly string memberName;
         protected readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
         protected readonly IJsonToDictionaryDeserializer jsonToDictionaryDeserializer;
 
         protected override string GetCacheKey()
         {
-            // TODO: Update cache key with siteMapCacheKey and siteMapNodeKey so it will persist between SiteMap rebuilds
-            return "__ROUTE_VALUE_DICTIONARY_" + this.instanceId.ToString();
+            return "__ROUTE_VALUE_DICTIONARY_" + this.siteMap.CacheKey + "_" + this.siteMapNodeKey + "_" + this.memberName + "_";
         }
 
         /// <summary>

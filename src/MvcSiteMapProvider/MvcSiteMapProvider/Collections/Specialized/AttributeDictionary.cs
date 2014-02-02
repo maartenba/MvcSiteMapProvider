@@ -20,6 +20,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
     {
         public AttributeDictionary(
             string siteMapNodeKey,
+            string memberName,
             ISiteMap siteMap,
             ILocalizationService localizationService,
             IReservedAttributeNameProvider reservedAttributeNameProvider,
@@ -30,6 +31,8 @@ namespace MvcSiteMapProvider.Collections.Specialized
         {
             if (string.IsNullOrEmpty(siteMapNodeKey))
                 throw new ArgumentNullException("siteMapNodeKey");
+            if (string.IsNullOrEmpty(memberName))
+                throw new ArgumentNullException("memberName");
             if (localizationService == null)
                 throw new ArgumentNullException("localizationService");
             if (reservedAttributeNameProvider == null)
@@ -38,20 +41,21 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 throw new ArgumentNullException("jsonToDictionaryDeserializer");
 
             this.siteMapNodeKey = siteMapNodeKey;
+            this.memberName = memberName;
             this.localizationService = localizationService;
             this.reservedAttributeNameProvider = reservedAttributeNameProvider;
             this.jsonToDictionaryDeserializer = jsonToDictionaryDeserializer;
         }
 
         protected readonly string siteMapNodeKey;
+        protected readonly string memberName;
         protected readonly ILocalizationService localizationService;
         protected readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
         protected readonly IJsonToDictionaryDeserializer jsonToDictionaryDeserializer;
 
         protected override string GetCacheKey()
         {
-            // TODO: Update cache key with siteMapCacheKey and siteMapNodeKey so it will persist between SiteMap rebuilds
-            return "__ATTRIBUTE_DICTIONARY_" + this.instanceId.ToString();
+            return "__ATTRIBUTE_DICTIONARY_" + this.siteMap.CacheKey + "_" + this.siteMapNodeKey + "_" + this.memberName + "_";
         }
 
         /// <summary>

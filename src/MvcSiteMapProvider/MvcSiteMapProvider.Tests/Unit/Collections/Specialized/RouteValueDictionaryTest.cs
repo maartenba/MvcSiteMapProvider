@@ -46,7 +46,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
 
         private IRouteValueDictionary NewRouteValueDictionaryInstance()
         {
-            return new RouteValueDictionary("testNodeKey", mSiteMap.Object, mReservedAttributeNameProvider.Object, mjsonToDictionaryDeserializer.Object, mRequestCache.Object);
+            return new RouteValueDictionary("testNodeKey", "RouteValues", mSiteMap.Object, mReservedAttributeNameProvider.Object, mjsonToDictionaryDeserializer.Object, mRequestCache.Object);
         }
 
         #endregion

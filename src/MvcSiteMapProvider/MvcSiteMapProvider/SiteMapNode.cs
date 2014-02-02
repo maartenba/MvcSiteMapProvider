@@ -52,8 +52,8 @@ namespace MvcSiteMapProvider
             this.urlPath = urlPath;
 
             // Initialize child collections
-            this.attributes = siteMapNodeChildStateFactory.CreateAttributeDictionary(key, siteMap, localizationService);
-            this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueDictionary(key, siteMap);
+            this.attributes = siteMapNodeChildStateFactory.CreateAttributeDictionary(key, "Attributes", siteMap, localizationService);
+            this.routeValues = siteMapNodeChildStateFactory.CreateRouteValueDictionary(key, "RouteValues", siteMap);
             this.preservedRouteParameters = siteMapNodeChildStateFactory.CreatePreservedRouteParameterCollection(siteMap);
             this.roles = siteMapNodeChildStateFactory.CreateRoleCollection(siteMap);
             this.metaRobotsValues = siteMapNodeChildStateFactory.CreateMetaRobotsValueCollection(siteMap);

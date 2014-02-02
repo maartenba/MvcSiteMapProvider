@@ -10,16 +10,8 @@ namespace MvcSiteMapProvider
     /// </summary>
     public interface ISiteMapNodeChildStateFactory
     {
-        IAttributeDictionary CreateAttributeDictionary(string siteMapNodeKey, ISiteMap siteMap, ILocalizationService localizationService);
-
-        [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
-        IAttributeDictionary CreateAttributeDictionary(ISiteMap siteMap, ILocalizationService localizationService);
-
-        IRouteValueDictionary CreateRouteValueDictionary(string siteMapNodeKey, ISiteMap siteMap);
-
-        [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
-        IRouteValueDictionary CreateRouteValueDictionary(ISiteMap siteMap);
-
+        IAttributeDictionary CreateAttributeDictionary(string siteMapNodeKey, string memberName, ISiteMap siteMap, ILocalizationService localizationService);
+        IRouteValueDictionary CreateRouteValueDictionary(string siteMapNodeKey, string memberName, ISiteMap siteMap);
         IPreservedRouteParameterCollection CreatePreservedRouteParameterCollection(ISiteMap siteMap);
         IRoleCollection CreateRoleCollection(ISiteMap siteMap);
         IMetaRobotsValueCollection CreateMetaRobotsValueCollection(ISiteMap siteMap);

@@ -37,15 +37,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         #region IRouteValueDictionaryFactory Members
 
-        public IRouteValueDictionary Create(string siteMapNodeKey, ISiteMap siteMap)
+        public IRouteValueDictionary Create(string siteMapNodeKey, string memberName, ISiteMap siteMap)
         {
- 	        return new RouteValueDictionary(siteMapNodeKey, siteMap, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
-        }
-
-        [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
-        public virtual IRouteValueDictionary Create(ISiteMap siteMap)
-        {
-            return new RouteValueDictionary("NO_KEY", siteMap, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
+ 	        return new RouteValueDictionary(siteMapNodeKey, memberName, siteMap, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
         }
 
         #endregion

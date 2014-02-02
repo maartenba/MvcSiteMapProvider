@@ -37,15 +37,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         #region IAttributeDictionaryFactory Members
 
-        public virtual IAttributeDictionary Create(string siteMapNodeKey, ISiteMap siteMap, ILocalizationService localizationService)
+        public virtual IAttributeDictionary Create(string siteMapNodeKey, string memberName, ISiteMap siteMap, ILocalizationService localizationService)
         {
-            return new AttributeDictionary(siteMapNodeKey, siteMap, localizationService, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
-        }
-
-        [Obsolete("Use the overload that accepts a siteMapNodeKey instead. This overload will be removed in version 5.")]
-        public virtual IAttributeDictionary Create(ISiteMap siteMap, ILocalizationService localizationService)
-        {
-            return new AttributeDictionary("NO_KEY", siteMap, localizationService, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
+            return new AttributeDictionary(siteMapNodeKey, memberName, siteMap, localizationService, this.reservedAttributeNameProvider, this.jsonToDictionaryDeserializer, this.requestCache);
         }
 
         #endregion

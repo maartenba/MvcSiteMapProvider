@@ -33,7 +33,6 @@ namespace MvcSiteMapProvider
         }
 
         private readonly IRequestCache requestCache;
-        private readonly Guid instanceId = Guid.NewGuid();
 
         #region Request Cacheable Members
 
@@ -102,7 +101,7 @@ namespace MvcSiteMapProvider
         {
             // NOTE: We must include IsReadOnly in the request cache key because we may have a different 
             // result when the sitemap is being constructed than when it is being read by the presentation layer.
-            return "__MVCSITEMAP_" + memberName + "_" + this.IsReadOnly.ToString() + "_" + this.instanceId.ToString();
+            return "__MVCSITEMAP_" + this.CacheKey + "_" + memberName + "_" + this.IsReadOnly.ToString() + "_";
         }
 
         protected virtual string GetDictionaryKey(IDictionary<string, object> dictionary)
