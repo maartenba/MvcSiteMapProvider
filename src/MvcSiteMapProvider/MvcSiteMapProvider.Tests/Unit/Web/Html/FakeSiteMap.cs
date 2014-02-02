@@ -11,7 +11,8 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         : ISiteMap
     {
         public FakeSiteMap(
-            bool securityTrimmingEnabled
+            bool securityTrimmingEnabled,
+            bool visibilityAffectsDescendants
             )
         {
             this.securityTrimmingEnabled = securityTrimmingEnabled;
@@ -28,6 +29,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 
         // Object State
         protected readonly bool securityTrimmingEnabled;
+        protected readonly bool visibilityAffectsDescendants;
         protected ISiteMapNode root;
         protected ISiteMapNode currentNode;
 
@@ -334,6 +336,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         public IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName)
         {
             throw new NotImplementedException();
+        }
+
+        public bool VisibilityAffectsDescendants
+        {
+            get { return this.visibilityAffectsDescendants; }
         }
 
         #endregion

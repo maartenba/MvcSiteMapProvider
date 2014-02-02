@@ -13,8 +13,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             //      /Home/About(+)
             //      /Home/Contact(+)
             
-            bool securityTrimmingEnabled = true;
-            var siteMap = new FakeSiteMap(securityTrimmingEnabled);
+            var siteMap = new FakeSiteMap(securityTrimmingEnabled: true, visibilityAffectsDescendants: true);
 
             var home = new FakeSiteMapNode(siteMap, "Home", "Home", isDynamic: false, isAccessibleToUser: true, isVisible: true, isClickable: true, url: "/", metaRobotsContentString: string.Empty);
             var about = new FakeSiteMapNode(siteMap, "About", "About", isDynamic: false, isAccessibleToUser: true, isVisible: true, isClickable: true, url: "/Home/About", metaRobotsContentString: string.Empty);
@@ -51,8 +50,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             //              /Categories/MemoryCards/Sony256GBSD/SonySDCardReader(+a)
 
 
-            bool securityTrimmingEnabled = true;
-            var siteMap = new FakeSiteMap(securityTrimmingEnabled);
+            var siteMap = new FakeSiteMap(securityTrimmingEnabled: true, visibilityAffectsDescendants: true);
 
             // Home
             var home = new FakeSiteMapNode(siteMap, "Home", "Home", isDynamic: false, isAccessibleToUser: true, isVisible: true, isClickable: true, url: "/", metaRobotsContentString: string.Empty);
@@ -150,9 +148,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             //  /Root/B(+)
             //  /Root/C(+)
 
-
-            bool securityTrimmingEnabled = true;
-            var siteMap = new FakeSiteMap(securityTrimmingEnabled);
+            var siteMap = new FakeSiteMap(securityTrimmingEnabled: true, visibilityAffectsDescendants: true);
 
             var root = new FakeSiteMapNode(siteMap, "Root", "Root", url: "/", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
             var a = new FakeSiteMapNode(siteMap, "A", "A", url: "/Root/A", isVisible: true, isDynamic: false, isAccessibleToUser: true, isClickable: true, metaRobotsContentString: string.Empty);
