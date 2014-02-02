@@ -115,7 +115,7 @@ namespace MvcSiteMapProvider.Builder
                 // the attributes, so there is no way to loop through them without reflection or some
                 // fancy dynamic subclass implementation.
                 var attributeDictionary = node.GetPrivateFieldValue<NameValueCollection>("_attributes");
-                siteMapNode.Attributes.AddRange(attributeDictionary);
+                siteMapNode.Attributes.AddRange(attributeDictionary, false);
             }
             siteMapNode.Roles.AddRange(node.Roles);
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
@@ -161,27 +161,48 @@ namespace MvcSiteMapProvider.Builder
 
             // Handle MVC details
 
-            // Get area, controller and action from node declaration
-            string area = node.GetAttributeValue("area");
-            string controller = node.GetAttributeValue("controller");
-
-            siteMapNode.Area = area;
-            siteMapNode.Controller = controller;
-
-            // Inherit area and controller from parent
-            if (parentNode != null)
-            {
-                if (string.IsNullOrEmpty(area))
-                {
-                    siteMapNode.Area = parentNode.Area;
-                }
-                if (string.IsNullOrEmpty(controller))
-                {
-                    siteMapNode.Controller = parentNode.Controller;
-                }
-            }
+            // Get area and controller from node declaration
+            siteMapNode.Area = this.InheritAreaIfNotProvided(node, parentNode);
+            siteMapNode.Controller = this.InheritControllerIfNotProvided(node, parentNode);
 
             return nodeParentMap;
+        }
+
+        /// <summary>
+        /// Inherits the area from the parent node if it is not provided in the current <see cref="System.Web.SiteMapNode"/> and the parent node is not null.
+        /// </summary>
+        /// <param name="node">The siteMapNode element.</param>
+        /// <param name="parentNode">The parent node.</param>
+        /// <returns>The value provided by either the siteMapNode or parentNode.Area.</returns>
+        protected virtual string InheritAreaIfNotProvided(System.Web.SiteMapNode node, ISiteMapNode parentNode)
+        {
+            var result = node.GetAttributeValue("area");
+
+            // NOTE: Since there is no way to determine if an attribute exists without using reflection, 
+            // using area="" to override the parent area is not supported.
+            if (string.IsNullOrEmpty(result) && parentNode != null)
+            {
+                result = parentNode.Area;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Inherits the controller from the parent node if it is not provided in the current <see cref="System.Web.SiteMapNode"/> and the parent node is not null.
+        /// </summary>
+        /// <param name="node">The siteMapNode element.</param>
+        /// <param name="parentNode">The parent node.</param>
+        /// <returns>The value provided by either the siteMapNode or parentNode.Controller.</returns>
+        protected virtual string InheritControllerIfNotProvided(System.Web.SiteMapNode node, ISiteMapNode parentNode)
+        {
+            var result = node.GetAttributeValue("controller");
+            if (string.IsNullOrEmpty(result) && parentNode != null)
+            {
+                result = parentNode.Controller;
+            }
+
+            return result;
         }
     }
 }

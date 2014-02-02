@@ -186,12 +186,11 @@ namespace MvcSiteMapProvider.Builder
         /// <returns>An MvcSiteMapNode which represents the XMLElement.</returns>
         protected virtual ISiteMapNodeToParentRelation GetSiteMapNodeFromXmlElement(XElement node, ISiteMapNode parentNode, ISiteMapNodeHelper helper)
         {
-            // Get area, controller and action from node declaration
-            string area = node.GetAttributeValue("area");
-            string controller = node.GetAttributeValue("controller");
+            // Get area and controller from node declaration or the parent node
+            var area = this.InheritAreaIfNotProvided(node, parentNode);
+            var controller = this.InheritControllerIfNotProvided(node, parentNode);
             var parentKey = parentNode == null ? "" : parentNode.Key;
             var httpMethod = node.GetAttributeValueOrFallback("httpMethod", HttpVerbs.Get.ToString()).ToUpperInvariant();
-            // Handle title and description
             var title = node.GetAttributeValue("title");
             var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
 
@@ -243,11 +242,16 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.PreservedRouteParameters.AddRange(node.GetAttributeValue("preservedRouteParameters"), new[] { ',', ';' });
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
 
+            // Area and controller may need inheriting from the parent node, so set (or reset) them explicitly
+            siteMapNode.Area = area;
+            siteMapNode.Controller = controller;
+
             // Add inherited route values to sitemap node
             foreach (var inheritedRouteParameter in node.GetAttributeValue("inheritedRouteParameters").Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 var item = inheritedRouteParameter.Trim();
-                if (siteMapNode.RouteValues.ContainsKey(item))
+                //if (siteMapNode.RouteValues.ContainsKey(item))
+                if (node.Attribute(item) != null)
                     throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter, key, title, item));
 
                 if (parentNode.RouteValues.ContainsKey(item))
@@ -256,22 +260,41 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-            // Handle MVC details
+            return nodeParentMap;
+        }
 
-            // Inherit area and controller from parent
-            if (parentNode != null)
+        /// <summary>
+        /// Inherits the area from the parent node if it is not provided in the current siteMapNode XML element and the parent node is not null.
+        /// </summary>
+        /// <param name="node">The siteMapNode element.</param>
+        /// <param name="parentNode">The parent node.</param>
+        /// <returns>The value provided by either the siteMapNode or parentNode.Area.</returns>
+        protected virtual string InheritAreaIfNotProvided(XElement node, ISiteMapNode parentNode)
+        {
+            var result = node.GetAttributeValue("area");
+            if (node.Attribute("area") == null && parentNode != null)
             {
-                if (string.IsNullOrEmpty(area) && !siteMapNode.RouteValues.ContainsKey("area"))
-                {
-                    siteMapNode.Area = parentNode.Area;
-                }
-                if (string.IsNullOrEmpty(controller) && !siteMapNode.RouteValues.ContainsKey("controller"))
-                {
-                    siteMapNode.Controller = parentNode.Controller;
-                }
+                result = parentNode.Area;
             }
 
-            return nodeParentMap;
+            return result;
+        }
+
+        /// <summary>
+        /// Inherits the controller from the parent node if it is not provided in the current siteMapNode XML element and the parent node is not null.
+        /// </summary>
+        /// <param name="node">The siteMapNode element.</param>
+        /// <param name="parentNode">The parent node.</param>
+        /// <returns>The value provided by either the siteMapNode or parentNode.Controller.</returns>
+        protected virtual string InheritControllerIfNotProvided(XElement node, ISiteMapNode parentNode)
+        {
+            var result = node.GetAttributeValue("controller");
+            if (node.Attribute("controller") == null && parentNode != null)
+            {
+                result = parentNode.Controller;
+            }
+
+            return result;
         }
     }
 }
