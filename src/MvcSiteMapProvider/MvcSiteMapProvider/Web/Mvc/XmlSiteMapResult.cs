@@ -46,15 +46,6 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected readonly List<string> duplicateUrlCheck = new List<string>();
 
         /// <summary>
-        /// Gets or sets a value indicating whether the visibility property of the current node
-        /// will affect the descendant nodes.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if visibility should affect descendants; otherwise, <c>false</c>.
-        /// </value>
-        private bool visibilityAffectsDescendants;
-
-        /// <summary>
         /// Maximal number of links per sitemap file.
         /// </summary>
         /// <remarks>
@@ -120,7 +111,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             // Output content type
             context.HttpContext.Response.ContentType = "text/xml";
 
-            // Generate sitemap sitemapindex
+            // Generate sitemap index
             var sitemapIndex = new XElement(Ns + "sitemapindex");
             sitemapIndex.Add(GenerateSiteMapIndexElements(Convert.ToInt32(numPages), this.BaseUrl, SiteMapUrlTemplate).ToArray());
 
@@ -193,9 +184,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                     {
                         throw new UnknownSiteMapException(Resources.Messages.UnknownSiteMap);
                     }
-                    visibilityAffectsDescendants = siteMap.VisibilityAffectsDescendants;
-                    RootNode = siteMap.RootNode;
-                    foreach (var item in FlattenHierarchy(this.RootNode, context))
+                    this.RootNode = siteMap.RootNode;
+                    foreach (var item in FlattenHierarchy(this.RootNode, context, siteMap.VisibilityAffectsDescendants))
                     {
                         flattenedHierarchy.Add(item);
                     }
@@ -203,8 +193,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             }
             else
             {
-                visibilityAffectsDescendants = siteMapLoader.GetSiteMap().VisibilityAffectsDescendants;
-                foreach (var item in FlattenHierarchy(this.RootNode, context))
+                foreach (var item in FlattenHierarchy(this.RootNode, context, this.RootNode.SiteMap.VisibilityAffectsDescendants))
                 {
                     flattenedHierarchy.Add(item);
                 }
@@ -285,45 +274,30 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// Generates flat list of SiteMapNode from SiteMap hierarchy.
         /// </summary>
         /// <param name="startingNode">The starting node.</param>
-        /// <param name="url">The URL.</param>
+        /// <param name="context">The controller context.</param>
+        /// <param name="visibilityAffectsDescendants">A boolean indicating whether visibility of the current node should affect the visibility of descendant nodes.</param>
         /// <returns>A flat list of SiteMapNode.</returns>
-        protected virtual IEnumerable<ISiteMapNode> FlattenHierarchy(ISiteMapNode startingNode, ControllerContext context)
+        protected virtual IEnumerable<ISiteMapNode> FlattenHierarchy(ISiteMapNode startingNode, ControllerContext context, bool visibilityAffectsDescendants)
         {
             // Inaccessible - don't process current node or any descendant nodes.
-            if (startingNode.IsAccessibleToUser())
+            if (startingNode.IsAccessibleToUser() && (visibilityAffectsDescendants ? startingNode.IsVisible(SourceMetadata) : true))
             {
                 if (this.ShouldNodeRender(startingNode, context))
                 {
                     yield return startingNode;
                 }
-                if (startingNode.HasChildNodes && ChildNodesAreAllowedToBeVisible(startingNode))
+                if (startingNode.HasChildNodes)
                 {
                     // Make sure all child nodes are accessible prior to rendering them...
                     foreach (ISiteMapNode node in startingNode.ChildNodes)
                     {
-                        foreach (var childNode in FlattenHierarchy(node, context))
+                        foreach (var childNode in FlattenHierarchy(node, context, visibilityAffectsDescendants))
                         {
                             yield return childNode;
                         }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Checks the rules to determine if the childnodes can be visible in the sitemap
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns><b>true</b> if the childnodes can be visible; otherwise <b>false</b></returns>
-        protected bool ChildNodesAreAllowedToBeVisible(ISiteMapNode node)
-        {
-            if (!visibilityAffectsDescendants)
-                return true;
-
-            if (node == RootNode)
-                node.IsVisible(SourceMetadata);
-
-            return node.ParentNode.IsVisible(SourceMetadata);
         }
 
         /// <summary>

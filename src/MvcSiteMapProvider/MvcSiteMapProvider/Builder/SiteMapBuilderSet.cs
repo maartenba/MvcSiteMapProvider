@@ -44,14 +44,17 @@ namespace MvcSiteMapProvider.Builder
             bool enableLocalization,
             ISiteMapBuilder siteMapBuilder,
             ICacheDetails cacheDetails
-            ) :
-            this(
-            instanceName,
-            securityTrimmingEnabled,
-            enableLocalization,
-            false,
-            siteMapBuilder,
-            cacheDetails) { }
+            ) 
+            : this(
+                instanceName,
+                securityTrimmingEnabled,
+                enableLocalization,
+                true,
+                siteMapBuilder,
+                cacheDetails
+            ) 
+        { 
+        }
 
 
         protected readonly string instanceName;
