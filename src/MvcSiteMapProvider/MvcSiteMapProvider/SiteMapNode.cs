@@ -155,8 +155,20 @@ namespace MvcSiteMapProvider
         /// <remarks>The description can be localized using a resource provider.</remarks>
         public override string Description 
         {
-            get { return localizationService.GetResourceString("description", this.description, this.SiteMap); }
-            set { this.description = localizationService.ExtractExplicitResourceKey("description", value); }
+            get 
+            { 
+                var result = localizationService.GetResourceString("description", this.description, this.SiteMap);
+                if (this.SiteMap.UseTitleIfDescriptionNotProvided && string.IsNullOrEmpty(result))
+                {
+                    result = this.Title;
+                }
+
+                return result;
+            }
+            set 
+            { 
+                this.description = localizationService.ExtractExplicitResourceKey("description", value); 
+            }
         }
 
         /// <summary>

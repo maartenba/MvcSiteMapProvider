@@ -39,6 +39,7 @@ namespace MvcSiteMapProvider
         bool IsAccessibleToUser(ISiteMapNode node);
         string ResourceKey { get; set; }
         bool SecurityTrimmingEnabled { get; }
+        bool UseTitleIfDescriptionNotProvided { get; }
         bool VisibilityAffectsDescendants { get; }
         Type ResolveControllerType(string areaName, string controllerName);
         IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);

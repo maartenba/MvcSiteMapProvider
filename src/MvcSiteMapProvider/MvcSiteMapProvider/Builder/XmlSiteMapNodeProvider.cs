@@ -192,7 +192,6 @@ namespace MvcSiteMapProvider.Builder
             var parentKey = parentNode == null ? "" : parentNode.Key;
             var httpMethod = node.GetAttributeValueOrFallback("httpMethod", HttpVerbs.Get.ToString()).ToUpperInvariant();
             var title = node.GetAttributeValue("title");
-            var description = String.IsNullOrEmpty(node.GetAttributeValue("description")) ? title : node.GetAttributeValue("description");
 
             // Generate key for node
             string key = helper.CreateNodeKey(
@@ -215,7 +214,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Assign defaults
             siteMapNode.Title = title;
-            siteMapNode.Description = description;
+            siteMapNode.Description = node.GetAttributeValue("description");
             siteMapNode.Attributes.AddRange(node, false);
             siteMapNode.Roles.AddRange(node.GetAttributeValue("roles"), new[] { ',', ';' });
             siteMapNode.Clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));

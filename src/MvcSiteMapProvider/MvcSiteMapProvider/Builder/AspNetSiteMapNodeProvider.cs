@@ -108,7 +108,7 @@ namespace MvcSiteMapProvider.Builder
             var siteMapNode = nodeParentMap.Node;
 
             siteMapNode.Title = node.Title;
-            siteMapNode.Description = String.IsNullOrEmpty(node.Description) ? siteMapNode.Title : node.Description;
+            siteMapNode.Description = node.Description;
             if (this.reflectAttributes)
             {
                 // Unfortunately, the ASP.NET implementation uses a protected member variable to store

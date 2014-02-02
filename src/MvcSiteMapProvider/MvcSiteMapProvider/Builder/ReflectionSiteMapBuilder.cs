@@ -420,9 +420,8 @@ namespace MvcSiteMapProvider.Builder
 
             string httpMethod = String.IsNullOrEmpty(attribute.HttpMethod) ? HttpVerbs.Get.ToString().ToUpperInvariant() : attribute.HttpMethod.ToUpperInvariant();
 
-            // Handle title and description
+            // Handle title
             var title = attribute.Title;
-            var description = String.IsNullOrEmpty(attribute.Description) ? title : attribute.Description;
 
             // Handle implicit resources
             var implicitResourceKey = attribute.ResourceKey;
@@ -441,7 +440,7 @@ namespace MvcSiteMapProvider.Builder
 
             // Assign defaults
             siteMapNode.Title = title;
-            siteMapNode.Description = description;
+            siteMapNode.Description = attribute.Description;
             siteMapNode.Attributes.AddRange(attribute.Attributes, false);
             siteMapNode.Roles.AddRange(attribute.Roles);
             siteMapNode.Clickable = attribute.Clickable;

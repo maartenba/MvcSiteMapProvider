@@ -16,6 +16,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             )
         {
             this.securityTrimmingEnabled = securityTrimmingEnabled;
+            this.visibilityAffectsDescendants = visibilityAffectsDescendants;
         }
 
         // Services
@@ -336,6 +337,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         public IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName)
         {
             throw new NotImplementedException();
+        }
+
+        public bool UseTitleIfDescriptionNotProvided
+        {
+            get { throw new NotImplementedException(); }
         }
 
         public bool VisibilityAffectsDescendants

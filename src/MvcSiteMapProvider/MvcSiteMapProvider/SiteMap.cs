@@ -585,6 +585,15 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
+        /// Gets a Boolean value indicating whether the site map nodes should use the value of the Title 
+        /// property for the default if no value for Description is provided.
+        /// </summary>
+        public bool UseTitleIfDescriptionNotProvided
+        {
+            get { return this.siteMapSettings.UseTitleIfDescriptionNotProvided; }
+        }
+
+        /// <summary>
         /// Gets a Boolean value indicating whether the visibility property of the current node
         /// will affect the descendant nodes.
         /// </summary>

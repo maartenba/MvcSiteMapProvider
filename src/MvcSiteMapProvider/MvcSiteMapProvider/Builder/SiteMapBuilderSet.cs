@@ -14,6 +14,7 @@ namespace MvcSiteMapProvider.Builder
            bool securityTrimmingEnabled,
            bool enableLocalization,
            bool visibilityAffectsDescendants,
+           bool useTitleIfDescriptionNotProvided,
            ISiteMapBuilder siteMapBuilder,
            ICacheDetails cacheDetails
            )
@@ -29,6 +30,7 @@ namespace MvcSiteMapProvider.Builder
             this.securityTrimmingEnabled = securityTrimmingEnabled;
             this.enableLocalization = enableLocalization;
             this.visibilityAffectsDescendants = visibilityAffectsDescendants;
+            this.useTitleIfDescriptionNotProvided = useTitleIfDescriptionNotProvided;
             this.siteMapBuilder = siteMapBuilder;
             this.cacheDetails = cacheDetails;
         }
@@ -50,20 +52,20 @@ namespace MvcSiteMapProvider.Builder
                 securityTrimmingEnabled,
                 enableLocalization,
                 true,
+                true,
                 siteMapBuilder,
                 cacheDetails
             ) 
         { 
         }
 
-
         protected readonly string instanceName;
         protected readonly bool securityTrimmingEnabled;
         protected readonly bool enableLocalization;
         protected readonly bool visibilityAffectsDescendants;
+        protected readonly bool useTitleIfDescriptionNotProvided;
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly ICacheDetails cacheDetails;
-
 
         #region ISiteMapBuilderSet<CacheDependency> Members
 
@@ -90,6 +92,11 @@ namespace MvcSiteMapProvider.Builder
         public virtual bool VisibilityAffectsDescendants
         {
             get { return this.visibilityAffectsDescendants; }
+        }
+
+        public virtual bool UseTitleIfDescriptionNotProvided
+        {
+            get { return this.useTitleIfDescriptionNotProvided; }
         }
 
         public virtual bool AppliesTo(string builderSetName)

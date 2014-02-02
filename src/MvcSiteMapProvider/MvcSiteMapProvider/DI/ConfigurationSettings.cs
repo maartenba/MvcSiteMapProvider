@@ -33,6 +33,7 @@ namespace MvcSiteMapProvider.DI
             this.VisibilityAffectsDescendants = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_VisibilityAffectsDescendants", "true"));
             this.EnableSitemapsXml = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableSitemapsXml", "true"));
             this.EnableResolvedUrlCaching = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableResolvedUrlCaching", "true"));
+            this.UseTitleIfDescriptionNotProvided = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_UseTitleIfDescriptionNotProvided", "true"));
         }
 
         public bool UseExternalDIContainer { get; private set; }
@@ -52,7 +53,7 @@ namespace MvcSiteMapProvider.DI
         public bool VisibilityAffectsDescendants { get; private set; }
         public bool EnableSitemapsXml { get; private set; }
         public bool EnableResolvedUrlCaching { get; private set; }
-
+        public bool UseTitleIfDescriptionNotProvided { get; private set; }
 
         private string GetConfigurationValueOrFallback(string name, string defaultValue)
         {
