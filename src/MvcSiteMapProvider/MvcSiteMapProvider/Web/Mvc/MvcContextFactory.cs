@@ -47,6 +47,11 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller)
         {
+            if (requestContext == null)
+                throw new ArgumentNullException("requestContext");
+            if (controller == null)
+                throw new ArgumentNullException("controller");
+
             return new ControllerContext(requestContext, controller);
         }
 
@@ -73,6 +78,11 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual AuthorizationContext CreateAuthorizationContext(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
+            if (controllerContext == null)
+                throw new ArgumentNullException("controllerContext");
+            if (actionDescriptor == null)
+                throw new ArgumentNullException("actionDescriptor");
+
             return new AuthorizationContext(controllerContext, actionDescriptor);
         }
 
