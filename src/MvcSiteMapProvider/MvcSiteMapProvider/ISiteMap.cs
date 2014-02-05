@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Web.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Web.Mvc;
 using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {
     /// <summary>
-    /// Contract for the specialized class that manages the hierarchial relationship between different 
+    /// Contract for the specialized class that manages the hierarchical relationship between different 
     /// <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> instances.
     /// </summary>
     public interface ISiteMap
@@ -18,6 +19,9 @@ namespace MvcSiteMapProvider
         void RemoveNode(ISiteMapNode node);
         void Clear();
         ISiteMapNode RootNode { get; }
+
+        // Hide the BuildSiteMap method because it is only for use by MvcSiteMapProvider.
+        [EditorBrowsable(EditorBrowsableState.Never)]
         void BuildSiteMap();
 
         ISiteMapNode CurrentNode { get; }
