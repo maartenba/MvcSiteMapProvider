@@ -27,11 +27,6 @@ namespace MvcSiteMapProvider.Loader
             this.siteMapCache = siteMapCache;
             this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapCreator = siteMapCreator;
-
-            // Attach an event to the cache so when the SiteMap is removed, the Clear() method can be called on it to ensure
-            // we don't have any circular references that aren't GC'd.
-            siteMapCache.ItemRemoved += new EventHandler<MicroCacheItemRemovedEventArgs<ISiteMap>>(siteMapCache_ItemRemoved);
-
         }
 
         protected readonly ISiteMapCache siteMapCache;
@@ -72,12 +67,5 @@ namespace MvcSiteMapProvider.Loader
         }
 
         #endregion
-
-        protected virtual void siteMapCache_ItemRemoved(object sender, MicroCacheItemRemovedEventArgs<ISiteMap> e)
-        {
-            // Call clear to remove ISiteMapNode object references from internal collections. This
-            // will release the circular references and free the memory.
-            e.Item.Clear();
-        }
     }
 }
