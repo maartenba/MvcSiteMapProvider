@@ -52,7 +52,12 @@ namespace MvcSiteMapProvider.Web.Mvc
             if (controller == null)
                 throw new ArgumentNullException("controller");
 
-            return new ControllerContext(requestContext, controller);
+            var result = new ControllerContext(requestContext, controller);
+
+            // Fixes #271 - set controller's ControllerContext property for MVC
+            result.Controller.ControllerContext = result;
+
+            return result;
         }
 
         public virtual IRequestCache GetRequestCache()

@@ -112,16 +112,10 @@ namespace MvcSiteMapProvider.Security
             var controllerContext = this.CreateControllerContext(node, routes, controllerType, controllerFactory, out factoryBuiltController);
             try
             {
-                // Fixes #271 - set controller's ControllerContext property for MVC
-                controllerContext.Controller.ControllerContext = controllerContext;
-
                 return this.VerifyControllerAttributes(node, controllerType, controllerContext);
             }
             finally
             {
-                // Release the circular reference between Controller-ControllerContext, so it can be GC'd
-                controllerContext.Controller.ControllerContext = null;
-
                 // Release controller
                 if (factoryBuiltController)
                     controllerFactory.ReleaseController(controllerContext.Controller);
