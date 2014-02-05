@@ -5,6 +5,11 @@ using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Caching
 {
+    /// <summary>
+    /// A cache provider that uses the <see cref="System.Web.HttpContext.Current.Cache"/> instance to 
+    /// cache items that are added.
+    /// </summary>
+    /// <typeparam name="T">The type of item that will be stored in the cache.</typeparam>
     public class AspNetCacheProvider<T>
         : ICacheProvider<T>
     {

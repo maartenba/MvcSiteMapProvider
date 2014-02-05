@@ -2,6 +2,11 @@
 
 namespace MvcSiteMapProvider.Caching
 {
+    /// <summary>
+    /// Contract for cache provider. Implement this interface to provide an alternate cache management
+    /// system.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface ICacheProvider<T>
     {
         bool Contains(string key);

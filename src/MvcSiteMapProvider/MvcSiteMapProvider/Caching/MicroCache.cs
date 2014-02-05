@@ -23,7 +23,7 @@ namespace MvcSiteMapProvider.Caching
                 throw new ArgumentNullException("cacheProvider");
             this.cacheProvider = cacheProvider;
 
-            // Attach our event so we can recieve notifications when objects are removed
+            // Attach our event so we can receive notifications when objects are removed
             this.cacheProvider.ItemRemoved += cacheProvider_ItemRemoved;
         }
         protected readonly ICacheProvider<T> cacheProvider;

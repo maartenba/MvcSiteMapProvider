@@ -47,7 +47,17 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller)
         {
-            return new ControllerContext(requestContext, controller);
+            if (requestContext == null)
+                throw new ArgumentNullException("requestContext");
+            if (controller == null)
+                throw new ArgumentNullException("controller");
+
+            var result = new ControllerContext(requestContext, controller);
+
+            // Fixes #271 - set controller's ControllerContext property for MVC
+            result.Controller.ControllerContext = result;
+
+            return result;
         }
 
         public virtual IRequestCache GetRequestCache()
@@ -73,6 +83,11 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual AuthorizationContext CreateAuthorizationContext(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
+            if (controllerContext == null)
+                throw new ArgumentNullException("controllerContext");
+            if (actionDescriptor == null)
+                throw new ArgumentNullException("actionDescriptor");
+
             return new AuthorizationContext(controllerContext, actionDescriptor);
         }
 

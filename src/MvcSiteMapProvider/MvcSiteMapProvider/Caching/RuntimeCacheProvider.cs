@@ -5,6 +5,11 @@ using System.Runtime.Caching;
 
 namespace MvcSiteMapProvider.Caching
 {
+    /// <summary>
+    /// A cache provider that uses an <see cref="System.Runtime.Caching.ObjectCache"/> instance to 
+    /// cache items that are added.
+    /// </summary>
+    /// <typeparam name="T">The type of item that will be stored in the cache.</typeparam>
     public class RuntimeCacheProvider<T>
         : ICacheProvider<T>
     {
