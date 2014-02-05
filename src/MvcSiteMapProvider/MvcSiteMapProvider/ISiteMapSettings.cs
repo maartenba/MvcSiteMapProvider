@@ -6,5 +6,6 @@ namespace MvcSiteMapProvider
     {
         bool SecurityTrimmingEnabled { get; }
         bool EnableLocalization { get; }
+        bool VisibilityAffectsDescendants { get; }
     }
 }

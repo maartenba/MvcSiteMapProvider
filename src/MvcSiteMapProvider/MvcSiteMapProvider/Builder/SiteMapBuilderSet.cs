@@ -10,12 +10,13 @@ namespace MvcSiteMapProvider.Builder
         : ISiteMapBuilderSet
     {
         public SiteMapBuilderSet(
-            string instanceName,
-            bool securityTrimmingEnabled,
-            bool enableLocalization,
-            ISiteMapBuilder siteMapBuilder,
-            ICacheDetails cacheDetails
-            )
+           string instanceName,
+           bool securityTrimmingEnabled,
+           bool enableLocalization,
+           bool visibilityAffectsDescendants,
+           ISiteMapBuilder siteMapBuilder,
+           ICacheDetails cacheDetails
+           )
         {
             if (string.IsNullOrEmpty(instanceName))
                 throw new ArgumentNullException("instanceName");
@@ -27,13 +28,36 @@ namespace MvcSiteMapProvider.Builder
             this.instanceName = instanceName;
             this.securityTrimmingEnabled = securityTrimmingEnabled;
             this.enableLocalization = enableLocalization;
+            this.visibilityAffectsDescendants = visibilityAffectsDescendants;
             this.siteMapBuilder = siteMapBuilder;
             this.cacheDetails = cacheDetails;
         }
 
+        /// <summary>
+        /// ctor for backwards compatibility, 
+        /// visibilityAffectsDescendants parameter defaults to false
+        /// </summary>
+        [Obsolete]
+        public SiteMapBuilderSet(
+            string instanceName,
+            bool securityTrimmingEnabled,
+            bool enableLocalization,
+            ISiteMapBuilder siteMapBuilder,
+            ICacheDetails cacheDetails
+            ) :
+            this(
+            instanceName,
+            securityTrimmingEnabled,
+            enableLocalization,
+            false,
+            siteMapBuilder,
+            cacheDetails) { }
+
+
         protected readonly string instanceName;
         protected readonly bool securityTrimmingEnabled;
         protected readonly bool enableLocalization;
+        protected readonly bool visibilityAffectsDescendants;
         protected readonly ISiteMapBuilder siteMapBuilder;
         protected readonly ICacheDetails cacheDetails;
 
@@ -58,6 +82,11 @@ namespace MvcSiteMapProvider.Builder
         public virtual bool EnableLocalization
         {
             get { return this.enableLocalization; }
+        }
+
+        public virtual bool VisibilityAffectsDescendants
+        {
+            get { return this.visibilityAffectsDescendants; }
         }
 
         public virtual bool AppliesTo(string builderSetName)
