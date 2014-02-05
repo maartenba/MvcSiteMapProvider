@@ -48,7 +48,5 @@ namespace MvcSiteMapProvider.Caching
         }
 
         #endregion
-
-
     }
 }
