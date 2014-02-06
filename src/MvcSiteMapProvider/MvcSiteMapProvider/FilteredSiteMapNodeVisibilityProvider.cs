@@ -67,6 +67,10 @@ namespace MvcSiteMapProvider
                 {
                     return true;
                 }
+                else if (visibilityKeyword == "IfSelected" && node.IsInCurrentPath())
+                {
+                    return true;
+                }
                 else if (visibilityKeyword == "!" + htmlHelper || visibilityKeyword == "!" + name || visibilityKeyword == "!*")
                 {
                     return false;
