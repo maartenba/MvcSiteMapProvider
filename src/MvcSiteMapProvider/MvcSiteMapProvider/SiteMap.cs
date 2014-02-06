@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
@@ -673,6 +674,10 @@ namespace MvcSiteMapProvider
             var routeData = routes.GetRouteData(httpContext);
             if (routeData != null)
             {
+                if (routeData.Values.ContainsKey("MS_DirectRouteMatches"))
+                {
+                    routeData = ((IEnumerable<RouteData>)routeData.Values["MS_DirectRouteMatches"]).First();
+                }
                 if (!routeData.Values.ContainsKey("area"))
                 {
                     if (routeData.DataTokens["area"] != null)
