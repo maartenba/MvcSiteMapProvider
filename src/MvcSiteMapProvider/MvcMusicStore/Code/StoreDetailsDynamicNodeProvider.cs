@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MvcSiteMapProvider.Extensibility;
 using MvcMusicStore.Models;
 using System.Web.Caching;
+using MvcSiteMapProvider;
 
 namespace MvcMusicStore.Code
 {
@@ -19,41 +19,27 @@ namespace MvcMusicStore.Code
         /// <summary>
         /// Gets the dynamic node collection.
         /// </summary>
+        /// <param name="node">The current node.</param>
         /// <returns>
         /// A dynamic node collection represented.
         /// </returns>
-        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
+        public override IEnumerable<DynamicNode> GetDynamicNodeCollection(ISiteMapNode node)
         {
             // Create a node for each album
             foreach (var album in storeDB.Albums.Include("Genre"))
             {
-                DynamicNode node = new DynamicNode();
-                node.Title = album.Title;
-                node.ParentKey = "Genre_" + album.Genre.Name;
-                node.RouteValues.Add("id", album.AlbumId);
+                DynamicNode dynamicNode = new DynamicNode();
+                dynamicNode.Title = album.Title;
+                dynamicNode.ParentKey = "Genre_" + album.Genre.Name;
+                dynamicNode.RouteValues.Add("id", album.AlbumId);
 
                 if (album.Title.Contains("Hit") || album.Title.Contains("Best"))
                 {
-                    node.Attributes.Add("bling", "<span style=\"color: Red;\">hot!</span>");
+                    dynamicNode.Attributes.Add("bling", "<span style=\"color: Red;\">hot!</span>");
                 }
 
-                yield return node; 
+                yield return dynamicNode; 
             }
-        }
-
-        /// <summary>
-        /// Gets a cache description for the dynamic node collection 
-        /// or null if there is none.
-        /// </summary>
-        /// <returns>
-        /// A cache description represented as a <see cref="CacheDescription"/> instance .
-        /// </returns>
-        public override CacheDescription GetCacheDescription()
-        {
-            return new CacheDescription("StoreDetailsDynamicNodeProvider")
-            {
-                SlidingExpiration = TimeSpan.FromMinutes(1)
-            };
         }
     }
 }

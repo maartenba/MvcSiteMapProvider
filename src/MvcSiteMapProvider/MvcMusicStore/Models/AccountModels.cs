@@ -17,80 +17,6 @@ namespace MvcMusicStore.Models
     // how to create an abstract wrapper around such a type in order to make the AccountController
     // code unit testable.
 
-    public interface IMembershipService
-    {
-        int MinPasswordLength { get; }
-
-        bool ValidateUser(string userName, string password);
-        MembershipCreateStatus CreateUser(string userName, string password, string email);
-        bool ChangePassword(string userName, string oldPassword, string newPassword);
-    }
-
-    public class AccountMembershipService : IMembershipService
-    {
-        private readonly MembershipProvider _provider;
-
-        public AccountMembershipService()
-            : this(null)
-        {
-        }
-
-        public AccountMembershipService(MembershipProvider provider)
-        {
-            _provider = provider ?? Membership.Provider;
-        }
-
-        public int MinPasswordLength
-        {
-            get
-            {
-                return _provider.MinRequiredPasswordLength;
-            }
-        }
-
-        public bool ValidateUser(string userName, string password)
-        {
-            ValidationUtil.ValidateRequiredStringValue(userName, "userName");
-            ValidationUtil.ValidateRequiredStringValue(password, "password");
-
-            return _provider.ValidateUser(userName, password);
-        }
-
-        public MembershipCreateStatus CreateUser(string userName, string password, string email)
-        {
-            ValidationUtil.ValidateRequiredStringValue(userName, "userName");
-            ValidationUtil.ValidateRequiredStringValue(password, "password");
-            ValidationUtil.ValidateRequiredStringValue(email, "email");
-
-            MembershipCreateStatus status;
-            _provider.CreateUser(userName, password, email, null, null, true, null, out status);
-            return status;
-        }
-
-        public bool ChangePassword(string userName, string oldPassword, string newPassword)
-        {
-            ValidationUtil.ValidateRequiredStringValue(userName, "userName");
-            ValidationUtil.ValidateRequiredStringValue(oldPassword, "oldPassword");
-            ValidationUtil.ValidateRequiredStringValue(newPassword, "newPassword");
-
-            // The underlying ChangePassword() will throw an exception rather
-            // than return false in certain failure scenarios.
-            try
-            {
-                MembershipUser currentUser = _provider.GetUser(userName, true /* userIsOnline */);
-                return currentUser.ChangePassword(oldPassword, newPassword);
-            }
-            catch (ArgumentException)
-            {
-                return false;
-            }
-            catch (MembershipPasswordException)
-            {
-                return false;
-            }
-        }
-    }
-
     public interface IFormsAuthenticationService
     {
         void SignIn(string userName, bool createPersistentCookie);
@@ -242,7 +168,7 @@ namespace MvcMusicStore.Models
     {
         private const string _defaultErrorMessage = "'{0}' must be at least {1} characters long.";
 
-        private readonly int _minCharacters = Membership.Provider.MinRequiredPasswordLength;
+        private readonly int _minCharacters =6;
 
         public ValidatePasswordLengthAttribute()
             : base(_defaultErrorMessage)

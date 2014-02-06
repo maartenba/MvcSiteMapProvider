@@ -1,8 +1,5 @@
-﻿#region Using directives
-
-using System;
-
-#endregion
+﻿using System;
+using System.Collections.Generic;
 
 namespace MvcSiteMapProvider
 {
@@ -18,6 +15,7 @@ namespace MvcSiteMapProvider
         public MvcSiteMapNodeAttribute()
         {
             Clickable = true;
+            Attributes = new Dictionary<string, object>();
         }
 
         /// <summary>
@@ -34,6 +32,13 @@ namespace MvcSiteMapProvider
         /// Gets or sets the name of the area.
         /// </summary>
         /// <value>The name of the area.</value>
+        public string Area { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the area.
+        /// </summary>
+        /// <value>The name of the area.</value>
+        [Obsolete("AreaName is deprecated and will be removed in version 5. Use Area instead.")]
         public string AreaName { get; set; }
 
         /// <summary>
@@ -89,7 +94,9 @@ namespace MvcSiteMapProvider
         public string VisibilityProvider { get; set; }
 
         /// <summary>
-        /// Used for ordering nodes
+        /// Gets or sets the sort order of this node relative to all other nodes.
+        /// This value is used both for determining which order parent-child relationships are processed 
+        /// as well as for how the node is diplayed in the HTML helper controls.
         /// </summary>
         public int Order { get; set; }
 
@@ -124,11 +131,56 @@ namespace MvcSiteMapProvider
         public string ImageUrl { get; set; }
 
         /// <summary>
+        /// A value indicating to cache the resolved URL. If false, the URL will be 
+        /// resolved every time it is accessed.
+        /// </summary>
+        public bool CacheResolvedUrl { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        public string CanonicalUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another ISiteMapNode to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        public string CanonicalKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the robots meta values.
+        /// </summary>
+        /// <value>The robots meta values.</value>
+        public string[] MetaRobotsValues { get; set; }
+
+        /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>
         /// <value>
         /// The preserved route parameter names.
         /// </value>
         public string PreservedRouteParameters { get; set; }
+
+        /// <summary>
+        /// Gets or sets the attributes (optional).
+        /// </summary>
+        /// <value>The attributes.</value>
+        public IDictionary<string, object> Attributes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the cache key this node is associated with
+        /// </summary>
+        public string SiteMapCacheKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the HTTP method (such as GET, POST, or HEAD) to use to determine
+        /// node accessibility.
+        /// </summary>
+        /// <value>
+        /// The HTTP method.
+        /// </value>
+        public string HttpMethod { get; set; }
     }
 }

@@ -1,14 +1,11 @@
-﻿#region Using directives
-
-using System;
-
-#endregion
+﻿using System;
 
 namespace MvcSiteMapProvider
 {
     /// <summary>
     /// MvcSiteMapException
     /// </summary>
+    [Serializable]
     public class MvcSiteMapException : Exception
     {
         /// <summary>

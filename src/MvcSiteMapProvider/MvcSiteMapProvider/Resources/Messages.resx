@@ -117,43 +117,242 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AclModuleDoesNotSupportRegularSiteMapNodes" xml:space="preserve">
-    <value>The current ACL module does not provide functionality for regular SiteMapNode objects.</value>
-  </data>
   <data name="AmbiguousControllerFoundMultipleControllers" xml:space="preserve">
-    <value>Ambiguous controller. Found multiple controller types for {0}Controller. Consider narrowing the places to search by adding you controller namespaces to ControllerBuilder.Current.DefaultNamespaces.</value>
-  </data>
-  <data name="AssemblyScanTrustLevelNotSupported" xml:space="preserve">
-    <value>Scanning assemblies for sitemap nodes is not supported in the current trust level. Consider a higher trust level or disable scanning assemblies for SiteMap nodes.</value>
+    <value>Ambiguous controller. Found multiple controller types for '{0}Controller'.  The types that matched are: {1}Consider narrowing the places to search by adding your controller namespaces to ControllerBuilder.Current.DefaultNamespaces or exluding namespaces by adding them to the areaNamespacesToIgnore parameter of ControllerTypeResolverFactory.</value>
   </data>
   <data name="CannotEnumerateThreadSafeDictionary" xml:space="preserve">
     <value>Cannot enumerate a threadsafe dictionary. Instead, enumerate the keys or values collection.</value>
   </data>
-  <data name="CouldNotDetermineRootNode" xml:space="preserve">
-    <value>Root node could not be determined. Check that the XML SiteMap file exists or that there is an MvcSiteMapNode attribute defined that does not have the ParentKey defined.</value>
+  <data name="CannotExitUpTopDirectory" xml:space="preserve">
+    <value>Cannot use a leading .. to exit above the top directory.</value>
   </data>
-  <data name="CouldNotResolve" xml:space="preserve">
-    <value>Could not resolve URL for sitemap node {0} which represents action {1} in controller {2}. Ensure that the route {3} for this sitemap node can be resolved and that its default values allow resolving the URL for the current sitemap node.</value>
-  </data>
-  <data name="DuplicateRootNodeDetected" xml:space="preserve">
-    <value>Duplicate root node detected. This usually happens when a rootnode is defined in the SiteMap XML file and/or one or more MvcSiteMapNode attributes have been defined without a ParentKey.</value>
+  <data name="CollectionReadOnly" xml:space="preserve">
+    <value>Collection is read-only.</value>
   </data>
   <data name="InvalidSiteMapElement" xml:space="preserve">
-    <value>An invalid element was found in the sitemap.</value>
+    <value>An invalid element was found in the .sitemap XML file. Please check your sitemap file against the MvcSiteMapProvider.xsd schema.</value>
   </data>
-  <data name="NoUrlResolverProvided" xml:space="preserve">
-    <value>No ISiteMapNodeUrlResolver is provided for the current node.</value>
+  <data name="InvalidVirtualPath" xml:space="preserve">
+    <value>'{0}' is not a valid virtual path.</value>
   </data>
-  <data name="RelativeUrlNotAllowed" xml:space="preserve">
-    <value>Relative URL is not allowed.</value>
+  <data name="MultipleNodesWithIdenticalKey" xml:space="preserve">
+    <value>Multiple nodes with the same key '{0}' were found. SiteMap requires that sitemap nodes have unique keys.</value>
   </data>
-  <data name="SiteMapFileNotFound" xml:space="preserve">
-    <value>Site map file could not be found. Verify that the path provided in Web.config is correct.</value>
+  <data name="MultipleNodesWithIdenticalUrl" xml:space="preserve">
+    <value>Multiple nodes with the same URL '{0}' were found. SiteMap requires that sitemap nodes have unique URLs.</value>
   </data>
-  <data name="UnknownException" xml:space="preserve">
-    <value>An error occured while building the sitemap... Check the InnerException for more details.</value>
+  <data name="NoParentKeyDefined" xml:space="preserve">
+    <value>Multiple root nodes defined in sitemap with cache key '{0}'. Are you missing a ParentKey definition on the '{1}' controller, '{2}' method?</value>
   </data>
-  <data name="UnknownSiteMapProvider" xml:space="preserve">
-    <value>Unknown SiteMap provider: {0}</value>
+  <data name="NamedUrlResolverNotFound" xml:space="preserve">
+    <value>The URL resolver instance named '{0}' was not found. Check your DI configuration to ensure a URL resolver instance with this name exists and is configured correctly.</value>
+  </data>
+  <data name="PhysicalPathNotAllowed" xml:space="preserve">
+    <value>'{0}' is a physical path, but a virtual path was expected.</value>
+  </data>
+  <data name="SiteMapRootNodeNotDefined" xml:space="preserve">
+    <value>The site map builders returned null for root node. Root node defined in SiteMap cannot be null. Please make sure you return a root node for each SiteMapBuilderSet and that a root node is set in your sitemap XML file if you are using one.</value>
+  </data>
+  <data name="SiteMapLoaderAlreadySet" xml:space="preserve">
+    <value>The sitemap loader may only be set in the Application_Start event of Global.asax and must not be set again. Set the 'MvcSiteMapProvider_UseExternalDIContainer' in the AppSettings section of the web.config file to 'true' if you are using an external dependency injection container.</value>
+  </data>
+  <data name="ResourceNotFoundWithClassAndKey" xml:space="preserve">
+    <value>The resource object with classname '{0}' and key '{1}' was not found.</value>
+  </data>
+  <data name="SiteMapNodeReadOnly" xml:space="preserve">
+    <value>SiteMapNode is readonly, property '{0}' cannot be modified.</value>
+  </data>
+  <data name="SiteMapReadOnly" xml:space="preserve">
+    <value>SiteMap is readonly, nodes cannot be modified.</value>
+  </data>
+  <data name="SiteMapNodeCanonicalValueAlreadySet" xml:space="preserve">
+    <value>The '{0}' has already been set. Simultaneous use of both CanonicalUrl and CanonicalKey is not allowed.</value>
+  </data>
+  <data name="VisitingSiteMapBuilderRequiresRootNode" xml:space="preserve">
+    <value>VisitingSiteMapBuilder requires a root node in order to function.
+
+Make sure your configuration includes a root node by ensuring there is exactly 1 root node in your .sitemap file or ensuring there is exactly 1 node that has no ParentKey configured.</value>
+  </data>
+  <data name="MetaRobotsValueFollowAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'follow' and 'nofollow' may not be used at the same time.</value>
+  </data>
+  <data name="MetaRobotsValueIndexAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'index' and 'noindex' may not be used at the same time.</value>
+  </data>
+  <data name="MetaRobotsValueNoneAmbiguous" xml:space="preserve">
+    <value>The '{0}' value for the robots meta tag has already been added for node. 'none' cannot be used in conjunction with 'index', 'noindex', 'follow', or 'nofollow'. You may use 'none' to indicate 'noindex' and 'nofollow' (not recommended), but do not combine it with these values.</value>
+  </data>
+  <data name="MetaRobotsValueUnrecognized" xml:space="preserve">
+    <value>The value '{0}' is not a valid meta robots value.</value>
+  </data>
+  <data name="CopyOperationDoesNotSupportReferenceTypes" xml:space="preserve">
+    <value>Copy operation does not support reference types. If you need this functionality, override CopyTo() and provide your own implementation.</value>
+  </data>
+  <data name="DictionaryAlreadyContainsKey" xml:space="preserve">
+    <value>An item with the same key has already been added.</value>
+  </data>
+  <data name="XmlFileNotFound" xml:space="preserve">
+    <value>Xml file '{0}' could not be found. Verify that the path provided is correct.</value>
+  </data>
+  <data name="XmlValidationFailed" xml:space="preserve">
+    <value>The file at '{0}' contains XML validation errors. See the inner exception for complete details.</value>
+  </data>
+  <data name="UnknownSiteMap" xml:space="preserve">
+    <value>Unknown SiteMap: '{0}'.</value>
+  </data>
+  <data name="NamedBuilderSetNotFound" xml:space="preserve">
+    <value>The builder set instance named '{0}' was not found. Check your DI configuration to ensure a builder set instance with this name exists.</value>
+  </data>
+  <data name="SiteMapLoaderNotInitialized" xml:space="preserve">
+    <value>The SiteMapLoader has not been initialized. You must set the SiteMaps.Loader property during Application_Start in Global.asax if the 'MvcSiteMapProvider_UseExternalDIContainer' setting is set to 'true' in the AppSettings section of web.config.</value>
+  </data>
+  <data name="ObjectFieldNotFound" xml:space="preserve">
+    <value>Field '{0}' was not found in Type '{1}'.</value>
+  </data>
+  <data name="ObjectPropertyNotFound" xml:space="preserve">
+    <value>Property '{0}' was not found in Type '{1}'.</value>
+  </data>
+  <data name="NamedSiteMapNodeVisibilityProviderNotFound" xml:space="preserve">
+    <value>The visibility provider instance named '{0}' was not found. Check your DI configuration to ensure a visibility provider instance with this name exists and is configured correctly.</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
+    <value>There is more than one MvcSiteMapNodeAttribute declared without a parent key. The ParentKey property must be set for all (or all but 1) MvcSiteMapNodeAttribute in the application.
+
+SiteMapCacheKey: '{0}'
+Key of root nodes without a ParentKey: 
+{1}</value>
+  </data>
+  <data name="SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has '{2}' configured in both RouteValues and PreservedRouteParameters, which is not allowed. 
+
+PreservedRouteParameters copies the route value from the current HTTP request which would overwrite your configured RouteValue in every case. Either remove '{2}' from PreservedRouteParameters or as a configured RouteValue.
+
+Alternatively, if you are configuring the node in XML and intend to use '{2}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{2}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderRootKeyAmbiguousAcrossBuilders" xml:space="preserve">
+    <value>There is an MvcSiteMapNodeAttribute declared without a parent key, but there was also a root node defined using another configuration method. Only 1 root node is allowed per SiteMap.
+
+SiteMapCacheKey: '{0}'
+Key of root node from other SiteMap builder: '{1}'
+Key of root node defined with MvcSiteMapNodeAttribute: '{2}'</value>
+  </data>
+  <data name="XmlSiteMapBuilderRootKeyNotDefined" xml:space="preserve">
+    <value>The root node was not found in the .sitemap XML file. If XML configuration is enabled, exactly one root node must be defined in the file.
+
+Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapBuilder from the MvcSiteMapProvider DI module.</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderOrphanedNodes" xml:space="preserve">
+    <value>Not all nodes defined by MvcSiteMapNodeAttribute could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+
+SiteMapCacheKey: '{0}'
+
+Orphaned Nodes:
+
+{1}</value>
+  </data>
+  <data name="SiteMapNodeFormatWithParentKey" xml:space="preserve">
+    <value>ParentKey: '{0}' | Controller: '{1}' | Action: '{2}' | Area: '{3}' | URL: '{4}' | Key: '{5}' | Source: '{6}'</value>
+  </data>
+  <data name="XmlSiteMapBuilderOrphanedNodes" xml:space="preserve">
+    <value>Not all nodes defined by using a .sitemap XML file could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+
+Also note that nodes defined using a DynamicNodeProvider that are defined in a .sitemap XML file cannot use MvcSiteMapNodeAttribute nodes (or dynamic nodes from DynamicNodeProviders defined on MvcSiteMapNodeAttribute) as a parent.
+
+SiteMapCacheKey: '{0}'
+
+Orphaned Nodes:
+
+{1}</value>
+  </data>
+  <data name="ReflectionSiteMapBuilderNodeCouldNotBeCreated" xml:space="preserve">
+    <value>A node defined by MvcSiteMapNodeAttribute could not be created. Please check the properties of the node carefully.
+
+SiteMapCacheKey '{0}'
+
+Node Details: 
+
+{1} </value>
+  </data>
+  <data name="SiteMapBuilderRootKeyAmbiguous" xml:space="preserve">
+    <value>There is more than one node declared without a parent key. The parent key must be set for all but 1 node in the SiteMap. The node with no parent key will be considered the root node. Note that when defining nodes in XML, the XML file must contain the root node.
+
+You can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvider DI module.
+
+Alternatively, you can set the MvcSiteMapProvider_IncludeRootNodeFromSiteMapFile setting to "false" to exclude the root node from the XML file, but include all of the other nodes. For an external DI configuration, this setting can be found on the constructor of the XmlSiteMapNodeProvider.
+
+SiteMapCacheKey: '{0}'
+
+Ambiguous Root Nodes:
+
+{1}</value>
+  </data>
+  <data name="SiteMapBuilderRootNodeNotDefined" xml:space="preserve">
+    <value>No node is defined as the root node of the SiteMap. Exactly one node must have a parent key set to an empty string. That node will be assumed to be the root node.
+
+SiteMapCacheKey: '{0}'</value>
+  </data>
+  <data name="SiteMapBuilderOrphanedNodes" xml:space="preserve">
+    <value>Not all configured nodes could be paired with a parent node. Check your parent keys to ensure that a node with a corresponding key exists in the SiteMap. Note that the match is case sensitive.
+
+SiteMapCacheKey: '{0}'
+
+Orphaned Nodes:
+
+{1}</value>
+  </data>
+  <data name="XmlSiteMapNodeProviderInvalidSiteMapElement" xml:space="preserve">
+    <value>An invalid element was found in the .sitemap XML file. Please check your sitemap file against the MvcSiteMapProvider.xsd schema.
+
+SiteMapCacheKey: '{0}'</value>
+  </data>
+  <data name="XmlSiteMapNodeProviderRootNodeNotDefined" xml:space="preserve">
+    <value>The root node was not found in the .sitemap XML file. If XML configuration is enabled, exactly one root node must be defined in the file. This will be the root node for the entire SiteMap.
+
+Alternatively, you can disable XML configuration by setting the MvcSiteMapProvider_EnableSiteMapFile setting to "false". For an external DI configuration, you can disable XML parsing by removing the XmlSiteMapNodeProvider from the MvcSiteMapProvider DI module.
+
+SiteMapCacheKey: '{0}'</value>
+  </data>
+  <data name="XmlSiteMapNodeProviderXmlNotDefined" xml:space="preserve">
+    <value>There was no XML provided by the IXmlSource (the return value was null). If you are using a custom IXmlSource, please be sure the output matches the XmlSiteMapProvider.xsd schema.
+
+SiteMapCacheKey: '{0}'</value>
+  </data>
+  <data name="SiteMapNodeActionAndURLNotSet" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has both an empty 'action' and empty 'url', which is not allowed.
+
+The node must have enough information to resolve the URL. This is normally achieved by setting 'controller', 'action', and (optionally) 'area' and/or custom parameters on the node. It can also be accomplished by setting the 'url' property to the relative or absolute URL.
+
+Note that when configuring in XML, 'controller' and 'area' are automatically inherited from the parent node if they are not set explicitly.</value>
+  </data>
+  <data name="SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has '{2}' configured in both RouteValues and InheritedRouteParameters, which is not allowed. 
+
+InheritedRouteParameters copies the route value from the parent node which would overwrite your configured RouteValue in every case. Either remove '{2}' from InheritedRouteParameters or as a configured RouteValue.
+
+Alternatively, if you are configuring the node in XML and intend to use '{2}' as a custom attribute, use the 'MvcSiteMapProvider_AttributesToIgnore' configuration setting to ensure '{2}' is not automatically added to RouteValues. If using external DI, this setting is injected into the constructor of 'SiteMapXmlReservedAttributeNameProvider'.</value>
+  </data>
+  <data name="SiteMapNodeTitleNotSet" xml:space="preserve">
+    <value>The node with key '{0}' does not have a 'title' set. Title is a required field for every node.</value>
+  </data>
+  <data name="SiteMapNodeHttpMethodInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has the value '{2}' for HttpMethod, which is not allowed.
+
+The available values for HttpMethod are:
+
+{3}</value>
+  </data>
+  <data name="SiteMapNodeAreaNameInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' does not have a valid value for Area. The current value is '{2}'. The Area field must be a valid C# identifier or be set to an empty string to indicate a non-area controller.
+
+A C# identifier must start with a Unicode letter, underscore, or ampersand and may be followed by zero or more Unicode letters, digits, or underscores.
+
+Please use the same value that is returned from the AreaName property of your AreaRegistration class.</value>
+  </data>
+  <data name="SiteMapNodeControllerNameInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' does not have a valid value for Controller. The current value is '{2}'. The Controller field must be a valid C# identifier and not end with the suffix 'Controller'. 
+
+A C# identifier must start with a Unicode letter, underscore, or ampersand and may be followed by zero or more Unicode letters, digits, or underscores.
+
+If you are attempting to add an area to the controller field, do note that the 'AreaName/ControllerName' syntax is not supported by MvcSiteMapProvider. To set the area, use the 'Area' property or 'area' attribute.</value>
   </data>
 </root>

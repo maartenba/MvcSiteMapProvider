@@ -5,9 +5,16 @@
 
     <head runat="server">
         <link href="/Content/Site.css" rel="stylesheet" type="text/css" />
+        <%=Html.MvcSiteMap().CanonicalTag()%>
+        <%=Html.MvcSiteMap().MetaRobotsTag()%>
         <title>
             <asp:ContentPlaceHolder ID="TitleContent" runat="server" /> (<%=Html.MvcSiteMap().SiteMapTitle() %>)
         </title>
+        
+        <script src="/Scripts/jquery-1.9.1.min.js"></script>
+        <script src="/Scripts/jquery.validate.min.js"></script>
+        <script src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+        <script src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
     </head>
 
     <body>
@@ -38,8 +45,7 @@
                 </div>
 
                 <div id="main">
-                    <!--<asp:SiteMapPath ID="siteMapPath" runat="server" ViewStateMode="Disabled">
-                    </asp:SiteMapPath>-->
+                    
                     <%=Html.MvcSiteMap().SiteMapPath()%>
                     
                     <div style="height: 10px;"></div>

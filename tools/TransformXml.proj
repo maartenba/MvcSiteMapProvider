@@ -1,0 +1,16 @@
+<Project ToolsVersion="4.0" DefaultTargets="Transform" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <UsingTask TaskName="TransformXml"
+		AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll"/>
+
+	<PropertyGroup>
+		<Source></Source>
+		<Transform></Transform>
+		<Destination></Destination>
+	</PropertyGroup>
+
+	<Target Name="Transform">
+		<TransformXml Source="$(Source)"
+				  Transform="$(Transform)"
+				  Destination="$(Destination)" />
+	</Target>
+</Project>

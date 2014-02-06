@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using MvcSiteMapProvider.Extensibility;
 using MvcMusicStore.Models;
+using MvcSiteMapProvider;
 
 namespace MvcMusicStore.Code
 {
@@ -18,18 +18,19 @@ namespace MvcMusicStore.Code
         /// <summary>
         /// Gets the dynamic node collection.
         /// </summary>
+        /// <param name="node">The current node.</param>
         /// <returns>
         /// A dynamic node collection represented as a <see cref="IEnumerable&lt;MvcSiteMapProvider.Extensibility.DynamicNode&gt;"/> instance 
         /// </returns>
-        public override IEnumerable<DynamicNode> GetDynamicNodeCollection()
+        public override IEnumerable<DynamicNode> GetDynamicNodeCollection(ISiteMapNode node)
         {
             // Create a node for each genre
             foreach (var genre in storeDB.Genres)
             {
-                DynamicNode node = new DynamicNode("Genre_" + genre.Name, genre.Name);
-                node.RouteValues.Add("genre", genre.Name);
+                DynamicNode dynamicNode = new DynamicNode("Genre_" + genre.Name, genre.Name);
+                dynamicNode.RouteValues.Add("genre", genre.Name);
 
-                yield return node; 
+                yield return dynamicNode; 
             }
         }
     }

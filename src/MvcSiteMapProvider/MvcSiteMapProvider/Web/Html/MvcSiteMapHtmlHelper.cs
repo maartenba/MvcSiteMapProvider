@@ -1,10 +1,7 @@
-﻿#region Using directives
-
+﻿using System;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Internal;
+using MvcSiteMapProvider.Web.Mvc;
 using System.Web;
-
-#endregion
 
 namespace MvcSiteMapProvider.Web.Html
 {
@@ -20,21 +17,38 @@ namespace MvcSiteMapProvider.Web.Html
         public HtmlHelper HtmlHelper { get; protected set; }
 
         /// <summary>
-        /// Gets or sets the sitemap provider.
+        /// Gets or sets the sitemap.
         /// </summary>
-        /// <value>The sitemap provider.</value>
-        public SiteMapProvider Provider { get; protected set; }
+        /// <value>The sitemap.</value>
+        public ISiteMap SiteMap { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
         /// </summary>
         /// <param name="htmlHelper">The HTML helper.</param>
-        /// <param name="provider">The sitemap provider.</param>
-        public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, SiteMapProvider provider)
+        /// <param name="provider">The sitemap.</param>
+        public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap)
+            : this(htmlHelper, siteMap, true)
         {
-            MvcSiteMapProviderViewEngine.Register();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
+        /// </summary>
+        /// <param name="htmlHelper">The HTML helper.</param>
+        /// <param name="provider">The sitemap.</param>
+        internal MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap, bool useViewEngine)
+        {
+            if (htmlHelper == null)
+                throw new ArgumentNullException("htmlHelper");
+            if (siteMap == null)
+                throw new ArgumentNullException("siteMap");
+
             HtmlHelper = htmlHelper;
-            Provider = provider;
+            SiteMap = siteMap;
+
+            if (useViewEngine) 
+                MvcSiteMapProviderViewEngine.Register();
         }
 
         /// <summary>

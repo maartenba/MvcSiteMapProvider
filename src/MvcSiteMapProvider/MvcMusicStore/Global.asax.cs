@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcMusicStore.App_Start;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
+using DI;
 
 namespace MvcMusicStore
 {
@@ -13,33 +18,43 @@ namespace MvcMusicStore
 
     public class MvcApplication : System.Web.HttpApplication
     {
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-            routes.MapRoute(
-                "Browse",                                                // Route name
-                "Store/Browse/{genre}",                                  // URL with parameters
-                new { controller = "Store", action = "Browse", id = UrlParameter.Optional }, // Parameter defaults
-                new string[] { "MvcMusicStore.Controllers" }
-            );
-
-            routes.MapRoute(
-                "Default",                                              // Route name
-                "{controller}/{action}/{id}",                           // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional },  // Parameter defaults
-                new string[] { "MvcMusicStore.Controllers" }
-            );
-        } 
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
 
-            // Register XmlSiteMapController
-            XmlSiteMapController.RegisterRoutes(RouteTable.Routes);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+        }
 
-            RegisterRoutes(RouteTable.Routes);           
+        /// <summary>
+        /// Used to fake roles in this demo application
+        /// </summary>
+        protected void Application_PostAuthenticateRequest(object sender, EventArgs eventArgs)
+        {
+            var user = HttpContext.Current.User;
+            if (user.Identity.IsAuthenticated && user.Identity.Name.ToLowerInvariant() == "administrator")
+            {
+                HttpContext.Current.User = Thread.CurrentPrincipal = new AdministratorPrincipal(user.Identity);
+            }
+        }
+
+        /// <summary>
+        /// Used to fake roles in this demo application
+        /// </summary>
+        public class AdministratorPrincipal
+            : IPrincipal
+        {
+            public AdministratorPrincipal(IIdentity identity)
+            {
+                Identity = identity;
+            }
+
+            public bool IsInRole(string role)
+            {
+                return true; // we satisfy *any* role
+            }
+
+            public IIdentity Identity { get; private set; }
         }
     }
 }
