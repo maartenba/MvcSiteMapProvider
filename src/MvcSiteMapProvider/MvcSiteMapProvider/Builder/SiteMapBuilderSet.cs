@@ -36,10 +36,11 @@ namespace MvcSiteMapProvider.Builder
         }
 
         /// <summary>
-        /// ctor for backwards compatibility, 
-        /// visibilityAffectsDescendants parameter defaults to false
+        /// ctor for backward compatibility, 
+        /// visibilityAffectsDescendants parameter defaults to true
+        /// useTitleIfDescriptionNotProvided parameter defaults to true
         /// </summary>
-        [Obsolete]
+        [Obsolete("Use the overload ctor(string, bool, bool, bool, bool, ISiteMapBuilder, ICacheDetails) instead.")]
         public SiteMapBuilderSet(
             string instanceName,
             bool securityTrimmingEnabled,
