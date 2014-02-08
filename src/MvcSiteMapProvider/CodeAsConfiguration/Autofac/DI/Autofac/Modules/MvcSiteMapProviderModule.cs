@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using System.Web.Hosting;
-using System.Web.Routing;
 using System.Reflection;
 using Autofac;
 using MvcSiteMapProvider;
-using MvcSiteMapProvider.Loader;
-using MvcSiteMapProvider.Visitor;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Compilation;
-using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Web.UrlResolver;
-using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Visitor;
+using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Globalization;
 
 namespace DI.Autofac.Modules
 {
@@ -27,19 +20,36 @@ namespace DI.Autofac.Modules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            bool securityTrimmingEnabled = false;
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
+            bool visibilityAffectsDescendants = true;
+            bool useTitleIfDescriptionNotProvided = true;
+#if Demo // Settings for MvcMusicStore demo: don't copy into your project
+            bool securityTrimmingEnabled = true;
+            string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
+#else
+            bool securityTrimmingEnabled = false;
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
+#endif
 
             var currentAssembly = this.GetType().Assembly;
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
             var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
             var excludeTypes = new Type[] { 
-                typeof(SiteMapNodeVisibilityProviderStrategy),
-                typeof(SiteMapXmlReservedAttributeNameProvider),
-                typeof(SiteMapBuilderSetStrategy)
+                // Use this array to add types you wish to explicitly exclude from convention-based  
+                // auto-registration. By default all types that either match I[TypeName] = [TypeName] or 
+                // I[TypeName] = [TypeName]Adapter will be automatically wired up as long as they don't 
+                // have the [ExcludeFromAutoRegistrationAttribute].
+                //
+                // If you want to override a type that follows the convention, you should add the name 
+                // of either the implementation name or the interface that it inherits to this list and 
+                // add your manual registration code below. This will prevent duplicate registrations 
+                // of the types from occurring. 
+
+                // Example:
+                // typeof(SiteMap),
+                // typeof(SiteMapNodeVisibilityProviderStrategy)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -47,7 +57,8 @@ namespace DI.Autofac.Modules
                 typeof(IDynamicNodeProvider) 
             };
 
-            // Single implementations of interface with matching name (minus the "I").
+            // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
+            // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
             CommonConventions.RegisterDefaultConventions(
                 (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
                 new Assembly[] { siteMapProviderAssembly },
@@ -55,13 +66,13 @@ namespace DI.Autofac.Modules
                 excludeTypes,
                 string.Empty);
 
-            // Multiple implementations of strategy based extension points
+            // Multiple implementations of strategy based extension points (and not decorated with [ExcludeFromAutoRegistrationAttribute]).
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
                 multipleImplementationTypes,
                 allAssemblies,
                 excludeTypes,
-                "^Composite");
+                string.Empty);
 
             // Registration of internal controllers
             CommonConventions.RegisterAllImplementationsOfInterface(
@@ -79,12 +90,6 @@ namespace DI.Autofac.Modules
             // Pass in the global controllerBuilder reference
             builder.RegisterInstance(ControllerBuilder.Current)
                    .As<ControllerBuilder>();
-
-            builder.RegisterType<BuildManagerAdaptor>()
-                   .As<IBuildManager>();
-
-            builder.RegisterType<ControllerBuilderAdaptor>()
-                   .As<IControllerBuilder>();
 
             builder.RegisterType<ControllerTypeResolverFactory>()
                 .As<IControllerTypeResolverFactory>()
@@ -140,8 +145,8 @@ namespace DI.Autofac.Modules
                 .Named<IXmlSource>("xmlSource1")
                 .WithParameter("fileName", absoluteFileName);
                 
-            builder.RegisterType<SiteMapXmlReservedAttributeNameProvider>()
-                .As<ISiteMapXmlReservedAttributeNameProvider>()
+            builder.RegisterType<ReservedAttributeNameProvider>()
+                .As<IReservedAttributeNameProvider>()
                 .WithParameter("attributesToIgnore", new string[0]);
 
 
@@ -182,6 +187,8 @@ namespace DI.Autofac.Modules
                    .WithParameter("instanceName", "default")
                    .WithParameter("securityTrimmingEnabled", securityTrimmingEnabled)
                    .WithParameter("enableLocalization", enableLocalization)
+                   .WithParameter("visibilityAffectsDescendants", visibilityAffectsDescendants)
+                   .WithParameter("useTitleIfDescriptionNotProvided", useTitleIfDescriptionNotProvided)
                    .WithParameter(
                         (p, c) => p.Name == "siteMapBuilder",
                         (p, c) => c.ResolveNamed<ISiteMapBuilder>("siteMapBuilder1"))

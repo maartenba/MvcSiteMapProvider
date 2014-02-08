@@ -3,23 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using SimpleInjector;
+using SimpleInjector.Extensions;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Collections.Specialized;
-using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Web.Compilation;
 using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.UrlResolver;
 using MvcSiteMapProvider.Xml;
-using SimpleInjector;
-using SimpleInjector.Extensions;
 
 namespace DI.SimpleInjector
 {
@@ -27,11 +23,18 @@ namespace DI.SimpleInjector
     {
         public static void SetUp(Container container)
         {
-            bool securityTrimmingEnabled = false;
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
-            string[] includeAssembliesForScan = new string[] { "$AssemblyName$" }; 
+            bool visibilityAffectsDescendants = true;
+            bool useTitleIfDescriptionNotProvided = true;
+#if Demo // Settings for MvcMusicStore demo: don't copy into your project
+            bool securityTrimmingEnabled = true;
+            string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
+#else
+            bool securityTrimmingEnabled = false;
+            string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
+#endif
 
             // Extension to allow resolution of arrays by GetAllInstances (natively based on IEnumerable).
             // source from: https://simpleinjector.codeplex.com/wikipage?title=CollectionRegistrationExtensions
@@ -41,38 +44,30 @@ namespace DI.SimpleInjector
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
             var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
             var excludeTypes = new Type[]
-                {
-                    typeof (SiteMapNodeVisibilityProviderStrategy),
-                    typeof (SiteMapXmlReservedAttributeNameProvider),
-                    typeof (SiteMapBuilderSetStrategy),
-                    typeof (ControllerTypeResolverFactory),
+            {
+                // Use this array to add types you wish to explicitly exclude from convention-based  
+                // auto-registration. By default all types that either match I[TypeName] = [TypeName] or 
+                // I[TypeName] = [TypeName]Adapter will be automatically wired up as long as they don't 
+                // have the [ExcludeFromAutoRegistrationAttribute].
+                //
+                // If you want to override a type that follows the convention, you should add the name 
+                // of either the implementation name or the interface that it inherits to this list and 
+                // add your manual registration code below. This will prevent duplicate registrations 
+                // of the types from occurring. 
 
-                    // Added 2013-06-28 by eric-b to avoid default singleton registration:
-                    typeof(XmlSiteMapController),
-
-                    // Added 2013-06-28 by eric-b for SimpleInjector.Verify method:
-                    typeof(PreservedRouteParameterCollection),
-                    typeof(MvcResolver), 
-                    typeof(MvcSiteMapProvider.SiteMap), 
-                    typeof(MetaRobotsValueCollection), 
-                    typeof(RoleCollection), 
-                    typeof(SiteMapPluginProvider), 
-                    typeof(ControllerTypeResolver),
-                    typeof(RouteValueDictionary), 
-                    typeof(AttributeDictionary),
-
-                    // Added 2013-11-11 by NightOwl888 for SimpleInjector.Verify method:
-                    typeof(SiteMapNodeCreator),
-                    typeof(DynamicSiteMapNodeBuilder)
-                };
+                // Example:
+                // typeof(SiteMap),
+                // typeof(SiteMapNodeVisibilityProviderStrategy)
+            };
             var multipleImplementationTypes = new Type[]
-                {
-                    typeof (ISiteMapNodeUrlResolver),
-                    typeof (ISiteMapNodeVisibilityProvider),
-                    typeof (IDynamicNodeProvider)
-                };
+            {
+                typeof(ISiteMapNodeUrlResolver),
+                typeof(ISiteMapNodeVisibilityProvider),
+                typeof(IDynamicNodeProvider)
+            };
 
-            // Single implementations of interface with matching name (minus the "I").
+            // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
+            // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
             CommonConventions.RegisterDefaultConventions(
                 (interfaceType, implementationType) => container.RegisterSingle(interfaceType, implementationType),
                 new Assembly[] { siteMapProviderAssembly },
@@ -80,37 +75,29 @@ namespace DI.SimpleInjector
                 excludeTypes,
                 string.Empty);
 
-            // Multiple implementations of strategy based extension points
+            // Multiple implementations of strategy based extension points (and not decorated with [ExcludeFromAutoRegistrationAttribute]).
             CommonConventions.RegisterAllImplementationsOfInterfaceSingle(
                 (interfaceType, implementationTypes) => container.RegisterAll(interfaceType, implementationTypes),
                 multipleImplementationTypes,
                 allAssemblies,
-                new Type[0],
-                "^Composite");
+                excludeTypes,
+                string.Empty);
 
             container.Register<XmlSiteMapController>();
 
             // Visibility Providers
             container.RegisterSingle<ISiteMapNodeVisibilityProviderStrategy>(() =>
-                                                                       new SiteMapNodeVisibilityProviderStrategy(
-                                                                           container.GetAllInstances
-                                                                               <ISiteMapNodeVisibilityProvider>().
-                                                                               ToArray(), string.Empty));
+                new SiteMapNodeVisibilityProviderStrategy(
+                    container.GetAllInstances<ISiteMapNodeVisibilityProvider>().ToArray(), string.Empty));
 
             // Pass in the global controllerBuilder reference
             container.RegisterSingle<ControllerBuilder>(() => ControllerBuilder.Current);
 
-            container.RegisterSingle<IControllerBuilder, ControllerBuilderAdaptor>();
-
-            container.RegisterSingle<IBuildManager, BuildManagerAdaptor>();
-
             container.RegisterSingle<IControllerTypeResolverFactory>(() =>
-                                                               new ControllerTypeResolverFactory(new string[0],
-                                                                                                 container.GetInstance
-                                                                                                     <IControllerBuilder
-                                                                                                     >(),
-                                                                                                 container.GetInstance
-                                                                                                     <IBuildManager>()));
+                new ControllerTypeResolverFactory(
+                    new string[0],
+                    container.GetInstance<IControllerBuilder>(),
+                    container.GetInstance<IBuildManager>()));
 
             // Configure Security
             container.RegisterAll<IAclModule>(typeof(AuthorizeAttributeAclModule), typeof(XmlRolesAclModule));
@@ -130,13 +117,9 @@ namespace DI.SimpleInjector
             // Configure the visitors
             container.RegisterSingle<ISiteMapNodeVisitor, UrlResolvingSiteMapNodeVisitor>();
 
-
             // Prepare for the sitemap node providers
-            container.RegisterSingle<ISiteMapXmlReservedAttributeNameProvider>(
-                () => new SiteMapXmlReservedAttributeNameProvider(new string[0]));
-
+            container.RegisterSingle<IReservedAttributeNameProvider>(() => new ReservedAttributeNameProvider(new string[0]));
             container.RegisterSingle<IXmlSource>(() => new FileXmlSource(absoluteFileName));
-
 
             // Register the sitemap node providers
             container.RegisterSingle<XmlSiteMapNodeProvider>(() => container.GetInstance<XmlSiteMapNodeProviderFactory>()
@@ -148,16 +131,20 @@ namespace DI.SimpleInjector
             container.RegisterSingle<ISiteMapBuilder>(() => container.GetInstance<SiteMapBuilderFactory>()
                 .Create(new CompositeSiteMapNodeProvider(container.GetInstance<XmlSiteMapNodeProvider>(), container.GetInstance<ReflectionSiteMapNodeProvider>())));
 
-            container.RegisterAll<ISiteMapBuilderSet>(ResolveISiteMapBuilderSets(container, securityTrimmingEnabled, enableLocalization));
+            container.RegisterAll<ISiteMapBuilderSet>(
+                ResolveISiteMapBuilderSets(container, securityTrimmingEnabled, enableLocalization, visibilityAffectsDescendants, useTitleIfDescriptionNotProvided));
             container.RegisterSingle<ISiteMapBuilderSetStrategy>(() => new SiteMapBuilderSetStrategy(container.GetAllInstances<ISiteMapBuilderSet>().ToArray()));
         }
 
-        private static IEnumerable<ISiteMapBuilderSet> ResolveISiteMapBuilderSets(Container container, bool securityTrimmingEnabled, bool enableLocalization)
+        private static IEnumerable<ISiteMapBuilderSet> ResolveISiteMapBuilderSets(
+            Container container, bool securityTrimmingEnabled, bool enableLocalization, bool visibilityAffectsDescendants, bool useTitleIfDescriptionNotProvided)
         {
             yield return new SiteMapBuilderSet(
                 "default",
                 securityTrimmingEnabled,
                 enableLocalization,
+                visibilityAffectsDescendants,
+                useTitleIfDescriptionNotProvided,
                 container.GetInstance<ISiteMapBuilder>(),
                 container.GetInstance<ICacheDetails>());
         }
