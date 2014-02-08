@@ -8,8 +8,7 @@ namespace DI
 {
     internal class CommonConventions
     {
-        // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
-        // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
+        // Single implementations of interface with matching name (minus the "I").
         public static void RegisterDefaultConventions(
             Action<Type, Type> registerMethod, 
             Assembly[] interfaceAssemblies, 
@@ -24,26 +23,21 @@ namespace DI
 
             foreach (var interfaceType in interfaces)
             {
-                if (!IsExcludedType(interfaceType, excludeTypes, excludeRegEx))
+                if (!IsMatch(interfaceType, excludeTypes, excludeRegEx))
                 {
                     List<Type> implementations = new List<Type>();
 
                     foreach (var assembly in implementationAssemblies)
-                        implementations.AddRange(GetImplementationsOfInterface(assembly, interfaceType).Where(implementation => !IsExcludedType(implementation, excludeTypes, excludeRegEx)).ToArray());
+                        implementations.AddRange(GetImplementationsOfInterface(assembly, interfaceType));
 
-                    // Prefer the default name ITypeName = TypeName
-                    Type implementationType = implementations.Where(implementation => IsDefaultType(interfaceType, implementation)).FirstOrDefault();
-
-                    if (implementationType == null)
+                    if (implementations.Count == 1)
                     {
-                        // Fall back on ITypeName = ITypeNameAdapter
-                        implementationType = implementations.Where(implementation => IsAdapterType(interfaceType, implementation)).FirstOrDefault();
-                    }
-
-                    if (implementationType != null)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Auto registration of {1} : {0}", interfaceType.Name, implementationType.Name);
-                        registerMethod(interfaceType, implementationType);
+                        var implementationType = implementations[0];
+                        if (!IsMatch(implementationType, excludeTypes, excludeRegEx) && interfaceType.Name.Equals("I" + implementationType.Name))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Auto registration of {1} : {0}", interfaceType.Name, implementationType.Name);
+                            registerMethod(interfaceType, implementationType);
+                        }
                     }
                 }
             }
@@ -66,7 +60,7 @@ namespace DI
 
                 foreach (var implementationType in implementations)
                 {
-                    if (!IsExcludedType(implementationType, excludeTypes, excludeRegEx))
+                    if (!IsMatch(implementationType, excludeTypes, excludeRegEx))
                     {
                         System.Diagnostics.Debug.WriteLine("Auto registration of {1} : {0}", interfaceType.Name, implementationType.Name);
                         registerMethod(interfaceType, implementationType);
@@ -93,7 +87,7 @@ namespace DI
 
                 foreach (var implementationType in implementations)
                 {
-                    if (!IsExcludedType(implementationType, excludeTypes, excludeRegEx))
+                    if (!IsMatch(implementationType, excludeTypes, excludeRegEx))
                     {
                         matchingImplementations.Add(implementationType);
                     }
@@ -105,36 +99,20 @@ namespace DI
         }
 
 
-        private static bool IsExcludedType(Type type, Type[] excludeTypes, string excludeRegEx)
+        private static bool IsMatch(Type type, Type[] excludeTypes, string excludeRegEx)
         {
-            return IsExcludedType(type, excludeTypes) || IsExcludedType(type, excludeRegEx) || IsExcludedType(type);
+            return IsMatch(type, excludeTypes) || IsMatch(type, excludeRegEx);
         }
 
-        private static bool IsExcludedType(Type type, Type[] excludeTypes)
+        private static bool IsMatch(Type type, Type[] excludeTypes)
         {
             return excludeTypes.Contains(type);
         }
 
-        private static bool IsExcludedType(Type type, string excludeRegEx)
+        private static bool IsMatch(Type type, string excludeRegEx)
         {
             if (string.IsNullOrEmpty(excludeRegEx)) return false;
             return Regex.Match(type.Name, excludeRegEx, RegexOptions.Compiled).Success;
-        }
-
-        private static bool IsExcludedType(Type type)
-        {
-            return type.GetCustomAttributes(typeof(MvcSiteMapProvider.DI.ExcludeFromAutoRegistrationAttribute), false).Length > 0;  
-        }
-
-        private static bool IsDefaultType(Type interfaceType, Type implementationType)
-        {
-            return interfaceType.Name.Equals("I" + implementationType.Name);
-        }
-
-        private static bool IsAdapterType(Type interfaceType, Type implementationType)
-        {
-            return implementationType.Name.EndsWith("Adapter") &&
-                interfaceType.Name.Equals("I" + implementationType.Name.Substring(0, implementationType.Name.Length - 7));
         }
 
         private static IEnumerable<Type> GetInterfaces(Assembly assembly)
