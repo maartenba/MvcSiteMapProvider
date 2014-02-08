@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Hosting;
+using System.Web.Routing;
 using System.Reflection;
 using Autofac;
 using MvcSiteMapProvider;
-using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Compilation;
+using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.UrlResolver;
+using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Reflection;
+using MvcSiteMapProvider.Builder;
+using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Globalization;
 
 namespace DI.Autofac.Modules
 {
@@ -24,29 +31,15 @@ namespace DI.Autofac.Modules
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
-#if Demo
-            string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
-#else
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
-#endif
 
             var currentAssembly = this.GetType().Assembly;
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
             var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
             var excludeTypes = new Type[] { 
-                    // Use this array to add types you wish to explicitly exclude from convention-based  
-                    // auto-registration. By default all types that either match I[TypeName] = [TypeName] or 
-                    // I[TypeName] = [TypeName]Adapter will be automatically wired up as long as they don't 
-                    // have the [ExcludeFromAutoRegistrationAttribute].
-                    //
-                    // If you want to override a type that follows the convention and doesn't have the 
-                    // [ExcludeFromAutoRegistrationAttribute], you should add the name of either the type name 
-                    // or the interface that it inherits to this list and add your manual registration code below. 
-                    // This will prevent duplicate registrations of the types from occurring. 
-
-                    // Example:
-                    // typeof(SiteMap),
-                    // typeof(SiteMapNodeVisibilityProviderStrategy)
+                typeof(SiteMapNodeVisibilityProviderStrategy),
+                typeof(SiteMapXmlReservedAttributeNameProvider),
+                typeof(SiteMapBuilderSetStrategy)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -54,8 +47,7 @@ namespace DI.Autofac.Modules
                 typeof(IDynamicNodeProvider) 
             };
 
-            // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
-            // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
+            // Single implementations of interface with matching name (minus the "I").
             CommonConventions.RegisterDefaultConventions(
                 (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
                 new Assembly[] { siteMapProviderAssembly },
@@ -63,13 +55,13 @@ namespace DI.Autofac.Modules
                 excludeTypes,
                 string.Empty);
 
-            // Multiple implementations of strategy based extension points (and not decorated with [ExcludeFromAutoRegistrationAttribute]).
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => builder.RegisterType(implementationType).As(interfaceType).SingleInstance(),
                 multipleImplementationTypes,
                 allAssemblies,
                 excludeTypes,
-                string.Empty);
+                "^Composite");
 
             // Registration of internal controllers
             CommonConventions.RegisterAllImplementationsOfInterface(
@@ -87,6 +79,12 @@ namespace DI.Autofac.Modules
             // Pass in the global controllerBuilder reference
             builder.RegisterInstance(ControllerBuilder.Current)
                    .As<ControllerBuilder>();
+
+            builder.RegisterType<BuildManagerAdaptor>()
+                   .As<IBuildManager>();
+
+            builder.RegisterType<ControllerBuilderAdaptor>()
+                   .As<IControllerBuilder>();
 
             builder.RegisterType<ControllerTypeResolverFactory>()
                 .As<IControllerTypeResolverFactory>()

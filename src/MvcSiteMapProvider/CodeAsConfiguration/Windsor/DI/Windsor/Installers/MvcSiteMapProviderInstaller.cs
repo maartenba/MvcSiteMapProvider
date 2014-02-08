@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Hosting;
 using System.Reflection;
+using MvcSiteMapProvider;
+using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Compilation;
+using MvcSiteMapProvider.Web.Mvc.Filters;
+using MvcSiteMapProvider.Web.UrlResolver;
+using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Reflection;
+using MvcSiteMapProvider.Visitor;
+using MvcSiteMapProvider.Builder;
+using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Xml;
+using MvcSiteMapProvider.Globalization;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Builder;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Visitor;
-using MvcSiteMapProvider.Web.Compilation;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.UrlResolver;
-using MvcSiteMapProvider.Xml;
 
 namespace DI.Windsor.Installers
 {
@@ -30,11 +33,7 @@ namespace DI.Windsor.Installers
             bool enableLocalization = true;
             string absoluteFileName = HostingEnvironment.MapPath("~/Mvc.sitemap");
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
-#if Demo
-            string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
-#else
             string[] includeAssembliesForScan = new string[] { "$AssemblyName$" };
-#endif
 
             // Configure Windsor to resolve arrays in constructors
             container.Kernel.Resolver.AddSubResolver(new ArrayResolver(container.Kernel, true));
@@ -43,20 +42,11 @@ namespace DI.Windsor.Installers
             var siteMapProviderAssembly = typeof(SiteMaps).Assembly;
             var allAssemblies = new Assembly[] { currentAssembly, siteMapProviderAssembly };
             var excludeTypes = new Type[] { 
-                    // Use this array to add types you wish to explicitly exclude from convention-based  
-                    // auto-registration. By default all types that either match I[TypeName] = [TypeName] or 
-                    // I[TypeName] = [TypeName]Adapter will be automatically wired up as long as they don't 
-                    // have the [ExcludeFromAutoRegistrationAttribute].
-                    //
-                    // If you want to override a type that follows the convention and doesn't have the 
-                    // [ExcludeFromAutoRegistrationAttribute], you should add the name of either the type name 
-                    // or the interface that it inherits to this list and add your manual registration code below. 
-                    // This will prevent duplicate registrations of the types from occurring. 
-
-                    // Example:
-                    // typeof(SiteMap),
-                    // typeof(SiteMapNodeVisibilityProviderStrategy)
-                    typeof(SiteMapNodeUrlResolver)
+                typeof(SiteMapNodeVisibilityProviderStrategy),
+                typeof(SiteMapXmlReservedAttributeNameProvider),
+                typeof(SiteMapBuilderSetStrategy),
+                typeof(ControllerTypeResolverFactory),
+                typeof(SiteMapNodeUrlResolver)
             };
             var multipleImplementationTypes = new Type[]  { 
                 typeof(ISiteMapNodeUrlResolver), 
@@ -64,8 +54,7 @@ namespace DI.Windsor.Installers
                 typeof(IDynamicNodeProvider) 
             };
 
-            // Matching type name (I[TypeName] = [TypeName]) or matching type name + suffix Adapter (I[TypeName] = [TypeName]Adapter)
-            // and not decorated with the [ExcludeFromAutoRegistrationAttribute].
+            // Single implementations of interface with matching name (minus the "I").
             CommonConventions.RegisterDefaultConventions(
                 (interfaceType, implementationType) => container.Register(Component.For(interfaceType).ImplementedBy(implementationType).LifestyleSingleton()),
                 new Assembly[] { siteMapProviderAssembly },
@@ -73,13 +62,13 @@ namespace DI.Windsor.Installers
                 excludeTypes,
                 string.Empty);
 
-            // Multiple implementations of strategy based extension points (and not decorated with [ExcludeFromAutoRegistrationAttribute]).
+            // Multiple implementations of strategy based extension points
             CommonConventions.RegisterAllImplementationsOfInterface(
                 (interfaceType, implementationType) => container.Register(Component.For(interfaceType).ImplementedBy(implementationType).LifestyleSingleton()),
                 multipleImplementationTypes,
                 allAssemblies,
                 new Type[0],
-                string.Empty);
+                "^Composite");
 
             // Registration of internal controllers
             CommonConventions.RegisterAllImplementationsOfInterface(
@@ -95,6 +84,8 @@ namespace DI.Windsor.Installers
 
             // Pass in the global controllerBuilder reference
             container.Register(Component.For<ControllerBuilder>().Instance(ControllerBuilder.Current));
+            container.Register(Component.For<IControllerBuilder>().ImplementedBy<ControllerBuilderAdaptor>());
+            container.Register(Component.For<IBuildManager>().ImplementedBy<BuildManagerAdaptor>());
             container.Register(Component.For<IControllerTypeResolverFactory>().ImplementedBy<ControllerTypeResolverFactory>()
                 .DependsOn(Dependency.OnValue("areaNamespacesToIgnore", new string[0])));
 
