@@ -401,7 +401,9 @@ namespace MvcSiteMapProvider
             Uri uri = null;
             if (Uri.TryCreate(this.Url, UriKind.Absolute, out uri))
             {
-                return !httpContext.Request.Url.DnsSafeHost.Equals(uri.DnsSafeHost);
+                var isDifferentHost = !httpContext.Request.Url.DnsSafeHost.Equals(uri.DnsSafeHost);
+                var isDifferentApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.InvariantCultureIgnoreCase);
+                return (isDifferentHost || isDifferentApplication);
             }
             return false;
         }
