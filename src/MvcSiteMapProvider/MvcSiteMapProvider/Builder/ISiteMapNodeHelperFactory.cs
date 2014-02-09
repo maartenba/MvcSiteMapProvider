@@ -7,6 +7,6 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface ISiteMapNodeHelperFactory
     {
-        ISiteMapNodeHelper Create(ISiteMap siteMap, string siteMapCacheKey);
+        ISiteMapNodeHelper Create(ISiteMap siteMap);
     }
 }

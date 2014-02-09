@@ -20,7 +20,6 @@ namespace MvcSiteMapProvider.Builder
             ISiteMapNodeProvider siteMapNodeProvider,
             ISiteMapNodeVisitor siteMapNodeVisitor,
             ISiteMapHierarchyBuilder siteMapHierarchyBuilder,
-            ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
             ISiteMapNodeHelperFactory siteMapNodeHelperFactory
             )
         {
@@ -30,38 +29,29 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("siteMapNodeVisitor");
             if (siteMapHierarchyBuilder == null)
                 throw new ArgumentNullException("siteMapHierarchyBuilder");
-            if (siteMapCacheKeyGenerator == null)
-                throw new ArgumentNullException("siteMapCacheKeyGenerator");
             if (siteMapNodeHelperFactory == null)
                 throw new ArgumentNullException("siteMapNodeHelperFactory");
             
             this.siteMapNodeProvider = siteMapNodeProvider;
             this.siteMapHierarchyBuilder = siteMapHierarchyBuilder;
-            this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapNodeHelperFactory = siteMapNodeHelperFactory;
             this.siteMapNodeVisitor = siteMapNodeVisitor;
         }
         protected readonly ISiteMapNodeProvider siteMapNodeProvider;
         protected readonly ISiteMapHierarchyBuilder siteMapHierarchyBuilder;
-        protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
         protected readonly ISiteMapNodeHelperFactory siteMapNodeHelperFactory;
         protected readonly ISiteMapNodeVisitor siteMapNodeVisitor;
-
-        // TODO: In version 5, we need to have the siteMapCacheKey passed from the
-        // caller or set to the sitemap itself so we can access it directly from the builder.
 
         #region ISiteMapBuilder Members
 
         public ISiteMapNode BuildSiteMap(ISiteMap siteMap, ISiteMapNode rootNode)
         {
+            // Load the source nodes
             var sourceNodes = new List<ISiteMapNodeToParentRelation>();
-            var siteMapCacheKey = this.siteMapCacheKeyGenerator.GenerateKey();
-
-            LoadSourceNodes(siteMap, siteMapCacheKey, sourceNodes);
-
-            var root = GetRootNode(siteMapCacheKey, sourceNodes);
+            LoadSourceNodes(siteMap, sourceNodes);
 
             // Add the root node to the sitemap
+            var root = GetRootNode(siteMap, sourceNodes);
             if (root != null)
             {
                 siteMap.AddNode(root);
@@ -79,7 +69,7 @@ namespace MvcSiteMapProvider.Builder
                                  select parent;
 
                 var names = String.Join(Environment.NewLine + Environment.NewLine, mismatched.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMapCacheKey, names));
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMap.CacheKey, names));
             }
 
             // Run our visitors
@@ -91,13 +81,13 @@ namespace MvcSiteMapProvider.Builder
 
         #endregion
 
-        protected virtual void LoadSourceNodes(ISiteMap siteMap, string siteMapCacheKey, List<ISiteMapNodeToParentRelation> sourceNodes)
+        protected virtual void LoadSourceNodes(ISiteMap siteMap, List<ISiteMapNodeToParentRelation> sourceNodes)
         {
-            var siteMapNodeHelper = this.siteMapNodeHelperFactory.Create(siteMap, siteMapCacheKey);
+            var siteMapNodeHelper = this.siteMapNodeHelperFactory.Create(siteMap);
             sourceNodes.AddRange(this.siteMapNodeProvider.GetSiteMapNodes(siteMapNodeHelper));
         }
 
-        protected virtual ISiteMapNode GetRootNode(string siteMapCacheKey, IList<ISiteMapNodeToParentRelation> sourceNodes)
+        protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, IList<ISiteMapNodeToParentRelation> sourceNodes)
         {
             var rootNodes = sourceNodes.Where(x => String.IsNullOrEmpty(x.ParentKey) || x.ParentKey.Trim() == String.Empty);
 
@@ -105,11 +95,11 @@ namespace MvcSiteMapProvider.Builder
             if (rootNodes.Count() > 1)
             {
                 var names = String.Join(Environment.NewLine + Environment.NewLine, rootNodes.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootKeyAmbiguous, siteMapCacheKey, names));
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootKeyAmbiguous, siteMap.CacheKey, names));
             }
             else if (rootNodes.Count() == 0)
             {
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootNodeNotDefined, siteMapCacheKey));
+                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootNodeNotDefined, siteMap.CacheKey));
             }
 
             var root = rootNodes.Single();

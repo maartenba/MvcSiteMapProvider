@@ -6,12 +6,17 @@ using MvcSiteMapProvider.Visitor;
 
 namespace MvcSiteMapProvider.Builder
 {
+    /// <summary>
+    /// Abstract factory that creates instances of <see cref="T:MvcSiteMapProvider.Builder.SiteMapBuilder"/>.
+    /// This factory can be used during DI configuration for DI containers that don't support a way to 
+    /// supply partial lists of constructor parameters. This enables us to create the type without tightly
+    /// binding to a specific constructor signature, which makes the DI configuration brittle.
+    /// </summary>
     public class SiteMapBuilderFactory
     {
         public SiteMapBuilderFactory(
             ISiteMapNodeVisitor siteMapNodeVisitor,
             ISiteMapHierarchyBuilder siteMapHierarchyBuilder,
-            ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator,
             ISiteMapNodeHelperFactory siteMapNodeHelperFactory
             )
         {
@@ -19,18 +24,14 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("siteMapNodeVisitor");
             if (siteMapHierarchyBuilder == null)
                 throw new ArgumentNullException("siteMapHierarchyBuilder");
-            if (siteMapCacheKeyGenerator == null)
-                throw new ArgumentNullException("siteMapCacheKeyGenerator");
             if (siteMapNodeHelperFactory == null)
                 throw new ArgumentNullException("siteMapNodeHelperFactory");
 
             this.siteMapHierarchyBuilder = siteMapHierarchyBuilder;
-            this.siteMapCacheKeyGenerator = siteMapCacheKeyGenerator;
             this.siteMapNodeHelperFactory = siteMapNodeHelperFactory;
             this.siteMapNodeVisitor = siteMapNodeVisitor;
         }
         protected readonly ISiteMapHierarchyBuilder siteMapHierarchyBuilder;
-        protected readonly ISiteMapCacheKeyGenerator siteMapCacheKeyGenerator;
         protected readonly ISiteMapNodeHelperFactory siteMapNodeHelperFactory;
         protected readonly ISiteMapNodeVisitor siteMapNodeVisitor;
 
@@ -40,7 +41,6 @@ namespace MvcSiteMapProvider.Builder
                 siteMapNodeProvider, 
                 this.siteMapNodeVisitor, 
                 this.siteMapHierarchyBuilder, 
-                this.siteMapCacheKeyGenerator, 
                 this.siteMapNodeHelperFactory);
         }
     }

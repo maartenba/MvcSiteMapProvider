@@ -34,10 +34,9 @@ namespace MvcSiteMapProvider.Builder
 
         #region ISiteMapNodeHelperFactory Members
 
-        public ISiteMapNodeHelper Create(ISiteMap siteMap, string siteMapCacheKey)
+        public ISiteMapNodeHelper Create(ISiteMap siteMap)
         {
             return new SiteMapNodeHelper(
-                siteMapCacheKey,
                 siteMap,
                 this.siteMapNodeCreatorFactory,
                 this.dynamicSiteMapNodeBuilderFactory,

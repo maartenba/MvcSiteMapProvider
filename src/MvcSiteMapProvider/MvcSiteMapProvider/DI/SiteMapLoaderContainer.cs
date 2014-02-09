@@ -113,7 +113,6 @@ namespace MvcSiteMapProvider.DI
                 this.siteMapNodeProvider,
                 this.siteMapNodeVisitor,
                 this.siteMapHierarchyBuilder,
-                this.siteMapCacheKeyGenerator,
                 this.siteMapNodeHelperFactory);
         }
 

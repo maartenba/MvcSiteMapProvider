@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvcSiteMapProvider.DI;
 using MvcSiteMapProvider.Xml;
 
 namespace MvcSiteMapProvider.Builder
@@ -8,19 +9,17 @@ namespace MvcSiteMapProvider.Builder
     /// <summary>
     /// A set of services useful for building SiteMap nodes, including dynamic nodes.
     /// </summary>
+    [ExcludeFromAutoRegistration]
     public class SiteMapNodeHelper
         : ISiteMapNodeHelper
     {
         public SiteMapNodeHelper(
-            string siteMapCacheKey,
             ISiteMap siteMap,
             ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory,
             IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory,
             IReservedAttributeNameProvider reservedAttributeNameProvider
             )
         {
-            if (String.IsNullOrEmpty(siteMapCacheKey))
-                throw new ArgumentNullException("siteMapCacheKey");
             if (siteMap == null)
                 throw new ArgumentNullException("siteMap");
             if (siteMapNodeCreatorFactory == null)
@@ -30,13 +29,12 @@ namespace MvcSiteMapProvider.Builder
             if (reservedAttributeNameProvider == null)
                 throw new ArgumentNullException("reservedAttributeNameProvider");
 
-            this.siteMapCacheKey = siteMapCacheKey;
             this.siteMap = siteMap;
             this.siteMapNodeCreatorFactory = siteMapNodeCreatorFactory;
             this.dynamicSiteMapNodeBuilderFactory = dynamicSiteMapNodeBuilderFactory;
             this.reservedAttributeNameProvider = reservedAttributeNameProvider;
         }
-        protected readonly string siteMapCacheKey;
+
         protected readonly ISiteMap siteMap;
         protected readonly ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory;
         protected readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
@@ -79,7 +77,7 @@ namespace MvcSiteMapProvider.Builder
 
         public string SiteMapCacheKey
         {
-            get { return this.siteMapCacheKey; }
+            get { return this.siteMap.CacheKey; }
         }
 
         #endregion
