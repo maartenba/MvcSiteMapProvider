@@ -124,9 +124,16 @@
     <Compile Include="Builder\AspNetSiteMapNodeProvider.cs" />
     <Compile Include="Builder\DynamicNodeBuilder.cs" />
     <Compile Include="Builder\DynamicSiteMapNodeBuilderFactory.cs" />
+    <Compile Include="Builder\FluentFactory.cs" />
+    <Compile Include="Builder\FluentSiteMapNodeBuilder.cs" />
+    <Compile Include="Builder\FluentSiteMapNodeFactory.cs" />
+    <Compile Include="Builder\FluentSiteMapNodeProvider.cs" />
     <Compile Include="Builder\IDynamicSiteMapNodeBuilderFactory.cs" />
     <Compile Include="Builder\IAspNetSiteMapProvider.cs" />
     <Compile Include="Builder\IDynamicNodeBuilder.cs" />
+    <Compile Include="Builder\IFluentFactory.cs" />
+    <Compile Include="Builder\IFluentSiteMapNodeBuilder.cs" />
+    <Compile Include="Builder\IFluentSiteMapNodeFactory.cs" />
     <Compile Include="Builder\ISiteMapHierarchyBuilder.cs" />
     <Compile Include="Builder\ISiteMapNodeHelper.cs" />
     <Compile Include="Builder\ISiteMapNodeCreator.cs" />

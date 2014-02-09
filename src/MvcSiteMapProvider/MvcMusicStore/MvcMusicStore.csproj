@@ -284,6 +284,7 @@ configured in the compilation constants -->
     <Compile Include="Code\NonAuthenticatedVisibilityProvider.cs" />
     <Compile Include="Code\StoreBrowseDynamicNodeProvider.cs" />
     <Compile Include="Code\StoreDetailsDynamicNodeProvider.cs" />
+    <Compile Include="Code\StoreFluentSiteMapProvider.cs" />
     <Compile Include="Code\UpperCaseSiteMapNodeUrlResolver.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CheckoutController.cs" />
