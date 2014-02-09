@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 
 namespace MvcSiteMapProvider
@@ -57,8 +58,9 @@ namespace MvcSiteMapProvider
             // Chop off the namespace
             htmlHelper = htmlHelper.Substring(htmlHelper.LastIndexOf(".") + 1);
 
-            // Get the keywords
-            var visibilityKeywords = visibility.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            // Get the keywords and trim any white-spaces
+            var visibilityKeywords = visibility.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(k => k.Trim()).ToList();
 
             // All set. Now parse the visibility variable.
             foreach (string visibilityKeyword in visibilityKeywords)
