@@ -322,14 +322,16 @@ namespace MvcSiteMapProvider
                 {
                     return string.Empty;
                 }
-                if (!String.IsNullOrEmpty(this.ResolvedUrl))
+                if (!string.IsNullOrEmpty(this.ResolvedUrl))
                 {
                     return this.ResolvedUrl;
                 }
                 // Only resolve the url if an absolute url is not already set
-                if (this.HasAbsoluteUrl())
+                // IMPORTANT: Must not call HasAbsoluteUrl here because that method calls this property.
+                var unresolved = this.UnresolvedUrl;
+                if (this.urlPath.IsAbsoluteUrl(unresolved))
                 {
-                    return this.UnresolvedUrl;
+                    return unresolved;
                 }
                 return GetResolvedUrl();
             }
@@ -360,7 +362,7 @@ namespace MvcSiteMapProvider
         /// </summary>
         public override void ResolveUrl()
         {
-            if (this.CacheResolvedUrl && String.IsNullOrEmpty(this.UnresolvedUrl) && this.preservedRouteParameters.Count == 0)
+            if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) && this.preservedRouteParameters.Count == 0)
             {
                 this.resolvedUrl = this.GetResolvedUrl();
             }
@@ -381,7 +383,7 @@ namespace MvcSiteMapProvider
         /// <returns></returns>
         public override bool HasAbsoluteUrl()
         {
-            return urlPath.IsAbsoluteUrl(this.url);
+            return this.urlPath.IsAbsoluteUrl(this.Url);
         }
 
         /// <summary>
@@ -397,7 +399,7 @@ namespace MvcSiteMapProvider
                 return false;
             }
             Uri uri = null;
-            if (Uri.TryCreate(this.url, UriKind.Absolute, out uri))
+            if (Uri.TryCreate(this.Url, UriKind.Absolute, out uri))
             {
                 return !httpContext.Request.Url.DnsSafeHost.Equals(uri.DnsSafeHost);
             }
