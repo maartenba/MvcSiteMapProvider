@@ -39,39 +39,177 @@
         <ul></ul>
       </nav>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h2>
+<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p><strong><a href="https://github.com/maartenba/MvcSiteMapProvider/releases">Release Notes</a></strong></p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<h4>
+<a name="congratulations-you-have-just-installed-mvcsitemapprovider" class="anchor" href="#congratulations-you-have-just-installed-mvcsitemapprovider"><span class="octicon octicon-link"></span></a>Congratulations, you have just installed MvcSiteMapProvider!</h4>
+
+<p>The NuGet package has added the default configuration to your application. Unless you are <a href="https://github.com/maartenba/MvcSiteMapProvider/wiki/Getting-Started#extra-configuration-steps-for-net-35">using .NET 3.5</a> or have installed a <a href="https://github.com/maartenba/MvcSiteMapProvider/wiki/Getting-Started#extra-configuration-steps-for-external-di-modules-packages">DI modules-only package</a>, this configuration will start up automatically.</p>
+
+<p>However, you still need to add the HTML helpers to your views to see it work. Let's get started by adding the following 2 HTML helpers to your /Views/Shared/<em>Layout.cshtml or /Views/Shared/</em>Layout.aspx page.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">@Html</span><span class="p">.</span><span class="n">MvcSiteMap</span><span class="p">().</span><span class="n">Menu</span><span class="p">()</span>
+<span class="n">@Html</span><span class="p">.</span><span class="n">MvcSiteMap</span><span class="p">().</span><span class="n">SiteMapPath</span><span class="p">()</span>
+</pre></div>
+
+<p>If you run your project, you will now see a menu that looks something like this:</p>
+
+<pre><code>Home   About
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>And a breadcrumb trail that just shows:</p>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<pre><code>Home
+</code></pre>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>If you click the About link, you will see your breadcrumb trail change to the following (we are assuming you have a controller action on the HomeController named About and a corresponding view named /Views/Home/About.cshtml).</p>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<pre><code>Home  &gt;  About
+</code></pre>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<h2>
+<a name="configuring-nodes" class="anchor" href="#configuring-nodes"><span class="octicon octicon-link"></span></a>Configuring Nodes</h2>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<p>Next, let's add the Contact page to demonstrate how easy it is to add new pages to the configuration. Again, make sure your Home controller has a Contact action, like this:</p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<div class="highlight highlight-csharp"><pre>    <span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Contact</span><span class="p">(</span><span class="kt">int</span> <span class="n">id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ViewBag</span><span class="p">.</span><span class="n">Message</span> <span class="p">=</span> <span class="s">"Your contact page."</span><span class="p">;</span>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+        <span class="k">return</span> <span class="nf">View</span><span class="p">();</span>
+    <span class="p">}</span>
+</pre></div>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>And make sure you have added a view named /Views/Home/Contact.cshtml (or .aspx).</p>
 
-<p>This is a test</p>
+<p>Open up the /Mvc.sitemap file and you will see that the default configuration looks like this.</p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="nt">&lt;mvcSiteMap</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;mvcSiteMapNode</span> <span class="na">title=</span><span class="s">"Home"</span> <span class="na">controller=</span><span class="s">"Home"</span> <span class="na">action=</span><span class="s">"Index"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;mvcSiteMapNode</span> <span class="na">title=</span><span class="s">"About"</span> <span class="na">controller=</span><span class="s">"Home"</span> <span class="na">action=</span><span class="s">"About"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/mvcSiteMapNode&gt;</span>
+
+<span class="nt">&lt;/mvcSiteMap&gt;</span>
+</pre></div>
+
+<p>Add another node just below about, setting the title to "Contact Us", the controller to "Home", and the action to "Contact" as shown below.</p>
+
+<div class="highlight highlight-xml"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
+<span class="nt">&lt;mvcSiteMap</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+        <span class="na">xmlns=</span><span class="s">"http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0"</span>
+        <span class="na">xsi:schemaLocation=</span><span class="s">"http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;mvcSiteMapNode</span> <span class="na">title=</span><span class="s">"Home"</span> <span class="na">controller=</span><span class="s">"Home"</span> <span class="na">action=</span><span class="s">"Index"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;mvcSiteMapNode</span> <span class="na">title=</span><span class="s">"About"</span> <span class="na">controller=</span><span class="s">"Home"</span> <span class="na">action=</span><span class="s">"About"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;mvcSiteMapNode</span> <span class="na">title=</span><span class="s">"Contact Us"</span> <span class="na">controller=</span><span class="s">"Home"</span> <span class="na">action=</span><span class="s">"Contact"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/mvcSiteMapNode&gt;</span>
+
+<span class="nt">&lt;/mvcSiteMap&gt;</span>
+</pre></div>
+
+<p>Run your project again, and you will see that your menu now contains a Contact Us link. Click it and you will see that the breadcrumb trail now shows the path below.</p>
+
+<pre><code>Home  &gt;  Contact Us
+</code></pre>
+
+<h4>
+<a name="dont-like-xml-configuration" class="anchor" href="#dont-like-xml-configuration"><span class="octicon octicon-link"></span></a>Don't like <a href="http://github.com/maartenba/MvcSiteMapProvider/wiki/Defining-sitemap-nodes-in-XML">XML configuration</a>?</h4>
+
+<ul>
+<li><a href="http://github.com/maartenba/MvcSiteMapProvider/wiki/Defining-sitemap-nodes-using-.NET-attributes">Define SiteMap nodes using .NET Attributes</a></li>
+<li><a href="http://github.com/maartenba/MvcSiteMapProvider/wiki/Defining-sitemap-nodes-using-IDynamicNodeProvider">Define SiteMap nodes using Dynamic Node Providers</a></li>
+</ul><h2>
+<a name="changing-the-templates" class="anchor" href="#changing-the-templates"><span class="octicon octicon-link"></span></a>Changing the Templates</h2>
+
+<p>Don't like the HTML elements that are output from these HTML helpers? Change them!</p>
+
+<p>Navigate to the /Views/Shared/DisplayTemplates/ folder and you will see a list of templates that are used to build the HTML, as follows.</p>
+
+<ul>
+<li>CanonicalHelperModel</li>
+<li>MenuHelperModel</li>
+<li>MetaRobotsHelperModel</li>
+<li>SiteMapHelperModel</li>
+<li>SiteMapNodeModel</li>
+<li>SiteMapNodeModelList</li>
+<li>SiteMapPathHelperModel</li>
+<li>SiteMapTitleHelperModel</li>
+</ul><p>To edit the menu, have a look at the MenuHelperModel.cshtml file. The default looks like this:</p>
+
+<pre><code>@model MvcSiteMapProvider.Web.Html.Models.MenuHelperModel
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+
+&lt;ul id="menu"&gt;
+    @foreach (var node in Model.Nodes) { 
+        &lt;li&gt;@Html.DisplayFor(m =&gt; node) 
+            @if (node.Children.Any()) {
+                @Html.DisplayFor(m =&gt; node.Children)
+            }
+        &lt;/li&gt;
+    }
+&lt;/ul&gt;
+</code></pre>
+
+<p>It calls the SiteMapNodeModel in a loop. But we can easily copy the contents of SiteMapNodeModel into MySiteMapNode and then edit the code. Then we can just call our new template by editing MenuHelperModel as follows.</p>
+
+<pre><code>@model MvcSiteMapProvider.Web.Html.Models.MenuHelperModel
+@using System.Web.Mvc.Html
+@using MvcSiteMapProvider.Web.Html.Models
+
+&lt;ul id="menu"&gt;
+    @foreach (var node in Model.Nodes) { 
+        &lt;li&gt;@Html.DisplayFor(m =&gt; node) 
+            @if (node.Children.Any()) {
+                @Html.DisplayFor(m =&gt; node.Children, "MySiteMapNode")
+            }
+        &lt;/li&gt;
+    }
+&lt;/ul&gt;
+</code></pre>
+
+<h2>
+<a name="automatic-sitemaps-xml-generation" class="anchor" href="#automatic-sitemaps-xml-generation"><span class="octicon octicon-link"></span></a>Automatic Sitemaps XML Generation</h2>
+
+<p>In addition to giving you HTML helpers, MvcSiteMapProvider keeps track of each of your URLs so they can be submitted to search engines using the <a href="http://www.sitemaps.org/protocol.html">standardized Sitemaps XML format</a>. </p>
+
+<p>This feature is automatically enabled by default, just navigate to the path /sitemap.xml in your browser to see the output from your configured nodes.</p>
+
+<h2>
+<a name="more-information" class="anchor" href="#more-information"><span class="octicon octicon-link"></span></a>More Information</h2>
+
+<p>MvcSiteMapProvider does a lot more than we can describe on one page, and it can also be extended in many ways - you can even replace much of the default behavior with your own code. Read the <a href="https://github.com/maartenba/mvcsitemapprovider/wiki">full documentation</a> on our wiki, or for a tutorial visit <a href="http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive">MvcSiteMapProvider - A Test Drive</a>.</p>
+
+<h2>
+<a name="extra-configuration-steps-for-net-35" class="anchor" href="#extra-configuration-steps-for-net-35"><span class="octicon octicon-link"></span></a>Extra Configuration Steps for .NET 3.5</h2>
+
+<p>For .NET 3.5, you need to manually add the code to launch MvcSiteMapProvider to your Application_Start() event of the /Global.asax file. There is only 1 line required.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">MvcSiteMapProvider</span><span class="p">.</span><span class="n">DI</span><span class="p">.</span><span class="n">Composer</span><span class="p">.</span><span class="n">Compose</span><span class="p">();</span>
+</pre></div>
+
+<p>After adding that line, MvcSiteMapProvider will launch when you run the application, as it would for .NET 4.0 or higher.</p>
+
+<h2>
+<a name="extra-configuration-steps-for-external-di-modules-packages" class="anchor" href="#extra-configuration-steps-for-external-di-modules-packages"><span class="octicon octicon-link"></span></a>Extra Configuration Steps for External DI Modules Packages</h2>
+
+<p>There is a readme file that opens up automatically when you install one of these packages with the code to add to your composition root. In case you need to reference it again, you can view the readme files online at the following locations.</p>
+
+<ul>
+<li><a href="https://github.com/maartenba/MvcSiteMapProvider/tree/master/src/MvcSiteMapProvider/CodeAsConfiguration/Autofac/DI/Autofac">Autofac</a></li>
+<li><a href="https://github.com/maartenba/MvcSiteMapProvider/tree/master/src/MvcSiteMapProvider/CodeAsConfiguration/Ninject/DI/Ninject">Ninject</a></li>
+<li><a href="https://github.com/maartenba/MvcSiteMapProvider/tree/master/src/MvcSiteMapProvider/CodeAsConfiguration/SimpleInjector/DI/SimpleInjector">SimpleInjector</a></li>
+<li><a href="https://github.com/maartenba/MvcSiteMapProvider/tree/master/src/MvcSiteMapProvider/CodeAsConfiguration/StructureMap/DI/StructureMap">StructureMap</a></li>
+<li><a href="https://github.com/maartenba/MvcSiteMapProvider/tree/master/src/MvcSiteMapProvider/CodeAsConfiguration/Unity/DI/Unity">Unity</a></li>
+<li><a href="https://github.com/maartenba/MvcSiteMapProvider/tree/master/src/MvcSiteMapProvider/CodeAsConfiguration/Windsor/DI/Windsor">Castle Windsor</a></li>
+</ul>
       </section>
       <footer>
         <p>Project maintained by <a href="https://github.com/NightOwl888">NightOwl888</a></p>
