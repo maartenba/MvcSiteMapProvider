@@ -210,6 +210,25 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
         }
 
+        public override object this[string key]
+        {
+            get
+            {
+                return base[key];
+            }
+            set
+            {
+                if (this.reservedAttributeNameProvider.IsRouteAttribute(key))
+                {
+                    base[key] = value;
+                }
+                else
+                {
+                    throw new ReservedKeyException(string.Format(Resources.Messages.RouteValueKeyReserved, this.siteMapNodeKey, key, value));
+                }
+            }
+        }
+
         public virtual bool ContainsCustomKeys
         {
             get
@@ -237,21 +256,23 @@ namespace MvcSiteMapProvider.Collections.Specialized
             if (routeValues.Count > 0)
             {
                 // Check for an exact match, and return false if not
-                foreach (var pair in routeValues)
-                {
-                    if (!this.MatchesRouteValue(new string[0], pair.Key, pair.Value))
-                    {
-                        return false;
-                    }
-                }
+                if (!this.MatchesRouteValues(new string[0], routeValues))
+                    return false;
 
-                // Now check to see if the action parameters match, too, and return false if not
-                foreach (var pair in routeValues)
+                // Now check to see if the action method parameters match, too, and return false if not
+                if (!this.MatchesRouteValues(actionParameters, routeValues))
+                    return false;
+            }
+            return true;
+        }
+
+        protected virtual bool MatchesRouteValues(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
+        {
+            foreach (var pair in routeValues)
+            {
+                if (!this.MatchesRouteValue(actionParameters, pair.Key, pair.Value))
                 {
-                    if (!this.MatchesRouteValue(actionParameters, pair.Key, pair.Value))
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             return true;
@@ -291,25 +312,6 @@ namespace MvcSiteMapProvider.Collections.Specialized
             return value == null ||
                 string.IsNullOrEmpty(value.ToString()) || 
                 value == UrlParameter.Optional;
-        }
-
-        public override object this[string key]
-        {
-            get
-            {
-                return base[key];
-            }
-            set
-            {
-                if (this.reservedAttributeNameProvider.IsRouteAttribute(key))
-                {
-                    base[key] = value;
-                }
-                else
-                {
-                    throw new ReservedKeyException(string.Format(Resources.Messages.RouteValueKeyReserved, this.siteMapNodeKey, key, value));
-                }
-            }
         }
 
         protected virtual bool ValueExists(string key)
