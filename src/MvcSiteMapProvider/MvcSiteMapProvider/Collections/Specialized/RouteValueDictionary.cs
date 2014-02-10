@@ -236,6 +236,16 @@ namespace MvcSiteMapProvider.Collections.Specialized
         {
             if (routeValues.Count > 0)
             {
+                // Check for an exact match, and return false if not
+                foreach (var pair in routeValues)
+                {
+                    if (!this.MatchesRouteValue(new string[0], pair.Key, pair.Value))
+                    {
+                        return false;
+                    }
+                }
+
+                // Now check to see if the action parameters match, too, and return false if not
                 foreach (var pair in routeValues)
                 {
                     if (!this.MatchesRouteValue(actionParameters, pair.Key, pair.Value))

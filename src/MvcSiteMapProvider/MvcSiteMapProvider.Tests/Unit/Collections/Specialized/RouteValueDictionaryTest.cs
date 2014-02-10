@@ -356,7 +356,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         }
 
         [Test]
-        public void MatchesRoute_MatchingRouteWith2StandardParamsAndNonMatchingActionParameterID_ShouldReturnTrue()
+        public void MatchesRoute_MatchingRouteWith2StandardParamsAndNonMatchingActionParameterID_ShouldReturnFalse()
         {
             // arrange
             var actionParameters = new List<string>();
@@ -377,7 +377,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
 
             // assert
             var actual = result;
-            var expected = true;
+            var expected = false;
 
             Assert.AreEqual(expected, actual);
         }
@@ -410,7 +410,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         }
 
         [Test]
-        public void MatchesRoute_MatchingRouteWith2StandardParamsEmptyIDAndNonMatchingActionParameterID_ShouldReturnTrue()
+        public void MatchesRoute_MatchingRouteWith2StandardParamsEmptyIDAndNonMatchingActionParameterID_ShouldReturnFalse()
         {
             // arrange
             var actionParameters = new List<string>();
@@ -431,7 +431,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
 
             // assert
             var actual = result;
-            var expected = true;
+            var expected = false;
 
             Assert.AreEqual(expected, actual);
         }
