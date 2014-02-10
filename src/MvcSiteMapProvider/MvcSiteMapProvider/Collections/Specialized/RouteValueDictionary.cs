@@ -210,6 +210,28 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
         }
 
+        public virtual bool ContainsCustomKeys
+        {
+            get
+            {
+                if (this.Count > 3)
+                    return true;
+
+                foreach (var key in this.Keys)
+                {
+                    if (this.IsCustomKey(key))
+                        return true;
+                }
+
+                return false;
+            }
+        }
+
+        protected virtual bool IsCustomKey(string key)
+        {
+            return string.IsNullOrEmpty(key) || (key != "area" && key != "controller" && key != "action");
+        }
+
         public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
         {
             if (routeValues.Count > 0)

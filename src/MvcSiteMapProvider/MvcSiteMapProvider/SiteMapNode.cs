@@ -374,7 +374,8 @@ namespace MvcSiteMapProvider
         /// </summary>
         public override void ResolveUrl()
         {
-            if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) && this.preservedRouteParameters.Count == 0)
+            if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) && 
+                this.preservedRouteParameters.Count == 0 && !this.RouteValues.ContainsCustomKeys)
             {
                 this.resolvedUrl = this.GetResolvedUrl();
             }

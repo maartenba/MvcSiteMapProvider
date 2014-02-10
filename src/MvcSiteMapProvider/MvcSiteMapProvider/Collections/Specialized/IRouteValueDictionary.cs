@@ -81,6 +81,8 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(NameValueCollection nameValueCollection, bool throwIfReservedKey);
 
+        bool ContainsCustomKeys { get; }
+
         bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues);
 
         void CopyTo(IDictionary<string, object> destination);

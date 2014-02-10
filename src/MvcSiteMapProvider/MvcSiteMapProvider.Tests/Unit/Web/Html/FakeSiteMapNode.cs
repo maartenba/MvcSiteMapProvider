@@ -432,6 +432,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public bool ContainsCustomKeys
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
         {
             throw new NotImplementedException();
