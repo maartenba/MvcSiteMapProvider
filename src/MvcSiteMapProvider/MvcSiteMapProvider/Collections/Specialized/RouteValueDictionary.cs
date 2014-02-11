@@ -303,8 +303,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         protected virtual bool IsEmptyValue(object value)
         {
             return value == null ||
-                string.IsNullOrEmpty(value.ToString()) || 
-                value == UrlParameter.Optional;
+                string.IsNullOrEmpty(value.ToString());
         }
 
         protected virtual bool ValueExists(string key)
