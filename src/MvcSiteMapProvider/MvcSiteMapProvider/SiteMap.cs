@@ -719,33 +719,16 @@ namespace MvcSiteMapProvider
 
         protected virtual ISiteMapNode FindSiteMapNodeFromMvc(HttpContextBase httpContext)
         {
-            ISiteMapNode node = null;
-            var routes = mvcContextFactory.GetRoutes();
-            var routeData = routes.GetRouteData(httpContext);
+            var routeData = this.GetMvcRouteData(httpContext);
             if (routeData != null)
             {
-                if (routeData.Values.ContainsKey("MS_DirectRouteMatches"))
-                {
-                    routeData = ((IEnumerable<RouteData>)routeData.Values["MS_DirectRouteMatches"]).First();
-                }
-                if (!routeData.Values.ContainsKey("area"))
-                {
-                    if (routeData.DataTokens["area"] != null)
-                    {
-                        routeData.Values.Add("area", routeData.DataTokens["area"]);
-                    }
-                    else
-                    {
-                        routeData.Values.Add("area", "");
-                    }
-                }
-                node = FindSiteMapNodeFromControllerAction(routeData.Values, routeData.Route);
+                return FindSiteMapNodeFromMvcRoute(routeData.Values, routeData.Route);
             }
-            return node;
+            return null;
         }
 
         /// <summary>
-        /// Finds the controller action node.
+        /// Finds the node that matches the MVC route.
         /// </summary>
         /// <param name="rootNode">The root node.</param>
         /// <param name="values">The values.</param>
@@ -753,16 +736,17 @@ namespace MvcSiteMapProvider
         /// <returns>
         /// A controller action node represented as a <see cref="SiteMapNode"/> instance
         /// </returns>
-        protected virtual ISiteMapNode FindSiteMapNodeFromControllerAction(IDictionary<string, object> values, RouteBase route)
+        protected virtual ISiteMapNode FindSiteMapNodeFromMvcRoute(IDictionary<string, object> values, RouteBase route)
         {
             var routes = mvcContextFactory.GetRoutes();
 
+            // keyTable contains every node in the SiteMap
             foreach (var node in this.keyTable.Values)
             {
                 // Look at the route property
                 if (!string.IsNullOrEmpty(node.Route))
                 {
-                    // This looks a bit weird, but if i set up a node to a general route ie /Controller/Action/ID
+                    // This looks a bit weird, but if I set up a node to a general route i.e. /Controller/Action/ID
                     // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route
                     if (routes[node.Route] == route && node.MatchesRoute(values))
                     {
@@ -791,6 +775,40 @@ namespace MvcSiteMapProvider
                 }
             }
             return node;
+        }
+
+        protected virtual RouteData GetMvcRouteData(HttpContextBase httpContext)
+        {
+            var routes = mvcContextFactory.GetRoutes();
+            var routeData = routes.GetRouteData(httpContext);
+            if (routeData != null)
+            {
+                if (routeData.Values.ContainsKey("MS_DirectRouteMatches"))
+                {
+                    routeData = ((IEnumerable<RouteData>)routeData.Values["MS_DirectRouteMatches"]).First();
+                }
+                this.SetMvcArea(routeData);
+            }
+
+            return routeData;
+        }
+
+        protected virtual void SetMvcArea(RouteData routeData)
+        {
+            if (routeData != null)
+            {
+                if (!routeData.Values.ContainsKey("area"))
+                {
+                    if (routeData.DataTokens["area"] != null)
+                    {
+                        routeData.Values.Add("area", routeData.DataTokens["area"]);
+                    }
+                    else
+                    {
+                        routeData.Values.Add("area", "");
+                    }
+                }
+            }
         }
 
         protected virtual ISiteMapNode ReturnNodeIfAccessible(ISiteMapNode node)
