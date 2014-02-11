@@ -229,6 +229,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
             }
         }
 
+        /// <summary>
+        /// <b>True</b> if the dictionary contains keys other than "area", "controller", and "action"; otherwise <b>false</b>.
+        /// </summary>
         public virtual bool ContainsCustomKeys
         {
             get
@@ -251,38 +254,33 @@ namespace MvcSiteMapProvider.Collections.Specialized
             return string.IsNullOrEmpty(key) || (key != "area" && key != "controller" && key != "action");
         }
 
+        [Obsolete("Use the overload MatchesRoute(IDictionary<string, object>) instead. This overload will be removed in version 5.")]
         public virtual bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
         {
-            if (routeValues.Count > 0)
-            {
-                // Check for an exact match, and return false if not
-                if (!this.MatchesRouteValues(new string[0], routeValues))
-                    return false;
-
-                // Now check to see if the action method parameters match, too, and return false if not
-                if (!this.MatchesRouteValues(actionParameters, routeValues))
-                    return false;
-            }
-            return true;
+            return this.MatchesRoute(routeValues);
         }
 
-        protected virtual bool MatchesRouteValues(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues)
+        public virtual bool MatchesRoute(IDictionary<string, object> routeValues)
         {
+            if (routeValues.Count == 0)
+                return false;
+
             foreach (var pair in routeValues)
             {
-                if (!this.MatchesRouteValue(actionParameters, pair.Key, pair.Value))
+                if (!this.MatchesRouteValue(pair.Key, pair.Value))
                 {
                     return false;
                 }
             }
+
             return true;
         }
 
-        protected virtual bool MatchesRouteValue(IEnumerable<string> actionParameters, string key, object value)
+        protected virtual bool MatchesRouteValue(string key, object value)
         {
             if (this.ValueExists(key))
             {
-                if (this.MatchesValue(key, value) || this.MatchesActionMethodParameter(actionParameters, key))
+                if (this.MatchesValue(key, value))
                 {
                     return true;
                 }
@@ -295,11 +293,6 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 }
             }
             return false;
-        }
-
-        protected virtual bool MatchesActionMethodParameter(IEnumerable<string> actionParameters, string key)
-        {
-            return actionParameters.Contains(key, StringComparer.InvariantCultureIgnoreCase);
         }
 
         protected virtual bool MatchesValue(string key, object value)

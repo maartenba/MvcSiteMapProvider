@@ -442,6 +442,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public bool MatchesRoute(IDictionary<string, object> routeValues)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CopyTo(IDictionary<string, object> destination)
         {
             throw new NotImplementedException();

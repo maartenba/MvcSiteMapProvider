@@ -81,9 +81,22 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(NameValueCollection nameValueCollection, bool throwIfReservedKey);
 
+        /// <summary>
+        /// <b>True</b> if the dictionary contains keys other than "area", "controller", and "action"; otherwise <b>false</b>.
+        /// </summary>
         bool ContainsCustomKeys { get; }
 
+        [Obsolete("Use the overload MatchesRoute(IDictionary<string, object>) instead. This overload will be removed in version 5.")]
         bool MatchesRoute(IEnumerable<string> actionParameters, IDictionary<string, object> routeValues);
+
+        /// <summary>
+        /// Compares whether the current dictionary the same as the passed in dictionary, accounting for empty optional values.
+        /// </summary>
+        /// <param name="routeValues">An <see cref="T:System.Collections.Generic.IDictionary{string, object}"/> that represents the routes, 
+        /// typically from the current request context.</param>
+        /// <returns><b>True</b> if the keys and values are an exact match (case insensitive) of of the routeValues that are passed and 
+        /// the every member of the action method parameter list is a key in the dictionary; otherwise <b>false</b>.</returns>
+        bool MatchesRoute(IDictionary<string, object> routeValues);
 
         void CopyTo(IDictionary<string, object> destination);
     }
