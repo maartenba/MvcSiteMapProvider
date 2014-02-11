@@ -643,10 +643,22 @@ namespace MvcSiteMapProvider
         /// Determines whether this node matches the supplied route values.
         /// </summary>
         /// <param name="routeValues">An IDictionary<string, object> of route values.</param>
-        /// <returns><c>true</c> if the route matches this node's RouteValues collection; otherwise <c>false</c>.</returns>
+        /// <returns><c>true</c> if the route matches this node's RouteValues and Attributes collections; otherwise <c>false</c>.</returns>
         public override bool MatchesRoute(IDictionary<string, object> routeValues)
         {
-            return this.RouteValues.MatchesRoute(RouteValues);
+            // Find action method parameters?
+            IEnumerable<string> actionParameters = new List<string>();
+            if (this.IsDynamic == false)
+            {
+                // We need to ensure 1 instance per sitemap instance for the resolver's internal
+                // cache to work on multi-tenant sites that would potentially have area, 
+                // controller and action name collisions.
+                actionParameters = this.SiteMap.ResolveActionMethodParameters(
+                    this.Area, this.Controller, this.Action);
+            }
+
+            var result = this.RouteValues.MatchesRoute(actionParameters, routeValues);
+            return result;
         }
 
         #endregion
