@@ -739,14 +739,7 @@ namespace MvcSiteMapProvider
                         routeData.Values.Add("area", "");
                     }
                 }
-                if (this.RootNode != null && this.RootNode.MatchesRoute(routeData.Values))
-                {
-                    node = RootNode;
-                }
-                if (node == null)
-                {
-                    node = FindSiteMapNodeFromControllerAction(RootNode, routeData.Values, routeData.Route);
-                }
+                node = FindSiteMapNodeFromControllerAction(routeData.Values, routeData.Route);
             }
             return node;
         }
@@ -760,44 +753,28 @@ namespace MvcSiteMapProvider
         /// <returns>
         /// A controller action node represented as a <see cref="SiteMapNode"/> instance
         /// </returns>
-        protected virtual ISiteMapNode FindSiteMapNodeFromControllerAction(ISiteMapNode rootNode, IDictionary<string, object> values, RouteBase route)
+        protected virtual ISiteMapNode FindSiteMapNodeFromControllerAction(IDictionary<string, object> values, RouteBase route)
         {
-            if (rootNode != null)
+            var routes = mvcContextFactory.GetRoutes();
+
+            foreach (var node in this.keyTable.Values)
             {
-                // Get all child nodes
-                var childNodes = GetChildNodes(rootNode);
-
-                var routes = mvcContextFactory.GetRoutes();
-
-                // Search current level
-                foreach (ISiteMapNode node in childNodes)
+                // Look at the route property
+                if (!string.IsNullOrEmpty(node.Route))
                 {
-                    // Look at the route property
-                    if (!string.IsNullOrEmpty(node.Route))
-                    {
-                        if (routes[node.Route] == route)
-                        {
-                            // This looks a bit weird, but if i set up a node to a general route ie /Controller/Action/ID
-                            // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route
-                            if (node.MatchesRoute(values))
-                            {
-                                return node;
-                            }
-                        }
-                    }
-                    else if (node.MatchesRoute(values))
+                    // This looks a bit weird, but if i set up a node to a general route ie /Controller/Action/ID
+                    // I need to check that the values are the same so that it doesn't swallow all of the nodes that also use that same general route
+                    if (routes[node.Route] == route && node.MatchesRoute(values))
                     {
                         return node;
                     }
-
-                    // Search next level
-                    var siteMapNode = FindSiteMapNodeFromControllerAction(node, values, route);
-                    if (siteMapNode != null)
-                    {
-                        return siteMapNode;
-                    }
+                }
+                else if (node.MatchesRoute(values))
+                {
+                    return node;
                 }
             }
+
             return null;
         }
 
