@@ -646,6 +646,7 @@ namespace MvcSiteMapProvider
         /// Resolves the action method parameters based on the current SiteMap instance.
         /// </summary>
         /// <remarks>There is 1 instance of action method parameter resolver per site map.</remarks>
+        [Obsolete("ResolveActionMethodParameters is deprecated and will be removed in version 5.")]
         public IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName)
         {
             return pluginProvider.MvcResolver.ResolveActionMethodParameters(areaName, controllerName, actionMethodName);

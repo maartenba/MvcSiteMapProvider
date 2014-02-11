@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
+    // TODO: Remove this type in version 5.
+
     /// <summary>
     /// IActionMethodParameterResolver contract
     /// </summary>

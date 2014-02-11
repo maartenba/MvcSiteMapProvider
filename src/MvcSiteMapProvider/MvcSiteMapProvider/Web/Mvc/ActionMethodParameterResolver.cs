@@ -7,6 +7,8 @@ using MvcSiteMapProvider.Collections;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
+    // TODO: Remove this type in version 5.
+
     /// <summary>
     /// ActionMethodParameterResolver class
     /// </summary>

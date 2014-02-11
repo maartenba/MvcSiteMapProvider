@@ -2,6 +2,8 @@
 
 namespace MvcSiteMapProvider.Web.Mvc
 {
+    // TODO: Remove this type in version 5.
+
     /// <summary>
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Web.Mvc.ActionMethodParameterResolver"/>
     /// at runtime.

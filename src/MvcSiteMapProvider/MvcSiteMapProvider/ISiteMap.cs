@@ -47,6 +47,8 @@ namespace MvcSiteMapProvider
         bool UseTitleIfDescriptionNotProvided { get; }
         bool VisibilityAffectsDescendants { get; }
         Type ResolveControllerType(string areaName, string controllerName);
+
+        [Obsolete("ResolveActionMethodParameters is deprecated and will be removed in version 5.")]
         IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);
     }
 }
