@@ -57,18 +57,16 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_MatchingRouteWith2StandardParams_ShouldReturnTrue()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -81,18 +79,16 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_MatchingRouteWith2StandardParamsNonMatchingCaseValues_ShouldReturnTrue()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "home");
-            routeValues.Add("Action", "index");
+            routeValues.Add("controller", "home");
+            routeValues.Add("action", "index");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -105,8 +101,6 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_MatchingRouteWith2StandardParamsNonMatchingCaseKeys_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
             routeValues.Add("controller", "Home");
             routeValues.Add("action", "Index");
@@ -116,7 +110,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
             target.Add("Action", "Index");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -129,20 +123,18 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_MatchingRouteWith2StandardParamsAndArea_ShouldReturnTrue()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("Area", "Admin");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("area", "Admin");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-            target.Add("Area", "Admin");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
+            target.Add("area", "Admin");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -155,20 +147,18 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_NonMatchingRouteWith2StandardParamsAndNonMatchingArea_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("Area", "Admin");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("area", "Admin");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-            target.Add("Area", "Home");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
+            target.Add("area", "Home");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -181,20 +171,18 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_NonMatchingRouteWith2StandardParamsAndArea_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("Area", "Admin");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("area", "Admin");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Test");
-            target.Add("Action", "Index");
-            target.Add("Area", "Admin");
+            target.Add("controller", "Test");
+            target.Add("action", "Index");
+            target.Add("area", "Admin");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -207,18 +195,16 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_NonMatchingRouteWith2StandardParams_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Test");
-            target.Add("Action", "Index");
+            target.Add("controller", "Test");
+            target.Add("action", "Index");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -231,19 +217,17 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_NonMatchingRouteWith2StandardParamsAndMissingArea_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("Area", "Admin");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("area", "Admin");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -256,20 +240,18 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_MatchingRouteWith2StandardParamsAndMatchingID_ShouldReturnTrue()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
             routeValues.Add("id", "1234");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
             target.Add("id", "1234");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -282,20 +264,18 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_NonMatchingRouteWith2StandardParamsAndNonMatchingID_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
             routeValues.Add("id", "1234");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
             target.Add("id", "123");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -308,19 +288,17 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         public void MatchesRoute_NonMatchingRouteWith2StandardParamsAndMissingID_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
             routeValues.Add("id", "1234");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
@@ -330,159 +308,25 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
         }
 
         [Test]
-        public void MatchesRoute_NonMatchingRouteWith2StandardParamsAndMissingIDAndMatchingActionParameterID_ShouldReturnFalse()
+        public void MatchesRoute_NonMatchingRouteWith2StandardParamsEmptyID_ShouldReturnFalse()
         {
             // arrange
-            var actionParameters = new List<string>();
-            actionParameters.Add("id");
-
             var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("id", "1234");
-
-            var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-
-            // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
-
-            // assert
-            var actual = result;
-            var expected = false;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void MatchesRoute_MatchingRouteWith2StandardParamsAndNonMatchingActionParameterID_ShouldReturnFalse()
-        {
-            // arrange
-            var actionParameters = new List<string>();
-            actionParameters.Add("id");
-
-            var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
             routeValues.Add("id", "12345");
 
             var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-            target.Add("id", "1");
-
-            // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
-
-            // assert
-            var actual = result;
-            var expected = false;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void MatchesRoute_NonMatchingRouteWith2StandardParamsEmptyIDAndNonMatchingActionParameterID_ShouldReturnFalse()
-        {
-            // arrange
-            var actionParameters = new List<string>();
-            actionParameters.Add("id");
-
-            var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("id", "12345");
-
-            var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
             target.Add("id", "");
 
             // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
+            var result = target.MatchesRoute(routeValues);
 
             // assert
             var actual = result;
             var expected = false;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void MatchesRoute_MatchingRouteWith2StandardParamsEmptyIDAndNonMatchingActionParameterID_ShouldReturnFalse()
-        {
-            // arrange
-            var actionParameters = new List<string>();
-            actionParameters.Add("id");
-
-            var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("id", "");
-
-            var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-            target.Add("id", "12345");
-
-            // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
-
-            // assert
-            var actual = result;
-            var expected = false;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void MatchesRoute_NonMatchingRouteWith2StandardParamsMissingIDAndNonMatchingActionParameterID_ShouldReturnFalse()
-        {
-            // arrange
-            var actionParameters = new List<string>();
-            actionParameters.Add("id");
-
-            var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("id", "12345");
-
-            var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-
-            // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
-
-            // assert
-            var actual = result;
-            var expected = false;
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [Test]
-        public void MatchesRoute_MatchingRouteWith2StandardParamsOptionalRouteIDAndMissingID_ShouldReturnTrue()
-        {
-            // arrange
-            var actionParameters = new List<string>();
-
-            var routeValues = new Dictionary<string, object>();
-            routeValues.Add("Controller", "Home");
-            routeValues.Add("Action", "Index");
-            routeValues.Add("id", UrlParameter.Optional);
-
-            var target = NewRouteValueDictionaryInstance();
-            target.Add("Controller", "Home");
-            target.Add("Action", "Index");
-
-            // act
-            var result = target.MatchesRoute(actionParameters, routeValues);
-
-            // assert
-            var actual = result;
-            var expected = true;
 
             Assert.AreEqual(expected, actual);
         }
