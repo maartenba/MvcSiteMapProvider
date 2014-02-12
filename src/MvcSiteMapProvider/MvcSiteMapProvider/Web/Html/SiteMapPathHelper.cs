@@ -127,8 +127,12 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, string startingNodeKey, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = helper.SiteMap.CurrentNode;
-            if (!string.IsNullOrEmpty(startingNodeKey))
+            ISiteMapNode startingNode;
+            if (string.IsNullOrEmpty(startingNodeKey))
+            {
+                startingNode = helper.SiteMap.CurrentNode;
+            }
+            else
             {
                 startingNode = helper.SiteMap.FindSiteMapNodeFromKey(startingNodeKey);
             }
