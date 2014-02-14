@@ -50,7 +50,7 @@ MvcSiteMapProvider used the psake build engine to build the project. Psake is a 
 
 ## Contributions
 
-Please read our [Contributing to MvcSiteMapProvider](https://github.com/maartenba/MvcSiteMapProvider/wiki/Contributing-to-MvcSiteMapProvider) guide.
+Please read our [Contributing to MvcSiteMapProvider](CONTRIBUTING.md) guide.
 
 ## Acknowledgements
 
