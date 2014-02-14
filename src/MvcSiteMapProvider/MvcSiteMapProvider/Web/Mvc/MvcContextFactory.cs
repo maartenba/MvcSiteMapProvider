@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
@@ -24,6 +25,21 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected virtual HttpContextBase CreateHttpContext(ISiteMapNode node)
         {
             return new SiteMapHttpContext(HttpContext.Current, node);
+        }
+
+        public virtual HttpContextBase CreateHttpContext(ISiteMapNode node, Uri nodeUri, TextWriter writer)
+        {
+            if (node == null)
+                throw new ArgumentNullException("node");
+            if (nodeUri == null)
+                throw new ArgumentNullException("nodeUri");
+            if (writer == null)
+                throw new ArgumentNullException("writer");
+
+            var request = new HttpRequest(string.Empty, nodeUri.ToString(), nodeUri.Query);
+            var response = new HttpResponse(writer);
+            var httpContext = new HttpContext(request, response);
+            return new SiteMapHttpContext(httpContext, node);
         }
 
         public virtual RequestContext CreateRequestContext(ISiteMapNode node, RouteData routeData)
