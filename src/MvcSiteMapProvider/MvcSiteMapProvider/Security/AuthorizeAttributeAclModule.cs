@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -55,19 +56,15 @@ namespace MvcSiteMapProvider.Security
         /// </returns>
         public bool IsAccessibleToUser(ISiteMap siteMap, ISiteMapNode node)
         {
-            // Clickable? Always accessible.
-            if (node.Clickable == false)
-            {
+            // Not Clickable? Always accessible.
+            if (!node.Clickable)
                 return true;
-            }
 
             var httpContext = mvcContextFactory.CreateHttpContext();
 
             // Is it an external Url?
             if (node.HasExternalUrl(httpContext))
-            {
                 return true;
-            }
 
             return this.VerifyNode(siteMap, node, httpContext);
         }
@@ -84,22 +81,11 @@ namespace MvcSiteMapProvider.Security
             if (controllerType == null)
                 return true;
 
-            var originalPath = httpContext.Request.Path;
+            var routes = this.FindRoutesForNode(node, httpContext);
+            if (routes == null)
+                return true; // Static URLs will have no route data, therefore return true.
 
-            // Find routes for the sitemap node's url
-            var routes = this.FindRoutesForNode(node, originalPath, httpContext);
-            try
-            {
-                if (routes == null)
-                    return true; // Static URL's will have no route data, therefore return true.
-
-                return this.VerifyController(node, routes, controllerType);
-            }
-            finally
-            {
-                // Restore HttpContext
-                httpContext.RewritePath(originalPath, true);
-            }
+            return this.VerifyController(node, routes, controllerType);
         }
 
         protected virtual bool VerifyController(ISiteMapNode node, RouteData routes, Type controllerType)
@@ -122,25 +108,33 @@ namespace MvcSiteMapProvider.Security
             }
         }
 
-        protected virtual RouteData FindRoutesForNode(ISiteMapNode node, string originalPath, HttpContextBase httpContext)
+        protected virtual RouteData FindRoutesForNode(ISiteMapNode node, HttpContextBase httpContext)
         {
-            var routes = mvcContextFactory.GetRoutes();
-            var originalRoutes = routes.GetRouteData(httpContext);
-            var nodeUrl = node.Url;
-            httpContext.RewritePath(nodeUrl, true);
+            // Create a Uri for the current node. Note that we are relying on the 
+            // node.HasExternalUrl(httpContext) check to ensure we don't have an absolute URL.
+            var nodeUri = new Uri(httpContext.Request.Url, node.Url);
 
-            RouteData routeData = node.GetRouteData(httpContext);
-            if (routeData != null)
+            RouteData routeData = null;
+
+            // Create a TextWriter with null stream as a backing stream 
+            // which doesn't consume resources
+            using (var nullWriter = new StreamWriter(Stream.Null))
             {
-                foreach (var routeValue in node.RouteValues)
+                // Create a new HTTP context using the node's URL instead of the current one.
+                var nodeHttpContext = this.mvcContextFactory.CreateHttpContext(node, nodeUri, nullWriter);
+
+                // Find routes for the sitemap node's URL using the new HTTP context
+                routeData = node.GetRouteData(nodeHttpContext);
+                if (routeData != null)
                 {
-                    routeData.Values[routeValue.Key] = routeValue.Value;
-                }
-                if (originalRoutes != null && (!routeData.Route.Equals(originalRoutes.Route) || originalPath != nodeUrl || node.Area == String.Empty))
-                {
-                    routeData.DataTokens.Remove("area");
-                    //routeData.DataTokens.Remove("Namespaces");
-                    //routeData.Values.Remove("area");
+                    foreach (var routeValue in node.RouteValues)
+                    {
+                        routeData.Values[routeValue.Key] = routeValue.Value;
+                    }
+                    if (string.IsNullOrEmpty(node.Area))
+                    {
+                        routeData.DataTokens.Remove("area");
+                    }
                 }
             }
             return routeData;
@@ -293,6 +287,5 @@ namespace MvcSiteMapProvider.Security
         }
 
         #endregion
-
     }
 }

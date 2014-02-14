@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -12,6 +13,7 @@ namespace MvcSiteMapProvider.Web.Mvc
     public interface IMvcContextFactory
     {
         HttpContextBase CreateHttpContext();
+        HttpContextBase CreateHttpContext(ISiteMapNode node, Uri nodeUri, TextWriter writer);
         RequestContext CreateRequestContext(ISiteMapNode node, RouteData routeData);
         RequestContext CreateRequestContext();
         ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller);
