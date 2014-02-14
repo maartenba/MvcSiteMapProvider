@@ -1,3 +1,5 @@
+# Contributing to MvcSiteMapProvider
+
 Your contributions to the MvcSiteMapProvider project are welcome. While we have put a lot of time and thought into this project, we recognize that it can always be improved or extended in some way, and we appreciate the feedback. Contributions can take many forms. Here are some common ones.
 
 1. [Opening an issue](https://github.com/maartenba/MvcSiteMapProvider/issues/new) to let us know about something that appears to be defective or to give us an idea for a new feature
