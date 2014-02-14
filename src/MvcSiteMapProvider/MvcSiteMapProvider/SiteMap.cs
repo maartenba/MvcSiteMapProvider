@@ -70,7 +70,6 @@ namespace MvcSiteMapProvider
         protected readonly IDictionary<string, ISiteMapNode> keyTable;
         protected readonly IDictionary<ISiteMapNode, ISiteMapNode> parentNodeTable;
         protected readonly IDictionary<string, ISiteMapNode> urlTable;
-        private readonly IList<string> duplicateUrlCheck = new List<string>();
 
         // Object state
         protected readonly object synclock = new object();
@@ -140,46 +139,44 @@ namespace MvcSiteMapProvider
             }
             lock (this.synclock)
             {
+                string url = string.Empty;
                 bool urlPrepared = false;
                 bool urlEncoded = false;
                 bool isMvcUrl = string.IsNullOrEmpty(node.UnresolvedUrl) && this.UsesDefaultUrlResolver(node);
-                string url = node.Url;
-
-                if (!string.IsNullOrEmpty(url))
+                
+                // Only store URLs if they are configured using the Url property
+                // or provided by a custom Url resolver.
+                if (!isMvcUrl)
                 {
-                    if (node.HasAbsoluteUrl())
-                    {
-                        // This is an external url, so we will encode it
-                        url = urlPath.UrlEncode(url);
-                        urlEncoded = true;
-                    }
-                    if (urlPath.AppDomainAppVirtualPath != null)
-                    {
-                        if (!urlPath.IsAbsolutePhysicalPath(url))
-                        {
-                            url = urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
-                        }
-                        if (!this.duplicateUrlCheck.Contains(url, StringComparer.OrdinalIgnoreCase))
-                        {
-                            duplicateUrlCheck.Add(url);
-                        }
-                        else
-                        {
-                            if (urlEncoded)
-                            {
-                                url = urlPath.UrlDecode(url);
-                            }
-                            throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
-                        }
-                    }
+                    url = node.Url;
 
-                    // Only store URLs if they are configured using the Url property
-                    // or provided by a custom Url resolver.
-                    if (!isMvcUrl)
+                    if (!string.IsNullOrEmpty(url))
                     {
+                        if (urlPath.AppDomainAppVirtualPath != null)
+                        {
+                            if (node.HasAbsoluteUrl())
+                            {
+                                // This is an external url, so we will encode it
+                                url = urlPath.UrlEncode(url);
+                                urlEncoded = true;
+                            }
+                            if (!urlPath.IsAbsolutePhysicalPath(url))
+                            {
+                                url = urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
+                            }
+                            if (this.urlTable.Keys.Contains(url, StringComparer.OrdinalIgnoreCase))
+                            {
+                                if (urlEncoded)
+                                {
+                                    url = urlPath.UrlDecode(url);
+                                }
+                                throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalUrl, url));
+                            }
+                        }
                         urlPrepared = true;
                     }
                 }
+
                 string key = node.Key;
                 if (this.keyTable.ContainsKey(key))
                 {
@@ -246,7 +243,6 @@ namespace MvcSiteMapProvider
                 this.urlTable.Clear();
                 this.parentNodeTable.Clear();
                 this.keyTable.Clear();
-                this.duplicateUrlCheck.Clear();
             }
         }
 
@@ -263,9 +259,6 @@ namespace MvcSiteMapProvider
             // If this was called before, just ignore this call.
             if (root != null) return;
             root = pluginProvider.SiteMapBuilder.BuildSiteMap(this, root);
-
-            // Clear the duplicate URL check - we no longer need it
-            this.duplicateUrlCheck.Clear();
             if (root == null)
             {
                 throw new MvcSiteMapException(Resources.Messages.SiteMapRootNodeNotDefined);
