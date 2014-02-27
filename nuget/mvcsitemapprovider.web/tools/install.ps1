@@ -35,10 +35,17 @@ function Add-Or-Update-AppSettings() {
 	$web_config_path = Get-Web-Config-Path
 	$xml.Load($web_config_path)
 
+	$conf = $xml.SelectSingleNode("configuration")
+	if ($conf -eq $null)
+	{
+		$conf = $xml.CreateElement("configuration")
+		$xml.AppendChild($conf)
+	}
+	
 	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
 	if ($appSettings -eq $null) {
 		$appSettings = $xml.CreateElement("appSettings")
-		$xml.AppendChild($appSettings)
+		$conf.AppendChild($appSettings)
 	}
 	
 	# add or update MvcSiteMapProvider_UseExternalDIContainer
@@ -86,10 +93,17 @@ function Add-Pages-Namespaces() {
 	$web_config_path = Get-Web-Config-Path
 	$xml.Load($web_config_path)
 
+	$conf = $xml.SelectSingleNode("configuration")
+	if ($conf -eq $null)
+	{
+		$conf = $xml.CreateElement("configuration")
+		$xml.AppendChild($conf)
+	}
+	
 	$system_web = $xml.SelectSingleNode("configuration/system.web")
 	if ($system_web -eq $null) {
 		$system_web = $xml.CreateElement("system.web")
-		$xml.AppendChild($system_web)
+		$conf.AppendChild($system_web)
 	}
 	
 	$pages = $xml.SelectSingleNode("configuration/system.web/pages")
@@ -140,10 +154,17 @@ function Add-Razor-Pages-Namespaces() {
 	# load Web.config as XML
 	$xml.Load($web_config_path)
 
+	$conf = $xml.SelectSingleNode("configuration")
+	if ($conf -eq $null)
+	{
+		$conf = $xml.CreateElement("configuration")
+		$xml.AppendChild($conf)
+	}
+	
 	$system_web_webpages_razor = $xml.SelectSingleNode("configuration/system.web.webPages.razor")
 	if ($system_web_webpages_razor -eq $null) {
 		$system_web_webpages_razor = $xml.CreateElement("system.web.webPages.razor")
-		$xml.AppendChild($system_web_webpages_razor)
+		$conf.AppendChild($system_web_webpages_razor)
 	}
 	
 	$pages = $xml.SelectSingleNode("configuration/system.web.webPages.razor/pages")
@@ -216,11 +237,17 @@ function Add-MVC4-Config-Sections() {
 	$web_config_path = Get-Web-Config-Path
 	$xml.Load($web_config_path)
 	
-	# select the node
+	$conf = $xml.SelectSingleNode("configuration")
+	if ($conf -eq $null)
+	{
+		$conf = $xml.CreateElement("configuration")
+		$xml.AppendChild($conf)
+	}
+	
 	$ws = $xml.SelectSingleNode("configuration/system.webServer")
 	if ($ws -eq $null) {
 		$ws = $xml.CreateElement("system.webServer")
-		$xml.AppendChild($ws)
+		$conf.AppendChild($ws)
 	}
 	
 	$modules = $xml.SelectSingleNode("configuration/system.webServer/modules")
@@ -302,14 +329,11 @@ if ([string](InferPreferredViewEngine) -eq 'aspx') {
 }
 
 # If MVC 4 or higher, install web.config section to fix 404 not found on sitemap.xml (#124)
-if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
+$mvc_version = $project.Object.References.Find("System.Web.Mvc").Version
+Write-Host "MVC Version: $mvc_version"
+if ($mvc_version -notmatch '^[123]\.' -or [string]::IsNullOrEmpty($mvc_version))
 {
-	Write-Host "Detected MVC 4"
-	Add-MVC4-Config-Sections
-}
-if ($project.Object.References.Find("System.Web.Mvc").Version -eq "5.0.0.0")
-{
-	Write-Host "Detected MVC 5"
+	Write-Host "Installing config sections for MVC >= 4"
 	Add-MVC4-Config-Sections
 }
 

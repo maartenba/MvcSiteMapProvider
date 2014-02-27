@@ -26,7 +26,7 @@ function Remove-AppSettings() {
 	}
 	
 	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
-	if ($appSettings -eq $null) {
+	if ($appSettings -ne $null) {
 		if (($appSettings.HasChildNodes -eq $false) -and ($appSettings.Attributes.Count -eq 0)) {
 			$appSettings.ParentNode.RemoveChild($appSettings)
 		}
@@ -198,10 +198,12 @@ function Remove-MVC4-Config-Sections() {
 	$xml.Save($localPath.Value)
 }
 
-# If MVC 4, remove web.config section to fix 404 not found on sitemap.xml (#124)
-if ($project.Object.References.Find("System.Web.Mvc").Version -eq "4.0.0.0")
+# If MVC 4 or higher, remove web.config section to fix 404 not found on sitemap.xml (#124)
+$mvc_version = $project.Object.References.Find("System.Web.Mvc").Version
+Write-Host "MVC Version: $mvc_version"
+if ($mvc_version -notmatch '^[123]\.' -or [string]::IsNullOrEmpty($mvc_version))
 {
-	Write-Host "Detected MVC 4"
+	Write-Host "Removing config sections for MVC >= 4"
 	Remove-MVC4-Config-Sections
 }
 
