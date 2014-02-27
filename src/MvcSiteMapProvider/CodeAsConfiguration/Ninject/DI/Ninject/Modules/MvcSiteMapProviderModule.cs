@@ -26,7 +26,8 @@ namespace DI.Ninject.Modules
             TimeSpan absoluteCacheExpiration = TimeSpan.FromMinutes(5);
             bool visibilityAffectsDescendants = true;
             bool useTitleIfDescriptionNotProvided = true;
-#if Demo // Settings for MvcMusicStore demo: don't copy into your project
+#if Demo
+            // Settings for MvcMusicStore demo: don't copy into your project
             bool securityTrimmingEnabled = true;
             string[] includeAssembliesForScan = new string[] { "Mvc Music Store" };
 #else
