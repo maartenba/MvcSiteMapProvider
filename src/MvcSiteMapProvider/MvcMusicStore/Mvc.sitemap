@@ -24,7 +24,7 @@
 
     <mvcSiteMapNode title="$resources:SiteMapLocalizations,ReviewCartTitle" controller="ShoppingCart" action="Index" />
 
-    <mvcSiteMapNode key="Checkout" title="$resources:SiteMapLocalizations,CheckoutTitle" controller="Checkout" clickable="false" />
+    <mvcSiteMapNode key="Checkout" title="$resources:SiteMapLocalizations,CheckoutTitle" controller="Checkout" clickable="false"  />
 
     <mvcSiteMapNode title="$resources:SiteMapLocalizations,AccountTitle" controller="Account" clickable="false">
       <mvcSiteMapNode title="$resources:SiteMapLocalizations,LogOnTitle" action="LogOn" visibilityProvider="MvcMusicStore.Code.NonAuthenticatedVisibilityProvider, Mvc Music Store" />
