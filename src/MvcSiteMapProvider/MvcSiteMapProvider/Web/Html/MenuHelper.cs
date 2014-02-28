@@ -1402,6 +1402,10 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>The node at level.</returns>
         public static ISiteMapNode GetNodeAtLevel(ISiteMapNode startingNode, int level, bool allowForwardSearch)
         {
+            if (startingNode == null)
+            {
+                return null;
+            }
             var startingNodeLevel = startingNode.GetNodeLevel();
             if (startingNodeLevel == level)
             {
