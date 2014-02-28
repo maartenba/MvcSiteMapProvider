@@ -27,16 +27,16 @@ namespace MvcSiteMapProvider.Web.Mvc
             return new SiteMapHttpContext(HttpContext.Current, node);
         }
 
-        public virtual HttpContextBase CreateHttpContext(ISiteMapNode node, Uri nodeUri, TextWriter writer)
+        public virtual HttpContextBase CreateHttpContext(ISiteMapNode node, Uri uri, TextWriter writer)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
-            if (nodeUri == null)
-                throw new ArgumentNullException("nodeUri");
+            if (uri == null)
+                throw new ArgumentNullException("uri");
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            var request = new HttpRequest(string.Empty, nodeUri.ToString(), nodeUri.Query);
+            var request = new HttpRequest(string.Empty, uri.ToString(), uri.Query);
             var response = new HttpResponse(writer);
             var httpContext = new HttpContext(request, response);
             return new SiteMapHttpContext(httpContext, node);
@@ -59,6 +59,16 @@ namespace MvcSiteMapProvider.Web.Mvc
 #endif
             else
                 return new RequestContext(httpContext, new RouteData());
+        }
+
+        public virtual RequestContext CreateRequestContext(HttpContextBase httpContext)
+        {
+            return new RequestContext(httpContext, new RouteData());
+        }
+
+        public virtual RequestContext CreateRequestContext(HttpContextBase httpContext, RouteData routeData)
+        {
+            return new RequestContext(httpContext, routeData);
         }
 
         public virtual ControllerContext CreateControllerContext(RequestContext requestContext, ControllerBase controller)
@@ -88,13 +98,13 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual IUrlHelper CreateUrlHelper(RequestContext requestContext)
         {
-            return new UrlHelperAdapter(requestContext);
+            return new UrlHelperAdapter(requestContext, this.GetRoutes());
         }
 
         public virtual IUrlHelper CreateUrlHelper()
         {
             var requestContext = this.CreateRequestContext();
-            return new UrlHelperAdapter(requestContext);
+            return new UrlHelperAdapter(requestContext, this.GetRoutes());
         }
 
         public virtual AuthorizationContext CreateAuthorizationContext(ControllerContext controllerContext, ActionDescriptor actionDescriptor)

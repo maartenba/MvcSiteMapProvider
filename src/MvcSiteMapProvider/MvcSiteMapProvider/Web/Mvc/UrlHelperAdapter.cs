@@ -12,12 +12,12 @@ namespace MvcSiteMapProvider.Web
     public class UrlHelperAdapter
         : UrlHelper, IUrlHelper
     {
-        public UrlHelperAdapter(RequestContext requestContext)
+        private UrlHelperAdapter(RequestContext requestContext)
             : base(requestContext)
         {
         }
 
-        private UrlHelperAdapter(RequestContext requestContext, RouteCollection routeCollection)
+        public UrlHelperAdapter(RequestContext requestContext, RouteCollection routeCollection)
             : base(requestContext, routeCollection)
         {
         }
