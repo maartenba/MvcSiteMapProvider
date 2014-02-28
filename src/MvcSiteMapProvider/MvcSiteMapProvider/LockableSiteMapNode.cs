@@ -269,6 +269,20 @@ namespace MvcSiteMapProvider
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to include ambient request values 
+        /// (from the RouteValues and/or query string) when resolving URLs.
+        /// </summary>
+        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
+        public override bool IncludeAmbientRequestValues
+        {
+            get { return base.IncludeAmbientRequestValues; }
+            set
+            {
+                this.ThrowIfReadOnly("IncludeAmbientRequestValues");
+                base.IncludeAmbientRequestValues = value;
+            }
+        }
 
         /// <summary>
         /// Sets the ResolvedUrl using the current Url or Url resolver.
@@ -278,7 +292,6 @@ namespace MvcSiteMapProvider
             this.ThrowIfReadOnly("ResolveUrl");
             base.ResolveUrl();
         }
-
 
         #endregion
 

@@ -59,6 +59,7 @@ namespace MvcSiteMapProvider
         string ResolvedUrl { get; }
         bool CacheResolvedUrl { get; set; }
         void ResolveUrl();
+        bool IncludeAmbientRequestValues { get; set; }
         bool HasAbsoluteUrl();
         bool HasExternalUrl(HttpContextBase httpContext);
 
@@ -74,7 +75,7 @@ namespace MvcSiteMapProvider
         IPreservedRouteParameterCollection PreservedRouteParameters { get; }
         RouteData GetRouteData(HttpContextBase httpContext);
         bool MatchesRoute(IDictionary<string, object> routeValues);
-
+        
         string Area { get; set; }
         string Controller { get; set; }
         string Action { get; set; }

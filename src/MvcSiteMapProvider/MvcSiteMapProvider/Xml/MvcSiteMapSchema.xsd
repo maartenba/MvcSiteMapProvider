@@ -137,6 +137,14 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
+    <xs:attribute name="includeAmbientRequestValues" type="xs:boolean" use="optional">
+      <xs:annotation>
+        <xs:documentation>
+          Optional. Whether or not to include request route values and/or query string values when resolving the
+          URL (for route/action URLs only). Default is false.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
 		<xs:attribute name="visibility" type="xs:string" use="optional" >
 			<xs:annotation>
 				<xs:documentation>
@@ -144,7 +152,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="visibilityProvider" type="xs:string" use="optional" >
 			<xs:annotation>
 				<xs:documentation>
@@ -159,7 +166,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="imageUrl" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>
@@ -167,7 +173,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="preservedRouteParameters" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>
@@ -175,7 +180,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="canonicalUrl" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>
@@ -191,7 +195,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="metaRobotsValues" type="metarobots_type" use="optional">
 			<xs:annotation>
 				<xs:documentation>
@@ -199,7 +202,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="httpMethod" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>
@@ -207,7 +209,6 @@
 				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
-
 		<xs:attribute name="order" type="xs:int" use="optional">
 			<xs:annotation>
 				<xs:documentation>

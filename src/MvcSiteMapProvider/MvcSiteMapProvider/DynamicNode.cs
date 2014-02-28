@@ -192,6 +192,13 @@ namespace MvcSiteMapProvider
         public virtual bool? Clickable { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to include ambient request values 
+        /// (from the RouteValues and/or query string) when resolving URLs.
+        /// </summary>
+        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
+        public virtual bool? IncludeAmbientRequestValues { get; set; }
+
+        /// <summary>
         /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
         /// doesn't overwrite any values that are not set in this <see cref="T:MvcSiteMapNodeProvider.DynamicNode"/> instance.
         /// </summary>
@@ -276,6 +283,8 @@ namespace MvcSiteMapProvider
                 node.UrlResolver = this.UrlResolver;
             if (this.Clickable != null)
                 node.Clickable = (bool)this.Clickable;
+            if (this.IncludeAmbientRequestValues != null)
+                node.IncludeAmbientRequestValues = (bool)this.IncludeAmbientRequestValues;
         }
 
 

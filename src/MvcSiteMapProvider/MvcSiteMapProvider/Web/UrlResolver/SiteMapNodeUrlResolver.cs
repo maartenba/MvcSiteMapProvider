@@ -69,7 +69,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             // which doesn't consume resources
             using (var nullWriter = new StreamWriter(Stream.Null))
             {
-                var requestContext = this.CreateRequestContext(node, true, nullWriter);
+                var requestContext = this.CreateRequestContext(node, nullWriter);
                 result = this.ResolveRouteUrl(node, area, controller, action, routeValues, requestContext);
             }
 
@@ -110,9 +110,9 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             return this.mvcContextFactory.CreateHttpContext(node, uri, writer);
         }
 
-        protected virtual RequestContext CreateRequestContext(ISiteMapNode node, bool includeAmbientRequestValues, TextWriter writer)
+        protected virtual RequestContext CreateRequestContext(ISiteMapNode node, TextWriter writer)
         {
-            if (!includeAmbientRequestValues)
+            if (!node.IncludeAmbientRequestValues)
             {
                 var httpContext = this.CreateHttpContext(node, writer);
                 return this.mvcContextFactory.CreateRequestContext(httpContext);

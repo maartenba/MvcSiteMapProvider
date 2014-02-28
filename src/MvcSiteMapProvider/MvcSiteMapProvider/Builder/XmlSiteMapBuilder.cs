@@ -154,6 +154,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.HttpMethod = httpMethod;
             siteMapNode.Url = url;
             siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
+            siteMapNode.IncludeAmbientRequestValues = bool.Parse(node.GetAttributeValueOrFallback("includeAmbientRequestValues", "false"));
             siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
             siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");
             siteMapNode.MetaRobotsValues.AddRange(node.GetAttributeValue("metaRobotsValues"), new[] { ' ' });
@@ -169,7 +170,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.RouteValues.AddRange(node, false);
             siteMapNode.PreservedRouteParameters.AddRange(node.GetAttributeValue("preservedRouteParameters"), new[] { ',', ';' });
             siteMapNode.UrlResolver = node.GetAttributeValue("urlResolver");
-
+            
             // Area and controller may need inheriting from the parent node, so set (or reset) them explicitly
             siteMapNode.Area = area;
             siteMapNode.Controller = controller;

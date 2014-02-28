@@ -248,6 +248,7 @@ namespace MvcSiteMapProvider.Builder
             node.HttpMethod = httpMethod;
             if (!string.IsNullOrEmpty(attribute.Url)) node.Url = attribute.Url;
             node.CacheResolvedUrl = attribute.CacheResolvedUrl;
+            node.IncludeAmbientRequestValues = attribute.IncludeAmbientRequestValues;
             node.CanonicalUrl = attribute.CanonicalUrl;
             node.CanonicalKey = attribute.CanonicalKey;
             node.MetaRobotsValues.AddRange(attribute.MetaRobotsValues);
@@ -261,7 +262,7 @@ namespace MvcSiteMapProvider.Builder
             node.RouteValues.AddRange(attribute.Attributes, false);
             node.PreservedRouteParameters.AddRange(attribute.PreservedRouteParameters, new[] { ',', ';' });
             node.UrlResolver = attribute.UrlResolver;
-
+            
             // Specified area, controller and action properties will override any 
             // provided in the attributes collection.
             if (!string.IsNullOrEmpty(area)) node.RouteValues.Add("area", area);

@@ -67,6 +67,7 @@ namespace MvcSiteMapProvider.Builder
                 || attributeName == "imageUrl"
                 || attributeName == "inheritedRouteParameters"
                 || attributeName == "preservedRouteParameters"
+                || attributeName == "includeAmbientRequestValues"
                 || attributeName == "canonicalUrl"
                 || attributeName == "canonicalKey"
                 || attributeName == "metaRobotsValues";

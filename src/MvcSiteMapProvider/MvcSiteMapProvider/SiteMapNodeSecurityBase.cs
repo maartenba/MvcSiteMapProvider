@@ -69,6 +69,7 @@ namespace MvcSiteMapProvider
         public abstract string ResolvedUrl { get; }
         public abstract bool CacheResolvedUrl { get; set; }
         public abstract void ResolveUrl();
+        public abstract bool IncludeAmbientRequestValues { get; set; }
         public abstract bool HasAbsoluteUrl();
         public abstract bool HasExternalUrl(HttpContextBase httpContext);
         public abstract string CanonicalUrl { get; set; }

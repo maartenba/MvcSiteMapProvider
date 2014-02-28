@@ -375,7 +375,7 @@ namespace MvcSiteMapProvider
         public override void ResolveUrl()
         {
             if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) && 
-                this.preservedRouteParameters.Count == 0 && !this.RouteValues.ContainsCustomKeys)
+                this.preservedRouteParameters.Count == 0 && !this.IncludeAmbientRequestValues)
             {
                 this.resolvedUrl = this.GetResolvedUrl();
             }
@@ -388,6 +388,13 @@ namespace MvcSiteMapProvider
             return pluginProvider.UrlResolverStrategy.ResolveUrl(
                 this.UrlResolver, this, this.Area, this.Controller, this.Action, this.RouteValues);
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to include ambient request values 
+        /// (from the RouteValues and/or query string) when resolving URLs.
+        /// </summary>
+        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
+        public override bool IncludeAmbientRequestValues { get; set; }
 
         /// <summary>
         /// Gets a boolean value that indicates this is an external URL by checking whether it
@@ -723,6 +730,7 @@ namespace MvcSiteMapProvider
             node.Route = this.Route;
             this.RouteValues.CopyTo(node.RouteValues);
             this.PreservedRouteParameters.CopyTo(node.PreservedRouteParameters);
+            node.IncludeAmbientRequestValues = this.IncludeAmbientRequestValues;
             // NOTE: Area, Controller, and Action are covered under RouteValues.
         }
 
