@@ -646,6 +646,14 @@ namespace MvcSiteMapProvider
         /// <returns><c>true</c> if the route matches this node's RouteValues collection; otherwise <c>false</c>.</returns>
         public override bool MatchesRoute(IDictionary<string, object> routeValues)
         {
+            // If not clickable, we never want to match the node.
+            if (!this.Clickable)
+                return false;
+
+            // If URL is set explicitly, we should never match based on route values.
+            if (!string.IsNullOrEmpty(this.UnresolvedUrl))
+                return false;
+
             return this.RouteValues.MatchesRoute(routeValues);
         }
 
