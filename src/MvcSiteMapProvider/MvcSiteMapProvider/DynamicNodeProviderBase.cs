@@ -22,13 +22,16 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Determines whether the provider instance matches the name
         /// </summary>
-        /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name can be used.</param>
+        /// <param name="providerName">The name of the dynamic node provider. This can be any string, but for backward compatibility the type name is used.</param>
         /// <returns>
         /// True if the provider name matches.
         /// </returns>
         public virtual bool AppliesTo(string providerName)
         {
-            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName, StringComparison.InvariantCulture);
+            if (string.IsNullOrEmpty(providerName))
+                return false;
+
+            return this.GetType().Equals(Type.GetType(providerName, false));
         }
 
         #endregion

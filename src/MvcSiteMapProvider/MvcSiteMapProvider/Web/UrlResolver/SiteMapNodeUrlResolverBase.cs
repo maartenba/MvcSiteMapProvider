@@ -27,13 +27,16 @@ namespace MvcSiteMapProvider.Web.UrlResolver
         /// <summary>
         /// Determines whether the provider instance matches the name
         /// </summary>
-        /// <param name="providerName">The name of the URL resolver. This can be any string, but for backward compatibility the type name can be used.</param>
+        /// <param name="providerName">The name of the URL resolver. This can be any string, but for backward compatibility the type name is used.</param>
         /// <returns>
         /// <c>true</c> if the provider name matches; otherwise <c>false</c>.
         /// </returns>
         public virtual bool AppliesTo(string providerName)
         {
-            return this.GetType().ShortAssemblyQualifiedName().Equals(providerName, StringComparison.InvariantCulture);
+            if (string.IsNullOrEmpty(providerName))
+                return false;
+
+            return this.GetType().Equals(Type.GetType(providerName, false));
         }
 
         #endregion

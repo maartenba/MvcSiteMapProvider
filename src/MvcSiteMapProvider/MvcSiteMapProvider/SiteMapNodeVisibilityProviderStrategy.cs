@@ -6,7 +6,7 @@ namespace MvcSiteMapProvider
 {
     /// <summary>
     /// Tracks all of the registered instances of <see cref="T:MvcSiteMapProvider.ISiteMapNodeVisiblityProvider"/> and 
-    /// allows the caller to get a specific named instance of this interface at runtime.
+    /// allows the caller to get a specific named instance of <see cref="T:MvcSiteMapProvider.ISiteMapNodeVisiblityProvider"/> at runtime.
     /// </summary>
     public class SiteMapNodeVisibilityProviderStrategy
         : ISiteMapNodeVisibilityProviderStrategy
@@ -28,27 +28,25 @@ namespace MvcSiteMapProvider
 
         public ISiteMapNodeVisibilityProvider GetProvider(string providerName)
         {
-            ISiteMapNodeVisibilityProvider provider = null;
-            if (!String.IsNullOrEmpty(providerName))
+            if (string.IsNullOrEmpty(providerName))
             {
-                provider = siteMapNodeVisibilityProviders.FirstOrDefault(x => x.AppliesTo(providerName));
-                if (provider == null)
-                {
-                    throw new MvcSiteMapException(String.Format(Resources.Messages.NamedSiteMapNodeVisibilityProviderNotFound, providerName));
-                }
+                // Get the configured default provider
+                providerName = this.defaultProviderName;
             }
-            else if (!string.IsNullOrEmpty(defaultProviderName))
+
+            var provider = this.siteMapNodeVisibilityProviders.FirstOrDefault(x => x.AppliesTo(providerName));
+            if (provider == null && !string.IsNullOrEmpty(providerName))
             {
-                // Return the configured default provider
-                provider = siteMapNodeVisibilityProviders.FirstOrDefault(x => x.AppliesTo(defaultProviderName));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.NamedSiteMapNodeVisibilityProviderNotFound, providerName));
             }
+
             return provider;
         }
 
         public bool IsVisible(string providerName, ISiteMapNode node, IDictionary<string, object> sourceMetadata)
         {
-            var provider = GetProvider(providerName);
-            if (provider == null) return true; // If no default provider configured, then always visible.
+            var provider = this.GetProvider(providerName);
+            if (provider == null) return true; // If no provider configured, then always visible.
             return provider.IsVisible(node, sourceMetadata);
         }
 

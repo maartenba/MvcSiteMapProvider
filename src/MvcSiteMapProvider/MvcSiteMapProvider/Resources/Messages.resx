@@ -374,4 +374,7 @@ Valid keys may be "area", "controller", "action", and custom parameters that are
 
 You may suppress this error message by calling an overload of the RouteValues.Add() or RouteValues.AddRange() that accepts the 'throwIfReservedKey' argument and passing false for the value. Note that if you do this, attempting to add a key with a reserved name to the RouteValues dictionary will silently fail.</value>
   </data>
+  <data name="NamedDynamicNodeProviderNotFound" xml:space="preserve">
+    <value>The dynamic node provider instance named '{0}' was not found. Check your DI configuration to ensure a dynamic node provider instance with this name exists and is configured correctly.</value>
+  </data>
 </root>

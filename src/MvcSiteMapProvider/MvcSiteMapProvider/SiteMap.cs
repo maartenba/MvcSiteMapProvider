@@ -816,8 +816,8 @@ namespace MvcSiteMapProvider
 
         protected virtual bool UsesDefaultUrlResolver(ISiteMapNode node)
         {
-            return string.IsNullOrEmpty(node.UrlResolver) || 
-                node.UrlResolver.Equals(typeof(MvcSiteMapProvider.Web.UrlResolver.SiteMapNodeUrlResolver).ShortAssemblyQualifiedName(), StringComparison.InvariantCulture);
+            return string.IsNullOrEmpty(node.UrlResolver) ||
+                typeof(MvcSiteMapProvider.Web.UrlResolver.SiteMapNodeUrlResolver).Equals(Type.GetType(node.UrlResolver, false));
         }
 
         protected virtual void AssertSiteMapNodeConfigurationIsValid(ISiteMapNode node)
