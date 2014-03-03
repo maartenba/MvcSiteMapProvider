@@ -213,6 +213,7 @@
     <Compile Include="Web\Mvc\Filters\GlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\IGlobalFilterProvider.cs" />
     <Compile Include="Web\Mvc\Filters\SiteMapCacheReleaseAttribute.cs" />
+    <Compile Include="Web\Routing\RouteDataExtensions.cs" />
     <Compile Include="Web\Mvc\SiteMapHttpResponse.cs" />
     <Compile Include="Web\Mvc\SiteMapHttpResponseCache.cs" />
     <Compile Include="Web\Mvc\UrlHelperAdapter.cs" />
