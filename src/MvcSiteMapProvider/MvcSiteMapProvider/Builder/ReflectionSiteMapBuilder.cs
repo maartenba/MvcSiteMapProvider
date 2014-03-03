@@ -452,6 +452,8 @@ namespace MvcSiteMapProvider.Builder
             if (!string.IsNullOrEmpty(attribute.Url)) siteMapNode.Url = attribute.Url;
             siteMapNode.CacheResolvedUrl = attribute.CacheResolvedUrl;
             siteMapNode.IncludeAmbientRequestValues = attribute.IncludeAmbientRequestValues;
+            siteMapNode.Protocol = attribute.Protocol;
+            siteMapNode.HostName = attribute.HostName;
             siteMapNode.CanonicalUrl = attribute.CanonicalUrl;
             siteMapNode.CanonicalKey = attribute.CanonicalKey;
             siteMapNode.MetaRobotsValues.AddRange(attribute.MetaRobotsValues);

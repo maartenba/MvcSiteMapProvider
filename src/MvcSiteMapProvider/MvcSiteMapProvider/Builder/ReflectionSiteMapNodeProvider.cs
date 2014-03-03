@@ -249,6 +249,8 @@ namespace MvcSiteMapProvider.Builder
             if (!string.IsNullOrEmpty(attribute.Url)) node.Url = attribute.Url;
             node.CacheResolvedUrl = attribute.CacheResolvedUrl;
             node.IncludeAmbientRequestValues = attribute.IncludeAmbientRequestValues;
+            node.Protocol = attribute.Protocol;
+            node.HostName = attribute.HostName;
             node.CanonicalUrl = attribute.CanonicalUrl;
             node.CanonicalKey = attribute.CanonicalKey;
             node.MetaRobotsValues.AddRange(attribute.MetaRobotsValues);

@@ -145,6 +145,20 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="protocol" type="xs:string" use="optional" >
+      <xs:annotation>
+        <xs:documentation>
+          Optional. The protocol that will be built into the URL.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="hostName" type="xs:string" use="optional" >
+      <xs:annotation>
+        <xs:documentation>
+          Optional. The host name that will be built into the URL.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
 		<xs:attribute name="visibility" type="xs:string" use="optional" >
 			<xs:annotation>
 				<xs:documentation>

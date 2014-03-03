@@ -77,17 +77,17 @@ namespace MvcSiteMapProvider
         protected readonly string key;
         protected readonly bool isDynamic;
         protected string httpMethod = HttpVerbs.Get.ToString().ToUpperInvariant();
-        protected string title = String.Empty;
-        protected string description = String.Empty;
-        protected string imageUrl = String.Empty;
+        protected string title = string.Empty;
+        protected string description = string.Empty;
+        protected string imageUrl = string.Empty;
         protected DateTime lastModifiedDate = DateTime.MinValue;
         protected ChangeFrequency changeFrequency = ChangeFrequency.Always;
         protected UpdatePriority updatePriority = UpdatePriority.Undefined;
         protected bool clickable = true;
-        protected string url = String.Empty;
-        protected string resolvedUrl = String.Empty;
-        protected string canonicalUrl = String.Empty;
-        protected string canonicalKey = String.Empty;
+        protected string url = string.Empty;
+        protected string resolvedUrl = string.Empty;
+        protected string canonicalUrl = string.Empty;
+        protected string canonicalKey = string.Empty;
 
         /// <summary>
         /// Gets the key.
@@ -395,6 +395,19 @@ namespace MvcSiteMapProvider
         /// </summary>
         /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
         public override bool IncludeAmbientRequestValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets the protocol, such as http or https that will 
+        /// be built into the URL.
+        /// </summary>
+        /// <value>The protocol.</value>
+        public override string Protocol { get; set; }
+
+        /// <summary>
+        /// Gets or sets the host name that will be built into the URL.
+        /// </summary>
+        /// <value>The host name.</value>
+        public override string HostName { get; set; }
 
         /// <summary>
         /// Gets a boolean value that indicates this is an external URL by checking whether it
@@ -723,6 +736,9 @@ namespace MvcSiteMapProvider
             node.UrlResolver = this.UrlResolver;
             node.Url = this.url; // Get protected member
             node.CacheResolvedUrl = this.CacheResolvedUrl;
+            node.IncludeAmbientRequestValues = this.IncludeAmbientRequestValues;
+            node.Protocol = this.Protocol;
+            node.HostName = this.HostName;
             node.CanonicalUrl = this.canonicalUrl; // Get protected member
             node.CanonicalKey = this.CanonicalKey;
             this.MetaRobotsValues.CopyTo(node.MetaRobotsValues);
@@ -730,7 +746,6 @@ namespace MvcSiteMapProvider
             node.Route = this.Route;
             this.RouteValues.CopyTo(node.RouteValues);
             this.PreservedRouteParameters.CopyTo(node.PreservedRouteParameters);
-            node.IncludeAmbientRequestValues = this.IncludeAmbientRequestValues;
             // NOTE: Area, Controller, and Action are covered under RouteValues.
         }
 

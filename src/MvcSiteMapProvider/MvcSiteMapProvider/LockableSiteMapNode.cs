@@ -285,6 +285,35 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
+        /// Gets or sets the protocol, such as http or https that will 
+        /// be built into the URL.
+        /// </summary>
+        /// <value>The protocol.</value>
+        public override string Protocol
+        {
+            get { return base.Protocol; }
+            set
+            {
+                this.ThrowIfReadOnly("Protocol");
+                base.Protocol = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the host name that will be built into the URL.
+        /// </summary>
+        /// <value>The host name.</value>
+        public override string HostName
+        {
+            get { return base.HostName; }
+            set
+            {
+                this.ThrowIfReadOnly("HostName");
+                base.HostName = value;
+            }
+        }
+
+        /// <summary>
         /// Sets the ResolvedUrl using the current Url or Url resolver.
         /// </summary>
         public override void ResolveUrl()
@@ -400,6 +429,5 @@ namespace MvcSiteMapProvider
                 throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, memberName));
             }
         }
-
     }
 }

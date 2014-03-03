@@ -113,6 +113,22 @@ namespace MvcSiteMapProvider
             set { base.Url = value; }
         }
 
+        public override string Protocol
+        {
+            get { return this.GetCachedOrMemberValue<string>(() => base.Protocol, "Protocol", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.Protocol = x, "Protocol", value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the host name that will be built into the URL.
+        /// </summary>
+        /// <value>The host name.</value>
+        public override string HostName
+        {
+            get { return this.GetCachedOrMemberValue<string>(() => base.HostName, "HostName", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.HostName = x, "HostName", value); }
+        }
+
         public override string CanonicalUrl
         {
             get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalUrl, "CanonicalUrl", false); }

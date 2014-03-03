@@ -127,6 +127,25 @@ namespace MvcSiteMapProvider
         bool CacheResolvedUrl { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to include ambient request values 
+        /// (from the RouteValues and/or query string) when resolving URLs.
+        /// </summary>
+        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
+        bool IncludeAmbientRequestValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets the protocol (such as http or https) that will be used when resolving the URL.
+        /// </summary>
+        /// <value>The protocol.</value>
+        string Protocol { get; set; }
+
+        /// <summary>
+        /// Gets or sets the host name (such as www.mysite.com) that will be used when resolving the URL.
+        /// </summary>
+        /// <value>The host name.</value>
+        string HostName { get; set; }
+
+        /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjunction with CanonicalKey. Only 1 canonical value is allowed.</remarks>
@@ -151,13 +170,6 @@ namespace MvcSiteMapProvider
         /// The preserved route parameter names.
         /// </value>
         string PreservedRouteParameters { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to include ambient request values 
-        /// (from the RouteValues and/or query string) when resolving URLs.
-        /// </summary>
-        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
-        bool IncludeAmbientRequestValues { get; set; }
 
         /// <summary>
         /// Gets or sets the attributes (optional).

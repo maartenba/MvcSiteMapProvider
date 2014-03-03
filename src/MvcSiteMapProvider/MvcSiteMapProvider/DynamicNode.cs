@@ -134,6 +134,24 @@ namespace MvcSiteMapProvider
         /// </summary>
         public virtual bool? CacheResolvedUrl { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to include ambient request values 
+        /// (from the RouteValues and/or query string) when resolving URLs.
+        /// </summary>
+        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
+        public virtual bool? IncludeAmbientRequestValues { get; set; }
+
+        /// <summary>
+        /// Gets or sets the protocol (such as http or https) that will be used when resolving the URL.
+        /// </summary>
+        /// <value>The protocol.</value>
+        public virtual string Protocol { get; set; }
+
+        /// <summary>
+        /// Gets or sets the host name (such as www.mysite.com) that will be used when resolving the URL.
+        /// </summary>
+        /// <value>The host name.</value>
+        public virtual string HostName { get; set; }
 
         /// <summary>
         /// Gets or sets the canonical URL.
@@ -191,12 +209,7 @@ namespace MvcSiteMapProvider
         /// </value>
         public virtual bool? Clickable { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to include ambient request values 
-        /// (from the RouteValues and/or query string) when resolving URLs.
-        /// </summary>
-        /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
-        public virtual bool? IncludeAmbientRequestValues { get; set; }
+
 
         /// <summary>
         /// Copies the values for matching properties on an <see cref="T:MvcSiteMapNodeProvider.ISiteMapNode"/> instance, but
@@ -205,23 +218,23 @@ namespace MvcSiteMapProvider
         /// <param name="node">The site map node to copy the values into.</param>
         public virtual void SafeCopyTo(ISiteMapNode node)
         {
-            if (!String.IsNullOrEmpty(this.Route))
+            if (!string.IsNullOrEmpty(this.Route))
                 node.Route = this.Route;
-            if (!String.IsNullOrEmpty(this.Url))
+            if (!string.IsNullOrEmpty(this.Url))
                 node.Url = this.Url;
-            if (!String.IsNullOrEmpty(this.Area))
+            if (!string.IsNullOrEmpty(this.Area))
                 node.Area = this.Area;
-            if (!String.IsNullOrEmpty(this.Controller))
+            if (!string.IsNullOrEmpty(this.Controller))
                 node.Controller = this.Controller;
-            if (!String.IsNullOrEmpty(this.Action))
+            if (!string.IsNullOrEmpty(this.Action))
                 node.Action = this.Action;
-            if (!String.IsNullOrEmpty(this.Title))
+            if (!string.IsNullOrEmpty(this.Title))
                 node.Title = this.Title;
-            if (!String.IsNullOrEmpty(this.Description))
+            if (!string.IsNullOrEmpty(this.Description))
                 node.Description = this.Description;
-            if (!String.IsNullOrEmpty(this.TargetFrame))
+            if (!string.IsNullOrEmpty(this.TargetFrame))
                 node.TargetFrame = this.TargetFrame;
-            if (!String.IsNullOrEmpty(this.ImageUrl))
+            if (!string.IsNullOrEmpty(this.ImageUrl))
                 node.ImageUrl = this.ImageUrl;
             foreach (var kvp in this.RouteValues)
             {
@@ -259,9 +272,15 @@ namespace MvcSiteMapProvider
                 node.UpdatePriority = this.UpdatePriority;
             if (this.CacheResolvedUrl != null)
                 node.CacheResolvedUrl = (bool)this.CacheResolvedUrl;
-            if (!String.IsNullOrEmpty(this.CanonicalKey))
+            if (this.IncludeAmbientRequestValues != null)
+                node.IncludeAmbientRequestValues = (bool)this.IncludeAmbientRequestValues;
+            if (!string.IsNullOrEmpty(this.Protocol))
+                node.Protocol = this.Protocol;
+            if (!string.IsNullOrEmpty(this.HostName))
+                node.HostName = this.HostName;
+            if (!string.IsNullOrEmpty(this.CanonicalKey))
                 node.CanonicalKey = this.CanonicalKey;
-            if (!String.IsNullOrEmpty(this.CanonicalUrl))
+            if (!string.IsNullOrEmpty(this.CanonicalUrl))
                 node.CanonicalUrl = this.CanonicalUrl;
             if (this.MetaRobotsValues.Any())
             {
@@ -275,16 +294,14 @@ namespace MvcSiteMapProvider
             }
             if (this.Order != null)
                 node.Order = (int)this.Order;
-            if (!String.IsNullOrEmpty(this.HttpMethod))
+            if (!string.IsNullOrEmpty(this.HttpMethod))
                 node.HttpMethod = this.HttpMethod;
-            if (!String.IsNullOrEmpty(this.VisibilityProvider))
+            if (!string.IsNullOrEmpty(this.VisibilityProvider))
                 node.VisibilityProvider = this.VisibilityProvider;
-            if (!String.IsNullOrEmpty(this.UrlResolver))
+            if (!string.IsNullOrEmpty(this.UrlResolver))
                 node.UrlResolver = this.UrlResolver;
             if (this.Clickable != null)
                 node.Clickable = (bool)this.Clickable;
-            if (this.IncludeAmbientRequestValues != null)
-                node.IncludeAmbientRequestValues = (bool)this.IncludeAmbientRequestValues;
         }
 
 
