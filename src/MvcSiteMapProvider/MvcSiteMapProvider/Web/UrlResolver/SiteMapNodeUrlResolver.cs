@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.Routing;
@@ -57,7 +58,25 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             var url = node.UnresolvedUrl;
             if (!urlPath.IsAbsoluteUrl(url))
             {
-                return urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
+                url = urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
+
+                if (!string.IsNullOrEmpty(node.Protocol) || !string.IsNullOrEmpty(node.HostName))
+                {
+                    var httpContext = this.mvcContextFactory.CreateHttpContext();
+                    Uri requestUrl = httpContext.Request.Url;
+                    var protocol = !string.IsNullOrEmpty(node.Protocol) ? node.Protocol : Uri.UriSchemeHttp;
+                    var hostName = !string.IsNullOrEmpty(node.HostName) ? node.HostName : requestUrl.Host;
+
+                    string port = string.Empty;
+                    string requestProtocol = requestUrl.Scheme;
+
+                    if (string.Equals(protocol, requestProtocol, StringComparison.OrdinalIgnoreCase))
+                    {
+                        port = requestUrl.IsDefaultPort ? string.Empty : (":" + Convert.ToString(requestUrl.Port, CultureInfo.InvariantCulture));
+                    }
+
+                    url = protocol + Uri.SchemeDelimiter + hostName + port + url;
+                }
             }
             return url;
         }
@@ -91,11 +110,11 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             if (!string.IsNullOrEmpty(node.Route))
             {
                 routeValueDictionary.Remove("route");
-                result = urlHelper.RouteUrl(node.Route, routeValueDictionary);
+                result = urlHelper.RouteUrl(node.Route, routeValueDictionary, node.Protocol, node.HostName);
             }
             else
             {
-                result = urlHelper.Action(action, controller, routeValueDictionary);
+                result = urlHelper.Action(action, controller, routeValueDictionary, node.Protocol, node.HostName);
             }
 
             return result;
