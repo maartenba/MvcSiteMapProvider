@@ -1,4 +1,5 @@
 ﻿using System;
+using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Builder
 {
@@ -7,6 +8,6 @@ namespace MvcSiteMapProvider.Builder
     /// </summary>
     public interface ISiteMapNodeHelperFactory
     {
-        ISiteMapNodeHelper Create(ISiteMap siteMap);
+        ISiteMapNodeHelper Create(ISiteMap siteMap, ICultureContext cultureContext);
     }
 }

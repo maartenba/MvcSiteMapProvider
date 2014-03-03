@@ -195,7 +195,7 @@ namespace MvcSiteMapProvider.Builder
             var url = node.GetAttributeValue("url");
             var explicitKey = node.GetAttributeValue("key");
             var parentKey = parentNode == null ? "" : parentNode.Key;
-            var httpMethod = node.GetAttributeValueOrFallback("httpMethod", HttpVerbs.Get.ToString()).ToUpperInvariant();
+            var httpMethod = node.GetAttributeValueOrFallback("httpMethod", HttpVerbs.Get.ToString()).ToUpper();
             var clickable = bool.Parse(node.GetAttributeValueOrFallback("clickable", "true"));
             var title = node.GetAttributeValue("title");
             var implicitResourceKey = node.GetAttributeValue("resourceKey");
@@ -234,7 +234,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.MetaRobotsValues.AddRange(node.GetAttributeValue("metaRobotsValues"), new[] { ' ' });
             siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValueOrFallback("changeFrequency", "Undefined"));
             siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValueOrFallback("updatePriority", "Undefined"));
-            siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()), CultureInfo.InvariantCulture);
+            siteMapNode.LastModifiedDate = DateTime.Parse(node.GetAttributeValueOrFallback("lastModifiedDate", DateTime.MinValue.ToString()));
             siteMapNode.Order = int.Parse(node.GetAttributeValueOrFallback("order", "0"));
 
             // Handle route details
@@ -253,7 +253,7 @@ namespace MvcSiteMapProvider.Builder
             {
                 var item = inheritedRouteParameter.Trim();
                 if (node.Attribute(item) != null)
-                    throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter, key, title, item));
+                    throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter, key, title, item));
 
                 if (parentNode.RouteValues.ContainsKey(item))
                 {

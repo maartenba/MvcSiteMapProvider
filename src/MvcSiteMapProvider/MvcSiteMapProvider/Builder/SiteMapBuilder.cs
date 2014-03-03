@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.DI;
+using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Visitor;
 
 namespace MvcSiteMapProvider.Builder
@@ -20,7 +21,8 @@ namespace MvcSiteMapProvider.Builder
             ISiteMapNodeProvider siteMapNodeProvider,
             ISiteMapNodeVisitor siteMapNodeVisitor,
             ISiteMapHierarchyBuilder siteMapHierarchyBuilder,
-            ISiteMapNodeHelperFactory siteMapNodeHelperFactory
+            ISiteMapNodeHelperFactory siteMapNodeHelperFactory,
+            ICultureContextFactory cultureContextFactory
             )
         {
             if (siteMapNodeProvider == null)
@@ -31,16 +33,20 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("siteMapHierarchyBuilder");
             if (siteMapNodeHelperFactory == null)
                 throw new ArgumentNullException("siteMapNodeHelperFactory");
-            
+            if (cultureContextFactory == null)
+                throw new ArgumentNullException("cultureContextFactory");
+
             this.siteMapNodeProvider = siteMapNodeProvider;
             this.siteMapHierarchyBuilder = siteMapHierarchyBuilder;
             this.siteMapNodeHelperFactory = siteMapNodeHelperFactory;
             this.siteMapNodeVisitor = siteMapNodeVisitor;
+            this.cultureContextFactory = cultureContextFactory;
         }
         protected readonly ISiteMapNodeProvider siteMapNodeProvider;
         protected readonly ISiteMapHierarchyBuilder siteMapHierarchyBuilder;
         protected readonly ISiteMapNodeHelperFactory siteMapNodeHelperFactory;
         protected readonly ISiteMapNodeVisitor siteMapNodeVisitor;
+        protected readonly ICultureContextFactory cultureContextFactory;
 
         #region ISiteMapBuilder Members
 
@@ -68,8 +74,10 @@ namespace MvcSiteMapProvider.Builder
                                          .Contains(parent.ParentKey)
                                  select parent;
 
-                var names = String.Join(Environment.NewLine + Environment.NewLine, mismatched.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMap.CacheKey, names));
+                var names = String.Join(Environment.NewLine + Environment.NewLine, mismatched.Select(x => 
+                    string.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, 
+                    x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMap.CacheKey, names));
             }
 
             // Run our visitors
@@ -83,8 +91,13 @@ namespace MvcSiteMapProvider.Builder
 
         protected virtual void LoadSourceNodes(ISiteMap siteMap, List<ISiteMapNodeToParentRelation> sourceNodes)
         {
-            var siteMapNodeHelper = this.siteMapNodeHelperFactory.Create(siteMap);
-            sourceNodes.AddRange(this.siteMapNodeProvider.GetSiteMapNodes(siteMapNodeHelper));
+            // Temporarily override the current thread's culture with the invariant culture
+            // while running the ISiteMapNodeProvider instances.
+            using (var cultureContext = this.cultureContextFactory.CreateInvariant())
+            {
+                var siteMapNodeHelper = this.siteMapNodeHelperFactory.Create(siteMap, cultureContext);
+                sourceNodes.AddRange(this.siteMapNodeProvider.GetSiteMapNodes(siteMapNodeHelper));
+            }
         }
 
         protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, IList<ISiteMapNodeToParentRelation> sourceNodes)
@@ -94,12 +107,14 @@ namespace MvcSiteMapProvider.Builder
             // Check if we have more than one root node defined or no root defined
             if (rootNodes.Count() > 1)
             {
-                var names = String.Join(Environment.NewLine + Environment.NewLine, rootNodes.Select(x => String.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootKeyAmbiguous, siteMap.CacheKey, names));
+                var names = string.Join(Environment.NewLine + Environment.NewLine, rootNodes.Select(x => 
+                    string.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, 
+                    x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapBuilderRootKeyAmbiguous, siteMap.CacheKey, names));
             }
             else if (rootNodes.Count() == 0)
             {
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapBuilderRootNodeNotDefined, siteMap.CacheKey));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapBuilderRootNodeNotDefined, siteMap.CacheKey));
             }
 
             var root = rootNodes.Single();

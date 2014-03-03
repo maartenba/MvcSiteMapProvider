@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Collections.Generic;
+using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Loader;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -14,19 +15,25 @@ namespace MvcSiteMapProvider.Web.Mvc
     {
         public XmlSiteMapResultFactory(
             ISiteMapLoader siteMapLoader,
-            IUrlPath urlPath
+            IUrlPath urlPath,
+            ICultureContextFactory cultureContextFactory
             )
         {
             if (siteMapLoader == null)
                 throw new ArgumentNullException("siteMapLoader");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (cultureContextFactory == null)
+                throw new ArgumentNullException("cultureContextFactory");
+
             this.siteMapLoader = siteMapLoader;
             this.urlPath = urlPath;
+            this.cultureContextFactory = cultureContextFactory;
         }
 
         protected readonly ISiteMapLoader siteMapLoader;
         protected readonly IUrlPath urlPath;
+        protected readonly ICultureContextFactory cultureContextFactory;
 
         #region IXmlSiteMapResultFactory Members
 
@@ -39,7 +46,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         public virtual ActionResult Create(int page, string siteMapUrlTemplate)
@@ -51,7 +59,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
         
         public virtual ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys)
@@ -63,7 +72,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         public virtual ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys, string siteMapUrlTemplate)
@@ -75,7 +85,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         public virtual ActionResult Create(int page, IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate)
@@ -87,7 +98,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 baseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         public virtual ActionResult Create(int page, ISiteMapNode rootNode)
@@ -99,7 +111,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         public virtual ActionResult Create(int page, ISiteMapNode rootNode, string siteMapUrlTemplate)
@@ -111,7 +124,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         public virtual ActionResult Create(int page, ISiteMapNode rootNode, string baseUrl, string siteMapUrlTemplate)
@@ -123,12 +137,9 @@ namespace MvcSiteMapProvider.Web.Mvc
                 baseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
-
-
-
-
 
         [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page) instead. This overload will be removed in version 5.")]
         public virtual ActionResult Create()
@@ -140,7 +151,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, IEnumerable<string> siteMapCacheKeys) instead. This overload will be removed in version 5.")]
@@ -153,7 +165,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, IEnumerable<string> siteMapCacheKeys, string baseUrl, string siteMapUrlTemplate) instead. This overload will be removed in version 5.")]
@@ -166,7 +179,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 baseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, ISiteMapNode rootNode) instead. This overload will be removed in version 5.")]
@@ -179,7 +193,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 this.DefaultBaseUrl,
                 this.DefaultSiteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         [Obsolete("Overload is invalid for sitemaps with over 35,000 links. Use Create(int page, IEnumerable<string> siteMapCacheKeys) instead. This overload will be removed in version 5.")]
@@ -192,7 +207,8 @@ namespace MvcSiteMapProvider.Web.Mvc
                 baseUrl,
                 siteMapUrlTemplate,
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
 
         #endregion
@@ -221,6 +237,5 @@ namespace MvcSiteMapProvider.Web.Mvc
         {
             get { return new List<string>(); }
         }
-
     }
 }

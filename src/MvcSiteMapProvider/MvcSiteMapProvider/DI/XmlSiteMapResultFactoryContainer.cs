@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using MvcSiteMapProvider.Globalization;
+using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Loader;
+
 
 namespace MvcSiteMapProvider.DI
 {
@@ -17,16 +17,19 @@ namespace MvcSiteMapProvider.DI
             var siteMapLoaderContainer = new SiteMapLoaderContainer(settings);
             this.siteMapLoader = siteMapLoaderContainer.ResolveSiteMapLoader();
             this.urlPath = new UrlPath(new MvcContextFactory());
+            this.cultureContextFactory = new CultureContextFactory();
         }
 
         private readonly ISiteMapLoader siteMapLoader;
         private readonly IUrlPath urlPath;
+        private readonly ICultureContextFactory cultureContextFactory;
 
         public IXmlSiteMapResultFactory ResolveXmlSiteMapResultFactory()
         {
             return new XmlSiteMapResultFactory(
                 this.siteMapLoader,
-                this.urlPath);
+                this.urlPath,
+                this.cultureContextFactory);
         }
     }
 }

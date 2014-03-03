@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Builder
 {
     public interface IDynamicSiteMapNodeBuilderFactory
     {
-        IDynamicSiteMapNodeBuilder Create(ISiteMap siteMap);
+        IDynamicSiteMapNodeBuilder Create(ISiteMap siteMap, ICultureContext cultureContext);
     }
 }

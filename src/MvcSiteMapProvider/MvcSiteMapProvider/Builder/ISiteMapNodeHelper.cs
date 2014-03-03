@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
+using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Xml;
 
 namespace MvcSiteMapProvider.Builder
@@ -69,10 +70,42 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         IReservedAttributeNameProvider ReservedAttributeNames { get; }
 
-
         /// <summary>
         /// The SiteMapCacheKey for the current SiteMap instance.
         /// </summary>
         string SiteMapCacheKey { get; }
+
+        /// <summary>
+        /// The current culture context. This object keeps track of the original 
+        /// culture and original UI culture of the request so they can be restored if necessary.
+        /// The <see cref="T:ISiteMapNodeProvider"/> is run under the invariant culture.
+        /// </summary>
+        ICultureContext CultureContext { get; }
+
+        /// <summary>
+        /// Creates a new culture context object that can be used in a using block 
+        /// to temporarily override the culture and UI culture of the current thread.
+        /// </summary>
+        /// <param name="cultureName">The new culture. Can be any valid .NET culture name.</param>
+        /// <param name="uiCultureName">The new UI culture. Can be any valid .NET culture name.</param>
+        /// <returns>A new culture context.</returns>
+        ICultureContext CreateCultureContext(string cultureName, string uiCultureName);
+
+        /// <summary>
+        /// Creates a new culture context object that can be used in a using block 
+        /// to temporarily override the culture and UI culture of the current thread.
+        /// </summary>
+        /// <param name="culture">The new culture.</param>
+        /// <param name="uiCulture">The new UI culture.</param>
+        /// <returns>A new culture context.</returns>
+        ICultureContext CreateCultureContext(CultureInfo culture, CultureInfo uiCulture);
+
+        /// <summary>
+        /// Creates a new culture context object that can be used in a using block 
+        /// to temporarily override the culture and UI culture of the current thread 
+        /// using the invariant culture.
+        /// </summary>
+        /// <returns>A new invariant culture context.</returns>
+        ICultureContext CreateInvariantCultureContext();
     }
 }

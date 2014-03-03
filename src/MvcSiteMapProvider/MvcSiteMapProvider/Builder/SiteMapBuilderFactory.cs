@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Visitor;
 
 namespace MvcSiteMapProvider.Builder
@@ -17,7 +18,8 @@ namespace MvcSiteMapProvider.Builder
         public SiteMapBuilderFactory(
             ISiteMapNodeVisitor siteMapNodeVisitor,
             ISiteMapHierarchyBuilder siteMapHierarchyBuilder,
-            ISiteMapNodeHelperFactory siteMapNodeHelperFactory
+            ISiteMapNodeHelperFactory siteMapNodeHelperFactory,
+            ICultureContextFactory cultureContextFactory
             )
         {
             if (siteMapNodeVisitor == null)
@@ -26,14 +28,18 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("siteMapHierarchyBuilder");
             if (siteMapNodeHelperFactory == null)
                 throw new ArgumentNullException("siteMapNodeHelperFactory");
+            if (cultureContextFactory == null)
+                throw new ArgumentNullException("cultureContextFactory");
 
             this.siteMapHierarchyBuilder = siteMapHierarchyBuilder;
             this.siteMapNodeHelperFactory = siteMapNodeHelperFactory;
             this.siteMapNodeVisitor = siteMapNodeVisitor;
+            this.cultureContextFactory = cultureContextFactory;
         }
         protected readonly ISiteMapHierarchyBuilder siteMapHierarchyBuilder;
         protected readonly ISiteMapNodeHelperFactory siteMapNodeHelperFactory;
         protected readonly ISiteMapNodeVisitor siteMapNodeVisitor;
+        protected readonly ICultureContextFactory cultureContextFactory;
 
         public virtual ISiteMapBuilder Create(ISiteMapNodeProvider siteMapNodeProvider)
         {
@@ -41,7 +47,8 @@ namespace MvcSiteMapProvider.Builder
                 siteMapNodeProvider, 
                 this.siteMapNodeVisitor, 
                 this.siteMapHierarchyBuilder, 
-                this.siteMapNodeHelperFactory);
+                this.siteMapNodeHelperFactory,
+                this.cultureContextFactory);
         }
     }
 }

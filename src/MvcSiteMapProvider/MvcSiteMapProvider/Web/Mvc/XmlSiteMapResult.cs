@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using System.IO;
 using System.IO.Compression;
 using System.Globalization;
+using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Loader;
 
 namespace MvcSiteMapProvider.Web.Mvc
@@ -24,12 +25,15 @@ namespace MvcSiteMapProvider.Web.Mvc
             string baseUrl,
             string siteMapUrlTemplate,
             ISiteMapLoader siteMapLoader,
-            IUrlPath urlPath)
+            IUrlPath urlPath,
+            ICultureContextFactory cultureContextFactory)
         {
             if (siteMapLoader == null)
                 throw new ArgumentNullException("siteMapLoader");
             if (urlPath == null)
                 throw new ArgumentNullException("urlPath");
+            if (cultureContextFactory == null)
+                throw new ArgumentNullException("cultureContextFactory");
 
             this.Ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
             this.Page = page;
@@ -39,10 +43,12 @@ namespace MvcSiteMapProvider.Web.Mvc
             this.SiteMapUrlTemplate = siteMapUrlTemplate;
             this.siteMapLoader = siteMapLoader;
             this.urlPath = urlPath;
+            this.cultureContextFactory = cultureContextFactory;
         }
 
         protected readonly ISiteMapLoader siteMapLoader;
         protected readonly IUrlPath urlPath;
+        protected readonly ICultureContextFactory cultureContextFactory;
         protected readonly List<string> duplicateUrlCheck = new List<string>();
 
         /// <summary>
@@ -251,18 +257,22 @@ namespace MvcSiteMapProvider.Web.Mvc
                 var urlElement = new XElement(Ns + "url",
                     new XElement(Ns + "loc", nodeUrl));
 
-                // Generate element properties
-                if (siteMapNode.LastModifiedDate > DateTime.MinValue)
+                // Switch to the invariant culture when evaluating DateTime.MinValue, doing ToLower(), and doing string.Format()
+                using (var cultureContext = this.cultureContextFactory.CreateInvariant())
                 {
-                    urlElement.Add(new XElement(Ns + "lastmod", siteMapNode.LastModifiedDate.ToUniversalTime()));
-                }
-                if (siteMapNode.ChangeFrequency != ChangeFrequency.Undefined)
-                {
-                    urlElement.Add(new XElement(Ns + "changefreq", siteMapNode.ChangeFrequency.ToString().ToLowerInvariant()));
-                }
-                if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
-                {
-                    urlElement.Add(new XElement(Ns + "priority", string.Format(CultureInfo.InvariantCulture, "{0:0.0}", ((double)siteMapNode.UpdatePriority / 100))));
+                    // Generate element properties
+                    if (siteMapNode.LastModifiedDate > DateTime.MinValue)
+                    {
+                        urlElement.Add(new XElement(Ns + "lastmod", siteMapNode.LastModifiedDate.ToUniversalTime()));
+                    }
+                    if (siteMapNode.ChangeFrequency != ChangeFrequency.Undefined)
+                    {
+                        urlElement.Add(new XElement(Ns + "changefreq", siteMapNode.ChangeFrequency.ToString().ToLower()));
+                    }
+                    if (siteMapNode.UpdatePriority != UpdatePriority.Undefined)
+                    {
+                        urlElement.Add(new XElement(Ns + "priority", string.Format("{0:0.0}", ((double)siteMapNode.UpdatePriority / 100))));
+                    }
                 }
 
                 // Return
@@ -311,7 +321,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             return node.Clickable &&
                 node.IsVisible(SourceMetadata) &&
                 !node.HasExternalUrl(context.HttpContext) &&
-                String.IsNullOrEmpty(node.CanonicalUrl) &&
+                string.IsNullOrEmpty(node.CanonicalUrl) &&
                 !node.HasNoIndexAndNoFollow &&
                 !this.IsDuplicateUrl(node);
         }

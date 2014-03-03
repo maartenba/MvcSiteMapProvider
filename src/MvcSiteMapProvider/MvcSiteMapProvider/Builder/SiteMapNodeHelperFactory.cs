@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Xml;
 
 namespace MvcSiteMapProvider.Builder
@@ -14,7 +13,8 @@ namespace MvcSiteMapProvider.Builder
         public SiteMapNodeHelperFactory(
             ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory,
             IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory,
-            IReservedAttributeNameProvider reservedAttributeNameProvider
+            IReservedAttributeNameProvider reservedAttributeNameProvider,
+            ICultureContextFactory cultureContextFactory
             )
         {
             if (siteMapNodeCreatorFactory == null)
@@ -23,24 +23,30 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("dynamicSiteMapNodeBuilderFactory");
             if (reservedAttributeNameProvider == null)
                 throw new ArgumentNullException("reservedAttributeNameProvider");
+            if (cultureContextFactory == null)
+                throw new ArgumentNullException("cultureContextFactory");
 
             this.siteMapNodeCreatorFactory = siteMapNodeCreatorFactory;
             this.dynamicSiteMapNodeBuilderFactory = dynamicSiteMapNodeBuilderFactory;
             this.reservedAttributeNameProvider = reservedAttributeNameProvider;
+            this.cultureContextFactory = cultureContextFactory;
         }
         protected readonly ISiteMapNodeCreatorFactory siteMapNodeCreatorFactory;
         protected readonly IDynamicSiteMapNodeBuilderFactory dynamicSiteMapNodeBuilderFactory;
         protected readonly IReservedAttributeNameProvider reservedAttributeNameProvider;
+        protected readonly ICultureContextFactory cultureContextFactory;
 
         #region ISiteMapNodeHelperFactory Members
 
-        public ISiteMapNodeHelper Create(ISiteMap siteMap)
+        public ISiteMapNodeHelper Create(ISiteMap siteMap, ICultureContext cultureContext)
         {
             return new SiteMapNodeHelper(
                 siteMap,
+                cultureContext,
                 this.siteMapNodeCreatorFactory,
                 this.dynamicSiteMapNodeBuilderFactory,
-                this.reservedAttributeNameProvider);
+                this.reservedAttributeNameProvider,
+                this.cultureContextFactory);
         }
 
         #endregion

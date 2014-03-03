@@ -190,6 +190,10 @@
     <Compile Include="DI\DependencyResolverDecorator.cs" />
     <Compile Include="DI\ExcludeFromAutoRegistrationAttribute.cs" />
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="Globalization\CultureContext.cs" />
+    <Compile Include="Globalization\CultureContextFactory.cs" />
+    <Compile Include="Globalization\ICultureContextFactory.cs" />
+    <Compile Include="Globalization\ICultureContext.cs" />
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
     <Compile Include="ISortable.cs" />
