@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Collections.Specialized;
@@ -472,21 +473,59 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public bool IsExternalUrl(string url, HttpContextBase httpContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsPublicHostName(string hostName, HttpContextBase httpContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string MakeUrlAbsolute(string url, string baseUrl)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveVirtualApplicationQualifiedUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveUrl(string url, string protocol)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveUrl(string url, string protocol, string hostName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        [Obsolete]
         public string MakeRelativeUrlAbsolute(string url)
         {
             throw new NotImplementedException();
         }
 
-        public string ResolveUrl(string originalUrl)
-        {
-            throw new NotImplementedException();
-        }
-
+        [Obsolete]
         public string ResolveServerUrl(string serverUrl, bool forceHttps)
         {
             throw new NotImplementedException();
         }
 
+        [Obsolete]
         public string ResolveServerUrl(string serverUrl)
         {
             throw new NotImplementedException();

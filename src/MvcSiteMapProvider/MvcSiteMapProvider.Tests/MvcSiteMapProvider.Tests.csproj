@@ -106,6 +106,7 @@
     <Compile Include="Unit\Web\Html\HtmlHelperTestCases.cs" />
     <Compile Include="Unit\Web\Html\MenuHelperTest.cs" />
     <Compile Include="Unit\Web\Html\SiteMapHelperTest.cs" />
+    <Compile Include="Unit\Web\UrlPathTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shared\MvcSiteMapProvider.snk">

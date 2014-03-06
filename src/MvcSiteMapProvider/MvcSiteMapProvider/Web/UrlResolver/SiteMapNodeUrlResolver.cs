@@ -55,30 +55,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
         protected virtual string ResolveVirtualPath(ISiteMapNode node)
         {
-            var url = node.UnresolvedUrl;
-            if (!urlPath.IsAbsoluteUrl(url))
-            {
-                url = urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
-
-                if (!string.IsNullOrEmpty(node.Protocol) || !string.IsNullOrEmpty(node.HostName))
-                {
-                    var httpContext = this.mvcContextFactory.CreateHttpContext();
-                    Uri requestUrl = httpContext.Request.Url;
-                    var protocol = !string.IsNullOrEmpty(node.Protocol) ? node.Protocol : Uri.UriSchemeHttp;
-                    var hostName = !string.IsNullOrEmpty(node.HostName) ? node.HostName : requestUrl.Host;
-
-                    string port = string.Empty;
-                    string requestProtocol = requestUrl.Scheme;
-
-                    if (string.Equals(protocol, requestProtocol, StringComparison.OrdinalIgnoreCase))
-                    {
-                        port = requestUrl.IsDefaultPort ? string.Empty : (":" + Convert.ToString(requestUrl.Port, CultureInfo.InvariantCulture));
-                    }
-
-                    url = protocol + Uri.SchemeDelimiter + hostName + port + url;
-                }
-            }
-            return url;
+            return this.urlPath.ResolveUrl(node.UnresolvedUrl, node.Protocol, node.HostName);
         }
 
         protected virtual string ResolveRouteUrl(ISiteMapNode node, string area, string controller, string action, IDictionary<string, object> routeValues)
@@ -95,7 +72,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             if (string.IsNullOrEmpty(result))
             {
                 // fixes #115 - UrlResolver should not throw exception.
-                return urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, "~/")) + Guid.NewGuid().ToString();
+                return this.urlPath.ResolveVirtualApplicationQualifiedUrl("~/") + Guid.NewGuid().ToString();
             }
 
             return result;
@@ -110,11 +87,20 @@ namespace MvcSiteMapProvider.Web.UrlResolver
             if (!string.IsNullOrEmpty(node.Route))
             {
                 routeValueDictionary.Remove("route");
-                result = urlHelper.RouteUrl(node.Route, routeValueDictionary, node.Protocol, node.HostName);
+                result = urlHelper.RouteUrl(node.Route, routeValueDictionary);
             }
             else
             {
-                result = urlHelper.Action(action, controller, routeValueDictionary, node.Protocol, node.HostName);
+                result = urlHelper.Action(action, controller, routeValueDictionary);
+            }
+
+            if (!string.IsNullOrEmpty(result))
+            {
+                // NOTE: We are purposely using the current request's context when resolving any absolute 
+                // URL so it will read the headers and use the HTTP_HOST of the client machine, if included,
+                // in the case where HostName is null or empty and protocol is not. The public facing port is
+                // also used when the protocol matches.
+                return this.urlPath.ResolveUrl(result, node.Protocol, node.HostName);
             }
 
             return result;

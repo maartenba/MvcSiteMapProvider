@@ -160,10 +160,7 @@ namespace MvcSiteMapProvider
                                 url = urlPath.UrlEncode(url);
                                 urlEncoded = true;
                             }
-                            if (!urlPath.IsAbsolutePhysicalPath(url))
-                            {
-                                url = urlPath.MakeVirtualPathAppAbsolute(urlPath.Combine(urlPath.AppDomainAppVirtualPath, url));
-                            }
+                            url = urlPath.ResolveVirtualApplicationQualifiedUrl(url);
                             if (this.urlTable.Keys.Contains(url, StringComparer.OrdinalIgnoreCase))
                             {
                                 if (urlEncoded)

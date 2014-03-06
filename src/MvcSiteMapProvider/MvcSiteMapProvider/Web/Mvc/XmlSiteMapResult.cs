@@ -235,8 +235,8 @@ namespace MvcSiteMapProvider.Web.Mvc
             // Generate elements
             for (int i = 1; i <= numPages; i++)
             {
-                var combinedPath = urlPath.Combine(urlPath.AppDomainAppVirtualPath, "~/" + siteMapUrlTemplate.Replace("{page}", i.ToString()));
-                var pageUrl = baseUrl + urlPath.MakeVirtualPathAppAbsolute(combinedPath);
+                var templateUrl = "~/" + siteMapUrlTemplate.Replace("{page}", i.ToString());
+                var pageUrl = this.urlPath.MakeUrlAbsolute(baseUrl, templateUrl);
                 yield return new XElement(Ns + "sitemap", new XElement(Ns + "loc", pageUrl));
             }
         }
@@ -253,7 +253,7 @@ namespace MvcSiteMapProvider.Web.Mvc
             foreach (var siteMapNode in siteMapNodes)
             {
                 // Generate element
-                var nodeUrl = this.GetAbsoluteUrl(siteMapNode);
+                var nodeUrl = this.urlPath.MakeUrlAbsolute(this.BaseUrl, siteMapNode.Url);
                 var urlElement = new XElement(Ns + "url",
                     new XElement(Ns + "loc", nodeUrl));
 
@@ -327,29 +327,13 @@ namespace MvcSiteMapProvider.Web.Mvc
         }
 
         /// <summary>
-        /// Gets the absolute URL for a node.
-        /// </summary>
-        /// <param name="node">The node.</param>
-        /// <returns>The absolute URL.</returns>
-        protected virtual string GetAbsoluteUrl(ISiteMapNode node)
-        {
-            var nodeUrl = node.Url;
-            var result = nodeUrl;
-            if (!node.HasAbsoluteUrl())
-            {
-                result = this.BaseUrl + nodeUrl;
-            }
-            return result;
-        }
-
-        /// <summary>
         /// Determines whether the URL is already included in the sitemap.
         /// </summary>
         /// <param name="node">The node.</param>
         /// <returns><b>true</b> if the URL of the node is a duplicate; otherwise <b>false</b>.</returns>
         protected virtual bool IsDuplicateUrl(ISiteMapNode node)
         {
-            var absoluteUrl = this.GetAbsoluteUrl(node);
+            var absoluteUrl = this.urlPath.MakeUrlAbsolute(this.BaseUrl, node.Url);
             var isDuplicate = this.duplicateUrlCheck.Contains(absoluteUrl);
             if (!isDuplicate)
             {

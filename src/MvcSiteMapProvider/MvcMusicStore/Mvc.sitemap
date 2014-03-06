@@ -19,6 +19,9 @@
 			<mvcSiteMapNode key="ABC123" title="Jazz 2" action="Browse" controller="Store" id="Jazz" someParameter="hello" canonicalUrl="/Store/Browse/Jazz" metaRobotsValues="noindex nofollow noodp"/>
 			<mvcSiteMapNode title="Jazz 5" action="Browse" controller="Store" id="Jazz" someParameter="goodbye" metaRobotsValues="noindex nofollow noodp noydir"/>
 			<mvcSiteMapNode title="Jazz 6" action="Browse" controller="Store" id="Jazz" someParameter="goodbye3" url="~//Store/Browse/Jazz?someParameter=goodbye3" />
+      <mvcSiteMapNode title="Test HTTPS" action="Browse" controller="Store" id="Jazz" protocol="https" someParameter="goodbye4"/>
+      <mvcSiteMapNode title="Test Host and HTTPS" protocol="https" hostName="somewhere.com" url="~/Store/Browse/Jazz?someParameter=goodbye5" />
+      <mvcSiteMapNode title="Test Absolute Path" url="http://localhost:1397/Store/Browse/Jazz?someParameter=goodbye6" />
     </mvcSiteMapNode>
 		
 

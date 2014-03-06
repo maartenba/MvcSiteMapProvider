@@ -427,18 +427,7 @@ namespace MvcSiteMapProvider
         /// <returns></returns>
         public override bool HasExternalUrl(HttpContextBase httpContext)
         {
-            if (!this.HasAbsoluteUrl())
-            {
-                return false;
-            }
-            Uri uri = null;
-            if (Uri.TryCreate(this.Url, UriKind.Absolute, out uri))
-            {
-                var isDifferentHost = !httpContext.Request.Url.DnsSafeHost.Equals(uri.DnsSafeHost);
-                var isDifferentApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.InvariantCultureIgnoreCase);
-                return (isDifferentHost || isDifferentApplication);
-            }
-            return false;
+            return this.urlPath.IsExternalUrl(this.Url, httpContext);
         }
 
         #endregion
@@ -505,29 +494,20 @@ namespace MvcSiteMapProvider
         protected virtual string GetAbsoluteCanonicalUrl()
         {
             var url = this.canonicalUrl;
-            if (!String.IsNullOrEmpty(url))
+            if (!string.IsNullOrEmpty(url))
             {
-                if (urlPath.IsAbsoluteUrl(url))
-                {
-                    return url;
-                }
-                return urlPath.MakeRelativeUrlAbsolute(url);
+                return this.urlPath.ResolveUrl(url, Uri.UriSchemeHttp);
             }
             var key = this.canonicalKey;
-            if (!String.IsNullOrEmpty(key))
+            if (!string.IsNullOrEmpty(key))
             {
                 var node = this.SiteMap.FindSiteMapNodeFromKey(key);
                 if (node != null)
                 {
-                    url = node.Url;
-                    if (urlPath.IsAbsoluteUrl(url))
-                    {
-                        return url;
-                    }
-                    return urlPath.MakeRelativeUrlAbsolute(url);
+                    return this.urlPath.ResolveUrl(url, Uri.UriSchemeHttp);
                 }
             }
-            return String.Empty;
+            return string.Empty;
         }
 
         #endregion
@@ -673,6 +653,15 @@ namespace MvcSiteMapProvider
             // If URL is set explicitly, we should never match based on route values.
             if (!string.IsNullOrEmpty(this.UnresolvedUrl))
                 return false;
+
+            if (!string.IsNullOrEmpty(this.HostName))
+            {
+                var httpContext = this.mvcContextFactory.CreateHttpContext();
+                if (!this.urlPath.IsPublicHostName(this.HostName, httpContext))
+                {
+                    return false;
+                }
+            }
 
             return this.RouteValues.MatchesRoute(routeValues);
         }

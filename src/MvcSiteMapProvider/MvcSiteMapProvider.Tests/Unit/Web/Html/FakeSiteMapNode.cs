@@ -248,6 +248,12 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public bool IncludeAmbientRequestValues { get; set; }
+
+        public string Protocol { get; set; }
+
+        public string HostName { get; set; }
+
         public bool HasAbsoluteUrl()
         {
             throw new NotImplementedException();

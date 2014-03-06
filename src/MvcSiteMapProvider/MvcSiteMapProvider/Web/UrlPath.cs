@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Specialized;
+using System.Globalization;
 using System.Text;
 using System.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -24,14 +26,19 @@ namespace MvcSiteMapProvider.Web
 
         protected readonly IMvcContextFactory mvcContextFactory;
 
+        protected virtual HttpContextBase HttpContext
+        {
+            get { return this.mvcContextFactory.CreateHttpContext(); }
+        }
+
         public string AppDomainAppVirtualPath
         {
-            get { return HttpRuntime.AppDomainAppVirtualPath; }
+            get { return this.HttpContext.Request.ApplicationPath; }
         }
 
         public string MakeVirtualPathAppAbsolute(string virtualPath)
         {
-            return MakeVirtualPathAppAbsolute(virtualPath, HttpRuntime.AppDomainAppVirtualPath);
+            return MakeVirtualPathAppAbsolute(virtualPath, this.AppDomainAppVirtualPath);
         }
 
         public string MakeVirtualPathAppAbsolute(string virtualPath, string applicationPath)
@@ -109,9 +116,31 @@ namespace MvcSiteMapProvider.Web
             return (((path.Length > 2) && IsDirectorySeparatorChar(path[0])) && IsDirectorySeparatorChar(path[1]));
         }
 
+        /// <summary>
+        /// Combines multiple strings into a URL, fixing any problems with forward 
+        /// and backslashes.
+        /// </summary>
+        /// <param name="uriParts">An array of strings to combine.</param>
+        /// <returns>The combined URL.</returns>
+        /// <remarks>Source: http://stackoverflow.com/questions/372865/path-combine-for-urls/6704287#6704287 </remarks>
+        private string CombineUrl(params string[] uriParts)
+        {
+            string uri = string.Empty;
+            if (uriParts != null && uriParts.Length > 0)
+            {
+                char[] trims = new char[] { '\\', '/' };
+                uri = (uriParts[0] ?? string.Empty).TrimEnd(trims);
+                for (int i = 1; i < uriParts.Length; i++)
+                {
+                    uri = string.Format("{0}/{1}", uri.TrimEnd(trims), (uriParts[i] ?? string.Empty).TrimStart(trims));
+                }
+            }
+            return uri;
+        }
+
         public string Combine(string basepath, string relative)
         {
-            return Combine(HttpRuntime.AppDomainAppVirtualPath, basepath, relative);
+            return Combine(this.AppDomainAppVirtualPath, basepath, relative);
         }
 
         private string Combine(string appPath, string basepath, string relative)
@@ -321,11 +350,213 @@ namespace MvcSiteMapProvider.Web
             return HttpUtility.UrlDecode(url);
         }
 
+        /// <summary>
+        /// Determines if the URL is an absolute or relative URL.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <returns><b>true</b> if the URL is absolute; otherwise <b>false</b>.</returns>
         public bool IsAbsoluteUrl(string url)
         {
-            return (url.StartsWith("http") || url.StartsWith("ftp"));
+            // There must be at least 1 character before the scheme delimiter.
+            return (url.IndexOf(Uri.SchemeDelimiter) > 0);
         }
 
+        /// <summary>
+        /// Determines if a URL is not part of the current application or web site.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="httpContext">The HTTP context representing the request.</param>
+        /// <returns><b>true</b> if the URL is not part of the virtual application or is on a different host name; otherwise <b>false</b>.</returns>
+        public bool IsExternalUrl(string url, HttpContextBase httpContext)
+        {
+            if (!this.IsAbsoluteUrl(url))
+                return false;
+
+            Uri uri = null;
+            if (Uri.TryCreate(url, UriKind.Absolute, out uri))
+            {
+                var publicFacingUrl = this.GetPublicFacingUrl(httpContext);
+                var isDifferentHost = !uri.Host.ToLowerInvariant().Equals(publicFacingUrl.Host.ToLowerInvariant());
+                var isDifferentVirtualApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.InvariantCultureIgnoreCase);
+
+                return (isDifferentHost || isDifferentVirtualApplication);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines if the host name matches the public facing host name.
+        /// </summary>
+        /// <param name="hostName">The host name.</param>
+        /// <param name="httpContext">The HTTP context representing the request.</param>
+        /// <returns><b>true</b> if the host name matches that of the public URL; otherwise <b>false</b>.</returns>
+        public bool IsPublicHostName(string hostName, HttpContextBase httpContext)
+        {
+            var publicFacingUrl = this.GetPublicFacingUrl(httpContext);
+            if (string.Equals(publicFacingUrl.Host, hostName, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Resolves the URL and combines it with the specified base URL to
+        /// make an absolute URL.
+        /// </summary>
+        /// <param name="baseUrl">An absolute URL beginning with protocol.</param>
+        /// <param name="url">
+        /// Any Url including those starting with "/", "~", or protocol. 
+        /// If an absolute URL is provided in this field, the baseUrl will be ignored.
+        /// </param>
+        /// <returns>The absolute URL.</returns>
+        public string MakeUrlAbsolute(string baseUrl, string url)
+        {
+            if (this.IsAbsoluteUrl(url))
+                return url;
+
+            return this.CombineUrl(baseUrl, this.ResolveUrl(url));
+        }
+
+        /// <summary>
+        /// Resolves a URL that starts with a "~" into a URL that starts with the virtual
+        /// application qualified path.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveVirtualApplicationQualifiedUrl(string url)
+        {
+            if (this.IsAbsoluteUrl(url) || this.IsAbsolutePhysicalPath(url))
+                return url;
+
+            return this.MakeVirtualPathAppAbsolute(this.Combine(this.AppDomainAppVirtualPath, url));
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveUrl(string url)
+        {
+            return this.ResolveUrl(url, null, null, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveUrl(string url, string protocol)
+        {
+            return this.ResolveUrl(url, protocol, null, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp.</param>
+        /// <param name="hostName">The host name such as www.somewhere.com.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveUrl(string url, string protocol, string hostName)
+        {
+            return this.ResolveUrl(url, protocol, hostName, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp.</param>
+        /// <param name="hostName">The host name such as www.somewhere.com.</param>
+        /// <param name="httpContext">The HTTP context representing the context of the request.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
+        {
+            if (string.IsNullOrEmpty(url))
+                return string.Empty;
+
+            if (!this.IsAbsoluteUrl(url))
+            {
+                url = this.ResolveVirtualApplicationQualifiedUrl(url);
+
+                if (!string.IsNullOrEmpty(protocol) || !string.IsNullOrEmpty(hostName))
+                {
+                    Uri requestUrl = this.GetPublicFacingUrl(httpContext);
+                    protocol = !string.IsNullOrEmpty(protocol) ? protocol : Uri.UriSchemeHttp;
+                    hostName = !string.IsNullOrEmpty(hostName) ? hostName : requestUrl.Host;
+
+                    string port = string.Empty;
+                    string requestProtocol = requestUrl.Scheme;
+
+                    if (string.Equals(protocol, requestProtocol, StringComparison.OrdinalIgnoreCase))
+                    {
+                        port = requestUrl.IsDefaultPort ? string.Empty : (":" + Convert.ToString(requestUrl.Port, CultureInfo.InvariantCulture));
+                    }
+
+                    url = protocol + Uri.SchemeDelimiter + hostName + port + url;
+                }
+            }
+
+            return url;
+        }
+
+        /// <summary>
+        /// Gets the public facing URL for the given incoming HTTP request.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context representing the context of the request.</param>
+        /// <returns>The URI that the outside world used to create this request.</returns>
+        internal Uri GetPublicFacingUrl(HttpContextBase httpContext)
+        {
+            var serverVariables = httpContext.Request.ServerVariables;
+            var request = httpContext.Request;
+
+            // Due to URL rewriting, cloud computing (i.e. Azure)
+            // and web farms, etc., we have to be VERY careful about what
+            // we consider the incoming URL.  We want to see the URL as it would
+            // appear on the public-facing side of the hosting web site.
+            // HttpRequest.Url gives us the internal URL in a cloud environment,
+            // So we use a variable that (at least from what I can tell) gives us
+            // the public URL:
+            if (serverVariables["HTTP_HOST"] != null)
+            {
+                //ErrorUtilities.VerifySupported(request.Url.Scheme == Uri.UriSchemeHttps || request.Url.Scheme == Uri.UriSchemeHttp, "Only HTTP and HTTPS are supported protocols.");
+                string scheme = serverVariables["HTTP_X_FORWARDED_PROTO"] ?? request.Url.Scheme;
+                Uri hostAndPort = new Uri(scheme + Uri.SchemeDelimiter + serverVariables["HTTP_HOST"]);
+                UriBuilder publicRequestUri = new UriBuilder(request.Url);
+                publicRequestUri.Scheme = scheme;
+                publicRequestUri.Host = hostAndPort.Host;
+                publicRequestUri.Port = hostAndPort.Port; // CC missing Uri.Port contract that's on UriBuilder.Port
+                return publicRequestUri.Uri;
+            }
+            // Failover to the method that works for non-web farm environments.
+            // We use Request.Url for the full path to the server, and modify it
+            // with Request.RawUrl to capture both the cookieless session "directory" if it exists
+            // and the original path in case URL rewriting is going on.  We don't want to be
+            // fooled by URL rewriting because we're comparing the actual URL with what's in
+            // the return_to parameter in some cases.
+            // Response.ApplyAppPathModifier(builder.Path) would have worked for the cookieless
+            // session, but not the URL rewriting problem.
+            return new Uri(request.Url, request.RawUrl);
+        }
+
+        [Obsolete(@"Use ResolveUrl(string, string) instead. Example: ResolveUrl(""\some-url\"", Uri.UriSchemeHttp). This method will be removed in version 5.")]
         public string MakeRelativeUrlAbsolute(string url)
         {
             if (!IsAbsolutePhysicalPath(url))
@@ -334,33 +565,6 @@ namespace MvcSiteMapProvider.Web
             }
             var basePath = ResolveServerUrl("~/", false);
             return basePath + url;
-        }
-
-        /// <summary>
-        /// Returns a site relative HTTP path from a partial path starting out with a ~.
-        /// Same syntax that ASP.Net internally supports but this method can be used
-        /// outside of the Page framework.
-        /// Works like Control.ResolveUrl including support for ~ syntax///
-        /// but returns an absolute URL.
-        /// </summary>
-        /// <remarks>See http://www.west-wind.com/Weblog/posts/154812.aspx for more information.</remarks>
-        /// <param name="originalUrl">Any Url including those starting with ~</param>
-        /// <returns>Relative url</returns>
-        public string ResolveUrl(string originalUrl)
-        {
-            if (originalUrl == null)
-            {
-                return null;
-            }
-
-            // Absolute path - just return    
-            if (originalUrl.IndexOf("://") != -1)
-            {
-                return originalUrl;
-            }
-
-            // Fix up image path for ~ root app dir directory
-            return this.MakeVirtualPathAppAbsolute(originalUrl);
         }
 
         /// <summary>
@@ -373,6 +577,7 @@ namespace MvcSiteMapProvider.Web
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="forceHttps">if true forces the url to use https</param>
         /// <returns>Fully qualified absolute server url.</returns>
+        [Obsolete(@"Use the ResolveUrl(string, string) overload instead. Example: ResolveUrl(""\some-url\"", Uri.UriSchemeHttp). This method will be removed in version 5.")]
         public string ResolveServerUrl(string serverUrl, bool forceHttps)
         {
             // Is it already an absolute Url?
@@ -426,6 +631,7 @@ namespace MvcSiteMapProvider.Web
         /// <remarks>See http://www.west-wind.com/Weblog/posts/154812.aspx for more information.</remarks>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns>Fully qualified absolute server url.</returns>
+        [Obsolete(@"Use the ResolveUrl(string, string) overload instead. Example: ResolveUrl(""\some-url\"", Uri.UriSchemeHttp). This method will be removed in version 5.")]
         public string ResolveServerUrl(string serverUrl)
         {
             return ResolveServerUrl(serverUrl, false);

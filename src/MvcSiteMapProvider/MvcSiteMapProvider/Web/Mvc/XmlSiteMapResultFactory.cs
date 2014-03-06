@@ -230,7 +230,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         protected virtual string DefaultBaseUrl
         {
-            get { return urlPath.ResolveServerUrl("~/", false); }
+            get { return this.urlPath.ResolveUrl("/", Uri.UriSchemeHttp); }
         }
 
         protected virtual IEnumerable<string> DefaultSiteMapCacheKeys
