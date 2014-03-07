@@ -113,12 +113,6 @@ namespace MvcSiteMapProvider
             }
             AssertSiteMapNodeConfigurationIsValid(node);
 
-            // Avoid issue with url table not clearing correctly.
-            if (this.FindSiteMapNode(node.Url) != null)
-            {
-                this.RemoveNode(node);
-            }
-
             // Add the node
             try
             {
