@@ -513,6 +513,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public Uri GetPublicFacingUrl(HttpContextBase httpContext)
+        {
+            throw new NotImplementedException();
+        }
+
         [Obsolete]
         public string MakeRelativeUrlAbsolute(string url)
         {
