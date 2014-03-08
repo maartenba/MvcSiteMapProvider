@@ -448,12 +448,13 @@ namespace MvcSiteMapProvider
             get 
             { 
                 var absoluteCanonicalUrl = this.GetAbsoluteCanonicalUrl();
-                if (!String.IsNullOrEmpty(absoluteCanonicalUrl))
+                if (!string.IsNullOrEmpty(absoluteCanonicalUrl))
                 {
-                    var httpContext = mvcContextFactory.CreateHttpContext();
-                    if (absoluteCanonicalUrl.Equals(urlPath.UrlDecode(httpContext.Request.Url.AbsoluteUri)))
+                    var httpContext = this.mvcContextFactory.CreateHttpContext();
+                    var publicFacingUrl = this.urlPath.GetPublicFacingUrl(httpContext);
+                    if (absoluteCanonicalUrl.Equals(this.urlPath.UrlDecode(publicFacingUrl.AbsoluteUri)))
                     {
-                        return String.Empty;
+                        return string.Empty;
                     }
                 }
                 return absoluteCanonicalUrl;
@@ -462,9 +463,9 @@ namespace MvcSiteMapProvider
             {
                 if (!this.canonicalUrl.Equals(value))
                 {
-                    if (!String.IsNullOrEmpty(this.canonicalKey))
+                    if (!string.IsNullOrEmpty(this.canonicalKey))
                     {
-                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalUrl");
+                        throw new ArgumentException(string.Format(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalUrl"), "CanonicalUrl");
                     }
                     this.canonicalUrl = value;
                 }
@@ -482,9 +483,9 @@ namespace MvcSiteMapProvider
             {
                 if (!this.canonicalKey.Equals(value))
                 {
-                    if (!String.IsNullOrEmpty(this.canonicalUrl))
+                    if (!string.IsNullOrEmpty(this.canonicalUrl))
                     {
-                        throw new ArgumentException(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey");
+                        throw new ArgumentException(string.Format(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey"), "CanonicalKey");
                     }
                     this.canonicalKey = value;
                 }
@@ -631,7 +632,7 @@ namespace MvcSiteMapProvider
         /// <returns>The route data associated with the current node.</returns>
         public override RouteData GetRouteData(HttpContextBase httpContext)
         {
-            var routes = mvcContextFactory.GetRoutes();
+            var routes = this.mvcContextFactory.GetRoutes();
             RouteData routeData;
             if (!string.IsNullOrEmpty(this.Route))
             {
