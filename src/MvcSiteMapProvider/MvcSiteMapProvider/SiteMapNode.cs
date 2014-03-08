@@ -514,7 +514,7 @@ namespace MvcSiteMapProvider
                 var node = this.SiteMap.FindSiteMapNodeFromKey(key);
                 if (node != null)
                 {
-                    return this.urlPath.ResolveUrl(url, Uri.UriSchemeHttp);
+                    return this.urlPath.ResolveUrl(node.Url, Uri.UriSchemeHttp);
                 }
             }
             return string.Empty;
