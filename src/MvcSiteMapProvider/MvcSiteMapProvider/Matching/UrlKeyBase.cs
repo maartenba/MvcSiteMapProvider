@@ -73,7 +73,7 @@ namespace MvcSiteMapProvider.Matching
             {
                 return false;
             }
-            ISiteMapNodeUrl objB = obj as ISiteMapNodeUrl;
+            IUrlKey objB = obj as IUrlKey;
             if (objB == null)
             {
                 return false;

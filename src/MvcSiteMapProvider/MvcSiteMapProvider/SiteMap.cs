@@ -5,13 +5,14 @@ using System.Web;
 using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.DI;
+using MvcSiteMapProvider.Matching;
 using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Text;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Routing;
-using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {
@@ -60,8 +61,8 @@ namespace MvcSiteMapProvider
 
             // TODO: Update the child state factory to return the correct type and load
             // up the factory correctly.
-            this.urlTable = new Dictionary<ISiteMapNodeUrl, ISiteMapNode>();
-            this.siteMapNodeUrlFactory = new SiteMapNodeUrlFactory(this.urlPath);
+            this.urlTable = new Dictionary<IUrlKey, ISiteMapNode>();
+            this.urlKeyFactory = new UrlKeyFactory(this.urlPath);
         }
 
         // Services
@@ -70,18 +71,14 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
         private readonly ISiteMapSettings siteMapSettings;
-        protected readonly ISiteMapNodeUrlFactory siteMapNodeUrlFactory;
+        protected readonly IUrlKeyFactory urlKeyFactory;
       
-
         // Child collections
         protected readonly IDictionary<ISiteMapNode, ISiteMapNodeCollection> childNodeCollectionTable;
         protected readonly IDictionary<string, ISiteMapNode> keyTable;
         protected readonly IDictionary<ISiteMapNode, ISiteMapNode> parentNodeTable;
-        //protected readonly IDictionary<string, ISiteMapNode> urlTable;
-
-        protected readonly IDictionary<ISiteMapNodeUrl, ISiteMapNode> urlTable;
+        protected readonly IDictionary<IUrlKey, ISiteMapNode> urlTable;
     
-
         // Object state
         protected readonly object synclock = new object();
         protected ISiteMapNode root;
@@ -137,14 +134,14 @@ namespace MvcSiteMapProvider
             }
             lock (this.synclock)
             {
-                ISiteMapNodeUrl url = null;
+                IUrlKey url = null;
                 bool isMvcUrl = string.IsNullOrEmpty(node.UnresolvedUrl) && this.UsesDefaultUrlResolver(node);
 
                 // Only store URLs if they are clickable and are configured using the Url
                 // property or provided by a custom URL resolver.
                 if (!isMvcUrl && node.Clickable)
                 {
-                    url = this.siteMapNodeUrlFactory.Create(node);
+                    url = this.urlKeyFactory.Create(node);
 
                     // Check for duplicates (including matching or empty host names).
                     if (this.urlTable
@@ -211,7 +208,7 @@ namespace MvcSiteMapProvider
                 }
 
                 // Remove the URL
-                var url = this.siteMapNodeUrlFactory.Create(node);
+                var url = this.urlKeyFactory.Create(node);
                 if (this.urlTable.ContainsKey(url))
                 {
                     this.urlTable.Remove(url);
@@ -313,8 +310,7 @@ namespace MvcSiteMapProvider
         /// </returns>
         public virtual ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
-            var httpContext = mvcContextFactory.CreateHttpContext();
-            return FindSiteMapNode(httpContext);
+            return FindSiteMapNode(this.HttpContext);
         }
 
         /// <summary>
@@ -666,7 +662,7 @@ namespace MvcSiteMapProvider
         protected virtual ISiteMapNode FindSiteMapNode(HttpContextBase httpContext)
         {
             // Try URL
-            var node = this.FindSiteMapNodeFromPublicUrl(httpContext);
+            var node = this.FindSiteMapNodeFromPublicFacingUrl(httpContext);
 
             // Try MVC
             if (node == null)
@@ -678,11 +674,10 @@ namespace MvcSiteMapProvider
             return this.ReturnNodeIfAccessible(node);
         }
 
-        protected virtual ISiteMapNode FindSiteMapNodeFromPublicUrl(HttpContextBase httpContext)
+        protected virtual ISiteMapNode FindSiteMapNodeFromPublicFacingUrl(HttpContextBase httpContext)
         {
-            var publicUri = this.urlPath.GetPublicFacingUrl(httpContext);
-
-            return this.FindSiteMapNodeFromUrl(publicUri.PathAndQuery, publicUri.AbsolutePath, publicUri.Host, httpContext.CurrentHandler);
+            var publicFacingUrl = this.urlPath.GetPublicFacingUrl(httpContext);
+            return this.FindSiteMapNodeFromUrl(publicFacingUrl.PathAndQuery, publicFacingUrl.AbsolutePath, publicFacingUrl.Host, httpContext.CurrentHandler);
         }
 
         protected virtual ISiteMapNode FindSiteMapNodeFromUrl(string relativeUrl, string relativePath, string hostName, IHttpHandler handler)
@@ -690,20 +685,20 @@ namespace MvcSiteMapProvider
             ISiteMapNode node = null;
 
             // Try absolute match with querystring
-            var absoluteMatch = this.siteMapNodeUrlFactory.Create(relativeUrl, hostName);
+            var absoluteMatch = this.urlKeyFactory.Create(relativeUrl, hostName);
             node = this.FindSiteMapNodeFromUrlMatch(absoluteMatch);
 
             // Try absolute match without querystring
             if (node == null && !string.IsNullOrEmpty(relativePath))
             {
-                var absoluteMatchWithoutQueryString = this.siteMapNodeUrlFactory.Create(relativePath, hostName);
+                var absoluteMatchWithoutQueryString = this.urlKeyFactory.Create(relativePath, hostName);
                 node = this.FindSiteMapNodeFromUrlMatch(absoluteMatchWithoutQueryString);
             }
 
             // Try relative match
             if (node == null)
             {
-                var relativeMatch = this.siteMapNodeUrlFactory.Create(relativeUrl, string.Empty);
+                var relativeMatch = this.urlKeyFactory.Create(relativeUrl, string.Empty);
                 node = this.FindSiteMapNodeFromUrlMatch(relativeMatch);
             }
 
@@ -724,14 +719,14 @@ namespace MvcSiteMapProvider
             // Try relative match without querystring
             if (node == null && !string.IsNullOrEmpty(relativePath))
             {
-                var relativeMatchWithoutQueryString = this.siteMapNodeUrlFactory.Create(relativePath, string.Empty);
+                var relativeMatchWithoutQueryString = this.urlKeyFactory.Create(relativePath, string.Empty);
                 node = this.FindSiteMapNodeFromUrlMatch(relativeMatchWithoutQueryString);
             }
 
             return node;
         }
 
-        protected virtual ISiteMapNode FindSiteMapNodeFromUrlMatch(ISiteMapNodeUrl urlToMatch)
+        protected virtual ISiteMapNode FindSiteMapNodeFromUrlMatch(IUrlKey urlToMatch)
         {
             if (this.urlTable.ContainsKey(urlToMatch))
             {
@@ -903,359 +898,4 @@ namespace MvcSiteMapProvider
 
         #endregion
     }
-
-
-
-    public class SiteMapNodeUrlFactory
-        : ISiteMapNodeUrlFactory
-    {
-        public SiteMapNodeUrlFactory(
-            IUrlPath urlPath
-            )
-        {
-            if (urlPath == null)
-                throw new ArgumentNullException("urlPath");
-
-            this.urlPath = urlPath;
-        }
-        private readonly IUrlPath urlPath;
-
-        public ISiteMapNodeUrl Create(ISiteMapNode node)
-        {
-            return new SiteMapNodeUrl(node, this.urlPath);
-        }
-
-        public ISiteMapNodeUrl Create(string relativeOrAbsoluteUrl, string hostName)
-        {
-            return new UnknownSiteMapNodeUrl(relativeOrAbsoluteUrl, hostName, this.urlPath);
-        }
-    }
-
-    public interface ISiteMapNodeUrlFactory
-    {
-        ISiteMapNodeUrl Create(ISiteMapNode node);
-        ISiteMapNodeUrl Create(string relativeOrAbsoluteUrl, string hostName);
-    }
-
-
-
-    // TODO: Move this into its own file
-    [ExcludeFromAutoRegistration]
-    public class SiteMapNodeUrl
-        : SiteMapNodeUrlBase, ISiteMapNodeUrl
-    {
-        public SiteMapNodeUrl(
-            ISiteMapNode node,
-            IUrlPath urlPath
-            ) : base(urlPath)
-        {
-            if (node == null)
-                throw new ArgumentNullException("node");
-
-            this.node = node;
-
-            // Host name in explicit URL overrides the one in the node.
-            //if (!string.IsNullOrEmpty(node.HostName))
-            //{
-                this.hostName = node.HostName;
-            //}
-
-            this.SetUrlValues(node.UnresolvedUrl);
-
-
-            //var unresolvedUrl = node.UnresolvedUrl;
-            //// NOTE: Currently this only supports URL based nodes (not route based nodes).
-            //if (string.IsNullOrEmpty(unresolvedUrl))
-            //{
-            //    if (this.urlPath.IsAbsolutePhysicalPath(unresolvedUrl) || this.urlPath.IsAppRelativePath(unresolvedUrl))
-            //    {
-            //        this.rootRelativeUrl = this.urlPath.ResolveVirtualApplicationQualifiedUrl(unresolvedUrl);
-            //    }
-            //    else if (this.urlPath.IsAbsoluteUrl(unresolvedUrl))
-            //    {
-            //        var absoluteUri = new Uri(unresolvedUrl, UriKind.Absolute);
-
-            //        // NOTE: this will cut off any fragments, but since they are not passed
-            //        // to the server, this is desired.
-            //        this.rootRelativeUrl = absoluteUri.PathAndQuery;
-            //        this.hostName = absoluteUri.Host;
-            //    }
-            //    else
-            //    {
-            //        // We must assume we already have a relative root URL
-            //        this.rootRelativeUrl = unresolvedUrl;
-            //    }
-            //}
-        }
-         
-        private readonly ISiteMapNode node; // Do we need this?
-        //private readonly IUrlPath urlPath;
-        //private readonly string hostName;
-        //private readonly string rootRelativeUrl;
-
-        public override string HostName 
-        {
-            // The hostname of the node can be modified at runtime, so we need to ensure
-            // we have the most current value.
-            get { return string.IsNullOrEmpty(node.HostName) ? this.hostName : node.HostName; }
-        }
-
-        //public string RootRelativeUrl 
-        //{
-        //    get { return this.rootRelativeUrl; }
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    unchecked
-        //    {
-        //        int hashCode = 0;
-
-        //        // String properties
-        //        hashCode = (hashCode * 397) ^ (this.HostName != null ? this.HostName.GetHashCode() : 0);
-        //        hashCode = (hashCode * 397) ^ (this.RootRelativeUrl != null ? this.RootRelativeUrl.GetHashCode() : 0);
-
-        //        //// int properties
-        //        //hashCode = (hashCode * 397) ^ intProperty;
-
-        //        return hashCode;
-        //    }
-        //}
-
-        //public override bool Equals(object obj)
-        //{
-        //    if (this == null)
-        //    {
-        //        return false;
-        //    }
-        //    ISiteMapNodeUrl objB = obj as ISiteMapNodeUrl;
-        //    if (objB == null)
-        //    {
-        //        return false;
-        //    }
-        //    if (object.ReferenceEquals(this, obj))
-        //    {
-        //        return true;
-        //    }
-        //    if (!string.Equals(this.RootRelativeUrl, objB.RootRelativeUrl, StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        return false;
-        //    }
-        //    // NOTE: We need to ensure we compare the local variable in this case.
-        //    if (!string.Equals(this.hostName, objB.HostName, StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        //public override string ToString()
-        //{
-        //    return string.Format("[HostName: {0}, RootRelativeUrl: {1}", this.HostName, this.RootRelativeUrl);
-        //}
-    }
-
-    public class UnknownSiteMapNodeUrl
-        : SiteMapNodeUrlBase, ISiteMapNodeUrl
-    {
-        public UnknownSiteMapNodeUrl(
-            string relativeOrAbsoluteUrl,
-            string hostName,
-            IUrlPath urlPath
-            ) : base(urlPath)
-        {
-            if (string.IsNullOrEmpty(relativeOrAbsoluteUrl))
-                throw new ArgumentNullException("relativeOrAbsoluteUrl");
-
-            this.relativeOrAbsoluteUrl = relativeOrAbsoluteUrl;
-            this.hostName = hostName;
-            this.SetUrlValues(relativeOrAbsoluteUrl);
-
-            //// NOTE: Currently this only supports URL based nodes (not route based nodes).
-            //if (this.urlPath.IsAbsolutePhysicalPath(relativeOrAbsoluteUrl) || this.urlPath.IsAppRelativePath(relativeOrAbsoluteUrl))
-            //{
-            //    this.rootRelativeUrl = this.urlPath.ResolveVirtualApplicationQualifiedUrl(relativeOrAbsoluteUrl);
-            //}
-            //else if (this.urlPath.IsAbsoluteUrl(relativeOrAbsoluteUrl))
-            //{
-            //    var absoluteUri = new Uri(relativeOrAbsoluteUrl, UriKind.Absolute);
-
-            //    // NOTE: this will cut off any fragments, but since they are not passed
-            //    // to the server, this is desired.
-            //    this.rootRelativeUrl = absoluteUri.PathAndQuery;
-            //    this.hostName = absoluteUri.Host;
-            //}
-            //else
-            //{
-            //    // We must assume we already have a relative root URL
-            //    this.rootRelativeUrl = relativeOrAbsoluteUrl;
-            //}
-        }
-
-        private readonly string relativeOrAbsoluteUrl;
-        //private readonly IUrlPath urlPath;
-        //protected readonly string hostName;
-        //protected readonly string rootRelativeUrl;
-
-        //public string HostName
-        //{
-        //    get { return this.hostName; }
-        //}
-
-        //public string RootRelativeUrl
-        //{
-        //    get { return this.rootRelativeUrl; }
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    unchecked
-        //    {
-        //        int hashCode = 0;
-
-        //        // String properties
-        //        hashCode = (hashCode * 397) ^ (this.HostName != null ? this.HostName.GetHashCode() : 0);
-        //        hashCode = (hashCode * 397) ^ (this.RootRelativeUrl != null ? this.RootRelativeUrl.GetHashCode() : 0);
-
-        //        //// int properties
-        //        //hashCode = (hashCode * 397) ^ intProperty;
-
-        //        return hashCode;
-        //    }
-        //}
-
-        //public override bool Equals(object obj)
-        //{
-        //    if (this == null)
-        //    {
-        //        return false;
-        //    }
-        //    ISiteMapNodeUrl objB = obj as ISiteMapNodeUrl;
-        //    if (objB == null)
-        //    {
-        //        return false;
-        //    }
-        //    if (object.ReferenceEquals(this, obj))
-        //    {
-        //        return true;
-        //    }
-        //    if (!string.Equals(this.RootRelativeUrl, objB.RootRelativeUrl, StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        return false;
-        //    }
-        //    // NOTE: We need to ensure we compare the local variable in this case.
-        //    if (!string.Equals(this.hostName, objB.HostName, StringComparison.OrdinalIgnoreCase))
-        //    {
-        //        return false;
-        //    }
-        //    return true;
-        //}
-
-        //public override string ToString()
-        //{
-        //    return string.Format("[HostName: {0}, RootRelativeUrl: {1}", this.HostName, this.RootRelativeUrl);
-        //}
-    }
-
-    public abstract class SiteMapNodeUrlBase
-        : ISiteMapNodeUrl
-    {
-        public SiteMapNodeUrlBase(
-                IUrlPath urlPath
-            )
-        {
-            if (urlPath == null)
-                throw new ArgumentNullException("urlPath");
-
-            this.urlPath = urlPath;
-        }
-
-        protected IUrlPath urlPath;
-        protected string hostName;
-        protected string rootRelativeUrl;
-
-        public virtual string HostName { get { return this.hostName; } }
-
-        public virtual string RootRelativeUrl { get { return this.rootRelativeUrl; } }
-
-        protected virtual void SetUrlValues(string relativeOrAbsoluteUrl)
-        {
-            // NOTE: Currently this only supports URL based nodes (not route based nodes).
-            if (this.urlPath.IsAbsolutePhysicalPath(relativeOrAbsoluteUrl) || this.urlPath.IsAppRelativePath(relativeOrAbsoluteUrl))
-            {
-                this.rootRelativeUrl = this.urlPath.ResolveVirtualApplicationQualifiedUrl(relativeOrAbsoluteUrl);
-            }
-            else if (this.urlPath.IsAbsoluteUrl(relativeOrAbsoluteUrl))
-            {
-                var absoluteUri = new Uri(relativeOrAbsoluteUrl, UriKind.Absolute);
-
-                // NOTE: this will cut off any fragments, but since they are not passed
-                // to the server, this is desired.
-                this.rootRelativeUrl = absoluteUri.PathAndQuery;
-                this.hostName = absoluteUri.Host;
-            }
-            else
-            {
-                // We must assume we already have a relative root URL
-                this.rootRelativeUrl = relativeOrAbsoluteUrl;
-            }
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = 0;
-
-                // String properties
-                hashCode = (hashCode * 397) ^ (this.HostName != null ? this.HostName.GetHashCode() : string.Empty.GetHashCode());
-                hashCode = (hashCode * 397) ^ (this.RootRelativeUrl != null ? this.RootRelativeUrl.GetHashCode() : string.Empty.GetHashCode());
-
-                //// int properties
-                //hashCode = (hashCode * 397) ^ intProperty;
-
-                return hashCode;
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (this == null)
-            {
-                return false;
-            }
-            ISiteMapNodeUrl objB = obj as ISiteMapNodeUrl;
-            if (objB == null)
-            {
-                return false;
-            }
-            if (object.ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-            if (!string.Equals(this.RootRelativeUrl, objB.RootRelativeUrl, StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-            // NOTE: We need to ensure we compare the local variable in this case.
-            if (!string.Equals(this.hostName, objB.HostName, StringComparison.OrdinalIgnoreCase))
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("[HostName: {0}, RootRelativeUrl: {1}]", this.HostName, this.RootRelativeUrl);
-        }
-    }
-        
-
-    public interface ISiteMapNodeUrl
-    {
-        string HostName { get; }
-        string RootRelativeUrl { get; }
-    }
-
 }
