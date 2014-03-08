@@ -522,7 +522,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The URI that the outside world used to create this request.</returns>
-        internal Uri GetPublicFacingUrl(HttpContextBase httpContext)
+        public Uri GetPublicFacingUrl(HttpContextBase httpContext)
         {
             var serverVariables = httpContext.Request.ServerVariables;
             var request = httpContext.Request;
