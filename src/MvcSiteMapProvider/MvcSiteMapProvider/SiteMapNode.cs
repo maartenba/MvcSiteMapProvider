@@ -400,8 +400,8 @@ namespace MvcSiteMapProvider
 
             // NOTE: In all cases where values from the current request can be included in the URL, 
             // we need to disable URL resolution caching.
-            if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) && 
-                this.preservedRouteParameters.Count == 0 && !this.IncludeAmbientRequestValues &&
+            if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) &&
+                this.preservedRouteParameters.Count == 0 && !this.IncludeAmbientValuesInUrl &&
                 !IsHostNameFromRequest)
             {
                 this.resolvedUrl = this.GetResolvedUrl();
@@ -421,7 +421,7 @@ namespace MvcSiteMapProvider
         /// (from the RouteValues and/or query string) when resolving URLs.
         /// </summary>
         /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
-        public override bool IncludeAmbientRequestValues { get; set; }
+        public override bool IncludeAmbientValuesInUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the protocol, such as http or https that will 
@@ -769,7 +769,7 @@ namespace MvcSiteMapProvider
             node.UrlResolver = this.UrlResolver;
             node.Url = this.url; // Get protected member
             node.CacheResolvedUrl = this.CacheResolvedUrl;
-            node.IncludeAmbientRequestValues = this.IncludeAmbientRequestValues;
+            node.IncludeAmbientValuesInUrl = this.IncludeAmbientValuesInUrl;
             node.Protocol = this.Protocol;
             node.HostName = this.HostName;
             node.CanonicalKey = this.CanonicalKey;

@@ -61,7 +61,7 @@ namespace MvcSiteMapProvider
         string ResolvedUrl { get; }
         bool CacheResolvedUrl { get; set; }
         void ResolveUrl();
-        bool IncludeAmbientRequestValues { get; set; }
+        bool IncludeAmbientValuesInUrl { get; set; }
         string Protocol { get; set; }
         string HostName { get; set; }
         bool HasAbsoluteUrl();

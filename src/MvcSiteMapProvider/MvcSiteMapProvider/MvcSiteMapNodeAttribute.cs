@@ -15,7 +15,7 @@ namespace MvcSiteMapProvider
         public MvcSiteMapNodeAttribute()
         {
             Clickable = true;
-            IncludeAmbientRequestValues = false;
+            IncludeAmbientValuesInUrl = false;
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace MvcSiteMapProvider
         /// (from the RouteValues and/or query string) when resolving URLs.
         /// </summary>
         /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
-        public bool IncludeAmbientRequestValues { get; set; }
+        public bool IncludeAmbientValuesInUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the protocol (such as http or https) that will be used when resolving the URL.

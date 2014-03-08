@@ -303,13 +303,13 @@ namespace MvcSiteMapProvider
         /// (from the RouteValues and/or query string) when resolving URLs.
         /// </summary>
         /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
-        public override bool IncludeAmbientRequestValues
+        public override bool IncludeAmbientValuesInUrl
         {
-            get { return base.IncludeAmbientRequestValues; }
+            get { return base.IncludeAmbientValuesInUrl; }
             set
             {
-                this.ThrowIfReadOnly("IncludeAmbientRequestValues");
-                base.IncludeAmbientRequestValues = value;
+                this.ThrowIfReadOnly("IncludeAmbientValuesInUrl");
+                base.IncludeAmbientValuesInUrl = value;
             }
         }
 

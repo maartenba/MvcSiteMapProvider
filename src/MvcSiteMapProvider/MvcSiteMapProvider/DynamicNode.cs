@@ -158,7 +158,7 @@ namespace MvcSiteMapProvider
         /// (from the RouteValues and/or query string) when resolving URLs.
         /// </summary>
         /// <value><b>true</b> to include ambient values (like MVC does); otherwise <b>false</b>.</value>
-        public virtual bool? IncludeAmbientRequestValues { get; set; }
+        public virtual bool? IncludeAmbientValuesInUrl { get; set; }
 
         /// <summary>
         /// Gets or sets the protocol (such as http or https) that will be used when resolving the URL.
@@ -289,8 +289,8 @@ namespace MvcSiteMapProvider
                 node.Url = this.Url;
             if (this.CacheResolvedUrl != null)
                 node.CacheResolvedUrl = (bool)this.CacheResolvedUrl;
-            if (this.IncludeAmbientRequestValues != null)
-                node.IncludeAmbientRequestValues = (bool)this.IncludeAmbientRequestValues;
+            if (this.IncludeAmbientValuesInUrl != null)
+                node.IncludeAmbientValuesInUrl = (bool)this.IncludeAmbientValuesInUrl;
             if (!string.IsNullOrEmpty(this.Protocol))
                 node.Protocol = this.Protocol;
             if (!string.IsNullOrEmpty(this.HostName))

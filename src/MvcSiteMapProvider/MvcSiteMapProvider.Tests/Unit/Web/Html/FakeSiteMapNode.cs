@@ -252,7 +252,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
-        public bool IncludeAmbientRequestValues { get; set; }
+        public bool IncludeAmbientValuesInUrl { get; set; }
 
         public string Protocol { get; set; }
 

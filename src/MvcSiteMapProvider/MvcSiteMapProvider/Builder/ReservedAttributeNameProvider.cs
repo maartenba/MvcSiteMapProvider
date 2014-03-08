@@ -67,7 +67,7 @@ namespace MvcSiteMapProvider.Builder
                 || attributeName == "urlResolver"
                 || attributeName == "url"
                 || attributeName == "cacheResolvedUrl"
-                || attributeName == "includeAmbientRequestValues"
+                || attributeName == "includeAmbientValuesInUrl"
                 || attributeName == "protocol"
                 || attributeName == "hostName"
                 || attributeName == "canonicalKey"

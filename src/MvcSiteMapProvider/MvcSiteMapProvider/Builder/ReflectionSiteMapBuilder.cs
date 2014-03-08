@@ -453,7 +453,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.HttpMethod = httpMethod;
             if (!string.IsNullOrEmpty(attribute.Url)) siteMapNode.Url = attribute.Url;
             siteMapNode.CacheResolvedUrl = attribute.CacheResolvedUrl;
-            siteMapNode.IncludeAmbientRequestValues = attribute.IncludeAmbientRequestValues;
+            siteMapNode.IncludeAmbientValuesInUrl = attribute.IncludeAmbientValuesInUrl;
             siteMapNode.Protocol = attribute.Protocol;
             siteMapNode.HostName = attribute.HostName;
             siteMapNode.CanonicalKey = attribute.CanonicalKey;

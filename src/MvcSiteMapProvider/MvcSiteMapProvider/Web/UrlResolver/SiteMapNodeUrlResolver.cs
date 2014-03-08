@@ -117,7 +117,7 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
         protected virtual RequestContext CreateRequestContext(ISiteMapNode node, TextWriter writer)
         {
-            if (!node.IncludeAmbientRequestValues)
+            if (!node.IncludeAmbientValuesInUrl)
             {
                 var httpContext = this.CreateHttpContext(node, writer);
                 return this.mvcContextFactory.CreateRequestContext(httpContext);

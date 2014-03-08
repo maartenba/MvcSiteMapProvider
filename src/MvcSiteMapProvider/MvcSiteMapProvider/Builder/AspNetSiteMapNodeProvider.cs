@@ -128,7 +128,7 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
             siteMapNode.Url = node.Url;
             siteMapNode.CacheResolvedUrl = bool.Parse(node.GetAttributeValueOrFallback("cacheResolvedUrl", "true"));
-            siteMapNode.IncludeAmbientRequestValues = bool.Parse(node.GetAttributeValueOrFallback("includeAmbientRequestValues", "false"));
+            siteMapNode.IncludeAmbientValuesInUrl = bool.Parse(node.GetAttributeValueOrFallback("includeAmbientValuesInUrl", "false"));
             siteMapNode.Protocol = node.GetAttributeValue("protocol");
             siteMapNode.HostName = node.GetAttributeValue("hostName");
             siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");

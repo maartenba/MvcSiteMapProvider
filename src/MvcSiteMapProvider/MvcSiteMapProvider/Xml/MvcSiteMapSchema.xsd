@@ -169,7 +169,7 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="includeAmbientRequestValues" type="xs:boolean" use="optional">
+    <xs:attribute name="includeAmbientValuesInUrl" type="xs:boolean" use="optional">
       <xs:annotation>
         <xs:documentation>
           Optional. Whether or not to include request route values and/or query string values when resolving the
