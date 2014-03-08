@@ -115,14 +115,14 @@
     </xs:attribute>
 
     <!-- Visibility -->
-    <xs:attribute name="visibility" type="xs:string" use="optional" >
+    <xs:attribute name="visibility" type="xs:string" use="optional">
       <xs:annotation>
         <xs:documentation>
           Example from demo: visibility="SiteMapPathHelper,!*"
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="visibilityProvider" type="xs:string" use="optional" >
+    <xs:attribute name="visibilityProvider" type="xs:string" use="optional">
       <xs:annotation>
         <xs:documentation>
           Class that will be used to determine visibility for a sitemap node.
@@ -131,7 +131,7 @@
     </xs:attribute>
     
     <!-- Dynamic Nodes -->
-    <xs:attribute name="dynamicNodeProvider" type="xs:string" use="optional" >
+    <xs:attribute name="dynamicNodeProvider" type="xs:string" use="optional">
       <xs:annotation>
         <xs:documentation>
           A class name implementing MvcSiteMapProvider.IDynamicNodeProvider and providing dynamic nodes for the site map.
@@ -140,14 +140,14 @@
     </xs:attribute>
     
     <!-- URL Resolver -->
-    <xs:attribute name="clickable" type="xs:boolean" use="optional">
+    <xs:attribute name="clickable" type="small_boolean_type" use="optional">
       <xs:annotation>
         <xs:documentation>
           Is the node clickable or just a grouping node? Default is true.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="urlResolver" type="xs:string" use="optional" >
+    <xs:attribute name="urlResolver" type="xs:string" use="optional">
       <xs:annotation>
         <xs:documentation>
           Class that will be used to generate URLs for sitemap nodes.
@@ -162,14 +162,14 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="cacheResolvedUrl" type="xs:boolean" use="optional">
+    <xs:attribute name="cacheResolvedUrl" type="small_boolean_type" use="optional">
       <xs:annotation>
         <xs:documentation>
           Should the resolved URL be cached (true) or resolved on each request (false)? Default is true.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="includeAmbientValuesInUrl" type="xs:boolean" use="optional">
+    <xs:attribute name="includeAmbientValuesInUrl" type="small_boolean_type" use="optional">
       <xs:annotation>
         <xs:documentation>
           Optional. Whether or not to include request route values and/or query string values when resolving the
@@ -177,14 +177,14 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="protocol" type="xs:string" use="optional" >
+    <xs:attribute name="protocol" type="xs:string" use="optional">
       <xs:annotation>
         <xs:documentation>
           Optional. The protocol that will be built into the URL.
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
-    <xs:attribute name="hostName" type="xs:string" use="optional" >
+    <xs:attribute name="hostName" type="xs:string" use="optional">
       <xs:annotation>
         <xs:documentation>
           Optional. The host name that will be built into the URL.
@@ -315,7 +315,7 @@
 		<!-- Put sitemap attributes here -->
 	</xs:attributeGroup>
 
-	<xs:simpleType name="small_boolean_Type">
+	<xs:simpleType name="small_boolean_type">
 		<xs:restriction base="xs:NMTOKEN">
 			<xs:enumeration value="false" />
 			<xs:enumeration value="true" />
