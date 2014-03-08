@@ -197,6 +197,12 @@
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
     <Compile Include="ISortable.cs" />
+    <Compile Include="Matching\IUrlKey.cs" />
+    <Compile Include="Matching\IUrlKeyFactory.cs" />
+    <Compile Include="Matching\RequestUrlKey.cs" />
+    <Compile Include="Matching\SiteMapNodeUrlKey.cs" />
+    <Compile Include="Matching\UrlKeyBase.cs" />
+    <Compile Include="Matching\UrlKeyFactory.cs" />
     <Compile Include="Reflection\AttributeAssemblyProvider.cs" />
     <Compile Include="Reflection\AttributeAssemblyProviderFactory.cs" />
     <Compile Include="Reflection\IAttributeAssemblyProvider.cs" />
@@ -474,6 +480,7 @@
   <ItemGroup>
     <None Include="Web\Html\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
