@@ -360,13 +360,6 @@ namespace MvcSiteMapProvider
                 {
                     return this.ResolvedUrl;
                 }
-                // Only resolve the url if an absolute url is not already set
-                // IMPORTANT: Must not call HasAbsoluteUrl here because that method calls this property.
-                var unresolved = this.UnresolvedUrl;
-                if (this.urlPath.IsAbsoluteUrl(unresolved))
-                {
-                    return unresolved;
-                }
                 return GetResolvedUrl();
             }
             set
