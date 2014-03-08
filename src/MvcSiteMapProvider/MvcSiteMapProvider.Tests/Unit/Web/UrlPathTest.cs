@@ -596,6 +596,52 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        public void ResolveContentUrl_WithRelativeUrlAndHost_ShouldReturnAbsoluteUrlWithRequestProtocolAndSpecifiedHost()
+        {
+            // arrange
+            Mock<HttpContextBase> context = new Mock<HttpContextBase>();
+            Mock<HttpRequestBase> request = new Mock<HttpRequestBase>();
+            context.Setup(x => x.Request).Returns(request.Object);
+            request.Setup(x => x.ApplicationPath).Returns("/some-application");
+            request.Setup(x => x.ServerVariables).Returns(new NameValueCollection());
+            request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
+            request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
+            this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
+            var target = new UrlPath(this.mvcContextFactory.Object);
+
+            // act
+            var result = target.ResolveContentUrl("/directory/subdirectory/page.aspx?a=b", null, "somewhere.com", context.Object);
+
+            // assert
+            var actual = result;
+            var expected = "https://somewhere.com/directory/subdirectory/page.aspx?a=b";
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void ResolveContentUrl_WithRelativeUrlHostAndNonStandardPort_ShouldReturnAbsoluteUrlWithRequestProtocolSpecifiedHostAndRequestPort()
+        {
+            // arrange
+            Mock<HttpContextBase> context = new Mock<HttpContextBase>();
+            Mock<HttpRequestBase> request = new Mock<HttpRequestBase>();
+            context.Setup(x => x.Request).Returns(request.Object);
+            request.Setup(x => x.ApplicationPath).Returns("/some-application");
+            request.Setup(x => x.ServerVariables).Returns(new NameValueCollection());
+            request.Setup(x => x.Url).Returns(new Uri("https://somehost:999/a.aspx?a=b"));
+            request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
+            this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
+            var target = new UrlPath(this.mvcContextFactory.Object);
+
+            // act
+            var result = target.ResolveContentUrl("/directory/subdirectory/page.aspx?a=b", null, "somewhere.com", context.Object);
+
+            // assert
+            var actual = result;
+            var expected = "https://somewhere.com:999/directory/subdirectory/page.aspx?a=b";
+            Assert.AreEqual(expected, actual);
+        }
+
         /// <summary>
         /// Verifies SSL forwarders are correctly handled when they supply X_FORWARDED_PROTO and HOST
         /// </summary>

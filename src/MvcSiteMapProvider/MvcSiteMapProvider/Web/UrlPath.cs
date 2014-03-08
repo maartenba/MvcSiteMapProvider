@@ -123,7 +123,7 @@ namespace MvcSiteMapProvider.Web
         /// <param name="uriParts">An array of strings to combine.</param>
         /// <returns>The combined URL.</returns>
         /// <remarks>Source: http://stackoverflow.com/questions/372865/path-combine-for-urls/6704287#6704287 </remarks>
-        private string CombineUrl(params string[] uriParts)
+        public string CombineUrl(params string[] uriParts)
         {
             string uri = string.Empty;
             if (uriParts != null && uriParts.Length > 0)
@@ -403,8 +403,24 @@ namespace MvcSiteMapProvider.Web
         }
 
         /// <summary>
+        /// Resolves the URL to an absolute URL using the HTTP protocol.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">
+        /// Any Url including those starting with "/", "~", or protocol.
+        /// </param>
+        /// <returns>The absolute URL.</returns>
+        public string MakeUrlAbsolute(string url)
+        {
+            if (this.IsAbsoluteUrl(url))
+                return url;
+
+            return this.ResolveUrl(url, Uri.UriSchemeHttp);
+        }
+
+        /// <summary>
         /// Resolves the URL and combines it with the specified base URL to
-        /// make an absolute URL.
+        /// make an absolute URL. Absolute URLs will be passed through unchanged.
         /// </summary>
         /// <param name="baseUrl">An absolute URL beginning with protocol.</param>
         /// <param name="url">
@@ -444,7 +460,7 @@ namespace MvcSiteMapProvider.Web
         /// <returns>The resolved URL.</returns>
         public string ResolveUrl(string url)
         {
-            return this.ResolveUrl(url, null, null, this.HttpContext);
+            return this.GenerateUrl(url, null /* protocol */, null /* hostName */, true /* defaultToHttp */, this.HttpContext);
         }
 
         /// <summary>
@@ -454,11 +470,12 @@ namespace MvcSiteMapProvider.Web
         /// Absolute URLs will be passed through unchanged.
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
-        /// <param name="protocol">The protocol such as http, https, or ftp.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
+        /// protocol if null or empty string.</param>
         /// <returns>The resolved URL.</returns>
         public string ResolveUrl(string url, string protocol)
         {
-            return this.ResolveUrl(url, protocol, null, this.HttpContext);
+            return this.GenerateUrl(url, protocol, null /* hostName */, true /* defaultToHttp */, this.HttpContext);
         }
 
         /// <summary>
@@ -468,12 +485,91 @@ namespace MvcSiteMapProvider.Web
         /// Absolute URLs will be passed through unchanged.
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
-        /// <param name="protocol">The protocol such as http, https, or ftp.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
+        /// protocol if null or empty string.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
         /// <returns>The resolved URL.</returns>
         public string ResolveUrl(string url, string protocol, string hostName)
         {
-            return this.ResolveUrl(url, protocol, hostName, this.HttpContext);
+            return this.GenerateUrl(url, protocol, hostName, true /* defaultToHttp */, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged. Uses the protocol of the request.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
+        /// protocol if null or empty string.</param>
+        /// <param name="hostName">The host name such as www.somewhere.com.</param>
+        /// <param name="httpContext">The HTTP context representing the context of the request.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
+        {
+            return this.GenerateUrl(url, protocol, hostName, true /* defaultToHttp */, httpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveContentUrl(string url)
+        {
+            return this.GenerateUrl(url, null /* protocol */, null /* hostName */, false /* defaultToHttp */, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to protocol of the
+        /// request to prevent errors when resolving content under https.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveContentUrl(string url, string protocol)
+        {
+            return this.GenerateUrl(url, protocol, null /* hostName */, false /* defaultToHttp */, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged. 
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to protocol of the
+        /// request to prevent errors when resolving content under https.</param>
+        /// <param name="hostName">The host name such as www.somewhere.com.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveContentUrl(string url, string protocol, string hostName)
+        {
+            return this.GenerateUrl(url, protocol, hostName, false /* defaultToHttp */, this.HttpContext);
+        }
+
+        /// <summary>
+        /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
+        /// If the URL begins with a "/", it will be resolved to the web root. If the 
+        /// URL begins with a "~", it will be resolved to the virtual application root.
+        /// Absolute URLs will be passed through unchanged.
+        /// </summary>
+        /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to protocol of the
+        /// request to prevent errors when resolving content under https.</param>
+        /// <param name="hostName">The host name such as www.somewhere.com.</param>
+        /// <param name="httpContext">The HTTP context representing the context of the request.</param>
+        /// <returns>The resolved URL.</returns>
+        public string ResolveContentUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
+        {
+            return this.GenerateUrl(url, protocol, hostName, false /* defaultToHttp */, httpContext);
         }
 
         /// <summary>
@@ -485,9 +581,13 @@ namespace MvcSiteMapProvider.Web
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
+        /// <param name="defaultToHttp">
+        /// <b>true</b> to default the protocol to http if it is null or empty string; 
+        /// <b>false</b> to default the protocol to that of the current request.
+        /// </param>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The resolved URL.</returns>
-        public string ResolveUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
+        internal string GenerateUrl(string url, string protocol, string hostName, bool defaultToHttp, HttpContextBase httpContext)
         {
             if (string.IsNullOrEmpty(url))
                 return string.Empty;
@@ -499,12 +599,14 @@ namespace MvcSiteMapProvider.Web
                 if (!string.IsNullOrEmpty(protocol) || !string.IsNullOrEmpty(hostName))
                 {
                     Uri requestUrl = this.GetPublicFacingUrl(httpContext);
-                    protocol = !string.IsNullOrEmpty(protocol) ? protocol : Uri.UriSchemeHttp;
+                    string requestProtocol = requestUrl.Scheme;
+                    var defaultProtocol = defaultToHttp ? Uri.UriSchemeHttp : requestProtocol;
+
+                    protocol = !string.IsNullOrEmpty(protocol) ? protocol : defaultProtocol;
                     hostName = !string.IsNullOrEmpty(hostName) ? hostName : requestUrl.Host;
 
                     string port = string.Empty;
-                    string requestProtocol = requestUrl.Scheme;
-
+                    
                     if (string.Equals(protocol, requestProtocol, StringComparison.OrdinalIgnoreCase))
                     {
                         port = requestUrl.IsDefaultPort ? string.Empty : (":" + Convert.ToString(requestUrl.Port, CultureInfo.InvariantCulture));
@@ -556,7 +658,7 @@ namespace MvcSiteMapProvider.Web
             return new Uri(request.Url, request.RawUrl);
         }
 
-        [Obsolete(@"Use ResolveUrl(string, string) instead. Example: ResolveUrl(""\some-url\"", Uri.UriSchemeHttp). This method will be removed in version 5.")]
+        [Obsolete(@"Use MakeUrlAbsolute(string) instead. Example: This method will be removed in version 5.")]
         public string MakeRelativeUrlAbsolute(string url)
         {
             if (!IsAbsolutePhysicalPath(url))
@@ -577,7 +679,7 @@ namespace MvcSiteMapProvider.Web
         /// <param name="serverUrl">The server URL.</param>
         /// <param name="forceHttps">if true forces the url to use https</param>
         /// <returns>Fully qualified absolute server url.</returns>
-        [Obsolete(@"Use the ResolveUrl(string, string) overload instead. Example: ResolveUrl(""\some-url\"", Uri.UriSchemeHttp). This method will be removed in version 5.")]
+        [Obsolete(@"Use MakeUrlAbsolute(string, string) instead. Example: This method will be removed in version 5.")]
         public string ResolveServerUrl(string serverUrl, bool forceHttps)
         {
             // Is it already an absolute Url?
@@ -631,7 +733,7 @@ namespace MvcSiteMapProvider.Web
         /// <remarks>See http://www.west-wind.com/Weblog/posts/154812.aspx for more information.</remarks>
         /// <param name="serverUrl">The server URL.</param>
         /// <returns>Fully qualified absolute server url.</returns>
-        [Obsolete(@"Use the ResolveUrl(string, string) overload instead. Example: ResolveUrl(""\some-url\"", Uri.UriSchemeHttp). This method will be removed in version 5.")]
+        [Obsolete(@"Use MakeUrlAbsolute(string) instead. Example: This method will be removed in version 5.")]
         public string ResolveServerUrl(string serverUrl)
         {
             return ResolveServerUrl(serverUrl, false);

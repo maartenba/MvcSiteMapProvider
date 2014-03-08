@@ -35,7 +35,6 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         protected ISiteMapNode root;
         protected ISiteMapNode currentNode;
 
-
         #region ISiteMap Members
 
         public bool IsReadOnly
@@ -391,6 +390,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             get { throw new NotImplementedException(); }
         }
 
+        public string CombineUrl(params string[] uriParts)
+        {
+            throw new NotImplementedException();
+        }
+
         public string Combine(string basepath, string relative)
         {
             throw new NotImplementedException();
@@ -483,6 +487,11 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public string MakeUrlAbsolute(string url)
+        {
+            throw new NotImplementedException();
+        }
+
         public string MakeUrlAbsolute(string url, string baseUrl)
         {
             throw new NotImplementedException();
@@ -509,6 +518,26 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
         }
 
         public string ResolveUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveContentUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveContentUrl(string url, string protocol)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveContentUrl(string url, string protocol, string hostName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ResolveContentUrl(string url, string protocol, string hostName, HttpContextBase httpContext)
         {
             throw new NotImplementedException();
         }
