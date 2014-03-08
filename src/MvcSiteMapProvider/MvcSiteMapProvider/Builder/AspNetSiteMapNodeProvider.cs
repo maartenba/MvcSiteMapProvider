@@ -122,6 +122,8 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.VisibilityProvider = node.GetAttributeValue("visibilityProvider");
             siteMapNode.DynamicNodeProvider = node.GetAttributeValue("dynamicNodeProvider");
             siteMapNode.ImageUrl = node.GetAttributeValue("imageUrl");
+            siteMapNode.ImageUrlProtocol = node.GetAttributeValue("imageUrlProtocol");
+            siteMapNode.ImageUrlHostName = node.GetAttributeValue("imageUrlHostName");
             siteMapNode.TargetFrame = node.GetAttributeValue("targetFrame");
             siteMapNode.HttpMethod = node.GetAttributeValueOrFallback("httpMethod", "*").ToUpperInvariant();
             siteMapNode.Url = node.Url;
@@ -129,8 +131,10 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.IncludeAmbientRequestValues = bool.Parse(node.GetAttributeValueOrFallback("includeAmbientRequestValues", "false"));
             siteMapNode.Protocol = node.GetAttributeValue("protocol");
             siteMapNode.HostName = node.GetAttributeValue("hostName");
-            siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
             siteMapNode.CanonicalKey = node.GetAttributeValue("canonicalKey");
+            siteMapNode.CanonicalUrl = node.GetAttributeValue("canonicalUrl");
+            siteMapNode.CanonicalUrlProtocol = node.GetAttributeValue("canonicalUrlProtocol");
+            siteMapNode.CanonicalUrlHostName = node.GetAttributeValue("canonicalUrlHostName");
             siteMapNode.MetaRobotsValues.AddRange(node.GetAttributeValue("metaRobotsValues"), new[] { ' ' });
             siteMapNode.ChangeFrequency = (ChangeFrequency)Enum.Parse(typeof(ChangeFrequency), node.GetAttributeValueOrFallback("changeFrequency", "Undefined"));
             siteMapNode.UpdatePriority = (UpdatePriority)Enum.Parse(typeof(UpdatePriority), node.GetAttributeValueOrFallback("updatePriority", "Undefined"));

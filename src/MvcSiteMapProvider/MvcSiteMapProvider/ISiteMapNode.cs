@@ -38,6 +38,8 @@ namespace MvcSiteMapProvider
         string Description { get; set; }
         string TargetFrame { get; set; }
         string ImageUrl { get; set; }
+        string ImageUrlProtocol { get; set; }
+        string ImageUrlHostName { get; set; }
         IAttributeDictionary Attributes { get; }
         IRoleCollection Roles { get; }
 
@@ -65,8 +67,10 @@ namespace MvcSiteMapProvider
         bool HasAbsoluteUrl();
         bool HasExternalUrl(HttpContextBase httpContext);
 
-        string CanonicalUrl { get; set; }
         string CanonicalKey { get; set; }
+        string CanonicalUrl { get; set; }
+        string CanonicalUrlProtocol { get; set; }
+        string CanonicalUrlHostName { get; set; }
 
         IMetaRobotsValueCollection MetaRobotsValues { get; }
         string GetMetaRobotsContentString();

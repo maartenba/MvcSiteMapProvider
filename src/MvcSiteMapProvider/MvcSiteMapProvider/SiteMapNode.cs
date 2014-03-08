@@ -189,9 +189,26 @@ namespace MvcSiteMapProvider
         /// <remarks>The image URL can be localized using a resource provider.</remarks>
         public override string ImageUrl 
         {
-            get { return localizationService.GetResourceString("imageUrl", this.imageUrl, this.SiteMap); }
+            get 
+            { 
+                var imageUrl = localizationService.GetResourceString("imageUrl", this.imageUrl, this.SiteMap);
+                return this.urlPath.ResolveContentUrl(imageUrl, this.ImageUrlProtocol, this.ImageUrlHostName);
+            }
             set { this.imageUrl = localizationService.ExtractExplicitResourceKey("imageUrl", value); }
         }
+
+        /// <summary>
+        /// Gets or sets the image URL protocol, such as http, https (optional).
+        /// If not provided, it will default to the protocol of the current request.
+        /// </summary>
+        /// <value>The protocol of the image URL.</value>
+        public override string ImageUrlProtocol { get; set; }
+
+        /// <summary>
+        /// Gets or sets the image URL host name, such as www.somewhere.com (optional).
+        /// </summary>
+        /// <value>The protocol of the image URL.</value>
+        public override string ImageUrlHostName { get; set; }
 
         /// <summary>
         /// Gets the attributes (optional).
@@ -445,6 +462,26 @@ namespace MvcSiteMapProvider
         #region Canonical Tag
 
         /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjunction with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
+        public override string CanonicalKey
+        {
+            get { return this.canonicalKey; }
+            set
+            {
+                if (!this.canonicalKey.Equals(value))
+                {
+                    if (!string.IsNullOrEmpty(this.canonicalUrl))
+                    {
+                        throw new ArgumentException(string.Format(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey"), "CanonicalKey");
+                    }
+                    this.canonicalKey = value;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
         /// <remarks>May not be used in conjunction with CanonicalKey. Only 1 canonical value is allowed.</remarks>
@@ -477,24 +514,16 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
+        /// Gets or sets the canonical URL protocol, such as http, https (optional).
         /// </summary>
-        /// <remarks>May not be used in conjunction with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
-        public override string CanonicalKey 
-        {
-            get { return this.canonicalKey; }
-            set
-            {
-                if (!this.canonicalKey.Equals(value))
-                {
-                    if (!string.IsNullOrEmpty(this.canonicalUrl))
-                    {
-                        throw new ArgumentException(string.Format(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey"), "CanonicalKey");
-                    }
-                    this.canonicalKey = value;
-                }
-            }
-        }
+        /// <value>The protocol of the image URL.</value>
+        public override string CanonicalUrlProtocol { get; set; }
+
+        /// <summary>
+        /// Gets or sets the canonical URL host name, such as www.somewhere.com (optional).
+        /// </summary>
+        /// <value>The protocol of the image URL.</value>
+        public override string CanonicalUrlHostName { get; set; }
 
         /// <summary>
         /// Gets the absolute value of the canonical URL, finding the value by 
@@ -506,7 +535,9 @@ namespace MvcSiteMapProvider
             var url = this.canonicalUrl;
             if (!string.IsNullOrEmpty(url))
             {
-                return this.urlPath.ResolveUrl(url, Uri.UriSchemeHttp);
+                // Use HTTP if not provided to force an absolute URL to be built.
+                var protocol = string.IsNullOrEmpty(this.CanonicalUrlProtocol) ? Uri.UriSchemeHttp : this.CanonicalUrlProtocol;
+                return this.urlPath.ResolveUrl(url, protocol, this.CanonicalUrlHostName);
             }
             var key = this.canonicalKey;
             if (!string.IsNullOrEmpty(key))
@@ -514,7 +545,9 @@ namespace MvcSiteMapProvider
                 var node = this.SiteMap.FindSiteMapNodeFromKey(key);
                 if (node != null)
                 {
-                    return this.urlPath.ResolveUrl(node.Url, Uri.UriSchemeHttp);
+                    // Use HTTP if not provided to force an absolute URL to be built.
+                    var protocol = string.IsNullOrEmpty(node.Protocol) ? Uri.UriSchemeHttp : node.Protocol;
+                    return this.urlPath.ResolveUrl(node.Url, protocol, node.HostName);
                 }
             }
             return string.Empty;
@@ -531,7 +564,7 @@ namespace MvcSiteMapProvider
         public override IMetaRobotsValueCollection MetaRobotsValues { get { return this.metaRobotsValues; } }
 
         /// <summary>
-        /// Gets a string containing the preformatted comma delimited list of values that can be inserted into the
+        /// Gets a string containing the pre-formatted comma delimited list of values that can be inserted into the
         /// content attribute of the meta robots tag.
         /// </summary>
         public override string GetMetaRobotsContentString()
@@ -724,6 +757,8 @@ namespace MvcSiteMapProvider
             node.Description = this.description; // Get protected member
             node.TargetFrame = this.TargetFrame;
             node.ImageUrl = this.ImageUrl;
+            node.ImageUrlProtocol = this.ImageUrlProtocol;
+            node.ImageUrlHostName = this.ImageUrlHostName;
             this.Attributes.CopyTo(node.Attributes);
             this.Roles.CopyTo(node.Roles);
             node.LastModifiedDate = this.LastModifiedDate;
@@ -737,8 +772,10 @@ namespace MvcSiteMapProvider
             node.IncludeAmbientRequestValues = this.IncludeAmbientRequestValues;
             node.Protocol = this.Protocol;
             node.HostName = this.HostName;
-            node.CanonicalUrl = this.canonicalUrl; // Get protected member
             node.CanonicalKey = this.CanonicalKey;
+            node.CanonicalUrl = this.canonicalUrl; // Get protected member
+            node.CanonicalUrlProtocol = this.CanonicalUrlProtocol;
+            node.CanonicalUrlHostName = this.CanonicalUrlHostName;
             this.MetaRobotsValues.CopyTo(node.MetaRobotsValues);
             node.DynamicNodeProvider = this.DynamicNodeProvider;
             node.Route = this.Route;

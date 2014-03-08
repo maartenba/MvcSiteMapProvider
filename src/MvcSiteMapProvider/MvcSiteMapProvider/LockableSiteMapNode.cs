@@ -121,6 +121,35 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
+        /// Gets or sets the image URL protocol, such as http, https (optional).
+        /// If not provided, it will default to the protocol of the current request.
+        /// </summary>
+        /// <value>The protocol of the image URL.</value>
+        public override string ImageUrlProtocol 
+        {
+            get { return base.ImageUrlProtocol; }
+            set
+            {
+                this.ThrowIfReadOnly("ImageUrlProtocol");
+                base.ImageUrlProtocol = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the image URL host name, such as www.somewhere.com (optional).
+        /// </summary>
+        /// <value>The protocol of the image URL.</value>
+        public override string ImageUrlHostName 
+        {
+            get { return base.ImageUrlHostName; }
+            set
+            {
+                this.ThrowIfReadOnly("ImageUrlHostName");
+                base.ImageUrlHostName = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the last modified date.
         /// </summary>
         /// <value>The last modified date.</value>
@@ -327,9 +356,23 @@ namespace MvcSiteMapProvider
         #region Canonical Tag
 
         /// <summary>
+        /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
+        /// </summary>
+        /// <remarks>May not be used in conjunction with CanonicalUrl; only 1 canonical value is allowed.</remarks>
+        public override string CanonicalKey
+        {
+            get { return base.CanonicalKey; }
+            set
+            {
+                this.ThrowIfReadOnly("CanonicalKey");
+                base.CanonicalKey = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the canonical URL.
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalKey. Only 1 canonical value is allowed.</remarks>
+        /// <remarks>May not be used in conjunction with CanonicalKey; only 1 canonical value is allowed.</remarks>
         public override string CanonicalUrl
         {
             get { return base.CanonicalUrl; }
@@ -341,19 +384,32 @@ namespace MvcSiteMapProvider
         }
 
         /// <summary>
-        /// Gets or sets the canonical key. The key is used to reference another <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> to get the canonical URL.
+        /// Gets or sets the canonical URL protocol, such as http, https (optional).
         /// </summary>
-        /// <remarks>May not be used in conjuntion with CanonicalUrl. Only 1 canonical value is allowed.</remarks>
-        public override string CanonicalKey
+        /// <value>The protocol of the image URL.</value>
+        public override string CanonicalUrlProtocol 
         {
-            get { return base.CanonicalKey; }
+            get { return base.CanonicalUrlProtocol; }
             set
             {
-                this.ThrowIfReadOnly("CanonicalKey");
-                base.CanonicalKey = value;
+                this.ThrowIfReadOnly("CanonicalUrlProtocol");
+                base.CanonicalUrlProtocol = value;
             }
         }
 
+        /// <summary>
+        /// Gets or sets the canonical URL host name, such as www.somewhere.com (optional).
+        /// </summary>
+        /// <value>The protocol of the image URL.</value>
+        public override string CanonicalUrlHostName 
+        {
+            get { return base.CanonicalUrlHostName; }
+            set
+            {
+                this.ThrowIfReadOnly("CanonicalUrlHostName");
+                base.CanonicalUrlHostName = value;
+            }
+        }
 
         #endregion
 

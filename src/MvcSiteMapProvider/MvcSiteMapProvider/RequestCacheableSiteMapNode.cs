@@ -77,6 +77,18 @@ namespace MvcSiteMapProvider
             set { this.SetCachedOrMemberValue<string>(x => base.ImageUrl = x, "ImageUrl", value); }
         }
 
+        public override string ImageUrlProtocol
+        {
+            get { return this.GetCachedOrMemberValue<string>(() => base.ImageUrlProtocol, "ImageUrlProtocol", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.ImageUrlProtocol = x, "ImageUrlProtocol", value); }
+        }
+
+        public override string ImageUrlHostName
+        {
+            get { return this.GetCachedOrMemberValue<string>(() => base.ImageUrlHostName, "ImageUrlHostName", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.ImageUrlHostName = x, "ImageUrlHostName", value); }
+        }
+
         public override string VisibilityProvider
         {
             get { return this.GetCachedOrMemberValue<string>(() => base.VisibilityProvider, "VisibilityProvider", false); }
@@ -119,14 +131,16 @@ namespace MvcSiteMapProvider
             set { this.SetCachedOrMemberValue<string>(x => base.Protocol = x, "Protocol", value); }
         }
 
-        /// <summary>
-        /// Gets or sets the host name that will be built into the URL.
-        /// </summary>
-        /// <value>The host name.</value>
         public override string HostName
         {
             get { return this.GetCachedOrMemberValue<string>(() => base.HostName, "HostName", false); }
             set { this.SetCachedOrMemberValue<string>(x => base.HostName = x, "HostName", value); }
+        }
+
+        public override string CanonicalKey
+        {
+            get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalKey, "CanonicalKey", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.CanonicalKey = x, "CanonicalKey", value); }
         }
 
         public override string CanonicalUrl
@@ -135,10 +149,16 @@ namespace MvcSiteMapProvider
             set { this.SetCachedOrMemberValue<string>(x => base.CanonicalUrl = x, "CanonicalUrl", value); }
         }
 
-        public override string CanonicalKey
+        public override string CanonicalUrlProtocol
         {
-            get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalKey, "CanonicalKey", false); }
-            set { this.SetCachedOrMemberValue<string>(x => base.CanonicalKey = x, "CanonicalKey", value); }
+            get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalUrlProtocol, "CanonicalUrlProtocol", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.CanonicalUrlProtocol = x, "CanonicalUrlProtocol", value); }
+        }
+
+        public override string CanonicalUrlHostName
+        {
+            get { return this.GetCachedOrMemberValue<string>(() => base.CanonicalUrlHostName, "CanonicalUrlHostName", false); }
+            set { this.SetCachedOrMemberValue<string>(x => base.CanonicalUrlHostName = x, "CanonicalUrlHostName", value); }
         }
 
         public override string Route

@@ -447,6 +447,8 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.VisibilityProvider = attribute.VisibilityProvider;
             siteMapNode.DynamicNodeProvider = attribute.DynamicNodeProvider;
             siteMapNode.ImageUrl = attribute.ImageUrl;
+            siteMapNode.ImageUrlProtocol = attribute.ImageUrlProtocol;
+            siteMapNode.ImageUrlHostName = attribute.ImageUrlHostName;
             siteMapNode.TargetFrame = attribute.TargetFrame;
             siteMapNode.HttpMethod = httpMethod;
             if (!string.IsNullOrEmpty(attribute.Url)) siteMapNode.Url = attribute.Url;
@@ -454,8 +456,10 @@ namespace MvcSiteMapProvider.Builder
             siteMapNode.IncludeAmbientRequestValues = attribute.IncludeAmbientRequestValues;
             siteMapNode.Protocol = attribute.Protocol;
             siteMapNode.HostName = attribute.HostName;
-            siteMapNode.CanonicalUrl = attribute.CanonicalUrl;
             siteMapNode.CanonicalKey = attribute.CanonicalKey;
+            siteMapNode.CanonicalUrl = attribute.CanonicalUrl;
+            siteMapNode.CanonicalUrlProtocol = attribute.CanonicalUrlProtocol;
+            siteMapNode.CanonicalUrlHostName = attribute.CanonicalUrlHostName;
             siteMapNode.MetaRobotsValues.AddRange(attribute.MetaRobotsValues);
             siteMapNode.LastModifiedDate = string.IsNullOrEmpty(attribute.LastModifiedDate) ? DateTime.MinValue : DateTime.Parse(attribute.LastModifiedDate, CultureInfo.InvariantCulture);
             siteMapNode.ChangeFrequency = attribute.ChangeFrequency;

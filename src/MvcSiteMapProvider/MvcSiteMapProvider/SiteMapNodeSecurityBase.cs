@@ -52,6 +52,8 @@ namespace MvcSiteMapProvider
         public abstract string Description { get; set; }
         public abstract string TargetFrame { get; set; }
         public abstract string ImageUrl { get; set; }
+        public abstract string ImageUrlProtocol { get; set; }
+        public abstract string ImageUrlHostName { get; set; }
         public abstract IAttributeDictionary Attributes { get; }
         public abstract IRoleCollection Roles { get; }
         public abstract DateTime LastModifiedDate { get; set; }
@@ -74,8 +76,10 @@ namespace MvcSiteMapProvider
         public abstract string HostName { get; set; }
         public abstract bool HasAbsoluteUrl();
         public abstract bool HasExternalUrl(HttpContextBase httpContext);
-        public abstract string CanonicalUrl { get; set; }
         public abstract string CanonicalKey { get; set; }
+        public abstract string CanonicalUrl { get; set; }
+        public abstract string CanonicalUrlProtocol { get; set; }
+        public abstract string CanonicalUrlHostName { get; set; }
         public abstract IMetaRobotsValueCollection MetaRobotsValues { get; }
         public abstract string GetMetaRobotsContentString();
         public abstract bool HasNoIndexAndNoFollow { get; }

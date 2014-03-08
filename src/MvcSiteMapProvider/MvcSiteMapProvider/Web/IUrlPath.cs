@@ -179,12 +179,12 @@ namespace MvcSiteMapProvider.Web
         /// <returns>The resolved URL.</returns>
         string ResolveContentUrl(string url, string protocol, string hostName, HttpContextBase httpContext);
 
-
         /// <summary>
         /// Gets the public facing URL for the given incoming HTTP request.
         /// </summary>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The URI that the outside world used to create this request.</returns>
+        /// <remarks>Source: http://stackoverflow.com/questions/7795910/how-do-i-get-url-action-to-use-the-right-port-number#11888846 </remarks>
         Uri GetPublicFacingUrl(HttpContextBase httpContext);
 
         [Obsolete(@"Use MakeUrlAbsolute(string) instead. Example: This method will be removed in version 5.")]

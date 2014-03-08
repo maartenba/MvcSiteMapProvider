@@ -624,6 +624,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The URI that the outside world used to create this request.</returns>
+        /// <remarks>Source: http://stackoverflow.com/questions/7795910/how-do-i-get-url-action-to-use-the-right-port-number#11888846 </remarks>
         public Uri GetPublicFacingUrl(HttpContextBase httpContext)
         {
             var serverVariables = httpContext.Request.ServerVariables;
@@ -638,7 +639,6 @@ namespace MvcSiteMapProvider.Web
             // the public URL:
             if (serverVariables["HTTP_HOST"] != null)
             {
-                //ErrorUtilities.VerifySupported(request.Url.Scheme == Uri.UriSchemeHttps || request.Url.Scheme == Uri.UriSchemeHttp, "Only HTTP and HTTPS are supported protocols.");
                 string scheme = serverVariables["HTTP_X_FORWARDED_PROTO"] ?? request.Url.Scheme;
                 Uri hostAndPort = new Uri(scheme + Uri.SchemeDelimiter + serverVariables["HTTP_HOST"]);
                 UriBuilder publicRequestUri = new UriBuilder(request.Url);

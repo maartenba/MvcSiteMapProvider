@@ -180,6 +180,10 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 
         public string ImageUrl { get; set; }
 
+        public string ImageUrlProtocol { get; set; }
+
+        public string ImageUrlHostName { get; set; }
+
         public IAttributeDictionary Attributes
         {
             get { return this.attributes; }
@@ -264,9 +268,13 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public string CanonicalKey { get; set; }
+
         public string CanonicalUrl { get; set; }
 
-        public string CanonicalKey { get; set; }
+        public string CanonicalUrlProtocol { get; set; }
+
+        public string CanonicalUrlHostName { get; set; }
 
         public IMetaRobotsValueCollection MetaRobotsValues
         {
