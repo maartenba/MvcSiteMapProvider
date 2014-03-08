@@ -57,13 +57,13 @@ namespace MvcSiteMapProvider
             this.childNodeCollectionTable = siteMapChildStateFactory.CreateChildNodeCollectionDictionary();
             this.keyTable = siteMapChildStateFactory.CreateKeyDictionary();
             this.parentNodeTable = siteMapChildStateFactory.CreateParentNodeDictionary();
-            //this.urlTable = siteMapChildStateFactory.CreateUrlDictionary();
-
-            // TODO: Update the child state factory to return the correct type and load
-            // up the factory correctly.
-            this.urlTable = new Dictionary<IUrlKey, ISiteMapNode>();
-            this.urlKeyFactory = new UrlKeyFactory(this.urlPath);
+            this.urlTable = siteMapChildStateFactory.CreateUrlDictionary();
         }
+
+        // TODO: In version 5, we should refactor this into separate services that each manage a single dictionary
+        // and hide those services behind a facade service so there isn't so many responsibilities in this class.
+        // This will help the process of eliminating child state factory and plugin provider which only serve to 
+        // reduce the number of dependencies in this class, but technically are providing unrelated services.
 
         // Services
         protected readonly ISiteMapPluginProvider pluginProvider;
@@ -71,7 +71,6 @@ namespace MvcSiteMapProvider
         protected readonly ISiteMapChildStateFactory siteMapChildStateFactory;
         protected readonly IUrlPath urlPath;
         private readonly ISiteMapSettings siteMapSettings;
-        protected readonly IUrlKeyFactory urlKeyFactory;
       
         // Child collections
         protected readonly IDictionary<ISiteMapNode, ISiteMapNodeCollection> childNodeCollectionTable;
@@ -141,7 +140,7 @@ namespace MvcSiteMapProvider
                 // property or provided by a custom URL resolver.
                 if (!isMvcUrl && node.Clickable)
                 {
-                    url = this.urlKeyFactory.Create(node);
+                    url = this.siteMapChildStateFactory.CreateUrlKey(node);
 
                     // Check for duplicates (including matching or empty host names).
                     if (this.urlTable
@@ -208,7 +207,7 @@ namespace MvcSiteMapProvider
                 }
 
                 // Remove the URL
-                var url = this.urlKeyFactory.Create(node);
+                var url = this.siteMapChildStateFactory.CreateUrlKey(node);
                 if (this.urlTable.ContainsKey(url))
                 {
                     this.urlTable.Remove(url);
@@ -685,20 +684,20 @@ namespace MvcSiteMapProvider
             ISiteMapNode node = null;
 
             // Try absolute match with querystring
-            var absoluteMatch = this.urlKeyFactory.Create(relativeUrl, hostName);
+            var absoluteMatch = this.siteMapChildStateFactory.CreateUrlKey(relativeUrl, hostName);
             node = this.FindSiteMapNodeFromUrlMatch(absoluteMatch);
 
             // Try absolute match without querystring
             if (node == null && !string.IsNullOrEmpty(relativePath))
             {
-                var absoluteMatchWithoutQueryString = this.urlKeyFactory.Create(relativePath, hostName);
+                var absoluteMatchWithoutQueryString = this.siteMapChildStateFactory.CreateUrlKey(relativePath, hostName);
                 node = this.FindSiteMapNodeFromUrlMatch(absoluteMatchWithoutQueryString);
             }
 
             // Try relative match
             if (node == null)
             {
-                var relativeMatch = this.urlKeyFactory.Create(relativeUrl, string.Empty);
+                var relativeMatch = this.siteMapChildStateFactory.CreateUrlKey(relativeUrl, string.Empty);
                 node = this.FindSiteMapNodeFromUrlMatch(relativeMatch);
             }
 
@@ -719,7 +718,7 @@ namespace MvcSiteMapProvider
             // Try relative match without querystring
             if (node == null && !string.IsNullOrEmpty(relativePath))
             {
-                var relativeMatchWithoutQueryString = this.urlKeyFactory.Create(relativePath, string.Empty);
+                var relativeMatchWithoutQueryString = this.siteMapChildStateFactory.CreateUrlKey(relativePath, string.Empty);
                 node = this.FindSiteMapNodeFromUrlMatch(relativeMatchWithoutQueryString);
             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Matching;
 
 namespace MvcSiteMapProvider
 {
@@ -14,20 +15,25 @@ namespace MvcSiteMapProvider
     {
         public SiteMapChildStateFactory(
             IGenericDictionaryFactory genericDictionaryFactory,
-            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory
+            ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory,
+            IUrlKeyFactory urlKeyFactory
             )
         {
             if (genericDictionaryFactory == null)
                 throw new ArgumentNullException("genericDictionaryFactory");
             if (siteMapNodeCollectionFactory == null)
                 throw new ArgumentNullException("siteMapNodeCollectionFactory");
+            if (urlKeyFactory == null)
+                throw new ArgumentNullException("urlKeyFactory");
 
             this.genericDictionaryFactory = genericDictionaryFactory;
             this.siteMapNodeCollectionFactory = siteMapNodeCollectionFactory;
+            this.urlKeyFactory = urlKeyFactory;
         }
 
         protected readonly IGenericDictionaryFactory genericDictionaryFactory;
         protected readonly ISiteMapNodeCollectionFactory siteMapNodeCollectionFactory;
+        protected readonly IUrlKeyFactory urlKeyFactory;
 
         #region ISiteMapChildStateFactory Members
 
@@ -46,9 +52,19 @@ namespace MvcSiteMapProvider
             return genericDictionaryFactory.Create<ISiteMapNode, ISiteMapNode>();
         }
 
-        public virtual IDictionary<string, ISiteMapNode> CreateUrlDictionary()
+        public virtual IDictionary<IUrlKey, ISiteMapNode> CreateUrlDictionary()
         {
-            return genericDictionaryFactory.Create<string, ISiteMapNode>(StringComparer.OrdinalIgnoreCase);
+            return genericDictionaryFactory.Create<IUrlKey, ISiteMapNode>();
+        }
+
+        public virtual IUrlKey CreateUrlKey(ISiteMapNode node)
+        {
+            return this.urlKeyFactory.Create(node);
+        }
+
+        public virtual IUrlKey CreateUrlKey(string relativeOrAbsoluteUrl, string hostName)
+        {
+            return this.urlKeyFactory.Create(relativeOrAbsoluteUrl, hostName);
         }
 
         public virtual ISiteMapNodeCollection CreateSiteMapNodeCollection()

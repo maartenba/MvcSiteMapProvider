@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Matching;
 
 namespace MvcSiteMapProvider
 {
@@ -13,7 +14,9 @@ namespace MvcSiteMapProvider
         IDictionary<ISiteMapNode, ISiteMapNodeCollection> CreateChildNodeCollectionDictionary();
         IDictionary<string, ISiteMapNode> CreateKeyDictionary();
         IDictionary<ISiteMapNode, ISiteMapNode> CreateParentNodeDictionary();
-        IDictionary<string, ISiteMapNode> CreateUrlDictionary();
+        IDictionary<IUrlKey, ISiteMapNode> CreateUrlDictionary();
+        IUrlKey CreateUrlKey(ISiteMapNode node);
+        IUrlKey CreateUrlKey(string relativeOrAbsoluteUrl, string hostName);
         ISiteMapNodeCollection CreateSiteMapNodeCollection();
         ISiteMapNodeCollection CreateLockableSiteMapNodeCollection(ISiteMap siteMap);
         ISiteMapNodeCollection CreateReadOnlySiteMapNodeCollection(ISiteMapNodeCollection siteMapNodeCollection);

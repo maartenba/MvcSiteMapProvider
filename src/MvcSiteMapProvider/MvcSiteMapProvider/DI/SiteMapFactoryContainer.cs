@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
+using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Collections;
+using MvcSiteMapProvider.Collections.Specialized;
+using MvcSiteMapProvider.Matching;
+using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Mvc.Filters;
 using MvcSiteMapProvider.Web.Compilation;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Security;
-using MvcSiteMapProvider.Reflection;
-using MvcSiteMapProvider.Collections;
-using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.DI
 {
@@ -28,12 +26,14 @@ namespace MvcSiteMapProvider.DI
             this.mvcContextFactory = mvcContextFactory;
             this.requestCache = this.mvcContextFactory.GetRequestCache();
             this.urlPath = urlPath;
+            this.urlKeyFactory = new UrlKeyFactory(this.urlPath);
         }
 
         private readonly ConfigurationSettings settings;
         private readonly IMvcContextFactory mvcContextFactory;
         private readonly IRequestCache requestCache;
         private readonly IUrlPath urlPath;
+        private readonly IUrlKeyFactory urlKeyFactory;
 
         public ISiteMapFactory ResolveSiteMapFactory()
         {
@@ -74,7 +74,8 @@ namespace MvcSiteMapProvider.DI
         {
             return new SiteMapChildStateFactory(
                 new GenericDictionaryFactory(),
-                new SiteMapNodeCollectionFactory()
+                new SiteMapNodeCollectionFactory(),
+                this.urlKeyFactory
                 );
         }
 
