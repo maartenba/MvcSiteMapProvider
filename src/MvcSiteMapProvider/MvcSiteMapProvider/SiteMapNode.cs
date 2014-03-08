@@ -90,6 +90,11 @@ namespace MvcSiteMapProvider
         protected string canonicalKey = string.Empty;
 
         /// <summary>
+        /// Gets the current HTTP context.
+        /// </summary>
+        protected virtual HttpContextBase HttpContext { get { return this.mvcContextFactory.CreateHttpContext(); } }
+
+        /// <summary>
         /// Gets the key.
         /// </summary>
         /// <value>The key.</value>
@@ -450,8 +455,7 @@ namespace MvcSiteMapProvider
                 var absoluteCanonicalUrl = this.GetAbsoluteCanonicalUrl();
                 if (!string.IsNullOrEmpty(absoluteCanonicalUrl))
                 {
-                    var httpContext = this.mvcContextFactory.CreateHttpContext();
-                    var publicFacingUrl = this.urlPath.GetPublicFacingUrl(httpContext);
+                    var publicFacingUrl = this.urlPath.GetPublicFacingUrl(this.HttpContext);
                     if (absoluteCanonicalUrl.Equals(this.urlPath.UrlDecode(publicFacingUrl.AbsoluteUri)))
                     {
                         return string.Empty;
@@ -589,7 +593,7 @@ namespace MvcSiteMapProvider
         {
             if (this.PreservedRouteParameters.Count > 0)
             {
-                var requestContext = mvcContextFactory.CreateRequestContext();
+                var requestContext = this.mvcContextFactory.CreateRequestContext();
                 var routeDataValues = requestContext.RouteData.Values;
                 var queryStringValues = requestContext.HttpContext.Request.QueryString;
 
@@ -662,8 +666,7 @@ namespace MvcSiteMapProvider
 
             if (!string.IsNullOrEmpty(this.HostName))
             {
-                var httpContext = this.mvcContextFactory.CreateHttpContext();
-                if (!this.urlPath.IsPublicHostName(this.HostName, httpContext))
+                if (!this.urlPath.IsPublicHostName(this.HostName, this.HttpContext))
                 {
                     return false;
                 }
