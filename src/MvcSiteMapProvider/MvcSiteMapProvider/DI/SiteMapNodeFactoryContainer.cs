@@ -151,7 +151,7 @@ namespace MvcSiteMapProvider.DI
             }
 
             // Fixes #196, default instance not created.
-            if (!String.IsNullOrEmpty(defaultVisibilityProviderName) && !typeNames.Contains(defaultVisibilityProviderName))
+            if (!string.IsNullOrEmpty(defaultVisibilityProviderName) && !typeNames.Contains(defaultVisibilityProviderName))
             {
                 typeNames.Add(defaultVisibilityProviderName);
             }
@@ -168,7 +168,7 @@ namespace MvcSiteMapProvider.DI
                 var assemblies = assemblyProvider.GetAssemblies();
                 var definitions = mvcSiteMapNodeAttributeProvider.GetMvcSiteMapNodeAttributeDefinitions(assemblies);
                 result.AddRange(definitions
-                    .Where(x => !String.IsNullOrEmpty(x.SiteMapNodeAttribute.DynamicNodeProvider))
+                    .Where(x => !string.IsNullOrEmpty(x.SiteMapNodeAttribute.DynamicNodeProvider))
                     .Select(x => x.SiteMapNodeAttribute.DynamicNodeProvider)
                     );
             }
@@ -183,7 +183,7 @@ namespace MvcSiteMapProvider.DI
                 var assemblies = assemblyProvider.GetAssemblies();
                 var definitions = mvcSiteMapNodeAttributeProvider.GetMvcSiteMapNodeAttributeDefinitions(assemblies);
                 result.AddRange(definitions
-                    .Where(x => !String.IsNullOrEmpty(x.SiteMapNodeAttribute.UrlResolver))
+                    .Where(x => !string.IsNullOrEmpty(x.SiteMapNodeAttribute.UrlResolver))
                     .Select(x => x.SiteMapNodeAttribute.UrlResolver)
                     );
             }
@@ -198,7 +198,7 @@ namespace MvcSiteMapProvider.DI
                 var assemblies = assemblyProvider.GetAssemblies();
                 var definitions = mvcSiteMapNodeAttributeProvider.GetMvcSiteMapNodeAttributeDefinitions(assemblies);
                 result.AddRange(definitions
-                    .Where(x => !String.IsNullOrEmpty(x.SiteMapNodeAttribute.VisibilityProvider))
+                    .Where(x => !string.IsNullOrEmpty(x.SiteMapNodeAttribute.VisibilityProvider))
                     .Select(x => x.SiteMapNodeAttribute.VisibilityProvider)
                     );
             }

@@ -60,7 +60,7 @@ namespace MvcSiteMapProvider.Builder
             else
             {
                 // Throw exception because XML was not defined
-                throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderXmlNotDefined, helper.SiteMapCacheKey));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.XmlSiteMapNodeProviderXmlNotDefined, helper.SiteMapCacheKey));
             }
 
             return result;
@@ -78,7 +78,7 @@ namespace MvcSiteMapProvider.Builder
             if (rootElement == null)
             {
                 // No root element - inform the user this isn't allowed.
-                throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderRootNodeNotDefined, helper.SiteMapCacheKey));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.XmlSiteMapNodeProviderRootNodeNotDefined, helper.SiteMapCacheKey));
             }
             // Add the root node
             var rootNode = GetRootNode(xml, rootElement, helper);
@@ -123,7 +123,7 @@ namespace MvcSiteMapProvider.Builder
                 if (node.Name != xmlNameProvider.NodeName)
                 {
                     // If the current node is not one of the known node types throw and exception
-                    throw new MvcSiteMapException(String.Format(Resources.Messages.XmlSiteMapNodeProviderInvalidSiteMapElement, helper.SiteMapCacheKey));
+                    throw new MvcSiteMapException(string.Format(Resources.Messages.XmlSiteMapNodeProviderInvalidSiteMapElement, helper.SiteMapCacheKey));
                 }
 
                 var child = GetSiteMapNodeFromXmlElement(node, parentNode, helper);

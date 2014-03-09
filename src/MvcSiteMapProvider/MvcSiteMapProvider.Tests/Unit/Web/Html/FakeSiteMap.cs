@@ -78,7 +78,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             string key = node.Key;
             if (this.keyTable.ContainsKey(key))
             {
-                throw new InvalidOperationException(String.Format("Multiple nodes with identical key: {0}", key));
+                throw new InvalidOperationException(string.Format("Multiple nodes with identical key: {0}", key));
             }
             this.keyTable[key] = node;
             this.urlTable[url] = node;

@@ -74,7 +74,7 @@ namespace MvcSiteMapProvider.Builder
                                          .Contains(parent.ParentKey)
                                  select parent;
 
-                var names = String.Join(Environment.NewLine + Environment.NewLine, mismatched.Select(x => 
+                var names = string.Join(Environment.NewLine + Environment.NewLine, mismatched.Select(x => 
                     string.Format(Resources.Messages.SiteMapNodeFormatWithParentKey, x.ParentKey, x.Node.Controller, 
                     x.Node.Action, x.Node.Area, x.Node.Url, x.Node.Key, x.SourceName)).ToArray());
                 throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapBuilderOrphanedNodes, siteMap.CacheKey, names));
@@ -102,7 +102,7 @@ namespace MvcSiteMapProvider.Builder
 
         protected virtual ISiteMapNode GetRootNode(ISiteMap siteMap, IList<ISiteMapNodeToParentRelation> sourceNodes)
         {
-            var rootNodes = sourceNodes.Where(x => String.IsNullOrEmpty(x.ParentKey) || x.ParentKey.Trim() == String.Empty);
+            var rootNodes = sourceNodes.Where(x => string.IsNullOrEmpty(x.ParentKey) || x.ParentKey.Trim() == string.Empty);
 
             // Check if we have more than one root node defined or no root defined
             if (rootNodes.Count() > 1)

@@ -42,7 +42,7 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual ISiteMap GetSiteMap(string siteMapCacheKey)
         {
-            if (String.IsNullOrEmpty(siteMapCacheKey))
+            if (string.IsNullOrEmpty(siteMapCacheKey))
             {
                 siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
             }
@@ -59,7 +59,7 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual void ReleaseSiteMap(string siteMapCacheKey)
         {
-            if (String.IsNullOrEmpty(siteMapCacheKey))
+            if (string.IsNullOrEmpty(siteMapCacheKey))
             {
                 siteMapCacheKey = siteMapCacheKeyGenerator.GenerateKey();
             }

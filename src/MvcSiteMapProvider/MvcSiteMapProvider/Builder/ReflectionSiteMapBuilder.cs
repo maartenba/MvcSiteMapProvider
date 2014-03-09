@@ -242,7 +242,7 @@ namespace MvcSiteMapProvider.Builder
             }
 
             // Create nodes
-            foreach (var assemblyNode in definitions.Where(t => !String.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)))
+            foreach (var assemblyNode in definitions.Where(t => !string.IsNullOrEmpty(t.SiteMapNodeAttribute.ParentKey)))
             {
                 ISiteMapNode nodeToAdd = null;
 
@@ -362,7 +362,7 @@ namespace MvcSiteMapProvider.Builder
                 throw new ArgumentNullException("type");
             }
 
-            if (!String.IsNullOrEmpty(attribute.SiteMapCacheKey))
+            if (!string.IsNullOrEmpty(attribute.SiteMapCacheKey))
             {
                 // Return null if the attribute doesn't apply to this cache key
                 if (!this.SiteMapCacheKey.Equals(attribute.SiteMapCacheKey))
@@ -391,7 +391,7 @@ namespace MvcSiteMapProvider.Builder
             {
                 area = attribute.AreaName;
             }
-            if (String.IsNullOrEmpty(area) && !String.IsNullOrEmpty(attribute.Area))
+            if (string.IsNullOrEmpty(area) && !string.IsNullOrEmpty(attribute.Area))
             {
                 area = attribute.Area;
             }
@@ -418,7 +418,7 @@ namespace MvcSiteMapProvider.Builder
                 }
             }
 
-            string httpMethod = String.IsNullOrEmpty(attribute.HttpMethod) ? HttpVerbs.Get.ToString().ToUpperInvariant() : attribute.HttpMethod.ToUpperInvariant();
+            string httpMethod = string.IsNullOrEmpty(attribute.HttpMethod) ? HttpVerbs.Get.ToString().ToUpperInvariant() : attribute.HttpMethod.ToUpperInvariant();
 
             // Handle title
             var title = attribute.Title;

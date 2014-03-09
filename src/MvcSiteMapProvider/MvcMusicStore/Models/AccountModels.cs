@@ -44,7 +44,7 @@ namespace MvcMusicStore.Models
 
         public static void ValidateRequiredStringValue(string value, string parameterName)
         {
-            if (String.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
             {
                 throw new ArgumentException(_stringRequiredErrorMessage, parameterName);
             }
@@ -150,7 +150,7 @@ namespace MvcMusicStore.Models
 
         public override string FormatErrorMessage(string name)
         {
-            return String.Format(CultureInfo.CurrentUICulture, ErrorMessageString,
+            return string.Format(CultureInfo.CurrentUICulture, ErrorMessageString,
                 OriginalProperty, ConfirmProperty);
         }
 
@@ -177,7 +177,7 @@ namespace MvcMusicStore.Models
 
         public override string FormatErrorMessage(string name)
         {
-            return String.Format(CultureInfo.CurrentUICulture, ErrorMessageString,
+            return string.Format(CultureInfo.CurrentUICulture, ErrorMessageString,
                 name, _minCharacters);
         }
 

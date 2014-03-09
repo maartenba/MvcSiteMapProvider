@@ -31,7 +31,7 @@ namespace MvcSiteMapProvider.Builder
             var builderSet = siteMapBuilderSets.FirstOrDefault(x => x.AppliesTo(builderSetName));
             if (builderSet == null)
             {
-                throw new MvcSiteMapException(String.Format(Resources.Messages.NamedBuilderSetNotFound, builderSetName));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.NamedBuilderSetNotFound, builderSetName));
             }
             return builderSet;
         }

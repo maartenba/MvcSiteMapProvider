@@ -27,7 +27,7 @@ namespace MvcSiteMapProvider.DI
             this.CacheDuration = int.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_CacheDuration", "5"));
             this.ControllerTypeResolverAreaNamespacesToIgnore = GetConfigurationValueOrFallback("MvcSiteMapProvider_ControllerTypeResolverAreaNamespacesToIgnore", "")
                 .Split(new char[] { '|', ';' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToList();
-            this.DefaultSiteMapNodeVisibiltyProvider = GetConfigurationValueOrFallback("MvcSiteMapProvider_DefaultSiteMapNodeVisibiltyProvider", String.Empty);
+            this.DefaultSiteMapNodeVisibiltyProvider = GetConfigurationValueOrFallback("MvcSiteMapProvider_DefaultSiteMapNodeVisibiltyProvider", string.Empty);
             this.EnableLocalization = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_EnableLocalization", "true"));
             this.SecurityTrimmingEnabled = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_SecurityTrimmingEnabled", "false"));
             this.VisibilityAffectsDescendants = bool.Parse(GetConfigurationValueOrFallback("MvcSiteMapProvider_VisibilityAffectsDescendants", "true"));
@@ -58,7 +58,7 @@ namespace MvcSiteMapProvider.DI
         private string GetConfigurationValueOrFallback(string name, string defaultValue)
         {
             var value = ConfigurationManager.AppSettings[name];
-            if (!String.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(value))
             {
                 return value;
             }

@@ -39,7 +39,7 @@ namespace MvcSiteMapProvider.Xml
                 }
                 catch (Exception ex)
                 {
-                    throw new MvcSiteMapException(String.Format(Resources.Messages.XmlValidationFailed, xmlPath), ex);
+                    throw new MvcSiteMapException(string.Format(Resources.Messages.XmlValidationFailed, xmlPath), ex);
                 }
                 finally
                 {

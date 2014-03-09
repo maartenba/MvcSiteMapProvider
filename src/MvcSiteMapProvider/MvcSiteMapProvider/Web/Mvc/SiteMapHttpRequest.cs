@@ -64,11 +64,11 @@ namespace MvcSiteMapProvider.Web.Mvc
             get
             {
                 bool useRequest = this.node == null || 
-                    String.Equals(this.node.HttpMethod, "*") || 
-                    String.Equals(this.node.HttpMethod, "request", StringComparison.InvariantCultureIgnoreCase);
+                    string.Equals(this.node.HttpMethod, "*") || 
+                    string.Equals(this.node.HttpMethod, "request", StringComparison.InvariantCultureIgnoreCase);
                 if (!useRequest)
                 {
-                    return String.IsNullOrEmpty(this.node.HttpMethod)
+                    return string.IsNullOrEmpty(this.node.HttpMethod)
                         ? HttpVerbs.Get.ToString().ToUpperInvariant()
                         : this.node.HttpMethod.ToUpperInvariant();
                 }

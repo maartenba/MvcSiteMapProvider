@@ -157,7 +157,7 @@ namespace MvcSiteMapProvider
                 string key = node.Key;
                 if (this.keyTable.ContainsKey(key))
                 {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.MultipleNodesWithIdenticalKey, key));
+                    throw new InvalidOperationException(string.Format(Resources.Messages.MultipleNodesWithIdenticalKey, key));
                 }
                 this.keyTable[key] = node;
 
@@ -839,58 +839,58 @@ namespace MvcSiteMapProvider
                 foreach (var key in node.PreservedRouteParameters)
                 {
                     if (node.RouteValues.ContainsKey(key))
-                        throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter, node.Key, node.Title, key));
+                        throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeSameKeyInRouteValueAndPreservedRouteParameter, node.Key, node.Title, key));
                 }
             }
         }
 
         protected virtual void ThrowIfActionAndUrlNotSet(ISiteMapNode node)
         {
-            if (node.Clickable && String.IsNullOrEmpty(node.Action) && String.IsNullOrEmpty(node.UnresolvedUrl))
+            if (node.Clickable && string.IsNullOrEmpty(node.Action) && string.IsNullOrEmpty(node.UnresolvedUrl))
             {
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeActionAndURLNotSet, node.Key, node.Title));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeActionAndURLNotSet, node.Key, node.Title));
             }
         }
 
         protected virtual void ThrowIfTitleNotSet(ISiteMapNode node)
         {
-            if (String.IsNullOrEmpty(node.Title))
+            if (string.IsNullOrEmpty(node.Title))
             {
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeTitleNotSet, node.Key));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeTitleNotSet, node.Key));
             }
         }
 
         protected virtual void ThrowIfHttpMethodInvalid(ISiteMapNode node)
         {
             HttpVerbs verbs;
-            if (String.IsNullOrEmpty(node.HttpMethod) || 
+            if (string.IsNullOrEmpty(node.HttpMethod) || 
                 (!EnumHelper.TryParse<HttpVerbs>(node.HttpMethod, true, out verbs) && 
                 !node.HttpMethod.Equals("*") && 
                 !node.HttpMethod.Equals("Request", StringComparison.InvariantCultureIgnoreCase)))
             {
-                var allowedVerbs = String.Join(Environment.NewLine, Enum.GetNames(typeof(HttpVerbs))) + Environment.NewLine + "Request" + Environment.NewLine + "*";
-                throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeHttpMethodInvalid, node.Key, node.Title, node.HttpMethod, allowedVerbs));
+                var allowedVerbs = string.Join(Environment.NewLine, Enum.GetNames(typeof(HttpVerbs))) + Environment.NewLine + "Request" + Environment.NewLine + "*";
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeHttpMethodInvalid, node.Key, node.Title, node.HttpMethod, allowedVerbs));
             }
         }
 
         protected virtual void ThrowIfControllerNameInvalid(ISiteMapNode node)
         {
-            if (!String.IsNullOrEmpty(node.Controller))
+            if (!string.IsNullOrEmpty(node.Controller))
             {
                 if (!node.Controller.IsValidIdentifier() || node.Controller.EndsWith("Controller"))
                 {
-                    throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeControllerNameInvalid, node.Key, node.Title, node.Controller));
+                    throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeControllerNameInvalid, node.Key, node.Title, node.Controller));
                 }
             }
         }
 
         protected virtual void ThrowIfAreaNameInvalid(ISiteMapNode node)
         {
-            if (!String.IsNullOrEmpty(node.Area))
+            if (!string.IsNullOrEmpty(node.Area))
             {
                 if (!node.Area.IsValidIdentifier())
                 {
-                    throw new MvcSiteMapException(String.Format(Resources.Messages.SiteMapNodeAreaNameInvalid, node.Key, node.Title, node.Area));
+                    throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeAreaNameInvalid, node.Key, node.Title, node.Area));
                 }
             }
         }

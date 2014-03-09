@@ -90,7 +90,7 @@ namespace MvcMusicStore.Controllers
 
                 FormsService.SignIn(model.UserName, model.RememberMe);
 
-                if (!String.IsNullOrEmpty(returnUrl))
+                if (!string.IsNullOrEmpty(returnUrl))
                 {
                     return Redirect(returnUrl);
                 }

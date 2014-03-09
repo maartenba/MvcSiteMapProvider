@@ -21,7 +21,7 @@ namespace MvcSiteMapProvider.Xml
             string fileName
             )
         {
-            if (String.IsNullOrEmpty(fileName))
+            if (string.IsNullOrEmpty(fileName))
                 throw new ArgumentNullException("fileName");
 
             this.fileName = fileName;

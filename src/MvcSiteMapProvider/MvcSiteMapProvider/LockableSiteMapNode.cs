@@ -482,7 +482,7 @@ namespace MvcSiteMapProvider
         {
             if (this.IsReadOnly)
             {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapNodeReadOnly, memberName));
+                throw new InvalidOperationException(string.Format(Resources.Messages.SiteMapNodeReadOnly, memberName));
             }
         }
     }

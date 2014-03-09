@@ -651,9 +651,9 @@ namespace MvcSiteMapProvider.Linq
         void ProcessParameters(ParameterExpression[] parameters)
         {
             foreach (ParameterExpression pe in parameters)
-                if (!String.IsNullOrEmpty(pe.Name))
+                if (!string.IsNullOrEmpty(pe.Name))
                     AddSymbol(pe.Name, pe);
-            if (parameters.Length == 1 && String.IsNullOrEmpty(parameters[0].Name))
+            if (parameters.Length == 1 && string.IsNullOrEmpty(parameters[0].Name))
                 it = parameters[0];
         }
 
@@ -2190,7 +2190,7 @@ namespace MvcSiteMapProvider.Linq
 
         bool TokenIdentifierIs(string id)
         {
-            return token.id == TokenId.Identifier && String.Equals(id, token.text, StringComparison.OrdinalIgnoreCase);
+            return token.id == TokenId.Identifier && string.Equals(id, token.text, StringComparison.OrdinalIgnoreCase);
         }
 
         string GetIdentifier()

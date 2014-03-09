@@ -21,7 +21,7 @@
         </p>
         <p>
             <em>Price:</em>
-            <%: String.Format("{0:F}", Model.Price) %>
+            <%: string.Format("{0:F}", Model.Price) %>
         </p>
         <p class="button">
             <%: Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.AlbumId }, "")%>

@@ -191,7 +191,7 @@ namespace MvcMenuTest.Controllers
                     }
                     catch (Exception)
                     {
-                        ModelState.AddModelError("", String.Format("Unable to create local account. An account with the name \"{0}\" may already exist.", User.Identity.Name));
+                        ModelState.AddModelError("", string.Format("Unable to create local account. An account with the name \"{0}\" may already exist.", User.Identity.Name));
                     }
                 }
             }

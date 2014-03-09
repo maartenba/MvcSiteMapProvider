@@ -57,7 +57,7 @@ namespace MvcSiteMapProvider.Text
         /// <remarks>Source: https://gist.github.com/LordDawnhunter/5245476 </remarks>
         public static bool IsValidIdentifier(this string identifier)
         {
-            if (String.IsNullOrEmpty(identifier)) return false;
+            if (string.IsNullOrEmpty(identifier)) return false;
             var normalizedIdentifier = identifier.Normalize();
 
             // 1. check that the identifier match the validIdentifer regular expression and it's not a C# keyword

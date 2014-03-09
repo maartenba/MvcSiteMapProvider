@@ -200,8 +200,8 @@ namespace MvcMenuTest.Models
             }
             set
             {
-                _output = value.Replace("\r\n", String.Empty);
-                _output = Regex.Replace(_output, @"[ ]+(?=<)", String.Empty);
+                _output = value.Replace("\r\n", string.Empty);
+                _output = Regex.Replace(_output, @"[ ]+(?=<)", string.Empty);
             }
         }
         public string ExpectedOutput { get; set; }

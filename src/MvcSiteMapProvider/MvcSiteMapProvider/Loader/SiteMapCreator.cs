@@ -36,7 +36,7 @@ namespace MvcSiteMapProvider.Loader
 
         public virtual ISiteMap CreateSiteMap(string siteMapCacheKey)
         {
-            if (String.IsNullOrEmpty(siteMapCacheKey))
+            if (string.IsNullOrEmpty(siteMapCacheKey))
             {
                 throw new ArgumentNullException("siteMapCacheKey");
             }

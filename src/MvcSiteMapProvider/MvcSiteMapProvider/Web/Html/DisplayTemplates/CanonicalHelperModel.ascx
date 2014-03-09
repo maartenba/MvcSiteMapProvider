@@ -2,6 +2,6 @@
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="MvcSiteMapProvider.Web.Html.Models" %>
 
-<% if (Model.CurrentNode != null && !String.IsNullOrEmpty(Model.CurrentNode.CanonicalUrl)) { %>
+<% if (Model.CurrentNode != null && !string.IsNullOrEmpty(Model.CurrentNode.CanonicalUrl)) { %>
     <link rel="canonical" href="<%=Model.CurrentNode.CanonicalUrl%>" />
 <% } %>

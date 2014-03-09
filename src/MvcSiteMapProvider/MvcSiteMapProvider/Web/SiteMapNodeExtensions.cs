@@ -14,7 +14,7 @@ namespace MvcSiteMapProvider.Web
 
         public static string GetAttributeValueOrFallback(this System.Web.SiteMapNode node, string key, string fallbackValue)
         {
-            return String.IsNullOrEmpty(node[key]) ? fallbackValue : node[key];
+            return string.IsNullOrEmpty(node[key]) ? fallbackValue : node[key];
         }
     }
 }

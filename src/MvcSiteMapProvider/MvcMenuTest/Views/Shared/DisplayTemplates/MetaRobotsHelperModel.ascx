@@ -2,6 +2,6 @@
 <%@ Import Namespace="System.Web.Mvc.Html" %>
 <%@ Import Namespace="MvcSiteMapProvider.Web.Html.Models" %>
 
-<% if (!String.IsNullOrEmpty(Model.CurrentNode.MetaRobotsContent)) { %>
+<% if (!string.IsNullOrEmpty(Model.CurrentNode.MetaRobotsContent)) { %>
     <meta name="robots" content="<%=Model.CurrentNode.MetaRobotsContent%>" />
 <% } %>

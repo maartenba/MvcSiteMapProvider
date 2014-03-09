@@ -170,7 +170,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 							StringComparer.OrdinalIgnoreCase);
 						AssemblyCache = groupedByName.ToDictionary(
 							g => g.Key,
-							g => g.ToLookup(t => t.Namespace ?? String.Empty, StringComparer.OrdinalIgnoreCase),
+							g => g.ToLookup(t => t.Namespace ?? string.Empty, StringComparer.OrdinalIgnoreCase),
 							StringComparer.OrdinalIgnoreCase);
 					}
 				}
@@ -225,7 +225,7 @@ namespace MvcSiteMapProvider.Web.Mvc
 			if (!requestedNamespace.EndsWith(".*", StringComparison.OrdinalIgnoreCase))
 			{
 				// looking for exact namespace match
-				return String.Equals(requestedNamespace, targetNamespace, StringComparison.OrdinalIgnoreCase);
+				return string.Equals(requestedNamespace, targetNamespace, StringComparison.OrdinalIgnoreCase);
 			}
 			else
 			{

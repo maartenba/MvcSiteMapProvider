@@ -102,7 +102,7 @@ namespace MvcSiteMapProvider.Globalization
                 }
                 if ((globalResourceObject == null) && throwIfNotFound)
                 {
-                    throw new InvalidOperationException(String.Format(Resources.Messages.ResourceNotFoundWithClassAndKey, values[0], values[1]));
+                    throw new InvalidOperationException(string.Format(Resources.Messages.ResourceNotFoundWithClassAndKey, values[0], values[1]));
                 }
             }
             return globalResourceObject;

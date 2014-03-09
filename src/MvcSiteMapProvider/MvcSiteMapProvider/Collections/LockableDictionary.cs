@@ -103,7 +103,7 @@ namespace MvcSiteMapProvider.Collections
         {
             if (this.IsReadOnly)
             {
-                throw new InvalidOperationException(String.Format(Resources.Messages.SiteMapReadOnly));
+                throw new InvalidOperationException(string.Format(Resources.Messages.SiteMapReadOnly));
             }
         }
     }
