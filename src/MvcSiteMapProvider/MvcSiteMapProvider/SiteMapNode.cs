@@ -690,13 +690,9 @@ namespace MvcSiteMapProvider
             if (!string.IsNullOrEmpty(this.UnresolvedUrl))
                 return false;
 
-            if (!string.IsNullOrEmpty(this.HostName))
-            {
-                if (!this.urlPath.IsPublicHostName(this.HostName, this.HttpContext))
-                {
-                    return false;
-                }
-            }
+            // Check whether the configured host name matches (only if it is supplied).
+            if (!string.IsNullOrEmpty(this.HostName) && !this.urlPath.IsPublicHostName(this.HostName, this.HttpContext))
+                return false;
 
             return this.RouteValues.MatchesRoute(routeValues);
         }
