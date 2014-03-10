@@ -17,20 +17,17 @@
 			<group targetFramework="net35">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
 				<!-- For new projects, we need to ensure the last update to MvcSiteMapProvider.Web is included -->
-				<dependency id="MvcSiteMapProvider.Web" version="4.5.2" />
-				<!--<dependency id="MvcSiteMapProvider.Web" version="4.5#prerelease#" />-->
+				<dependency id="MvcSiteMapProvider.Web" version="4.6#prerelease#" />
 			</group>
 			<group targetFramework="net40">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
 				<!-- For new projects, we need to ensure the last update to MvcSiteMapProvider.Web is included -->
-				<dependency id="MvcSiteMapProvider.Web" version="4.5.2" />
-				<!--<dependency id="MvcSiteMapProvider.Web" version="4.5#prerelease#" />-->
+				<dependency id="MvcSiteMapProvider.Web" version="4.6#prerelease#" />
 			</group>
 			<group targetFramework="net45">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
 				<!-- For new projects, we need to ensure the last update to MvcSiteMapProvider.Web is included -->
-				<dependency id="MvcSiteMapProvider.Web" version="4.5.2" />
-				<!--<dependency id="MvcSiteMapProvider.Web" version="4.5#prerelease#" />-->
+				<dependency id="MvcSiteMapProvider.Web" version="4.6#prerelease#" />
 			</group>
 		</dependencies>
 	</metadata>

@@ -15,16 +15,16 @@
 		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
 		<dependencies>
 			<group targetFramework="net35">
-				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.5#prerelease#" />
+				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.6#prerelease#" />
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="$version$" />
 			</group>
 			<group targetFramework="net40">
-				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.5#prerelease#" />
+				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.6#prerelease#" />
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="$version$" />
 				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 			<group targetFramework="net45">
-				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.5#prerelease#" />
+				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.DI.#di_container_name#.Modules" version="4.6#prerelease#" />
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#" version="$version$" />
 				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
