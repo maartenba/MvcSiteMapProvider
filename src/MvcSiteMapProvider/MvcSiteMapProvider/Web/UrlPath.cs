@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Web;
 using MvcSiteMapProvider.Web.Mvc;
@@ -15,16 +16,21 @@ namespace MvcSiteMapProvider.Web
         : IUrlPath
     {
         public UrlPath(
-            IMvcContextFactory mvcContextFactory
+            IMvcContextFactory mvcContextFactory,
+            IBindingProvider bindingProvider
             )
         {
             if (mvcContextFactory == null)
                 throw new ArgumentNullException("mvcContextFactory");
+            if (bindingProvider == null)
+                throw new ArgumentNullException("bindingProvider");
 
             this.mvcContextFactory = mvcContextFactory;
+            this.bindingProvider = bindingProvider;
         }
 
         protected readonly IMvcContextFactory mvcContextFactory;
+        protected readonly IBindingProvider bindingProvider;
 
         protected virtual HttpContextBase HttpContext
         {
@@ -438,11 +444,11 @@ namespace MvcSiteMapProvider.Web
 
         /// <summary>
         /// Resolves a URL that starts with a "~" into a URL that starts with the virtual
-        /// application qualified path.
+        /// application path. For example ~/MySite/ will resolve to /VirtualApplication/MySite/.
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <returns>The resolved URL.</returns>
-        public string ResolveVirtualApplicationQualifiedUrl(string url)
+        public string ResolveVirtualApplicationToRootRelativeUrl(string url)
         {
             if (this.IsAbsoluteUrl(url) || this.IsAbsolutePhysicalPath(url))
                 return url;
@@ -471,7 +477,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
-        /// protocol if null or empty string.</param>
+        /// protocol if null or empty string. To use the protocol of the current request, use *.</param>
         /// <returns>The resolved URL.</returns>
         public string ResolveUrl(string url, string protocol)
         {
@@ -486,7 +492,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
-        /// protocol if null or empty string.</param>
+        /// protocol if null or empty string. To use the protocol of the current request, use *.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
         /// <returns>The resolved URL.</returns>
         public string ResolveUrl(string url, string protocol, string hostName)
@@ -502,7 +508,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
-        /// protocol if null or empty string.</param>
+        /// protocol if null or empty string. To use the protocol of the current request, use *.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The resolved URL.</returns>
@@ -579,7 +585,8 @@ namespace MvcSiteMapProvider.Web
         /// Absolute URLs will be passed through unchanged.
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
-        /// <param name="protocol">The protocol such as http, https, or ftp.</param>
+        /// <param name="protocol">The protocol such as http, https, or ftp. 
+        /// To use the protocol of the current request, use *.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
         /// <param name="defaultToHttp">
         /// <b>true</b> to default the protocol to http if it is null or empty string; 
@@ -587,36 +594,91 @@ namespace MvcSiteMapProvider.Web
         /// </param>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The resolved URL.</returns>
-        internal string GenerateUrl(string url, string protocol, string hostName, bool defaultToHttp, HttpContextBase httpContext)
+        protected virtual string GenerateUrl(string url, string protocol, string hostName, bool defaultToHttp, HttpContextBase httpContext)
         {
             if (string.IsNullOrEmpty(url))
                 return string.Empty;
 
             if (!this.IsAbsoluteUrl(url))
             {
-                url = this.ResolveVirtualApplicationQualifiedUrl(url);
+                url = this.ResolveVirtualApplicationToRootRelativeUrl(url);
 
                 if (!string.IsNullOrEmpty(protocol) || !string.IsNullOrEmpty(hostName))
                 {
                     Uri requestUrl = this.GetPublicFacingUrl(httpContext);
-                    string requestProtocol = requestUrl.Scheme;
-                    var defaultProtocol = defaultToHttp ? Uri.UriSchemeHttp : requestProtocol;
+                    bool isWildcardProtocol = (protocol == "*");
+                    string defaultProtocol = (isWildcardProtocol || !defaultToHttp) ? requestUrl.Scheme : Uri.UriSchemeHttp;
 
-                    protocol = !string.IsNullOrEmpty(protocol) ? protocol : defaultProtocol;
+                    // Get the protocol and hostName
+                    protocol = (!string.IsNullOrEmpty(protocol) && !isWildcardProtocol) ? protocol : defaultProtocol;
                     hostName = !string.IsNullOrEmpty(hostName) ? hostName : requestUrl.Host;
 
-                    string port = string.Empty;
-                    
-                    if (string.Equals(protocol, requestProtocol, StringComparison.OrdinalIgnoreCase))
-                    {
-                        port = requestUrl.IsDefaultPort ? string.Empty : (":" + Convert.ToString(requestUrl.Port, CultureInfo.InvariantCulture));
-                    }
+                    // Get the port
+                    string port = this.GetPortString(protocol, hostName, requestUrl);
 
                     url = protocol + Uri.SchemeDelimiter + hostName + port + url;
                 }
             }
 
             return url;
+        }
+
+        protected virtual string GetPortString(string protocol, string hostName, Uri requestUrl)
+        {
+            int port = 80;
+            bool isProtocolMatch = string.Equals(protocol, requestUrl.Scheme, StringComparison.OrdinalIgnoreCase);
+            bool isHostMatch = string.Equals(hostName, requestUrl.Host, StringComparison.OrdinalIgnoreCase);
+            bool isDevelopmentEnvironment = (this.IsVisualStudioDevelopmentServer && isHostMatch);
+
+            if ((isProtocolMatch && isHostMatch) || isDevelopmentEnvironment)
+            {
+                port = requestUrl.Port;
+            }
+            else
+            {
+                // Attempt to get the port bindings from the binding provider.
+                bool succeeded = false;
+                var bindings = this.bindingProvider.GetBindings();
+                if (bindings != null)
+                {
+                    // Match the protocol
+                    var protocolBindings = bindings.Where(x => string.Equals(x.Protocol, protocol, StringComparison.OrdinalIgnoreCase)).ToList();
+                    if (protocolBindings.Count > 0)
+                    {
+                        // Favor an exact match
+                        var binding = protocolBindings.Where(x => string.Equals(x.HostName, hostName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+                        if (binding == null)
+                        {
+                            // Try using a wildcard *
+                            binding = protocolBindings.Where(x => x.HostName == "*").FirstOrDefault();
+                        }
+                        if (binding != null)
+                        {
+                            port = binding.Port;
+                            succeeded = true;
+                        }
+                    }
+                }
+
+                if (!succeeded)
+                {
+                    // Binding not found - use default port.
+                    return string.Empty;
+                }
+            }
+
+            return this.IsDefaultPort(port, protocol) ? string.Empty : (":" + Convert.ToString(port, CultureInfo.InvariantCulture));
+        }
+
+        protected virtual bool IsDefaultPort(int port, string protocol)
+        {
+            return new Uri(protocol + Uri.SchemeDelimiter + "unknownhost:" + 
+                Convert.ToString(port, CultureInfo.InvariantCulture) + "/").IsDefaultPort;
+        }
+
+        protected virtual bool IsVisualStudioDevelopmentServer
+        {
+            get { return string.IsNullOrEmpty(this.HttpContext.Request.ServerVariables["SERVER_SOFTWARE"]); }
         }
 
         /// <summary>

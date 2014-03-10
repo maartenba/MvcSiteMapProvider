@@ -17,17 +17,27 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         #region SetUp / TearDown
 
         private Mock<IMvcContextFactory> mvcContextFactory = null;
+        private Mock<IBindingProvider> bindingProvider = null;
 
         [SetUp]
         public void Init()
         {
             mvcContextFactory = new Mock<IMvcContextFactory>();
+            bindingProvider = new Mock<IBindingProvider>();
         }
 
         [TearDown]
         public void Dispose()
         {
             mvcContextFactory = null;
+            bindingProvider = null;
+        }
+
+        private UrlPath NewUrlPath()
+        {
+            return new UrlPath(
+                this.mvcContextFactory.Object, 
+                this.bindingProvider.Object);
         }
 
         #endregion
@@ -35,10 +45,10 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         #region Tests
 
         [Test]
-        public void IsAbsoluteUrl_WithRootRelativeUrl_ShouldReturnFalse()
+        public void IsAbsoluteUrl_WithTildeUrl_ShouldReturnFalse()
         {
             // arrange
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsAbsoluteUrl("~/directory/subdirectory/page.aspx?a=b");
@@ -53,7 +63,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         public void IsAbsoluteUrl_WithRelativeUrl_ShouldReturnFalse()
         {
             // arrange
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsAbsoluteUrl("/directory/subdirectory/page.aspx?a=b");
@@ -68,7 +78,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         public void IsAbsoluteUrl_WithAbsoluteUrl_ShouldReturnTrue()
         {
             // arrange
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsAbsoluteUrl("http://somewhere.com/directory/subdirectory/page.aspx?a=b");
@@ -94,7 +104,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsExternalUrl("http://someinternalhost/matching-application/some-page", context.Object);
@@ -120,7 +130,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsExternalUrl("http://someinternalhost/non-matching-application/some-page", context.Object);
@@ -147,7 +157,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             //request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsExternalUrl("http://someinternalhost/some-page", context.Object);
@@ -174,7 +184,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsExternalUrl("http://someotherhost/some-page", context.Object);
@@ -201,7 +211,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.ServerVariables).Returns(new NameValueCollection { { "HTTP_HOST", "somehost" } });
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsExternalUrl("http://somehost/some-page", context.Object);
@@ -227,7 +237,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.ServerVariables).Returns(new NameValueCollection { { "HTTP_HOST", "somehost" } });
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsExternalUrl("http://someotherhost/some-page", context.Object);
@@ -253,7 +263,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsPublicHostName("someinternalhost", context.Object);
@@ -278,7 +288,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.ServerVariables).Returns(new NameValueCollection { { "HTTP_HOST", "somehost" } });
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsPublicHostName("somehost2", context.Object);
@@ -303,7 +313,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.ServerVariables).Returns(new NameValueCollection { { "HTTP_HOST", "somehost" } });
             request.Setup(x => x.Url).Returns(new Uri("https://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.IsPublicHostName("somehost", context.Object);
@@ -327,7 +337,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         ////    request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
         ////    request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
         ////    this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-        ////    var target = new UrlPath(this.mvcContextFactory.Object);
+        ////    var target = this.NewUrlPath();
 
         ////    // act
         ////    var result = target.MakeRelativeUrlAbsolute("http://testing.com:333/directory/subdirectory/page.aspx?a=b", context.Object);
@@ -339,7 +349,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         ////}
 
         ////[Test]
-        ////public void MakeRelativeUrlAbsolute_WithRootRelativeUrl_ShouldReturnAbsoluteUrlWithVirtualPath()
+        ////public void MakeRelativeUrlAbsolute_WithTildeUrl_ShouldReturnAbsoluteUrlWithVirtualPath()
         ////{
         ////    // arrange
         ////    Mock<HttpContextBase> context = new Mock<HttpContextBase>();
@@ -350,7 +360,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         ////    request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
         ////    request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
         ////    this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-        ////    var target = new UrlPath(this.mvcContextFactory.Object);
+        ////    var target = this.NewUrlPath();
 
         ////    // act
         ////    var result = target.MakeRelativeUrlAbsolute("~/directory/subdirectory/page.aspx?a=b", context.Object);
@@ -378,7 +388,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         ////    request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
         ////    request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
         ////    this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-        ////    var target = new UrlPath(this.mvcContextFactory.Object);
+        ////    var target = this.NewUrlPath();
 
         ////    // act
         ////    var result = target.MakeRelativeUrlAbsolute("/directory/subdirectory/page.aspx?a=b", context.Object);
@@ -390,7 +400,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         ////}
 
         ////[Test]
-        ////public void MakeRelativeUrlAbsolute_WithVirtualApplicationQualifiedUrl_ShouldReturnAbsoluteUrlWithVirtualPath()
+        ////public void MakeRelativeUrlAbsolute_WithRootRelativeUrl_ShouldReturnAbsoluteUrlWithVirtualPath()
         ////{
         ////    // arrange
         ////    Mock<HttpContextBase> context = new Mock<HttpContextBase>();
@@ -401,7 +411,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         ////    request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
         ////    request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
         ////    this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-        ////    var target = new UrlPath(this.mvcContextFactory.Object);
+        ////    var target = this.NewUrlPath();
 
         ////    // act
         ////    var result = target.MakeRelativeUrlAbsolute("/some-application/directory/subdirectory/page.aspx?a=b", context.Object);
@@ -417,7 +427,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         /// absolute URL is passed in.
         /// </summary>
         [Test]
-        public void ResolveVirtualApplicationQualifiedUrl_WithVirtualDirectoryAndAbsoluteUrl_ShouldReturnAbsoluteUrl()
+        public void ResolveVirtualApplicationToRootRelativeUrl_WithVirtualDirectoryAndAbsoluteUrl_ShouldReturnAbsoluteUrl()
         {
             // arrange
             Mock<HttpContextBase> context = new Mock<HttpContextBase>();
@@ -425,10 +435,10 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             context.Setup(x => x.Request).Returns(request.Object);
             request.Setup(x => x.ApplicationPath).Returns("/some-application");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
-            var result = target.ResolveVirtualApplicationQualifiedUrl("http://www.somewhere.com/directory/subdirectory/page.aspx?a=b");
+            var result = target.ResolveVirtualApplicationToRootRelativeUrl("http://www.somewhere.com/directory/subdirectory/page.aspx?a=b");
 
             // assert
             var actual = result;
@@ -439,9 +449,9 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         /// <summary>
         /// Verifies that an application hosted in a virtual directory will return the virtual directory qualified URL
         /// when the url starts with a "~".
-        /// </summary>
+        /// </summary>ApplicationRelative
         [Test]
-        public void ResolveVirtualApplicationQualifiedUrl_WithVirtualDirectoryAndRootRelativeUrl_ShouldReturnApplicationQualifiedUrl()
+        public void ResolveVirtualApplicationToRootRelativeUrl_WithVirtualDirectoryAndTildeUrl_ShouldReturnRootRelativeUrl()
         {
             // arrange
             Mock<HttpContextBase> context = new Mock<HttpContextBase>();
@@ -449,10 +459,10 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             context.Setup(x => x.Request).Returns(request.Object);
             request.Setup(x => x.ApplicationPath).Returns("/some-application");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
-            var result = target.ResolveVirtualApplicationQualifiedUrl("~/directory/subdirectory/page.aspx?a=b");
+            var result = target.ResolveVirtualApplicationToRootRelativeUrl("~/directory/subdirectory/page.aspx?a=b");
 
             // assert
             var actual = result;
@@ -461,7 +471,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         }
 
         [Test]
-        public void ResolveUrl_WithRootRelativeUrl_ShouldReturnVirtualApplicationQualifiedUrl()
+        public void ResolveUrl_WithTildeUrl_ShouldReturnRootRelativeUrl()
         {
             // arrange
             Mock<HttpContextBase> context = new Mock<HttpContextBase>();
@@ -472,7 +482,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveUrl("~/directory/subdirectory/page.aspx?a=b", null, null, context.Object);
@@ -495,7 +505,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveUrl("/directory/subdirectory/page.aspx?a=b", null, null, context.Object);
@@ -518,7 +528,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://somehost:999/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveUrl("/directory/subdirectory/page.aspx?a=b", null, "somewhere.com", context.Object);
@@ -541,7 +551,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveUrl("/directory/subdirectory/page.aspx?a=b", null, "somewhere.com", context.Object);
@@ -563,7 +573,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.ServerVariables).Returns(new NameValueCollection());
             request.Setup(x => x.Url).Returns(new Uri("http://somehost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveUrl("/directory/subdirectory/page.aspx?a=b", "http", null, context.Object);
@@ -585,7 +595,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.ServerVariables).Returns(new NameValueCollection());
             request.Setup(x => x.Url).Returns(new Uri("http://somehost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveUrl("/directory/subdirectory/page.aspx?a=b", "http", "somewhere.com", context.Object);
@@ -593,6 +603,32 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             // assert
             var actual = result;
             var expected = "http://somewhere.com/directory/subdirectory/page.aspx?a=b";
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// Ensures the request protocol is used when the configured protocol is *
+        /// </summary>
+        [Test]
+        public void ResolveUrl_WithTildeUrlAndAsteriskProtocol_ShouldReturnRootRelativeUrlAndRequestProtocol()
+        {
+            // arrange
+            Mock<HttpContextBase> context = new Mock<HttpContextBase>();
+            Mock<HttpRequestBase> request = new Mock<HttpRequestBase>();
+            context.Setup(x => x.Request).Returns(request.Object);
+            request.Setup(x => x.ApplicationPath).Returns("/some-application");
+            request.Setup(x => x.ServerVariables).Returns(new NameValueCollection());
+            request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
+            request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
+            this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
+            var target = this.NewUrlPath();
+
+            // act
+            var result = target.ResolveUrl("~/directory/subdirectory/page.aspx?a=b", "*", null, context.Object);
+
+            // assert
+            var actual = result;
+            var expected = "https://somehost/some-application/directory/subdirectory/page.aspx?a=b";
             Assert.AreEqual(expected, actual);
         }
 
@@ -608,7 +644,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://somehost/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveContentUrl("/directory/subdirectory/page.aspx?a=b", null, "somewhere.com", context.Object);
@@ -620,7 +656,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
         }
 
         [Test]
-        public void ResolveContentUrl_WithRelativeUrlHostAndNonStandardPort_ShouldReturnAbsoluteUrlWithRequestProtocolSpecifiedHostAndRequestPort()
+        public void ResolveContentUrl_WithRelativeUrlHostAndNonStandardPort_ShouldReturnAbsoluteUrlWithRequestProtocolSpecifiedHostAndDefaultPort()
         {
             // arrange
             Mock<HttpContextBase> context = new Mock<HttpContextBase>();
@@ -631,14 +667,14 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             request.Setup(x => x.Url).Returns(new Uri("https://somehost:999/a.aspx?a=b"));
             request.Setup(x => x.RawUrl).Returns("/a.aspx?a=b");
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.ResolveContentUrl("/directory/subdirectory/page.aspx?a=b", null, "somewhere.com", context.Object);
 
             // assert
             var actual = result;
-            var expected = "https://somewhere.com:999/directory/subdirectory/page.aspx?a=b";
+            var expected = "https://somewhere.com/directory/subdirectory/page.aspx?a=b";
             Assert.AreEqual(expected, actual);
         }
 
@@ -659,7 +695,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
                 });
             request.Setup(x => x.Url).Returns(new Uri("http://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.GetPublicFacingUrl(context.Object);
@@ -687,7 +723,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
                 });
             request.Setup(x => x.Url).Returns(new Uri("http://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.GetPublicFacingUrl(context.Object);
@@ -714,7 +750,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
                 });
             request.Setup(x => x.Url).Returns(new Uri("http://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.GetPublicFacingUrl(context.Object);
@@ -741,7 +777,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
                 });
             request.Setup(x => x.Url).Returns(new Uri("http://someinternalhost/a.aspx?a=b"));
             this.mvcContextFactory.Setup(x => x.CreateHttpContext()).Returns(context.Object);
-            var target = new UrlPath(this.mvcContextFactory.Object);
+            var target = this.NewUrlPath();
 
             // act
             var result = target.GetPublicFacingUrl(context.Object);

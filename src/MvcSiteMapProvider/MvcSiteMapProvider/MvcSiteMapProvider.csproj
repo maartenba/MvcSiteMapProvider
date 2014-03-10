@@ -104,6 +104,10 @@
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.Administration, Version=7.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -216,7 +220,15 @@
     <Compile Include="Text\StringExtensions.cs" />
     <Compile Include="TrimEmptyGroupingNodesVisibilityProvider.cs" />
     <Compile Include="Visitor\NullSiteMapNodeVisitor.cs" />
+    <Compile Include="Web\Binding.cs" />
+    <Compile Include="Web\BindingFactory.cs" />
+    <Compile Include="Web\BindingProvider.cs" />
     <Compile Include="Web\Compilation\BuildManagerAdapter.cs" />
+    <Compile Include="Web\CompositeBindingProvider.cs" />
+    <Compile Include="Web\CustomBindingProvider.cs" />
+    <Compile Include="Web\IBinding.cs" />
+    <Compile Include="Web\IBindingFactory.cs" />
+    <Compile Include="Web\IBindingProvider.cs" />
     <Compile Include="Web\Mvc\ControllerBuilderAdapter.cs" />
     <Compile Include="Web\Mvc\ControllerExtensions.cs" />
     <Compile Include="Web\Mvc\Filters\Filter.cs" />

@@ -35,7 +35,9 @@ namespace MvcSiteMapProvider.DI
 #endif
             this.cacheDependency = this.ResolveCacheDependency(settings);
             this.requestCache = this.mvcContextFactory.GetRequestCache();
-            this.urlPath = new UrlPath(this.mvcContextFactory);
+            this.bindingFactory = new BindingFactory();
+            this.bindingProvider = new BindingProvider(this.bindingFactory, this.mvcContextFactory);
+            this.urlPath = new UrlPath(this.mvcContextFactory, this.bindingProvider);
             this.siteMapCacheKeyGenerator = new SiteMapCacheKeyGenerator(this.mvcContextFactory);
             this.siteMapCacheKeyToBuilderSetMapper = new SiteMapCacheKeyToBuilderSetMapper();
             this.reservedAttributeNameProvider = new ReservedAttributeNameProvider(settings.AttributesToIgnore);
@@ -61,6 +63,8 @@ namespace MvcSiteMapProvider.DI
 
         private readonly string absoluteFileName;
         private readonly IMvcContextFactory mvcContextFactory;
+        private readonly IBindingFactory bindingFactory;
+        private readonly IBindingProvider bindingProvider;
         private readonly ISiteMapCache siteMapCache;
         private readonly ICacheDependency cacheDependency;
         private readonly IRequestCache requestCache;

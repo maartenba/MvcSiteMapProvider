@@ -497,7 +497,7 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
-        public string ResolveVirtualApplicationQualifiedUrl(string url)
+        public string ResolveVirtualApplicationToRootRelativeUrl(string url)
         {
             throw new NotImplementedException();
         }

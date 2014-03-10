@@ -31,7 +31,7 @@ namespace MvcSiteMapProvider.Matching
         {
             if (this.urlPath.IsAbsolutePhysicalPath(relativeOrAbsoluteUrl) || this.urlPath.IsAppRelativePath(relativeOrAbsoluteUrl))
             {
-                this.rootRelativeUrl = this.urlPath.ResolveVirtualApplicationQualifiedUrl(relativeOrAbsoluteUrl);
+                this.rootRelativeUrl = this.urlPath.ResolveVirtualApplicationToRootRelativeUrl(relativeOrAbsoluteUrl);
             }
             else if (this.urlPath.IsAbsoluteUrl(relativeOrAbsoluteUrl))
             {

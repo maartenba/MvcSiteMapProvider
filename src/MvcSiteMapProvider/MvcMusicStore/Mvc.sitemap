@@ -22,6 +22,7 @@
       <mvcSiteMapNode title="Test HTTPS" action="Browse" controller="Store" id="Jazz" protocol="https" someParameter="goodbye4"/>
       <mvcSiteMapNode title="Test Host and HTTPS" protocol="https" hostName="somewhere.com" url="~/Store/Browse/Jazz?someParameter=goodbye5" />
       <mvcSiteMapNode title="Test Absolute Path" url="http://localhost:1397/Store/Browse/Jazz?someParameter=goodbye6" />
+      <mvcSiteMapNode title="Test Absolute Path Generation" url="~/Store/Browse/Jazz?someParameter=goodbye7" hostName="www.something.com" />
     </mvcSiteMapNode>
 		
 

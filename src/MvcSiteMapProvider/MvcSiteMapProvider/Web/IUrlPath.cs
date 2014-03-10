@@ -75,11 +75,11 @@ namespace MvcSiteMapProvider.Web
 
         /// <summary>
         /// Resolves a URL that starts with a "~" into a URL that starts with the virtual
-        /// application qualified path.
+        /// application path. For example ~/MySite/ will resolve to /VirtualApplication/MySite/.
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <returns>The resolved URL.</returns>
-        string ResolveVirtualApplicationQualifiedUrl(string url);
+        string ResolveVirtualApplicationToRootRelativeUrl(string url);
 
         /// <summary>
         /// Resolves a URL, similar to how it would on Control.ResolveUrl() in ASP.NET.
@@ -99,7 +99,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
-        /// protocol if null or empty string.</param>
+        /// protocol if null or empty string. To use the protocol of the current request, use *.</param>
         /// <returns>The resolved URL.</returns>
         string ResolveUrl(string url, string protocol);
 
@@ -111,7 +111,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
-        /// protocol if null or empty string.</param>
+        /// protocol if null or empty string. To use the protocol of the current request, use *.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
         /// <returns>The resolved URL.</returns>
         string ResolveUrl(string url, string protocol, string hostName);
@@ -124,7 +124,7 @@ namespace MvcSiteMapProvider.Web
         /// </summary>
         /// <param name="url">Any Url including those starting with "/", "~", or protocol.</param>
         /// <param name="protocol">The protocol such as http, https, or ftp. Defaults to http 
-        /// protocol if null or empty string.</param>
+        /// protocol if null or empty string. To use the protocol of the current request, use *.</param>
         /// <param name="hostName">The host name such as www.somewhere.com.</param>
         /// <param name="httpContext">The HTTP context representing the context of the request.</param>
         /// <returns>The resolved URL.</returns>
