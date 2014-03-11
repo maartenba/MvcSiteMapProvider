@@ -389,13 +389,14 @@ namespace MvcSiteMapProvider
         /// </summary>
         public override void ResolveUrl()
         {
-            var IsHostNameFromRequest = !string.IsNullOrEmpty(this.Protocol) && string.IsNullOrEmpty(this.HostName);
+            var isProtocolOrHostNameFromRequest =
+                (!string.IsNullOrEmpty(this.Protocol) && (string.IsNullOrEmpty(this.HostName) || this.Protocol == "*"));
 
             // NOTE: In all cases where values from the current request can be included in the URL, 
             // we need to disable URL resolution caching.
             if (this.CacheResolvedUrl && string.IsNullOrEmpty(this.UnresolvedUrl) &&
                 this.preservedRouteParameters.Count == 0 && !this.IncludeAmbientValuesInUrl &&
-                !IsHostNameFromRequest)
+                !isProtocolOrHostNameFromRequest)
             {
                 this.resolvedUrl = this.GetResolvedUrl();
             }
