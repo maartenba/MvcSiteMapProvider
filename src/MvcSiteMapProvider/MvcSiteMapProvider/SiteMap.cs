@@ -830,6 +830,9 @@ namespace MvcSiteMapProvider
             ThrowIfActionAndUrlNotSet(node);
             ThrowIfHttpMethodInvalid(node);
             ThrowIfRouteValueIsPreservedRouteParameter(node);
+            ThrowIfHostNameInvalid(node);
+            ThrowIfCanonicalUrlHostNameInvalid(node);
+            ThrowIfImageUrlHostNameInvalid(node);
         }
 
         protected virtual void ThrowIfRouteValueIsPreservedRouteParameter(ISiteMapNode node)
@@ -892,6 +895,30 @@ namespace MvcSiteMapProvider
                 {
                     throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeAreaNameInvalid, node.Key, node.Title, node.Area));
                 }
+            }
+        }
+
+        protected virtual void ThrowIfHostNameInvalid(ISiteMapNode node)
+        {
+            if (!string.IsNullOrEmpty(node.HostName) && node.HostName.Contains(":"))
+            {
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeHostNameInvalid, node.Key, node.Title, node.HostName, "HostName"));
+            }
+        }
+
+        protected virtual void ThrowIfImageUrlHostNameInvalid(ISiteMapNode node)
+        {
+            if (!string.IsNullOrEmpty(node.ImageUrlHostName) && node.ImageUrlHostName.Contains(":"))
+            {
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeHostNameInvalid, node.Key, node.Title, node.ImageUrlHostName, "ImageUrlHostName"));
+            }
+        }
+
+        protected virtual void ThrowIfCanonicalUrlHostNameInvalid(ISiteMapNode node)
+        {
+            if (!string.IsNullOrEmpty(node.CanonicalUrlHostName) && node.CanonicalUrlHostName.Contains(":"))
+            {
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeHostNameInvalid, node.Key, node.Title, node.CanonicalUrlHostName, "CanonicalUrlHostName"));
             }
         }
 

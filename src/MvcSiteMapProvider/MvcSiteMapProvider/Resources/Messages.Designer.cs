@@ -472,6 +472,17 @@ namespace MvcSiteMapProvider.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; does not have a valid value for {3}. The current value is &apos;{2}&apos;. The HostName may not contain a &apos;:&apos; character. 
+        ///
+        ///If you need to configure a non-default port number, pass a CustomBindingProvider instance to the IBindingProvider constructor parameter of UrlPath or configure HOST header names in the Bindings section of IIS..
+        /// </summary>
+        internal static string SiteMapNodeHostNameInvalid {
+            get {
+                return ResourceManager.GetString("SiteMapNodeHostNameInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The node with key &apos;{0}&apos; and title &apos;{1}&apos; has the value &apos;{2}&apos; for HttpMethod, which is not allowed.
         ///
         ///The available values for HttpMethod are:

@@ -377,4 +377,9 @@ You may suppress this error message by calling an overload of the RouteValues.Ad
   <data name="NamedDynamicNodeProviderNotFound" xml:space="preserve">
     <value>The dynamic node provider instance named '{0}' was not found. Check your DI configuration to ensure a dynamic node provider instance with this name exists and is configured correctly.</value>
   </data>
+  <data name="SiteMapNodeHostNameInvalid" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' does not have a valid value for {3}. The current value is '{2}'. The HostName may not contain a ':' character. 
+
+If you need to configure a non-default port number, pass a CustomBindingProvider instance to the IBindingProvider constructor parameter of UrlPath or configure HOST header names in the Bindings section of IIS.</value>
+  </data>
 </root>
