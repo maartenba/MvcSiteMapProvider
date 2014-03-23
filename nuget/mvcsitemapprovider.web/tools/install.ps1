@@ -1,6 +1,8 @@
 # install.ps1
 param($rootPath, $toolsPath, $package, $project)
 
+Add-Type -AssemblyName 'Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'
+
 function CountSolutionFilesByExtension($extension) {
 	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
 	$totalfiles = [System.IO.Directory]::EnumerateFiles("$path", "*." + $extension, [System.IO.SearchOption]::AllDirectories)
@@ -82,6 +84,23 @@ function Add-Or-Update-AppSettings() {
 		$scan.Attributes.Append($value)
 		
 		$appSettings.AppendChild($scan)
+	}
+	
+	# add MvcSiteMapProvider_IncludeAssembliesForScan (never update)
+	$include_scan = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_IncludeAssembliesForScan']")
+	if ($include_scan -eq $null) {
+		$assembly_name = Get-Project-Property-Value "AssemblyName"
+		$include_scan = $xml.CreateElement("add")
+		
+		$key = $xml.CreateAttribute("key")
+		$key.Value = "MvcSiteMapProvider_IncludeAssembliesForScan"
+		$include_scan.Attributes.Append($key)
+		
+		$value = $xml.CreateAttribute("value")
+		$value.Value = "$assembly_name"
+		$include_scan.Attributes.Append($value)
+		
+		$appSettings.AppendChild($include_scan)
 	}
 	
 	Save-Document-With-Formatting $xml $web_config_path
@@ -319,6 +338,17 @@ function Get-Web-Config-Path() {
 	$path = [System.IO.Path]::GetDirectoryName($project.FullName)
 	$web_config_path = "$path\Web.config"
 	return $web_config_path
+}
+
+function Get-Project-Property-Value([string] $property_name) {
+	$ms_build_project = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection.GetLoadedProjects($Project.FullName) | Select-Object -First 1
+	foreach ($property in $ms_build_project.Properties) {
+		if ($property.Name -eq $property_name) {
+			$value = $property.EvaluatedValue
+			break
+		}
+	}
+	return $value
 }
 
 # Infer which view engine you're using based on the files in your project

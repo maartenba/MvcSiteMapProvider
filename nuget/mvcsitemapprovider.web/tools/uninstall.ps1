@@ -25,6 +25,12 @@ function Remove-AppSettings() {
 		$scan.ParentNode.RemoveChild($scan)
 	}
 	
+	# remove MvcSiteMapProvider_IncludeAssembliesForScan
+	$include_scan = $xml.SelectSingleNode("configuration/appSettings/add[@key='MvcSiteMapProvider_IncludeAssembliesForScan']")
+	if ($include_scan -ne $null) {
+		$include_scan.ParentNode.RemoveChild($include_scan)
+	}
+	
 	$appSettings = $xml.SelectSingleNode("configuration/appSettings")
 	if ($appSettings -ne $null) {
 		if (($appSettings.HasChildNodes -eq $false) -and ($appSettings.Attributes.Count -eq 0)) {
