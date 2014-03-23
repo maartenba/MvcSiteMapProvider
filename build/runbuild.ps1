@@ -31,12 +31,15 @@ task Init -description "This tasks makes sure the build environment is correctly
 	Ensure-Directory-Exists "$build_directory\test.temp"
 	Copy-Item "$source_directory\Shared\CommonAssemblyInfo.cs" "$build_directory\CommonAssemblyInfo.cs"
 
+	#Get the current year from the system
+	$year = [DateTime]::Today.Year
+
 	Generate-Assembly-Info `
 		-file "$source_directory\Shared\CommonAssemblyInfo.cs" `
 		-company "MvcSiteMapProvider" `
 		-version $version `
 		-packageVersion $packageVersion `
-		-copyright "Copyright © MvcSiteMapProvider 2009 - 2013"
+		-copyright "Copyright © MvcSiteMapProvider 2009 - $year"
 }
 
 task Restore -depends Clean -description "This task runs NuGet package restore" {
