@@ -81,7 +81,7 @@ namespace MvcSiteMapProvider
         protected string description = string.Empty;
         protected string imageUrl = string.Empty;
         protected DateTime lastModifiedDate = DateTime.MinValue;
-        protected ChangeFrequency changeFrequency = ChangeFrequency.Always;
+        protected ChangeFrequency changeFrequency = ChangeFrequency.Undefined;
         protected UpdatePriority updatePriority = UpdatePriority.Undefined;
         protected bool clickable = true;
         protected string url = string.Empty;

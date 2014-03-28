@@ -14,8 +14,10 @@ namespace MvcSiteMapProvider
         /// </summary>
         public MvcSiteMapNodeAttribute()
         {
-            Clickable = true;
-            IncludeAmbientValuesInUrl = false;
+            this.Clickable = true;
+            this.IncludeAmbientValuesInUrl = false;
+            this.ChangeFrequency = ChangeFrequency.Undefined;
+            this.UpdatePriority = UpdatePriority.Undefined;
         }
 
         /// <summary>
