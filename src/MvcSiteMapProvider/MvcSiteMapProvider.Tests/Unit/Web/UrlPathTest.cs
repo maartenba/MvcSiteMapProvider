@@ -89,6 +89,21 @@ namespace MvcSiteMapProvider.Tests.Unit.Web
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        public void IsAbsoluteUrl_WithAbsoluteUrlAsQueryParameter_ShouldReturnFalse()
+        {
+            // arrange
+            var target = this.NewUrlPath();
+
+            // act
+            var result = target.IsAbsoluteUrl(@"/error/pagenotfound?404;http://somewhere.com/directory/subdirectory/page.aspx?a=b");
+
+            // assert
+            var actual = result;
+            var expected = false;
+            Assert.AreEqual(expected, actual);
+        }
+
         /// <summary>
         /// Return false when the virtual application name (and host name) match.
         /// </summary>

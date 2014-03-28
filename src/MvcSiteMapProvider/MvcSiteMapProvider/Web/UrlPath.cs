@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using MvcSiteMapProvider.Web.Mvc;
 
@@ -363,8 +364,14 @@ namespace MvcSiteMapProvider.Web
         /// <returns><b>true</b> if the URL is absolute; otherwise <b>false</b>.</returns>
         public bool IsAbsoluteUrl(string url)
         {
-            // There must be at least 1 character before the scheme delimiter.
-            return (url.IndexOf(Uri.SchemeDelimiter) > 0);
+            // Optimization: Return false early if there is no scheme delimiter in the string
+            // prefixed by at least 1 character.
+            if (!(url.IndexOf(Uri.SchemeDelimiter) > 0))
+                return false;
+
+            // There must be at least 1 word character before the scheme delimiter.
+            // This ensures we don't return true for query strings that contain absolute URLs.
+            return Regex.IsMatch(url, @"^\w+://", RegexOptions.Compiled);
         }
 
         /// <summary>
