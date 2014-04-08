@@ -191,6 +191,9 @@ namespace MvcSiteMapProvider
         /// </summary>
         string Route { get; set; }
 
+        // TODO: In version 5, RouteValues should be a separate property so the values can be controlled separately,
+        // similar to how the DynamicNode values are set.
+
         /// <summary>
         /// Gets or sets the preserved route parameter names (= values that will be used from the current request route).
         /// </summary>

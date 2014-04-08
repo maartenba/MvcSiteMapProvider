@@ -146,7 +146,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
         public void AddRange(string jsonString, bool throwIfReservedKey)
         {
             var items = this.jsonToDictionaryDeserializer.Deserialize(jsonString);
-            this.AddRange(items);
+            this.AddRange(items, throwIfReservedKey);
         }
 
         /// <summary>
