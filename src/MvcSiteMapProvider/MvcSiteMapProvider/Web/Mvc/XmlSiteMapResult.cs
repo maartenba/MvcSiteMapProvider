@@ -49,7 +49,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         protected readonly ISiteMapLoader siteMapLoader;
         protected readonly IUrlPath urlPath;
         protected readonly ICultureContextFactory cultureContextFactory;
-        protected readonly List<string> duplicateUrlCheck = new List<string>();
+        protected readonly HashSet<string> duplicateUrlCheck = new HashSet<string>();
 
         /// <summary>
         /// Maximal number of links per sitemap file.
