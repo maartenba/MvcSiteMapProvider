@@ -11,7 +11,7 @@ namespace MvcSiteMapProvider
     /// node in the hierarchy.
     /// </summary>
     public interface ISiteMapNode
-        : ISortable
+        : ISortable, IEquatable<ISiteMapNode>
     {
         string Key { get; }
         bool IsDynamic { get; }

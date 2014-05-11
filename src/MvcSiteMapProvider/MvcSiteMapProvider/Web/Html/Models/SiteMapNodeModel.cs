@@ -54,9 +54,9 @@ namespace MvcSiteMapProvider.Web.Html.Models
             Url = node.Url;
             CanonicalUrl = node.CanonicalUrl;
             MetaRobotsContent = node.GetMetaRobotsContentString();
-            IsCurrentNode = (node == node.SiteMap.CurrentNode);
+            IsCurrentNode = (node.Equals(node.SiteMap.CurrentNode));
             IsInCurrentPath = node.IsInCurrentPath();
-            IsRootNode = (node == node.SiteMap.RootNode);
+            IsRootNode = (node.Equals(node.SiteMap.RootNode));
             IsClickable = node.Clickable;
             VisibilityAffectsDescendants = visibilityAffectsDescendants;
             RouteValues = node.RouteValues;
@@ -347,7 +347,7 @@ namespace MvcSiteMapProvider.Web.Html.Models
                 return false;
             if (node.IsInCurrentPath())
                 return true;
-            if (node.ParentNode == node.SiteMap.CurrentNode)
+            if (node.ParentNode != null && node.ParentNode.Equals(node.SiteMap.CurrentNode))
                 return true;
             foreach (ISiteMapNode sibling in node.ParentNode.ChildNodes)
             {

@@ -775,5 +775,66 @@ namespace MvcSiteMapProvider
         }
 
         #endregion
+
+        #region IEquatable<ISiteMapNode> Members
+
+        public override bool Equals(ISiteMapNode node)
+        {
+            if (base.Equals((object)node))
+            {
+                return true;
+            }
+
+            return this.Key.Equals(node.Key);
+        }
+
+        #endregion
+
+        #region System.Object Overrides
+
+        public override bool Equals(object obj)
+        {
+            ISiteMapNode node = obj as ISiteMapNode;
+            if (node == null)
+            {
+                return false;
+            }
+
+            return this.Equals(node);
+        }
+
+        public static bool operator ==(SiteMapNode node1, SiteMapNode node2)
+        {
+            // If both are null, or both are same instance, return true.
+            if (object.ReferenceEquals(node1, node2))
+            {
+                return true;
+            }
+
+            // If one is null, but not both, return false.
+            if (((object)node1 == null) || ((object)node2 == null))
+            {
+                return false;
+            }
+
+            return node1.Equals(node2);
+        }
+
+        public static bool operator !=(SiteMapNode node1, SiteMapNode node2)
+        {
+            return !(node1 == node2);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Key.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return this.Key;
+        }
+
+        #endregion
     }
 }

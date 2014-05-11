@@ -92,6 +92,7 @@ namespace MvcSiteMapProvider
         public abstract string Controller { get; set; }
         public abstract string Action { get; set; }
         public abstract void CopyTo(ISiteMapNode node);
+        public abstract bool Equals(ISiteMapNode node);
 
         #endregion
     }

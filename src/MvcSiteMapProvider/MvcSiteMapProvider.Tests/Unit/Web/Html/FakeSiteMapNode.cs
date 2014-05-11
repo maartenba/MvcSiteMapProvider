@@ -324,6 +324,16 @@ namespace MvcSiteMapProvider.Tests.Unit.Web.Html
             throw new NotImplementedException();
         }
 
+        public bool Equals(ISiteMapNode node)
+        {
+            if (base.Equals(node))
+            {
+                return true;
+            }
+
+            return this.Key.Equals(node.Key);
+        }
+
         #endregion
     }
 
