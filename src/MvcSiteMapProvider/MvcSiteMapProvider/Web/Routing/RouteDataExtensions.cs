@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Routing;
 
 namespace MvcSiteMapProvider.Web.Routing
@@ -20,6 +22,14 @@ namespace MvcSiteMapProvider.Web.Routing
                 return value as string;
             }
 
+            if (routeData.Values.ContainsKey("MS_DirectRouteMatches"))
+            {
+                if (((IEnumerable<RouteData>)routeData.Values["MS_DirectRouteMatches"]).First().Values.TryGetValue(valueName, out value))
+                {
+                    return value as string;
+                }
+            }
+
             return string.Empty;
         }
 
@@ -34,6 +44,14 @@ namespace MvcSiteMapProvider.Web.Routing
             if (routeData.DataTokens.TryGetValue("area", out value))
             {
                 return value as string;
+            }
+
+            if (routeData.Values.ContainsKey("MS_DirectRouteMatches"))
+            {
+                if (((IEnumerable<RouteData>)routeData.Values["MS_DirectRouteMatches"]).First().DataTokens.TryGetValue("area", out value))
+                {
+                    return value as string;
+                }
             }
 
             return string.Empty;

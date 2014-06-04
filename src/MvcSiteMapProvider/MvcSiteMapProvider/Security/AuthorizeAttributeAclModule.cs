@@ -213,7 +213,8 @@ namespace MvcSiteMapProvider.Security
             actionDescriptor = null;
             try
             {
-                actionDescriptor = controllerDescriptor.FindAction(controllerContext, actionName);
+                var actionSelector = new ActionSelector();
+                actionDescriptor = actionSelector.FindAction(controllerContext, controllerDescriptor, actionName);
                 if (actionDescriptor != null)
                     return true;
             }
@@ -278,5 +279,15 @@ namespace MvcSiteMapProvider.Security
         }
 
         #endregion
+
+        private class ActionSelector 
+            : AsyncControllerActionInvoker
+        {
+            // Needed because FindAction is protected, and we are changing it to be public
+            public new ActionDescriptor FindAction(ControllerContext controllerContext, ControllerDescriptor controllerDescriptor, string actionName)
+            {
+                return base.FindAction(controllerContext, controllerDescriptor, actionName);
+            }
+        }
     }
 }
