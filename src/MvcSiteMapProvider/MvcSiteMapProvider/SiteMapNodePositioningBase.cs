@@ -150,8 +150,6 @@ namespace MvcSiteMapProvider
             }
         }
 
-        // TODO: rework... (maartenba)
-
         /// <summary>
         /// Determines whether the specified node is in current path.
         /// </summary>
@@ -161,7 +159,7 @@ namespace MvcSiteMapProvider
         public override bool IsInCurrentPath()
         {
             ISiteMapNode node = this;
-            return (this.SiteMap.CurrentNode != null && (node == this.SiteMap.CurrentNode || this.SiteMap.CurrentNode.IsDescendantOf(node)));
+            return (this.SiteMap.CurrentNode != null && (this.SiteMap.CurrentNode.Equals(node) || this.SiteMap.CurrentNode.IsDescendantOf(node)));
         }
 
         /// <summary>

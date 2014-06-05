@@ -283,7 +283,7 @@ namespace MvcSiteMapProvider.Builder
                             foreach (var dynamicNode in dynamicNodesForChildNode)
                             {
                                 // Verify parent/child relation
-                                if (dynamicNode.ParentNode == parentNode
+                                if (dynamicNode.ParentNode.Equals(parentNode)
                                     && !siteMap.GetChildNodes(parentNode).Contains(dynamicNode))
                                 {
                                     siteMap.AddNode(dynamicNode, parentNode);
@@ -325,7 +325,7 @@ namespace MvcSiteMapProvider.Builder
                             foreach (var dynamicNode in dynamicNodesForChildNode)
                             {
                                 // Verify parent/child relation
-                                if (dynamicNode.ParentNode == parentNode
+                                if (dynamicNode.ParentNode.Equals(parentNode)
                                     && !siteMap.GetChildNodes(parentNode).Contains(dynamicNode))
                                 {
                                     siteMap.AddNode(dynamicNode, parentNode);
