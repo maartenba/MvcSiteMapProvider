@@ -785,6 +785,11 @@ namespace MvcSiteMapProvider
                 return true;
             }
 
+            if (node == null)
+            {
+                return false;
+            }
+
             return this.Key.Equals(node.Key);
         }
 
