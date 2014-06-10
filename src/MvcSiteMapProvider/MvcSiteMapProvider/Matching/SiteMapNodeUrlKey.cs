@@ -23,7 +23,21 @@ namespace MvcSiteMapProvider.Matching
 
             // Host name in absolute URL overrides this one.
             this.hostName = node.HostName;
-            this.SetUrlValues(node.UnresolvedUrl);
+
+            // Fixes #322 - If using a custom URL resolver, we need to account for the case that
+            // the URL will be provided by the resolver instead of specified explicitly.
+            if (!string.IsNullOrEmpty(node.UnresolvedUrl))
+            {
+                this.SetUrlValues(node.UnresolvedUrl);
+            }
+            else if (!node.UsesDefaultUrlResolver())
+            {
+                // For a custom URL resolver, if the unresolved URL property
+                // is not set use the one returned from the URL resolver.
+                // This ensures URLs that are unidentifiable by MVC can still
+                // be matched by URL.
+                this.SetUrlValues(node.Url);
+            }
         }
          
         private readonly ISiteMapNode node;

@@ -134,7 +134,7 @@ namespace MvcSiteMapProvider
             lock (this.synclock)
             {
                 IUrlKey url = null;
-                bool isMvcUrl = string.IsNullOrEmpty(node.UnresolvedUrl) && this.UsesDefaultUrlResolver(node);
+                bool isMvcUrl = string.IsNullOrEmpty(node.UnresolvedUrl) && node.UsesDefaultUrlResolver();
 
                 // Only store URLs if they are clickable and are configured using the Url
                 // property or provided by a custom URL resolver.
@@ -814,12 +814,6 @@ namespace MvcSiteMapProvider
                 return node;
             }
             return null;
-        }
-
-        protected virtual bool UsesDefaultUrlResolver(ISiteMapNode node)
-        {
-            return string.IsNullOrEmpty(node.UrlResolver) ||
-                typeof(MvcSiteMapProvider.Web.UrlResolver.SiteMapNodeUrlResolver).Equals(Type.GetType(node.UrlResolver, false));
         }
 
         protected virtual void AssertSiteMapNodeConfigurationIsValid(ISiteMapNode node)

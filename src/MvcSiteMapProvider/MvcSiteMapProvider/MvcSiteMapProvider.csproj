@@ -198,6 +198,7 @@
     <Compile Include="Globalization\CultureContextFactory.cs" />
     <Compile Include="Globalization\ICultureContextFactory.cs" />
     <Compile Include="Globalization\ICultureContext.cs" />
+    <Compile Include="ISiteMapNodeExtensions.cs" />
     <Compile Include="ISiteMapNodeProvider.cs" />
     <Compile Include="ISiteMapSettings.cs" />
     <Compile Include="ISortable.cs" />
