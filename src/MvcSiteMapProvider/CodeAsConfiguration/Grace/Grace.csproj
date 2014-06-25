@@ -34,8 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Grace">
-      <HintPath>..\..\packages\Grace.2.3.5\lib\portable-net45+win+wp80\Grace.dll</HintPath>
+    <Reference Include="Grace, Version=2.3.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Grace.2.3.6\lib\portable-net45+win+wp80\Grace.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
