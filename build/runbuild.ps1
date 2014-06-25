@@ -78,7 +78,7 @@ task NuGet -depends Compile -description "This tasks makes creates the NuGet pac
 
 	Create-MvcSiteMapProvider-Web-Package
 	
-	Create-DIContainer-Packages ("Autofac", "Ninject", "SimpleInjector", "StructureMap", "Unity", "Windsor")
+	Create-DIContainer-Packages ("Autofac", "Grace", "Ninject", "SimpleInjector", "StructureMap", "Unity", "Windsor")
 }
 
 task Finalize -depends NuGet -description "This tasks finalizes the build" {  
@@ -262,17 +262,25 @@ function Create-DIContainer-Packages ([string[]] $di_containers) {
 		Write-Host $di_container -ForegroundColor Yellow
 
 		#exception: SimpleInjector version 2 doesn't support .NET 3.5
-		if ($di_container -ne "SimpleInjector") {
+		if ($di_container -ne "SimpleInjector" -and $di_container -ne "Grace") {
 			Create-DIContainer-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
 			Create-DIContainer-Modules-Package $di_container ("net35", "net40", "net45") -mvc_version "2"
 		}
 
-		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "3"
-		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "3"
+		if ($di_container -ne "Grace") {
+			Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "3"
+			Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "3"
 
-		Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
-		Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "4"
-		
+			Create-DIContainer-Package $di_container ("net40", "net45") -mvc_version "4"
+			Create-DIContainer-Modules-Package $di_container ("net40", "net45") -mvc_version "4"
+		} else {
+			Create-DIContainer-Package $di_container ("net45") -mvc_version "3"
+			Create-DIContainer-Modules-Package $di_container ("net45") -mvc_version "3"
+
+			Create-DIContainer-Package $di_container ("net45") -mvc_version "4"
+			Create-DIContainer-Modules-Package $di_container ("net45") -mvc_version "4"
+		}
+
 		Create-DIContainer-Package $di_container ("net45") -mvc_version "5"
 		Create-DIContainer-Modules-Package $di_container ("net45") -mvc_version "5"
 	}

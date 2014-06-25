@@ -13,6 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MvcMusicStore</RootNamespace>
     <AssemblyName>Mvc Music Store</AssemblyName>
+    <TargetFrameworkVersion Condition=" $(DefineConstants.Contains('Grace')) ">v4.5</TargetFrameworkVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SccProjectName>
     </SccProjectName>
@@ -39,7 +40,8 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Demo;MVC4;NET40;SimpleInjector</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;Demo;MVC4;NET45;Grace</DefineConstants>
+    <TargetFrameworkVersion Condition=" $(DefineConstants.Contains('Grace')) ">v4.5</TargetFrameworkVersion>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -64,6 +66,10 @@
     </Reference>
     <Reference Include="Castle.Windsor">
       <HintPath>..\packages\Castle.Windsor.3.2.0\lib\net40\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="Grace, Version=2.3.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Grace.2.3.6\lib\portable-net45+win+wp80\Grace.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -218,6 +224,16 @@ configured in the compilation constants -->
         </Compile>
       </ItemGroup>
     </When>
+    <When Condition=" $(DefineConstants.Contains('Grace')) ">
+      <ItemGroup>
+        <Compile Include="..\CodeAsConfiguration\Grace\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
+        </Compile>
+        <Compile Include="..\CodeAsConfiguration\Grace\DI\Grace\GraceDependencyInjectionContainer.cs">
+          <Link>DI\Grace\GraceDependencyInjectionContainer.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
     <!-- TODO: Define other DI containers here -->
   </Choose>
   <ItemGroup>
@@ -262,6 +278,12 @@ configured in the compilation constants -->
     </Compile>
     <Compile Include="..\CodeAsConfiguration\Windsor\DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs">
       <Link>DI\Windsor\Installers\MvcSiteMapProviderInstaller.cs</Link>
+    </Compile>
+    <Compile Include="..\CodeAsConfiguration\Grace\DI\Grace\Modules\MvcModule.cs" Condition=" $(DefineConstants.Contains('Grace')) ">
+      <Link>DI\Grace\Modules\MvcModule.cs</Link>
+    </Compile>
+    <Compile Include="..\CodeAsConfiguration\Grace\DI\Grace\Modules\MvcSiteMapProviderModule.cs" Condition=" $(DefineConstants.Contains('Grace')) ">
+      <Link>DI\Grace\Modules\MvcSiteMapProviderModule.cs</Link>
     </Compile>
     <Compile Include="App_GlobalResources\SiteMapLocalizations.Designer.cs">
       <AutoGen>True</AutoGen>
