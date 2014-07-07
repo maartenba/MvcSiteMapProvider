@@ -13,7 +13,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MvcMusicStore</RootNamespace>
     <AssemblyName>Mvc Music Store</AssemblyName>
-    <TargetFrameworkVersion Condition=" $(DefineConstants.Contains('Grace')) ">v4.5</TargetFrameworkVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SccProjectName>
     </SccProjectName>
@@ -164,26 +163,6 @@
 configured in the compilation constants -->
   <Choose>
     <!-- Choose between our DI containers -->
-    <When Condition=" $(DefineConstants.Contains('StructureMap')) ">
-      <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\StructureMap\App_Start\CompositionRoot.cs">
-          <Link>App_Start\CompositionRoot.cs</Link>
-        </Compile>
-        <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\StructureMapDependencyInjectionContainer.cs">
-          <Link>DI\StructureMap\StructureMapDependencyInjectionContainer.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </When>
-    <When Condition=" $(DefineConstants.Contains('Unity')) ">
-      <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Unity\App_Start\CompositionRoot.cs">
-          <Link>App_Start\CompositionRoot.cs</Link>
-        </Compile>
-        <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\UnityDependencyInjectionContainer.cs">
-          <Link>DI\Unity\UnityDependencyInjectionContainer.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </When>
     <When Condition=" $(DefineConstants.Contains('Autofac')) ">
       <ItemGroup>
         <Compile Include="..\CodeAsConfiguration\Autofac\App_Start\CompositionRoot.cs">
@@ -191,6 +170,16 @@ configured in the compilation constants -->
         </Compile>
         <Compile Include="..\CodeAsConfiguration\Autofac\DI\Autofac\AutofacDependencyInjectionContainer.cs">
           <Link>DI\Autofac\AutofacDependencyInjectionContainer.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
+    <When Condition=" $(DefineConstants.Contains('Grace')) ">
+      <ItemGroup>
+        <Compile Include="..\CodeAsConfiguration\Grace\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
+        </Compile>
+        <Compile Include="..\CodeAsConfiguration\Grace\DI\Grace\GraceDependencyInjectionContainer.cs">
+          <Link>DI\Grace\GraceDependencyInjectionContainer.cs</Link>
         </Compile>
       </ItemGroup>
     </When>
@@ -214,6 +203,26 @@ configured in the compilation constants -->
         </Compile>
       </ItemGroup>
     </When>
+    <When Condition=" $(DefineConstants.Contains('StructureMap')) ">
+      <ItemGroup>
+        <Compile Include="..\CodeAsConfiguration\StructureMap\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
+        </Compile>
+        <Compile Include="..\CodeAsConfiguration\StructureMap\DI\StructureMap\StructureMapDependencyInjectionContainer.cs">
+          <Link>DI\StructureMap\StructureMapDependencyInjectionContainer.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
+    <When Condition=" $(DefineConstants.Contains('Unity')) ">
+      <ItemGroup>
+        <Compile Include="..\CodeAsConfiguration\Unity\App_Start\CompositionRoot.cs">
+          <Link>App_Start\CompositionRoot.cs</Link>
+        </Compile>
+        <Compile Include="..\CodeAsConfiguration\Unity\DI\Unity\UnityDependencyInjectionContainer.cs">
+          <Link>DI\Unity\UnityDependencyInjectionContainer.cs</Link>
+        </Compile>
+      </ItemGroup>
+    </When>
     <When Condition=" $(DefineConstants.Contains('Windsor')) ">
       <ItemGroup>
         <Compile Include="..\CodeAsConfiguration\Windsor\App_Start\CompositionRoot.cs">
@@ -224,16 +233,7 @@ configured in the compilation constants -->
         </Compile>
       </ItemGroup>
     </When>
-    <When Condition=" $(DefineConstants.Contains('Grace')) ">
-      <ItemGroup>
-        <Compile Include="..\CodeAsConfiguration\Grace\App_Start\CompositionRoot.cs">
-          <Link>App_Start\CompositionRoot.cs</Link>
-        </Compile>
-        <Compile Include="..\CodeAsConfiguration\Grace\DI\Grace\GraceDependencyInjectionContainer.cs">
-          <Link>DI\Grace\GraceDependencyInjectionContainer.cs</Link>
-        </Compile>
-      </ItemGroup>
-    </When>
+    
     <!-- TODO: Define other DI containers here -->
   </Choose>
   <ItemGroup>
