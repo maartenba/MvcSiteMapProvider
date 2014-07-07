@@ -90,29 +90,34 @@ namespace DI.Grace.Modules
                  new Type[0],
                  string.Empty);
 
+            // Visibility Providers
             container.Export<SiteMapNodeVisibilityProviderStrategy>()
                      .As<ISiteMapNodeVisibilityProviderStrategy>()
-                     .WithCtorParam(() => string.Empty);
+                     .WithCtorParam(() => string.Empty).Named("defaultProviderName");
 
+            // Pass in the global controllerBuilder reference
             container.ExportInstance((s, c) => ControllerBuilder.Current);
+
             container.Export<ControllerTypeResolverFactory>().As<IControllerTypeResolverFactory>();
 
+            // Configure attribute security
             string attributeModuleKey = typeof(AuthorizeAttributeAclModule).Name;
-
             container.Export<AuthorizeAttributeAclModule>()
                      .As<IAclModule>()
                      .WithKey(attributeModuleKey);
 
+            // Configure XML security
             string xmlModuleKey = typeof(XmlRolesAclModule).Name;
-
             container.Export<XmlRolesAclModule>()
                      .As<IAclModule>()
                      .WithKey(xmlModuleKey);
-
+            
+            // Combine attribute and xml security
             container.Export<CompositeAclModule>()
                      .As<IAclModule>()
-                     .WithCtorParam<IAclModule[]>().LocateWithKey(new[] { attributeModuleKey, xmlModuleKey });
+                     .WithCtorParam<IAclModule[]>().Named("aclModules").LocateWithKey(new[] { attributeModuleKey, xmlModuleKey });
 
+            // Configure cache
             container.ExportInstance<System.Runtime.Caching.ObjectCache>(
                 (scope, context) => System.Runtime.Caching.MemoryCache.Default);
 
@@ -130,8 +135,10 @@ namespace DI.Grace.Modules
                      .WithNamedCtorValue(() => absoluteCacheExpiration)
                      .WithNamedCtorValue(() => slidingCacheExpiration);
 
+            // Configure the visitors
             container.Export<UrlResolvingSiteMapNodeVisitor>().As<ISiteMapNodeVisitor>();
 
+            // Prepare for our node providers
             container.Export<FileXmlSource>()
                      .As<IXmlSource>()
                      .WithKey("xmlSource1")
@@ -140,7 +147,8 @@ namespace DI.Grace.Modules
             container.Export<ReservedAttributeNameProvider>()
                      .As<IReservedAttributeNameProvider>();
 
-            container.Export<XmlSiteMapNodeProvider>()
+            // Register the sitemap node providers
+           container.Export<XmlSiteMapNodeProvider>()
                      .As<ISiteMapNodeProvider>()
                      .WithKey("xmlSiteMapNodeProvider1")
                      .WithCtorParam<IXmlSource>().LocateWithKey("xmlSource1")
@@ -155,25 +163,35 @@ namespace DI.Grace.Modules
 
             container.Export<CompositeSiteMapNodeProvider>()
                      .As<ISiteMapNodeProvider>()
+                     .WithKey("siteMapNodeProvider1")
                      .WithCtorParam<ISiteMapNodeProvider[]>().LocateWithKey(new[]
                                                                             {
                                                                                 "xmlSiteMapNodeProvider1",
                                                                                 "reflectionSiteMapNodeProvider1"
                                                                             });
 
-            container.Export<SiteMapBuilder>().As<ISiteMapBuilder>();
+            // Register the sitemap builders
+            container.Export<SiteMapBuilder>()
+                     .As<ISiteMapBuilder>()
+                     .WithKey("siteMapBuilder1")
+                     .WithCtorParam<ISiteMapNodeProvider>().Named("siteMapNodeProvider").LocateWithKey("siteMapNodeProvider1");
 
+            // Configure the builder setsbuilderSet1
             container.Export<SiteMapBuilderSet>()
                      .As<ISiteMapBuilderSet>()
-                     .WithCtorParam(() => "default")
-                     .WithCtorParam<ICacheDetails>().LocateWithKey("cacheDetails1")
+                     .WithKey("builderSet1")
+                     .WithCtorParam(() => "default").Named("instanceName")
+                     .WithCtorParam<ISiteMapBuilder>().Named("siteMapBuilder").LocateWithKey("siteMapBuilder1")
+                     .WithCtorParam<ICacheDetails>().Named("cacheDetails").LocateWithKey("cacheDetails1")
                      .WithNamedCtorValue(() => securityTrimmingEnabled)
                      .WithNamedCtorValue(() => enableLocalization)
                      .WithNamedCtorValue(() => visibilityAffectsDescendants)
                      .WithNamedCtorValue(() => useTitleIfDescriptionNotProvided);
 
-            container.Export<SiteMapBuilderSetStrategy>().As<ISiteMapBuilderSetStrategy>();
-
+            // Configure the builder sets
+            container.Export<SiteMapBuilderSetStrategy>()
+                     .As<ISiteMapBuilderSetStrategy>()
+                     .WithCtorParam<ISiteMapBuilderSet[]>().Named("siteMapBuilderSets").LocateWithKey(new[] { "builderSet1" });
         }
     }
 }
