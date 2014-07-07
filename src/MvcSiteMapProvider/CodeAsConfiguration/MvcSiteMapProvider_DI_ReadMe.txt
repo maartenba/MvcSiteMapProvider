@@ -29,6 +29,7 @@ Here is a list of the locations for each DI container where you can view
 the latest version of the MvcSiteMapProvider modules:
 
 Autofac: https://github.com/maartenba/MvcSiteMapProvider/blob/master/src/MvcSiteMapProvider/CodeAsConfiguration/Autofac/DI/Autofac/Modules/MvcSiteMapProviderModule.cs
+Grace: https://github.com/maartenba/MvcSiteMapProvider/blob/master/src/MvcSiteMapProvider/CodeAsConfiguration/Grace/DI/Grace/Modules/MvcSiteMapProviderModule.cs
 Ninject: https://github.com/maartenba/MvcSiteMapProvider/blob/master/src/MvcSiteMapProvider/CodeAsConfiguration/Ninject/DI/Ninject/Modules/MvcSiteMapProviderModule.cs
 SimpleInjector: https://github.com/maartenba/MvcSiteMapProvider/blob/master/src/MvcSiteMapProvider/CodeAsConfiguration/SimpleInjector/DI/SimpleInjector/MvcSiteMapProviderContainerInitializer.cs
 StructureMap: https://github.com/maartenba/MvcSiteMapProvider/blob/master/src/MvcSiteMapProvider/CodeAsConfiguration/StructureMap/DI/StructureMap/Registries/MvcSiteMapProviderRegistry.cs
