@@ -608,7 +608,6 @@ namespace MvcSiteMapProvider
         /// <value>The preserved route parameters.</value>
         public override IPreservedRouteParameterCollection PreservedRouteParameters { get { return this.preservedRouteParameters; } }
 
-
         /// <summary>
         /// Sets the preserved route parameters of the current request to the routeValues collection.
         /// </summary>
@@ -655,7 +654,6 @@ namespace MvcSiteMapProvider
             set { } 
         }
 
-
         /// <summary>
         /// Gets the route data associated with the current node.
         /// </summary>
@@ -695,7 +693,46 @@ namespace MvcSiteMapProvider
             if (!string.IsNullOrEmpty(this.HostName) && !this.urlPath.IsPublicHostName(this.HostName, this.HttpContext))
                 return false;
 
-            return this.RouteValues.MatchesRoute(routeValues);
+            // Merge in any query string values from the current context that match keys with
+            // the route values configured in the current node (MVC doesn't automatically assign them 
+            // as route values). This allows matching on query string values, but only if they 
+            // are configured in the node.
+            var values = this.MergeRouteValuesAndNamedQueryStringValues(routeValues, this.RouteValues.Keys, this.HttpContext);
+
+            return this.RouteValues.MatchesRoute(values);
+        }
+
+        /// <summary>
+        /// Makes a copy of the passed in route values and merges in any query string parameters 
+        /// that are configured for the current node. This ensures query string parameters are only 
+        /// taken into consideration for the match.
+        /// </summary>
+        /// <param name="routeValues">The route values from the RouteData object.</param>
+        /// <param name="queryStringKeys">A list of keys of query string values to add to the route values if 
+        /// they exist in the current context.</param>
+        /// <param name="httpContext">The current HTTP context.</param>
+        /// <returns>A merged list of routeValues and query string values. Route values will take precedence 
+        /// over query string values in cases where both are specified.</returns>
+        protected virtual IDictionary<string, object> MergeRouteValuesAndNamedQueryStringValues(IDictionary<string, object> routeValues, ICollection<string> queryStringKeys, HttpContextBase httpContext)
+        {
+            // Make a copy of the routeValues. We only want to limit this to the scope of the current node.
+            var result = new Dictionary<string, object>(routeValues);
+
+            // Add any query string values from the current context
+            var queryStringValues = httpContext.Request.QueryString;
+
+            foreach (var key in queryStringValues.AllKeys)
+            {
+                // Copy the query string value as a route value if it doesn't already exist
+                // and the name is provided as a match. Note that route values will take
+                // precedence over query string parameters in cases of duplicates.
+                if (queryStringKeys.Contains(key) && !result.ContainsKey(key))
+                {
+                    result[key] = queryStringValues[key];
+                }
+            }
+
+            return result;
         }
 
         #endregion
