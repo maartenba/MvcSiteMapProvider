@@ -4,13 +4,13 @@
 To add MvcSiteMapProvider to your DI configuration,
 add the following code to your composition root.
 
-    // Create new container
+    // Create the DI container (typically part of your DI setup already)
     var container = new Grace.DependencyInjection.DependencyInjectionContainer();
 
-    // Install MVC sitemap provider
+    // Setup configuration of DI (required)
     container.Configure(new MvcSiteMapProviderModule());
 
-    // Install Controllers
+    // Install MVC Controllers (typically part of your DI setup already)
     container.Configure(new MvcModule());
         
     // Setup global sitemap loader (required)
