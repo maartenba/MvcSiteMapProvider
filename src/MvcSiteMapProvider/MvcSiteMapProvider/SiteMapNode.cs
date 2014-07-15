@@ -721,12 +721,13 @@ namespace MvcSiteMapProvider
             // Add any query string values from the current context
             var queryStringValues = httpContext.Request.QueryString;
 
+            //QueryString collection might contain nullable keys
             foreach (var key in queryStringValues.AllKeys)
             {
                 // Copy the query string value as a route value if it doesn't already exist
                 // and the name is provided as a match. Note that route values will take
                 // precedence over query string parameters in cases of duplicates.
-                if (queryStringKeys.Contains(key) && !result.ContainsKey(key))
+                if (key != null && queryStringKeys.Contains(key) && !result.ContainsKey(key))
                 {
                     result[key] = queryStringValues[key];
                 }
