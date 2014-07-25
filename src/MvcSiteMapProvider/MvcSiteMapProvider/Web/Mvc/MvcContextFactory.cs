@@ -29,8 +29,6 @@ namespace MvcSiteMapProvider.Web.Mvc
 
         public virtual HttpContextBase CreateHttpContext(ISiteMapNode node, Uri uri, TextWriter writer)
         {
-            if (node == null)
-                throw new ArgumentNullException("node");
             if (uri == null)
                 throw new ArgumentNullException("uri");
             if (writer == null)

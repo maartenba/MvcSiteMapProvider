@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -280,6 +281,13 @@ namespace MvcSiteMapProvider
             get { return this.siteMapSettings.EnableLocalization; }
         }
 
+        /// <summary>
+        /// Retrieves a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> object that represents the page at the specified URL.
+        /// </summary>
+        /// <param name="rawUrl">A URL that identifies the page for which to retrieve a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/>.</param>
+        /// <returns>A <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> that represents the page identified by rawURL; otherwise, <b>null</b>, 
+        /// if no corresponding <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> is found or if security trimming is enabled and the 
+        /// <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> cannot be returned for the current user.</returns>
         public virtual ISiteMapNode FindSiteMapNode(string rawUrl)
         {
             if (rawUrl == null)
@@ -296,7 +304,25 @@ namespace MvcSiteMapProvider
             // and the current URL will be the absolute URL that is passed.
             var publicFacingUrl = this.urlPath.GetPublicFacingUrl(this.HttpContext);
             var currentUrl = new Uri(publicFacingUrl, rawUrl);
+
+            // Search the internal dictionary for the URL that is registered manually.
             var node = this.FindSiteMapNodeFromUrl(currentUrl.PathAndQuery, currentUrl.AbsolutePath, currentUrl.Host, HttpContext.CurrentHandler);
+
+            // Search for the URL by creating a context based on the new URL and matching route values.
+            if (node == null)
+            {
+                // Create a TextWriter with null stream as a backing stream 
+                // which doesn't consume resources
+                using (var nullWriter = new StreamWriter(Stream.Null))
+                {
+                    // Create a new HTTP context using the current URL.
+                    var currentUrlHttpContext = this.mvcContextFactory.CreateHttpContext(null, currentUrl, nullWriter);
+
+                    // Find node for the passed-in URL using the new HTTP context. This will do a
+                    // match based on route values and/or query string values.
+                    node = this.FindSiteMapNodeFromMvc(currentUrlHttpContext);
+                }
+            }
 
             return this.ReturnNodeIfAccessible(node);
         }
@@ -305,7 +331,8 @@ namespace MvcSiteMapProvider
         /// Retrieves a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> object that represents the currently requested page using the current <see cref="T:System.Web.HttpContext"/> object.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> or if the page context is null.
+        /// A <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> that represents the currently requested page; otherwise, <b>null</b>, 
+        /// if no corresponding <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> can be found in the <see cref="T:MvcSiteMapProvider.SiteMapNode"/> or if the page context is null.
         /// </returns>
         public virtual ISiteMapNode FindSiteMapNodeFromCurrentContext()
         {
@@ -322,6 +349,13 @@ namespace MvcSiteMapProvider
             return this.FindSiteMapNode(context.HttpContext);
         }
 
+        /// <summary>
+        /// Retrieves a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> object based on a specified key.
+        /// </summary>
+        /// <param name="key">A lookup key with which a <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> instance is created.</param>
+        /// <returns>A <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> that represents the page identified by key; otherwise, <b>null</b>, 
+        /// if no corresponding <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> is found or if security trimming is enabled and the 
+        /// <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> cannot be returned for the current user. The default is null.</returns>
         public virtual ISiteMapNode FindSiteMapNodeFromKey(string key)
         {
             ISiteMapNode node = null;

@@ -159,7 +159,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap) : helper.SiteMap.RootNode;
+            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap, true) : helper.SiteMap.RootNode;
             return Menu(helper, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, sourceMetadata);
         }
 
@@ -204,7 +204,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap) : helper.SiteMap.RootNode;
+            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap, true) : helper.SiteMap.RootNode;
             return Menu(helper, null, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, visibilityAffectsDescendants, sourceMetadata);
         }
 
@@ -249,7 +249,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -301,7 +301,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -435,7 +435,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -490,7 +490,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescenants, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -791,7 +791,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap) : helper.SiteMap.RootNode;
+            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap, true) : helper.SiteMap.RootNode;
             return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, sourceMetadata);
         }
 
@@ -839,7 +839,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, bool startFromCurrentNode, bool startingNodeInChildLevel, bool showStartingNode, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap) : helper.SiteMap.RootNode;
+            ISiteMapNode startingNode = startFromCurrentNode ? GetCurrentNode(helper.SiteMap, true) : helper.SiteMap.RootNode;
             return Menu(helper, templateName, startingNode, startingNodeInChildLevel, showStartingNode, Int32.MaxValue, false, visibilityAffectsDescendants, sourceMetadata);
         }
 
@@ -887,7 +887,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -986,7 +986,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -1047,7 +1047,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns>Html markup</returns>
         public static MvcHtmlString Menu(this MvcSiteMapHtmlHelper helper, string templateName, int startingNodeLevel, bool startingNodeInChildLevel, bool showStartingNode, int maxDepth, bool allowForwardSearch, bool drillDownToCurrent, bool visibilityAffectsDescendants, SourceMetadataDictionary sourceMetadata)
         {
-            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap), startingNodeLevel, allowForwardSearch);
+            ISiteMapNode startingNode = GetStartingNode(GetCurrentNode(helper.SiteMap, true), startingNodeLevel, allowForwardSearch);
             if (startingNode == null)
             {
                 return MvcHtmlString.Empty;
@@ -1333,6 +1333,20 @@ namespace MvcSiteMapProvider.Web.Html
         /// <returns></returns>
         public static ISiteMapNode GetCurrentNode(ISiteMap selectedSiteMap)
         {
+            return GetCurrentNode(selectedSiteMap, false);
+        }
+
+        /// <summary>
+        /// This determines the deepest node matching the current HTTP context, so if the current URL describes a location
+        /// deeper than the site map designates, it will determine the closest parent to the current URL and return that 
+        /// as the current node. This allows menu relevance when navigating deeper than the sitemap structure designates, such
+        /// as when navigating to MVC actions, which are not shown in the menus
+        /// </summary>
+        /// <param name="selectedSiteMapProvider">the current MVC Site Map Provider</param>
+        /// <param name="returnRootNodeIfNotFound">whether to return the root node if the current node is null</param>
+        /// <returns></returns>
+        public static ISiteMapNode GetCurrentNode(ISiteMap selectedSiteMap, bool returnRootNodeIfNotFound)
+        {
             // get the node matching the current URL location
             var currentNode = selectedSiteMap.CurrentNode;
 
@@ -1341,11 +1355,12 @@ namespace MvcSiteMapProvider.Web.Html
             if (currentNode == null)
             {
                 var url = HttpContext.Current.Request.Url.LocalPath;
+                var queryString = HttpContext.Current.Request.Url.Query;
 
                 while (url.Length > 0)
                 {
                     // see if we can find a matching node
-                    currentNode = selectedSiteMap.FindSiteMapNode(url);
+                    currentNode = selectedSiteMap.FindSiteMapNode(url + queryString);
 
                     // if we get a hit, stop
                     if (currentNode != null) break;
@@ -1355,6 +1370,13 @@ namespace MvcSiteMapProvider.Web.Html
                     if (lastSlashlocation < 0) break; // protects us from malformed URLs
                     url = url.Remove(lastSlashlocation);
                 }
+            }
+
+            // If the current node is still null, return the root node.
+            // This is the same way the SiteMap.FindSiteMapNode(rawUrl) method worked in v3.
+            if (currentNode == null && returnRootNodeIfNotFound)
+            {
+                currentNode = selectedSiteMap.RootNode;
             }
 
             return currentNode;
