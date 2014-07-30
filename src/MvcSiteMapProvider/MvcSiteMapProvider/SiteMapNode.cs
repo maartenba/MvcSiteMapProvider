@@ -726,8 +726,9 @@ namespace MvcSiteMapProvider
             {
                 // Copy the query string value as a route value if it doesn't already exist
                 // and the name is provided as a match. Note that route values will take
-                // precedence over query string parameters in cases of duplicates.
-                if (key != null && queryStringKeys.Contains(key) && !result.ContainsKey(key))
+                // precedence over query string parameters in cases of duplicates
+                // (unless the route value contains an empty value, then overwrite).
+                if (key != null && queryStringKeys.Contains(key) && (!result.ContainsKey(key) || string.IsNullOrEmpty(result[key].ToString())))
                 {
                     result[key] = queryStringValues[key];
                 }
