@@ -23,11 +23,9 @@ namespace MvcSiteMapProvider.Globalization
                 if (((trimmedText.Length > 10)) && trimmedText.ToLower(CultureInfo.InvariantCulture).StartsWith("$resources:", StringComparison.Ordinal))
                 {
                     resourceString = trimmedText.Substring(11);
-                    string resourceLocation;
-                    string resourceName;
                     var index = resourceString.IndexOf(',');
-                    resourceLocation = resourceString.Substring(0, index);
-                    resourceName = resourceString.Substring(index + 1);
+                    string resourceLocation = resourceString.Substring(0, index);
+                    string resourceName = resourceString.Substring(index + 1);
                     var length = resourceName.IndexOf(',');
                     if (length != -1)
                     {
@@ -36,7 +34,9 @@ namespace MvcSiteMapProvider.Globalization
                     }
                     else
                     {
-                        value = null;
+                        // Fixes #339, return string datatype (rather than null) so custom 
+                        // attributes can still be identified as string vs another datatype.
+                        value = string.Empty;
                     }
                     if (explicitResourceKeys == null)
                     {
