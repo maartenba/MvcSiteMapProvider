@@ -18,7 +18,7 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Determines whether the provider instance matches the name
         /// </summary>
-        /// <param name="providerName">The name of the builder set.</param>
+        /// <param name="builderSetName">The name of the builder set.</param>
         /// <returns>
         /// True if the builder set name matches.
         /// </returns>

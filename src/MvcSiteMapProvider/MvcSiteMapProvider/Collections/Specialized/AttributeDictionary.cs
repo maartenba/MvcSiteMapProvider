@@ -61,7 +61,8 @@ namespace MvcSiteMapProvider.Collections.Specialized
         /// <summary>
         /// Adds a new element to the dictionary with the specified key and value. If the key exists, the value will be overwritten.
         /// </summary>
-        /// <param name="item">The KeyValuePair object that contains the key and value to add.</param>
+        /// <param name="key">The key of the new item to add.</param>
+        /// <param name="value">The value of the new item to add.</param>
         public override void Add(string key, object value)
         {
             this.Add(key, value, true);
@@ -111,18 +112,18 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Adds the elements from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>. If the key exists, the value will be overwritten.
+        /// Adds the elements from a <see cref="T:System.Collections.Generic.Dictionary{string, object}"/>. If the key exists, the value will be overwritten.
         /// </summary>
-        /// <param name="items">The <see cref="System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
+        /// <param name="items">The <see cref="T:System.Collections.Generic.Dictionary{string, object}"/> of items to add.</param>
         public override void AddRange(IDictionary<string, object> items)
         {
             this.AddRange(items, true);
         }
 
         /// <summary>
-        /// Adds the elements from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>. If the key exists, the value will be overwritten.
+        /// Adds the elements from a <see cref="T:System.Collections.Generic.Dictionary{string, object}"/>. If the key exists, the value will be overwritten.
         /// </summary>
-        /// <param name="items">The <see cref="System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
+        /// <param name="items">The <see cref="T:System.Collections.Generic.Dictionary{string, object}"/> of items to add.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         public void AddRange(IDictionary<string, object> items, bool throwIfReservedKey)
         {

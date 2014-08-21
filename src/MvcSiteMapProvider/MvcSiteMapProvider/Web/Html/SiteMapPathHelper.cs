@@ -28,8 +28,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// Gets SiteMap path for the current request
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
-        /// <param name="templateName">Name of the template.</param>
-        /// <param name="startingNodeKey">The starting node (the last node in the site map path).</param>
+        /// <param name="startingNode">The starting node (the last node in the site map path).</param>
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, ISiteMapNode startingNode)
         {
@@ -144,7 +143,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
         /// <param name="templateName">Name of the template.</param>
-        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="startingNode">The starting node (the last node in the site map path).</param>
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode)
         {
@@ -156,7 +155,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
         /// <param name="templateName">Name of the template.</param>
-        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="startingNode">The starting node (the last node in the site map path).</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, object sourceMetadata)
@@ -169,7 +168,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="helper">MvcSiteMapHtmlHelper instance</param>
         /// <param name="templateName">Name of the template.</param>
-        /// <param name="startingNodeKey">The key of the starting node (the last node in the site map path).</param>
+        /// <param name="startingNode">The starting node (the last node in the site map path).</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>SiteMap path for the current request</returns>
         public static MvcHtmlString SiteMapPath(this MvcSiteMapHtmlHelper helper, string templateName, ISiteMapNode startingNode, SourceMetadataDictionary sourceMetadata)

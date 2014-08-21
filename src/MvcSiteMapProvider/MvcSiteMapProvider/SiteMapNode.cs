@@ -270,7 +270,6 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Determines whether the node is visible.
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="sourceMetadata">The source metadata.</param>
         /// <returns>
         /// 	<c>true</c> if the specified node is visible; otherwise, <c>false</c>.
@@ -677,7 +676,7 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Determines whether this node matches the supplied route values.
         /// </summary>
-        /// <param name="routeValues">An IDictionary<string, object> of route values.</param>
+        /// <param name="routeValues">An <see cref="T:System.Collections.Generic.IDictionary{string, object}"/> of route values.</param>
         /// <returns><c>true</c> if the route matches this node's RouteValues collection; otherwise <c>false</c>.</returns>
         public override bool MatchesRoute(IDictionary<string, object> routeValues)
         {

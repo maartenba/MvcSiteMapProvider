@@ -38,9 +38,8 @@ namespace MvcSiteMapProvider.Builder
         /// <summary>
         /// Gets the dynamic nodes for node.
         /// </summary>
-        /// <param name="siteMap">The site map.</param>
-        /// <param name="node">The node.</param>
-        /// <param name="parentKey">The key of the parent node.</param>
+        /// <param name="node">The SiteMap node.</param>
+        /// <param name="defaultParentKey">The key of the parent node.</param>
         public virtual IEnumerable<ISiteMapNodeToParentRelation> BuildDynamicNodes(ISiteMapNode node, string defaultParentKey)
         {
             var result = new List<ISiteMapNodeToParentRelation>();

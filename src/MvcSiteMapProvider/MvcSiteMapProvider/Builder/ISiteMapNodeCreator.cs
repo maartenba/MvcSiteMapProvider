@@ -14,7 +14,6 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="key">The key for the node. This cannot be changed.</param>
         /// <param name="parentKey">The key of the intended parent node.</param>
-        /// <param name="node">The node to map to the parentKey.</param>
         /// <param name="sourceName">A string description of the provider. This value is shown in exception messages related to the node configuration.</param>
         /// <param name="implicitResourceKey">The implicit resource key for localization of the node's properties.</param>
         /// <returns>An <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> instance.</returns>
@@ -25,7 +24,6 @@ namespace MvcSiteMapProvider.Builder
         /// </summary>
         /// <param name="key">The key for the node. This cannot be changed.</param>
         /// <param name="parentKey">The key of the intended parent node.</param>
-        /// <param name="node">The node to map to the parentKey.</param>
         /// <param name="sourceName">A string description of the provider. This value is shown in exception messages related to the node configuration.</param>
         /// <param name="implicitResourceKey">The implicit resource key for localization of the node's properties.</param>
         /// <returns>An <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/> instance.</returns>

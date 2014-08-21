@@ -18,9 +18,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
         void AddRange(string stringToSplit, char[] separator);
 
         /// <summary>
-        /// Adds each element of a <see cref="System.Collections.Generic.IEnumerable{string}"/> to the collection as a new meta robots value. Duplicates will be ignored.
+        /// Adds each element of a <see cref="T:System.Collections.Generic.IEnumerable{string}"/> to the collection as a new meta robots value. Duplicates will be ignored.
         /// </summary>
-        /// <param name="collection">The <see cref="System.Collections.Generic.IEnumerable{string}"/> containing the values to add, or <b>null</b>.</param>
+        /// <param name="collection">The <see cref="T:System.Collections.Generic.IEnumerable{string}"/> containing the values to add, or <b>null</b>.</param>
         void AddRange(IEnumerable<string> collection);
 
         string GetMetaRobotsContentString();

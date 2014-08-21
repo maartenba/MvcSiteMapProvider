@@ -12,7 +12,7 @@ namespace MvcSiteMapProvider.DI
 {
     /// <summary>
     /// This is the default dependency injection composer for the MvcSiteMapProvider that is fired automatically
-    /// using a <see cref="WebActivatorEx.PostApplicationStartMethodAttribute"/> during application startup.
+    /// using a WebActivatorEx.PostApplicationStartMethodAttribute during application startup.
     /// </summary>
     public class Composer
     {

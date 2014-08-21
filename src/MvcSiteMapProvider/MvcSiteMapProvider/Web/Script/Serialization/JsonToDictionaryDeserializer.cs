@@ -6,7 +6,7 @@ using MvcSiteMapProvider.Web.Mvc;
 namespace MvcSiteMapProvider.Web.Script.Serialization
 {
     /// <summary>
-    /// Specialized class to deserialize JSON into a <see cref="System.Collections.Generic.IDictionary{string, object}"/>. The 
+    /// Specialized class to deserialize JSON into a <see cref="T:System.Collections.Generic.IDictionary{string, object}"/>. The 
     /// value is request cached so if the string has been encountered before in the current request it will not be deserialized again.
     /// </summary>
     public class JsonToDictionaryDeserializer : MvcSiteMapProvider.Web.Script.Serialization.IJsonToDictionaryDeserializer

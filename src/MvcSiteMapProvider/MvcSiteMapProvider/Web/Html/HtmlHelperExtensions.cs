@@ -25,7 +25,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// Creates a new MvcSiteMapProvider HtmlHelper.
         /// </summary>
         /// <param name="helper">The helper.</param>
-        /// <param name="provider">The sitemap provider.</param>
+        /// <param name="siteMap">The SiteMap.</param>
         /// <returns>
         /// A <see cref="MvcSiteMapHtmlHelper"/> instance
         /// </returns>

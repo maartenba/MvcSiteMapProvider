@@ -577,12 +577,15 @@ namespace MvcSiteMapProvider
         /// true if security trimming is enabled and <paramref name="node"/> can be viewed by the user or security trimming is not enabled; otherwise, false.
         /// </returns>
         /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="context"/> is null.
-        /// - or -
-        /// <paramref name="node"/> is null.
+        ///     <paramref name="node"/> is null.
         /// </exception>
         public virtual bool IsAccessibleToUser(ISiteMapNode node)
         {
+            if (node == null)
+            {
+                throw new ArgumentNullException("node");
+            }
+
             // If the sitemap is still being constructed, always
             // make all nodes accessible regardless of security trimming.
             if (!IsReadOnly)
@@ -782,7 +785,6 @@ namespace MvcSiteMapProvider
         /// <summary>
         /// Finds the node that matches the MVC route.
         /// </summary>
-        /// <param name="rootNode">The root node.</param>
         /// <param name="values">The values.</param>
         /// <param name="route">The route.</param>
         /// <returns>

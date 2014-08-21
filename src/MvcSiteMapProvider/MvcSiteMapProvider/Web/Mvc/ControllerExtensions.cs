@@ -44,7 +44,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// Gets the current site map node for child action.
         /// </summary>
         /// <param name="controller">The controller.</param>
-        /// <param name="provider">The provider.</param>
+        /// <param name="siteMap">The SiteMap.</param>
         /// <returns></returns>
         public static ISiteMapNode GetCurrentSiteMapNodeForChildAction(this ControllerBase controller, ISiteMap siteMap)
         {

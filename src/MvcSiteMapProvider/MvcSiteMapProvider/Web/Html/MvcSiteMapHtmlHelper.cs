@@ -26,7 +26,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
         /// </summary>
         /// <param name="htmlHelper">The HTML helper.</param>
-        /// <param name="provider">The sitemap.</param>
+        /// <param name="siteMap">The sitemap.</param>
         public MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap)
             : this(htmlHelper, siteMap, true)
         {
@@ -36,7 +36,8 @@ namespace MvcSiteMapProvider.Web.Html
         /// Initializes a new instance of the <see cref="MvcSiteMapHtmlHelper"/> class.
         /// </summary>
         /// <param name="htmlHelper">The HTML helper.</param>
-        /// <param name="provider">The sitemap.</param>
+        /// <param name="siteMap">The sitemap.</param>
+        /// <param name="useViewEngine"><c>true</c> to use the internal view engine; otherwise <c>false</c></param>
         internal MvcSiteMapHtmlHelper(HtmlHelper htmlHelper, ISiteMap siteMap, bool useViewEngine)
         {
             if (htmlHelper == null)

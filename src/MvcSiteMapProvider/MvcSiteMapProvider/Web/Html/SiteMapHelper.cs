@@ -247,9 +247,9 @@ namespace MvcSiteMapProvider.Web.Html
         /// <param name="rootInChildLevel">Renders startingNode in child level if set to <c>true</c>.</param>
         /// <param name="sourceMetadata">User-defined meta data.</param>
         /// <returns>Html markup</returns>
-        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, bool rootInChildLevel, object sourceMetaData)
+        public static MvcHtmlString SiteMap(this MvcSiteMapHtmlHelper helper, string templateName, bool rootInChildLevel, object sourceMetadata)
         {
-            return SiteMap(helper, templateName, helper.SiteMap.RootNode, rootInChildLevel, sourceMetaData);
+            return SiteMap(helper, templateName, helper.SiteMap.RootNode, rootInChildLevel, sourceMetadata);
         }
 
         /// <summary>

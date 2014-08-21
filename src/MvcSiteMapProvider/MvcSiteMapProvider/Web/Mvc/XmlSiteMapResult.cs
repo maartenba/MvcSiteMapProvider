@@ -245,7 +245,7 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// Generates the URL elements.
         /// </summary>
         /// <param name="siteMapNodes">The site map nodes.</param>
-        /// <param name="url">The URL.</param>
+        /// <param name="baseUrl">The base URL.</param>
         /// <returns>The URL elements.</returns>
         protected virtual IEnumerable<XElement> GenerateUrlElements(ControllerContext context, IEnumerable<ISiteMapNode> siteMapNodes, string baseUrl)
         {

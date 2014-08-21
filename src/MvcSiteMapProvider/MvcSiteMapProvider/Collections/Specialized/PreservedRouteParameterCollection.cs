@@ -37,9 +37,9 @@ namespace MvcSiteMapProvider.Collections.Specialized
         }
 
         /// <summary>
-        /// Adds each element of a <see cref="System.Collections.Generic.IEnumerable{string}"/> to the collection.
+        /// Adds each element of a <see cref="T:System.Collections.Generic.IEnumerable{string}"/> to the collection.
         /// </summary>
-        /// <param name="collection">The <see cref="System.Collections.Generic.IEnumerable{string}"/> containing the values to add, or <b>null</b>.</param>
+        /// <param name="collection">The <see cref="T:System.Collections.Generic.IEnumerable{string}"/> containing the values to add, or <b>null</b>.</param>
         public override void AddRange(IEnumerable<string> collection)
         {
             if (collection != null)

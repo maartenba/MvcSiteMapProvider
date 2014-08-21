@@ -1329,7 +1329,7 @@ namespace MvcSiteMapProvider.Web.Html
         /// as the current node. This allows menu relevance when navigating deeper than the sitemap structure designates, such
         /// as when navigating to MVC actions, which are not shown in the menus
         /// </summary>
-        /// <param name="selectedSiteMapProvider">the current MVC Site Map Provider</param>
+        /// <param name="selectedSiteMap">The current SiteMap.</param>
         /// <returns></returns>
         public static ISiteMapNode GetCurrentNode(ISiteMap selectedSiteMap)
         {
@@ -1342,8 +1342,8 @@ namespace MvcSiteMapProvider.Web.Html
         /// as the current node. This allows menu relevance when navigating deeper than the sitemap structure designates, such
         /// as when navigating to MVC actions, which are not shown in the menus
         /// </summary>
-        /// <param name="selectedSiteMapProvider">the current MVC Site Map Provider</param>
-        /// <param name="returnRootNodeIfNotFound">whether to return the root node if the current node is null</param>
+        /// <param name="selectedSiteMap">The current SiteMap.</param>
+        /// <param name="returnRootNodeIfNotFound">Whether to return the root node if the current node is null</param>
         /// <returns></returns>
         public static ISiteMapNode GetCurrentNode(ISiteMap selectedSiteMap, bool returnRootNodeIfNotFound)
         {
@@ -1408,7 +1408,6 @@ namespace MvcSiteMapProvider.Web.Html
         /// </summary>
         /// <param name="currentNode">The current node.</param>
         /// <param name="startingNodeLevel">The starting node level.</param>
-        /// <param name="allowForwardSearch">if set to <c>true</c> allow forward search. Forward search will search all parent nodes and child nodes, where in other circumstances only parent nodes are searched.</param>
         /// <returns>The starting node.</returns>
         public static ISiteMapNode GetStartingNode(ISiteMapNode currentNode, int startingNodeLevel)
         {

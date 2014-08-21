@@ -28,15 +28,15 @@ namespace MvcSiteMapProvider.Collections.Specialized
         void Add(KeyValuePair<string, object> item, bool throwIfReservedKey);
 
         /// <summary>
-        /// Adds the elements from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>. If the key exists, the value will be overwritten.
+        /// Adds the elements from a <see cref="T:System.Collections.Generic.IDictionary{string, object}"/>. If the key exists, the value will be overwritten.
         /// </summary>
-        /// <param name="items">The <see cref="System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
+        /// <param name="items">The <see cref="T:System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
         void AddRange(IDictionary<string, object> items);
 
         /// <summary>
-        /// Adds the elements from a <see cref="System.Collections.Generic.IDictionary{string, object}"/>. If the key exists, the value will be overwritten.
+        /// Adds the elements from a <see cref="T:System.Collections.Generic.IDictionary{string, object}"/>. If the key exists, the value will be overwritten.
         /// </summary>
-        /// <param name="items">The <see cref="System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
+        /// <param name="items">The <see cref="T:System.Collections.Generic.IDictionary{string, object}"/> of items to add.</param>
         /// <param name="throwIfReservedKey"><c>true</c> to throw an exception if one of the keys being added is a reserved key name; otherwise, <c>false</c>.</param>
         void AddRange(IDictionary<string, object> items, bool throwIfReservedKey);
 
