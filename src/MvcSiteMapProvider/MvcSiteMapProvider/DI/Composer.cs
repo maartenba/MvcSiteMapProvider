@@ -8,11 +8,6 @@ using MvcSiteMapProvider.Web.Mvc;
 using System.Web.WebPages.Razor;
 #endif
 
-#if !NET35
-// Startup using WebActivatorEx (which allows multiple things to be started up, as opposed to the System.Web version).
-    [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(MvcSiteMapProvider.DI.Composer), "Compose")]
-#endif
-
 namespace MvcSiteMapProvider.DI
 {
     /// <summary>

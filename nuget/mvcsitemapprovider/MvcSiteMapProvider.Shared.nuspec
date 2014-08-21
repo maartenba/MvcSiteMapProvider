@@ -23,11 +23,13 @@
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
 				<!-- For new projects, we need to ensure the last update to MvcSiteMapProvider.Web is included -->
 				<dependency id="MvcSiteMapProvider.Web" version="4.6#prerelease#" />
+				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 			<group targetFramework="net45">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
 				<!-- For new projects, we need to ensure the last update to MvcSiteMapProvider.Web is included -->
 				<dependency id="MvcSiteMapProvider.Web" version="4.6#prerelease#" />
+				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 		</dependencies>
 	</metadata>

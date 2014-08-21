@@ -406,6 +406,10 @@ configured in the compilation constants -->
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MvcSiteMapProvider.WebActivator\MvcSiteMapProvider.WebActivator.csproj">
+      <Project>{312503cd-bfda-4a09-8299-2b0c09a1239f}</Project>
+      <Name>MvcSiteMapProvider.WebActivator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
       <Project>{8625FB9C-BE71-41EF-993D-3C05EA11DEF4}</Project>
       <Name>MvcSiteMapProvider</Name>

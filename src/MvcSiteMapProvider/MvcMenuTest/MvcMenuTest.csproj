@@ -332,6 +332,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MvcSiteMapProvider.WebActivator\MvcSiteMapProvider.WebActivator.csproj">
+      <Project>{312503cd-bfda-4a09-8299-2b0c09a1239f}</Project>
+      <Name>MvcSiteMapProvider.WebActivator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MvcSiteMapProvider\MvcSiteMapProvider.csproj">
       <Project>{8625fb9c-be71-41ef-993d-3c05ea11def4}</Project>
       <Name>MvcSiteMapProvider</Name>

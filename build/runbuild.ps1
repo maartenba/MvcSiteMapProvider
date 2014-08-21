@@ -52,10 +52,10 @@ task Compile -depends Clean, Init, Restore -description "This task compiles the 
 
 	Write-Host "Compiling..." -ForegroundColor Green
 
-	Build-MvcSiteMapProvider-Core-Versions ("net35", "net40", "net45") -mvc_version "2"
-	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "3"
-	Build-MvcSiteMapProvider-Core-Versions ("net40", "net45") -mvc_version "4"
-	Build-MvcSiteMapProvider-Core-Versions ("net45") -mvc_version "5"
+	Build-MvcSiteMapProvider-Versions ("net35", "net40", "net45") -mvc_version "2"
+	Build-MvcSiteMapProvider-Versions ("net40", "net45") -mvc_version "3"
+	Build-MvcSiteMapProvider-Versions ("net40", "net45") -mvc_version "4"
+	Build-MvcSiteMapProvider-Versions ("net45") -mvc_version "5"
 }
 
 task NuGet -depends Compile -description "This tasks makes creates the NuGet packages" {
@@ -131,28 +131,21 @@ function Tokenize-Namespaces ([string] $source) {
 	} | Set-Content $source -Force
 }
 
-function Build-MvcSiteMapProvider-Core-Versions ([string[]] $net_versions, [string] $mvc_version) {
+function Build-MvcSiteMapProvider-Versions ([string[]] $net_versions, [string] $mvc_version) {
 	#create the build for each version of the framework
 	foreach ($net_version in $net_versions) {
-		Build-MvcSiteMapProvider-Core-Version $net_version $mvc_version
+		Build-MvcSiteMapProvider-Version $net_version $mvc_version
+		Build-MvcSiteMapProvider-WebActivator-Version $net_version $mvc_version
 	}
 }
 
-function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] $mvc_version) {
+function Build-MvcSiteMapProvider-Version ([string] $net_version, [string] $mvc_version) {
 	$net_version_upper = $net_version.toUpper()
 	Write-Host "Compiling MvcSiteMapProvider for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
 	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version.core\lib\$net_version\"
 	$documentation_file = $outdir + "MvcSiteMapProvider.xml"
-
-	if ($net_version -eq "net35") {
-		$targetFramework = "v3.5"
-	}
-	if ($net_version -eq "net40") {
-		$targetFramework = "v4.0"
-	}
-	if ($net_version -eq "net45") {
-		$targetFramework = "v4.5"
-	}
+	$targetFramework = Get-TargetFramework-Version $net_version
+	Write-Host "Targeting framework $targetFramework" -ForegroundColor Cyan
 
 	exec { 
 		msbuild $source_directory\MvcSiteMapProvider\MvcSiteMapProvider.csproj `
@@ -163,11 +156,36 @@ function Build-MvcSiteMapProvider-Core-Version ([string] $net_version, [string] 
 			/property:WarningLevel=3 `
 			/property:DefineConstants=`" MVC$mvc_version`;$net_version_upper`" `
 			/property:TargetFrameworkVersion=$targetFramework `
-			/property:EnableNuGetPackageRestore=true `
 			/property:DocumentationFile=`"$documentation_file`"
 	}
-	
+
 	dir $outdir | ?{ -not($_.Name -match 'MvcSiteMapProvider') } | %{ del $_.FullName }
+}
+
+function Build-MvcSiteMapProvider-WebActivator-Version ([string] $net_version, [string] $mvc_version) {
+	$net_version_upper = $net_version.toUpper()
+	Write-Host "Compiling MvcSiteMapProvider.WebActivator for $net_version_upper, MVC$mvc_version" -ForegroundColor Blue
+	$outdir = "$build_directory\mvcsitemapprovider.mvc$mvc_version\lib\$net_version\"
+	$documentation_file = $outdir + "MvcSiteMapProvider.WebActivator.xml"
+	$targetFramework = Get-TargetFramework-Version $net_version
+	Write-Host "Targeting framework $targetFramework" -ForegroundColor Cyan
+
+	#Create a webactivator for all versions except .NET 3.5
+	if ($net_version -ne "net35") {
+		exec { 
+			msbuild $source_directory\MvcSiteMapProvider.WebActivator\MvcSiteMapProvider.WebActivator.csproj `
+				/property:outdir=$outdir `
+				/verbosity:quiet `
+				/property:Configuration=$configuration `
+				"/t:Clean;Rebuild" `
+				/property:WarningLevel=3 `
+				/property:DefineConstants=`" MVC$mvc_version`;$net_version_upper`" `
+				/property:TargetFrameworkVersion=$targetFramework `
+				/property:DocumentationFile=`"$documentation_file`"
+		}
+
+		dir $outdir | ?{ -not($_.Name -match 'MvcSiteMapProvider.WebActivator') } | %{ del $_.FullName }
+	}
 }
 
 function Create-MvcSiteMapProvider-Legacy-Package ([string] $mvc_version) {
@@ -418,4 +436,18 @@ function Get-Prerelease-Text {
 		return ".0$prerelease"
 	}
 	return ""
+}
+
+function Get-TargetFramework-Version ([string] $net_version) {
+	$targetFramework = "v4.0"
+	if ($net_version -eq "net35") {
+		$targetFramework = "v3.5"
+	}
+	if ($net_version -eq "net40") {
+		$targetFramework = "v4.0"
+	}
+	if ($net_version -eq "net45") {
+		$targetFramework = "v4.5"
+	}
+	return $targetFramework
 }

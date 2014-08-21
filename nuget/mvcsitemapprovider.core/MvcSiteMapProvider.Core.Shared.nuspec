@@ -17,10 +17,8 @@
 			<group targetFramework="net35">
 			</group>
 			<group targetFramework="net40">
-				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 			<group targetFramework="net45">
-				<dependency id="WebActivatorEx" version="2.0.1" />
 			</group>
 		</dependencies>
 	</metadata>

@@ -204,7 +204,13 @@ Make sure your configuration includes a root node by ensuring there is exactly 1
     <value>The builder set instance named '{0}' was not found. Check your DI configuration to ensure a builder set instance with this name exists.</value>
   </data>
   <data name="SiteMapLoaderNotInitialized" xml:space="preserve">
-    <value>The SiteMapLoader has not been initialized. You must set the SiteMaps.Loader property during Application_Start in Global.asax if the 'MvcSiteMapProvider_UseExternalDIContainer' setting is set to 'true' in the AppSettings section of web.config.</value>
+    <value>The SiteMapLoader has not been initialized. 
+
+Check the 'MvcSiteMapProvider_UseExternalDIContainer' setting in the AppSettings section of web.config.
+
+If the setting is set to 'false', you will need to call the MvcSiteMapProvider.DI.Composer.Compose() method at the end of Application_Start in the Global.asax file. Alternatively, if you are using .NET 4.0 or higher you can install the MvcSiteMapProvider.MVCx NuGet package corresponding to your MVC version.
+
+If the setting is set to 'true', you must set the SiteMaps.Loader property during Application_Start in Global.asax to an instance of the built-in SiteMapLoader type or a custom ISiteMapLoader instance. This can be achieved most easily by using your external DI container.</value>
   </data>
   <data name="ObjectFieldNotFound" xml:space="preserve">
     <value>Field '{0}' was not found in Type '{1}'.</value>
