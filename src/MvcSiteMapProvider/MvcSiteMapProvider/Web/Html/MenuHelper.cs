@@ -1465,11 +1465,6 @@ namespace MvcSiteMapProvider.Web.Html
                 }
             }
 
-            if (startingNode != null && startingNode.SiteMap.RootNode != null && allowForwardSearch)
-            {
-                return startingNode.SiteMap.RootNode;
-            }
-
             return null;
         }
 
