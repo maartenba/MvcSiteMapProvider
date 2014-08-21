@@ -331,6 +331,80 @@ namespace MvcSiteMapProvider.Tests.Unit.Collections.Specialized
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        public void MatchesRoute_MatchingRouteWith2StandardParamsNullIDEmptyArea_ShouldReturnTrue()
+        {
+            // arrange
+            var routeValues = new Dictionary<string, object>();
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("id", null);
+            routeValues.Add("area", "");
+
+            var target = NewRouteValueDictionaryInstance();
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
+
+            // act
+            var result = target.MatchesRoute(routeValues);
+
+            // assert
+            var actual = result;
+            var expected = true;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test(Description = "Ensures that all configured route keys with values are considered in the match")]
+        public void MatchesRoute_MatchingRouteWith2StandardParamsEmptyIDEmptyArea_WithExtraConfiguredKeyAndValue_ShouldReturnFalse()
+        {
+            // arrange
+            var routeValues = new Dictionary<string, object>();
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("id", null);
+            routeValues.Add("area", "");
+
+            var target = NewRouteValueDictionaryInstance();
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
+            target.Add("something", "1234");
+
+            // act
+            var result = target.MatchesRoute(routeValues);
+
+            // assert
+            var actual = result;
+            var expected = false;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test(Description = "Ensures that empty configured route keys are not considered in the match")]
+        public void MatchesRoute_MatchingRouteWith2StandardParamsEmptyIDEmptyArea_WithExtraConfiguredKeyAndEmptyValue_ShouldReturnTrue()
+        {
+            // arrange
+            var routeValues = new Dictionary<string, object>();
+            routeValues.Add("controller", "Home");
+            routeValues.Add("action", "Index");
+            routeValues.Add("id", null);
+            routeValues.Add("area", "");
+
+            var target = NewRouteValueDictionaryInstance();
+            target.Add("controller", "Home");
+            target.Add("action", "Index");
+            target.Add("something", "");
+
+            // act
+            var result = target.MatchesRoute(routeValues);
+
+            // assert
+            var actual = result;
+            var expected = true;
+
+            Assert.AreEqual(expected, actual);
+        }
+
         #endregion
 
     }
