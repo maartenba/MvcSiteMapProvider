@@ -48,7 +48,27 @@ task Restore -depends Clean -description "This task runs NuGet package restore" 
 	}
 }
 
-task Compile -depends Clean, Init, Restore -description "This task compiles the solution" {
+task Test -depends Clean, Init, Restore -description "This tasks runs the unit tests" {
+	Write-Host "Running Unit Tests..." -ForegroundColor Magenta
+
+	$target_project = "$source_directory\MvcSiteMapProvider.Tests\MvcSiteMapProvider.Tests.csproj"
+
+	exec { 
+		msbuild $target_project `
+			/verbosity:quiet `
+			/property:Configuration=$configuration `
+			"/t:Clean;Rebuild" `
+			/property:WarningLevel=3 `
+			/property:DefineConstants=`" MVC4`;NET40`" `
+			/property:TargetFrameworkVersion=v4.0 `"
+	}
+
+	exec {
+		&"$tools_directory\nunit\nunit-console.exe" $target_project /config:$configuration /noshadow /noresult /framework:net-4.0
+	}
+}
+
+task Compile -depends Test -description "This task compiles the solution" {
 
 	Write-Host "Compiling..." -ForegroundColor Green
 
