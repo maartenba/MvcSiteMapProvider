@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace MvcSiteMapProvider.Caching
@@ -97,10 +98,15 @@ namespace MvcSiteMapProvider.Caching
 
         #endregion
 
-        private void cacheProvider_ItemRemoved(object sender, MicroCacheItemRemovedEventArgs<T> e)
+        protected virtual void cacheProvider_ItemRemoved(object sender, MicroCacheItemRemovedEventArgs<T> e)
         {
-            // Cascade the event
-            OnCacheItemRemoved(e);
+            // Skip the event if the item is null, empty, or otherwise a default value,
+            // since nothing was actually put in the cache, so nothing was removed
+            if (!EqualityComparer<T>.Default.Equals(e.Item, default(T)))
+            {
+                // Cascade the event
+                OnCacheItemRemoved(e);
+            }
         }
 
         protected virtual void OnCacheItemRemoved(MicroCacheItemRemovedEventArgs<T> e)

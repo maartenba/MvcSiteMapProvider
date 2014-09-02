@@ -18,6 +18,11 @@ namespace MvcSiteMapProvider.Caching
         {
             if (!got)
             {
+                if (activator == null)
+                {
+                    return default(TValue);
+                }
+
                 lock (this)
                 {
                     if (!got)
