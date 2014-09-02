@@ -94,7 +94,7 @@ namespace MvcSiteMapProvider.Caching
             return (!timeSpan.Equals(TimeSpan.MinValue));
         }
 
-        private void CacheItemRemoved(CacheEntryRemovedArguments arguments)
+        protected virtual void CacheItemRemoved(CacheEntryRemovedArguments arguments)
         {
             var item = arguments.CacheItem;
             var args = new MicroCacheItemRemovedEventArgs<T>(item.Key, ((LazyLock)item.Value).Get<T>(null));
