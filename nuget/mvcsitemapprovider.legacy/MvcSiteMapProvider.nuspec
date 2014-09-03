@@ -7,7 +7,7 @@
 		<authors>Maarten Balliauw, Shad Storhaug</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>This package is obsolete. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version).</summary>
-		<description>This package is obsolete, but development is still active on the MvcSiteMapProvider project. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version). If you have installed this package into your project, please downgrad it by running the command 'Uninstall-Package MvcSiteMapProvider' (without the quotes) from Package Manager Console. Do not uninstall any dependencies. NuGet doesn't support multiple versions of MVC in one package, so it was necessary to create a different NuGet package per MVC version we support.</description>
+		<description>This package is obsolete, but development is still active on the MvcSiteMapProvider project. Please install one of the MvcSiteMapProvider.MVCx packages instead (where x is your MVC version). If you have installed this package into your project, please downgrade it by running the command 'Uninstall-Package MvcSiteMapProvider' (without the quotes) from Package Manager Console. Do not uninstall any dependencies. NuGet doesn't support multiple versions of MVC in one package, so it was necessary to create a different NuGet package per MVC version we support.</description>
 		<language>en-US</language>
 		<tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation mvcsitemapprovider</tags>
 		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
