@@ -72,6 +72,7 @@ Other places around the web have some documentation that is helpful for getting 
 - [MvcSiteMapProvider 4.0 - Unit Testing with the SiteMaps Static Methods] (http://www.shiningtreasures.com/post/2013/08/14/mvcsitemapprovider-4-unit-testing-with-the-sitemaps-static-methods)
 - [Debugging an MvcSiteMapProvider Configuration] (http://www.shiningtreasures.com/post/2013/08/21/debugging-an-mvcsitemapprovider-configuration)
 - [Converting from C# to Vb MvcSiteMapProvider] (http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
+- [ASP.NET MVC Menu using Site Map Provider & Bootstrap Navbar] (http://joeylicc.wordpress.com/2014/10/03/asp-net-mvc-5-menu-using-site-map-provider-bootstrap-3-navbar/)
 - [NightOwl888's MvcSiteMapProvider Demos] (https://github.com/NightOwl888?tab=repositories) - Filter for "MvcSiteMapProvider" to see the most relevant.
 
 #### Version 3.x
