@@ -747,7 +747,8 @@ namespace MvcSiteMapProvider
                     string clientQueryString = currentHandler.ClientQueryString;
                     if (clientQueryString.Length > 0)
                     {
-                        node = this.FindSiteMapNode(relativePath + "?" + clientQueryString);
+                        var aspNetRelativeMatch = this.siteMapChildStateFactory.CreateUrlKey(relativePath + "?" + clientQueryString, string.Empty);
+                        node = this.FindSiteMapNodeFromUrlMatch(aspNetRelativeMatch);
                     }
                 }
             }
