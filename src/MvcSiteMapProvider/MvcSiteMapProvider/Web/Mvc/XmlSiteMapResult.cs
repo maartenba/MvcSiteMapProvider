@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Linq;
@@ -318,12 +319,54 @@ namespace MvcSiteMapProvider.Web.Mvc
         /// <returns><b>true</b> if the current node should be rendered; otherwise<b>false</b>.</returns>
         protected virtual bool ShouldNodeRender(ISiteMapNode node, ControllerContext context)
         {
+
             return node.Clickable &&
                 node.IsVisible(SourceMetadata) &&
                 !node.HasExternalUrl(context.HttpContext) &&
-                string.IsNullOrEmpty(node.CanonicalUrl) &&
+                this.IsCanonicalUrl(node, context.HttpContext) &&
                 !node.HasNoIndexAndNoFollow &&
                 !this.IsDuplicateUrl(node);
+        }
+
+        /// <summary>
+        /// Determines whether the URL of the current node is a canonical node. 
+        /// </summary>
+        /// <param name="node">The node</param>
+        /// <returns><c>true</c> if the node's URL is canonical; otherwise<c>false</c>.</returns>
+        protected virtual bool IsCanonicalUrl(ISiteMapNode node, HttpContextBase context)
+        {
+            var canonicalUrl = node.CanonicalUrl;
+            if (string.IsNullOrEmpty(canonicalUrl))
+            {
+                return true;
+            }
+
+            string absoluteUrl = string.Empty;
+
+            if (string.IsNullOrEmpty(node.Protocol) && string.IsNullOrEmpty(node.HostName))
+            {
+                var mvcContextFactory = new MvcContextFactory();
+
+                // Use the HTTP protocol to force an absolute URL to compare with if no protocol was provided.
+                var protocol = string.IsNullOrEmpty(node.Protocol) ? Uri.UriSchemeHttp : node.Protocol;
+
+                // Create a URI with the home page and no query string values.
+                var uri = new Uri(context.Request.Url, "/");
+
+                // Create a TextWriter with null stream as a backing stream 
+                // which doesn't consume resources
+                using (var nullWriter = new StreamWriter(Stream.Null))
+                {
+                    var newContext = mvcContextFactory.CreateHttpContext(node, uri, nullWriter);
+                    absoluteUrl = this.urlPath.ResolveUrl(node.Url, protocol, node.HostName, newContext);
+                }
+            }
+            else
+            {
+                absoluteUrl = node.Url;
+            }
+
+            return absoluteUrl.Equals(node.CanonicalUrl, StringComparison.Ordinal) || absoluteUrl.Equals("#");
         }
 
         /// <summary>
