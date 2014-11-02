@@ -465,7 +465,7 @@ namespace MvcSiteMapProvider
             {
                 if (!this.canonicalKey.Equals(value))
                 {
-                    if (!string.IsNullOrEmpty(this.canonicalUrl))
+                    if (!string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(this.canonicalUrl))
                     {
                         throw new ArgumentException(string.Format(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalKey"), "CanonicalKey");
                     }
@@ -497,7 +497,7 @@ namespace MvcSiteMapProvider
             {
                 if (!this.canonicalUrl.Equals(value))
                 {
-                    if (!string.IsNullOrEmpty(this.canonicalKey))
+                    if (!string.IsNullOrEmpty(value) && !string.IsNullOrEmpty(this.canonicalKey))
                     {
                         throw new ArgumentException(string.Format(Resources.Messages.SiteMapNodeCanonicalValueAlreadySet, "CanonicalUrl"), "CanonicalUrl");
                     }
