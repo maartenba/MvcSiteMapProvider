@@ -26,14 +26,29 @@ namespace MvcSiteMapProvider.Caching
 
         public virtual string GenerateKey()
         {
-            var context = mvcContextFactory.CreateHttpContext();
             var builder = new StringBuilder();
             builder.Append("sitemap://");
-            builder.Append(context.Request.Url.DnsSafeHost);
+            builder.Append(this.GetHostName());
             builder.Append("/");
+
             return builder.ToString();
         }
 
         #endregion
+
+        protected virtual string GetHostName()
+        {
+            var context = this.mvcContextFactory.CreateHttpContext();
+            var request = context.Request;
+
+            // In a cloud or web farm environment, use the HTTP_HOST 
+            // header to derive the host name.
+            if (request.ServerVariables["HTTP_HOST"] != null)
+            {
+                return request.ServerVariables["HTTP_HOST"];
+            }
+
+            return request.Url.DnsSafeHost;
+        }
     }
 }
