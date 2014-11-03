@@ -49,7 +49,9 @@
     <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup Condition=" $(DefineConstants.Contains('MVC3')) ">
-    <Reference Include="System.Web.Mvc, Version=3.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <!-- Due to the windows update MS14-059, we need this hack to ensure we can build MVC3 both on machines that have the update and those that don't -->
+    <Reference Condition=" Exists('$(windir)\Microsoft.NET\assembly\GAC_MSIL\System.Web.Mvc\v4.0_3.0.0.0__31bf3856ad364e35\System.Web.Mvc.dll') " Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Condition=" !Exists('$(windir)\Microsoft.NET\assembly\GAC_MSIL\System.Web.Mvc\v4.0_3.0.0.0__31bf3856ad364e35\System.Web.Mvc.dll') " Include="System.Web.Mvc, Version=3.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.Mvc.3.0.20105.1\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
