@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -620,7 +621,7 @@ namespace MvcSiteMapProvider
             {
                 var requestContext = this.mvcContextFactory.CreateRequestContext();
                 var routeDataValues = requestContext.RouteData.Values;
-                var queryStringValues = requestContext.HttpContext.Request.QueryString;
+                var queryStringValues = this.GetCaseCorrectedQueryString(requestContext.HttpContext);
 
                 foreach (var item in this.PreservedRouteParameters)
                 {
@@ -640,6 +641,47 @@ namespace MvcSiteMapProvider
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets a <see cref="T:System.Collections.Specialized.NameValueCollection"/> containing the query string
+        /// key value pairs for the passed in HTTP context. The casing of the keys corrected to be the same as the values that are 
+        /// configured either in the <see cref="P:RouteValues"/> dictionary or the <see cref="P:PreservedRouteParameters"/> collection.
+        /// </summary>
+        /// <param name="httpContext">The HTTP context.</param>
+        /// <returns>A <see cref="T:System.Collections.Specialized.NameValueCollection"/> containing the case-corrected 
+        /// key value pairs of the query string.</returns>
+        protected virtual NameValueCollection GetCaseCorrectedQueryString(HttpContextBase httpContext)
+        {
+            var queryStringValues = httpContext.Request.QueryString;
+            // Note: we must use the configured route values, rather than the RouteValue property to avoid an
+            // infinite loop.
+            var caseInsensitiveRouteKeys = new HashSet<string>(this.routeValues.Keys, StringComparer.InvariantCultureIgnoreCase);
+            var caseInsensitivePreservedRouteParameters = new HashSet<string>(this.PreservedRouteParameters, StringComparer.InvariantCultureIgnoreCase);
+            var result = new NameValueCollection();
+
+            foreach (var key in queryStringValues.AllKeys)
+            {
+                // A malformed URL could have a null key
+                if (key != null)
+                {
+                    if (caseInsensitivePreservedRouteParameters.Contains(key))
+                    {
+                        result.AddWithCaseCorrection(key, queryStringValues[key], caseInsensitivePreservedRouteParameters);
+                    }
+                    else if (caseInsensitiveRouteKeys.Contains(key))
+                    {
+                        result.AddWithCaseCorrection(key, queryStringValues[key], caseInsensitiveRouteKeys);
+                    }
+                    else
+                    {
+                        // If the value is not configured, add it to the dictionary with the original case.
+                        result.Add(key, queryStringValues[key]);
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -718,7 +760,7 @@ namespace MvcSiteMapProvider
             var result = new Dictionary<string, object>(routeValues);
 
             // Add any query string values from the current context
-            var queryStringValues = httpContext.Request.QueryString;
+            var queryStringValues = this.GetCaseCorrectedQueryString(httpContext);
 
             // QueryString collection might contain nullable keys
             foreach (var key in queryStringValues.AllKeys)

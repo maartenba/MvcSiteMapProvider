@@ -185,6 +185,7 @@
     <Compile Include="Collections\LockableList.cs" />
     <Compile Include="Collections\CacheableDictionary.cs" />
     <Compile Include="Collections\CacheableList.cs" />
+    <Compile Include="Collections\Specialized\NameValueCollectionExtensions.cs" />
     <Compile Include="Collections\Specialized\ReservedKeyException.cs" />
     <Compile Include="Collections\Specialized\SourceMetadataDictionary.cs" />
     <Compile Include="CompositeSiteMapNodeProvider.cs" />
