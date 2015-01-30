@@ -12,7 +12,7 @@
 		<language>en-US</language>
 		<tags>mvc mvc#mvc_version# sitemap mvcsitemap menu breadcrumb navigation mvcsitemapprovider</tags>
 		<projectUrl>http://github.com/maartenba/MvcSiteMapProvider</projectUrl>
-		<iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=mvcsitemap&amp;DownloadId=196029</iconUrl>
+		<iconUrl>https://raw.githubusercontent.com/maartenba/MvcSiteMapProvider/master/map-icon.gif</iconUrl>
 		<dependencies>
 			<group targetFramework="net35">
 				<dependency id="MvcSiteMapProvider.MVC#mvc_version#.Core" version="[$version$]" />
