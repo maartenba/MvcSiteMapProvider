@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Web;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web.Mvc;
@@ -165,6 +168,27 @@ namespace MvcSiteMapProvider
         {
             get { return this.GetCachedOrMemberValue<string>(() => base.Route, "Route", false); }
             set { this.SetCachedOrMemberValue<string>(x => base.Route = x, "Route", value); }
+        }
+
+        protected override NameValueCollection GetCaseCorrectedQueryString(HttpContextBase httpContext)
+        {
+            // This method is called twice per node only in the case where there are 
+            // preserved route parameters, so the memory trade-off is only worth it if
+            // we have some configured.
+            if (this.PreservedRouteParameters.Any())
+            {
+                var key = this.GetCacheKey("GetCaseCorrectedQueryString_" + httpContext.Request.Url.Query);
+                var result = this.requestCache.GetValue<NameValueCollection>(key);
+                if (result == null)
+                {
+                    result = base.GetCaseCorrectedQueryString(httpContext);
+                    this.requestCache.SetValue<NameValueCollection>(key, result);
+                }
+
+                return result;
+            }
+
+            return base.GetCaseCorrectedQueryString(httpContext);
         }
 
         protected override bool AreRouteParametersPreserved

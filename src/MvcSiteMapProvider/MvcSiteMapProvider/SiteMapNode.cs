@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -645,7 +646,7 @@ namespace MvcSiteMapProvider
 
         /// <summary>
         /// Gets a <see cref="T:System.Collections.Specialized.NameValueCollection"/> containing the query string
-        /// key value pairs for the passed in HTTP context. The casing of the keys corrected to be the same as the values that are 
+        /// key value pairs for the passed in HTTP context. The casing of the keys corrected to be the same case as the values that are 
         /// configured either in the <see cref="P:RouteValues"/> dictionary or the <see cref="P:PreservedRouteParameters"/> collection.
         /// </summary>
         /// <param name="httpContext">The HTTP context.</param>
@@ -656,9 +657,10 @@ namespace MvcSiteMapProvider
             var queryStringValues = httpContext.Request.QueryString;
             // Note: we must use the configured route values, rather than the RouteValue property to avoid an
             // infinite loop.
-            var caseInsensitiveRouteKeys = new HashSet<string>(this.routeValues.Keys, StringComparer.InvariantCultureIgnoreCase);
+            var routeKeys = this.routeValues.Keys.ToArray();
+            var caseInsensitiveRouteKeys = new HashSet<string>(routeKeys, StringComparer.InvariantCultureIgnoreCase);
             var caseInsensitivePreservedRouteParameters = new HashSet<string>(this.PreservedRouteParameters, StringComparer.InvariantCultureIgnoreCase);
-            var result = new NameValueCollection();
+            var result = new NameValueCollection(queryStringValues.Count);
 
             foreach (var key in queryStringValues.AllKeys)
             {
@@ -667,11 +669,11 @@ namespace MvcSiteMapProvider
                 {
                     if (caseInsensitivePreservedRouteParameters.Contains(key))
                     {
-                        result.AddWithCaseCorrection(key, queryStringValues[key], caseInsensitivePreservedRouteParameters);
+                        result.AddWithCaseCorrection(key, queryStringValues[key], this.PreservedRouteParameters);
                     }
                     else if (caseInsensitiveRouteKeys.Contains(key))
                     {
-                        result.AddWithCaseCorrection(key, queryStringValues[key], caseInsensitiveRouteKeys);
+                        result.AddWithCaseCorrection(key, queryStringValues[key], routeKeys);
                     }
                     else
                     {

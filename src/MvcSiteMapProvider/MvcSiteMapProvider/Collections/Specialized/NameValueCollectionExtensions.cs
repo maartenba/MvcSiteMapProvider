@@ -17,6 +17,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
                 {
                     // Add item with corrected case key
                     nameValueCollection.Add(item, value);
+                    break;
                 }
             }
         }
