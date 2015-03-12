@@ -62,7 +62,7 @@ namespace MvcSiteMapProvider.DI
         }
 
 #if !MVC2 
-        public SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)
+        protected override SessionStateBehavior GetControllerSessionBehavior(RequestContext requestContext, string controllerName)
         {
             return this.innerControllerFactory.GetControllerSessionBehavior(requestContext, controllerName);
         }
