@@ -880,9 +880,9 @@ namespace MvcSiteMapProvider
 
         protected virtual void ThrowIfActionAndUrlNotSet(ISiteMapNode node)
         {
-            if (node.Clickable && string.IsNullOrEmpty(node.Action) && string.IsNullOrEmpty(node.UnresolvedUrl))
+            if (node.Clickable && string.IsNullOrEmpty(node.Action) && string.IsNullOrEmpty(node.UnresolvedUrl) && string.IsNullOrEmpty(node.Route))
             {
-                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeActionAndURLNotSet, node.Key, node.Title));
+                throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeActionAndRouteAndURLNotSet, node.Key, node.Title));
             }
         }
 

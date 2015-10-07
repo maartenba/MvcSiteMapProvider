@@ -323,12 +323,12 @@ SiteMapCacheKey: '{0}'</value>
 
 SiteMapCacheKey: '{0}'</value>
   </data>
-  <data name="SiteMapNodeActionAndURLNotSet" xml:space="preserve">
-    <value>The node with key '{0}' and title '{1}' has both an empty 'action' and empty 'url', which is not allowed.
+  <data name="SiteMapNodeActionAndRouteAndURLNotSet" xml:space="preserve">
+    <value>The node with key '{0}' and title '{1}' has an empty 'action', an emtpy 'route', and an empty 'url', which is not allowed.
 
-The node must have enough information to resolve the URL. This is normally achieved by setting 'controller', 'action', and (optionally) 'area' and/or custom parameters on the node. It can also be accomplished by setting the 'url' property to the relative or absolute URL.
+The node must have enough information to resolve the URL. This is normally achieved by setting 'controller', 'action', and (optionally) 'area' and/or custom parameters on the node. It can also be accomplished by supplying the route name to the 'route` attribute/property. Alternatively, set the 'url' property to the relative or absolute URL and (optionally) the 'protocol' and 'hostname'.
 
-Note that when configuring in XML, 'controller' and 'area' are automatically inherited from the parent node if they are not set explicitly.</value>
+Note that when configuring nodes in XML, 'controller' and 'area' are automatically inherited from the parent node if they are not set explicitly.</value>
   </data>
   <data name="SiteMapNodeSameKeyInRouteValueAndInheritedRouteParameter" xml:space="preserve">
     <value>The node with key '{0}' and title '{1}' has '{2}' configured in both RouteValues and InheritedRouteParameters, which is not allowed. 

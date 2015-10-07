@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Web.Mvc;
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Web;
 using System.Web.Routing;
-using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.UrlResolver
 {
@@ -86,7 +85,14 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
             if (!string.IsNullOrEmpty(node.Route))
             {
+                // (comment copied from MVC source code)
+                // We only include MVC-specific values like 'controller' and 'action' if we are generating an action link.
+                // If we are generating a route link [as to MapRoute("Foo", "any/url", new { controller = ... })], including
+                // the current controller name will cause the route match to fail if the current controller is not the same
+                // as the destination controller.
                 routeValueDictionary.Remove("route");
+                routeValueDictionary.Remove("controller");
+                routeValueDictionary.Remove("action");
                 result = urlHelper.RouteUrl(node.Route, routeValueDictionary);
             }
             else
