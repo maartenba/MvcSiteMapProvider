@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Web.Mvc;
 using System.Web.Hosting;
+using System.Web.Mvc;
 using Microsoft.Practices.Unity;
 using MvcSiteMapProvider;
 using MvcSiteMapProvider.Builder;
@@ -77,22 +76,20 @@ namespace DI.Unity.ContainerExtensions
                 excludeTypes,
                 string.Empty);
 
-            // TODO: Find a better way to inject an array constructor
-
             // Url Resolvers
             this.Container.RegisterType<ISiteMapNodeUrlResolverStrategy, SiteMapNodeUrlResolverStrategy>(new InjectionConstructor(
-                new ResolvedArrayParameter<ISiteMapNodeUrlResolver>(this.Container.ResolveAll<ISiteMapNodeUrlResolver>().ToArray())
+                new ResolvedParameter<ISiteMapNodeUrlResolver[]>()
                 ));
 
             // Visibility Providers
             this.Container.RegisterType<ISiteMapNodeVisibilityProviderStrategy, SiteMapNodeVisibilityProviderStrategy>(new InjectionConstructor(
-                new ResolvedArrayParameter<ISiteMapNodeVisibilityProvider>(this.Container.ResolveAll<ISiteMapNodeVisibilityProvider>().ToArray()),
-                new InjectionParameter<string>(string.Empty)
+                new ResolvedParameter<ISiteMapNodeVisibilityProvider[]>(),
+                new InjectionParameter<string>(string.Empty) // defaultProviderName
                 ));
 
             // Dynamic Node Providers
             this.Container.RegisterType<IDynamicNodeProviderStrategy, DynamicNodeProviderStrategy>(new InjectionConstructor(
-                new ResolvedArrayParameter<IDynamicNodeProvider>(this.Container.ResolveAll<IDynamicNodeProvider>().ToArray())
+                new ResolvedParameter<IDynamicNodeProvider[]>()
                 ));
 
 
@@ -109,19 +106,19 @@ namespace DI.Unity.ContainerExtensions
             // IMPORTANT: Must give arrays of object a name in Unity in order for it to resolve them.
             this.Container.RegisterType<IAclModule, AuthorizeAttributeAclModule>("authorizeAttribute");
             this.Container.RegisterType<IAclModule, XmlRolesAclModule>("xmlRoles");
-            this.Container.RegisterType<IAclModule, CompositeAclModule>(new InjectionConstructor(new ResolvedArrayParameter<IAclModule>(
-                new ResolvedParameter<IAclModule>("authorizeAttribute"),
-                new ResolvedParameter<IAclModule>("xmlRoles"))));
+            this.Container.RegisterType<IAclModule, CompositeAclModule>(new InjectionConstructor(
+                new ResolvedParameter<IAclModule[]>()
+                ));
 
 #if NET35
             this.Container.RegisterType(typeof(ICacheProvider<>), typeof(AspNetCacheProvider<>));
             this.Container.RegisterType<ICacheDependency, AspNetFileCacheDependency>(
-                "cacheDependency", new InjectionConstructor(absoluteFileName));
+                "cacheDependency", new InjectionConstructor(new InjectionParameter<string>(absoluteFileName)));
 #else
             this.Container.RegisterInstance<System.Runtime.Caching.ObjectCache>(System.Runtime.Caching.MemoryCache.Default);
             this.Container.RegisterType(typeof(ICacheProvider<>), typeof(RuntimeCacheProvider<>));
             this.Container.RegisterType<ICacheDependency, RuntimeFileCacheDependency>(
-                "cacheDependency", new InjectionConstructor(absoluteFileName));
+                "cacheDependency", new InjectionConstructor(new InjectionParameter<string>(absoluteFileName)));
 #endif
             this.Container.RegisterType<ICacheDetails, CacheDetails>("cacheDetails",
                 new InjectionConstructor(absoluteCacheExpiration, TimeSpan.MinValue, new ResolvedParameter<ICacheDependency>("cacheDependency")));
@@ -130,15 +127,26 @@ namespace DI.Unity.ContainerExtensions
             this.Container.RegisterType<ISiteMapNodeVisitor, UrlResolvingSiteMapNodeVisitor>();
 
             // Prepare for the sitemap node providers
-            this.Container.RegisterType<IXmlSource, FileXmlSource>("file1XmlSource", new InjectionConstructor(absoluteFileName));
+            this.Container.RegisterType<IXmlSource, FileXmlSource>("file1XmlSource", new InjectionConstructor(new InjectionParameter<string>(absoluteFileName)));
             this.Container.RegisterType<IReservedAttributeNameProvider, ReservedAttributeNameProvider>(new InjectionConstructor(new List<string>()));
 
             // IMPORTANT: Must give arrays of object a name in Unity in order for it to resolve them.
             // Register the sitemap node providers
-            this.Container.RegisterInstance<ISiteMapNodeProvider>("xmlSiteMapNodeProvider1", 
-                this.Container.Resolve<XmlSiteMapNodeProviderFactory>().Create(this.Container.Resolve<IXmlSource>("file1XmlSource")), new ContainerControlledLifetimeManager());
-            this.Container.RegisterInstance<ISiteMapNodeProvider>("reflectionSiteMapNodeProvider1",
-                this.Container.Resolve<ReflectionSiteMapNodeProviderFactory>().Create(includeAssembliesForScan), new ContainerControlledLifetimeManager());
+            this.Container.RegisterType<ISiteMapNodeProvider>(
+                "xmlSiteMapNodeProvider1",
+                new ContainerControlledLifetimeManager(),
+                new InjectionFactory(c => c.Resolve<XmlSiteMapNodeProvider>(
+                    new ParameterOverride("includeRootNode", true),
+                    new ParameterOverride("useNestedDynamicNodeRecursion", false),
+                    new DependencyOverride<IXmlSource>(c.Resolve<IXmlSource>("file1XmlSource"))
+                    )));
+            this.Container.RegisterType<ISiteMapNodeProvider>(
+                "reflectionSiteMapNodeProvider1",
+                new ContainerControlledLifetimeManager(),
+                new InjectionFactory(c => c.Resolve<ReflectionSiteMapNodeProvider>(
+                    new ParameterOverride("includeAssemblies", includeAssembliesForScan),
+                    new ParameterOverride("excludeAssemblies", new string[0])
+                    )));
             this.Container.RegisterType<ISiteMapNodeProvider, CompositeSiteMapNodeProvider>(new InjectionConstructor(new ResolvedArrayParameter<ISiteMapNodeProvider>(
                 new ResolvedParameter<ISiteMapNodeProvider>("xmlSiteMapNodeProvider1"),
                 new ResolvedParameter<ISiteMapNodeProvider>("reflectionSiteMapNodeProvider1"))));
