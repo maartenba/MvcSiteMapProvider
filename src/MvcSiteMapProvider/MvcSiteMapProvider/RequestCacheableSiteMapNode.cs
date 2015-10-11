@@ -124,7 +124,16 @@ namespace MvcSiteMapProvider
 
         public override string Url
         {
-            get { return this.GetCachedOrMemberValue<string>(() => base.Url, "Url", true); }
+            get 
+            {
+                // Fix for #272 - Change the context of the URL cache to ensure
+                // that the AclModule doesn't prevent manually setting route values
+                // from having any effect on the URL.
+                var urlContext = this.requestCache.GetValue<string>(this.SiteMap.GetUrlContextKey());
+                var memberName = "Url" + (string.IsNullOrEmpty(urlContext) ? string.Empty : "_" + urlContext);
+
+                return this.GetCachedOrMemberValue<string>(() => base.Url, memberName, true); 
+            }
             set { base.Url = value; }
         }
 

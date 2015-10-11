@@ -86,8 +86,17 @@ namespace MvcSiteMapProvider
             var result = this.requestCache.GetValue<bool?>(key);
             if (result == null)
             {
+                // Fix for #272 - Change the context of the URL cache to ensure
+                // that the AclModule doesn't prevent manually setting route values
+                // from having any effect on the URL. This setting takes effect in
+                // the RequestCacheableSiteMapNode.Url property.
+                var urlContextKey = this.GetUrlContextKey();
+                this.requestCache.SetValue<string>(urlContextKey, "AclModule");
                 result = base.IsAccessibleToUser(node);
                 this.requestCache.SetValue<bool>(key, (bool)result);
+
+                // Restore the URL context.
+                this.requestCache.SetValue<string>(urlContextKey, string.Empty);
             }
             return (bool)result;
         }

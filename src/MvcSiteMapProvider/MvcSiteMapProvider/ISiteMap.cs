@@ -51,4 +51,12 @@ namespace MvcSiteMapProvider
         [Obsolete("ResolveActionMethodParameters is deprecated and will be removed in version 5.")]
         IEnumerable<string> ResolveActionMethodParameters(string areaName, string controllerName, string actionMethodName);
     }
+
+    public static class SiteMapExtensions
+    {
+        public static string GetUrlContextKey(this ISiteMap siteMap)
+        {
+            return "__MVCSITEMAP_" + siteMap.CacheKey + "_UrlContext_" + siteMap.IsReadOnly.ToString() + "_";
+        }
+    }
 }
