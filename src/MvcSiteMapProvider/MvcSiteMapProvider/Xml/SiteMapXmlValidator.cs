@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using System.Reflection;
 
 namespace MvcSiteMapProvider.Xml
 {
@@ -20,9 +16,8 @@ namespace MvcSiteMapProvider.Xml
             const string resourceFileName = "MvcSiteMapSchema.xsd";
 
             var xsdPath = resourceNamespace + "." + resourceFileName;
-            var xsdStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(xsdPath);
-            XmlReader xsd = new XmlTextReader(xsdStream);
-            try
+            var xsdStream = this.GetType().Assembly.GetManifestResourceStream(xsdPath);
+            using (XmlReader xsd = XmlReader.Create(xsdStream))
             {
                 XmlSchemaSet schema = new XmlSchemaSet();
                 schema.Add(null, xsd);
@@ -32,23 +27,17 @@ namespace MvcSiteMapProvider.Xml
                 xmlReaderSettings.Schemas.Add(schema);
                 //xmlReaderSettings.ValidationEventHandler += new ValidationEventHandler(ValidationHandler);
 
-                XmlReader xmlReader = XmlReader.Create(xmlPath, xmlReaderSettings);
-                try
+                using (XmlReader xmlReader = XmlReader.Create(xmlPath, xmlReaderSettings))
                 {
-                    while (xmlReader.Read());
+                    try
+                    {
+                        while (xmlReader.Read()) ;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new MvcSiteMapException(string.Format(Resources.Messages.XmlValidationFailed, xmlPath), ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    throw new MvcSiteMapException(string.Format(Resources.Messages.XmlValidationFailed, xmlPath), ex);
-                }
-                finally
-                {
-                    xmlReader.Close();
-                }
-            }
-            finally
-            {
-                xsd.Close();
             }
         }
     }
