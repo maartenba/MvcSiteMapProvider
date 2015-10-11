@@ -1,7 +1,7 @@
-﻿using System;
-using MvcSiteMapProvider.Globalization;
-using MvcSiteMapProvider.Web.Mvc;
+﻿using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Mvc;
+using System;
 
 namespace MvcSiteMapProvider
 {

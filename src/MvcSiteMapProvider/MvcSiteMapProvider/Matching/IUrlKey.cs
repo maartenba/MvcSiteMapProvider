@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Matching
+﻿namespace MvcSiteMapProvider.Matching
 {
     /// <summary>
     /// Contract for a class that can be used as a key for matching relative or absolute URLs.

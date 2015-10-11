@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Builder
+﻿namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// INodeKeyGenerator contract

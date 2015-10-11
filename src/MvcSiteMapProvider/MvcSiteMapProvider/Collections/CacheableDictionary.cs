@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Caching;
+using System;
 using System.Collections.Generic;
+#if !NET35
 using System.Collections.Specialized;
-using MvcSiteMapProvider.Caching;
+#endif
 
 namespace MvcSiteMapProvider.Collections
 {

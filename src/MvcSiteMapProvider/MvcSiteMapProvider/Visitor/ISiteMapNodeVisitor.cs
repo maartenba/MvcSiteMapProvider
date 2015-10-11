@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Visitor
+﻿namespace MvcSiteMapProvider.Visitor
 {
     /// <summary>
     /// Contract for a site map node visitor.

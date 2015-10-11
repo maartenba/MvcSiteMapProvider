@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider
+﻿namespace MvcSiteMapProvider
 {
     public interface ISiteMapSettings
     {

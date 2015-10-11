@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using MvcSiteMapProvider.Collections;
+﻿using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Matching;
+using System;
+using System.Collections.Generic;
 
 namespace MvcSiteMapProvider
 {

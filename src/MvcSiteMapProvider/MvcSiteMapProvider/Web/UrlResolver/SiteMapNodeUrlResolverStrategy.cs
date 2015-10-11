@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvcSiteMapProvider.Reflection;
 
 namespace MvcSiteMapProvider.Web.UrlResolver
 {

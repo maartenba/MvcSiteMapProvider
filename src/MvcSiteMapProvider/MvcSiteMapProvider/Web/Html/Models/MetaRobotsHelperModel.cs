@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Web.Html.Models
+﻿namespace MvcSiteMapProvider.Web.Html.Models
 {
     /// <summary>
     /// MetaRobotsHelperModel

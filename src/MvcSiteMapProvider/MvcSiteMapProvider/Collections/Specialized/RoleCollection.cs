@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MvcSiteMapProvider.DI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {

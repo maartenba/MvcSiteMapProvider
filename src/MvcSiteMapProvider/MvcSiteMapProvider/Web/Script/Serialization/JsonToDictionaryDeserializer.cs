@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using MvcSiteMapProvider.Caching;
+﻿using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Web.Mvc;
+using System;
+using System.Collections.Generic;
 
 namespace MvcSiteMapProvider.Web.Script.Serialization
 {

@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Linq;
-using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
+#if !NET35
 using System.Collections.Specialized;
+#endif
+using System.ComponentModel;
+using System.Linq;
 
 // Source: http://blogs.microsoft.co.il/blogs/shimmy/archive/2010/12/26/observabledictionary-lt-tkey-tvalue-gt-c.aspx
 

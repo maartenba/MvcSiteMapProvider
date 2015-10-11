@@ -1,5 +1,5 @@
-﻿using System;
-using MvcSiteMapProvider.Web;
+﻿using MvcSiteMapProvider.Web;
+using System;
 
 namespace MvcSiteMapProvider.Matching
 {

@@ -1,11 +1,8 @@
-﻿using System;
-using NUnit;
-using NUnit.Framework;
-using Moq;
-using Moq.Matchers;
-using MvcSiteMapProvider.Loader;
+﻿using Moq;
 using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Builder;
+using MvcSiteMapProvider.Loader;
+using NUnit.Framework;
+using System;
 
 namespace MvcSiteMapProvider.Tests.Unit
 {

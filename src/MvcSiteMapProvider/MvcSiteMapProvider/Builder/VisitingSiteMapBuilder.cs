@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MvcSiteMapProvider.Visitor;
+﻿using MvcSiteMapProvider.Visitor;
+using System;
 
 namespace MvcSiteMapProvider.Builder
 {

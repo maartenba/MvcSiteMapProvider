@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Matching
+﻿namespace MvcSiteMapProvider.Matching
 {
     /// <summary>
     /// Contract for an abstract factory that creates new instances of 

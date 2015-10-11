@@ -1,7 +1,4 @@
-﻿using System;
-using MvcSiteMapProvider;
-
-namespace MvcSiteMapProvider.Builder
+﻿namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// Implement this interface to make a custom implementation that will build a sitemap.

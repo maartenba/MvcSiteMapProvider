@@ -1,7 +1,7 @@
-﻿using System;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Builder;
+﻿using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Security;
+using MvcSiteMapProvider.Web.Mvc;
+using System;
 
 namespace MvcSiteMapProvider
 {

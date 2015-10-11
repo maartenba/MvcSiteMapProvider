@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if !NET35
+using System;
+#endif
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Script.Serialization;

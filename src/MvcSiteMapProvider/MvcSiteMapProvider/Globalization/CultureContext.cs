@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MvcSiteMapProvider.DI;
+using System;
 using System.Globalization;
 using System.Threading;
-using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Globalization
 {

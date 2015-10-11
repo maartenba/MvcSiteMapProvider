@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Builder
+﻿namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// Abstract factory that provides instances of SiteMapNodeToParentRelation for mapping 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Caching
+﻿namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
     /// The default mapper class that simply maps everything to the default <see cref="T:MvcSiteMapProvider.Builder.ISiteMapBulderSet"/>.

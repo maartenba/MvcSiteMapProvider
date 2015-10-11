@@ -1,5 +1,5 @@
-﻿using System;
-using MvcSiteMapProvider.Builder;
+﻿using MvcSiteMapProvider.Builder;
+using System;
 
 namespace MvcSiteMapProvider.Xml
 {

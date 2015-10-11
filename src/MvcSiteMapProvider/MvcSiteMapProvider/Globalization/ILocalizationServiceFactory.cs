@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Globalization
+﻿namespace MvcSiteMapProvider.Globalization
 {
     /// <summary>
     /// Contract for an abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.Globalization.ILocalizationService"/> 

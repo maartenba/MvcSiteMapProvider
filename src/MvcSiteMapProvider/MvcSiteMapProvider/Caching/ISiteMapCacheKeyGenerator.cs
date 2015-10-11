@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Caching
+﻿namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
     /// ISiteMapCacheKeyGenerator interface. This interface allows the semantics of when a new sitemap

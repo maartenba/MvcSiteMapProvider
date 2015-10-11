@@ -1,7 +1,6 @@
-﻿using System;
+﻿using MvcSiteMapProvider.DI;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Web
 {

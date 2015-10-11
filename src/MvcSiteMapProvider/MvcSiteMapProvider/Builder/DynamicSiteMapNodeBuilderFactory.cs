@@ -1,5 +1,5 @@
-﻿using System;
-using MvcSiteMapProvider.Globalization;
+﻿using MvcSiteMapProvider.Globalization;
+using System;
 
 namespace MvcSiteMapProvider.Builder
 {

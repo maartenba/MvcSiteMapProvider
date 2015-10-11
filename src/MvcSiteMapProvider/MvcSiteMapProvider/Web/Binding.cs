@@ -1,5 +1,5 @@
-﻿using System;
-using MvcSiteMapProvider.DI;
+﻿using MvcSiteMapProvider.DI;
+using System;
 
 namespace MvcSiteMapProvider.Web
 {

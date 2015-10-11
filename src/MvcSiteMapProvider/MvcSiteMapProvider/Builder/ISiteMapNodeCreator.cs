@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MvcSiteMapProvider.Builder
+﻿namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// Contract for a set of services useful for creating SiteMap nodes.

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Web
+﻿namespace MvcSiteMapProvider.Web
 {
     /// <summary>
     /// Extension methods for getting attribute values from a <see cref="T:System.Web.SiteMapNode"/> instance.

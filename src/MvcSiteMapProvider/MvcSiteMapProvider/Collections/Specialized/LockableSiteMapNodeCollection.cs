@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace MvcSiteMapProvider.Collections.Specialized
 {
     /// <summary>

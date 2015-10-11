@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web.Mvc.Filters

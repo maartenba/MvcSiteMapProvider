@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Globalization;
+﻿using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Visitor;
+using System;
 
 namespace MvcSiteMapProvider.Builder
 {

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Web.Mvc;
+using System;
 using System.Text;
-using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Caching
 {

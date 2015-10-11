@@ -1,15 +1,14 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Globalization;
+using MvcSiteMapProvider.Loader;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Linq;
-using System.IO;
-using System.IO.Compression;
-using System.Globalization;
-using MvcSiteMapProvider.Globalization;
-using MvcSiteMapProvider.Loader;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MvcSiteMapProvider.Web.Mvc;
+using System;
 using System.Web.Mvc;
 using System.Web.Routing;
+#if !MVC2
 using System.Web.SessionState;
-using MvcSiteMapProvider.Web.Mvc;
+#endif
 
 namespace MvcSiteMapProvider.DI
 {

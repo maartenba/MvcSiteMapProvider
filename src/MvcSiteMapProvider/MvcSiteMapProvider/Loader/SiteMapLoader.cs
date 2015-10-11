@@ -1,6 +1,5 @@
-﻿using System;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Builder;
+﻿using MvcSiteMapProvider.Caching;
+using System;
 
 namespace MvcSiteMapProvider.Loader
 {

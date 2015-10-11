@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Caching
+﻿namespace MvcSiteMapProvider.Caching
 {
     /// <summary>
     /// An <see cref="T:MvcSiteMapProvider.Caching.ICacheDependency"/> implementation that can be used to indicate

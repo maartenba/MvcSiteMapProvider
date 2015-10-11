@@ -1,11 +1,8 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Xml;
+using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Web.Mvc;
 using System.Xml.Linq;
-using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider.Builder
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 using System.Web.Caching;
 using System.Web.Hosting;
-using System.Reflection;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

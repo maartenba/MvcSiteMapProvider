@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Caching
+﻿namespace MvcSiteMapProvider.Caching
 {
     public class SiteMapCache
         : MicroCache<ISiteMap>, ISiteMapCache

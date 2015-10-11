@@ -1,10 +1,12 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Caching;
+using System;
 using System.IO;
 using System.Web;
-using System.Web.UI;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcSiteMapProvider.Caching;
+#if !NET35
+using System.Web.UI;
+#endif
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

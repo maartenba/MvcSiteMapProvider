@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Web.Mvc.Filters
+﻿namespace MvcSiteMapProvider.Web.Mvc.Filters
 {
     /// <summary>
     /// AttributeTarget

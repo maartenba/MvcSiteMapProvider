@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Web
+﻿namespace MvcSiteMapProvider.Web
 {
     /// <summary>
     /// Contract for a class that represents a binding between host name, protocol, and port.

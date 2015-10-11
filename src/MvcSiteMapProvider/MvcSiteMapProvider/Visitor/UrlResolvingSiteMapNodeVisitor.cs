@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Visitor
+﻿namespace MvcSiteMapProvider.Visitor
 {
     /// <summary>
     /// Specialized <see cref="T:MvcSiteMapProvider.Visitor.ISiteMapNodeVisitor"/> class for resolving URLs

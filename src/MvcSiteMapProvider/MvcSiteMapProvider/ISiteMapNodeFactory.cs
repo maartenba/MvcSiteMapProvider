@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider
+﻿namespace MvcSiteMapProvider
 {
     /// <summary>
     /// Contract for an abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.ISiteMapNode"/> at runtime.

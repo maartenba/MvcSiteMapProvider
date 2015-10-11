@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Mvc.Filters;
+using MvcSiteMapProvider.Web.Routing;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,9 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
 using System.Web.Routing;
-using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Web.Routing;
 
 namespace MvcSiteMapProvider.Security
 {

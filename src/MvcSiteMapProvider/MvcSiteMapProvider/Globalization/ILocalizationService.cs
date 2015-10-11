@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Globalization
+﻿namespace MvcSiteMapProvider.Globalization
 {
     /// <summary>
     /// Provides services to extract meta-keys and to later use the keys to localize text into different cultures. 

@@ -1,6 +1,4 @@
 ﻿#if MVC2
-using System;
-
 namespace MvcSiteMapProvider.Web.Mvc.Filters
 {
     /// <summary>

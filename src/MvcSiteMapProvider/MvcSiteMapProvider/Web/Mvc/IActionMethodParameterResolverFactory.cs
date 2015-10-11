@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Web.Mvc
+﻿namespace MvcSiteMapProvider.Web.Mvc
 {
     // TODO: Remove this type in version 5.
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Tests.Unit.Web.Html
+﻿namespace MvcSiteMapProvider.Tests.Unit.Web.Html
 {
     class HtmlHelperTestCases
     {

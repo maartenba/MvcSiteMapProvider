@@ -1,12 +1,11 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Web.Mvc;
+using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Web
 {

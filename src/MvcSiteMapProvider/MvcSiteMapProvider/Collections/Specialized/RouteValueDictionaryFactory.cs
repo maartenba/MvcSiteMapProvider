@@ -1,7 +1,7 @@
-﻿using System;
-using MvcSiteMapProvider.Builder;
+﻿using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Web.Script.Serialization;
+using System;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {

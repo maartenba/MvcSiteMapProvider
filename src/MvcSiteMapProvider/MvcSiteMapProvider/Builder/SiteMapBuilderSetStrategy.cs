@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using MvcSiteMapProvider.Caching;
+﻿using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.DI;
+using System;
+using System.Linq;
 
 namespace MvcSiteMapProvider.Builder
 {

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Caching;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using MvcSiteMapProvider.Caching;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

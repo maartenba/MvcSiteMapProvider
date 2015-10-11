@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Hosting;
-using MvcSiteMapProvider.Builder;
+﻿using MvcSiteMapProvider.Builder;
 using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Globalization;
 using MvcSiteMapProvider.Loader;
 using MvcSiteMapProvider.Reflection;
 using MvcSiteMapProvider.Visitor;
 using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
-using MvcSiteMapProvider.Web.Script.Serialization;
 using MvcSiteMapProvider.Xml;
+using System;
+using System.Collections.Generic;
+using System.Web.Hosting;
 
 namespace MvcSiteMapProvider.DI
 {

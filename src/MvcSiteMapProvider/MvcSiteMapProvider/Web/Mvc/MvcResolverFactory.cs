@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace MvcSiteMapProvider.Web.Mvc
+﻿namespace MvcSiteMapProvider.Web.Mvc
 {
     /// <summary>
     /// An abstract factory that can be used to create new instances of <see cref="T:MvcSiteMapProvider.Web.Mvc.MvcResolver"/>

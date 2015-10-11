@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Script.Serialization;
+﻿using System.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.Web.Script.Serialization
 {

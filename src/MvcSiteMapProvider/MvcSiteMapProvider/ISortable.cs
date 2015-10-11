@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider
+﻿namespace MvcSiteMapProvider
 {
     /// <summary>
     /// Contract to specify a sortable entity.

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using MvcSiteMapProvider.Collections.Specialized;
+﻿using MvcSiteMapProvider.Collections.Specialized;
 
 namespace MvcSiteMapProvider
 {

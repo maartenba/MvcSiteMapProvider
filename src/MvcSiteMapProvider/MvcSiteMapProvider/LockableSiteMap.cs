@@ -1,6 +1,6 @@
-﻿using System;
-using MvcSiteMapProvider.Web;
+﻿using MvcSiteMapProvider.Web;
 using MvcSiteMapProvider.Web.Mvc;
+using System;
 
 namespace MvcSiteMapProvider
 {

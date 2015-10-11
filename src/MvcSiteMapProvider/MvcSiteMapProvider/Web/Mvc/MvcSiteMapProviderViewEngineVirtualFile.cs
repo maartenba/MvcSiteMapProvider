@@ -1,7 +1,6 @@
-﻿using System;
-using System.Web.Hosting;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
+using System.Web.Hosting;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

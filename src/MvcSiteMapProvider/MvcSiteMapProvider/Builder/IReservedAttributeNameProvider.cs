@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Builder
+﻿namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// Contract for reserved attribute name provider for SiteMap nodes.

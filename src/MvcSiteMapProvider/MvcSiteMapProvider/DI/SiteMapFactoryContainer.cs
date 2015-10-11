@@ -1,14 +1,13 @@
-﻿using System;
-using System.Web.Mvc;
-using MvcSiteMapProvider.Caching;
+﻿using MvcSiteMapProvider.Caching;
 using MvcSiteMapProvider.Collections;
 using MvcSiteMapProvider.Collections.Specialized;
 using MvcSiteMapProvider.Matching;
 using MvcSiteMapProvider.Security;
 using MvcSiteMapProvider.Web;
+using MvcSiteMapProvider.Web.Compilation;
 using MvcSiteMapProvider.Web.Mvc;
 using MvcSiteMapProvider.Web.Mvc.Filters;
-using MvcSiteMapProvider.Web.Compilation;
+using System.Web.Mvc;
 
 namespace MvcSiteMapProvider.DI
 {
@@ -63,7 +62,7 @@ namespace MvcSiteMapProvider.DI
                     new ControllerDescriptorFactory(),
                     new ControllerBuilderAdapter(ControllerBuilder.Current),
                     new GlobalFilterProvider()
-),
+                ),
                 new XmlRolesAclModule(
                     this.mvcContextFactory
                     )

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using MvcSiteMapProvider.DI;
+using MvcSiteMapProvider.Web.Compilation;
+using System;
 using System.Collections.Generic;
 using System.Web.Routing;
-using MvcSiteMapProvider.DI;
-using MvcSiteMapProvider.Web.Compilation;
 
 namespace MvcSiteMapProvider.Web.Mvc
 {

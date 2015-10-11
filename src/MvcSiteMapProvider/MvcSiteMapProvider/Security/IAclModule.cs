@@ -1,9 +1,4 @@
-﻿using System;
-using System.Web;
-using MvcSiteMapProvider;
-using MvcSiteMapProvider.Web.Mvc;
-
-namespace MvcSiteMapProvider.Security
+﻿namespace MvcSiteMapProvider.Security
 {
     // TODO: In version 5, need to add context back in here as a parameter.
 

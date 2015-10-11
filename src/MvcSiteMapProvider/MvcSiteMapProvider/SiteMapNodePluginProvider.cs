@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using MvcSiteMapProvider.Web.UrlResolver;
+﻿using MvcSiteMapProvider.Web.UrlResolver;
+using System;
 
 namespace MvcSiteMapProvider
 {

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Builder;
 using System.Collections.Generic;
-using MvcSiteMapProvider.Builder;
 
 namespace MvcSiteMapProvider
 {

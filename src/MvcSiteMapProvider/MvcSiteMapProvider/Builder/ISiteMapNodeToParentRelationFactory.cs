@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MvcSiteMapProvider.Builder
+﻿namespace MvcSiteMapProvider.Builder
 {
     /// <summary>
     /// Contract for abstract factory that creates new instances of <see cref="T:MvcSiteMapProvider.Builder.ISiteMapNodeToParentRelation"/>.

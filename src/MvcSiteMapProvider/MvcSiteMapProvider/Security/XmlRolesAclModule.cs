@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Web.Mvc;
+using System;
 using System.Linq;
-using MvcSiteMapProvider.Web.Mvc;
 
 namespace MvcSiteMapProvider.Security
 {

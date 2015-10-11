@@ -1,14 +1,12 @@
-﻿using System;
+﻿using MvcSiteMapProvider.Caching;
+using MvcSiteMapProvider.Xml;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
-using MvcSiteMapProvider.Caching;
-using MvcSiteMapProvider.Xml;
-using MvcSiteMapProvider.Collections.Specialized;
-using MvcSiteMapProvider.Web.Script.Serialization;
 
 namespace MvcSiteMapProvider.Builder
 {

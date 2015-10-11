@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MvcSiteMapProvider.Globalization;
+﻿using MvcSiteMapProvider.Globalization;
 
 namespace MvcSiteMapProvider.Collections.Specialized
 {

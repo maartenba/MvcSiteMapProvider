@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MvcSiteMapProvider.Reflection;
 
 namespace MvcSiteMapProvider
 {
@@ -35,6 +34,5 @@ namespace MvcSiteMapProvider
         }
 
         #endregion
-
     }
 }

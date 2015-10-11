@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MvcSiteMapProvider.DI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using MvcSiteMapProvider.DI;
 
 namespace MvcSiteMapProvider.Reflection
 {
