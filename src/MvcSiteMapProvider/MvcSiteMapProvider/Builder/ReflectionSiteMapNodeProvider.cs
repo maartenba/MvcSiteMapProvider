@@ -177,10 +177,12 @@ namespace MvcSiteMapProvider.Builder
             }
 
             string area = "";
+#pragma warning disable 612,618
             if (!string.IsNullOrEmpty(attribute.AreaName))
             {
                 area = attribute.AreaName;
             }
+#pragma warning restore 612,618
             if (string.IsNullOrEmpty(area) && !string.IsNullOrEmpty(attribute.Area))
             {
                 area = attribute.Area;
