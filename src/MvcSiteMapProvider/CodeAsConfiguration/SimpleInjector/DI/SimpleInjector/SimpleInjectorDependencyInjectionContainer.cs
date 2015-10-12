@@ -34,7 +34,13 @@ namespace DI.SimpleInjector
 
         public void Release(object instance)
         {
-            // Do nothing
+            // Simple Injector depends on the behavior of the
+            // DefaultControllerFactory to release controllers.
+            IDisposable disposable = instance as IDisposable;
+            if (disposable != null)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }
