@@ -1,4 +1,5 @@
 ﻿using MvcSiteMapProvider.Web.Mvc;
+using MvcSiteMapProvider.Web.Routing;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -123,15 +124,22 @@ namespace MvcSiteMapProvider.Web.UrlResolver
 
         protected virtual RequestContext CreateRequestContext(ISiteMapNode node, TextWriter writer)
         {
+            var realRequestContext = this.mvcContextFactory.CreateRequestContext();
+
+            // For interop with MvcCodeRouting, we need to build a data token with the appropriate value.
+            realRequestContext.RouteData.SetMvcCodeRoutingContext(node);
+
             if (!node.IncludeAmbientValuesInUrl)
             {
                 var httpContext = this.CreateHttpContext(node, writer);
-                return this.mvcContextFactory.CreateRequestContext(httpContext);
+                var fakeRequestContext = this.mvcContextFactory.CreateRequestContext(httpContext);
+                fakeRequestContext.RouteData.MergeDataTokens(realRequestContext.RouteData.DataTokens);
+                fakeRequestContext.RouteData.Route = realRequestContext.RouteData.Route;
+                fakeRequestContext.RouteData.RouteHandler = realRequestContext.RouteData.RouteHandler;
+                return fakeRequestContext;
             }
-            else
-            {
-                return this.mvcContextFactory.CreateRequestContext();
-            }
+
+            return realRequestContext;
         }
     }
 }
