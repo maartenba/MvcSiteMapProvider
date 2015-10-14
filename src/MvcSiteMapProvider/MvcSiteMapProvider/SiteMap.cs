@@ -899,7 +899,7 @@ namespace MvcSiteMapProvider
             if (string.IsNullOrEmpty(node.HttpMethod) || 
                 (!EnumHelper.TryParse<HttpVerbs>(node.HttpMethod, true, out verbs) && 
                 !node.HttpMethod.Equals("*") && 
-                !node.HttpMethod.Equals("Request", StringComparison.InvariantCultureIgnoreCase)))
+                !node.HttpMethod.Equals("Request", StringComparison.OrdinalIgnoreCase)))
             {
                 var allowedVerbs = string.Join(Environment.NewLine, Enum.GetNames(typeof(HttpVerbs))) + Environment.NewLine + "Request" + Environment.NewLine + "*";
                 throw new MvcSiteMapException(string.Format(Resources.Messages.SiteMapNodeHttpMethodInvalid, node.Key, node.Title, node.HttpMethod, allowedVerbs));

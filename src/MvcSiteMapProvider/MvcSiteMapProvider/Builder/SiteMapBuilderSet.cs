@@ -104,7 +104,7 @@ namespace MvcSiteMapProvider.Builder
 
         public virtual bool AppliesTo(string builderSetName)
         {
-            return this.instanceName.Equals(builderSetName, StringComparison.InvariantCulture);
+            return this.instanceName.Equals(builderSetName, StringComparison.Ordinal);
         }
 
         #endregion

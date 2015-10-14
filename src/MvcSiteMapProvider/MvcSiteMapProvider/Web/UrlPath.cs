@@ -389,7 +389,7 @@ namespace MvcSiteMapProvider.Web
             {
                 var publicFacingUrl = this.GetPublicFacingUrl(httpContext);
                 var isDifferentHost = !uri.Host.ToLowerInvariant().Equals(publicFacingUrl.Host.ToLowerInvariant());
-                var isDifferentVirtualApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.InvariantCultureIgnoreCase);
+                var isDifferentVirtualApplication = !uri.AbsolutePath.StartsWith(httpContext.Request.ApplicationPath, StringComparison.OrdinalIgnoreCase);
 
                 return (isDifferentHost || isDifferentVirtualApplication);
             }

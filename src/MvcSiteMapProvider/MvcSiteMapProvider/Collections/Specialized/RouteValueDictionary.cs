@@ -305,7 +305,7 @@ namespace MvcSiteMapProvider.Collections.Specialized
 
         protected virtual bool MatchesValue(string key, object value)
         {
-            return this[key].ToString().Equals(value.ToString(), StringComparison.InvariantCultureIgnoreCase);
+            return this[key].ToString().Equals(value.ToString(), StringComparison.OrdinalIgnoreCase);
         }
 
         protected virtual bool IsEmptyValue(object value)
