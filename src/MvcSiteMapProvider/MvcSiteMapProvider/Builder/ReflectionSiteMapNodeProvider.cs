@@ -163,9 +163,8 @@ namespace MvcSiteMapProvider.Builder
 
             if (methodInfo == null) // try to find Index action
             {
-                var ms = type.FindMembers(MemberTypes.Method, BindingFlags.Instance | BindingFlags.Public,
-                                          (mi, o) => mi != null && string.Equals(mi.Name, "Index"), null);
-                foreach (MethodInfo m in ms.OfType<MethodInfo>())
+                var ms = type.GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(x => x.Name.Equals("Index"));
+                foreach (MethodInfo m in ms)
                 {
                     var pars = m.GetParameters();
                     if (pars.Length == 0)
