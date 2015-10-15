@@ -36,7 +36,10 @@ namespace MvcSiteMapProvider.Web.Mvc
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            var request = new HttpRequest(string.Empty, uri.ToString(), uri.Query);
+            var request = new HttpRequest(
+                filename: string.Empty, 
+                url: uri.ToString(), 
+                queryString: string.IsNullOrEmpty(uri.Query) ? string.Empty : uri.Query.Substring(1));
             var response = new HttpResponse(writer);
             var httpContext = new HttpContext(request, response);
             return new SiteMapHttpContext(httpContext, node);
