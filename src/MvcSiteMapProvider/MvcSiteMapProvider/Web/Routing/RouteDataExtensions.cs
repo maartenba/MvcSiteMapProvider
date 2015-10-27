@@ -85,8 +85,14 @@ namespace MvcSiteMapProvider.Web.Routing
                 return;
 
             var controllerType = node.SiteMap.ResolveControllerType(node.Area, node.Controller);
-            var mvcCodeRoutingRouteContext = GetMvcCodeRoutingRouteContext(controllerType, node.Controller);
-            routeData.DataTokens["MvcCodeRouting.RouteContext"] = mvcCodeRoutingRouteContext;
+
+            // Fix for #416 - If Areas are misconfigured, controllerType may be null. Since MvcCodeRouting
+            // doesn't work in conjunction with Areas anyway, we are going to ignore this here.
+            if (controllerType != null)
+            {
+                var mvcCodeRoutingRouteContext = GetMvcCodeRoutingRouteContext(controllerType, node.Controller);
+                routeData.DataTokens["MvcCodeRouting.RouteContext"] = mvcCodeRoutingRouteContext;
+            }
         }
 
         private static string GetMvcCodeRoutingRouteContext(Type controllerType, string controllerName)
