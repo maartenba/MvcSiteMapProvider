@@ -64,41 +64,41 @@ Other places around the web have some documentation that is helpful for getting 
 
 #### Version 4.x
 
-- [MvcSiteMapProvider 4.0 - A Test Drive] (http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
-- [MvcSiteMapProvider 4.0 - SEO Features Tutorial] (http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
-- [How to Make MvcSiteMapProvider Remember a User’s Position] (http://www.shiningtreasures.com/post/2013/09/02/how-to-make-mvcsitemapprovider-remember-a-user-position)
-- [MvcSiteMapProvider 4.0 - Cache Configuration] (http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
-- [MvcSiteMapProvider 4.0 - Extending the Cache] (http://www.shiningtreasures.com/post/2013/08/13/mvcsitemapprovider-4-extending-the-cache)
-- [MvcSiteMapProvider 4.0 - Unit Testing with the SiteMaps Static Methods] (http://www.shiningtreasures.com/post/2013/08/14/mvcsitemapprovider-4-unit-testing-with-the-sitemaps-static-methods)
-- [Debugging an MvcSiteMapProvider Configuration] (http://www.shiningtreasures.com/post/2013/08/21/debugging-an-mvcsitemapprovider-configuration)
-- [Converting from C# to Vb MvcSiteMapProvider] (http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
-- [ASP.NET MVC Menu using Site Map Provider & Bootstrap 3 Navbar] (http://joeylicc.wordpress.com/2014/10/03/asp-net-mvc-5-menu-using-site-map-provider-bootstrap-3-navbar/)
+- [MvcSiteMapProvider 4.0 - A Test Drive](http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
+- [MvcSiteMapProvider 4.0 - SEO Features Tutorial](http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
+- [How to Make MvcSiteMapProvider Remember a User’s Position](http://www.shiningtreasures.com/post/2013/09/02/how-to-make-mvcsitemapprovider-remember-a-user-position)
+- [MvcSiteMapProvider 4.0 - Cache Configuration](http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
+- [MvcSiteMapProvider 4.0 - Extending the Cache](http://www.shiningtreasures.com/post/2013/08/13/mvcsitemapprovider-4-extending-the-cache)
+- [MvcSiteMapProvider 4.0 - Unit Testing with the SiteMaps Static Methods](http://www.shiningtreasures.com/post/2013/08/14/mvcsitemapprovider-4-unit-testing-with-the-sitemaps-static-methods)
+- [Debugging an MvcSiteMapProvider Configuration](http://www.shiningtreasures.com/post/2013/08/21/debugging-an-mvcsitemapprovider-configuration)
+- [Converting from C# to Vb MvcSiteMapProvider](http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
+- [ASP.NET MVC Menu using Site Map Provider & Bootstrap 3 Navbar](http://joeylicc.wordpress.com/2014/10/03/asp-net-mvc-5-menu-using-site-map-provider-bootstrap-3-navbar/)
 - [ASP.NET MVC SiteMapPath using Site Map Provider & Bootstrap Breadcrumbs](https://joeylicc.wordpress.com/2013/07/08/asp-net-mvc-sitemappath-using-site-map-provider-bootstrap-breadcrumbs/)
-- [NightOwl888's MvcSiteMapProvider Demos] (https://github.com/NightOwl888?tab=repositories) - Filter for "MvcSiteMapProvider" to see the most relevant.
+- [NightOwl888's MvcSiteMapProvider Demos](https://github.com/NightOwl888?tab=repositories) - Filter for "MvcSiteMapProvider" to see the most relevant.
 
 #### Version 3.x
 
-- [MvcSiteMapProvider Tutorial and Examples] (http://edspencer.me.uk/2011/02/10/mvc-sitemap-provider-tutorial/)
-- [MvcSiteMapProvider Tutorial 2 - Breadcrumbs] (http://edspencer.me.uk/2011/09/20/mvc-sitemap-provider-tutorial-2-breadcrumbs/)
-- [Getting Started with MvcSiteMapProvider] (http://blog.danstuken.com/2011/04/29/getting-started-with-mvcsitemapprovider/)
-- [Inside the MvcSiteMapProvider - Part 1] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-1.html)
-- [Inside the MvcSiteMapProvider - Part 2: Dynamic node providers] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-2.html)
-- [Inside the MvcSiteMapProvider - Part 3: The ISiteMapVisibilityProvider] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-3.html)
-- [Inside the MvcSiteMapProvider - Part 4: The IAclModule] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-4.html)
-- [Inside the MvcSiteMapProvider - Part 5: The ISiteMapNodeUrlResolver] (http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-5.html)
-- [Styling MvcSiteMapProvider with CSS] (http://tutsblog.net/styling-mvc-sitemap-provider-with-css/)
-- [Using MvcSiteMapProvider with Twitter Bootstrap] (http://codingit.wordpress.com/2013/05/03/using-mvcsitemapprovider-with-twitter-bootstrap/)
-- [ASP.NET MVC Menu using Site Map Provider & Bootstrap Navbar] (http://joeylicc.wordpress.com/2013/06/04/asp-net-mvc-menu-using-site-map-provider-bootstrap-navbar/)
+- [MvcSiteMapProvider Tutorial and Examples](http://edspencer.me.uk/2011/02/10/mvc-sitemap-provider-tutorial/)
+- [MvcSiteMapProvider Tutorial 2 - Breadcrumbs](http://edspencer.me.uk/2011/09/20/mvc-sitemap-provider-tutorial-2-breadcrumbs/)
+- [Getting Started with MvcSiteMapProvider](http://blog.danstuken.com/2011/04/29/getting-started-with-mvcsitemapprovider/)
+- [Inside the MvcSiteMapProvider - Part 1](http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-1.html)
+- [Inside the MvcSiteMapProvider - Part 2: Dynamic node providers](http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-2.html)
+- [Inside the MvcSiteMapProvider - Part 3: The ISiteMapVisibilityProvider](http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-3.html)
+- [Inside the MvcSiteMapProvider - Part 4: The IAclModule](http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-4.html)
+- [Inside the MvcSiteMapProvider - Part 5: The ISiteMapNodeUrlResolver](http://xharze.blogspot.com/2012/04/inside-mvcsitemapprovider-part-5.html)
+- [Styling MvcSiteMapProvider with CSS](http://tutsblog.net/styling-mvc-sitemap-provider-with-css/)
+- [Using MvcSiteMapProvider with Twitter Bootstrap](http://codingit.wordpress.com/2013/05/03/using-mvcsitemapprovider-with-twitter-bootstrap/)
+- [ASP.NET MVC Menu using Site Map Provider & Bootstrap Navbar](http://joeylicc.wordpress.com/2013/06/04/asp-net-mvc-menu-using-site-map-provider-bootstrap-navbar/)
 
 ### Forums and Q & A Sites
 
-- [StackOverflow MvcSiteMapProvider] (http://stackoverflow.com/questions/tagged/mvcsitemapprovider)
-- [StackOverflow MvcSiteMap] (http://stackoverflow.com/questions/tagged/mvcsitemap)
-- [StackOverflow ASP.NET MVC SiteMap] (http://stackoverflow.com/questions/tagged/asp.net-mvc-sitemap)
-- [CodePlex Discussion Forum (no longer maintained)] (http://mvcsitemap.codeplex.com/discussions/topics/general?size=2147483647)
-- [Telerik Forum] (http://www.telerik.com/search.aspx?insection=False&start=0&client=telerik_developer_tools&q=MvcSiteMapProvider&sid=1)
+- [StackOverflow MvcSiteMapProvider](http://stackoverflow.com/questions/tagged/mvcsitemapprovider)
+- [StackOverflow MvcSiteMap](http://stackoverflow.com/questions/tagged/mvcsitemap)
+- [StackOverflow ASP.NET MVC SiteMap](http://stackoverflow.com/questions/tagged/asp.net-mvc-sitemap)
+- [CodePlex Discussion Forum (no longer maintained)](http://mvcsitemap.codeplex.com/discussions/topics/general?size=2147483647)
+- [Telerik Forum](http://www.telerik.com/search.aspx?insection=False&start=0&client=telerik_developer_tools&q=MvcSiteMapProvider&sid=1)
 
 ### Other Blog Posts
 
-- [maartenba's blog] (http://blog.maartenballiauw.be/search.aspx?q=mvcsitemapprovider)
-- [NightOwl888's blog] (http://www.shiningtreasures.com/category/MvcSiteMapProvider)
+- [maartenba's blog](http://blog.maartenballiauw.be/search.aspx?q=mvcsitemapprovider)
+- [NightOwl888's blog](http://www.shiningtreasures.com/category/MvcSiteMapProvider)
