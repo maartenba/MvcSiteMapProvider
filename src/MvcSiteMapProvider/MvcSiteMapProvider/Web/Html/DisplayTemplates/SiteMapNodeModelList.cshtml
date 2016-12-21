@@ -4,7 +4,7 @@
 
 <ul>
     @foreach (var node in Model) { 
-        <li>@Html.DisplayFor(m => node) 
+        <li class="@(node.IsCurrentNode ? "current" : "not-selected")" >@Html.DisplayFor(m => node) 
             @if (node.Children.Any()) {
                 @Html.DisplayFor(m => node.Children)
             }

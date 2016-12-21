@@ -146,6 +146,30 @@ namespace MvcSiteMapProvider.Web.Html.Models
         /// </value>
         public bool IsCurrentNode { get; protected set; }
 
+
+        /// <summary>
+        /// Returns true if this instance or any of its children is current node.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance or any of its children 
+        ///     is current node; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCurrentNodeOrChild 
+        { 
+            get 
+            {           
+                if (this.IsCurrentNode) return true;
+
+                foreach (var child in this.Children)
+                {
+                    if (child.IsCurrentNodeOrChild)
+                        return true;                    
+                }
+
+                return false;
+            }         
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether this instance is in current path.
         /// </summary>
