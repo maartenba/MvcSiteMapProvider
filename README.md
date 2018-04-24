@@ -64,13 +64,13 @@ Other places around the web have some documentation that is helpful for getting 
 
 #### Version 4.x
 
-- [MvcSiteMapProvider 4.0 - A Test Drive](http://www.shiningtreasures.com/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
-- [MvcSiteMapProvider 4.0 - SEO Features Tutorial](http://www.shiningtreasures.com/post/2013/08/10/mvcsitemapprovider-4-seo-features)
-- [How to Make MvcSiteMapProvider Remember a User’s Position](http://www.shiningtreasures.com/post/2013/09/02/how-to-make-mvcsitemapprovider-remember-a-user-position)
-- [MvcSiteMapProvider 4.0 - Cache Configuration](http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
-- [MvcSiteMapProvider 4.0 - Extending the Cache](http://www.shiningtreasures.com/post/2013/08/13/mvcsitemapprovider-4-extending-the-cache)
-- [MvcSiteMapProvider 4.0 - Unit Testing with the SiteMaps Static Methods](http://www.shiningtreasures.com/post/2013/08/14/mvcsitemapprovider-4-unit-testing-with-the-sitemaps-static-methods)
-- [Debugging an MvcSiteMapProvider Configuration](http://www.shiningtreasures.com/post/2013/08/21/debugging-an-mvcsitemapprovider-configuration)
+- [MvcSiteMapProvider 4.0 - A Test Drive](https://web.archive.org/web/20160424031041/http://www.shiningtreasures.com:80/post/2013/08/07/MvcSiteMapProvider-40-a-test-drive)
+- [MvcSiteMapProvider 4.0 - SEO Features Tutorial](https://web.archive.org/web/20160425143429/http://www.shiningtreasures.com:80/post/2013/08/10/mvcsitemapprovider-4-seo-features)
+- [How to Make MvcSiteMapProvider Remember a User’s Position](https://web.archive.org/web/20160425143429/http://www.shiningtreasures.com:80/post/2013/09/02/how-to-make-mvcsitemapprovider-remember-a-user-position)
+- [MvcSiteMapProvider 4.0 - Cache Configuration](https://web.archive.org/web/20160423105051/http://www.shiningtreasures.com/post/2013/08/11/mvcsitemapprovider-4-cache-configuration)
+- [MvcSiteMapProvider 4.0 - Extending the Cache](https://web.archive.org/web/20160423105051/http://www.shiningtreasures.com/post/2013/08/13/mvcsitemapprovider-4-extending-the-cache)
+- [MvcSiteMapProvider 4.0 - Unit Testing with the SiteMaps Static Methods](https://web.archive.org/web/20160423105051/http://www.shiningtreasures.com/post/2013/08/14/mvcsitemapprovider-4-unit-testing-with-the-sitemaps-static-methods)
+- [Debugging an MvcSiteMapProvider Configuration](https://web.archive.org/web/20160423105051/http://www.shiningtreasures.com/post/2013/08/21/debugging-an-mvcsitemapprovider-configuration)
 - [Converting from C# to Vb MvcSiteMapProvider](http://www.developerfusion.com/thread/112710/converting-from-c-to-vb-mvcsitemapprovider/)
 - [ASP.NET MVC Menu using Site Map Provider & Bootstrap 3 Navbar](http://joeylicc.wordpress.com/2014/10/03/asp-net-mvc-5-menu-using-site-map-provider-bootstrap-3-navbar/)
 - [ASP.NET MVC SiteMapPath using Site Map Provider & Bootstrap Breadcrumbs](https://joeylicc.wordpress.com/2013/07/08/asp-net-mvc-sitemappath-using-site-map-provider-bootstrap-breadcrumbs/)
@@ -101,4 +101,3 @@ Other places around the web have some documentation that is helpful for getting 
 ### Other Blog Posts
 
 - [maartenba's blog](http://blog.maartenballiauw.be/search.aspx?q=mvcsitemapprovider)
-- [NightOwl888's blog](http://www.shiningtreasures.com/category/MvcSiteMapProvider)
