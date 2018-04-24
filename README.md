@@ -26,7 +26,7 @@ Stable releases:
                    - or -
     Install-Package MvcSiteMapProvider.MVC2
                    - or -
-Use one of our [dependency injection packages] (http://www.nuget.org/packages?q=mvcsitemapprovider.mvc*.di&prerelease=&sortOrder=package-download-count).
+Use one of our [dependency injection packages](http://www.nuget.org/packages?q=mvcsitemapprovider.mvc*.di&prerelease=&sortOrder=package-download-count).
 
 Prefer continuous integration builds?
 
