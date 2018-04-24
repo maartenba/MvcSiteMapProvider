@@ -95,8 +95,6 @@ Other places around the web have some documentation that is helpful for getting 
 - [StackOverflow MvcSiteMapProvider](http://stackoverflow.com/questions/tagged/mvcsitemapprovider)
 - [StackOverflow MvcSiteMap](http://stackoverflow.com/questions/tagged/mvcsitemap)
 - [StackOverflow ASP.NET MVC SiteMap](http://stackoverflow.com/questions/tagged/asp.net-mvc-sitemap)
-- [CodePlex Discussion Forum (no longer maintained)](http://mvcsitemap.codeplex.com/discussions/topics/general?size=2147483647)
-- [Telerik Forum](http://www.telerik.com/search.aspx?insection=False&start=0&client=telerik_developer_tools&q=MvcSiteMapProvider&sid=1)
 
 ### Other Blog Posts
 
