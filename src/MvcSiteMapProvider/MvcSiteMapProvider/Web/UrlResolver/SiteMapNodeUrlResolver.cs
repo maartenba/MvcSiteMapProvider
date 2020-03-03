@@ -92,8 +92,15 @@ namespace MvcSiteMapProvider.Web.UrlResolver
                 // the current controller name will cause the route match to fail if the current controller is not the same
                 // as the destination controller.
                 routeValueDictionary.Remove("route");
-                routeValueDictionary.Remove("controller");
-                routeValueDictionary.Remove("action");
+                // However, removing controller and action potentially have the unintended side-effect of preventing 
+                // routes from matching when the route depends on either to satisfy a constraint. 
+                // It is possible that these values should NEVER be removed to allow proper construction of a
+                // named route without defaults or with unspecified tokens.
+                //routeValueDictionary.Remove("controller")
+                //routeValueDictionary.Remove("action")
+                var route = urlHelper.RouteCollection[node.Route] as Route;
+                if (!(route?.Constraints.ContainsKey("controller") ?? false)) routeValueDictionary.Remove("controller");
+                if (!(route?.Constraints.ContainsKey("action") ?? false)) routeValueDictionary.Remove("action");
                 result = urlHelper.RouteUrl(node.Route, routeValueDictionary);
             }
             else
